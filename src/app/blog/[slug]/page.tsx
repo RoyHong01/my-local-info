@@ -3,6 +3,23 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import fs from 'fs/promises';
+import path from 'path';
+import AdBanner from '@/components/AdBanner';
+import CoupangBanner from '@/components/CoupangBanner';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const p = await params;
+  const post = getPostData(p.slug);
+  if (!post) {
+    return { title: 'Not Found' };
+  }
+  return {
+    title: `${post.title} | 성남시 생활 정보`,
+    description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
+  };
+}
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
@@ -19,8 +36,47 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
+  const filePath = path.join(process.cwd(), 'public/data/local-info.json');
+  let sourceLink = '#';
+  try {
+    const fileContents = await fs.readFile(filePath, 'utf8');
+    const items = JSON.parse(fileContents);
+    const sourceItem = items.find((item: any) => item.name === post.title);
+    if (sourceItem && sourceItem.link) {
+      sourceLink = sourceItem.link;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    datePublished: post.date,
+    dateModified: post.date,
+    description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
+    author: {
+      "@type": "Organization",
+      name: "성남시 생활 정보",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "성남시 생활 정보",
+      url: "https://my-local-info-2gs.pages.dev",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://my-local-info-2gs.pages.dev/blog/${p.slug}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-orange-50/50 font-sans text-stone-800">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+      />
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-orange-600">성남시 생활 정보</Link>
@@ -29,6 +85,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <li><Link href="/#events" className="hover:text-orange-600 transition">행사/축제</Link></li>
               <li><Link href="/#benefits" className="hover:text-orange-600 transition">지원금/혜택</Link></li>
               <li><Link href="/blog" className="hover:text-orange-600 transition">블로그</Link></li>
+              <li><Link href="/about" className="hover:text-orange-600 transition">소개</Link></li>
             </ul>
           </nav>
         </div>
@@ -39,13 +96,32 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
             <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>
-            <div className="text-stone-500">{post.date}</div>
+            <div className="flex items-center gap-4 text-sm">
+              <span className="text-stone-500">작성일: {post.date}</span>
+              <span className="text-stone-300">|</span>
+              <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
+            </div>
           </header>
-          <div className="prose prose-stone prose-orange max-w-none">
+          <div className="prose prose-stone prose-orange max-w-none mb-12">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
             </ReactMarkdown>
           </div>
+          <AdBanner />
+          <CoupangBanner />
+          <footer className="mt-12 pt-8 border-t border-stone-100 text-sm text-stone-500 space-y-4 bg-stone-50 p-6 rounded-2xl">
+            <p>
+              이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다. 정확한 내용은 원문 링크를 통해 확인해주세요.
+            </p>
+            {sourceLink !== '#' && (
+              <p>
+                <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
+                  <span>공식 원문 바로가기</span>
+                  <span>&rarr;</span>
+                </a>
+              </p>
+            )}
+          </footer>
         </article>
       </main>
     </div>

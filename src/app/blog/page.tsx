@@ -14,6 +14,7 @@ export default function BlogPage() {
               <li><Link href="/#events" className="hover:text-orange-600 transition">행사/축제</Link></li>
               <li><Link href="/#benefits" className="hover:text-orange-600 transition">지원금/혜택</Link></li>
               <li><Link href="/blog" className="hover:text-orange-600 transition">블로그</Link></li>
+              <li><Link href="/about" className="hover:text-orange-600 transition">소개</Link></li>
             </ul>
           </nav>
         </div>

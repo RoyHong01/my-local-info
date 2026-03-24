@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
+import AdBanner from '@/components/AdBanner';
 
 interface InfoItem {
   id: string;
@@ -25,8 +26,40 @@ export default async function Home() {
     year: 'numeric', month: 'long', day: 'numeric'
   });
 
+  const eventsJsonLd = events.map((item) => ({
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: item.name,
+    startDate: item.startDate,
+    endDate: item.endDate || undefined,
+    location: {
+      "@type": "Place",
+      name: item.location,
+    },
+    description: item.summary,
+  }));
+
+  const benefitsJsonLd = benefits.map((item) => ({
+    "@context": "https://schema.org",
+    "@type": "GovernmentService",
+    name: item.name,
+    description: item.summary,
+    provider: {
+      "@type": "GovernmentOrganization",
+      name: "성남시",
+    },
+  }));
+
   return (
     <div className="min-h-screen bg-orange-50/50 font-sans text-stone-800">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(benefitsJsonLd) }}
+      />
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -36,6 +69,7 @@ export default async function Home() {
               <li><Link href="#events" className="hover:text-orange-600 transition">행사/축제</Link></li>
               <li><Link href="#benefits" className="hover:text-orange-600 transition">지원금/혜택</Link></li>
               <li><Link href="/blog" className="hover:text-orange-600 transition">블로그</Link></li>
+              <li><Link href="/about" className="hover:text-orange-600 transition">소개</Link></li>
             </ul>
           </nav>
         </div>
@@ -91,6 +125,9 @@ export default async function Home() {
             ))}
           </div>
         </section>
+
+        {/* Ad Banner */}
+        <AdBanner />
 
         {/* Benefits Section */}
         <section id="benefits" className="scroll-mt-24">
