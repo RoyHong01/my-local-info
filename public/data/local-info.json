@@ -53,5 +53,16 @@
     "target": "출산 가정",
     "summary": "첫째 100만원, 둘째 150만원 산후조리 및 육아 물품 지원",
     "link": "#"
+  },
+  {
+    "id": "465790",
+    "name": "유아학비 (누리과정) 지원",
+    "category": "혜택",
+    "startDate": "2023-10-27",
+    "endDate": "상시",
+    "location": "주민센터",
+    "target": "국공립 및 사립유치원에 다니는 3~5세 유아",
+    "summary": "유치원에 다니는 3~5세 아동에게 유아학비, 방과후과정비 등 지원",
+    "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/000000465790"
   }
 ]
