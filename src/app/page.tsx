@@ -35,6 +35,7 @@ export default async function Home() {
             <ul className="flex space-x-4 md:space-x-6 text-sm font-medium text-stone-600">
               <li><Link href="#events" className="hover:text-orange-600 transition">행사/축제</Link></li>
               <li><Link href="#benefits" className="hover:text-orange-600 transition">지원금/혜택</Link></li>
+              <li><Link href="/blog" className="hover:text-orange-600 transition">블로그</Link></li>
             </ul>
           </nav>
         </div>
@@ -62,7 +63,7 @@ export default async function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((item) => (
-              <Link href={`/info/${item.id}`} key={item.id} className="group flex flex-col h-full">
+              <Link href="/blog" key={item.id} className="group flex flex-col h-full">
                 <div className="bg-white rounded-3xl p-6 shadow-sm border border-stone-100 hover:shadow-lg hover:border-rose-200 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1">
                   <div className="flex justify-between items-start mb-4">
                     <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full">
@@ -100,7 +101,7 @@ export default async function Home() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {benefits.map((item) => (
-              <Link href={`/info/${item.id}`} key={item.id} className="group flex flex-col h-full">
+              <Link href="/blog" key={item.id} className="group flex flex-col h-full">
                 <div className="bg-white rounded-3xl p-6 shadow-sm border border-stone-100 hover:shadow-lg hover:border-amber-200 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1">
                   <div className="flex justify-between items-start mb-4">
                     <span className="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full">
