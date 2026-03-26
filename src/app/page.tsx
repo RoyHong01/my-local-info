@@ -29,19 +29,22 @@ function IncheonCard({ item }: { item: DataItem }) {
   const name = getField(item, ['서비스명', 'name', 'title']);
   const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
   const org = getField(item, ['소관기관명', 'location', 'addr1']);
+  const id = getField(item, ['서비스ID', 'id']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
-      <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">
-        인천
-      </span>
-      <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
-      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
-      {org && (
-        <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-          <span>🏛</span> {org}
-        </p>
-      )}
-    </div>
+    <Link href={`/incheon/${encodeURIComponent(id)}`} className="block cursor-pointer">
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
+        <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">
+          인천
+        </span>
+        <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
+        <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
+        {org && (
+          <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
+            <span>🏛</span> {org}
+          </p>
+        )}
+      </div>
+    </Link>
   );
 }
 
@@ -49,19 +52,22 @@ function SubsidyCard({ item }: { item: DataItem }) {
   const name = getField(item, ['서비스명', 'name', 'title']);
   const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
   const target = getField(item, ['지원대상', 'target']);
+  const id = getField(item, ['서비스ID', 'id']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col min-h-[180px]">
-      <span className="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full mb-3 self-start">
-        보조금
-      </span>
-      <h4 className="text-base font-bold mb-2 text-stone-800">{name}</h4>
-      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
-      {target && (
-        <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-          <span>🎯</span> {target}
-        </p>
-      )}
-    </div>
+    <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block cursor-pointer">
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col min-h-[180px]">
+        <span className="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full mb-3 self-start">
+          보조금
+        </span>
+        <h4 className="text-base font-bold mb-2 text-stone-800">{name}</h4>
+        <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
+        {target && (
+          <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
+            <span>🎯</span> {target}
+          </p>
+        )}
+      </div>
+    </Link>
   );
 }
 
@@ -69,19 +75,22 @@ function FestivalCard({ item }: { item: DataItem }) {
   const name = getField(item, ['title', 'name', '서비스명']);
   const summary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
   const location = getField(item, ['addr1', 'location', '소관기관명']);
+  const id = getField(item, ['contentid', 'id']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
-      <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">
-        축제·여행
-      </span>
-      <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
-      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
-      {location && (
-        <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-          <span>📍</span> {location}
-        </p>
-      )}
-    </div>
+    <Link href={`/festival/${encodeURIComponent(id)}`} className="block cursor-pointer">
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
+        <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">
+          축제·여행
+        </span>
+        <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
+        <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
+        {location && (
+          <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
+            <span>📍</span> {location}
+          </p>
+        )}
+      </div>
+    </Link>
   );
 }
 
