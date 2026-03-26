@@ -21,6 +21,9 @@
 - **CI/CD 워크플로우**: GitHub Actions (매일 07:00 KST) + Cloudflare Pages 자동 배포
 - **RSS 피드**: /rss.xml 경로 제공
 - **네이버 서치어드바이저**: 사이트 인증 완료
+- **네비 메뉴명 변경**: 인천정보→인천시 정보, 보조금→전국 보조금·복지 정책, 축제·여행→전국 축제·여행 정보
+- **헤더 UI 확대**: 로고·네비 폰트 사이즈 업
+- **축제 overview 수집 보강**: collect-festival.js에 detailCommon2 API 추가, 기존 100건 보강 완료
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

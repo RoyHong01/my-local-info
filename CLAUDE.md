@@ -122,3 +122,13 @@ deploy.yml        # 매일 07:00 KST 자동화
   - public/favicon.ico (32x32, 오렌지 배경 + 흰색 P)
   - public/favicon.svg (벡터, 고해상도 대응)
   - layout.tsx: icons 메타데이터 설정 추가
+- 네비 메뉴명 변경 (10개 페이지):
+  - 인천정보 → 인천시 정보
+  - 보조금 → 전국 보조금·복지 정책
+  - 축제·여행 → 전국 축제·여행 정보
+- 헤더 UI 확대: 로고 text-2xl→text-3xl, 네비 text-sm→text-base
+- 축제 상세설명(overview) 수집 보강:
+  - collect-festival.js: detailCommon2 API 추가 호출로 각 축제 overview 자동 수집
+  - HTML 태그 제거 + 200자 요약 처리
+  - 기존 overview 없는 항목 자동 보강 로직 추가
+  - 100건 축제 상세 설명 보강 완료
