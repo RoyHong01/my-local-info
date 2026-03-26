@@ -24,6 +24,9 @@ function getField(item: DataItem, keys: string[]): string {
   return '';
 }
 
+const cleanText = (text: string) =>
+  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+
 export default async function IncheonPage() {
   const all = await readJson('incheon.json');
   const items = all.filter(i => !i.expired);
@@ -58,17 +61,37 @@ export default async function IncheonPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {items.map((item, i) => {
               const name = getField(item, ['서비스명', 'name', 'title']);
-              const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
-              const org = getField(item, ['소관기관명', 'location', 'addr1']);
-              const target = getField(item, ['지원대상', 'target']);
+              const rawSummary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']))
+                || cleanText(getField(item, ['지원내용'])).slice(0, 100)
+                || '상세 정보는 해당 서비스를 통해 확인하세요.';
+              const org = cleanText(getField(item, ['소관기관명', 'location', 'addr1']));
+              const target = cleanText(getField(item, ['지원대상', 'target']));
+              const startDate = getField(item, ['startDate']);
+              const deadline = getField(item, ['신청기한', 'endDate']);
+              const dateStr = startDate && deadline
+                ? `${startDate} ~ ${deadline}`
+                : deadline || startDate;
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
+                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col" style={{minHeight: '200px'}}>
                   <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">인천</span>
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
-                  <p className="text-stone-700 text-sm line-clamp-3 overflow-hidden flex-grow">{summary || '상세 정보는 해당 서비스를 통해 확인하세요.'}</p>
-                  <div className="mt-3 space-y-1 text-xs text-stone-400">
-                    {org && <p className="flex items-center gap-1"><span>🏛</span> {org}</p>}
-                    {target && <p className="flex items-center gap-1"><span>🎯</span> {target}</p>}
+                  {dateStr && (
+                    <p className="text-xs text-orange-500 mb-2 flex items-center gap-1">
+                      <span>📅</span> {dateStr}
+                    </p>
+                  )}
+                  <p className="text-stone-700 text-sm mb-3"
+                     style={{display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
+                    {rawSummary}
+                  </p>
+                  <div className="mt-auto space-y-1 text-xs text-stone-500">
+                    {org && <p className="flex items-center gap-1 truncate"><span>🏛</span> {org}</p>}
+                    {target && (
+                      <p className="flex items-center gap-1"
+                         style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
+                        <span>🎯</span> {target}
+                      </p>
+                    )}
                   </div>
                 </div>
               );
