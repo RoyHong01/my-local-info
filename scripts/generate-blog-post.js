@@ -81,7 +81,7 @@ tags: [태그1, 태그2, 태그3]
 
 마지막 줄에 FILENAME: YYYY-MM-DD-keyword 형식으로 파일명도 출력해줘. 키워드는 영문으로.`;
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   let geminiRes;
   try {
@@ -136,6 +136,14 @@ tags: [태그1, 태그2, 태그3]
     finalContent = finalContent.substring(0, finalContent.length - 3);
   }
   finalContent = finalContent.trim();
+
+  // YAML frontmatter에서 title 값에 콜론이 있으면 따옴표로 감싸기
+  finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
+    if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {
+      return `${prefix}"${value.replace(/"/g, '\\"')}"`;
+    }
+    return match;
+  });
 
   if (!filename) {
     const today = new Date().toISOString().split('T')[0];
