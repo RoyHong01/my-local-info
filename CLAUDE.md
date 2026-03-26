@@ -51,7 +51,10 @@ incheon/          # 인천 지역 정보 목록
 subsidy/          # 전국 보조금 목록
 festival/         # 전국 축제·여행 목록
 blog/             # AI 블로그 목록 + 상세
+rss.xml/          # RSS 피드 (route.ts)
 about/            # 소개 페이지
+src/components/
+BlogFilter.tsx    # 블로그 카테고리 필터 (use client)
 scripts/
 collect-incheon.js    # 인천 데이터 수집
 collect-subsidy.js    # 보조금 데이터 수집
@@ -91,7 +94,13 @@ deploy.yml        # 매일 07:00 KST 자동화
 - 홈 카드에 상세 페이지 링크 연결
 
 ### 2026-03-26 (계속)
-- Gemini 모델 gemini-2.5-pro → gemini-2.5-flash 변경 (free tier 쿼터 초과)
+- Gemini 모델 gemini-2.5-pro → gemini-2.5-flash → gemini-2.0-flash 변경 (free tier 쿼터 초과)
 - 블로그 포스트 3편 자동 생성 성공 (인천 봄꽃 축제, 청년 월세 지원, 어린이날 큰잔치)
 - YAML frontmatter title 콜론 자동 따옴표 처리 로직 추가
-- GitHub 푸시 완료
+- 블로그 목록 컴팩트 카드 그리드로 개선 (3열, 카테고리 필터 탭)
+  - src/components/BlogFilter.tsx 신규 생성 (use client, 카테고리 필터)
+  - src/app/blog/page.tsx 서버 컴포넌트로 유지, BlogFilter에 데이터 전달
+- 기존 블로그 글 category 수정 (정보 → 적절한 카테고리)
+- 네이버 서치어드바이저 사이트 인증 메타태그 추가 (layout.tsx)
+- 네이버 서치어드바이저 소유 확인 HTML 파일 추가 (public/)
+- RSS 피드 추가 (src/app/rss.xml/route.ts → /rss.xml 경로)
