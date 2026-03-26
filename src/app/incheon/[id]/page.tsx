@@ -1,0 +1,142 @@
+import fs from 'fs/promises';
+import path from 'path';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+
+interface DataItem {
+  [key: string]: unknown;
+}
+
+async function readJson(filename: string): Promise<DataItem[]> {
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'data', filename);
+    const content = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(content);
+  } catch {
+    return [];
+  }
+}
+
+function getField(item: DataItem, keys: string[]): string {
+  for (const key of keys) {
+    if (item[key] && typeof item[key] === 'string') return item[key] as string;
+  }
+  return '';
+}
+
+const cleanText = (text: string) =>
+  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  if (!value) return null;
+  return (
+    <div className="py-4 border-b border-stone-100 last:border-0">
+      <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">{label}</dt>
+      <dd className="text-stone-700 text-sm leading-relaxed">{value}</dd>
+    </div>
+  );
+}
+
+export async function generateStaticParams() {
+  const all = await readJson('incheon.json');
+  return all.map(item => ({
+    id: encodeURIComponent(getField(item, ['서비스ID', 'id']))
+  })).filter(p => p.id);
+}
+
+export default async function IncheonDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const all = await readJson('incheon.json');
+  const item = all.find(i =>
+    encodeURIComponent(getField(i, ['서비스ID', 'id'])) === id
+  );
+
+  if (!item) notFound();
+
+  const name = getField(item, ['서비스명', 'name', 'title']);
+  const field = getField(item, ['서비스분야']);
+  const deadline = getField(item, ['신청기한', 'endDate']);
+  const summary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']));
+  const content = cleanText(getField(item, ['지원내용']));
+  const target = cleanText(getField(item, ['지원대상', 'target']));
+  const method = cleanText(getField(item, ['신청방법']));
+  const office = cleanText(getField(item, ['접수기관명']));
+  const phone = getField(item, ['전화문의']);
+  const org = cleanText(getField(item, ['소관기관명', 'location']));
+  const officialUrl = getField(item, ['상세조회URL', 'link']);
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
+      <header className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/" className="text-2xl font-bold text-orange-500">픽앤조이 🎯</Link>
+          <nav>
+            <ul className="flex space-x-3 md:space-x-5 text-sm font-medium text-stone-600">
+              <li><Link href="/incheon" className="text-blue-600 font-bold">인천정보</Link></li>
+              <li><Link href="/subsidy" className="hover:text-amber-600 transition">보조금</Link></li>
+              <li><Link href="/festival" className="hover:text-rose-600 transition">축제·여행</Link></li>
+              <li><Link href="/blog" className="hover:text-orange-500 transition">블로그</Link></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <main className="max-w-3xl mx-auto px-4 py-10">
+        <Link href="/incheon" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
+          ← 인천 지역 정보 목록
+        </Link>
+
+        <article className="bg-white rounded-3xl shadow-sm border border-stone-100 p-8">
+          <header className="mb-6 pb-6 border-b border-stone-100">
+            {field && (
+              <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3">
+                {field}
+              </span>
+            )}
+            <h1 className="text-2xl font-extrabold text-stone-900 mb-2">{name}</h1>
+            {deadline && (
+              <p className="text-sm text-orange-500 flex items-center gap-1">
+                <span>📅</span> 신청기한: {deadline}
+              </p>
+            )}
+          </header>
+
+          <dl>
+            <InfoRow label="서비스 요약" value={summary} />
+            <InfoRow label="지원 내용" value={content} />
+            <InfoRow label="지원 대상" value={target} />
+            <InfoRow label="신청 방법" value={method} />
+            <InfoRow label="접수 기관" value={office} />
+            <InfoRow label="전화 문의" value={phone} />
+            <InfoRow label="소관 기관" value={org} />
+          </dl>
+
+          {officialUrl && officialUrl !== '#' && (
+            <div className="mt-8 pt-6 border-t border-stone-100">
+              <a
+                href={officialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                공식 사이트에서 신청하기 →
+              </a>
+            </div>
+          )}
+        </article>
+      </main>
+
+      <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-center md:text-left">
+            <p className="font-bold text-lg text-white mb-1">픽앤조이</p>
+            <p className="text-stone-500">pick-n-joy.com</p>
+          </div>
+          <div className="text-center md:text-right text-stone-500">
+            <p>데이터 출처: 공공데이터포털 · 한국관광공사</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

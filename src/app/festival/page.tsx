@@ -69,8 +69,10 @@ export default async function FestivalPage() {
               const dateStr = rawStart
                 ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
                 : '';
+              const itemId = encodeURIComponent(getField(item, ['contentid', 'id']));
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[200px]">
+                <Link key={i} href={`/festival/${itemId}`}>
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[200px] cursor-pointer">
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
                   {dateStr && (
                     <p className="text-xs text-stone-500 mb-2 flex items-center gap-1">
@@ -84,6 +86,7 @@ export default async function FestivalPage() {
                     </p>
                   )}
                 </div>
+                </Link>
               );
             })}
           </div>

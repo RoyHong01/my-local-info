@@ -70,8 +70,10 @@ export default async function SubsidyPage() {
               const dateStr = startDate && deadline
                 ? `${startDate} ~ ${deadline}`
                 : deadline || startDate;
+              const itemId = encodeURIComponent(getField(item, ['서비스ID', 'id']));
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col" style={{minHeight: '200px'}}>
+                <Link key={i} href={`/subsidy/${itemId}`}>
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col cursor-pointer" style={{minHeight: '200px'}}>
                   <h2 className="text-base font-bold mb-2 text-stone-800">{name}</h2>
                   {dateStr && (
                     <p className="text-xs text-orange-500 mb-2 flex items-center gap-1">
@@ -92,6 +94,7 @@ export default async function SubsidyPage() {
                     {org && <p className="flex items-center gap-1 truncate"><span>🏛</span> {org}</p>}
                   </div>
                 </div>
+                </Link>
               );
             })}
           </div>
