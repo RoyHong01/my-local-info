@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://my-local-info-2gs.pages.dev"),
-  title: "성남시 생활 정보 | 행사·혜택·지원금 안내",
-  description: "성남시 주민을 위한 지역 행사, 축제, 지원금, 혜택 정보를 매일 업데이트합니다.",
+  metadataBase: new URL("https://pick-n-joy.com"),
+  title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
+  description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
   openGraph: {
-    title: "성남시 생활 정보 | 행사·혜택·지원금 안내",
-    description: "성남시 주민을 위한 지역 행사, 축제, 지원금, 혜택 정보를 매일 업데이트합니다.",
-    url: "/",
-    siteName: "성남시 생활 정보",
+    title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
+    description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
+    url: "https://pick-n-joy.com",
+    siteName: "픽앤조이",
     type: "website",
   },
 };
@@ -33,9 +33,9 @@ export default function RootLayout({
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "성남시 생활 정보",
-    url: "https://my-local-info-2gs.pages.dev",
-    description: "성남시 주민을 위한 지역 행사, 축제, 지원금, 혜택 정보",
+    name: "픽앤조이",
+    url: "https://pick-n-joy.com",
+    description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
   };
 
   const breadcrumbJsonLd = {
@@ -46,13 +46,13 @@ export default function RootLayout({
         "@type": "ListItem",
         position: 1,
         name: "홈",
-        item: "https://my-local-info-2gs.pages.dev",
+        item: "https://pick-n-joy.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "블로그",
-        item: "https://my-local-info-2gs.pages.dev/blog",
+        item: "https://pick-n-joy.com/blog",
       },
     ],
   };
