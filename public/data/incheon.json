@@ -1,0 +1,41 @@
+[
+  {
+    "id": "incheon-001",
+    "name": "2026 인천 봄꽃 축제",
+    "category": "행사",
+    "startDate": "2026-04-05",
+    "endDate": "2026-04-13",
+    "location": "인천대공원",
+    "target": "인천시민 누구나",
+    "summary": "인천대공원에서 펼쳐지는 봄꽃 축제. 벚꽃, 진달래 등 다양한 봄꽃을 감상할 수 있습니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "incheon-002",
+    "name": "인천 청년 월세 지원",
+    "category": "혜택",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "location": "인천광역시청",
+    "target": "만 19~39세 인천 거주 청년",
+    "summary": "인천시 거주 청년의 주거비 부담 완화를 위해 월 최대 20만원 지원합니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "incheon-003",
+    "name": "인천 어린이날 큰잔치",
+    "category": "행사",
+    "startDate": "2026-05-05",
+    "endDate": "2026-05-05",
+    "location": "인천종합문화예술회관",
+    "target": "어린이 및 가족",
+    "summary": "어린이날을 맞아 다양한 공연과 체험 행사가 펼쳐집니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  }
+]

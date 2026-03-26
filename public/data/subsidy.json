@@ -1,0 +1,41 @@
+[
+  {
+    "id": "subsidy-001",
+    "name": "청년 도약 계좌",
+    "category": "혜택",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "location": "금융위원회",
+    "target": "만 19~34세 청년",
+    "summary": "월 40~70만원 납입 시 정부 기여금 지원 및 비과세 혜택 제공. 5년 만기 시 최대 5000만원 수령 가능.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "subsidy-002",
+    "name": "첫만남이용권 (출산지원금)",
+    "category": "혜택",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "location": "보건복지부",
+    "target": "2024년 이후 출생아 가정",
+    "summary": "첫째 200만원, 둘째 이상 300만원 바우처 지급. 출생 후 1년 이내 신청 가능.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "subsidy-003",
+    "name": "국민취업지원제도",
+    "category": "혜택",
+    "startDate": "2026-01-01",
+    "endDate": "2026-12-31",
+    "location": "고용노동부",
+    "target": "취업 취약계층 (15~69세)",
+    "summary": "취업지원 서비스와 함께 구직촉진수당 월 50만원을 최대 6개월 지원합니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  }
+]

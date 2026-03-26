@@ -1,0 +1,41 @@
+[
+  {
+    "id": "festival-001",
+    "name": "진해 군항제 (벚꽃 축제)",
+    "category": "행사",
+    "startDate": "2026-03-28",
+    "endDate": "2026-04-06",
+    "location": "경남 창원시 진해구",
+    "target": "전국 관광객",
+    "summary": "국내 최대 규모 벚꽃 축제. 350여만 그루의 벚꽃이 만개하는 장관을 감상할 수 있습니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "festival-002",
+    "name": "경주 벚꽃 마라톤 & 봄 여행",
+    "category": "행사",
+    "startDate": "2026-04-05",
+    "endDate": "2026-04-07",
+    "location": "경북 경주시",
+    "target": "전국 관광객",
+    "summary": "천년 고도 경주의 봄을 만끽하는 여행. 불국사, 첨성대 주변 벚꽃길이 절경입니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  },
+  {
+    "id": "festival-003",
+    "name": "서울 여의도 봄꽃 축제",
+    "category": "행사",
+    "startDate": "2026-04-01",
+    "endDate": "2026-04-14",
+    "location": "서울 영등포구 여의도",
+    "target": "전국 관광객",
+    "summary": "여의도 윤중로 벚꽃길 따라 화려한 봄꽃 축제. 야간 조명과 함께 더욱 아름다운 풍경을 연출합니다.",
+    "link": "#",
+    "expired": false,
+    "collectedAt": "2026-03-26"
+  }
+]
