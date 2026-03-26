@@ -1,6 +1,18 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '인천 지역 정보 | 픽앤조이',
+  description: '인천 지역의 최신 복지, 행사, 생활 정보를 한눈에 확인하세요.',
+  alternates: { canonical: '/incheon/' },
+  openGraph: {
+    title: '인천 지역 정보 | 픽앤조이',
+    description: '인천 지역의 최신 복지, 행사, 생활 정보를 한눈에 확인하세요.',
+    url: 'https://pick-n-joy.com/incheon/',
+  },
+};
 
 interface DataItem {
   [key: string]: unknown;

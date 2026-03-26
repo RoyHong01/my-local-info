@@ -1,6 +1,18 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '전국 보조금·복지 정보 | 픽앤조이',
+  description: '전국의 보조금, 복지, 지원금 정보를 한눈에 확인하세요.',
+  alternates: { canonical: '/subsidy/' },
+  openGraph: {
+    title: '전국 보조금·복지 정보 | 픽앤조이',
+    description: '전국의 보조금, 복지, 지원금 정보를 한눈에 확인하세요.',
+    url: 'https://pick-n-joy.com/subsidy/',
+  },
+};
 
 interface DataItem {
   [key: string]: unknown;

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     url: "https://pick-n-joy.com",
     siteName: "픽앤조이",
     type: "website",
+    images: [{ url: "https://pick-n-joy.com/images/default-og.svg", width: 1200, height: 630, alt: "픽앤조이" }],
   },
 };
 

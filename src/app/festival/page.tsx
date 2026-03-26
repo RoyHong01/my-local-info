@@ -1,6 +1,18 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '전국 축제·여행 정보 | 픽앤조이',
+  description: '전국의 축제, 여행, 관광 정보를 한눈에 확인하세요.',
+  alternates: { canonical: '/festival/' },
+  openGraph: {
+    title: '전국 축제·여행 정보 | 픽앤조이',
+    description: '전국의 축제, 여행, 관광 정보를 한눈에 확인하세요.',
+    url: 'https://pick-n-joy.com/festival/',
+  },
+};
 
 interface DataItem {
   [key: string]: unknown;

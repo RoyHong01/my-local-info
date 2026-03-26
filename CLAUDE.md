@@ -104,3 +104,17 @@ deploy.yml        # 매일 07:00 KST 자동화
 - 네이버 서치어드바이저 사이트 인증 메타태그 추가 (layout.tsx)
 - 네이버 서치어드바이저 소유 확인 HTML 파일 추가 (public/)
 - RSS 피드 추가 (src/app/rss.xml/route.ts → /rss.xml 경로)
+
+### 2026-03-27
+
+- sitemap.xml 도메인 수정: pages.dev → pick-n-joy.com (generate-sitemap.js, robots.txt)
+- SEO 전체 점검 및 보강:
+  - 블로그 상세 페이지: OG 태그, canonical, publishedTime 추가
+  - 블로그 목록/소개/인천/보조금/축제 페이지: metadata export 추가 (title, description, OG, canonical)
+- og:image 자동화 구현:
+  - generate-blog-post.js: TourAPI firstimage → frontmatter image 필드 자동 삽입
+  - 이미지 없는 카테고리는 카테고리별 기본 SVG 이미지 사용
+  - posts.ts: PostData에 image 필드 추가
+  - blog/[slug] generateMetadata: og:image 반영
+  - layout.tsx: 사이트 전역 기본 og:image 추가
+  - public/images/ 기본 OG 이미지 4종 생성 (default-og, default-incheon, default-subsidy, default-festival)

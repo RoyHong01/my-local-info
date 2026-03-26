@@ -62,7 +62,15 @@ async function run() {
     return;
   }
 
-  // [3단계] Gemini 2.5 Pro로 블로그 글 생성
+  // [3단계] 대표 이미지 URL 추출 (TourAPI: firstimage, 없으면 카테고리별 기본 이미지)
+  const defaultImages = {
+    '인천 지역 정보': 'https://pick-n-joy.com/images/default-incheon.svg',
+    '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
+    '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
+  };
+  const imageUrl = candidate.firstimage || candidate.firstimage2 || defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
+
+  // [4단계] Gemini로 블로그 글 생성
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
 카테고리: ${candidate._category}
 
@@ -136,6 +144,9 @@ tags: [태그1, 태그2, 태그3]
     finalContent = finalContent.substring(0, finalContent.length - 3);
   }
   finalContent = finalContent.trim();
+
+  // YAML frontmatter에 image 필드 삽입 (tags 라인 뒤에)
+  finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${imageUrl}"`);
 
   // YAML frontmatter에서 title 값에 콜론이 있으면 따옴표로 감싸기
   finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {

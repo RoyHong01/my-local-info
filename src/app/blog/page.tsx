@@ -1,6 +1,18 @@
 import Link from 'next/link';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogFilter from '@/components/BlogFilter';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '블로그 | 픽앤조이',
+  description: '인천 및 전국의 행사, 축제, 보조금, 여행 정보를 쉽고 친근하게 전해드리는 블로그입니다.',
+  alternates: { canonical: '/blog/' },
+  openGraph: {
+    title: '블로그 | 픽앤조이',
+    description: '인천 및 전국의 행사, 축제, 보조금, 여행 정보를 쉽고 친근하게 전해드리는 블로그입니다.',
+    url: 'https://pick-n-joy.com/blog/',
+  },
+};
 
 export default function BlogPage() {
   const posts = getSortedPostsData();

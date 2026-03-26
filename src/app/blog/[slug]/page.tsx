@@ -15,9 +15,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) {
     return { title: 'Not Found' };
   }
+  const description = post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
   return {
     title: `${post.title} | 픽앤조이`,
-    description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
+    description,
+    alternates: {
+      canonical: `/blog/${p.slug}/`,
+    },
+    openGraph: {
+      title: `${post.title} | 픽앤조이`,
+      description,
+      url: `https://pick-n-joy.com/blog/${p.slug}/`,
+      type: 'article',
+      publishedTime: post.date,
+      siteName: '픽앤조이',
+      ...(post.image ? { images: [{ url: post.image, width: 1200, height: 630, alt: post.title }] } : {}),
+    },
   };
 }
 

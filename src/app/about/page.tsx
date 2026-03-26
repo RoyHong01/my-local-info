@@ -1,4 +1,16 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '사이트 소개 | 픽앤조이',
+  description: '픽앤조이는 인천 및 전국의 유용한 생활 정보를 모아 한눈에 보기 쉽게 제공합니다.',
+  alternates: { canonical: '/about/' },
+  openGraph: {
+    title: '사이트 소개 | 픽앤조이',
+    description: '픽앤조이는 인천 및 전국의 유용한 생활 정보를 모아 한눈에 보기 쉽게 제공합니다.',
+    url: 'https://pick-n-joy.com/about/',
+  },
+};
 
 export default function AboutPage() {
   return (
