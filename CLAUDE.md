@@ -118,3 +118,7 @@ deploy.yml        # 매일 07:00 KST 자동화
   - blog/[slug] generateMetadata: og:image 반영
   - layout.tsx: 사이트 전역 기본 og:image 추가
   - public/images/ 기본 OG 이미지 4종 생성 (default-og, default-incheon, default-subsidy, default-festival)
+- favicon 추가:
+  - public/favicon.ico (32x32, 오렌지 배경 + 흰색 P)
+  - public/favicon.svg (벡터, 고해상도 대응)
+  - layout.tsx: icons 메타데이터 설정 추가

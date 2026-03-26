@@ -9,14 +9,24 @@
 - **핵심 기능**: 공공데이터포털 API 연동, Gemini 2.5 Flash를 활용한 블로그 포스트(.md) 자동 생성화 스크립트
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
-- **UI 및 기본 라우팅 완성**: 메인 URL(`my-local-info.pages.dev` 또는 `my-local-info-2gs`)에 성남 기반의 공공 데이터 카드 및 `/blog` 상세 페이지 라우팅 적용 완료
-- **스크립트 고도화**:
-  - `fetch-public-data.js` (성남/경기 공공 데이터 최신화 체크, 중복 방지)
-  - `generate-blog-post.js` (마크다운 기반 SEO 및 Frontmatter 자동 생성 분리 파싱 완료)
-- **CI/CD 워크플로우 구성**: `.github/workflows/deploy.yml` 작성 및 Cloudflare 권한 Secret 세팅 통과(성공적인 Build & Deploy)
-- **가이드라인 도입**: SEO/E-E-A-T 가이드라인을 정의한 `AI_RULES.md` 생성 완료
+
+- **멀티카테고리 구조 전면 재설계**: 인천/전국 보조금/축제·여행 3개 카테고리 + 블로그
+- **SEO 전면 보강 (2026-03-27)**:
+  - sitemap.xml 도메인 수정 (pages.dev → pick-n-joy.com)
+  - 전 페이지 metadata export 추가 (title, description, OG, canonical)
+  - og:image 자동화 (TourAPI firstimage → frontmatter, 카테고리별 기본 SVG)
+  - favicon 추가 (ico + svg)
+  - robots.txt 도메인 수정
+- **블로그 자동 생성**: Gemini 2.0-flash + 공공데이터 기반 블로그 포스트 자동 생성 스크립트
+- **CI/CD 워크플로우**: GitHub Actions (매일 07:00 KST) + Cloudflare Pages 자동 배포
+- **RSS 피드**: /rss.xml 경로 제공
+- **네이버 서치어드바이저**: 사이트 인증 완료
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
-- [ ] 블로그 상세 페이지(`app/blog/[slug]/page.tsx`) 구조화된 JSON-LD 데이터 추가 및 Meta 데이터(OpenGraph 등) 확충 작업
-- [ ] 사이트맵(`sitemap.js/ts`) 및 웹 로봇(`robots.txt`) 추가하여 신규 글들에 대한 크롤링 최적화 진행
-- [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 Slack이나 이메일 등으로 결과를 알림받는 알림 채널 검토
+
+- [x] 블로그 상세 페이지 구조화된 JSON-LD 데이터 추가 및 Meta 데이터(OpenGraph 등) 확충 작업
+- [x] 사이트맵(`sitemap.xml`) 및 웹 로봇(`robots.txt`) 추가하여 신규 글들에 대한 크롤링 최적화 진행
+- [ ] Google Analytics (NEXT_PUBLIC_GA_ID) 설정
+- [ ] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정
+- [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
+- [ ] 2단계: 전국 맛집 기능 (restaurant.json, 카카오 API 연동)
