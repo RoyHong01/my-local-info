@@ -61,10 +61,10 @@ export default async function FestivalPage() {
               const summary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
               const location = getField(item, ['addr1', 'location', '소관기관명']);
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col h-full">
+                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
                   <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">축제·여행</span>
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
-                  <p className="text-stone-500 text-sm line-clamp-3 flex-grow">{summary}</p>
+                  <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
                   {location && (
                     <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
                       <span>📍</span> {location}

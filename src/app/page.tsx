@@ -30,12 +30,12 @@ function IncheonCard({ item }: { item: DataItem }) {
   const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
   const org = getField(item, ['소관기관명', 'location', 'addr1']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
       <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">
         인천
       </span>
       <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
-      <p className="text-stone-500 text-sm line-clamp-2 flex-grow">{summary}</p>
+      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
       {org && (
         <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
           <span>🏛</span> {org}
@@ -50,12 +50,12 @@ function SubsidyCard({ item }: { item: DataItem }) {
   const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
   const target = getField(item, ['지원대상', 'target']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col min-h-[180px]">
       <span className="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full mb-3 self-start">
         보조금
       </span>
       <h4 className="text-base font-bold mb-2 text-stone-800">{name}</h4>
-      <p className="text-stone-500 text-sm flex-grow">{summary}</p>
+      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
       {target && (
         <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
           <span>🎯</span> {target}
@@ -70,12 +70,12 @@ function FestivalCard({ item }: { item: DataItem }) {
   const summary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
   const location = getField(item, ['addr1', 'location', '소관기관명']);
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
       <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">
         축제·여행
       </span>
       <h4 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h4>
-      <p className="text-stone-500 text-sm line-clamp-2 flex-grow">{summary}</p>
+      <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
       {location && (
         <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
           <span>📍</span> {location}
@@ -108,9 +108,9 @@ export default async function Home() {
           <Link href="/" className="text-2xl font-bold text-orange-500">픽앤조이 🎯</Link>
           <nav>
             <ul className="flex space-x-3 md:space-x-5 text-sm font-medium text-stone-600">
-              <li><Link href="#incheon" className="hover:text-blue-600 transition">인천정보</Link></li>
-              <li><Link href="#subsidy" className="hover:text-amber-600 transition">보조금</Link></li>
-              <li><Link href="#festival" className="hover:text-rose-600 transition">축제·여행</Link></li>
+              <li><Link href="/incheon" className="hover:text-blue-600 transition">인천정보</Link></li>
+              <li><Link href="/subsidy" className="hover:text-amber-600 transition">보조금</Link></li>
+              <li><Link href="/festival" className="hover:text-rose-600 transition">축제·여행</Link></li>
               <li><Link href="/blog" className="hover:text-orange-500 transition">블로그</Link></li>
               <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
             </ul>

@@ -62,10 +62,10 @@ export default async function IncheonPage() {
               const org = getField(item, ['소관기관명', 'location', 'addr1']);
               const target = getField(item, ['지원대상', 'target']);
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col h-full">
+                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
                   <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">인천</span>
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
-                  <p className="text-stone-500 text-sm line-clamp-3 flex-grow">{summary}</p>
+                  <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
                   <div className="mt-3 space-y-1 text-xs text-stone-400">
                     {org && <p className="flex items-center gap-1"><span>🏛</span> {org}</p>}
                     {target && <p className="flex items-center gap-1"><span>🎯</span> {target}</p>}
