@@ -62,12 +62,12 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-orange-500">픽앤조이 🎯</Link>
+          <Link href="/" className="text-3xl font-bold text-orange-500">픽앤조이 🎯</Link>
           <nav>
-            <ul className="flex space-x-3 md:space-x-5 text-sm font-medium text-stone-600">
-              <li><Link href="/incheon" className="hover:text-blue-600 transition">인천정보</Link></li>
-              <li><Link href="/subsidy" className="hover:text-amber-600 transition">보조금</Link></li>
-              <li><Link href="/festival" className="text-rose-600 font-bold">축제·여행</Link></li>
+            <ul className="flex space-x-4 md:space-x-6 text-base font-medium text-stone-600">
+              <li><Link href="/incheon" className="hover:text-blue-600 transition">인천시 정보</Link></li>
+              <li><Link href="/subsidy" className="hover:text-amber-600 transition">전국 보조금·복지 정책</Link></li>
+              <li><Link href="/festival" className="text-rose-600 font-bold">전국 축제·여행 정보</Link></li>
               <li><Link href="/blog" className="hover:text-orange-500 transition">블로그</Link></li>
             </ul>
           </nav>
