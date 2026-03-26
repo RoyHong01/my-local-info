@@ -92,9 +92,9 @@ export default async function Home() {
     readJson('festival.json'),
   ]);
 
-  const incheon = incheonAll.filter(i => !i.expired).slice(0, 6);
-  const subsidy = subsidyAll.filter(i => !i.expired).slice(0, 4);
-  const festival = festivalAll.filter(i => !i.expired).slice(0, 6);
+  const incheon = incheonAll.filter(i => !i.expired).slice(0, 3);
+  const subsidy = subsidyAll.filter(i => !i.expired).slice(0, 3);
+  const festival = festivalAll.filter(i => !i.expired).slice(0, 3);
 
   const today = new Date().toLocaleDateString('ko-KR', {
     year: 'numeric', month: 'long', day: 'numeric'
@@ -121,67 +121,72 @@ export default async function Home() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-orange-500 to-amber-400 text-white py-16 px-4 text-center">
         <h1 className="text-3xl md:text-5xl font-extrabold mb-4 drop-shadow">
-          당신의 일상을 Pick,<br className="hidden md:block" /> 당신의 주말을 Enjoy!
+          당신의 일상을 Pick, 당신의 주말을 Enjoy!
         </h1>
         <p className="text-orange-100 text-sm md:text-base max-w-xl mx-auto">
           인천 및 전국의 최신 행사·축제·보조금·여행 정보를 매일 업데이트합니다.
         </p>
       </section>
 
-      <main className="max-w-5xl mx-auto px-4 py-10 space-y-16">
-        {/* 인천 지역 정보 */}
-        <section id="incheon" className="scroll-mt-24">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-extrabold flex items-center gap-2">
-              <span className="text-2xl">🏙</span> 인천 지역 정보
-            </h2>
-            <Link href="/incheon" className="text-sm text-blue-600 hover:underline">더보기 →</Link>
-          </div>
-          {incheon.length === 0 ? (
-            <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {incheon.map((item, i) => <IncheonCard key={i} item={item} />)}
+      <main className="max-w-5xl mx-auto px-4 py-10">
+        {/* 3열 가로 배치 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* 인천 지역 정보 열 */}
+          <section id="incheon" className="scroll-mt-24 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-extrabold flex items-center gap-2">
+                <span className="text-xl">🏙</span> 인천 지역 정보
+              </h2>
             </div>
-          )}
-        </section>
+            <div className="flex flex-col gap-4 flex-grow">
+              {incheon.length === 0 ? (
+                <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
+              ) : (
+                incheon.map((item, i) => <IncheonCard key={i} item={item} />)
+              )}
+            </div>
+            <Link href="/incheon" className="text-sm text-blue-600 hover:underline mt-4 text-right">더보기 →</Link>
+          </section>
+
+          {/* 전국 보조금 열 */}
+          <section id="subsidy" className="scroll-mt-24 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-extrabold flex items-center gap-2">
+                <span className="text-xl">💰</span> 전국 보조금·복지
+              </h2>
+            </div>
+            <div className="flex flex-col gap-4 flex-grow">
+              {subsidy.length === 0 ? (
+                <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
+              ) : (
+                subsidy.map((item, i) => <SubsidyCard key={i} item={item} />)
+              )}
+            </div>
+            <Link href="/subsidy" className="text-sm text-amber-600 hover:underline mt-4 text-right">더보기 →</Link>
+          </section>
+
+          {/* 전국 축제·여행 열 */}
+          <section id="festival" className="scroll-mt-24 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-extrabold flex items-center gap-2">
+                <span className="text-xl">🎪</span> 전국 축제·여행
+              </h2>
+            </div>
+            <div className="flex flex-col gap-4 flex-grow">
+              {festival.length === 0 ? (
+                <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
+              ) : (
+                festival.map((item, i) => <FestivalCard key={i} item={item} />)
+              )}
+            </div>
+            <Link href="/festival" className="text-sm text-rose-600 hover:underline mt-4 text-right">더보기 →</Link>
+          </section>
+        </div>
 
         {/* Ad Banner */}
-        <AdBanner />
-
-        {/* 전국 보조금 */}
-        <section id="subsidy" className="scroll-mt-24">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-extrabold flex items-center gap-2">
-              <span className="text-2xl">💰</span> 전국 보조금·복지 정책
-            </h2>
-            <Link href="/subsidy" className="text-sm text-amber-600 hover:underline">더보기 →</Link>
-          </div>
-          {subsidy.length === 0 ? (
-            <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {subsidy.map((item, i) => <SubsidyCard key={i} item={item} />)}
-            </div>
-          )}
-        </section>
-
-        {/* 전국 축제·여행 */}
-        <section id="festival" className="scroll-mt-24">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-extrabold flex items-center gap-2">
-              <span className="text-2xl">🎪</span> 전국 축제·여행 정보
-            </h2>
-            <Link href="/festival" className="text-sm text-rose-600 hover:underline">더보기 →</Link>
-          </div>
-          {festival.length === 0 ? (
-            <p className="text-stone-400 text-sm py-8 text-center">곧 업데이트될 예정입니다.</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {festival.map((item, i) => <FestivalCard key={i} item={item} />)}
-            </div>
-          )}
-        </section>
+        <div className="mt-12">
+          <AdBanner />
+        </div>
       </main>
 
       {/* Footer */}
