@@ -8,33 +8,33 @@ async function run() {
     return;
   }
 
-  // [1단계] 최신 데이터 확인
-  const dataPath = path.join(process.cwd(), 'public', 'data', 'local-info.json');
-  let data = [];
-  try {
-    const fileContent = await fs.readFile(dataPath, 'utf-8');
-    data = JSON.parse(fileContent);
-  } catch (err) {
-    console.error("Failed to read local-info.json:", err.message);
-    return;
+  // [1단계] 3개 데이터 파일 모두 읽기
+  const dataFiles = [
+    { file: 'incheon.json', category: '인천 지역 정보' },
+    { file: 'subsidy.json', category: '전국 보조금·복지 정책' },
+    { file: 'festival.json', category: '전국 축제·여행' }
+  ];
+
+  let allItems = [];
+  for (const { file, category } of dataFiles) {
+    const dataPath = path.join(process.cwd(), 'public', 'data', file);
+    try {
+      const content = await fs.readFile(dataPath, 'utf-8');
+      const items = JSON.parse(content);
+      allItems = allItems.concat(items.map(item => ({ ...item, _category: category })));
+    } catch (_) {
+      console.log(`${file} 없음, 건너뜀`);
+    }
   }
 
-  if (data.length === 0) {
+  if (allItems.length === 0) {
     console.log("데이터가 없습니다.");
     return;
   }
 
-  // 마지막 항목 가져오기
-  const latestItem = data[data.length - 1];
-  const itemName = latestItem.name || latestItem["서비스명"];
-  
+  // [2단계] 이미 블로그 글이 있는 항목 확인
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
-
-  try {
-    await fs.mkdir(postsDir, { recursive: true });
-  } catch (e) {
-    // Ignore if directory already exists
-  }
+  await fs.mkdir(postsDir, { recursive: true });
 
   let postsFiles = [];
   try {
@@ -44,34 +44,36 @@ async function run() {
     return;
   }
 
-  let isDuplicate = false;
+  let postsContent = '';
   for (const file of postsFiles) {
     if (file.endsWith('.md')) {
-      const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
-      // 글 안에 이름이 포함되어 있는지로 중복 여부 확인
-      if (itemName && content.includes(itemName)) {
-        isDuplicate = true;
-        break;
-      }
+      postsContent += await fs.readFile(path.join(postsDir, file), 'utf-8');
     }
   }
 
-  if (isDuplicate) {
-    console.log("이미 작성된 글입니다");
+  // 아직 글이 없는 항목 선택 (만료되지 않은 것 우선)
+  const candidate = allItems.find(item => {
+    const name = item['서비스명'] || item['title'] || item['name'] || '';
+    return name && !postsContent.includes(name) && !item.expired;
+  });
+
+  if (!candidate) {
+    console.log("블로그 글을 생성할 새로운 항목이 없습니다.");
     return;
   }
 
-  // [2단계] Gemini AI로 블로그 글 생성
-  const prompt = `아래 공공서비스 정보를 바탕으로 블로그 글을 작성해줘.
+  // [3단계] Gemini 2.5 Pro로 블로그 글 생성
+  const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
+카테고리: ${candidate._category}
 
-정보: ${JSON.stringify(latestItem, null, 2)}
+정보: ${JSON.stringify(candidate, null, 2)}
 
 아래 형식으로 출력해줘. 반드시 이 형식만 출력하고 다른 텍스트는 없이:
 ---
 title: (친근하고 흥미로운 제목)
 date: (오늘 날짜 YYYY-MM-DD)
 summary: (한 줄 요약)
-category: 정보
+category: ${candidate._category}
 tags: [태그1, 태그2, 태그3]
 ---
 
@@ -79,7 +81,7 @@ tags: [태그1, 태그2, 태그3]
 
 마지막 줄에 FILENAME: YYYY-MM-DD-keyword 형식으로 파일명도 출력해줘. 키워드는 영문으로.`;
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
 
   let geminiRes;
   try {
@@ -110,7 +112,7 @@ tags: [태그1, 태그2, 태그3]
 
   const generatedText = geminiData.candidates[0].content.parts[0].text;
 
-  // [3단계] 파일 저장
+  // [4단계] 파일 저장
   const lines = generatedText.split('\n');
   let filename = '';
   let contentLines = [];
@@ -124,35 +126,29 @@ tags: [태그1, 태그2, 태그3]
   }
 
   let finalContent = contentLines.join('\n').trim();
-  
-  // 마크다운 코드블록 안의 내용일 경우 정리
+
   if (finalContent.startsWith('```markdown')) {
     finalContent = finalContent.substring(11);
   } else if (finalContent.startsWith('```')) {
     finalContent = finalContent.substring(3);
   }
-  
   if (finalContent.endsWith('```')) {
     finalContent = finalContent.substring(0, finalContent.length - 3);
   }
-  
   finalContent = finalContent.trim();
 
-  // 안전장치
   if (!filename) {
     const today = new Date().toISOString().split('T')[0];
-    filename = `${today}-new-service`;
+    filename = `${today}-new-post`;
   }
-  
   if (!filename.endsWith('.md')) {
     filename += '.md';
   }
 
   const destPath = path.join(postsDir, filename);
-
   try {
     await fs.writeFile(destPath, finalContent, 'utf-8');
-    console.log(`블로그 글 성공적으로 생성: ${filename}`);
+    console.log(`블로그 글 생성 완료: ${filename}`);
   } catch (err) {
     console.error("Failed to save blog post:", err.message);
   }

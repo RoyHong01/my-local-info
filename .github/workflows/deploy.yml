@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: Daily Update & Deploy
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  update-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,36 +26,51 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Fetch Public Data
+      - name: 인천 지역 정보 수집
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: node scripts/fetch-public-data.js
+        run: node scripts/collect-incheon.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Generate Blog Post
+      - name: 전국 보조금 정책 수집
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: node scripts/collect-subsidy.js
+        env:
+          PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
+
+      - name: 전국 축제·여행 정보 수집
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: node scripts/collect-festival.js
+        env:
+          TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
+
+      - name: 만료 콘텐츠 처리
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: node scripts/cleanup-expired.js
+
+      - name: AI 블로그 글 자동 생성
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: node scripts/generate-blog-post.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Commit and Push changes
+      - name: 변경사항 커밋 & 푸시
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add .
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트: 공공데이터 수집 및 블로그 글 생성"
+            git commit -m "자동 업데이트: 데이터 수집 및 블로그 글 생성 $(date +'%Y-%m-%d')"
             git push
           else
-            echo "No changes to commit"
+            echo "변경사항 없음"
           fi
 
-      - name: Build Project
+      - name: Next.js 빌드
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
+      - name: Cloudflare Pages 배포
         run: npx wrangler pages deploy out --project-name=my-local-info
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
