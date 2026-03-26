@@ -68,7 +68,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                       기타
                     </span>
                   )}
-                  <span className="text-xs text-stone-400">{post.date}</span>
+                  <span className="text-xs text-stone-500">{post.date}</span>
                 </div>
                 <h2
                   className="text-sm font-bold text-stone-800 hover:text-orange-500 transition-colors leading-snug"
@@ -77,7 +77,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                   {post.title}
                 </h2>
                 <p
-                  className="text-xs text-stone-600 leading-relaxed flex-grow"
+                  className="text-xs text-stone-700 leading-relaxed flex-grow"
                   style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
                 >
                   {post.summary}

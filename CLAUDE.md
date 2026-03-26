@@ -13,7 +13,7 @@
 
 ## 기술 스택
 - Next.js 14 (App Router) + TypeScript + Tailwind CSS
-- Gemini API (gemini-2.5-pro) — 블로그 글 자동 생성
+- Gemini API (gemini-2.0-flash) — 블로그 글 자동 생성
 - 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
 - GitHub Actions — 매일 07:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
@@ -87,3 +87,11 @@ deploy.yml        # 매일 07:00 KST 자동화
 - src/app/ 멀티카테고리 UI 전면 재작성 (픽앤조이 브랜딩 적용)
 - 샘플 데이터 3종 생성 (incheon.json, subsidy.json, festival.json)
 - Cloudflare Pages 배포 확인: https://my-local-info-2gs.pages.dev
+- 상세 페이지 생성: incheon/[id], subsidy/[id], festival/[id]
+- 홈 카드에 상세 페이지 링크 연결
+
+### 2026-03-26 (계속)
+- Gemini 모델 gemini-2.5-pro → gemini-2.5-flash 변경 (free tier 쿼터 초과)
+- 블로그 포스트 3편 자동 생성 성공 (인천 봄꽃 축제, 청년 월세 지원, 어린이날 큰잔치)
+- YAML frontmatter title 콜론 자동 따옴표 처리 로직 추가
+- GitHub 푸시 완료
