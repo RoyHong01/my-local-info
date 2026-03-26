@@ -8,8 +8,12 @@ async function run() {
     return;
   }
 
-  // contentTypeId 15 = 축제/공연/행사
-  const endpoint = `https://apis.data.go.kr/B551011/KorService2/areaBasedList1?serviceKey=${TOUR_API_KEY}&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&listYN=Y&arrange=C&contentTypeId=15`;
+  // searchFestival2: 기간별 축제 목록 조회
+  const today = new Date();
+  const fmt = (d) => d.toISOString().split('T')[0].replace(/-/g, '');
+  const startDate = fmt(today);
+  const endDate = fmt(new Date(today.getFullYear(), today.getMonth() + 6, today.getDate()));
+  const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchFestival2?serviceKey=${TOUR_API_KEY}&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&eventStartDate=${startDate}&eventEndDate=${endDate}`;
 
   let items = [];
   try {

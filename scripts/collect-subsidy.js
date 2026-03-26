@@ -8,11 +8,13 @@ async function run() {
     return;
   }
 
-  const endpoint = `https://apis.data.go.kr/1741000/Subsidy24/getSubsidy24List?serviceKey=${PUBLIC_DATA_API_KEY}&page=1&perPage=100&returnType=JSON`;
+  const endpoint = `https://api.odcloud.kr/api/gov24/v3/serviceList?page=1&perPage=100&returnType=JSON`;
 
   let items = [];
   try {
-    const response = await fetch(endpoint);
+    const response = await fetch(endpoint, {
+      headers: { 'Authorization': `Infuser ${PUBLIC_DATA_API_KEY}` }
+    });
     if (!response.ok) {
       console.error("Failed to fetch subsidy data:", await response.text());
       return;
@@ -24,16 +26,10 @@ async function run() {
     return;
   }
 
-  // 인천 제외, 전국 단위 필터링
+  // 인천 소관기관 제외
   const filtered = items.filter(item => {
-    const text = [
-      item['서비스명'],
-      item['서비스목적요약'],
-      item['지원대상'],
-      item['소관기관명'],
-      item['서비스분야']
-    ].join(' ');
-    return !text.includes('인천');
+    const org = item['소관기관명'] || '';
+    return !org.includes('인천');
   });
 
   const dataPath = path.join(process.cwd(), 'public', 'data', 'subsidy.json');

@@ -8,11 +8,13 @@ async function run() {
     return;
   }
 
-  const endpoint = `https://apis.data.go.kr/1741000/Subsidy24/getSubsidy24List?serviceKey=${PUBLIC_DATA_API_KEY}&page=1&perPage=100&returnType=JSON`;
+  const endpoint = `https://api.odcloud.kr/api/gov24/v3/serviceList?page=1&perPage=100&returnType=JSON&cond[소관기관명::LIKE]=인천`;
 
   let items = [];
   try {
-    const response = await fetch(endpoint);
+    const response = await fetch(endpoint, {
+      headers: { 'Authorization': `Infuser ${PUBLIC_DATA_API_KEY}` }
+    });
     if (!response.ok) {
       console.error("Failed to fetch incheon data:", await response.text());
       return;
@@ -24,17 +26,7 @@ async function run() {
     return;
   }
 
-  // 인천 키워드 필터링
-  const filtered = items.filter(item => {
-    const text = [
-      item['서비스명'],
-      item['서비스목적요약'],
-      item['지원대상'],
-      item['소관기관명'],
-      item['서비스분야']
-    ].join(' ');
-    return text.includes('인천');
-  });
+  const filtered = items;
 
   const dataPath = path.join(process.cwd(), 'public', 'data', 'incheon.json');
 
