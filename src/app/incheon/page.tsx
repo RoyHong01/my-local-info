@@ -73,7 +73,6 @@ export default async function IncheonPage() {
                 : deadline || startDate;
               return (
                 <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col" style={{minHeight: '200px'}}>
-                  <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">인천</span>
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
                   {dateStr && (
                     <p className="text-xs text-orange-500 mb-2 flex items-center gap-1">
