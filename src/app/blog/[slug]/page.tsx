@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return { title: 'Not Found' };
   }
   return {
-    title: `${post.title} | 성남시 생활 정보`,
+    title: `${post.title} | 픽앤조이`,
     description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
   };
 }
@@ -58,34 +58,35 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
     author: {
       "@type": "Organization",
-      name: "성남시 생활 정보",
+      name: "픽앤조이",
     },
     publisher: {
       "@type": "Organization",
-      name: "성남시 생활 정보",
-      url: "https://my-local-info-2gs.pages.dev",
+      name: "픽앤조이",
+      url: "https://pick-n-joy.com",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://my-local-info-2gs.pages.dev/blog/${p.slug}`,
+      "@id": `https://pick-n-joy.com/blog/${p.slug}`,
     },
   };
 
   return (
-    <div className="min-h-screen bg-orange-50/50 font-sans text-stone-800">
+    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
       />
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-orange-600">성남시 생활 정보</Link>
+          <Link href="/" className="text-2xl font-bold text-orange-500">픽앤조이 🎯</Link>
           <nav>
-            <ul className="flex space-x-4 md:space-x-6 text-sm font-medium text-stone-600">
-              <li><Link href="/#events" className="hover:text-orange-600 transition">행사/축제</Link></li>
-              <li><Link href="/#benefits" className="hover:text-orange-600 transition">지원금/혜택</Link></li>
-              <li><Link href="/blog" className="hover:text-orange-600 transition">블로그</Link></li>
-              <li><Link href="/about" className="hover:text-orange-600 transition">소개</Link></li>
+            <ul className="flex space-x-3 md:space-x-5 text-sm font-medium text-stone-600">
+              <li><Link href="/#incheon" className="hover:text-blue-600 transition">인천정보</Link></li>
+              <li><Link href="/#subsidy" className="hover:text-amber-600 transition">보조금</Link></li>
+              <li><Link href="/#festival" className="hover:text-rose-600 transition">축제·여행</Link></li>
+              <li><Link href="/blog" className="text-orange-500 font-bold">블로그</Link></li>
+              <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
             </ul>
           </nav>
         </div>
