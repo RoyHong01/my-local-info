@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-const baseUrl = 'https://my-local-info-2gs.pages.dev';
+const baseUrl = 'https://pick-n-joy.com';
 const postsDir = path.join(__dirname, '..', 'src', 'content', 'posts');
 const outFile = path.join(__dirname, '..', 'out', 'sitemap.xml');
 

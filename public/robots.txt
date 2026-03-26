@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://my-local-info-2gs.pages.dev/sitemap.xml
+Sitemap: https://pick-n-joy.com/sitemap.xml
