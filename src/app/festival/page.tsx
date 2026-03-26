@@ -58,12 +58,26 @@ export default async function FestivalPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {items.map((item, i) => {
               const name = getField(item, ['title', 'name', '서비스명']);
-              const summary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
+              const rawSummary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
+              const summary = rawSummary || '상세 정보는 해당 축제를 통해 확인하세요.';
               const location = getField(item, ['addr1', 'location', '소관기관명']);
+              const rawStart = getField(item, ['eventstartdate', 'startDate']);
+              const rawEnd = getField(item, ['eventenddate', 'endDate']);
+              const fmtDate = (d: string) => d.length === 8
+                ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
+                : d;
+              const dateStr = rawStart
+                ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
+                : '';
               return (
-                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
+                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[200px]">
                   <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">축제·여행</span>
                   <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
+                  {dateStr && (
+                    <p className="text-xs text-stone-500 mb-2 flex items-center gap-1">
+                      <span>📅</span> {dateStr}
+                    </p>
+                  )}
                   <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
                   {location && (
                     <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
