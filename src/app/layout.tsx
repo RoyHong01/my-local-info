@@ -66,6 +66,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <meta name="naver-site-verification" content="e64f4446ce00f3d310e0c0fddce06498be24e86a" />
         {showAdsense && (
           <script
             async
