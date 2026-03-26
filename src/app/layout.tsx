@@ -16,6 +16,12 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://pick-n-joy.com"),
   title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
   description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
     description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
