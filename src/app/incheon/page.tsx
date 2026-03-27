@@ -79,7 +79,7 @@ export default async function IncheonPage() {
               <IncheonCardList items={items} />
             )}
           </div>
-          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-24">
             <TaeheoAdBanner />
           </aside>
         </div>
