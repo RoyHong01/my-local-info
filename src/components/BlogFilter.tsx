@@ -120,7 +120,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
               href={`/blog/${post.slug}`}
               onClick={() => sessionStorage.setItem('blogScrollY', String(window.scrollY))}
             >
-              <div className="bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
+              <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}
                 <div className="relative h-40 w-full flex-shrink-0">
                   {post.image && !post.image.endsWith('.svg') ? (
@@ -142,7 +142,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getCategoryBadge(post.category)}`}>
                       {getCategoryLabel(post.category)}
                     </span>
-                    <span className="text-xs text-stone-400">{post.date}</span>
+                    <span className="menu-card-icon text-xs text-stone-400">{post.date}</span>
                   </div>
                   <h2
                     className="text-base font-bold text-stone-800 hover:text-orange-500 transition-colors leading-snug"

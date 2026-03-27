@@ -37,11 +37,11 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
             href={`/subsidy/${itemId}`}
             onClick={() => sessionStorage.setItem('subsidyScrollY', String(window.scrollY))}
           >
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col cursor-pointer min-h-[220px]">
+            <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col cursor-pointer min-h-[220px]">
               <h2 className="text-[1.05rem] font-bold tracking-tight leading-snug mb-2 line-clamp-2 text-stone-900">{name}</h2>
               {dateStr && (
                 <p className="inline-flex w-fit items-center gap-1 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold px-2.5 py-1 mb-3">
-                  <span className="text-amber-500">📅</span> {dateStr}
+                  <span className="menu-card-icon text-amber-500">📅</span> {dateStr}
                 </p>
               )}
               <p className="text-[15px] leading-relaxed text-stone-700 line-clamp-3 mb-4">
@@ -50,10 +50,10 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
               <div className="mt-auto pt-3 border-t border-stone-100 space-y-1.5 text-[12px] text-stone-500">
                 {target && (
                   <p className="flex items-center gap-1 line-clamp-2">
-                    <span className="text-stone-400">🎯</span> {target}
+                    <span className="menu-card-icon text-stone-400">🎯</span> {target}
                   </p>
                 )}
-                {org && <p className="flex items-center gap-1 truncate"><span className="text-stone-400">🏛</span> {org}</p>}
+                {org && <p className="flex items-center gap-1 truncate"><span className="menu-card-icon text-stone-400">🏛</span> {org}</p>}
               </div>
             </div>
           </Link>

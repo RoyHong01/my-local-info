@@ -20,3 +20,55 @@ body {
   font-feature-settings: "ss01" on, "ss02" on;
   text-rendering: optimizeLegibility;
 }
+
+/* 전역 카드 인터랙션 (메뉴 카드 공통) */
+.menu-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 240ms ease, box-shadow 240ms ease, background-color 240ms ease;
+  transform: translateY(0) scale(1);
+  will-change: transform;
+}
+
+.menu-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(245, 158, 11, 0.045) 100%);
+  transition: opacity 240ms ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  background-color: #fffefd;
+}
+
+.menu-card:hover::after {
+  opacity: 1;
+}
+
+.menu-card-icon {
+  opacity: 0.7;
+  transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
+}
+
+.menu-card:hover .menu-card-icon {
+  opacity: 0.5;
+  filter: saturate(0.85);
+  transform: translateY(-0.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-card,
+  .menu-card::after,
+  .menu-card-icon {
+    transition: none !important;
+  }
+
+  .menu-card:hover {
+    transform: none;
+  }
+}

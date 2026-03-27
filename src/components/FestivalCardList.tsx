@@ -40,17 +40,17 @@ export default function FestivalCardList({ items }: { items: DataItem[] }) {
             href={`/festival/${itemId}`}
             onClick={() => sessionStorage.setItem('festivalScrollY', String(window.scrollY))}
           >
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-rose-500 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[220px] cursor-pointer">
+            <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-rose-500 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[220px] cursor-pointer">
               <h2 className="text-[1.05rem] font-bold tracking-tight leading-snug mb-2 line-clamp-2 text-stone-900">{name}</h2>
               {dateStr && (
                 <p className="inline-flex w-fit items-center gap-1 rounded-full bg-rose-50 text-rose-700 text-[11px] font-semibold px-2.5 py-1 mb-3">
-                  <span className="text-rose-500">📅</span> {dateStr}
+                  <span className="menu-card-icon text-rose-500">📅</span> {dateStr}
                 </p>
               )}
               <p className="text-[15px] leading-relaxed text-stone-700 line-clamp-3 mb-4 flex-grow">{summary}</p>
               {location && (
                 <p className="mt-auto pt-3 border-t border-stone-100 text-[12px] text-stone-500 flex items-center gap-1 truncate">
-                  <span className="text-stone-400">📍</span> {location}
+                  <span className="menu-card-icon text-stone-400">📍</span> {location}
                 </p>
               )}
             </div>

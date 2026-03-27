@@ -32,7 +32,7 @@ function IncheonCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/incheon/${encodeURIComponent(id)}`} className="block cursor-pointer">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
+      <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col min-h-[180px]">
         <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3 self-start">
           인천
         </span>
@@ -40,7 +40,7 @@ function IncheonCard({ item }: { item: DataItem }) {
         <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
         {org && (
           <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-            <span>🏛</span> {org}
+            <span className="menu-card-icon">🏛</span> {org}
           </p>
         )}
       </div>
@@ -55,7 +55,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block cursor-pointer">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col min-h-[180px]">
+      <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col min-h-[180px]">
         <span className="inline-block px-3 py-1 bg-amber-50 text-amber-600 text-xs font-bold rounded-full mb-3 self-start">
           보조금
         </span>
@@ -63,7 +63,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
         <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
         {target && (
           <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-            <span>🎯</span> {target}
+            <span className="menu-card-icon">🎯</span> {target}
           </p>
         )}
       </div>
@@ -78,7 +78,7 @@ function FestivalCard({ item }: { item: DataItem }) {
   const id = getField(item, ['contentid', 'id']);
   return (
     <Link href={`/festival/${encodeURIComponent(id)}`} className="block cursor-pointer">
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
+      <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[180px]">
         <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3 self-start">
           축제·여행
         </span>
@@ -86,7 +86,7 @@ function FestivalCard({ item }: { item: DataItem }) {
         <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
         {location && (
           <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-            <span>📍</span> {location}
+            <span className="menu-card-icon">📍</span> {location}
           </p>
         )}
       </div>
