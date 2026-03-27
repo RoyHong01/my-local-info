@@ -4,10 +4,10 @@
 
 ## 1. 현재 프로젝트 상태 (Current Status)
 
-- **기술 스택**: Next.js App Router, Tailwind CSS v4, TypeScript
+- **기술 스택**: Next.js 16 App Router, Tailwind CSS v4, TypeScript
 - **환경 기반**: 정적 HTML 배포 (`next.config.ts`의 `output: "export"` 적용)
 - **배포 플랫폼**: Cloudflare Pages (GitHub Actions `deploy.yml` 통해 자동 배포)
-- **핵심 기능**: 공공데이터포털 API 연동, Gemini 2.5 Flash를 활용한 블로그 포스트(.md) 자동 생성화 스크립트
+- **핵심 기능**: 공공데이터포털 API 연동, Claude API(claude-haiku-4-5)를 활용한 블로그 포스트(.md) 자동 생성 스크립트
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
@@ -18,7 +18,7 @@
   - og:image 자동화 (TourAPI firstimage → frontmatter, 카테고리별 기본 SVG)
   - favicon 추가 (ico + svg)
   - robots.txt 도메인 수정
-- **블로그 자동 생성**: Gemini 2.0-flash + 공공데이터 기반 블로그 포스트 자동 생성 스크립트
+- **블로그 자동 생성**: Claude API(claude-haiku-4-5) + 공공데이터 기반 블로그 포스트 자동 생성 스크립트
 - **CI/CD 워크플로우**: GitHub Actions (매일 07:00 KST) + Cloudflare Pages 자동 배포
 - **RSS 피드**: /rss.xml 경로 제공
 - **네이버 서치어드바이저**: 사이트 인증 완료

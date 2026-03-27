@@ -11,15 +11,15 @@
 - 최종 도메인: https://pick-n-joy.com
 
 ## 기술 스택
-- Next.js 14 (App Router) + TypeScript + Tailwind CSS v4
+- Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
 - 정적 HTML 배포 (`next.config.ts`의 `output: "export"`, `trailingSlash: true`)
-- Gemini API (gemini-2.0-flash) — 블로그 글 자동 생성
+- Claude API (claude-haiku-4-5) — 블로그 글 자동 생성
 - 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
 - GitHub Actions — 매일 07:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
 
 ## 환경변수 (.env.local)
-- GEMINI_API_KEY: Gemini AI 블로그 생성
+- ANTHROPIC_API_KEY: Claude API 블로그 생성
 - PUBLIC_DATA_API_KEY: 공공데이터포털 (보조금24, 인천 데이터)
 - TOUR_API_KEY: 한국관광공사 TourAPI
 - KAKAO_API_KEY: 카카오 로컬 API (2단계, 미사용)
@@ -64,7 +64,7 @@ scripts/
   collect-incheon.js  # 인천 데이터 수집
   collect-subsidy.js  # 보조금 데이터 수집
   collect-festival.js # 축제 데이터 수집 (detailCommon2로 overview 포함)
-  generate-blog-post.js # Gemini AI 블로그 생성 (하루 6편, 카테고리별 2편)
+  generate-blog-post.js # Claude API 블로그 생성 (카테고리별 2편)
   cleanup-expired.js  # 만료 콘텐츠 처리
   generate-sitemap.js # sitemap.xml 생성 (postbuild)
 .github/workflows/

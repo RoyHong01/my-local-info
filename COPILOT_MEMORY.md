@@ -20,9 +20,9 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 ## 핵심 프로젝트 요약
 
 - 사이트: 픽앤조이 (`https://pick-n-joy.com`)
-- 스택: Next.js 14 App Router + TypeScript + Tailwind CSS v4
+- 스택: Next.js 16 App Router + TypeScript + Tailwind CSS v4
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
-- 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Gemini(gemini-2.0-flash)
+- 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
 ## 최근 중요 반영 사항
 
