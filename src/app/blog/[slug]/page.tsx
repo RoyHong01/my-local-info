@@ -10,6 +10,7 @@ import path from 'path';
 import AdBanner from '@/components/AdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
 import BlogBackButton from '@/components/BlogBackButton';
+import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = await params;
@@ -108,6 +109,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-12">
+        <div className="flex gap-8 items-start">
+          <div className="flex-1 min-w-0">
         <BlogBackButton />
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
@@ -151,6 +154,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             )}
           </footer>
         </article>
+          </div>
+          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-24">
+            <TaeheoAdBanner />
+          </aside>
+        </div>
       </main>
     </div>
   );

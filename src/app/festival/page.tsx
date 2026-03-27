@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';
+import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 
 export const metadata: Metadata = {
   title: '전국 축제·여행 정보 | 픽앤조이',
@@ -57,20 +58,27 @@ export default async function FestivalPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
-            <span className="text-3xl">🎪</span> 전국 축제·여행 정보
-          </h1>
-          <p className="text-stone-500 text-sm">전국 축제, 관광지, 여행 추천, 계절 이벤트 전체 목록입니다.</p>
-        </div>
+      <main className="max-w-6xl mx-auto px-4 py-10">
+        <div className="flex gap-8 items-start">
+          <div className="flex-1 min-w-0">
+            <div className="mb-8">
+              <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
+                <span className="text-3xl">🎪</span> 전국 축제·여행 정보
+              </h1>
+              <p className="text-stone-500 text-sm">전국 축제, 관광지, 여행 추천, 계절 이벤트 전체 목록입니다.</p>
+            </div>
 
-        <ScrollRestorer storageKey="festivalScrollY" />
-        {items.length === 0 ? (
-          <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
-        ) : (
-          <FestivalCardList items={items} />
-        )}
+            <ScrollRestorer storageKey="festivalScrollY" />
+            {items.length === 0 ? (
+              <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
+            ) : (
+              <FestivalCardList items={items} />
+            )}
+          </div>
+          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-24">
+            <TaeheoAdBanner />
+          </aside>
+        </div>
       </main>
 
       <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">

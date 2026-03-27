@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogFilter from '@/components/BlogFilter';
 import BlogScrollRestorer from '@/components/BlogScrollRestorer';
+import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -36,19 +37,26 @@ export default function BlogPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
-            <span className="text-3xl">📝</span> 픽앤조이 블로그
-          </h1>
-          <p className="text-stone-500 text-sm">인천 및 전국의 생활정보를 쉽고 친근하게 전해드립니다</p>
-          <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
-        </div>
+      <main className="max-w-6xl mx-auto px-4 py-10">
+        <div className="flex gap-8 items-start">
+          <div className="flex-1 min-w-0">
+            <div className="mb-8">
+              <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
+                <span className="text-3xl">📝</span> 픽앤조이 블로그
+              </h1>
+              <p className="text-stone-500 text-sm">인천 및 전국의 생활정보를 쉽고 친근하게 전해드립니다</p>
+              <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
+            </div>
 
-        <Suspense fallback={null}>
-          <BlogScrollRestorer />
-          <BlogFilter posts={posts} />
-        </Suspense>
+            <Suspense fallback={null}>
+              <BlogScrollRestorer />
+              <BlogFilter posts={posts} />
+            </Suspense>
+          </div>
+          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-24">
+            <TaeheoAdBanner />
+          </aside>
+        </div>
       </main>
 
       <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">
