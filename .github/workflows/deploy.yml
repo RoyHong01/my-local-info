@@ -75,6 +75,8 @@ jobs:
 
       - name: Next.js 빌드
         run: npm run build
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: Cloudflare Pages 배포
         run: npx wrangler pages deploy out --project-name=my-local-info
