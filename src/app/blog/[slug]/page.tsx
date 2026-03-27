@@ -68,7 +68,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     headline: post.title,
     datePublished: post.date,
     dateModified: post.date,
-    description: post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
+    description: post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
     author: {
       "@type": "Organization",
       name: "픽앤조이",

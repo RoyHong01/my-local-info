@@ -151,6 +151,7 @@ deploy.yml        # 매일 07:00 KST 자동화
 - 블로그 카드 UI 개선: 이미지 있는 포스트 → 세로형(썸네일 h-40 + 카테고리 배지), 이미지 없는 포스트 → 컴팩트 가로형(왼쪽 컬러 스트라이프 + 텍스트)
 - 블로그 카드 레이아웃 통일: 이미지 없는 카드에 카테고리별 SVG 썸네일 자동 생성 (인천: 도시 아이콘/파란 그라디언트, 보조금: 문서 아이콘/주황, 축제: 깃발 아이콘/핑크), 단일 세로형 카드로 통일
 - 한글 파일명 슬러그 3개 영문으로 변경 (404 수정): 다자녀자동차취득세감면 → family-car-tax-reduction, 연수e음-지역화폐-캐시백 → yeonsu-local-currency-cashback, 인천동구명절위문지원 → incheon-donggu-holiday-welfare
+- SEO 보강: 전체 14개 포스트에 slug, description 필드 추가 (130~160자 meta description), posts.ts PostData에 description 필드 추가, blog/[slug] generateMetadata에서 description 우선 사용
 
 ## 다음 작업 예정
 - Google Analytics GA ID 설정

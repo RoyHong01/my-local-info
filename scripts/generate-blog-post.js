@@ -89,9 +89,10 @@ async function generatePost(candidate, postsDir) {
 ---
 title: (친근하고 흥미로운 제목. 콜론(:) 포함 시 반드시 큰따옴표로 감싸기)
 date: (오늘 날짜 YYYY-MM-DD)
-summary: (한 줄 요약, 50자 이내)
+summary: (130~160자 한국어 요약. 핵심 키워드를 앞에 배치. Google 검색 결과에 표시되는 문장이므로 금액·날짜·장소 등 구체적 정보 포함)
+description: (summary와 동일한 내용)
 category: ${candidate._category}
-tags: [태그1, 태그2, 태그3]
+tags: [태그1, 태그2, 태그3, 태그4, 태그5]
 ---
 
 (본문: 800자 이상, 친근한 블로그 톤, 추천 이유 3가지 포함, 신청 방법 안내)
@@ -155,6 +156,14 @@ tags: [태그1, 태그2, 태그3]
     filename = `${today}-post-${Date.now()}`;
   }
   if (!filename.endsWith('.md')) filename += '.md';
+
+  // slug 삽입: 파일명(확장자 제거)을 slug로 사용
+  const slugValue = filename.replace(/\.md$/, '');
+  if (/^source_id:/m.test(finalContent)) {
+    finalContent = finalContent.replace(/^(source_id:.*)$/m, `$1\nslug: "${slugValue}"`);
+  } else if (!/^slug:/m.test(finalContent)) {
+    finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nslug: "${slugValue}"`);
+  }
 
   await fs.writeFile(path.join(postsDir, filename), finalContent, 'utf-8');
   console.log(`✅ 생성 완료: ${filename} (${itemName})`);

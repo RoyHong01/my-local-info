@@ -53,7 +53,7 @@ export function getSortedPostsData(): PostData[] {
         title: matterResult.data.title || slug,
         date: dateStr,
         summary: matterResult.data.summary || '',
-        description: matterResult.data.description,
+        description: matterResult.data.description || matterResult.data.summary || '',
         category: matterResult.data.category,
         tags: matterResult.data.tags,
         image: matterResult.data.image,
