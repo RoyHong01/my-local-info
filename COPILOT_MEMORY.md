@@ -51,3 +51,5 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - 수집 스크립트 3종에 Anthropic 기반 `description_markdown` 생성 및 해시 캐시 적용
   - 로그에 input/output 토큰 사용량 출력(비용 모니터링)
   - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)로 실행당 AI 가공 수 제한
+  - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
+  - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월

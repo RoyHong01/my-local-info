@@ -48,6 +48,8 @@
   - 수집 스크립트(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에서 Anthropic으로 `description_markdown` 생성
   - source hash 기반 재생성 방지(`description_markdown_source_hash`)로 비용 최소화
   - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)으로 실행당 생성량 제한해 초기 백필 시간을 분산
+  - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
+  - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

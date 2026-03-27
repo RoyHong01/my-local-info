@@ -1,179 +1,170 @@
-# CLAUDE.md — 픽앤조이 프로젝트 가이드
+# CLAUDE.md ???�앤조이 ?�로?�트 가?�드
 
-> 작업 시작 전 반드시 읽기. 세션 종료 시 "## 작업 이력" 업데이트.
+> ?�업 ?�작 ??반드???�기. ?�션 종료 ??"## ?�업 ?�력" ?�데?�트.
 
-## 프로젝트 기본 정보
-- 사이트명: 픽앤조이 (pick-n-joy.com)
-- 슬로건: "당신의 일상을 Pick, 당신의 주말을 Enjoy!"
+## ?�로?�트 기본 ?�보
+- ?�이?�명: ?�앤조이 (pick-n-joy.com)
+- ?�로�? "?�신???�상??Pick, ?�신??주말??Enjoy!"
 - 로컬 경로: D:\Dev\my-local-info
 - GitHub: https://github.com/RoyHong01/my-local-info
-- 배포: Cloudflare Pages (https://my-local-info-2gs.pages.dev → pick-n-joy.com)
+- 배포: Cloudflare Pages (https://my-local-info-2gs.pages.dev ??pick-n-joy.com)
 
-## 기술 스택
+## 기술 ?�택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
-- Claude API (claude-haiku-4-5) — 블로그 글 자동 생성
-- 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
-- GitHub Actions — 매일 07:00 KST 자동 실행 (cron: `0 22 * * *`)
-- Cloudflare Pages (wrangler) — 호스팅 및 배포
+- Claude API (claude-haiku-4-5) ??블로�?글 ?�동 ?�성
+- 공공?�이?�포??API + ?�국관광공??TourAPI ???�이???�집
+- GitHub Actions ??매일 07:00 KST ?�동 ?�행 (cron: `0 22 * * *`)
+- Cloudflare Pages (wrangler) ???�스??�?배포
 
-## 환경변수 (.env.local)
-| 변수 | 용도 | 상태 |
+## ?�경변??(.env.local)
+| 변??| ?�도 | ?�태 |
 |------|------|------|
-| ANTHROPIC_API_KEY | Claude API 블로그 생성 | ✅ |
-| PUBLIC_DATA_API_KEY | 공공데이터포털 (보조금24, 인천) | ✅ |
-| TOUR_API_KEY | 한국관광공사 TourAPI | ✅ |
-| KAKAO_API_KEY | 카카오 로컬 API | 미사용 (2단계) |
-| NEXT_PUBLIC_GA_ID | Google Analytics | 미설정 |
-| NEXT_PUBLIC_ADSENSE_ID | Google AdSense | 미설정 |
-| NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 파트너스 | 미설정 |
+| ANTHROPIC_API_KEY | Claude API 블로�??�성 | ??|
+| PUBLIC_DATA_API_KEY | 공공?�이?�포??(보조�?4, ?�천) | ??|
+| TOUR_API_KEY | ?�국관광공??TourAPI | ??|
+| KAKAO_API_KEY | 카카??로컬 API | 미사??(2?�계) |
+| NEXT_PUBLIC_GA_ID | Google Analytics | 미설??|
+| NEXT_PUBLIC_ADSENSE_ID | Google AdSense | 미설??|
+| NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 ?�트?�스 | 미설??|
 
 ## GitHub Actions Secrets
-- CLOUDFLARE_API_TOKEN ✅
-- CLOUDFLARE_ACCOUNT_ID ✅
-- PUBLIC_DATA_API_KEY ✅
-- TOUR_API_KEY ✅
-- ANTHROPIC_API_KEY ✅
-
-## API 엔드포인트
-- 보조금24: https://apis.data.go.kr/1741000/Subsidy24
+- CLOUDFLARE_API_TOKEN ??- CLOUDFLARE_ACCOUNT_ID ??- PUBLIC_DATA_API_KEY ??- TOUR_API_KEY ??- ANTHROPIC_API_KEY ??
+## API ?�드?�인??- 보조�?4: https://apis.data.go.kr/1741000/Subsidy24
 - TourAPI: https://apis.data.go.kr/B551011/KorService2
 
-## 콘텐츠 카테고리 & 데이터
-| 카테고리 | 데이터 파일 | 상태 |
+## 콘텐�?카테고리 & ?�이??| 카테고리 | ?�이???�일 | ?�태 |
 |----------|------------|------|
-| 인천 지역 정보 | public/data/incheon.json | ✅ |
-| 전국 보조금·복지 | public/data/subsidy.json | ✅ |
-| 전국 축제·여행 | public/data/festival.json | ✅ |
-| 전국 맛집 | public/data/restaurant.json | 미구현 (2단계) |
+| ?�천 지???�보 | public/data/incheon.json | ??|
+| ?�국 보조금·복지 | public/data/subsidy.json | ??|
+| ?�국 축제·?�행 | public/data/festival.json | ??|
+| ?�국 맛집 | public/data/restaurant.json | 미구??(2?�계) |
 
 ## 만료 처리 방식
-- 파일 삭제 X (SEO 보존) → `expired: true` 마킹
-- 목록 페이지: expired 항목 필터링
-- 상세 페이지: "종료된 행사" 배지 표시
+- ?�일 ??�� X (SEO 보존) ??`expired: true` 마킹
+- 목록 ?�이지: expired ??�� ?�터�?- ?�세 ?�이지: "종료???�사" 배�? ?�시
 
-## 폴더 구조
+## ?�더 구조
 ```
 src/app/
-  page.tsx              # 메인 (멀티카테고리 홈)
-  incheon/page.tsx      # 인천 지역 정보 목록
-  incheon/[id]/page.tsx # 인천 상세
-  subsidy/page.tsx      # 전국 보조금 목록
-  subsidy/[id]/page.tsx # 보조금 상세
-  festival/page.tsx     # 전국 축제·여행 목록
-  festival/[id]/page.tsx# 축제 상세
-  blog/page.tsx         # AI 블로그 목록
-  blog/[slug]/page.tsx  # 블로그 상세
-  rss.xml/route.ts      # RSS 피드
-  about/page.tsx        # 소개 페이지
+  page.tsx              # 메인 (멀?�카?�고�???
+  incheon/page.tsx      # ?�천 지???�보 목록
+  incheon/[id]/page.tsx # ?�천 ?�세
+  subsidy/page.tsx      # ?�국 보조�?목록
+  subsidy/[id]/page.tsx # 보조�??�세
+  festival/page.tsx     # ?�국 축제·?�행 목록
+  festival/[id]/page.tsx# 축제 ?�세
+  blog/page.tsx         # AI 블로�?목록
+  blog/[slug]/page.tsx  # 블로�??�세
+  rss.xml/route.ts      # RSS ?�드
+  about/page.tsx        # ?�개 ?�이지
 
 src/components/
-  BlogFilter.tsx        # 블로그 카테고리 필터 (use client)
-  IncheonCardList.tsx   # 인천 카드 목록 (use client, 스크롤 저장)
-  SubsidyCardList.tsx   # 보조금 카드 목록 (use client, 스크롤 저장)
-  FestivalCardList.tsx  # 축제 카드 목록 (use client, 스크롤 저장)
-  ScrollRestorer.tsx    # 스크롤 위치 복원 (use client, storageKey prop)
+  BlogFilter.tsx        # 블로�?카테고리 ?�터 (use client)
+  IncheonCardList.tsx   # ?�천 카드 목록 (use client, ?�크�??�??
+  SubsidyCardList.tsx   # 보조�?카드 목록 (use client, ?�크�??�??
+  FestivalCardList.tsx  # 축제 카드 목록 (use client, ?�크�??�??
+  ScrollRestorer.tsx    # ?�크�??�치 복원 (use client, storageKey prop)
 
 scripts/
-  collect-incheon.js    # 인천 데이터 수집
-  collect-subsidy.js    # 보조금 데이터 수집
-  collect-festival.js   # 축제 데이터 수집 (overview 포함)
-  generate-blog-post.js # Claude API 블로그 자동 생성 (카테고리별 2편/일)
-  cleanup-expired.js    # 만료 콘텐츠 처리
-  generate-sitemap.js   # sitemap.xml 생성 (postbuild)
+  collect-incheon.js    # ?�천 ?�이???�집
+  collect-subsidy.js    # 보조�??�이???�집
+  collect-festival.js   # 축제 ?�이???�집 (overview ?�함)
+  generate-blog-post.js # Claude API 블로�??�동 ?�성 (카테고리�?2????
+  cleanup-expired.js    # 만료 콘텐�?처리
+  generate-sitemap.js   # sitemap.xml ?�성 (postbuild)
 
 .github/workflows/
-  deploy.yml            # push 또는 07:00 KST 자동화
-```
+  deploy.yml            # push ?�는 07:00 KST ?�동??```
 
-## 작업 규칙
-1. 작업 전 이 파일(CLAUDE.md) 먼저 읽기
-2. 새 파일 생성 시 폴더 구조 섹션 업데이트
-3. 새 환경변수·Secret 추가 시 해당 섹션 업데이트
-4. 세션 종료 시 작업 이력 날짜·요약 추가
-5. **커밋 전 반드시 `npm run build` 실행** → 빌드 오류 확인
-6. **커밋 시 새 파일 누락 주의**: `git status`로 untracked 파일 확인 후 명시적으로 `git add`
-7. 빌드 성공 후 `git add [파일목록] → git commit → git push` 순서로 배포
-8. Copilot 병행 시 `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` 동기화
-9. **모든 작업 종료 루틴(필수)**: 코드 수정 작업이 끝나면 반드시 `build 성공 → commit/push 완료 → 4개 문서 동기화(CLAUDE.md, .github/copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md)` 순서를 수행하며, 미완료 시 세션 종료로 간주하지 않음.
+## ?�업 규칙
+1. ?�업 ?????�일(CLAUDE.md) 먼�? ?�기
+2. ???�일 ?�성 ???�더 구조 ?�션 ?�데?�트
+3. ???�경변?�·Secret 추�? ???�당 ?�션 ?�데?�트
+4. ?�션 종료 ???�업 ?�력 ?�짜·?�약 추�?
+5. **커밋 ??반드??`npm run build` ?�행** ??빌드 ?�류 ?�인
+6. **커밋 ?????�일 ?�락 주의**: `git status`�?untracked ?�일 ?�인 ??명시?�으�?`git add`
+7. 빌드 ?�공 ??`git add [?�일목록] ??git commit ??git push` ?�서�?배포
+8. Copilot 병행 ??`.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` ?�기??9. **모든 ?�업 종료 루틴(?�수)**: 코드 ?�정 ?�업???�나�?반드??`build ?�공 ??commit/push ?�료 ??4�?문서 ?�기??CLAUDE.md, .github/copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md)` ?�서�??�행?�며, 미완�????�션 종료�?간주?��? ?�음.
 
-## 작업 이력
+## ?�업 ?�력
 
 ### 2026-03-26
 
-- 프로젝트 인천/전국 멀티카테고리 구조로 전면 재설계 (성남 → 인천/전국)
-- 환경변수 재정비, scripts/ 재편, GitHub Actions 업데이트
-- 샘플 데이터 3종 생성, 상세 페이지 구현, Cloudflare 배포 확인
-- 블로그 자동 생성 구축: Gemini → gemini-2.0-flash (쿼터 문제, 현재 미사용)
-- BlogFilter.tsx, RSS 피드, 네이버 서치어드바이저 인증 추가
+- ?�로?�트 ?�천/?�국 멀?�카?�고�?구조�??�면 ?�설�?(?�남 ???�천/?�국)
+- ?�경변???�정�? scripts/ ?�편, GitHub Actions ?�데?�트
+- ?�플 ?�이??3�??�성, ?�세 ?�이지 구현, Cloudflare 배포 ?�인
+- 블로�??�동 ?�성 구축: Gemini ??gemini-2.0-flash (쿼터 문제, ?�재 미사??
+- BlogFilter.tsx, RSS ?�드, ?�이�??�치?�드바이?� ?�증 추�?
 
 ### 2026-03-27
 
-- 축제 상세 데이터 복구:
-  - `collect-festival.js` overview 절삭(200자) 제거 → 원문 상세설명 보존
-  - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
-  - 매칭 실패 샘플 자동 정리 + `contentid/id` 기준 중복 제거 추가
-  - `festival.json` 재수집 완료 (샘플 제거/교체 후 API 기반 데이터로 정리)
+- 축제 ?�세 ?�이??복구:
+  - `collect-festival.js` overview ?�삭(200?? ?�거 ???�문 ?�세?�명 보존
+  - ?�래???�플 3�?`festival-001~003`) API ?�본 매핑/교체 로직 추�?
+  - 매칭 ?�패 ?�플 ?�동 ?�리 + `contentid/id` 기�? 중복 ?�거 추�?
+  - `festival.json` ?�수�??�료 (?�플 ?�거/교체 ??API 기반 ?�이?�로 ?�리)
 
-- 전국 드래프트 구조 정리 및 문서화 동기화:
-  - CLAUDE.md, copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md 기술 스택 통일
-  - Next.js 14 → **16 확정**, Gemini → **Claude API** 확정 (claude-haiku-4-5)
+- ?�국 ?�래?�트 구조 ?�리 �?문서???�기??
+  - CLAUDE.md, copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md 기술 ?�택 ?�일
+  - Next.js 14 ??**16 ?�정**, Gemini ??**Claude API** ?�정 (claude-haiku-4-5)
   
-- **상세 페이지 가독성 개선 (최종):**
-  - **폰트 컬러 강화**: `text-stone-700` → `text-stone-900` (검정색에 가까운 짙은 회색)
-  - **한글 폰트 스택 업그레이드** (globals.css):
-    - 기본값: `"Pretendard Variable", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic"` 등
-    - 가독성 + 타이포그래피 최적화 (`ss01`, `ss02` 기능)
-  - **인천/보조금 상세 (`incheon/[id]/page.tsx`, `subsidy/[id]/page.tsx`)**:
-    - `InfoRow` 컴포넌트: 텍스트 >170자 자동 문단 분리 로직 추가
-    - 줄 높이 조정: `leading-relax` → `leading-7`, 단락 간 여백: `space-y-1` → `space-y-2`
-    - 레이블: `text-xs text-stone-400` → `text-xs text-stone-500 uppercase mb-1.5 tracking-wide`
-    - 패딩 정리: `py-4` → `py-3`
-  - **축제 상세 (`festival/[id]/page.tsx`)**:
-    - 새로운 `splitParagraphs()` 함수: 공백 문단 기준 먼저 분리, 후 문장 단위 분리
-    - 렌더링: 단일 `overview` 문자열 → `overviewParagraphs` 배열 매핑
-    - 타이포그래피: `text-[15px] text-stone-900 leading-7 space-y-3` (더 넓은 단락 간격)
-  - **빌드 검증**: `npm run build` 통과 (300+ 페이지 사전 렌더링, sitemap.xml 생성 성공)
+- **?�세 ?�이지 가?�성 개선 (최종):**
+  - **?�트 컬러 강화**: `text-stone-700` ??`text-stone-900` (검?�색??가까운 짙�? ?�색)
+  - **?��? ?�트 ?�택 ?�그?�이??* (globals.css):
+    - 기본�? `"Pretendard Variable", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic"` ??    - 가?�성 + ?�?�포그래??최적??(`ss01`, `ss02` 기능)
+  - **?�천/보조�??�세 (`incheon/[id]/page.tsx`, `subsidy/[id]/page.tsx`)**:
+    - `InfoRow` 컴포?�트: ?�스??>170???�동 문단 분리 로직 추�?
+    - �??�이 조정: `leading-relax` ??`leading-7`, ?�락 �??�백: `space-y-1` ??`space-y-2`
+    - ?�이�? `text-xs text-stone-400` ??`text-xs text-stone-500 uppercase mb-1.5 tracking-wide`
+    - ?�딩 ?�리: `py-4` ??`py-3`
+  - **축제 ?�세 (`festival/[id]/page.tsx`)**:
+    - ?�로??`splitParagraphs()` ?�수: 공백 문단 기�? 먼�? 분리, ??문장 ?�위 분리
+    - ?�더�? ?�일 `overview` 문자????`overviewParagraphs` 배열 매핑
+    - ?�?�포그래?? `text-[15px] text-stone-900 leading-7 space-y-3` (???��? ?�락 간격)
+  - **빌드 검�?*: `npm run build` ?�과 (300+ ?�이지 ?�전 ?�더�? sitemap.xml ?�성 ?�공)
 
-- **@tailwindcss/typography 플러그인 활성화 (prose 적용):**
-  - `tailwind.config.ts` 파일 생성 (v4 환경에서 필수)
-  - 블로그와 동일한 스타일 (prose-stone) 통일
-  - 인천/보조금/축제 상세 페이지 본문 영역을 `prose prose-stone` 클래스로 감싸기
-  - 타이포그래피 강화: 단락 간격, 글자 크기, line-height 자동 최적화
-  - 블로그처럼 강력한 가독성 효과 달성
+- **@tailwindcss/typography ?�러그인 ?�성??(prose ?�용):**
+  - `tailwind.config.ts` ?�일 ?�성 (v4 ?�경?�서 ?�수)
+  - 블로그�? ?�일???��???(prose-stone) ?�일
+  - ?�천/보조�?축제 ?�세 ?�이지 본문 ?�역??`prose prose-stone` ?�래?�로 감싸�?  - ?�?�포그래??강화: ?�락 간격, 글???�기, line-height ?�동 최적??  - 블로그처??강력??가?�성 ?�과 ?�성
 
-- **상세 페이지 레이아웃/타이포그래피 추가 개선:**
-  - 사용자 피드백 반영: 상세 페이지 체감 폭이 좁아 보이던 문제 수정
-  - 상세 페이지 4종(`incheon/[id]`, `subsidy/[id]`, `festival/[id]`, `blog/[slug]`) 메인 컨테이너 `max-w-5xl` → `max-w-7xl` 확장
-  - 상세 페이지 prose 스타일 강화: `prose-orange`, `lg:prose-lg`, `prose-p:leading-8` 등 적용
-  - 빌드 재검증 완료 (`npm run build` 통과)
+- **?�세 ?�이지 ?�이?�웃/?�?�포그래??추�? 개선:**
+  - ?�용???�드�?반영: ?�세 ?�이지 체감 ??�� 좁아 보이??문제 ?�정
+  - ?�세 ?�이지 4�?`incheon/[id]`, `subsidy/[id]`, `festival/[id]`, `blog/[slug]`) 메인 컨테?�너 `max-w-5xl` ??`max-w-7xl` ?�장
+  - ?�세 ?�이지 prose ?��???강화: `prose-orange`, `lg:prose-lg`, `prose-p:leading-8` ???�용
+  - 빌드 ?��?�??�료 (`npm run build` ?�과)
 
-- **상세 페이지 폭 미세 조정 (사용자 피드백 반영):**
-  - 과도한 좌우 확장 체감 보정: 상세 4페이지 메인 컨테이너 `max-w-7xl` → `max-w-6xl`
-  - 대상: `blog/[slug]`, `incheon/[id]`, `subsidy/[id]`, `festival/[id]`
-  - 빌드 검증 완료 (`npm run build` 통과)
+- **?�세 ?�이지 ??미세 조정 (?�용???�드�?반영):**
+  - 과도??좌우 ?�장 체감 보정: ?�세 4?�이지 메인 컨테?�너 `max-w-7xl` ??`max-w-6xl`
+  - ?�?? `blog/[slug]`, `incheon/[id]`, `subsidy/[id]`, `festival/[id]`
+  - 빌드 검�??�료 (`npm run build` ?�과)
 
-- **블로그 본문 구조/가독성 규칙 강화:**
-  - 본문 훅 헤딩이 메인 제목보다 커 보이지 않도록 H1→H2 자동 보정 (`posts.ts`)
-  - 훅이 없는 글은 제목 기반 훅(`## ...`)을 본문 첫 줄에 자동 삽입
-  - `1. 소제목 설명`/`**1. 소제목**`/`**1️⃣ 소제목**`/`1️⃣ 소제목` 패턴을
-    `### 1. 소제목` + 다음 설명 단락 형태로 자동 변환
-  - 번호 소제목 다음 문단 들여쓰기(code block 오인) 보정으로 좌우 스크롤(`pre`) 문제 해결
-  - 빌드 산출물에서 `h3 1/2/3` 분리 및 `pre/code` 제거 검증 완료
+- **블로�?본문 구조/가?�성 규칙 강화:**
+  - 본문 ???�딩??메인 ?�목보다 �?보이지 ?�도�?H1?�H2 ?�동 보정 (`posts.ts`)
+  - ?�이 ?�는 글?� ?�목 기반 ??`## ...`)??본문 �?줄에 ?�동 ?�입
+  - `1. ?�제�??�명`/`**1. ?�제�?*`/`**1️⃣ ?�제�?*`/`1️⃣ ?�제�? ?�턴??    `### 1. ?�제�? + ?�음 ?�명 ?�락 ?�태�??�동 변??  - 번호 ?�제�??�음 문단 ?�여?�기(code block ?�인) 보정?�로 좌우 ?�크�?`pre`) 문제 ?�결
+  - 빌드 ?�출물에??`h3 1/2/3` 분리 �?`pre/code` ?�거 검�??�료
 
-- **블로그 생성 프롬프트 강화 (`scripts/generate-blog-post.js`):**
-  - 새 글은 본문 첫 줄을 훅(##)으로 시작하도록 지시
-  - 추천 이유 3가지는 `### 1/2/3` 형식 + 설명 단락 분리 형식으로 지시
+- **블로�??�성 ?�롬?�트 강화 (`scripts/generate-blog-post.js`):**
+  - ??글?� 본문 �?줄을 ??##)?�로 ?�작?�도�?지??  - 추천 ?�유 3가지??`### 1/2/3` ?�식 + ?�명 ?�락 분리 ?�식?�로 지??
+- **?�세 콘텐�?블로그형 고도??(기존+?�후 ?�시 ?�용):**
+  - ?�세 3?�이지(`incheon/[id]`, `subsidy/[id]`, `festival/[id]`) 본문??`ReactMarkdown + prose` 중심 ?�더링으�??�환
+  - ?�이?�에 `description_markdown`???�으�??�선 ?�용, ?�으�?기존 ?�드 기반 fallback markdown ?�동 ?�성?�로 즉시 ?�용
+  - ?�집 ?�크립트 3�?`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)??Anthropic 기반 `description_markdown` ?�성 로직 추�?
+  - `description_markdown_source_hash` 캐시 방식?�로 변경된 ??���??�생?�하??비용 최소??  - ?�집 로그???�력/출력 ?�큰 ?�용??출력 추�?(비용 추적??
+  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT` ?�경변?�로 ?�행???�성 건수 ?�한(기본 10�??�여 초기 백필 과�???방�?
 
-- **상세 콘텐츠 블로그형 고도화 (기존+향후 동시 적용):**
-  - 상세 3페이지(`incheon/[id]`, `subsidy/[id]`, `festival/[id]`) 본문을 `ReactMarkdown + prose` 중심 렌더링으로 전환
-  - 데이터에 `description_markdown`이 있으면 우선 사용, 없으면 기존 필드 기반 fallback markdown 자동 생성으로 즉시 적용
-  - 수집 스크립트 3종(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에 Anthropic 기반 `description_markdown` 생성 로직 추가
-  - `description_markdown_source_hash` 캐시 방식으로 변경된 항목만 재생성하여 비용 최소화
-  - 수집 로그에 입력/출력 토큰 사용량 출력 추가(비용 추적용)
-  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT` 환경변수로 실행당 생성 건수 제한(기본 10건)하여 초기 백필 과부하 방지
+### 2026-03-27 (2)
 
-## 다음 작업 예정
+- **description_markdown 전체 백필 완료:**
+  - incheon 103/103건, subsidy 103/103건, festival 107/107건 100% 완료
+  - Anthropic Haiku 4.5 실측 단가: 입력 $1/MTok, 출력 $5/MTok
+  - 10건 기준 실측 비용: ~$0.037 (1건당 ~$0.004, ₩5 수준)
+  - 월 예산: 하루 10건 기준 ~$1.10/월 (예산 여유 충분)
+  - 커벗: `1041ef9`
 
-- Google Analytics (GA ID) 설정
-- 쿠팡 파트너스 배너 삽입
-- Google AdSense 신청 (포스트 15편 이상 시)
+## ?�음 ?�업 ?�정
+
+- Google Analytics (GA ID) ?�정
+- 쿠팡 ?�트?�스 배너 ?�입
+- Google AdSense ?�청 (?�스??15???�상 ??

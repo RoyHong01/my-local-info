@@ -115,6 +115,15 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 수집 스크립트에서 Anthropic으로 `description_markdown` 생성(해시 캐시 기반 재생성)
   - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`로 실행당 생성 건수 제한(기본 10건)
 
+### 2026-03-27 (2)
+
+- **description_markdown 전체 백필 완료:**
+  - incheon 103/103건, subsidy 103/103건, festival 107/107건 100% 완료
+  - Anthropic Haiku 4.5 실측 단가: 입력 $1/MTok, 출력 $5/MTok
+  - 10건 기준 실측 비용: ~$0.037 (1건당 ~$0.004, ₩5 수준)
+  - 월 예산: 하루 10건 기준 ~$1.10/월 (예산 여유 충분)
+  - 커벗: `1041ef9`
+
 ## 백로그
 - [ ] Google Analytics 설정
 - [ ] Google AdSense 설정
