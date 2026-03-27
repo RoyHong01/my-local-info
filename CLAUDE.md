@@ -155,6 +155,12 @@ deploy.yml        # 매일 07:00 KST 자동화
 - SEO 자동화: generate-blog-post.js 프롬프트 개선 (summary 130~160자, description=summary, tags 5개), 파일 저장 시 slug 자동 삽입 로직 추가
 - 기존 포스트 6개 summary 130~160자로 보강: nurieducation, yeonsu, incheon-spring(2026), namsan, family-car-tax, edc-korea
 - posts.ts description fallback 추가 (description || summary), JSON-LD에도 description 우선 적용
+- 블로그 목록 스크롤 위치 복원 기능 추가: BlogFilter.tsx 카드 클릭 시 sessionStorage에 scrollY 저장, BlogScrollRestorer.tsx 신규 생성(useEffect로 복원), blog/page.tsx에 추가
+- 상세 페이지 정보 풍부화: incheon/[id], subsidy/[id], festival/[id] 전면 재작성 (formatText 줄바꿈 보존, ㅇ→• 변환, 필드 추가, 링크 버튼 개선)
+- 목록 페이지 클라이언트 컴포넌트 분리: IncheonCardList.tsx, SubsidyCardList.tsx, FestivalCardList.tsx 신규 생성 (sessionStorage 스크롤 저장)
+- ScrollRestorer.tsx 신규 생성 (storageKey prop으로 범용 사용)
+- incheon/page.tsx, subsidy/page.tsx, festival/page.tsx: ScrollRestorer + CardList 컴포넌트 적용
+- blog/page.tsx: BlogScrollRestorer → ScrollRestorer(storageKey="blogScrollY")로 통일
 
 ## 다음 작업 예정
 - Google Analytics GA ID 설정
