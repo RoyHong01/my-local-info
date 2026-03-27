@@ -190,6 +190,14 @@ scripts/
   - `min-h` / `max-h` 제거, `h-full` 단일 방식으로 통일
   - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
 
+### 2026-03-27 (7)
+
+- **수동 블로그 포스트 추가:**
+  - `2026-03-27-nationwide-cherry-blossom-top-15.md` 신규 생성
+  - 제목: "2026 전국 벚꽃 축제 명소 TOP 15 총정리"
+  - 카테고리: 전국 축제·여행, source_id: manual-cherry-blossom-2026
+  - 총 블로그 포스트: 15편
+
 ### 2026-03-27 (6)
 
 - **인천/보조금 카드 구조를 FestivalCardList와 동일하게 통일:**
