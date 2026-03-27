@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface DataItem {
   [key: string]: unknown;
@@ -34,35 +36,69 @@ function formatText(text: string): string {
     .join('\n');
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
-  if (!value) return null;
+function markdownEscape(value: string): string {
+  return value
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .trim();
+}
 
-  const baseLines = value.split('\n').map(l => l.trim()).filter(Boolean);
-  const lines = baseLines.length === 1 && baseLines[0].length > 170
-    ? baseLines[0]
-        .split(/(?<=[.!?다])\s+(?=[가-힣A-Za-z0-9"“‘])/)
-        .map(s => s.trim())
-        .filter(Boolean)
-        .reduce<string[]>((acc, cur, idx, arr) => {
-          if (idx % 2 === 0) acc.push(cur);
-          else acc[acc.length - 1] += ` ${cur}`;
-          if (idx === arr.length - 1 && idx % 2 === 0) acc[acc.length - 1] = cur;
-          return acc;
-        }, [])
-    : baseLines;
+function buildSubsidyMarkdown(params: {
+  name: string;
+  summary: string;
+  content: string;
+  target: string;
+  method: string;
+  deadline: string;
+  supportType: string;
+  userType: string;
+  criteria: string;
+  office: string;
+  dept: string;
+  phone: string;
+  org: string;
+}): string {
+  const parts: string[] = [];
 
-  return (
-    <div className="py-3 border-b border-stone-100 last:border-0">
-      <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">{label}</dt>
-      <dd className="text-[15px] text-stone-900 leading-7 space-y-2">
-        {lines.map((line, i) => {
-          const isBullet = line.trimStart().startsWith('ㅇ');
-          const displayLine = isBullet ? '• ' + line.trimStart().slice(1).trim() : line;
-          return <p key={i} className="text-pretty">{displayLine}</p>;
-        })}
-      </dd>
-    </div>
-  );
+  parts.push(`## ${params.name} 꼭 알아야 할 핵심`);
+
+  if (params.summary) {
+    parts.push(markdownEscape(params.summary));
+  }
+
+  if (params.content) {
+    parts.push('### 💡 어떤 혜택인가요?');
+    parts.push(markdownEscape(params.content));
+  }
+
+  if (params.target) {
+    parts.push('### 👥 지원 대상');
+    parts.push(markdownEscape(params.target));
+  }
+
+  if (params.method) {
+    parts.push('### 📝 신청 방법');
+    parts.push(markdownEscape(params.method));
+  }
+
+  const infos = [
+    ['신청기한', params.deadline],
+    ['지원유형', params.supportType],
+    ['신청 대상 구분', params.userType],
+    ['선정 기준', params.criteria],
+    ['접수 기관', params.office],
+    ['담당 부서', params.dept],
+    ['전화 문의', params.phone],
+    ['소관 기관', params.org],
+  ].filter(([, v]) => !!v);
+
+  if (infos.length > 0) {
+    parts.push('### 📌 한눈에 보는 신청 정보');
+    infos.forEach(([k, v]) => parts.push(`- **${k}**: ${markdownEscape(v as string)}`));
+  }
+
+  return parts.join('\n\n').trim();
 }
 
 export async function generateStaticParams() {
@@ -96,6 +132,22 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
   const dept = getField(item, ['부서명']);
   const criteria = formatText(getField(item, ['선정기준']));
   const officialUrl = getField(item, ['상세조회URL', 'link']);
+  const generatedMarkdown = buildSubsidyMarkdown({
+    name,
+    summary,
+    content,
+    target,
+    method,
+    deadline,
+    supportType,
+    userType,
+    criteria,
+    office,
+    dept,
+    phone,
+    org,
+  });
+  const detailMarkdown = getField(item, ['description_markdown']) || generatedMarkdown;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
@@ -133,20 +185,10 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             )}
           </header>
 
-          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900">
-            <dl>
-              <InfoRow label="서비스 요약" value={summary} />
-              <InfoRow label="지원 내용" value={content} />
-              <InfoRow label="지원 대상" value={target} />
-              <InfoRow label="지원 유형" value={supportType} />
-              <InfoRow label="신청 대상 구분" value={userType} />
-              <InfoRow label="선정 기준" value={criteria} />
-              <InfoRow label="신청 방법" value={method} />
-              <InfoRow label="접수 기관" value={office} />
-              <InfoRow label="담당 부서" value={dept} />
-              <InfoRow label="전화 문의" value={phone} />
-              <InfoRow label="소관 기관" value={org} />
-            </dl>
+          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {detailMarkdown}
+            </ReactMarkdown>
           </div>
 
           <div className="mt-8 pt-6 border-t border-stone-100">

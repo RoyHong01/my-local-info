@@ -164,6 +164,13 @@ scripts/
   - 새 글은 본문 첫 줄을 훅(##)으로 시작하도록 지시
   - 추천 이유 3가지는 `### 1/2/3` 형식 + 설명 단락 분리 형식으로 지시
 
+- **상세 콘텐츠 블로그형 고도화 (기존+향후 동시 적용):**
+  - 상세 3페이지(`incheon/[id]`, `subsidy/[id]`, `festival/[id]`) 본문을 `ReactMarkdown + prose` 중심 렌더링으로 전환
+  - 데이터에 `description_markdown`이 있으면 우선 사용, 없으면 기존 필드 기반 fallback markdown 자동 생성으로 즉시 적용
+  - 수집 스크립트 3종(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에 Anthropic 기반 `description_markdown` 생성 로직 추가
+  - `description_markdown_source_hash` 캐시 방식으로 변경된 항목만 재생성하여 비용 최소화
+  - 수집 로그에 입력/출력 토큰 사용량 출력 추가(비용 추적용)
+
 ## 다음 작업 예정
 
 - Google Analytics (GA ID) 설정

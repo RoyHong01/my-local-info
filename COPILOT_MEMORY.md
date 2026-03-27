@@ -45,3 +45,8 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - 번호 소제목 자동 변환: `1.`/`1️⃣` 패턴을 `### 1.` 헤딩 + 설명 단락으로 분리
   - 번호 항목 아래 들여쓰기 코드블록 오인(`pre`) 제거 로직 추가
   - 생성 스크립트(`generate-blog-post.js`)에 훅/번호 소제목 형식 가이드 반영
+- 상세 콘텐츠 블로그형 고도화(2026-03-27):
+  - 상세 3페이지 본문을 `ReactMarkdown + prose` 렌더링으로 전환
+  - `description_markdown` 우선 렌더링, 미존재 시 필드 기반 fallback markdown 생성
+  - 수집 스크립트 3종에 Anthropic 기반 `description_markdown` 생성 및 해시 캐시 적용
+  - 로그에 input/output 토큰 사용량 출력(비용 모니터링)

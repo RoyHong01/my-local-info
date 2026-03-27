@@ -1,5 +1,9 @@
 const fs = require('fs/promises');
 const path = require('path');
+const Anthropic = require('@anthropic-ai/sdk');
+
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null;
 
 // detailCommon2로 축제 상세 설명(overview) 가져오기
 async function fetchOverview(contentId, apiKey) {
@@ -41,6 +45,51 @@ function cleanOverview(html) {
 
 // API 호출 간 딜레이 (rate limit 방지)
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function sourceHash(item) {
+  return [
+    item.title || item.name || '',
+    item.eventstartdate || '',
+    item.eventenddate || '',
+    item.overview || '',
+    item.addr1 || item.location || '',
+    item.tel || '',
+    item.homepage || '',
+  ].join('||');
+}
+
+async function generateFestivalMarkdown(item) {
+  if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
+
+  const prompt = `아래 축제 정보를 블로그처럼 가독성 높은 한국어 Markdown으로 재작성해줘.
+
+[요구사항]
+- 첫 줄은 훅: ## ...
+- 다음 구조를 반드시 포함
+  ### ✨ 축제 소개
+  ### 📌 방문 정보
+- 과장/허위 금지, 제공된 사실만 사용
+- 500~900자
+- 출력은 Markdown 본문만 (코드블록 금지)
+
+[데이터]
+${JSON.stringify(item, null, 2)}`;
+
+  const msg = await anthropic.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1200,
+    messages: [{ role: 'user', content: prompt }],
+  });
+
+  const markdown = (msg.content?.[0]?.text || '').trim();
+  return {
+    markdown,
+    usage: {
+      input_tokens: msg.usage?.input_tokens || 0,
+      output_tokens: msg.usage?.output_tokens || 0,
+    },
+  };
+}
 
 async function run() {
   const TOUR_API_KEY = process.env.TOUR_API_KEY;
@@ -185,9 +234,43 @@ async function run() {
   }
   const merged = Array.from(dedupMap.values());
 
+  // description_markdown 생성 (신규/변경 항목만)
+  let markdownGenerated = 0;
+  let inputTokens = 0;
+  let outputTokens = 0;
+  if (!anthropic) {
+    console.log('ANTHROPIC_API_KEY 없음: description_markdown 생성 건너뜀');
+  } else {
+    for (const item of merged) {
+      const hash = sourceHash(item);
+      if (item.description_markdown && item.description_markdown_source_hash === hash) {
+        continue;
+      }
+
+      try {
+        const { markdown, usage } = await generateFestivalMarkdown(item);
+        if (markdown) {
+          item.description_markdown = markdown;
+          item.description_markdown_source_hash = hash;
+          item.description_markdown_model = 'claude-haiku-4-5-20251001';
+          item.description_markdown_updated_at = new Date().toISOString().split('T')[0];
+          markdownGenerated++;
+          inputTokens += usage.input_tokens;
+          outputTokens += usage.output_tokens;
+        }
+      } catch (e) {
+        console.error(`  description_markdown 생성 실패: ${item.title || item.name || item.contentid}`);
+      }
+      await delay(80);
+    }
+  }
+
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItems.length}건 추가, 기존 ${updatedCount}건 보강, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리 (총 ${merged.length}건)`);
+  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItems.length}건 추가, 기존 ${updatedCount}건 보강, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
+  if (markdownGenerated > 0) {
+    console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
+  }
 }
 
 run();

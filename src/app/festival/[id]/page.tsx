@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface DataItem {
   [key: string]: unknown;
@@ -60,6 +62,35 @@ function splitParagraphs(text: string): string[] {
   return chunks;
 }
 
+function buildFestivalMarkdown(params: {
+  name: string;
+  dateStr: string;
+  overviewParagraphs: string[];
+  addr: string;
+  tel: string;
+  homepage: string;
+}): string {
+  const parts: string[] = [];
+
+  parts.push(`## ${params.name} 이렇게 즐겨보세요`);
+
+  if (params.dateStr) {
+    parts.push(`- **일정**: ${params.dateStr}`);
+  }
+
+  if (params.overviewParagraphs.length > 0) {
+    parts.push('### ✨ 축제 소개');
+    params.overviewParagraphs.forEach((p) => parts.push(p.trim()));
+  }
+
+  parts.push('### 📌 방문 정보');
+  if (params.addr) parts.push(`- **주소**: ${params.addr}`);
+  if (params.tel) parts.push(`- **전화**: ${params.tel}`);
+  if (params.homepage) parts.push(`- **공식 홈페이지**: ${params.homepage}`);
+
+  return parts.join('\n\n').trim();
+}
+
 const fmtDate = (d: string) => d.length === 8
   ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
   : d;
@@ -91,6 +122,15 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
   const addr = getField(item, ['addr1', 'location']);
   const tel = getField(item, ['tel']);
   const homepage = getField(item, ['homepage']);
+  const generatedMarkdown = buildFestivalMarkdown({
+    name,
+    dateStr,
+    overviewParagraphs,
+    addr,
+    tel,
+    homepage,
+  });
+  const detailMarkdown = getField(item, ['description_markdown']) || generatedMarkdown;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
@@ -126,33 +166,10 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
             )}
           </header>
 
-          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900">
-            <dl>
-              {overview && (
-                <div className="py-3 border-b border-stone-100">
-                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">상세 설명</dt>
-                  <dd className="text-[15px] text-stone-900 leading-7 space-y-3">
-                    {overviewParagraphs.map((paragraph, index) => (
-                      <p key={index} className="text-pretty">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </dd>
-                </div>
-              )}
-              {addr && (
-                <div className="py-3 border-b border-stone-100">
-                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">주소</dt>
-                  <dd className="text-[15px] text-stone-900 leading-7 flex items-center gap-1"><span>📍</span> {addr}</dd>
-                </div>
-              )}
-              {tel && (
-                <div className="py-3 border-b border-stone-100 last:border-0">
-                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">전화</dt>
-                  <dd className="text-[15px] text-stone-900 leading-7">{tel}</dd>
-                </div>
-              )}
-            </dl>
+          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {detailMarkdown}
+            </ReactMarkdown>
           </div>
 
           {homepage && (

@@ -109,6 +109,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 훅(Hook) 우선 시작 규칙 + H1→H2 자동 보정(훅이 메인 제목보다 커 보이지 않게)
   - 번호 소제목(`1.` / `1️⃣`) 자동 헤딩화(`### 1.`) 및 설명 단락 분리
   - 들여쓰기 code block 오인 제거로 좌우 스크롤(`pre`) 이슈 해결
+- 상세 콘텐츠 블로그형 전환:
+  - `incheon/subsidy/festival` 상세 본문을 Markdown + prose 렌더링 방식으로 통일
+  - `description_markdown` 우선 사용 + 기존 데이터 fallback markdown 생성으로 즉시 반영
+  - 수집 스크립트에서 Anthropic으로 `description_markdown` 생성(해시 캐시 기반 재생성)
 
 ## 백로그
 - [ ] Google Analytics 설정
