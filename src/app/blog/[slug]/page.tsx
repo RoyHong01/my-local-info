@@ -1,5 +1,6 @@
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import Link from 'next/link';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { notFound } from 'next/navigation';
@@ -116,6 +117,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
             </div>
           </header>
+          {post.image && !post.image.endsWith('.svg') && (
+            <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-10">
+              <Image
+                src={post.image}
+                alt={post.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 1200px"
+                priority
+              />
+            </div>
+          )}
           <div className="prose prose-stone prose-orange lg:prose-lg max-w-none mb-12 prose-p:leading-8 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
