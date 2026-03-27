@@ -29,37 +29,68 @@ function normalizeNumberedInlineSections(content: string): string {
   const lines = content.split('\n');
   const out: string[] = [];
 
-  for (const line of lines) {
-    const boldWithDesc = line.match(/^(\d+)\.\s+\*\*(.+?)\*\*[:：]?\s+(.+)$/);
-    if (boldWithDesc) {
-      out.push(`### ${boldWithDesc[1]}. ${boldWithDesc[2].trim()}`);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // 1) "1. **소제목** 설명" 한 줄 패턴
+    const numberedBoldInline = trimmed.match(/^(\d+)\.\s+\*\*(.+?)\*\*[:：]?\s+(.+)$/);
+    if (numberedBoldInline) {
+      out.push(`### ${numberedBoldInline[1]}. ${numberedBoldInline[2].trim()}`);
       out.push('');
-      out.push(boldWithDesc[3].trim());
+      out.push(numberedBoldInline[3].trim());
       out.push('');
       continue;
     }
 
-    const standaloneBoldNumber = line.match(/^\*\*(\d+)\.\s+(.+?)\*\*\s*$/);
+    // 2) "1. **소제목**" + 다음 줄 설명 패턴
+    const numberedBoldOnly = trimmed.match(/^(\d+)\.\s+\*\*(.+?)\*\*\s*$/);
+    if (numberedBoldOnly) {
+      out.push(`### ${numberedBoldOnly[1]}. ${numberedBoldOnly[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    // 3) "**1. 소제목**" 패턴
+    const standaloneBoldNumber = trimmed.match(/^\*\*(\d+)\.\s+(.+?)\*\*\s*$/);
     if (standaloneBoldNumber) {
       out.push(`### ${standaloneBoldNumber[1]}. ${standaloneBoldNumber[2].trim()}`);
       out.push('');
       continue;
     }
 
-    const standalonePlainNumber = line.match(/^(\d+)\.\s+(.+)$/);
-    if (standalonePlainNumber) {
-      out.push(`### ${standalonePlainNumber[1]}. ${standalonePlainNumber[2].trim()}`);
+    // 4) "**1️⃣ 소제목**" / "**2️⃣ 소제목**" 패턴 (키캡 숫자 변형 포함)
+    const emojiNumberHeading = trimmed.match(/^\*\*([1-9])(?:\uFE0F?\u20E3)\s+(.+?)\*\*\s*$/u);
+    if (emojiNumberHeading) {
+      out.push(`### ${emojiNumberHeading[1]}. ${emojiNumberHeading[2].trim()}`);
       out.push('');
       continue;
     }
 
-    const plainWithDesc = line.match(
+    // 4-1) "1️⃣ 소제목" (bold 없는 키캡 숫자) 패턴
+    const emojiPlainHeading = trimmed.match(/^([1-9])(?:\uFE0F?\u20E3)\s+(.+)$/u);
+    if (emojiPlainHeading) {
+      out.push(`### ${emojiPlainHeading[1]}. ${emojiPlainHeading[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    // 5) "1. 소제목 설명" 한 줄 패턴
+    const plainWithDesc = trimmed.match(
       /^(\d+)\.\s+(.+?(?:니다|요|됩니다|있습니다|합니다|간단합니다|큽니다|좋습니다|가능합니다))\s+(.+)$/
     );
     if (plainWithDesc) {
       out.push(`### ${plainWithDesc[1]}. ${plainWithDesc[2].trim()}`);
       out.push('');
       out.push(plainWithDesc[3].trim());
+      out.push('');
+      continue;
+    }
+
+    // 6) "1. 소제목" 단독 패턴
+    const standalonePlainNumber = trimmed.match(/^(\d+)\.\s+(.+)$/);
+    if (standalonePlainNumber) {
+      out.push(`### ${standalonePlainNumber[1]}. ${standalonePlainNumber[2].trim()}`);
       out.push('');
       continue;
     }
@@ -86,6 +117,18 @@ function normalizeBlogContent(content: string, title: string): string {
 
   // "1. 소제목 설명" 형태를 "소제목 + 다음 단락 설명" 형태로 자동 보정
   normalized = normalizeNumberedInlineSections(normalized);
+
+  // 번호 소제목 다음 설명이 4칸 이상 들여쓰기 되어 code block(<pre>)로 렌더링되는 문제 방지
+  normalized = normalized
+    .split('\n')
+    .map((line) => {
+      if (!/^\s+/.test(line)) return line;
+      if (/^\s*(```|~~~)/.test(line)) return line;
+      if (/^\s*>/.test(line)) return line;
+      if (/^\s*([-*+]|\d+\.)\s+/.test(line)) return line;
+      return line.trimStart();
+    })
+    .join('\n');
 
   const firstNonEmpty = normalized.split('\n').find((line) => line.trim().length > 0) || '';
   if (!/^#{2,6}\s+/.test(firstNonEmpty)) {
