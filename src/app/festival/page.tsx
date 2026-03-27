@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import ScrollRestorer from '@/components/ScrollRestorer';
+import FestivalCardList from '@/components/FestivalCardList';
 
 export const metadata: Metadata = {
   title: '전국 축제·여행 정보 | 픽앤조이',
@@ -27,13 +29,6 @@ async function readJson(filename: string): Promise<DataItem[]> {
   } catch {
     return [];
   }
-}
-
-function getField(item: DataItem, keys: string[]): string {
-  for (const key of keys) {
-    if (item[key] && typeof item[key] === 'string') return item[key] as string;
-  }
-  return '';
 }
 
 export default async function FestivalPage() {
@@ -64,44 +59,11 @@ export default async function FestivalPage() {
           <p className="text-stone-500 text-sm">전국 축제, 관광지, 여행 추천, 계절 이벤트 전체 목록입니다.</p>
         </div>
 
+        <ScrollRestorer storageKey="festivalScrollY" />
         {items.length === 0 ? (
           <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {items.map((item, i) => {
-              const name = getField(item, ['title', 'name', '서비스명']);
-              const rawSummary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
-              const summary = rawSummary || '상세 정보는 해당 축제를 통해 확인하세요.';
-              const location = getField(item, ['addr1', 'location', '소관기관명']);
-              const rawStart = getField(item, ['eventstartdate', 'startDate']);
-              const rawEnd = getField(item, ['eventenddate', 'endDate']);
-              const fmtDate = (d: string) => d.length === 8
-                ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
-                : d;
-              const dateStr = rawStart
-                ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
-                : '';
-              const itemId = encodeURIComponent(getField(item, ['contentid', 'id']));
-              return (
-                <Link key={i} href={`/festival/${itemId}`}>
-                <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col min-h-[200px] cursor-pointer">
-                  <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
-                  {dateStr && (
-                    <p className="text-xs text-stone-500 mb-2 flex items-center gap-1">
-                      <span>📅</span> {dateStr}
-                    </p>
-                  )}
-                  <p className="text-stone-700 text-sm line-clamp-3 flex-grow">{summary}</p>
-                  {location && (
-                    <p className="text-xs text-stone-400 mt-3 flex items-center gap-1">
-                      <span>📍</span> {location}
-                    </p>
-                  )}
-                </div>
-                </Link>
-              );
-            })}
-          </div>
+          <FestivalCardList items={items} />
         )}
       </main>
 
