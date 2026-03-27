@@ -115,7 +115,11 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              onClick={() => sessionStorage.setItem('blogScrollY', String(window.scrollY))}
+            >
               <div className="bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}
                 <div className="relative h-40 w-full flex-shrink-0">

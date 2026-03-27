@@ -152,6 +152,9 @@ deploy.yml        # 매일 07:00 KST 자동화
 - 블로그 카드 레이아웃 통일: 이미지 없는 카드에 카테고리별 SVG 썸네일 자동 생성 (인천: 도시 아이콘/파란 그라디언트, 보조금: 문서 아이콘/주황, 축제: 깃발 아이콘/핑크), 단일 세로형 카드로 통일
 - 한글 파일명 슬러그 3개 영문으로 변경 (404 수정): 다자녀자동차취득세감면 → family-car-tax-reduction, 연수e음-지역화폐-캐시백 → yeonsu-local-currency-cashback, 인천동구명절위문지원 → incheon-donggu-holiday-welfare
 - SEO 보강: 전체 14개 포스트에 slug, description 필드 추가 (130~160자 meta description), posts.ts PostData에 description 필드 추가, blog/[slug] generateMetadata에서 description 우선 사용
+- SEO 자동화: generate-blog-post.js 프롬프트 개선 (summary 130~160자, description=summary, tags 5개), 파일 저장 시 slug 자동 삽입 로직 추가
+- 기존 포스트 6개 summary 130~160자로 보강: nurieducation, yeonsu, incheon-spring(2026), namsan, family-car-tax, edc-korea
+- posts.ts description fallback 추가 (description || summary), JSON-LD에도 description 우선 적용
 
 ## 다음 작업 예정
 - Google Analytics GA ID 설정

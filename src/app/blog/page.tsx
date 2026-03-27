@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogFilter from '@/components/BlogFilter';
+import BlogScrollRestorer from '@/components/BlogScrollRestorer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -43,6 +44,7 @@ export default function BlogPage() {
           <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
         </div>
 
+        <BlogScrollRestorer />
         <BlogFilter posts={posts} />
       </main>
 
