@@ -7,6 +7,17 @@
 
 ## 2026-03-27
 
+### 블로그 카테고리 필터 URL 파라미터 방식 전환
+- **BlogFilter.tsx**: `useState` → `useSearchParams` + `useRouter`로 교체
+  - 필터 탭 클릭 시 URL 변경 (`/blog?category=축제` 등)
+  - 카드 클릭 시 `blogScrollY` + `blogCategory` 모두 sessionStorage 저장
+- **BlogScrollRestorer.tsx** (신규): 카테고리 URL 복원 + 스크롤 복원 통합
+  - URL에 category 없는데 sessionStorage에 있으면 `router.replace`로 복원
+- **BlogBackButton.tsx** (신규): "목록으로 돌아가기" 클라이언트 컴포넌트
+  - sessionStorage의 `blogCategory`를 읽어 올바른 URL로 `router.push`
+- **blog/page.tsx**: ScrollRestorer → BlogScrollRestorer 교체, Suspense 래핑
+- **blog/[slug]/page.tsx**: Link → BlogBackButton 교체
+
 ### 구조 개선
 - **CLAUDE.md/WORK_LOG.md 분리 리팩터링:**
   - CLAUDE.md: 설정·규칙만 유지, 인코딩 깨짐 전체 수정 (한글 정상화)
