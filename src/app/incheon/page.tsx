@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import ScrollRestorer from '@/components/ScrollRestorer';
+import IncheonCardList from '@/components/IncheonCardList';
 
 export const metadata: Metadata = {
   title: '인천 지역 정보 | 픽앤조이',
@@ -67,50 +69,11 @@ export default async function IncheonPage() {
           <p className="text-stone-500 text-sm">인천광역시 내 행사·축제·보조금 정보 전체 목록입니다.</p>
         </div>
 
+        <ScrollRestorer storageKey="incheonScrollY" />
         {items.length === 0 ? (
           <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {items.map((item, i) => {
-              const name = getField(item, ['서비스명', 'name', 'title']);
-              const rawSummary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']))
-                || cleanText(getField(item, ['지원내용'])).slice(0, 100)
-                || '상세 정보는 해당 서비스를 통해 확인하세요.';
-              const org = cleanText(getField(item, ['소관기관명', 'location', 'addr1']));
-              const target = cleanText(getField(item, ['지원대상', 'target']));
-              const startDate = getField(item, ['startDate']);
-              const deadline = getField(item, ['신청기한', 'endDate']);
-              const dateStr = startDate && deadline
-                ? `${startDate} ~ ${deadline}`
-                : deadline || startDate;
-              const itemId = encodeURIComponent(getField(item, ['서비스ID', 'id']));
-              return (
-                <Link key={i} href={`/incheon/${itemId}`}>
-                <div className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col cursor-pointer" style={{minHeight: '200px'}}>
-                  <h2 className="text-base font-bold mb-2 line-clamp-2 text-stone-800">{name}</h2>
-                  {dateStr && (
-                    <p className="text-xs text-orange-500 mb-2 flex items-center gap-1">
-                      <span>📅</span> {dateStr}
-                    </p>
-                  )}
-                  <p className="text-stone-700 text-sm mb-3"
-                     style={{display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
-                    {rawSummary}
-                  </p>
-                  <div className="mt-auto space-y-1 text-xs text-stone-500">
-                    {org && <p className="flex items-center gap-1 truncate"><span>🏛</span> {org}</p>}
-                    {target && (
-                      <p className="flex items-center gap-1"
-                         style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
-                        <span>🎯</span> {target}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                </Link>
-              );
-            })}
-          </div>
+          <IncheonCardList items={items} />
         )}
       </main>
 

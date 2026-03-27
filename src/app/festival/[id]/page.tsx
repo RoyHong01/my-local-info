@@ -24,8 +24,37 @@ function getField(item: DataItem, keys: string[]): string {
   return '';
 }
 
-const cleanText = (text: string) =>
-  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+function formatText(text: string): string {
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .join('\n');
+}
+
+function InfoRow({ label, value, icon }: { label: string; value: string; icon?: string }) {
+  if (!value) return null;
+  const lines = value.split('\n').filter(l => l.trim());
+  return (
+    <div className="py-4 border-b border-stone-100 last:border-0">
+      <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">{label}</dt>
+      <dd className="text-stone-700 text-sm leading-relaxed space-y-1">
+        {lines.map((line, i) => {
+          const isBullet = line.trimStart().startsWith('ㅇ');
+          const displayLine = isBullet ? '• ' + line.trimStart().slice(1).trim() : line;
+          return (
+            <p key={i} className={icon && i === 0 ? 'flex items-center gap-1' : ''}>
+              {icon && i === 0 && <span>{icon}</span>}
+              {displayLine}
+            </p>
+          );
+        })}
+      </dd>
+    </div>
+  );
+}
 
 const fmtDate = (d: string) => d.length === 8
   ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
@@ -53,10 +82,16 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
   const dateStr = rawStart
     ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
     : '';
-  const overview = cleanText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
-  const addr = getField(item, ['addr1', 'location']);
+  const overview = formatText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
+  const addr1 = getField(item, ['addr1', 'location']);
+  const addr2 = getField(item, ['addr2']);
+  const fullAddr = addr2 ? `${addr1} ${addr2}`.trim() : addr1;
   const tel = getField(item, ['tel']);
   const homepage = getField(item, ['homepage']);
+  const playtime = getField(item, ['playtime']);
+  const usetimefestival = getField(item, ['usetimefestival']);
+  const sponsor1 = getField(item, ['sponsor1']);
+  const sponsor1tel = getField(item, ['sponsor1tel']);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
@@ -93,28 +128,17 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
           </header>
 
           <dl>
-            {overview && (
-              <div className="py-4 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">상세 설명</dt>
-                <dd className="text-stone-700 text-sm leading-relaxed">{overview}</dd>
-              </div>
-            )}
-            {addr && (
-              <div className="py-4 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">주소</dt>
-                <dd className="text-stone-700 text-sm flex items-center gap-1"><span>📍</span> {addr}</dd>
-              </div>
-            )}
-            {tel && (
-              <div className="py-4 border-b border-stone-100 last:border-0">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">전화</dt>
-                <dd className="text-stone-700 text-sm">{tel}</dd>
-              </div>
-            )}
+            <InfoRow label="상세 설명" value={overview} />
+            <InfoRow label="주소" value={fullAddr} icon="📍" />
+            <InfoRow label="운영 시간" value={playtime} />
+            <InfoRow label="이용 요금" value={usetimefestival} />
+            <InfoRow label="주최" value={sponsor1} />
+            <InfoRow label="주최 연락처" value={sponsor1tel} />
+            <InfoRow label="전화" value={tel} />
           </dl>
 
-          {homepage && (
-            <div className="mt-8 pt-6 border-t border-stone-100">
+          <div className="mt-8 pt-6 border-t border-stone-100">
+            {homepage ? (
               <a
                 href={homepage}
                 target="_blank"
@@ -123,8 +147,10 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
               >
                 공식 홈페이지 방문하기 →
               </a>
-            </div>
-          )}
+            ) : (
+              <p className="text-xs text-stone-400">정보 출처: 한국관광공사 TourAPI</p>
+            )}
+          </div>
         </article>
       </main>
 

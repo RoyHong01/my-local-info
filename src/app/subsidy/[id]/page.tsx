@@ -24,15 +24,29 @@ function getField(item: DataItem, keys: string[]): string {
   return '';
 }
 
-const cleanText = (text: string) =>
-  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+function formatText(text: string): string {
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .join('\n');
+}
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
+  const lines = value.split('\n').filter(l => l.trim());
   return (
     <div className="py-4 border-b border-stone-100 last:border-0">
       <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">{label}</dt>
-      <dd className="text-stone-700 text-sm leading-relaxed">{value}</dd>
+      <dd className="text-stone-700 text-sm leading-relaxed space-y-1">
+        {lines.map((line, i) => {
+          const isBullet = line.trimStart().startsWith('ㅇ');
+          const displayLine = isBullet ? '• ' + line.trimStart().slice(1).trim() : line;
+          return <p key={i}>{displayLine}</p>;
+        })}
+      </dd>
     </div>
   );
 }
@@ -56,13 +70,17 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
   const name = getField(item, ['서비스명', 'name', 'title']);
   const field = getField(item, ['서비스분야']);
   const deadline = getField(item, ['신청기한', 'endDate']);
-  const summary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']));
-  const content = cleanText(getField(item, ['지원내용']));
-  const target = cleanText(getField(item, ['지원대상', 'target']));
-  const method = cleanText(getField(item, ['신청방법']));
-  const office = cleanText(getField(item, ['접수기관명']));
+  const summary = formatText(getField(item, ['서비스목적요약', 'summary', 'description']));
+  const content = formatText(getField(item, ['지원내용']));
+  const target = formatText(getField(item, ['지원대상', 'target']));
+  const method = formatText(getField(item, ['신청방법']));
+  const office = formatText(getField(item, ['접수기관명']));
   const phone = getField(item, ['전화문의']);
-  const org = cleanText(getField(item, ['소관기관명', 'location']));
+  const org = formatText(getField(item, ['소관기관명', 'location']));
+  const supportType = getField(item, ['지원유형']);
+  const userType = getField(item, ['사용자구분']);
+  const dept = getField(item, ['부서명']);
+  const criteria = formatText(getField(item, ['선정기준']));
   const officialUrl = getField(item, ['상세조회URL', 'link']);
 
   return (
@@ -105,14 +123,18 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             <InfoRow label="서비스 요약" value={summary} />
             <InfoRow label="지원 내용" value={content} />
             <InfoRow label="지원 대상" value={target} />
+            <InfoRow label="지원 유형" value={supportType} />
+            <InfoRow label="신청 대상 구분" value={userType} />
+            <InfoRow label="선정 기준" value={criteria} />
             <InfoRow label="신청 방법" value={method} />
             <InfoRow label="접수 기관" value={office} />
+            <InfoRow label="담당 부서" value={dept} />
             <InfoRow label="전화 문의" value={phone} />
             <InfoRow label="소관 기관" value={org} />
           </dl>
 
-          {officialUrl && officialUrl !== '#' && (
-            <div className="mt-8 pt-6 border-t border-stone-100">
+          <div className="mt-8 pt-6 border-t border-stone-100">
+            {officialUrl && officialUrl !== '#' ? (
               <a
                 href={officialUrl}
                 target="_blank"
@@ -121,8 +143,10 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
               >
                 공식 사이트에서 신청하기 →
               </a>
-            </div>
-          )}
+            ) : (
+              <p className="text-xs text-stone-400">정보 출처: 공공데이터포털 (data.go.kr)</p>
+            )}
+          </div>
         </article>
       </main>
 
