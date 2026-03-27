@@ -18,7 +18,7 @@ const cleanText = (text: string) =>
 
 export default function SubsidyCardList({ items }: { items: DataItem[] }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {items.map((item, i) => {
         const name = getField(item, ['서비스명', 'name', 'title']);
         const rawSummary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']))
