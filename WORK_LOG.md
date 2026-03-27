@@ -5,6 +5,15 @@
 
 ---
 
+## 2026-03-28
+
+### 태허철학관 배너 가로형 교체 + 도장 로고 추가
+- `TaeheoAdBanner.tsx` 전면 교체: 세로형 → 가로형 (좌측 도장 로고 + 우측 텍스트)
+- `public/images/taeheo-logo.png` 추가 (도장 이미지)
+- 5개 페이지 aside 너비 `w-52` → `w-56` 조정
+
+---
+
 ## 2026-03-27
 
 ### Google Analytics 설정
