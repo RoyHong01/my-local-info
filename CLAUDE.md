@@ -190,6 +190,13 @@ scripts/
   - `min-h` / `max-h` 제거, `h-full` 단일 방식으로 통일
   - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
 
+### 2026-03-27 (9)
+
+- **블로그 상세 페이지 히어로 이미지 추가:**
+  - `blog/[slug]/page.tsx`: `Image` 컴포넌트 import 추가
+  - `post.image`가 있고 `.svg`가 아닌 경우 prose 위에 `h-72 md:h-96` 히어로 이미지 표시
+  - `next.config.ts`는 `unoptimized: true` 상태로 외부 도메인 설정 불필요
+
 ### 2026-03-27 (8)
 
 - **수동 블로그 포스트 추가:**
