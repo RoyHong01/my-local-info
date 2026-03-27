@@ -6,7 +6,7 @@ summary: "36만 그루 벚꽃이 도시 전체를 덮는 진해 군항제가 지
 description: "36만 그루 벚꽃이 도시 전체를 덮는 진해 군항제가 지금 한창입니다. 4월 3일까지만 볼 수 있는 이 풍경, 진짜 후회하기 전에 지금 바로 떠나세요."
 category: "전국 축제·여행"
 tags: [진해군항제, 벚꽃축제, 진해벚꽃, 2026봄여행, 창원여행, 픽앤조이]
-image: "https://images.unsplash.com/photo-1508193638397-1c4234db14d8?auto=format&fit=crop&q=80&w=1200"
+image: "https://tong.visitkorea.or.kr/cms/resource/72/4020672_image2_1.JPG"
 source_id: "manual-jinhae-2026"
 ---
 

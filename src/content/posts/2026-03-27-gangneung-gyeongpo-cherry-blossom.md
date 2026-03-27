@@ -6,7 +6,7 @@ summary: "푸른 동해 바다를 배경으로 피어나는 벚꽃, 경포호수
 description: "푸른 동해 바다를 배경으로 피어나는 벚꽃, 경포호수를 감싸는 꽃길. 3월 31일 시작하는 강릉 경포 벚꽃 축제 완벽 가이드. 강릉 카페와 맛집까지 한 번에."
 category: "전국 축제·여행"
 tags: [경포벚꽃축제, 강릉벚꽃, 강릉여행, 경포호수, 동해바다벚꽃, 픽앤조이]
-image: "https://images.unsplash.com/photo-1546961342-ba5891374b92?auto=format&fit=crop&q=80&w=1200"
+image: "https://tong.visitkorea.or.kr/cms/resource/23/4041323_image2_1.jpg"
 source_id: "manual-gyeongpo-2026"
 ---
 

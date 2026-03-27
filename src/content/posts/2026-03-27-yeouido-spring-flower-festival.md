@@ -6,7 +6,7 @@ summary: "서울 한복판에서 즐기는 가장 화려한 봄의 잔치, 2026 
 description: "서울 한복판에서 즐기는 가장 화려한 봄의 잔치, 2026 여의도 봄꽃 축제가 4월 1일 시작됩니다. 국회 뒷길 벚꽃터널부터 한강 피크닉까지 완벽 가이드 총정리."
 category: "전국 축제·여행"
 tags: [여의도봄꽃축제, 여의도벚꽃, 한강벚꽃, 서울봄축제, 2026벚꽃, 픽앤조이]
-image: "https://images.unsplash.com/photo-1490750967868-88df5691cc8f?auto=format&fit=crop&q=80&w=1200"
+image: "https://tong.visitkorea.or.kr/cms/resource/07/4041207_image2_1.jpg"
 source_id: "manual-yeouido-2026"
 ---
 
