@@ -113,6 +113,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - `incheon/subsidy/festival` 상세 본문을 Markdown + prose 렌더링 방식으로 통일
   - `description_markdown` 우선 사용 + 기존 데이터 fallback markdown 생성으로 즉시 반영
   - 수집 스크립트에서 Anthropic으로 `description_markdown` 생성(해시 캐시 기반 재생성)
+  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`로 실행당 생성 건수 제한(기본 10건)
 
 ## 백로그
 - [ ] Google Analytics 설정

@@ -31,18 +31,24 @@ jobs:
         run: node scripts/collect-incheon.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 전국 보조금 정책 수집
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: node scripts/collect-subsidy.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 전국 축제·여행 정보 수집
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: node scripts/collect-festival.js
         env:
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 만료 콘텐츠 처리
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

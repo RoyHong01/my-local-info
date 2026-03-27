@@ -47,6 +47,7 @@
   - `description_markdown` 필드 우선 사용, 기존 데이터는 fallback markdown 생성으로 즉시 적용
   - 수집 스크립트(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에서 Anthropic으로 `description_markdown` 생성
   - source hash 기반 재생성 방지(`description_markdown_source_hash`)로 비용 최소화
+  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)으로 실행당 생성량 제한해 초기 백필 시간을 분산
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

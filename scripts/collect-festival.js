@@ -93,6 +93,7 @@ ${JSON.stringify(item, null, 2)}`;
 
 async function run() {
   const TOUR_API_KEY = process.env.TOUR_API_KEY;
+  const DESCRIPTION_MARKDOWN_BATCH_LIMIT = Number.parseInt(process.env.DESCRIPTION_MARKDOWN_BATCH_LIMIT || '10', 10);
   if (!TOUR_API_KEY) {
     console.error("Missing TOUR_API_KEY in process.env");
     return;
@@ -241,11 +242,15 @@ async function run() {
   if (!anthropic) {
     console.log('ANTHROPIC_API_KEY 없음: description_markdown 생성 건너뜀');
   } else {
-    for (const item of merged) {
+    const markdownTargets = merged.filter((item) => {
       const hash = sourceHash(item);
-      if (item.description_markdown && item.description_markdown_source_hash === hash) {
-        continue;
-      }
+      return !(item.description_markdown && item.description_markdown_source_hash === hash);
+    });
+    const batchTargets = markdownTargets.slice(0, Math.max(0, DESCRIPTION_MARKDOWN_BATCH_LIMIT));
+    console.log(`description_markdown 배치 처리: ${batchTargets.length}건 / 대기 ${Math.max(0, markdownTargets.length - batchTargets.length)}건`);
+
+    for (const item of batchTargets) {
+      const hash = sourceHash(item);
 
       try {
         const { markdown, usage } = await generateFestivalMarkdown(item);

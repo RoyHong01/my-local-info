@@ -170,6 +170,7 @@ scripts/
   - 수집 스크립트 3종(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에 Anthropic 기반 `description_markdown` 생성 로직 추가
   - `description_markdown_source_hash` 캐시 방식으로 변경된 항목만 재생성하여 비용 최소화
   - 수집 로그에 입력/출력 토큰 사용량 출력 추가(비용 추적용)
+  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT` 환경변수로 실행당 생성 건수 제한(기본 10건)하여 초기 백필 과부하 방지
 
 ## 다음 작업 예정
 

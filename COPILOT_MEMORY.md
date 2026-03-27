@@ -50,3 +50,4 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - `description_markdown` 우선 렌더링, 미존재 시 필드 기반 fallback markdown 생성
   - 수집 스크립트 3종에 Anthropic 기반 `description_markdown` 생성 및 해시 캐시 적용
   - 로그에 input/output 토큰 사용량 출력(비용 모니터링)
+  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)로 실행당 AI 가공 수 제한
