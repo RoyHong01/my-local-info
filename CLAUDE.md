@@ -174,6 +174,14 @@ scripts/
   - 카드 크기를 축제/블로그와 유사한 자연 높이로 복구
   - 긴 텍스트는 기존 `line-clamp` 범위 내에서만 노출
 
+### 2026-03-27 (4)
+
+- **인천/보조금 카드 고정 높이 & 텍스트 넘침 방지:**
+  - 카드 div에 `max-h-[280px]` + `overflow-hidden` 추가 → 어떤 데이터에도 높이 일정
+  - `rawSummary` 최대 120자 강제 절삭 (지원내용 fallback은 80자 선절삭 후 120자 제한)
+  - flex 컨테이너 안 `line-clamp` 미작동 버그 수정: 아이콘(`flex-shrink-0`)과 텍스트 `<span>`을 분리하고 텍스트 span에만 `line-clamp-1 overflow-hidden` 적용
+  - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
+
 ## ?�음 ?�업 ?�정
 
 - Google Analytics (GA ID) ?�정
