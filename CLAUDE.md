@@ -140,6 +140,12 @@ scripts/
   - 타이포그래피 강화: 단락 간격, 글자 크기, line-height 자동 최적화
   - 블로그처럼 강력한 가독성 효과 달성
 
+- **상세 페이지 레이아웃/타이포그래피 추가 개선:**
+  - 사용자 피드백 반영: 상세 페이지 체감 폭이 좁아 보이던 문제 수정
+  - 상세 페이지 4종(`incheon/[id]`, `subsidy/[id]`, `festival/[id]`, `blog/[slug]`) 메인 컨테이너 `max-w-5xl` → `max-w-7xl` 확장
+  - 상세 페이지 prose 스타일 강화: `prose-orange`, `lg:prose-lg`, `prose-p:leading-8` 등 적용
+  - 빌드 재검증 완료 (`npm run build` 통과)
+
 ## 다음 작업 예정
 
 - Google Analytics (GA ID) 설정

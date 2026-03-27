@@ -113,7 +113,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-10">
+      <main className="max-w-7xl mx-auto px-4 py-10">
         <Link href="/subsidy" className="text-sm text-amber-600 hover:underline mb-6 inline-block">
           ← 전국 보조금 목록
         </Link>
@@ -133,7 +133,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             )}
           </header>
 
-          <div className="prose prose-stone max-w-none">
+          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900">
             <dl>
               <InfoRow label="서비스 요약" value={summary} />
               <InfoRow label="지원 내용" value={content} />

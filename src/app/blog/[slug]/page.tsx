@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
+      <main className="max-w-7xl mx-auto px-4 py-12">
         <Link href="/blog" className="text-orange-600 hover:underline mb-8 inline-block">&larr; 목록으로 돌아가기</Link>
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
             </div>
           </header>
-          <div className="prose prose-stone prose-orange max-w-none mb-12">
+          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none mb-12 prose-p:leading-8">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
             </ReactMarkdown>
