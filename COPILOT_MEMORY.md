@@ -35,3 +35,11 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
   - 매칭 실패 샘플 자동 제거 + `contentid/id` 기준 중복 제거
   - `festival.json` 재수집 완료
+- 상세 페이지 typography/prose 개선(2026-03-27):
+  - `@tailwindcss/typography` 활성화 및 상세 페이지 본문 `prose` 적용
+  - 상세 4페이지 폭 `max-w-5xl → 7xl → 6xl` 사용자 피드백 기반 조정
+- 블로그 가독성 규칙 강화(2026-03-27):
+  - 본문 훅(Hook) 시작 강제, H1→H2 자동 보정
+  - 번호 소제목 자동 변환: `1.`/`1️⃣` 패턴을 `### 1.` 헤딩 + 설명 단락으로 분리
+  - 번호 항목 아래 들여쓰기 코드블록 오인(`pre`) 제거 로직 추가
+  - 생성 스크립트(`generate-blog-post.js`)에 훅/번호 소제목 형식 가이드 반영

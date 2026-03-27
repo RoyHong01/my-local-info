@@ -26,6 +26,15 @@
 - **헤더 UI 확대**: 로고·네비 폰트 사이즈 업
 - **축제 overview 수집 보강**: collect-festival.js에 detailCommon2 API 추가, 기존 100건 보강 완료
 - **축제 상세 데이터 복구**: overview 절삭 제거, 샘플 3건 API 매핑/교체(매칭 실패 샘플 정리), festival.json API 기반 재정리 완료
+- **상세 페이지 가독성 개선**:
+  - 전역 폰트 스택 개선(Pretendard/Noto Sans KR) 및 텍스트 톤 강화
+  - 상세 본문 prose 적용(`@tailwindcss/typography`)
+  - 상세 4페이지 폭 조정(`max-w-5xl → 7xl → 6xl`)
+- **블로그 본문 구조화 자동 보정**:
+  - 훅(Hook) 우선 시작 보정, 본문 H1→H2 보정
+  - `1.`/`1️⃣` 번호 소제목 자동 헤딩화 + 설명 단락 분리
+  - 번호 항목 설명 들여쓰기 code block 오인(pre/code 좌우 스크롤) 제거
+  - 블로그 생성 프롬프트에 훅/번호 소제목 규칙 반영
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

@@ -99,6 +99,12 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - 축제 상세 설명 복구: `collect-festival.js` overview 절삭 제거로 원문 보존
 - 오래된 샘플 3건(`festival-001~003`) 정리: API 원본 매핑/교체 + 매칭 실패 샘플 자동 제거
 - `festival.json`은 API 기반 항목 중심으로 재정리 (중복 제거 포함)
+- 상세 페이지 typography/prose 적용: `@tailwindcss/typography` 활성화 + 상세 4페이지 본문 가독성 강화
+- 상세 페이지 폭 조정: `max-w-5xl → 7xl → 6xl`로 사용자 피드백 기반 미세 조정
+- 블로그 구조 보정 고도화:
+  - 훅(Hook) 우선 시작 규칙 + H1→H2 자동 보정(훅이 메인 제목보다 커 보이지 않게)
+  - 번호 소제목(`1.` / `1️⃣`) 자동 헤딩화(`### 1.`) 및 설명 단락 분리
+  - 들여쓰기 code block 오인 제거로 좌우 스크롤(`pre`) 이슈 해결
 
 ## 백로그
 - [ ] Google Analytics 설정
