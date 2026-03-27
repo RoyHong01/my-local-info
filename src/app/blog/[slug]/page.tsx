@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-12">
+      <main className="max-w-6xl mx-auto px-4 py-12">
         <Link href="/blog" className="text-orange-600 hover:underline mb-8 inline-block">&larr; 목록으로 돌아가기</Link>
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">

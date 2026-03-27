@@ -108,7 +108,7 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-10">
+      <main className="max-w-6xl mx-auto px-4 py-10">
         <Link href="/festival" className="text-sm text-rose-600 hover:underline mb-6 inline-block">
           ← 전국 축제·여행 목록
         </Link>

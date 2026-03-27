@@ -113,7 +113,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-10">
+      <main className="max-w-6xl mx-auto px-4 py-10">
         <Link href="/incheon" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
           ← 인천 지역 정보 목록
         </Link>
