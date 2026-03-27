@@ -1,12 +1,13 @@
 const fs = require('fs/promises');
 const path = require('path');
+const Anthropic = require('@anthropic-ai/sdk');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
 // 카테고리별 우선순위 정렬 함수
 function sortByPriority(items, category) {
   if (category === '인천 지역 정보') {
-    // 행사/축제 우선, 최근 등록 순
     return items.sort((a, b) => {
       const aIsEvent = ['행사', '축제', '문화'].some(k =>
         (a['서비스명'] || a['name'] || '').includes(k));
@@ -18,11 +19,9 @@ function sortByPriority(items, category) {
     });
   }
   if (category === '전국 보조금·복지 정책') {
-    // 조회수 높은 것 우선 (인기 보조금)
     return items.sort((a, b) => (b['조회수'] || 0) - (a['조회수'] || 0));
   }
   if (category === '전국 축제·여행') {
-    // 이미지 있는 것 우선 (콘텐츠 풍성), 그 다음 가까운 날짜 순
     return items.sort((a, b) => {
       const aHasImg = !!(a.firstimage || a.firstimage2);
       const bHasImg = !!(b.firstimage || b.firstimage2);
@@ -34,24 +33,32 @@ function sortByPriority(items, category) {
   return items;
 }
 
-// 이미 작성된 블로그 제목 목록 가져오기
-async function getExistingTitles(postsDir) {
-  const titles = new Set();
+// 이미 작성된 블로그 글의 source_id 및 파일명 목록 가져오기
+async function getExistingPosts(postsDir) {
+  // source_id가 있는 파일: ID로 정확 매칭
   const serviceIds = new Set();
+  // source_id가 없는 파일: 파일명 키워드로 부분 매칭
+  const filenameKeywords = [];
+
   try {
     const files = await fs.readdir(postsDir);
     for (const file of files) {
       if (!file.endsWith('.md')) continue;
       const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
-      // frontmatter에서 title 추출
-      const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
-      if (titleMatch) titles.add(titleMatch[1].trim());
-      // source_id 추출 (중복 방지용)
+
+      // source_id 추출 — 따옴표 제거 후 저장
       const idMatch = content.match(/^source_id:\s*(.+)\s*$/m);
-      if (idMatch) serviceIds.add(idMatch[1].trim());
+      if (idMatch) {
+        serviceIds.add(idMatch[1].trim().replace(/^["']|["']$/g, ''));
+      } else {
+        // source_id 없는 파일은 파일명(날짜 제외)을 키워드로 보관
+        const keyword = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
+        filenameKeywords.push(keyword);
+      }
     }
   } catch (_) {}
-  return { titles, serviceIds };
+
+  return { serviceIds, filenameKeywords };
 }
 
 // 30초 대기
@@ -91,22 +98,18 @@ tags: [태그1, 태그2, 태그3]
 
 마지막 줄에 FILENAME: YYYY-MM-DD-영문키워드 형식으로 파일명 출력`;
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+  const message = await anthropic.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 2048,
+    messages: [{ role: 'user', content: prompt }]
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    console.error(`Gemini API 오류: ${err}`);
+  const generatedText = message.content?.[0]?.text || '';
+
+  if (!generatedText) {
+    console.error('Claude API 응답 없음');
     return false;
   }
-
-  const data = await res.json();
-  const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
   // 파일명 추출
   const lines = generatedText.split('\n');
@@ -129,9 +132,14 @@ tags: [태그1, 태그2, 태그3]
   // image 필드 삽입
   finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${imageUrl}"`);
 
-  // source_id 삽입 (중복 방지용 ID)
+  // source_id 반드시 삽입
   if (sourceId) {
-    finalContent = finalContent.replace(/^(image:.*)$/m, `$1\nsource_id: "${sourceId}"`);
+    if (/^image:/m.test(finalContent)) {
+      finalContent = finalContent.replace(/^(image:.*)$/m, `$1\nsource_id: "${sourceId}"`);
+    } else {
+      // image 필드가 없으면 tags 바로 뒤에 삽입
+      finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nsource_id: "${sourceId}"`);
+    }
   }
 
   // title 콜론 처리
@@ -154,8 +162,8 @@ tags: [태그1, 태그2, 태그3]
 }
 
 async function run() {
-  if (!GEMINI_API_KEY) {
-    console.error("Missing GEMINI_API_KEY");
+  if (!ANTHROPIC_API_KEY) {
+    console.error("Missing ANTHROPIC_API_KEY");
     return;
   }
 
@@ -168,8 +176,8 @@ async function run() {
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
   await fs.mkdir(postsDir, { recursive: true });
 
-  const { titles, serviceIds } = await getExistingTitles(postsDir);
-  console.log(`기존 블로그 글: ${titles.size}편`);
+  const { serviceIds, filenameKeywords } = await getExistingPosts(postsDir);
+  console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건`);
 
   let totalGenerated = 0;
 
@@ -191,17 +199,18 @@ async function run() {
       category
     );
 
-    // 아직 글 없는 항목 필터링
+    // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
     const candidates = validItems.filter(item => {
       const name = item['서비스명'] || item['title'] || item['name'] || '';
-      const id = item['서비스ID'] || item['contentid'] || item['id'] || '';
+      const id = String(item['서비스ID'] || item['contentid'] || item['id'] || '');
       if (!name) return false;
-      // 제목 또는 ID로 중복 체크
-      if (serviceIds.has(String(id))) return false;
-      // 이름이 기존 제목에 포함되면 건너뜀
-      for (const t of titles) {
-        if (t.includes(name) || name.includes(t.slice(0, 10))) return false;
-      }
+
+      // 1순위: source_id 정확 매칭
+      if (id && serviceIds.has(id)) return false;
+
+      // 2순위: source_id 없는 기존 파일의 파일명 키워드 부분 매칭
+      if (filenameKeywords.some(kw => name.includes(kw) || kw.includes(name.slice(0, 6)))) return false;
+
       return true;
     });
 
@@ -216,10 +225,9 @@ async function run() {
         if (ok) {
           generated++;
           totalGenerated++;
-          // API 쿼터 보호: 글 사이 30초 대기
-          if (generated < 2 && candidates.indexOf(candidate) < candidates.length - 1) {
-            console.log('  ⏳ 30초 대기 중...');
-            await sleep(30000);
+          if (generated < 2) {
+            console.log('  ⏳ 5초 대기 중...');
+            await sleep(5000);
           }
         }
       } catch (err) {
@@ -229,12 +237,6 @@ async function run() {
 
     if (generated === 0) {
       console.log(`  ⚠️ 생성할 새 항목 없음`);
-    }
-
-    // 카테고리 사이 30초 대기
-    if (dataFiles.indexOf({ file, category }) < dataFiles.length - 1) {
-      console.log('\n⏳ 다음 카테고리까지 30초 대기...');
-      await sleep(30000);
     }
   }
 
