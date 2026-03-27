@@ -6,7 +6,7 @@ summary: 광안대교를 배경으로 펼쳐지는 환상적인 드론 라이트
 description: "부산 광안대교를 배경으로 펼쳐지는 환상적인 드론 라이트쇼, 광안리 M(Marvelous) 드론 라이트쇼! 수백 대의 드론이 수놓는 야경을 가족, 연인과 함께 즐겨보세요. 부산 대표 야간 관광 명소입니다."
 category: 전국 축제·여행
 tags: [부산여행, 드론쇼, 광안리, 야경, 가족나들이]
-image: "http://tong.visitkorea.or.kr/cms/resource/12/3518612_image2_1.jpeg"
+image: "https://tong.visitkorea.or.kr/cms/resource/12/3518612_image3_1.jpeg"
 source_id: "2786391"
 ---
 
