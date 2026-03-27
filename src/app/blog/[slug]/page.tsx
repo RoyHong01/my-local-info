@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) {
     return { title: 'Not Found' };
   }
-  const description = post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
+  const description = post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
   return {
     title: `${post.title} | 픽앤조이`,
     description,

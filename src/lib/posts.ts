@@ -9,6 +9,7 @@ export interface PostData {
   title: string;
   date: string;
   summary: string;
+  description?: string;
   category?: string;
   tags?: string[];
   image?: string;
@@ -48,10 +49,11 @@ export function getSortedPostsData(): PostData[] {
       }
 
       return {
-        slug,
+        slug: matterResult.data.slug || slug,
         title: matterResult.data.title || slug,
         date: dateStr,
         summary: matterResult.data.summary || '',
+        description: matterResult.data.description,
         category: matterResult.data.category,
         tags: matterResult.data.tags,
         image: matterResult.data.image,

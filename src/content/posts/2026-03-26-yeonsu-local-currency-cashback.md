@@ -1,7 +1,9 @@
 ---
 title: "인천 연수구민이라면 꼭 알아야 할 지역화폐: 연수e음으로 똑똑하게 쇼핑하기"
 date: 2026-03-26
+slug: "2026-03-26-yeonsu-local-currency-cashback"
 summary: 연수구 지역화폐 연수e음으로 최대 10% 캐시백을 받으며 똑똑한 소비하기
+description: "인천 연수구 지역화폐 연수e음으로 최대 10% 캐시백을 받으세요! 만 14세 이상 누구나 모바일앱으로 간편하게 신청하고, 축제 기간에는 추가 캐시백까지 받는 스마트한 소비 방법을 안내합니다."
 category: 인천 지역 정보
 tags: [연수e음, 지역화폐, 캐시백, 인천연수구, 전자상품권]
 image: "https://pick-n-joy.com/images/default-incheon.svg"
