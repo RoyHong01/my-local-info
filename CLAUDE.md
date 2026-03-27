@@ -182,6 +182,14 @@ scripts/
   - flex 컨테이너 안 `line-clamp` 미작동 버그 수정: 아이콘(`flex-shrink-0`)과 텍스트 `<span>`을 분리하고 텍스트 span에만 `line-clamp-1 overflow-hidden` 적용
   - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
 
+### 2026-03-27 (5)
+
+- **인천/보조금 카드 그리드 정렬 완전 통일:**
+  - Link에 `block h-[300px]` 적용 → 그리드 셀 높이 완전 고정
+  - 카드 div를 `h-full overflow-hidden`으로 변경 → Link 높이를 꽉 채워 모든 카드 동일 크기
+  - `min-h` / `max-h` 제거, `h-full` 단일 방식으로 통일
+  - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
+
 ## ?�음 ?�업 ?�정
 
 - Google Analytics (GA ID) ?�정
