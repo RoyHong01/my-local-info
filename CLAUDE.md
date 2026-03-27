@@ -190,6 +190,13 @@ scripts/
   - `min-h` / `max-h` 제거, `h-full` 단일 방식으로 통일
   - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
 
+### 2026-03-27 (8)
+
+- **수동 블로그 포스트 추가:**
+  - `2026-03-27-gurye-sansuyu-flower-festival.md` 신규 생성
+  - 제목: "2026 구례 산수유꽃 축제 후기 + 내년 가이드"
+  - 누적 블로그 포스트: 총 17편
+
 ### 2026-03-27 (7)
 
 - **수동 블로그 포스트 추가:**
