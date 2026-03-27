@@ -94,6 +94,7 @@ scripts/
 6. **커밋 시 새 파일 누락 주의**: `git status`로 untracked 파일 확인 후 명시적으로 `git add`
 7. 빌드 성공 후 `git add [파일목록] → git commit → git push` 순서로 배포
 8. Copilot 병행 시 `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` 동기화
+9. **모든 작업 종료 루틴(필수)**: 코드 수정 작업이 끝나면 반드시 `build 성공 → commit/push 완료 → 4개 문서 동기화(CLAUDE.md, .github/copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md)` 순서를 수행하며, 미완료 시 세션 종료로 간주하지 않음.
 
 ## 작업 이력
 

@@ -13,9 +13,11 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 ## 운영 규칙
 
 - 세션 시작 시 위 4개 파일의 최신 상태를 확인한다.
-- 세션 종료 전 사용자에게 문서 업데이트 여부를 확인한다.
+- 세션 종료 전 사용자 확인 여부와 관계없이, 작업 이력이 있으면 문서/메모리 동기화를 수행한다.
 - 업데이트 시 최소 `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`를 함께 반영한다.
-- 코드 변경 후에는 `npm run build`로 검증한다.
+- 코드 변경 후에는 반드시 `npm run build`로 검증한다.
+- 코드 작업 완료 시 반드시 `git add → git commit → git push`를 수행한다.
+- **작업 종료 체크리스트(필수)**: build 성공 + commit/push 완료 + 4개 문서 동기화
 
 ## 핵심 프로젝트 요약
 

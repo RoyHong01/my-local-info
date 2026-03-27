@@ -79,6 +79,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 4. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
 5. 빌드 성공 후 `git add . → git commit → git push` 순서로 배포
 6. 세션 종료 시 CLAUDE.md, PROJECT_MEMORY.md, COPILOT_MEMORY.md, 이 파일(copilot-instructions.md) 모두 업데이트
+7. **항상 적용할 종료 루틴(필수)**
+  - 코드 변경 작업 완료 후, 반드시 `build 성공 → commit/push → 문서/메모리 동기화` 순서를 수행
+  - 문서/메모리 동기화 대상: `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+  - 위 루틴 미완료 상태에서는 작업 완료로 보지 않음
 
 ## 헤더/네비게이션 패턴
 - 헤더는 10개 페이지에 동일 패턴 반복 (컴포넌트 미분리 상태)

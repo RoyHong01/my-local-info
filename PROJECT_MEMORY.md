@@ -2,6 +2,13 @@
 
 이 파일은 프로젝트의 과거 작업 이력, 현재 상태, 그리고 앞으로 해야 할 작업들을 기록하여 AI 어시스턴트가 프로젝트의 전체 컨텍스트를 빠르고 정확하게 파악할 수 있도록 돕는 핵심 메모리 파일입니다.
 
+## 운영 원칙 (Operational Rules)
+
+- 코드 변경 작업이 끝나면 반드시 `npm run build`를 먼저 통과시킨다.
+- 빌드 성공 후 반드시 `git add → git commit → git push` 순서로 반영한다.
+- 작업 이력은 항상 `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` 4개 문서에 동기화한다.
+- 위 3개 항목(build/commit/문서동기화)이 모두 완료되어야 작업 완료로 간주한다.
+
 ## 1. 현재 프로젝트 상태 (Current Status)
 
 - **기술 스택**: Next.js 16 App Router, Tailwind CSS v4, TypeScript
