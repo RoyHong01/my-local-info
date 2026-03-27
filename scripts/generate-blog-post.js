@@ -66,6 +66,199 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function splitMarkdownSections(markdown) {
+  const normalized = (markdown || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  if (!normalized.startsWith('---\n')) {
+    return { frontmatter: '', body: normalized };
+  }
+
+  const end = normalized.indexOf('\n---\n', 4);
+  if (end === -1) {
+    return { frontmatter: '', body: normalized };
+  }
+
+  const frontmatter = normalized.slice(0, end + 5);
+  const body = normalized.slice(end + 5).trim();
+  return { frontmatter, body };
+}
+
+function extractTitleFromFrontmatter(frontmatter) {
+  const m = frontmatter.match(/^title:\s*(.+)$/m);
+  if (!m) return '';
+  return m[1].trim().replace(/^"|"$/g, '').replace(/^'|'$/g, '');
+}
+
+function buildHookFromTitle(title, fallback) {
+  const seed = (title || fallback || '이번 소식').trim();
+  const cleaned = seed
+    .replace(/["'“”‘’]/g, '')
+    .replace(/[!?.,:;]+$/g, '')
+    .trim();
+  const core = cleaned.split(/[,:]/)[0].trim() || cleaned;
+  return `## ${core}, 핵심부터 빠르게 볼까요?`;
+}
+
+function normalizeNumberedInlineSections(content) {
+  const lines = content.split('\n');
+  const out = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    const numberedBoldInline = trimmed.match(/^(\d+)\.\s+\*\*(.+?)\*\*[:：]?\s+(.+)$/);
+    if (numberedBoldInline) {
+      out.push(`### ${numberedBoldInline[1]}. ${numberedBoldInline[2].trim()}`);
+      out.push('');
+      out.push(numberedBoldInline[3].trim());
+      out.push('');
+      continue;
+    }
+
+    const numberedBoldOnly = trimmed.match(/^(\d+)\.\s+\*\*(.+?)\*\*\s*$/);
+    if (numberedBoldOnly) {
+      out.push(`### ${numberedBoldOnly[1]}. ${numberedBoldOnly[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    const standaloneBoldNumber = trimmed.match(/^\*\*(\d+)\.\s+(.+?)\*\*\s*$/);
+    if (standaloneBoldNumber) {
+      out.push(`### ${standaloneBoldNumber[1]}. ${standaloneBoldNumber[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    const emojiNumberHeading = trimmed.match(/^\*\*([1-9])(?:\uFE0F?\u20E3)\s+(.+?)\*\*\s*$/u);
+    if (emojiNumberHeading) {
+      out.push(`### ${emojiNumberHeading[1]}. ${emojiNumberHeading[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    const emojiPlainHeading = trimmed.match(/^([1-9])(?:\uFE0F?\u20E3)\s+(.+)$/u);
+    if (emojiPlainHeading) {
+      out.push(`### ${emojiPlainHeading[1]}. ${emojiPlainHeading[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    const plainWithDesc = trimmed.match(
+      /^(\d+)\.\s+(.+?(?:니다|요|됩니다|있습니다|합니다|간단합니다|큽니다|좋습니다|가능합니다))\s+(.+)$/
+    );
+    if (plainWithDesc) {
+      out.push(`### ${plainWithDesc[1]}. ${plainWithDesc[2].trim()}`);
+      out.push('');
+      out.push(plainWithDesc[3].trim());
+      out.push('');
+      continue;
+    }
+
+    const standalonePlainNumber = trimmed.match(/^(\d+)\.\s+(.+)$/);
+    if (standalonePlainNumber) {
+      out.push(`### ${standalonePlainNumber[1]}. ${standalonePlainNumber[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    out.push(line);
+  }
+
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function removeFalseCodeBlockIndentation(content) {
+  return content
+    .split('\n')
+    .map((line) => {
+      if (!/^\s+/.test(line)) return line;
+      if (/^\s*(```|~~~)/.test(line)) return line;
+      if (/^\s*>/.test(line)) return line;
+      if (/^\s*([-*+]|\d+\.)\s+/.test(line)) return line;
+      return line.trimStart();
+    })
+    .join('\n');
+}
+
+function calculateToneScore(content) {
+  const emotionalKeywords = [
+    '따스', '설렘', '기분', '여유', '기다리고', '추천', '즐겨', '함께',
+    '소중한', '특별한', '가볍게', '산책', '봄바람', '감성', '마음', '따뜻'
+  ];
+
+  let score = 0;
+  if (/\?/.test(content)) score += 20;
+  if (/##\s+/.test(content)) score += 15;
+  if (/###\s+1\./.test(content) && /###\s+2\./.test(content) && /###\s+3\./.test(content)) score += 25;
+
+  const hitCount = emotionalKeywords.reduce((acc, keyword) => {
+    return acc + (content.includes(keyword) ? 1 : 0);
+  }, 0);
+  score += Math.min(30, hitCount * 5);
+
+  if (content.length >= 1000) score += 10;
+  return Math.min(100, score);
+}
+
+function ensureEmotionalIntro(body, category) {
+  const paragraphs = body.split(/\n\n+/).filter(Boolean);
+  if (paragraphs.length === 0) return body;
+
+  const introText = paragraphs.slice(0, 2).join(' ');
+  const hasEmotion = /(따스|설렘|여유|기분|함께|특별한|소중한|가볍게|마음)/.test(introText);
+  if (hasEmotion) return body;
+
+  const fallbackByCategory = {
+    '전국 축제·여행': '여행의 설렘이 필요한 주말이라면, 잠깐의 발걸음으로도 기분 좋은 추억을 만들 수 있어요.',
+    '전국 보조금·복지 정책': '복잡하게 느껴지는 정책도 생활 속 언어로 풀어보면, 지금 바로 도움이 되는 정보가 됩니다.',
+    '인천 지역 정보': '우리 동네의 작은 변화가 일상을 더 따뜻하게 만들 수 있다는 점, 그래서 더 반갑게 느껴집니다.',
+  };
+
+  const fallback = fallbackByCategory[category] || '오늘 정보가 여러분의 하루를 조금 더 가볍고 따뜻하게 만들어주길 바랍니다.';
+
+  // 훅 바로 다음에 감성 도입 단락 추가
+  if (/^##\s+.+/m.test(body)) {
+    return body.replace(/^(##\s+.+)$/m, `$1\n\n${fallback}`);
+  }
+  return `${fallback}\n\n${body}`;
+}
+
+function postProcessGeneratedMarkdown(markdown, context) {
+  const { frontmatter, body } = splitMarkdownSections(markdown);
+  let normalizedBody = (body || '').trim();
+
+  // 본문 H1은 H2로 낮춰 카드 메인 제목보다 과도하게 커 보이지 않게 처리
+  normalizedBody = normalizedBody
+    .split('\n')
+    .map((line) => line.replace(/^#\s+/, '## '))
+    .join('\n');
+
+  // 훅 누락 시 자동 삽입
+  const firstNonEmpty = normalizedBody.split('\n').find((line) => line.trim().length > 0) || '';
+  if (!/^##\s+/.test(firstNonEmpty)) {
+    const title = extractTitleFromFrontmatter(frontmatter) || context.itemName;
+    normalizedBody = `${buildHookFromTitle(title, context.itemName)}\n\n${normalizedBody}`;
+  }
+
+  normalizedBody = normalizeNumberedInlineSections(normalizedBody);
+  normalizedBody = removeFalseCodeBlockIndentation(normalizedBody);
+  normalizedBody = ensureEmotionalIntro(normalizedBody, context.category);
+  normalizedBody = normalizedBody.replace(/\n{3,}/g, '\n\n').trim();
+
+  const toneScore = calculateToneScore(normalizedBody);
+  const summary = {
+    toneScore,
+    hasHook: /^##\s+/.test((normalizedBody.split('\n').find((line) => line.trim()) || '')),
+    hasReasonStructure: /###\s+1\./.test(normalizedBody) && /###\s+2\./.test(normalizedBody) && /###\s+3\./.test(normalizedBody),
+    length: normalizedBody.length,
+  };
+
+  return {
+    content: `${frontmatter}\n\n${normalizedBody}`.trim(),
+    summary,
+  };
+}
+
 // 블로그 글 1편 생성
 async function generatePost(candidate, postsDir) {
   const defaultImages = {
@@ -184,6 +377,14 @@ tags: [태그1, 태그2, 태그3, 태그4, 태그5]
   } else if (!/^slug:/m.test(finalContent)) {
     finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nslug: "${slugValue}"`);
   }
+
+  // 생성 후 자동 후처리(구조 보정 + 감성 품질 점검)
+  const postProcessed = postProcessGeneratedMarkdown(finalContent, {
+    itemName,
+    category: candidate._category,
+  });
+  finalContent = postProcessed.content;
+  console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);
 
   await fs.writeFile(path.join(postsDir, filename), finalContent, 'utf-8');
   console.log(`✅ 생성 완료: ${filename} (${itemName})`);
