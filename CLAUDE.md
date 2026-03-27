@@ -85,6 +85,12 @@ scripts/
 6. **커밋 ?????�일 ?�락 주의**: `git status`�?untracked ?�일 ?�인 ??명시?�으�?`git add`
 7. 빌드 ?�공 ??`git add [?�일목록] ??git commit ??git push` ?�서�?배포
 8. Copilot 병행 ??`.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` ?�기??9. **모든 ?�업 종료 루틴(?�수)**: 코드 ?�정 ?�업???�나�?반드??`build ?�공 ??commit/push ?�료 ??4�?문서 ?�기??CLAUDE.md, .github/copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md)` ?�서�??�행?�며, 미완�????�션 종료�?간주?��? ?�음.
+10. **수동 블로그 작성 시 이미지 규칙:**
+    - `image` 필드는 반드시 글 주제와 직접 관련된 이미지 사용
+    - Unsplash 사용 시 영문 검색어로 관련 이미지 확인 후 URL 삽입
+      - 예) 산수유 → `cornelian cherry yellow flowers korea`
+      - 예) 한국 벚꽃 → `korea cherry blossom festival`
+    - 주제와 무관한 이미지는 사용 금지 (기본 SVG가 더 나음)
 
 ## ?�업 ?�력
 
