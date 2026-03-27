@@ -113,6 +113,9 @@ scripts/
 - 상세 페이지 정보 풍부화 (incheon/subsidy/festival [id] 재작성)
 - 클라이언트 컴포넌트 분리: IncheonCardList, SubsidyCardList, FestivalCardList, ScrollRestorer 신규 생성
 - **fix**: 누락 컴포넌트 파일 미커밋으로 GitHub Actions 빌드 실패 → 수정 완료
+- festival/[id]/page.tsx 이전 버전 복원 (상세설명/주소/전화 정상 표시)
+- SubsidyCardList.tsx 2열 → 3열 변경
+- incheon.json·subsidy.json 첫 3개 샘플 항목 상세 필드 보강 (서비스분야, 지원내용, 신청방법, 전화문의 등)
 
 ## 다음 작업 예정
 - Google Analytics (GA ID) 설정
