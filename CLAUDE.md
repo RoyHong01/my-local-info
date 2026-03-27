@@ -190,6 +190,15 @@ scripts/
   - `min-h` / `max-h` 제거, `h-full` 단일 방식으로 통일
   - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
 
+### 2026-03-27 (6)
+
+- **인천/보조금 카드 구조를 FestivalCardList와 동일하게 통일:**
+  - Link `className` 제거 (고정 높이 방식 폐기)
+  - 카드 div: `h-full overflow-hidden` 제거, `min-h-[220px]` 추가
+  - summary `<p>`: `flex-grow` 추가 → 하단 org/target 영역을 카드 맨 아래로 자연스럽게 밀어냄
+  - 하단 `<div>`: `mt-auto` 제거 (flex-grow로 대체)
+  - 대상: `IncheonCardList.tsx`, `SubsidyCardList.tsx`
+
 ## ?�음 ?�업 ?�정
 
 - Google Analytics (GA ID) ?�정
