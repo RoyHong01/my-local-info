@@ -39,6 +39,20 @@ function normalizeNumberedInlineSections(content: string): string {
       continue;
     }
 
+    const standaloneBoldNumber = line.match(/^\*\*(\d+)\.\s+(.+?)\*\*\s*$/);
+    if (standaloneBoldNumber) {
+      out.push(`### ${standaloneBoldNumber[1]}. ${standaloneBoldNumber[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
+    const standalonePlainNumber = line.match(/^(\d+)\.\s+(.+)$/);
+    if (standalonePlainNumber) {
+      out.push(`### ${standalonePlainNumber[1]}. ${standalonePlainNumber[2].trim()}`);
+      out.push('');
+      continue;
+    }
+
     const plainWithDesc = line.match(
       /^(\d+)\.\s+(.+?(?:니다|요|됩니다|있습니다|합니다|간단합니다|큽니다|좋습니다|가능합니다))\s+(.+)$/
     );
