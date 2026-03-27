@@ -78,6 +78,8 @@ deploy.yml        # 매일 07:00 KST 자동화
 4. 각 작업 세션 종료 시 "## 작업 이력" 섹션에 날짜와 작업 내용 추가
 5. npm run build 항상 마지막에 실행해서 빌드 오류 확인
 6. 빌드 성공 후 git add . → git commit → git push 순서로 배포
+7. Copilot과 병행 작업 시 `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`를 함께 확인하고 동기화 유지
+8. 세션 종료 전 사용자에게 문서 업데이트 여부를 확인하고, 업데이트 시 CLAUDE.md / .github/copilot-instructions.md / COPILOT_MEMORY.md / PROJECT_MEMORY.md를 함께 반영
 
 ## 작업 이력
 
@@ -132,3 +134,8 @@ deploy.yml        # 매일 07:00 KST 자동화
   - HTML 태그 제거 + 200자 요약 처리
   - 기존 overview 없는 항목 자동 보강 로직 추가
   - 100건 축제 상세 설명 보강 완료
+- generate-blog-post.js 전면 재작성:
+  - 하루 6편 생성 (카테고리별 2편씩)
+  - 중복 체크 개선: title 정확 매칭 + source_id 기반 ID 중복 방지
+  - 카테고리별 우선순위 정렬 로직 추가 (인천: 행사/축제 우선, 보조금: 조회수 순, 축제: 이미지 있는 것 우선)
+  - 글 사이 30초 대기 (API 쿼터 보호)
