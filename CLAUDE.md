@@ -85,12 +85,13 @@ scripts/
 6. **커밋 ?????�일 ?�락 주의**: `git status`�?untracked ?�일 ?�인 ??명시?�으�?`git add`
 7. 빌드 ?�공 ??`git add [?�일목록] ??git commit ??git push` ?�서�?배포
 8. Copilot 병행 ??`.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` ?�기??9. **모든 ?�업 종료 루틴(?�수)**: 코드 ?�정 ?�업???�나�?반드??`build ?�공 ??commit/push ?�료 ??4�?문서 ?�기??CLAUDE.md, .github/copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md)` ?�서�??�행?�며, 미완�????�션 종료�?간주?��? ?�음.
-10. **수동 블로그 작성 시 이미지 규칙:**
-    - `image` 필드는 반드시 글 주제와 직접 관련된 이미지 사용
-    - Unsplash 사용 시 영문 검색어로 관련 이미지 확인 후 URL 삽입
-      - 예) 산수유 → `cornelian cherry yellow flowers korea`
-      - 예) 한국 벚꽃 → `korea cherry blossom festival`
-    - 주제와 무관한 이미지는 사용 금지 (기본 SVG가 더 나음)
+10. **수동 블로그 작성 시 이미지 우선순위 규칙:**
+    - 1순위: 공식 행사 포스터 이미지 (주최 측 제공, `public/images/`에 저장)
+    - 2순위: 한국관광공사 TourAPI 이미지 (`festival.json`의 `firstimage` 필드)
+      - 검색 방법: `public/data/festival.json`에서 해당 축제명으로 검색 후 `firstimage` URL 추출
+      - URL 형식: `https://tong.visitkorea.or.kr/cms/resource/...`
+    - 3순위: 카테고리 기본 SVG (`default-festival.svg` 등) - 1,2순위 없을 때만 사용
+    - ※ **절대 사용 금지**: 검증되지 않은 Unsplash 외부 이미지 (관련 없는 사진 나올 수 있음)
 
 ## ?�업 ?�력
 
@@ -208,6 +209,13 @@ scripts/
   - MZ 감성 단어 적용 (진짜, 레전드, 각도 나옴 등)
   - 이모지 리스트, 표(table) 활용 지침 추가
   - 소제목에 이모지 포함, 감성 마무리 문장으로 행동 유도
+
+### 2026-03-27 (12)
+
+- **블로그 4개 썸네일 TourAPI/공식 이미지로 교체:**
+  - 진해 군항제, 여의도 봄꽃, 경포 벚꽃: Unsplash → TourAPI 이미지로 교체
+  - 구례 산수유: TourAPI URL → 로컬 공식 포스터 저장 (`public/images/gurye-sansuyu-2026-poster.jpg`)
+  - `CLAUDE.md` 작업 규칙 10번: 이미지 우선순위 1/2/3순위 규칙으로 재정의 (Unsplash 절대 금지 명시)
 
 ### 2026-03-27 (10)
 
