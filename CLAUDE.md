@@ -102,7 +102,7 @@ scripts/
 - 프로젝트 인천/전국 멀티카테고리 구조로 전면 재설계 (성남 → 인천/전국)
 - 환경변수 재정비, scripts/ 재편, GitHub Actions 업데이트
 - 샘플 데이터 3종 생성, 상세 페이지 구현, Cloudflare 배포 확인
-- 블로그 자동 생성 구축: Gemini → gemini-2.0-flash (쿼터 문제)
+- 블로그 자동 생성 구축: Gemini → gemini-2.0-flash (쿼터 문제, 현재 미사용)
 - BlogFilter.tsx, RSS 피드, 네이버 서치어드바이저 인증 추가
 
 ### 2026-03-27
@@ -112,6 +112,26 @@ scripts/
   - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
   - 매칭 실패 샘플 자동 정리 + `contentid/id` 기준 중복 제거 추가
   - `festival.json` 재수집 완료 (샘플 제거/교체 후 API 기반 데이터로 정리)
+
+- 전국 드래프트 구조 정리 및 문서화 동기화:
+  - CLAUDE.md, copilot-instructions.md, COPILOT_MEMORY.md, PROJECT_MEMORY.md 기술 스택 통일
+  - Next.js 14 → **16 확정**, Gemini → **Claude API** 확정 (claude-haiku-4-5)
+  
+- **상세 페이지 가독성 개선 (최종):**
+  - **폰트 컬러 강화**: `text-stone-700` → `text-stone-900` (검정색에 가까운 짙은 회색)
+  - **한글 폰트 스택 업그레이드** (globals.css):
+    - 기본값: `"Pretendard Variable", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic"` 등
+    - 가독성 + 타이포그래피 최적화 (`ss01`, `ss02` 기능)
+  - **인천/보조금 상세 (`incheon/[id]/page.tsx`, `subsidy/[id]/page.tsx`)**:
+    - `InfoRow` 컴포넌트: 텍스트 >170자 자동 문단 분리 로직 추가
+    - 줄 높이 조정: `leading-relax` → `leading-7`, 단락 간 여백: `space-y-1` → `space-y-2`
+    - 레이블: `text-xs text-stone-400` → `text-xs text-stone-500 uppercase mb-1.5 tracking-wide`
+    - 패딩 정리: `py-4` → `py-3`
+  - **축제 상세 (`festival/[id]/page.tsx`)**:
+    - 새로운 `splitParagraphs()` 함수: 공백 문단 기준 먼저 분리, 후 문장 단위 분리
+    - 렌더링: 단일 `overview` 문자열 → `overviewParagraphs` 배열 매핑
+    - 타이포그래피: `text-[15px] text-stone-900 leading-7 space-y-3` (더 넓은 단락 간격)
+  - **빌드 검증**: `npm run build` 통과 (300+ 페이지 사전 렌더링, sitemap.xml 생성 성공)
 
 ## 다음 작업 예정
 

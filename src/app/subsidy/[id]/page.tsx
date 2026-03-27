@@ -36,15 +36,29 @@ function formatText(text: string): string {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
-  const lines = value.split('\n').filter(l => l.trim());
+
+  const baseLines = value.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = baseLines.length === 1 && baseLines[0].length > 170
+    ? baseLines[0]
+        .split(/(?<=[.!?다])\s+(?=[가-힣A-Za-z0-9"“‘])/)
+        .map(s => s.trim())
+        .filter(Boolean)
+        .reduce<string[]>((acc, cur, idx, arr) => {
+          if (idx % 2 === 0) acc.push(cur);
+          else acc[acc.length - 1] += ` ${cur}`;
+          if (idx === arr.length - 1 && idx % 2 === 0) acc[acc.length - 1] = cur;
+          return acc;
+        }, [])
+    : baseLines;
+
   return (
-    <div className="py-4 border-b border-stone-100 last:border-0">
-      <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">{label}</dt>
-      <dd className="text-stone-700 text-sm leading-relaxed space-y-1">
+    <div className="py-3 border-b border-stone-100 last:border-0">
+      <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">{label}</dt>
+      <dd className="text-[15px] text-stone-900 leading-7 space-y-2">
         {lines.map((line, i) => {
           const isBullet = line.trimStart().startsWith('ㅇ');
           const displayLine = isBullet ? '• ' + line.trimStart().slice(1).trim() : line;
-          return <p key={i}>{displayLine}</p>;
+          return <p key={i} className="text-pretty">{displayLine}</p>;
         })}
       </dd>
     </div>

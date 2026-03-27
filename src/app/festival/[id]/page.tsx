@@ -24,8 +24,41 @@ function getField(item: DataItem, keys: string[]): string {
   return '';
 }
 
-const cleanText = (text: string) =>
-  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+function formatText(text: string): string {
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\u00a0/g, ' ')
+    .split('\n')
+    .map(line => line.trim())
+    .join('\n')
+    .trim();
+}
+
+function splitParagraphs(text: string): string[] {
+  if (!text) return [];
+
+  const normalized = formatText(text);
+  const byBlankLine = normalized
+    .split(/\n{2,}/)
+    .map(p => p.trim())
+    .filter(Boolean);
+
+  if (byBlankLine.length > 1) return byBlankLine;
+
+  const sentenceSplit = normalized
+    .split(/(?<=[.!?다])\s+(?=[가-힣A-Za-z0-9"“‘])/)
+    .map(s => s.trim())
+    .filter(Boolean);
+
+  if (sentenceSplit.length <= 2) return [normalized];
+
+  const chunks: string[] = [];
+  for (let i = 0; i < sentenceSplit.length; i += 2) {
+    chunks.push(sentenceSplit.slice(i, i + 2).join(' '));
+  }
+  return chunks;
+}
 
 const fmtDate = (d: string) => d.length === 8
   ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
@@ -53,7 +86,8 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
   const dateStr = rawStart
     ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
     : '';
-  const overview = cleanText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
+  const overview = formatText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
+  const overviewParagraphs = splitParagraphs(overview);
   const addr = getField(item, ['addr1', 'location']);
   const tel = getField(item, ['tel']);
   const homepage = getField(item, ['homepage']);
@@ -94,21 +128,27 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
 
           <dl>
             {overview && (
-              <div className="py-4 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">상세 설명</dt>
-                <dd className="text-stone-700 text-sm leading-relaxed">{overview}</dd>
+              <div className="py-3 border-b border-stone-100">
+                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">상세 설명</dt>
+                <dd className="text-[15px] text-stone-900 leading-7 space-y-3">
+                  {overviewParagraphs.map((paragraph, index) => (
+                    <p key={index} className="text-pretty">
+                      {paragraph}
+                    </p>
+                  ))}
+                </dd>
               </div>
             )}
             {addr && (
-              <div className="py-4 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">주소</dt>
-                <dd className="text-stone-700 text-sm flex items-center gap-1"><span>📍</span> {addr}</dd>
+              <div className="py-3 border-b border-stone-100">
+                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">주소</dt>
+                <dd className="text-[15px] text-stone-900 leading-7 flex items-center gap-1"><span>📍</span> {addr}</dd>
               </div>
             )}
             {tel && (
-              <div className="py-4 border-b border-stone-100 last:border-0">
-                <dt className="text-xs font-semibold text-stone-400 uppercase mb-1">전화</dt>
-                <dd className="text-stone-700 text-sm">{tel}</dd>
+              <div className="py-3 border-b border-stone-100 last:border-0">
+                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">전화</dt>
+                <dd className="text-[15px] text-stone-900 leading-7">{tel}</dd>
               </div>
             )}
           </dl>
