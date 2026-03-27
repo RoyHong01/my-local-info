@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { PostData } from '@/lib/posts';
@@ -81,11 +81,40 @@ function CategoryThumbnail({ category }: { category?: string }) {
   );
 }
 
-export default function BlogFilter({ posts }: { posts: PostData[] }) {
-  const [active, setActive] = useState('');
+const CATEGORY_PARAM_MAP: Record<string, string> = {
+  '인천': '인천 지역 정보',
+  '보조금': '전국 보조금·복지 정책',
+  '축제': '전국 축제·여행',
+};
 
-  const filtered = active
-    ? posts.filter((p) => p.category === active)
+const REVERSE_MAP: Record<string, string> = {
+  '인천 지역 정보': '인천',
+  '전국 보조금·복지 정책': '보조금',
+  '전국 축제·여행': '축제',
+};
+
+export default function BlogFilter({ posts }: { posts: PostData[] }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const activeCategoryParam = searchParams.get('category') || '';
+  const activeCategory = CATEGORY_PARAM_MAP[activeCategoryParam] || '';
+
+  const handleCategoryClick = (value: string) => {
+    if (value === '') {
+      router.push('/blog');
+    } else {
+      router.push(`/blog?category=${REVERSE_MAP[value]}`);
+    }
+  };
+
+  const handleCardClick = () => {
+    sessionStorage.setItem('blogScrollY', String(window.scrollY));
+    sessionStorage.setItem('blogCategory', activeCategoryParam);
+  };
+
+  const filtered = activeCategory
+    ? posts.filter((p) => p.category === activeCategory)
     : posts;
 
   return (
@@ -95,9 +124,9 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
         {CATEGORIES.map(({ label, value }) => (
           <button
             key={value}
-            onClick={() => setActive(value)}
+            onClick={() => handleCategoryClick(value)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              active === value
+              activeCategory === value || (value === '' && !activeCategory)
                 ? 'bg-orange-500 text-white'
                 : 'bg-white text-stone-600 border border-stone-200 hover:border-orange-300'
             }`}
@@ -118,7 +147,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              onClick={() => sessionStorage.setItem('blogScrollY', String(window.scrollY))}
+              onClick={handleCardClick}
             >
               <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}

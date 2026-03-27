@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import AdBanner from '@/components/AdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import BlogBackButton from '@/components/BlogBackButton';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = await params;
@@ -107,7 +108,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-12">
-        <Link href="/blog" className="text-orange-600 hover:underline mb-8 inline-block">&larr; 목록으로 돌아가기</Link>
+        <BlogBackButton />
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
             <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>

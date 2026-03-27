@@ -1,7 +1,8 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogFilter from '@/components/BlogFilter';
-import ScrollRestorer from '@/components/ScrollRestorer';
+import BlogScrollRestorer from '@/components/BlogScrollRestorer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -44,8 +45,10 @@ export default function BlogPage() {
           <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
         </div>
 
-        <ScrollRestorer storageKey="blogScrollY" />
-        <BlogFilter posts={posts} />
+        <Suspense fallback={null}>
+          <BlogScrollRestorer />
+          <BlogFilter posts={posts} />
+        </Suspense>
       </main>
 
       <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">
