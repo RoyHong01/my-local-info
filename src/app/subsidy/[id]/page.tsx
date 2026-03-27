@@ -133,19 +133,21 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             )}
           </header>
 
-          <dl>
-            <InfoRow label="서비스 요약" value={summary} />
-            <InfoRow label="지원 내용" value={content} />
-            <InfoRow label="지원 대상" value={target} />
-            <InfoRow label="지원 유형" value={supportType} />
-            <InfoRow label="신청 대상 구분" value={userType} />
-            <InfoRow label="선정 기준" value={criteria} />
-            <InfoRow label="신청 방법" value={method} />
-            <InfoRow label="접수 기관" value={office} />
-            <InfoRow label="담당 부서" value={dept} />
-            <InfoRow label="전화 문의" value={phone} />
-            <InfoRow label="소관 기관" value={org} />
-          </dl>
+          <div className="prose prose-stone max-w-none">
+            <dl>
+              <InfoRow label="서비스 요약" value={summary} />
+              <InfoRow label="지원 내용" value={content} />
+              <InfoRow label="지원 대상" value={target} />
+              <InfoRow label="지원 유형" value={supportType} />
+              <InfoRow label="신청 대상 구분" value={userType} />
+              <InfoRow label="선정 기준" value={criteria} />
+              <InfoRow label="신청 방법" value={method} />
+              <InfoRow label="접수 기관" value={office} />
+              <InfoRow label="담당 부서" value={dept} />
+              <InfoRow label="전화 문의" value={phone} />
+              <InfoRow label="소관 기관" value={org} />
+            </dl>
+          </div>
 
           <div className="mt-8 pt-6 border-t border-stone-100">
             {officialUrl && officialUrl !== '#' ? (

@@ -133,6 +133,13 @@ scripts/
     - 타이포그래피: `text-[15px] text-stone-900 leading-7 space-y-3` (더 넓은 단락 간격)
   - **빌드 검증**: `npm run build` 통과 (300+ 페이지 사전 렌더링, sitemap.xml 생성 성공)
 
+- **@tailwindcss/typography 플러그인 활성화 (prose 적용):**
+  - `tailwind.config.ts` 파일 생성 (v4 환경에서 필수)
+  - 블로그와 동일한 스타일 (prose-stone) 통일
+  - 인천/보조금/축제 상세 페이지 본문 영역을 `prose prose-stone` 클래스로 감싸기
+  - 타이포그래피 강화: 단락 간격, 글자 크기, line-height 자동 최적화
+  - 블로그처럼 강력한 가독성 효과 달성
+
 ## 다음 작업 예정
 
 - Google Analytics (GA ID) 설정

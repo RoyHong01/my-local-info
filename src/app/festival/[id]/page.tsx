@@ -126,32 +126,34 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
             )}
           </header>
 
-          <dl>
-            {overview && (
-              <div className="py-3 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">상세 설명</dt>
-                <dd className="text-[15px] text-stone-900 leading-7 space-y-3">
-                  {overviewParagraphs.map((paragraph, index) => (
-                    <p key={index} className="text-pretty">
-                      {paragraph}
-                    </p>
-                  ))}
-                </dd>
-              </div>
-            )}
-            {addr && (
-              <div className="py-3 border-b border-stone-100">
-                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">주소</dt>
-                <dd className="text-[15px] text-stone-900 leading-7 flex items-center gap-1"><span>📍</span> {addr}</dd>
-              </div>
-            )}
-            {tel && (
-              <div className="py-3 border-b border-stone-100 last:border-0">
-                <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">전화</dt>
-                <dd className="text-[15px] text-stone-900 leading-7">{tel}</dd>
-              </div>
-            )}
-          </dl>
+          <div className="prose prose-stone max-w-none">
+            <dl>
+              {overview && (
+                <div className="py-3 border-b border-stone-100">
+                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">상세 설명</dt>
+                  <dd className="text-[15px] text-stone-900 leading-7 space-y-3">
+                    {overviewParagraphs.map((paragraph, index) => (
+                      <p key={index} className="text-pretty">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </dd>
+                </div>
+              )}
+              {addr && (
+                <div className="py-3 border-b border-stone-100">
+                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">주소</dt>
+                  <dd className="text-[15px] text-stone-900 leading-7 flex items-center gap-1"><span>📍</span> {addr}</dd>
+                </div>
+              )}
+              {tel && (
+                <div className="py-3 border-b border-stone-100 last:border-0">
+                  <dt className="text-xs font-semibold text-stone-500 uppercase mb-1.5 tracking-wide">전화</dt>
+                  <dd className="text-[15px] text-stone-900 leading-7">{tel}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
 
           {homepage && (
             <div className="mt-8 pt-6 border-t border-stone-100">
