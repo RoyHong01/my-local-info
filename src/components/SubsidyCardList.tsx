@@ -18,7 +18,7 @@ const cleanText = (text: string) =>
 
 export default function SubsidyCardList({ items }: { items: DataItem[] }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {items.map((item, i) => {
         const name = getField(item, ['서비스명', 'name', 'title']);
         const rawSummary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']))
@@ -36,9 +36,8 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
             key={i}
             href={`/subsidy/${itemId}`}
             onClick={() => sessionStorage.setItem('subsidyScrollY', String(window.scrollY))}
-            className="block h-full"
           >
-            <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col cursor-pointer min-h-[220px] h-full">
+            <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col cursor-pointer min-h-[220px]">
               <h2 className="text-[1.05rem] font-bold tracking-tight leading-snug mb-2 line-clamp-2 text-stone-900">{name}</h2>
               {dateStr && (
                 <p className="inline-flex w-fit items-center gap-1 rounded-full bg-amber-50 text-amber-700 text-[11px] font-semibold px-2.5 py-1 mb-3">

@@ -50,6 +50,13 @@
   - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)으로 실행당 생성량 제한해 초기 백필 시간을 분산
   - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
   - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월
+- **카드 UI 인터랙션 전역화 (2026-03-27)**:
+  - `src/app/globals.css`에 공통 카드 인터랙션 클래스(`.menu-card`, `.menu-card-icon`) 도입
+  - 인천/보조금/축제/블로그/홈 카드 hover 동작을 일관화(미세 확대 + 배경 틴트 + 아이콘 톤다운)
+  - `prefers-reduced-motion`에서 애니메이션 비활성화로 접근성 대응
+- **카드 높이 정책 재조정 (2026-03-27)**:
+  - 인천/보조금 목록의 강제 동일 높이(`auto-rows-fr`, `h-full`) 적용을 롤백
+  - 과도한 카드 확장 이슈를 해소하고 축제/블로그와 유사한 카드 체감 크기로 복구
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

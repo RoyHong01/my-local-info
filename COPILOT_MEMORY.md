@@ -53,3 +53,9 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)로 실행당 AI 가공 수 제한
   - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
   - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월
+- 카드 UI 전역 인터랙션 정리(2026-03-27):
+  - `globals.css`에 `.menu-card`, `.menu-card-icon` 추가 (미세 확대/배경 틴트/아이콘 톤다운)
+  - 인천/보조금/축제/블로그/홈 카드에 공통 적용
+- 카드 그리드 높이 복구(2026-03-27):
+  - 인천/보조금 목록에서 `auto-rows-fr`, `h-full` 강제 적용 제거
+  - 카드가 과도하게 커지는 문제 해결, 축제/블로그와 유사한 자연 높이 유지
