@@ -21,6 +21,10 @@ interface DataItem {
   expired?: boolean;
 }
 
+function hasContentId(item: DataItem): boolean {
+  return typeof item.contentid === 'string' && item.contentid.trim().length > 0;
+}
+
 async function readJson(filename: string): Promise<DataItem[]> {
   try {
     const filePath = path.join(process.cwd(), 'public', 'data', filename);
@@ -33,7 +37,9 @@ async function readJson(filename: string): Promise<DataItem[]> {
 
 export default async function FestivalPage() {
   const all = await readJson('festival.json');
-  const items = all.filter(i => !i.expired);
+  const activeItems = all.filter(i => !i.expired);
+  const apiItems = activeItems.filter(hasContentId);
+  const items = apiItems.length > 0 ? apiItems : activeItems;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">

@@ -17,11 +17,26 @@ async function fetchOverview(contentId, apiKey) {
   }
 }
 
-// HTML 태그 제거 + 200자 요약
+// searchKeyword2로 특정 축제 키워드 검색 (샘플 데이터 API 교체용)
+async function fetchByKeyword(keyword, apiKey) {
+  const encodedKeyword = encodeURIComponent(keyword);
+  const url = `https://apis.data.go.kr/B551011/KorService2/searchKeyword2?serviceKey=${apiKey}&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&keyword=${encodedKeyword}&numOfRows=10&pageNo=1`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    const item = data?.response?.body?.items?.item || [];
+    return Array.isArray(item) ? item : [item];
+  } catch {
+    return [];
+  }
+}
+
+// HTML 태그 제거 (상세 페이지용 원문 최대 보존)
 function cleanOverview(html) {
   if (!html) return '';
   const text = html.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
-  return text.length > 200 ? text.slice(0, 197) + '...' : text;
+  return text;
 }
 
 // API 호출 간 딜레이 (rate limit 방지)
@@ -81,17 +96,70 @@ async function run() {
     existing = JSON.parse(fileContent);
   } catch (_) {}
 
-  // 기존 데이터 중 overview 없는 항목도 보강
+  // 오래된 샘플 3건(id 기반)을 TourAPI 원본 항목으로 교체
+  const legacyKeywordMap = {
+    'festival-001': ['진해군항제', '군항제'],
+    'festival-002': ['경주벚꽃마라톤', '벚꽃마라톤'],
+    'festival-003': ['영등포 여의도 봄꽃축제', '여의도 봄꽃축제']
+  };
+
+  let replacedLegacyCount = 0;
+  for (let i = 0; i < existing.length; i++) {
+    const ex = existing[i];
+    const legacyId = ex?.id;
+
+    if (!legacyId || ex?.contentid || !legacyKeywordMap[legacyId]) continue;
+
+    let found = null;
+    for (const keyword of legacyKeywordMap[legacyId]) {
+      const candidates = await fetchByKeyword(keyword, TOUR_API_KEY);
+      found = candidates.find(c => c?.contenttypeid === '15') || candidates[0] || null;
+      if (found?.contentid) break;
+      await delay(100);
+    }
+
+    if (!found?.contentid) continue;
+
+    const rawOverview = await fetchOverview(found.contentid, TOUR_API_KEY);
+    const replacement = {
+      ...found,
+      expired: false,
+      collectedAt: new Date().toISOString().split('T')[0],
+      overview: cleanOverview(rawOverview)
+    };
+
+    existing[i] = replacement;
+    replacedLegacyCount++;
+    console.log(`  샘플 교체 완료: ${legacyId} -> ${replacement.title} (${replacement.contentid})`);
+    await delay(100);
+  }
+
+  // API 매칭 실패한 오래된 샘플(id만 있고 contentid 없음) 제거
+  const beforeLegacyCleanup = existing.length;
+  existing = existing.filter(ex => !(ex?.id && !ex?.contentid && String(ex.id).startsWith('festival-')));
+  const removedLegacyCount = beforeLegacyCleanup - existing.length;
+
+  // 기존 데이터 overview 보강 (신규 조회 결과 우선 사용)
   let updatedCount = 0;
   for (const ex of existing) {
-    if (ex.contentid && !ex.overview) {
-      const raw = await fetchOverview(ex.contentid, TOUR_API_KEY);
-      ex.overview = cleanOverview(raw);
-      if (ex.overview) {
-        console.log(`  기존 항목 보강: ${ex.title} - 설명 수집 완료`);
+    if (ex.contentid) {
+      const fromFetched = items.find(it => it.contentid === ex.contentid)?.overview;
+
+      if (fromFetched) {
+        ex.overview = fromFetched;
         updatedCount++;
+        continue;
       }
-      await delay(100);
+
+      if (!ex.overview || ex.overview.endsWith('...')) {
+        const raw = await fetchOverview(ex.contentid, TOUR_API_KEY);
+        ex.overview = cleanOverview(raw);
+        if (ex.overview) {
+          console.log(`  기존 항목 보강: ${ex.title} - 설명 수집 완료`);
+          updatedCount++;
+        }
+        await delay(100);
+      }
     }
   }
 
@@ -99,7 +167,7 @@ async function run() {
   const existingIds = new Set(existing.map(e => e.contentid));
   const newItems = items.filter(item => !existingIds.has(item.contentid));
 
-  const merged = [
+  const mergedRaw = [
     ...existing,
     ...newItems.map(item => ({
       ...item,
@@ -108,9 +176,18 @@ async function run() {
     }))
   ];
 
+  // contentid(또는 id) 기준 중복 제거
+  const dedupMap = new Map();
+  for (const item of mergedRaw) {
+    const key = item.contentid || item.id;
+    if (!key) continue;
+    dedupMap.set(String(key), item);
+  }
+  const merged = Array.from(dedupMap.values());
+
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItems.length}건 추가, 기존 ${updatedCount}건 보강 (총 ${merged.length}건)`);
+  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItems.length}건 추가, 기존 ${updatedCount}건 보강, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리 (총 ${merged.length}건)`);
 }
 
 run();

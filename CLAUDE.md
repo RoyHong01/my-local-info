@@ -98,6 +98,7 @@ scripts/
 ## 작업 이력
 
 ### 2026-03-26
+
 - 프로젝트 인천/전국 멀티카테고리 구조로 전면 재설계 (성남 → 인천/전국)
 - 환경변수 재정비, scripts/ 재편, GitHub Actions 업데이트
 - 샘플 데이터 3종 생성, 상세 페이지 구현, Cloudflare 배포 확인
@@ -105,19 +106,15 @@ scripts/
 - BlogFilter.tsx, RSS 피드, 네이버 서치어드바이저 인증 추가
 
 ### 2026-03-27
-- SEO 전면 보강: OG 태그, canonical, og:image 자동화, favicon 추가
-- sitemap.xml 도메인 pick-n-joy.com으로 수정
-- 블로그 생성: Gemini → **Claude API (claude-haiku-4-5)** 교체
-- 블로그 중복 정리 (총 14편: 인천 7, 보조금 5, 축제 2)
-- 블로그 카드 UI 통일 (카테고리별 SVG 썸네일), 스크롤 복원 기능 추가
-- 상세 페이지 정보 풍부화 (incheon/subsidy/festival [id] 재작성)
-- 클라이언트 컴포넌트 분리: IncheonCardList, SubsidyCardList, FestivalCardList, ScrollRestorer 신규 생성
-- **fix**: 누락 컴포넌트 파일 미커밋으로 GitHub Actions 빌드 실패 → 수정 완료
-- festival/[id]/page.tsx 이전 버전 복원 (상세설명/주소/전화 정상 표시)
-- SubsidyCardList.tsx 2열 → 3열 변경
-- incheon.json·subsidy.json 첫 3개 샘플 항목 상세 필드 보강 (서비스분야, 지원내용, 신청방법, 전화문의 등)
+
+- 축제 상세 데이터 복구:
+  - `collect-festival.js` overview 절삭(200자) 제거 → 원문 상세설명 보존
+  - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
+  - 매칭 실패 샘플 자동 정리 + `contentid/id` 기준 중복 제거 추가
+  - `festival.json` 재수집 완료 (샘플 제거/교체 후 API 기반 데이터로 정리)
 
 ## 다음 작업 예정
+
 - Google Analytics (GA ID) 설정
 - 쿠팡 파트너스 배너 삽입
 - Google AdSense 신청 (포스트 15편 이상 시)

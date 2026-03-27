@@ -95,6 +95,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - ✅ favicon (ico + svg)
 - ✅ og:image 자동화 (TourAPI firstimage + 카테고리별 기본 SVG)
 
+## 최근 동기화 메모 (2026-03-27)
+- 축제 상세 설명 복구: `collect-festival.js` overview 절삭 제거로 원문 보존
+- 오래된 샘플 3건(`festival-001~003`) 정리: API 원본 매핑/교체 + 매칭 실패 샘플 자동 제거
+- `festival.json`은 API 기반 항목 중심으로 재정리 (중복 제거 포함)
+
 ## 백로그
 - [ ] Google Analytics 설정
 - [ ] Google AdSense 설정

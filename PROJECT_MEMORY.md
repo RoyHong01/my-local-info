@@ -3,6 +3,7 @@
 이 파일은 프로젝트의 과거 작업 이력, 현재 상태, 그리고 앞으로 해야 할 작업들을 기록하여 AI 어시스턴트가 프로젝트의 전체 컨텍스트를 빠르고 정확하게 파악할 수 있도록 돕는 핵심 메모리 파일입니다.
 
 ## 1. 현재 프로젝트 상태 (Current Status)
+
 - **기술 스택**: Next.js App Router, Tailwind CSS v4, TypeScript
 - **환경 기반**: 정적 HTML 배포 (`next.config.ts`의 `output: "export"` 적용)
 - **배포 플랫폼**: Cloudflare Pages (GitHub Actions `deploy.yml` 통해 자동 배포)
@@ -24,6 +25,7 @@
 - **네비 메뉴명 변경**: 인천정보→인천시 정보, 보조금→전국 보조금·복지 정책, 축제·여행→전국 축제·여행 정보
 - **헤더 UI 확대**: 로고·네비 폰트 사이즈 업
 - **축제 overview 수집 보강**: collect-festival.js에 detailCommon2 API 추가, 기존 100건 보강 완료
+- **축제 상세 데이터 복구**: overview 절삭 제거, 샘플 3건 API 매핑/교체(매칭 실패 샘플 정리), festival.json API 기반 재정리 완료
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 

@@ -30,3 +30,8 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 헤더 UI 확대: 로고 `text-3xl`, 네비 `text-base`
 - 축제 설명 보강: `scripts/collect-festival.js`에서 `detailCommon2`로 `overview` 수집
 - 주의: KorService2 `detailCommon2`는 `defaultYN`, `overviewYN` 파라미터를 사용하면 오류 발생 (파라미터 없이 호출)
+- 축제 상세 데이터 복구(2026-03-27):
+  - `overview` 200자 절삭 제거 → 상세 원문 보존
+  - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
+  - 매칭 실패 샘플 자동 제거 + `contentid/id` 기준 중복 제거
+  - `festival.json` 재수집 완료
