@@ -23,7 +23,7 @@
 | PUBLIC_DATA_API_KEY | 공공데이터포털 (보조금4, 인천) | ✅ |
 | TOUR_API_KEY | 한국관광공사 TourAPI | ✅ |
 | KAKAO_API_KEY | 카카오 로컬 API | 미사용 (2단계) |
-| NEXT_PUBLIC_GA_ID | Google Analytics | 미설정 |
+| NEXT_PUBLIC_GA_ID | Google Analytics | ✅ G-6VNKGES4FW |
 | NEXT_PUBLIC_ADSENSE_ID | Google AdSense | 미설정 |
 | NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 파트너스 | 미설정 |
 
@@ -111,6 +111,6 @@ public/
 - 자동 생성: GitHub Actions 매일 07:00 KST, 카테고리당 2편
 
 ## 다음 작업 예정
-- Google Analytics (GA ID) 설정
+- ~~Google Analytics (GA ID) 설정~~ ✅ 완료
 - 쿠팡 파트너스 배너 삽입
 - Google AdSense 신청 (페이지 15개 이상 완료)

@@ -7,6 +7,12 @@
 
 ## 2026-03-27
 
+### Google Analytics 설정
+- `.env.local`: `NEXT_PUBLIC_GA_ID=G-6VNKGES4FW` 설정
+- GitHub Secret `NEXT_PUBLIC_GA_ID` 등록 (`gh secret set`)
+- `deploy.yml` "Next.js 빌드" 단계에 `NEXT_PUBLIC_GA_ID` env 주입 추가
+- 빌드 결과물(`out/index.html`) GA 스크립트 포함 확인 ✅
+
 ### 태허철학관 자체 배너 추가
 - **TaeheoAdBanner.tsx** (신규): 딥네이비 + 금색 디자인, 사주·운세·작명 CTA 배너
 - 5개 페이지 사이드바 구조 적용: blog, incheon, subsidy, festival 목록 + blog 상세
