@@ -7,6 +7,12 @@
 
 ## 2026-03-27
 
+### 태허철학관 자체 배너 추가
+- **TaeheoAdBanner.tsx** (신규): 딥네이비 + 금색 디자인, 사주·운세·작명 CTA 배너
+- 5개 페이지 사이드바 구조 적용: blog, incheon, subsidy, festival 목록 + blog 상세
+  - `max-w-5xl` → `max-w-6xl`, `flex gap-8` 레이아웃, `aside.hidden.lg:block.w-52.sticky.top-24`
+  - 모바일(lg 미만) 숨김, 데스크탑에서만 우측 고정 표시
+
 ### 블로그 카테고리 필터 URL 파라미터 방식 전환
 - **BlogFilter.tsx**: `useState` → `useSearchParams` + `useRouter`로 교체
   - 필터 탭 클릭 시 URL 변경 (`/blog?category=축제` 등)
