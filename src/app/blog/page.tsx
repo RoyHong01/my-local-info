@@ -54,7 +54,7 @@ export default function BlogPage() {
               <BlogFilter posts={posts} />
             </Suspense>
           </div>
-          <aside className="hidden lg:block w-44 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner />
@@ -71,7 +71,7 @@ export default function BlogPage() {
           </div>
           <div className="text-center md:text-right text-stone-500">
             <p>데이터 출처: 공공데이터포털 · 한국관광공사</p>
-            <p className="text-xs text-stone-600 mt-2 text-center">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+            <p className="text-xs text-stone-600 mt-1 text-center md:text-right">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
           </div>
         </div>
       </footer>
