@@ -1,5 +1,6 @@
 // 쿠팡 파트너스 활동을 통해 수수료를 제공받습니다.
-// 공식 iframe 방식 사용 / 블로그 글 하단 전용
+// same-origin iframe 방식: public/coupang-bottom.html에서 g.js 실행
+// 블로그 글 하단 전용
 
 export default function CoupangBottomBanner({ bannerId }: { bannerId?: string }) {
   return (
@@ -13,12 +14,11 @@ export default function CoupangBottomBanner({ bannerId }: { bannerId?: string })
         🛒 쿠팡 추천 상품
       </div>
       <iframe
-        src="https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource="
+        src="/coupang-bottom.html"
         width={680}
         height={300}
         frameBorder={0}
         scrolling="no"
-        referrerPolicy="unsafe-url"
         style={{
           display: 'block',
           borderRadius: '12px',
