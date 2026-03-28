@@ -11,7 +11,8 @@
 
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
-- Claude API (claude-haiku-4-5) → 블로그 글 자동 생성
+- Claude API (claude-haiku-4-5) → 인천/보조금/축제 데이터 description 생성
+- Gemini API (gemini-1.5-pro) → 블로그 글 자동 생성 (감성적 문체)
 - 공공데이터포털 API + 한국관광공사 TourAPI → 데이터 수집
 - GitHub Actions → 매일 07:00 KST 자동 실행 (cron: `0 22 * * *`)
 - Cloudflare Pages (wrangler) → 빌드 후 자동 배포
@@ -19,7 +20,8 @@
 ## 환경변수 (.env.local)
 | 변수 | 용도 | 상태 |
 |------|------|------|
-| ANTHROPIC_API_KEY | Claude API 블로그 생성 | ✅ |
+| ANTHROPIC_API_KEY | Claude API 데이터 description 생성 | ✅ |
+| GEMINI_API_KEY | Gemini API 블로그 글 생성 | ✅ GitHub Secrets only |
 | PUBLIC_DATA_API_KEY | 공공데이터포털 (보조금4, 인천) | ✅ |
 | TOUR_API_KEY | 한국관광공사 TourAPI | ✅ |
 | KAKAO_API_KEY | 카카오 로컬 API | 미사용 (2단계) |

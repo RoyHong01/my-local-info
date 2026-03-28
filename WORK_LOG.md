@@ -7,6 +7,14 @@
 
 ## 2026-03-28
 
+### 블로그 글 생성 Gemini 1.5 Pro로 교체
+- `generate-blog-post.js`: Anthropic SDK → Gemini 1.5 Pro fetch API 교체
+  - `callGemini()` 함수 추가 (temperature 0.9, maxOutputTokens 2048)
+  - 프롬프트에 Gemini 감성 글쓰기 지침 추가 (MZ 스타일, 오감 묘사, 공문서 스타일 금지)
+  - run() API 키 체크 → `GEMINI_API_KEY`로 변경
+- `deploy.yml`: 블로그 생성 스텝 env `ANTHROPIC_API_KEY` → `GEMINI_API_KEY` 교체
+- GitHub Secrets에 `GEMINI_API_KEY` 등록되어 있음 (로컬 .env.local 불필요)
+
 ### 인천 봄꽃 축제 중복 정리 + 이미지 교체 + 제목 수정
 - `2026-03-26-incheon-spring-flower-festival.md` 삭제 (샘플 기반 중복, default 이미지)
 - `2024-04-23-incheon-spring-flower-festival.md` 유지본으로 확정
