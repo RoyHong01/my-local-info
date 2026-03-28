@@ -7,6 +7,11 @@
 
 ## 2026-03-28
 
+### GitHub Actions 빌드 에러 수정
+- 원인: `CoupangBottomBanner.tsx`, `CoupangBanner.tsx` 수정분이 git에 누락된 상태로 push됨
+- `Module not found: Can't resolve '@/components/CoupangBottomBanner'` 에러 4회 발생 (#125~#128)
+- 두 파일 커밋 후 GitHub Actions 정상 복구 ✅
+
 ### 쿠팡 배너 240x600 적용, aside 너비 w-72 통일
 - 5개 페이지 aside 너비 `w-44` → `w-72` (240px 배너 여백 확보)
 - `blog/[slug]` footer 공정위 문구 클래스: `text-stone-400`으로 통일
