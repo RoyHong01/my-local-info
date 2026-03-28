@@ -7,6 +7,12 @@
 
 ## 2026-03-28
 
+### 진해군항제 수동 중복 제거 + 고창청보리밭 축제 블로그 추가
+- `2026-03-27-jinhae-gunhangje-cherry-blossom.md` 삭제 (API 기반 자동 생성본 `2026-03-27-post-1774652966257.md`으로 대체)
+- `2026-03-28-gochang-barley-field-festival.md` 신규 작성 (전국 축제·여행, source_id: 511801)
+  - 4월 18일~5월 10일, 전북 고창 학원농장, 77만㎡ 청보리밭, firstimage TourAPI 사용
+- 총 블로그 수 유지: 28편
+
 ### 태허철학관 배너 가로형 교체 + 도장 로고 추가
 - `TaeheoAdBanner.tsx` 전면 교체: 세로형 → 가로형 (좌측 도장 로고 + 우측 텍스트)
 - `public/images/taeheo-logo.png` 추가 (도장 이미지)
