@@ -7,6 +7,14 @@
 
 ## 2026-03-28
 
+### 쿠팡 배너 안정적 재구현 + 상세 페이지 사이드바 추가
+- CoupangBanner/CoupangBottomBanner: useEffect + g.js 중복 로드 방지 방식으로 재작성
+  - bannerId prop으로 페이지별 고유 id 지정 (기존 id prop → bannerId prop 변경)
+  - window.PartnersCoupang 존재 시 즉시 실행, 로드 중이면 500ms 후 시도
+- incheon/[id], subsidy/[id], festival/[id] 상세 페이지 사이드바 추가 (TaeheoAdBanner + CoupangBanner)
+- 전체 9개 위치 bannerId 고유값 정리:
+  - blog-list, blog-detail, incheon-list, incheon-detail, subsidy-list, subsidy-detail, festival-list, festival-detail, bottom-blog
+
 ### 쿠팡 배너 next/script 방식으로 재구현 (배너 위치 오류 수정)
 - 문제: useEffect로 스크립트 동적 삽입 시 쿠팡 G() 함수가 `document.currentScript`를 찾지 못해 배너가 body 맨 앞에 삽입됨
 - 해결: `next/script` `afterInteractive` + `onLoad` 콜백 방식으로 재작성, `container` 옵션으로 지정 div에 삽입
