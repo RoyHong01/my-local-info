@@ -1,56 +1,24 @@
 'use client';
 // 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-// 사이드바 세로형 배너 (160x600)
+// 사이드바 세로형 배너 (240x600)
+import Script from 'next/script';
 
-import { useEffect, useRef } from 'react';
-
-export default function CoupangBanner() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (!containerRef.current || initialized.current) return;
-    initialized.current = true;
-
-    const libScript = document.createElement('script');
-    libScript.src = 'https://ads-partners.coupang.com/g.js';
-    libScript.async = true;
-
-    libScript.onload = () => {
-      const initScript = document.createElement('script');
-      initScript.innerHTML = `
-        try {
-          new PartnersCoupang.G({
-            "id": 976088,
-            "template": "carousel",
-            "trackingCode": "AF5831775",
-            "width": "240",
-            "height": "600",
-            "tsource": ""
-          });
-        } catch(e) { console.warn('Coupang banner init failed', e); }
-      `;
-      if (containerRef.current) {
-        containerRef.current.appendChild(initScript);
-      }
-    };
-
-    containerRef.current.appendChild(libScript);
-  }, []);
-
+export default function CoupangBanner({ id = 'coupang-sidebar' }: { id?: string }) {
   return (
     <div>
-      <div style={{
-        fontSize: '10px',
-        color: '#9ca3af',
-        textAlign: 'center',
-        marginBottom: '6px',
-        letterSpacing: '0.03em',
-      }}>
+      <div
+        style={{
+          fontSize: '10px',
+          color: '#9ca3af',
+          textAlign: 'center',
+          marginBottom: '6px',
+          letterSpacing: '0.03em',
+        }}
+      >
         🛒 쿠팡 추천 상품
       </div>
       <div
-        ref={containerRef}
+        id={id}
         style={{
           width: '240px',
           minHeight: '600px',
@@ -60,14 +28,38 @@ export default function CoupangBanner() {
           border: '1px solid #f3f4f6',
         }}
       />
-      <p style={{
-        fontSize: '9px',
-        color: '#d1d5db',
-        textAlign: 'center',
-        marginTop: '6px',
-        lineHeight: '1.4',
-      }}>
-        쿠팡 파트너스 활동을 통해<br />수수료를 제공받습니다.
+      <Script
+        src="https://ads-partners.coupang.com/g.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          try {
+            // @ts-ignore
+            new window.PartnersCoupang.G({
+              id: 976088,
+              template: 'carousel',
+              trackingCode: 'AF5831775',
+              width: '240',
+              height: '600',
+              tsource: '',
+              container: id,
+            });
+          } catch (e) {
+            console.warn('Coupang banner error:', e);
+          }
+        }}
+      />
+      <p
+        style={{
+          fontSize: '9px',
+          color: '#d1d5db',
+          textAlign: 'center',
+          marginTop: '6px',
+          lineHeight: '1.4',
+        }}
+      >
+        쿠팡 파트너스 활동을 통해
+        <br />
+        수수료를 제공받습니다.
       </p>
     </div>
   );

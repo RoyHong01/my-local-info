@@ -57,7 +57,7 @@ export default function BlogPage() {
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
-              <CoupangBanner />
+              <CoupangBanner id="coupang-sidebar-blog-list" />
             </div>
           </aside>
         </div>
