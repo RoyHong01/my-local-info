@@ -7,6 +7,15 @@
 
 ## 2026-03-28
 
+### 쿠팡 배너 next/script 방식으로 재구현 (배너 위치 오류 수정)
+- 문제: useEffect로 스크립트 동적 삽입 시 쿠팡 G() 함수가 `document.currentScript`를 찾지 못해 배너가 body 맨 앞에 삽입됨
+- 해결: `next/script` `afterInteractive` + `onLoad` 콜백 방식으로 재작성, `container` 옵션으로 지정 div에 삽입
+- `id` prop 추가 → 페이지별 고유 container id 부여 (중복 방지)
+  - blog/[slug] aside: `coupang-sidebar-blog`, 본문 하단: `coupang-bottom-blog`
+  - blog list: `coupang-sidebar-blog-list`
+  - incheon: `coupang-sidebar-incheon`, subsidy: `coupang-sidebar-subsidy`, festival: `coupang-sidebar-festival`
+- `output: "export"` 환경에서도 `afterInteractive` 정상 동작 확인
+
 ### GitHub Actions 빌드 에러 수정
 - 원인: `CoupangBottomBanner.tsx`, `CoupangBanner.tsx` 수정분이 git에 누락된 상태로 push됨
 - `Module not found: Can't resolve '@/components/CoupangBottomBanner'` 에러 4회 발생 (#125~#128)
