@@ -353,8 +353,12 @@ tags: [태그1, 태그2, 태그3, 태그4, 태그5]
   if (finalContent.endsWith('```')) finalContent = finalContent.slice(0, -3);
   finalContent = finalContent.trim();
 
-  // image 필드 삽입
-  finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${imageUrl}"`);
+  // image 필드 삽입 (이미 있으면 덮어쓰기, 없으면 tags 뒤에 삽입)
+  if (/^image:/m.test(finalContent)) {
+    finalContent = finalContent.replace(/^image:.*$/m, `image: "${imageUrl}"`);
+  } else {
+    finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${imageUrl}"`);
+  }
 
   // source_id 반드시 삽입
   if (sourceId) {
