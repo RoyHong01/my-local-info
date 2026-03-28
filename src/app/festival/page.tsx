@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
+import CoupangBanner from '@/components/CoupangBanner';
 
 export const metadata: Metadata = {
   title: '전국 축제·여행 정보 | 픽앤조이',
@@ -75,8 +76,9 @@ export default async function FestivalPage() {
               <FestivalCardList items={items} />
             )}
           </div>
-          <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-24 flex flex-col gap-4">
             <TaeheoAdBanner />
+            <CoupangBanner />
           </aside>
         </div>
       </main>
@@ -89,6 +91,7 @@ export default async function FestivalPage() {
           </div>
           <div className="text-center md:text-right text-stone-500">
             <p>데이터 출처: 공공데이터포털 · 한국관광공사</p>
+            <p className="text-stone-500 text-xs mt-2">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
           </div>
         </div>
       </footer>

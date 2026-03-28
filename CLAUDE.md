@@ -27,7 +27,7 @@
 | KAKAO_API_KEY | 카카오 로컬 API | 미사용 (2단계) |
 | NEXT_PUBLIC_GA_ID | Google Analytics | ✅ G-6VNKGES4FW |
 | NEXT_PUBLIC_ADSENSE_ID | Google AdSense | 미설정 |
-| NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 파트너스 | 미설정 |
+| NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 파트너스 | ✅ AF5831775 |
 
 ## GitHub Actions Secrets
 - CLOUDFLARE_API_TOKEN ✅
