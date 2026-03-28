@@ -26,7 +26,23 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
-## 최근 중요 반영 사항
+## 최근 중요 반영 사항 (2026-03-28)
+
+- **Google Analytics**: `layout.tsx`에 `G-6VNKGES4FW` Script 삽입 완료
+- **블로그 카테고리 필터**: `BlogFilter.tsx` → `useSearchParams` 기반 URL 파라미터 방식으로 전환 (뒤로가기 시 필터 유지)
+- **블로그 생성 AI**: `generate-blog-post.js` Gemini 2.5 Pro 전환 + MZ 감성 + 정보 완전성 규칙
+- **태허철학관 배너**: `TaeheoAdBanner.tsx` 신규, 가로형 + `taeheo-logo.png` 도장 로고. 전 사이드바 상단 배치
+- **쿠팡 파트너스 배너**:
+  - `CoupangBanner.tsx` (사이드바 240x600, 쿠팡 id:976088) / `CoupangBottomBanner.tsx` (하단 680x300, id:976089)
+  - 파트너 트래킹 코드: AF5831775
+  - `bannerId` prop으로 페이지별 고유 DOM id 지정 (중복 방지)
+  - useEffect + g.js 중복 로드 방지 로직 (window.PartnersCoupang 체크 → 즉시 실행 / 로드 중이면 500ms 후 재시도)
+  - 적용: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세 (총 8곳)
+- **인천/보조금/축제 상세 페이지 사이드바 추가**: `incheon/[id]`, `subsidy/[id]`, `festival/[id]` 에 `flex gap-8 items-start` 레이아웃 + TaeheoAdBanner + CoupangBanner 삽입
+- **공정위 문구**: 전 페이지 footer에 쿠팡 파트너스 고지 문구 추가
+- **블로그 썸네일**: TourAPI 실제 이미지로 5개 포스트 교체 (진해/여의도/경포/구례/광안리)
+
+## 이전 반영 사항 (2026-03-27 이전)
 
 - 네비 메뉴명 통일: 인천시 정보 / 전국 보조금·복지 정책 / 전국 축제·여행 정보
 - 헤더 UI 확대: 로고 `text-3xl`, 네비 `text-base`

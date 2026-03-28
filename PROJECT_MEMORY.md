@@ -18,6 +18,21 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-28 완료
+- **블로그 썸네일 TourAPI 실제 이미지로 교체**: 진해군항제/여의도벚꽃/경포벚꽃/구례산수유/광안리 5개 포스트
+- **태허철학관 배너 추가**: `TaeheoAdBanner.tsx` 가로형 + 도장 로고(`taeheo-logo.png`) 삽입, 전 페이지 사이드바 상단 배치
+- **Google Analytics 설정**: `G-6VNKGES4FW` 적용 완료, `layout.tsx`에 Script 삽입
+- **블로그 카테고리 필터 URL 파라미터 방식 전환**: `BlogFilter.tsx`를 `useSearchParams` 기반으로 재작성, 뒤로가기 시 필터 유지
+- **블로그 생성 AI Gemini 2.5 Pro 전환**: `generate-blog-post.js` Gemini 2.5 Pro로 교체, MZ 감성 + 정보 완전성 규칙 추가
+- **쿠팡 파트너스 배너 전면 구현**:
+  - `CoupangBanner.tsx` (사이드바 240x600, id:976088) + `CoupangBottomBanner.tsx` (하단 680x300, id:976089)
+  - 파트너ID: AF5831775
+  - useEffect + g.js 중복 로드 방지 + `bannerId` prop으로 페이지별 고유 container id 지정
+  - blog/incheon/subsidy/festival 목록·상세 8개 페이지 전체 적용
+- **공정위 필수 문구**: 전 페이지 footer에 "쿠팡 파트너스 활동을 통해 수수료를 제공받습니다" 추가
+- **인천/보조금/축제 상세 페이지 사이드바 추가**: `TaeheoAdBanner` + `CoupangBanner` 사이드바 3개 상세 페이지 전부 적용
+- **블로그 중복 제거**: 진해군항제 1편 삭제 → 고창청보리밭 축제 1편 추가, 인천 봄꽃 축제 중복 제거
+
 - **멀티카테고리 구조 전면 재설계**: 인천/전국 보조금/축제·여행 3개 카테고리 + 블로그
 - **SEO 전면 보강 (2026-03-27)**:
   - sitemap.xml 도메인 수정 (pages.dev → pick-n-joy.com)
@@ -62,7 +77,9 @@
 
 - [x] 블로그 상세 페이지 구조화된 JSON-LD 데이터 추가 및 Meta 데이터(OpenGraph 등) 확충 작업
 - [x] 사이트맵(`sitemap.xml`) 및 웹 로봇(`robots.txt`) 추가하여 신규 글들에 대한 크롤링 최적화 진행
-- [ ] Google Analytics (NEXT_PUBLIC_GA_ID) 설정
+- [x] Google Analytics (NEXT_PUBLIC_GA_ID) 설정 ✅ 2026-03-28
+- [x] 쿠팡 파트너스 배너 구현 ✅ 2026-03-28
+- [ ] 쿠팡 배너 렌더링 확인 (배포 후 브라우저 콘솔 점검)
 - [ ] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정
 - [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
 - [ ] 2단계: 전국 맛집 기능 (restaurant.json, 카카오 API 연동)

@@ -12,7 +12,7 @@
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
 - Claude API (claude-haiku-4-5) → 인천/보조금/축제 데이터 description 생성
-- Gemini API (gemini-2.5-pro) → 블로그 글 자동 생성 (감성적 문체)
+- Gemini API (gemini-2.5-pro) → 블로그 글 자동 생성 (MZ 감성 + 정보 완전성 규칙)
 - 공공데이터포털 API + 한국관광공사 TourAPI → 데이터 수집
 - GitHub Actions → 매일 07:00 KST 자동 실행 (cron: `0 22 * * *`)
 - Cloudflare Pages (wrangler) → 빌드 후 자동 배포
@@ -69,11 +69,15 @@ src/app/
   about/page.tsx        # 소개 페이지
 
 src/components/
-  BlogFilter.tsx        # 블로그 카테고리 필터 (use client)
+  BlogFilter.tsx        # 블로그 카테고리 필터 (use client, URL 파라미터 방식)
   IncheonCardList.tsx   # 인천 카드 목록 (use client, 스크롤 저장)
   SubsidyCardList.tsx   # 보조금 카드 목록 (use client, 스크롤 저장)
   FestivalCardList.tsx  # 축제 카드 목록 (use client, 스크롤 저장)
   ScrollRestorer.tsx    # 스크롤 위치 복원 (use client, storageKey prop)
+  TaeheoAdBanner.tsx    # 태허철학관 배너 (가로형 + 도장 로고)
+  CoupangBanner.tsx     # 쿠팡 사이드바 배너 240x600 (use client, bannerId prop)
+  CoupangBottomBanner.tsx # 쿠팡 하단 배너 680x300 (use client, bannerId prop)
+  AdBanner.tsx          # Google AdSense 배너 (ADSENSE_ID 없으면 null)
 
 scripts/
   collect-incheon.js    # 인천 데이터 수집
@@ -110,11 +114,22 @@ public/
 
 ## 블로그 현황 (2026-03-28 기준)
 - 총 28편: 인천 지역 정보 9편, 전국 보조금·복지 9편, 전국 축제·여행 9편, 기타 1편
-- 자동 생성: GitHub Actions 매일 07:00 KST, 카테고리당 2편
+- 자동 생성: GitHub Actions 매일 07:00 KST, 카테고리당 2편 (Gemini 2.5 Pro, MZ 감성)
 - 2026-03-28: 진해군항제 수동 중복 제거(1편 삭제) → 고창청보리밭 축제 추가(1편)
 - 2026-03-28: 인천 봄꽃 축제 중복 제거(1편 삭제), 유지본 제목·이미지·source_id 수정
+- 2026-03-28: 블로그 썸네일 TourAPI 실제 이미지로 교체 (진해/여의도/경포/구례/광안리)
+
+## 쿠팡 파트너스 배너 현황 (2026-03-28)
+- 파트너ID: AF5831775
+- 사이드바: id 976088, 240x600, `CoupangBanner` (bannerId prop으로 페이지별 고유 id)
+- 하단: id 976089, 680x300, `CoupangBottomBanner`
+- 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세 (총 8곳)
+- 구현 방식: useEffect + g.js 중복 로드 방지 + window.PartnersCoupang 존재 시 즉시 실행
+- 공정위 문구: 전 페이지 footer에 추가 완료
 
 ## 다음 작업 예정
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
-- 쿠팡 파트너스 배너 삽입
+- ~~쿠팡 파트너스 배너 삽입~~ ✅ 완료
+- 쿠팡 배너 렌더링 확인 (배포 후 브라우저 콘솔 확인)
 - Google AdSense 신청 (페이지 15개 이상 완료)
+- 카카오 API 맛집 페이지 구축 (2단계)
