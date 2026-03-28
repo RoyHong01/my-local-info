@@ -75,8 +75,8 @@ src/components/
   FestivalCardList.tsx  # 축제 카드 목록 (use client, 스크롤 저장)
   ScrollRestorer.tsx    # 스크롤 위치 복원 (use client, storageKey prop)
   TaeheoAdBanner.tsx    # 태허철학관 배너 (가로형 + 도장 로고)
-  CoupangBanner.tsx     # 쿠팡 사이드바 배너 240x600 (use client, bannerId prop)
-  CoupangBottomBanner.tsx # 쿠팡 하단 배너 680x300 (use client, bannerId prop)
+  CoupangBanner.tsx     # 쿠팡 사이드바 배너 240x600 (공식 iframe 방식)
+  CoupangBottomBanner.tsx # 쿠팡 하단 배너 680x300 (공식 iframe 방식)
   AdBanner.tsx          # Google AdSense 배너 (ADSENSE_ID 없으면 null)
 
 scripts/
@@ -121,15 +121,18 @@ public/
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-28)
 - 파트너ID: AF5831775
-- 사이드바: id 976088, 240x600, `CoupangBanner` (bannerId prop으로 페이지별 고유 id)
+- 사이드바: id 976088, 240x600, `CoupangBanner`
+  - src: `https://ads-partners.coupang.com/widgets.html?id=976088&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
 - 하단: id 976089, 680x300, `CoupangBottomBanner`
+  - src: `https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource=`
+- 구현 방식: **공식 iframe 직접 임베드** (useEffect/script 방식 완전 제거)
+  - `referrerPolicy="unsafe-url"` 필수
+  - `bannerId` prop은 인터페이스 호환용으로만 유지 (실제 미사용)
 - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세 (총 8곳)
-- 구현 방식: useEffect + g.js 중복 로드 방지 + window.PartnersCoupang 존재 시 즉시 실행
 - 공정위 문구: 전 페이지 footer에 추가 완료
 
 ## 다음 작업 예정
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
 - ~~쿠팡 파트너스 배너 삽입~~ ✅ 완료
-- 쿠팡 배너 렌더링 확인 (배포 후 브라우저 콘솔 확인)
 - Google AdSense 신청 (페이지 15개 이상 완료)
 - 카카오 API 맛집 페이지 구축 (2단계)
