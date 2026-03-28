@@ -3,7 +3,29 @@ const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+// 블로그 글 생성: Gemini 1.5 Pro 사용
+async function callGemini(prompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.9,
+        maxOutputTokens: 2048,
+      },
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gemini API 오류: ${res.status} ${err}`);
+  }
+  const data = await res.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
 
 // 카테고리별 우선순위 정렬 함수
 function sortByPriority(items, category) {
@@ -295,6 +317,18 @@ tags: [태그1, 태그2, 태그3, 태그4, 태그5]
 - TourAPI 이미지가 없으면 카테고리 기본 SVG 사용 (잘못된 외부 이미지보다 낫다)
 - 절대로 주제와 무관한 Unsplash 또는 외부 이미지 URL을 임의로 삽입하지 말 것
 
+(본문: 1000자 이상, 아래 스타일 가이드 반드시 적용)
+[Gemini 감성 글쓰기 지침 - 반드시 따를 것]
+- 독자가 글을 읽는 순간 당장이라도 현장으로 달려가고 싶은 생동감 넘치는 MZ 스타일 문체로 작성
+- 감성적이고 따뜻하되, MZ 세대가 공감하는 솔직하고 톡톡 튀는 표현 사용
+  예) "진짜 이건 알고 가야 해요", "올해 봄 이거 모르면 진짜 손해", "갔다 온 사람들 후기가 난리남"
+- 첫 문장은 독자의 감성을 자극하는 도입부로 시작
+  예) "봄이 이렇게 예쁠 줄 몰랐어요.", "사실 저도 반신반의했는데, 직접 가보고 생각이 바뀌었어요."
+- 풍경 묘사, 냄새, 소리 등 오감을 자극하는 표현 적극 사용
+- 이모지를 자연스럽게 활용해 읽는 재미를 더할 것 🌸✨
+- 마무리는 독자가 당장 행동하고 싶게 만드는 따뜻한 한마디로 끝낼 것
+- 딱딱한 공문서 스타일, 항목 나열식 정보 전달은 절대 금지
+
 (본문 작성 규칙 - MZ 감성 스타일 적용)
 1) 본문 첫 줄은 반드시 훅(Hook) 소제목으로 시작: "## ..." 형식 (절대 "#" 사용 금지)
 2) 훅 첫 문장은 짧고 강렬하게, 1~2줄로 독자를 바로 끌어당길 것
@@ -322,16 +356,10 @@ tags: [태그1, 태그2, 태그3, 태그4, 태그5]
 
 마지막 줄에 FILENAME: YYYY-MM-DD-영문키워드 형식으로 파일명 출력`;
 
-  const message = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 2048,
-    messages: [{ role: 'user', content: prompt }]
-  });
-
-  const generatedText = message.content?.[0]?.text || '';
+  const generatedText = await callGemini(prompt);
 
   if (!generatedText) {
-    console.error('Claude API 응답 없음');
+    console.error('Gemini API 응답 없음');
     return false;
   }
 
@@ -406,8 +434,8 @@ tags: [태그1, 태그2, 태그3, 태그4, 태그5]
 }
 
 async function run() {
-  if (!ANTHROPIC_API_KEY) {
-    console.error("Missing ANTHROPIC_API_KEY");
+  if (!GEMINI_API_KEY) {
+    console.error("Missing GEMINI_API_KEY");
     return;
   }
 
