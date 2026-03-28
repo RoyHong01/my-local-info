@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import AdBanner from '@/components/AdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 
@@ -139,7 +140,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <CoupangBanner />
+          <CoupangBottomBanner />
           <footer className="mt-12 pt-8 border-t border-stone-100 text-sm text-stone-500 space-y-4 bg-stone-50 p-6 rounded-2xl">
             <p className="text-xs text-stone-600 mt-2 text-center">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
             <p>
