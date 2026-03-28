@@ -140,7 +140,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <CoupangBottomBanner id="coupang-bottom-blog" />
+          <CoupangBottomBanner bannerId="coupang-bottom-blog" />
           <footer className="mt-12 pt-8 border-t border-stone-100 text-sm text-stone-500 space-y-4 bg-stone-50 p-6 rounded-2xl">
             <p className="text-xs text-stone-400">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
             <p>
@@ -160,7 +160,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
-              <CoupangBanner id="coupang-sidebar-blog" />
+              <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
             </div>
           </aside>
         </div>

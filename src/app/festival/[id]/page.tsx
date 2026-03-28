@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import TaeheoAdBanner from '@/components/TaeheoAdBanner';
+import CoupangBanner from '@/components/CoupangBanner';
 
 interface DataItem {
   [key: string]: unknown;
@@ -149,42 +151,54 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <Link href="/festival" className="text-sm text-rose-600 hover:underline mb-6 inline-block">
-          ← 전국 축제·여행 목록
-        </Link>
+        <div className="flex gap-8 items-start">
+          {/* 메인 콘텐츠 */}
+          <div className="flex-1 min-w-0">
+            <Link href="/festival" className="text-sm text-rose-600 hover:underline mb-6 inline-block">
+              ← 전국 축제·여행 목록
+            </Link>
 
-        <article className="bg-white rounded-3xl shadow-sm border border-stone-100 p-8">
-          <header className="mb-6 pb-6 border-b border-stone-100">
-            <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3">
-              축제·여행
-            </span>
-            <h1 className="text-2xl font-extrabold text-stone-900 mb-2">{name}</h1>
-            {dateStr && (
-              <p className="text-sm text-orange-500 flex items-center gap-1">
-                <span>📅</span> {dateStr}
-              </p>
-            )}
-          </header>
+            <article className="bg-white rounded-3xl shadow-sm border border-stone-100 p-8">
+              <header className="mb-6 pb-6 border-b border-stone-100">
+                <span className="inline-block px-3 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded-full mb-3">
+                  축제·여행
+                </span>
+                <h1 className="text-2xl font-extrabold text-stone-900 mb-2">{name}</h1>
+                {dateStr && (
+                  <p className="text-sm text-orange-500 flex items-center gap-1">
+                    <span>📅</span> {dateStr}
+                  </p>
+                )}
+              </header>
 
-          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {detailMarkdown}
-            </ReactMarkdown>
+              <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {detailMarkdown}
+                </ReactMarkdown>
+              </div>
+
+              {homepage && (
+                <div className="mt-8 pt-6 border-t border-stone-100">
+                  <a
+                    href={homepage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+                  >
+                    공식 홈페이지 방문하기 →
+                  </a>
+                </div>
+              )}
+            </article>
           </div>
-
-          {homepage && (
-            <div className="mt-8 pt-6 border-t border-stone-100">
-              <a
-                href={homepage}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-xl transition-colors"
-              >
-                공식 홈페이지 방문하기 →
-              </a>
+          {/* 사이드바 */}
+          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
+            <div className="flex flex-col gap-4">
+              <TaeheoAdBanner />
+              <CoupangBanner bannerId="coupang-sidebar-festival-detail" />
             </div>
-          )}
-        </article>
+          </aside>
+        </div>
       </main>
 
       <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">

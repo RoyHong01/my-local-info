@@ -73,7 +73,7 @@ export default async function SubsidyPage() {
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
-              <CoupangBanner id="coupang-sidebar-subsidy" />
+              <CoupangBanner bannerId="coupang-sidebar-subsidy-list" />
             </div>
           </aside>
         </div>

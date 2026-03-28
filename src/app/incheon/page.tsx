@@ -83,7 +83,7 @@ export default async function IncheonPage() {
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
-              <CoupangBanner id="coupang-sidebar-incheon" />
+              <CoupangBanner bannerId="coupang-sidebar-incheon-list" />
             </div>
           </aside>
         </div>
