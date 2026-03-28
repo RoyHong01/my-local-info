@@ -7,6 +7,12 @@
 
 ## 2026-03-28
 
+### Gemini API 테스트 - 인천 지역 정보 블로그 1편 생성
+- Gemini 모델 `gemini-1.5-pro` → `gemini-2.5-flash` 교체 (기존 모델 신규 키 미지원)
+- `scripts/_test-gemini-blog.js` 임시 테스트 스크립트로 API 호출 성공 확인
+- 인천 중구 저소득 노인 부분틀니 지대치 비용 지원 블로그 생성 (source_id: 349000000108)
+- `.env.local`에 `GEMINI_API_KEY` 추가
+
 ### 블로그 글 생성 Gemini 1.5 Pro로 교체
 - `generate-blog-post.js`: Anthropic SDK → Gemini 1.5 Pro fetch API 교체
   - `callGemini()` 함수 추가 (temperature 0.9, maxOutputTokens 2048)
