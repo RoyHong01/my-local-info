@@ -12,7 +12,7 @@
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
 - Claude API (claude-haiku-4-5) → 인천/보조금/축제 데이터 description 생성
-- Gemini API (gemini-2.5-flash) → 블로그 글 자동 생성 (감성적 문체)
+- Gemini API (gemini-2.5-pro) → 블로그 글 자동 생성 (감성적 문체)
 - 공공데이터포털 API + 한국관광공사 TourAPI → 데이터 수집
 - GitHub Actions → 매일 07:00 KST 자동 실행 (cron: `0 22 * * *`)
 - Cloudflare Pages (wrangler) → 빌드 후 자동 배포
