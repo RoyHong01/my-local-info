@@ -7,6 +7,11 @@
 
 ## 2026-03-28
 
+### 쿠팡 파트너스 배너 aside 구조 개선
+- aside 너비 `w-56` → `w-44` (쿠팡 배너 160px 맞춤)
+- aside 내부 `<div className="flex flex-col gap-4">` 래퍼 구조로 변경
+- 공정위 문구 스타일 `text-stone-600 text-center`로 5개 파일 통일
+
 ### 쿠팡 파트너스 배너 추가 + 공정위 필수 문구 삽입
 - `CoupangBanner.tsx` 기존 구현 확인 (AF5831775, carousel 템플릿, 160×600)
 - 5개 페이지 aside에 `<CoupangBanner />` 추가 (태허철학관 배너 하단, `flex flex-col gap-4`)
