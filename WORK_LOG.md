@@ -7,6 +7,12 @@
 
 ## 2026-03-28
 
+### 쿠팡 파트너스 배너 2종 적용 완료
+- `CoupangBottomBanner.tsx` (680x300, id:976089) 확인
+- `blog/[slug]/page.tsx`: 본문 하단 `CoupangBanner` → `CoupangBottomBanner` (가로형) 교체
+- 사이드바 aside는 `CoupangBanner` (160x600, 세로형) 유지
+- 목록 4개 페이지(blog/incheon/subsidy/festival) 사이드바·공정위 문구 이미 적용 완료
+
 ### 쿠팡 파트너스 배너 aside 구조 개선
 - aside 너비 `w-56` → `w-44` (쿠팡 배너 160px 맞춤)
 - aside 내부 `<div className="flex flex-col gap-4">` 래퍼 구조로 변경
