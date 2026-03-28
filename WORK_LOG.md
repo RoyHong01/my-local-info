@@ -7,6 +7,11 @@
 
 ## 2026-03-28
 
+### 쿠팡 배너 240x600 적용, aside 너비 w-72 통일
+- 5개 페이지 aside 너비 `w-44` → `w-72` (240px 배너 여백 확보)
+- `blog/[slug]` footer 공정위 문구 클래스: `text-stone-400`으로 통일
+- 4개 목록 페이지 footer 공정위 문구: `mt-1 text-center md:text-right` 적용
+
 ### 쿠팡 파트너스 배너 2종 적용 완료
 - `CoupangBottomBanner.tsx` (680x300, id:976089) 확인
 - `blog/[slug]/page.tsx`: 본문 하단 `CoupangBanner` → `CoupangBottomBanner` (가로형) 교체
