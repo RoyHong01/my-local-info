@@ -7,6 +7,14 @@
 
 ## 2026-03-28
 
+### 인천 봄꽃 축제 중복 정리 + 이미지 교체 + 제목 수정
+- `2026-03-26-incheon-spring-flower-festival.md` 삭제 (샘플 기반 중복, default 이미지)
+- `2024-04-23-incheon-spring-flower-festival.md` 유지본으로 확정
+  - title: "2026년 인천 봄꽃 축제" → "2026 인천대공원 봄꽃 축제" 수정
+  - `image: "/images/incheon-spring-festival-2026.jpg"` 추가 (공식 포스터)
+  - `source_id: "incheon-001"` 추가
+- `public/images/incheon-spring-festival-2026.jpg` 공식 포스터 이미지 추가
+
 ### 진해군항제 수동 중복 제거 + 고창청보리밭 축제 블로그 추가
 - `2026-03-27-jinhae-gunhangje-cherry-blossom.md` 삭제 (API 기반 자동 생성본 `2026-03-27-post-1774652966257.md`으로 대체)
 - `2026-03-28-gochang-barley-field-festival.md` 신규 작성 (전국 축제·여행, source_id: 511801)
