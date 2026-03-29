@@ -335,7 +335,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               />
             </div>
           )}
-          <div className="prose prose-stone prose-orange lg:prose-lg max-w-none mb-12 prose-p:leading-8 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
+          <div className="blog-prose prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {post.content}
             </ReactMarkdown>

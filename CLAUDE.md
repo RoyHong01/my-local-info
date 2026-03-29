@@ -147,6 +147,11 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **블로그 상세 본문 spacing 미세 조정**:
+  - `src/app/blog/[slug]/page.tsx`: 본문 컨테이너에서 `lg:prose-lg`, `prose-p:leading-8` 제거 후 `blog-prose` 전용 클래스 적용
+  - `src/app/globals.css`: 문단/헤딩/리스트 간격을 조금 더 타이트하게 줄이는 `blog-prose` 스타일 추가
+  - 검증: `npm run build` 성공
+
 - **맛집 상세 404(slug 매핑) 복구**:
   - 증상: `2026-03-29-인천-젠젠-본점`, `2026-03-29-서울-미테이블-성수본점` 클릭 시 404
   - 원인: slug/frontmatter와 파일명 매핑이 취약해 일부 케이스에서 상세 파일 조회 실패 가능
