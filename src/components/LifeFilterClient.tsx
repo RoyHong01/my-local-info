@@ -69,7 +69,21 @@ function ChoiceThumbnail() {
   );
 }
 
-function LifeCard({ item }: { item: LifePageItem }) {
+function buildLifeReturnHref(activeTab: string) {
+  return activeTab ? `/life?tab=${activeTab}` : '/life';
+}
+
+function LifeCard({ item, activeTab }: { item: LifePageItem; activeTab: string }) {
+  const handleInternalCardClick = () => {
+    sessionStorage.setItem('lifeScrollY', String(window.scrollY));
+    sessionStorage.setItem('lifeTab', activeTab);
+  };
+
+  const returnHref = buildLifeReturnHref(activeTab);
+  const internalHref = !item.external && item.href.startsWith('/blog/')
+    ? `${item.href}?from=life&returnTo=${encodeURIComponent(returnHref)}`
+    : item.href;
+
   const inner = (
     <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
       {/* 썸네일 */}
@@ -133,7 +147,7 @@ function LifeCard({ item }: { item: LifePageItem }) {
   }
 
   return (
-    <Link href={item.href} className="block">
+    <Link href={internalHref} className="block" onClick={handleInternalCardClick}>
       {inner}
     </Link>
   );
@@ -192,7 +206,7 @@ export default function LifeFilterClient({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((item) => (
-            <LifeCard key={`${item.type}-${item.id}`} item={item} />
+            <LifeCard key={`${item.type}-${item.id}`} item={item} activeTab={activeTab} />
           ))}
         </div>
       )}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import fs from 'fs/promises';
@@ -313,7 +314,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
-        <BlogBackButton />
+        <Suspense fallback={<span className="text-orange-600 mb-8 inline-block">&larr; 목록으로 돌아가기</span>}>
+          <BlogBackButton fallbackHref="/blog" />
+        </Suspense>
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
             <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>

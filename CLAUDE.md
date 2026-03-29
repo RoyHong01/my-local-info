@@ -147,6 +147,17 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 상세 → 일상의 즐거움 목록 복귀 흐름 보정**:
+  - `src/components/LifeFilterClient.tsx`
+    - 맛집 카드 클릭 시 `lifeScrollY` 저장
+    - 블로그 상세 링크에 `?from=life&returnTo=/life?tab=...` 복귀 정보 추가
+  - `src/components/BlogBackButton.tsx`
+    - `from=life`, `returnTo` 쿼리가 있으면 `/blog` 대신 원래 보던 `/life` 목록으로 복귀
+    - `useSearchParams()`는 `Suspense`로 감싼 상태에서 사용
+  - `src/app/life/page.tsx`
+    - `ScrollRestorer` 적용으로 목록 복귀 시 스크롤 위치 복원
+  - 검증: `npm run build` 성공
+
 - **블로그 상세 본문 spacing 미세 조정**:
   - `src/app/blog/[slug]/page.tsx`: 본문 컨테이너에서 `lg:prose-lg`, `prose-p:leading-8` 제거 후 `blog-prose` 전용 클래스 적용
   - `src/app/globals.css`: 문단/헤딩/리스트 간격을 조금 더 타이트하게 줄이는 `blog-prose` 스타일 추가
