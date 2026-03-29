@@ -131,9 +131,11 @@ export default async function Home() {
           {/* 인천 지역 정보 열 */}
           <section id="incheon" className="scroll-mt-24 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-extrabold flex items-center gap-2">
-                <span className="text-xl">🏙</span> 인천 지역 정보
-              </h2>
+              <Link href="/incheon" className="inline-block cursor-pointer hover:opacity-80 transition-opacity">
+                <h2 className="text-lg font-extrabold flex items-center gap-2">
+                  <span className="text-xl">🏙</span> 인천 지역 정보
+                </h2>
+              </Link>
             </div>
             <div className="flex flex-col gap-4 flex-grow">
               {incheon.length === 0 ? (
@@ -148,9 +150,11 @@ export default async function Home() {
           {/* 전국 보조금 열 */}
           <section id="subsidy" className="scroll-mt-24 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-extrabold flex items-center gap-2">
-                <span className="text-xl">💰</span> 전국 보조금·복지
-              </h2>
+              <Link href="/subsidy" className="inline-block cursor-pointer hover:opacity-80 transition-opacity">
+                <h2 className="text-lg font-extrabold flex items-center gap-2">
+                  <span className="text-xl">💰</span> 전국 보조금·복지
+                </h2>
+              </Link>
             </div>
             <div className="flex flex-col gap-4 flex-grow">
               {subsidy.length === 0 ? (
@@ -165,9 +169,11 @@ export default async function Home() {
           {/* 전국 축제·여행 열 */}
           <section id="festival" className="scroll-mt-24 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-extrabold flex items-center gap-2">
-                <span className="text-xl">🎪</span> 전국 축제·여행
-              </h2>
+              <Link href="/festival" className="inline-block cursor-pointer hover:opacity-80 transition-opacity">
+                <h2 className="text-lg font-extrabold flex items-center gap-2">
+                  <span className="text-xl">🎪</span> 전국 축제·여행
+                </h2>
+              </Link>
             </div>
             <div className="flex flex-col gap-4 flex-grow">
               {festival.length === 0 ? (
