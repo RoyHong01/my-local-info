@@ -205,10 +205,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <CoupangBottomBanner bannerId="coupang-bottom-blog" />
-          <footer className="mt-12 pt-8 border-t border-stone-100 text-sm text-stone-500 space-y-4 bg-stone-50 p-6 rounded-2xl">
-            <p className="text-sm text-stone-500">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-            <p>
+          <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-4">
+            <p className="text-sm text-stone-500 leading-6">
               이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다. 정확한 내용은 원문 링크를 통해 확인해주세요.
             </p>
             {sourceLink !== '#' && (
@@ -219,7 +217,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </a>
               </p>
             )}
-          </footer>
+          </div>
+
+          <div className="mt-8">
+            <CoupangBottomBanner bannerId="coupang-bottom-blog" />
+          </div>
+          <p className="mt-3 text-center text-xs text-stone-400">
+            이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+          </p>
         </article>
           </div>
           <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
