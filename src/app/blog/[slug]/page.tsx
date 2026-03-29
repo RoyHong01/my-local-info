@@ -346,10 +346,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <AdBanner />
           <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-4">
             <p className="text-sm text-stone-500 leading-6">
-              이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.{' '}
-              {sourceLink
-                ? '정확한 내용은 원문 링크를 통해 확인해주세요.'
-                : '최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.'}
+              {isRestaurantPost ? (
+                <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
+              ) : (
+                <>
+                  이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.{' '}
+                  {sourceLink
+                    ? '정확한 내용은 원문 링크를 통해 확인해주세요.'
+                    : '최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.'}
+                </>
+              )}
             </p>
             {sourceLink && (
               <p>
@@ -369,7 +375,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </p>
         </article>
           </div>
-          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
