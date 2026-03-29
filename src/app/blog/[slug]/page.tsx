@@ -204,6 +204,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <li><Link href="/#subsidy" className="hover:text-amber-600 transition">전국 보조금·복지 정책</Link></li>
               <li><Link href="/#festival" className="hover:text-rose-600 transition">전국 축제·여행 정보</Link></li>
               <li><Link href="/blog" className="text-orange-500 font-bold">블로그</Link></li>
+              <li><Link href="/life" className="hover:text-orange-500 transition">일상의 즐거움</Link></li>
               <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
             </ul>
           </nav>

@@ -12,6 +12,7 @@ export default function LifeHeader() {
             <li><Link href="/festival" className="hover:text-rose-600 transition">전국 축제·여행 정보</Link></li>
             <li><Link href="/blog" className="hover:text-orange-500 transition">블로그</Link></li>
             <li><Link href="/life" className="text-orange-500 font-bold">일상의 즐거움</Link></li>
+            <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
           </ul>
         </nav>
       </div>
