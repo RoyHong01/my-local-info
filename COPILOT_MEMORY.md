@@ -26,7 +26,26 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
-## 최근 중요 반영 사항 (2026-03-28)
+## 최근 중요 반영 사항 (2026-03-29)
+
+- **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):
+  - 페르소나: 30대 초반 여행·생활정보 에디터
+  - 경어체 종결어미 (`~해요/~거든요/~입니다`) 필수, 평어체 (`~이다/~한다`) 절대 금지
+  - AI 금지어 목록 추가: 결론적으로/다양한/인상적인/포착한/대명사가 됐다/라고 불린다 등
+  - 마무리: "함께 가면 좋은 사람" 공식 문구 → 작가 주관 한 줄 평 또는 상황 여운으로 변경
+- **블로그 date 하드코딩** (`generate-blog-post.js`):
+  - `const today = new Date().toISOString().split('T')[0]` → 프롬프트 frontmatter에 직접 주입
+  - Gemini가 임의로 날짜를 생성하던 버그 완전 차단
+- **논산딸기축제 포스트 수정** (`2026-03-28-post-1774739294677.md`):
+  - date: `2024-05-21` → `2026-03-29` 수정
+  - Gemini가 잘린 본문 완성 재작성 (훅 → ### 1~3 → 방문정보 표 → 작가 주관 마무리)
+- **쿠팡 배너 근본 문제 해결** (이전 세션 이어서 완료):
+  - `ads-partners.coupang.com/widgets.html` X-Frame-Options 제한 확인
+  - same-origin iframe 방식으로 전환: `public/coupang-sidebar.html`, `public/coupang-bottom.html`
+  - 두 HTML 파일에서 `g.js` 직접 로드 → `PartnersCoupang.G()` 호출
+  - `CoupangBanner.tsx`, `CoupangBottomBanner.tsx` → iframe src를 `/coupang-sidebar.html`, `/coupang-bottom.html`로 변경
+
+## 이전 중요 반영 사항 (2026-03-28)
 
 - **Google Analytics**: `layout.tsx`에 `G-6VNKGES4FW` Script 삽입 완료
 - **블로그 카테고리 필터**: `BlogFilter.tsx` → `useSearchParams` 기반 URL 파라미터 방식으로 전환 (뒤로가기 시 필터 유지)
