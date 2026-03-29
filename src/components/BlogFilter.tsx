@@ -125,6 +125,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
           <button
             key={value}
             onClick={() => handleCategoryClick(value)}
+            data-testid={`blog-filter-${value || 'all'}`}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
               activeCategory === value || (value === '' && !activeCategory)
                 ? 'bg-orange-500 text-white'
@@ -148,6 +149,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
               key={post.slug}
               href={`/blog/${post.slug}`}
               onClick={handleCardClick}
+              data-testid={`blog-card-${post.slug}`}
             >
               <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}

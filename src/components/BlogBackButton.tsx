@@ -17,6 +17,7 @@ export default function BlogBackButton() {
   return (
     <button
       onClick={handleBack}
+      data-testid="blog-back-button"
       className="text-orange-600 hover:underline mb-8 inline-block"
     >
       &larr; 목록으로 돌아가기

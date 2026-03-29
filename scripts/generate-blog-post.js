@@ -15,7 +15,7 @@ async function callGemini(prompt) {
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.9,
-        maxOutputTokens: 2048,
+        maxOutputTokens: 4096,
       },
     }),
   });
@@ -24,7 +24,32 @@ async function callGemini(prompt) {
     throw new Error(`Gemini API 오류: ${res.status} ${err}`);
   }
   const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const candidate = data?.candidates?.[0] || {};
+  return {
+    text: candidate?.content?.parts?.[0]?.text || '',
+    finishReason: candidate?.finishReason || '',
+  };
+}
+
+function looksIncompleteGeminiOutput(text) {
+  const value = (text || '').trim();
+  if (!value) return true;
+
+  // 파일명 라인이 없으면 후처리 단계에서 파일명/slug 추출이 깨지므로 불완전으로 판단
+  if (!/FILENAME:\s*\S+/m.test(value)) return true;
+
+  // 본문 최소 길이 가드 (지시사항: 1000자 이상)
+  const withoutFilename = value
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('FILENAME:'))
+    .join('\n')
+    .trim();
+  if (withoutFilename.length < 1000) return true;
+
+  // 마지막 문장이 어색하게 끊긴 경우 방지
+  if (!/[.!?…]$/.test(withoutFilename)) return true;
+
+  return false;
 }
 
 // 카테고리별 우선순위 정렬 함수
@@ -412,9 +437,33 @@ ${festivalStyleOverride}
 
 마지막 줄에 FILENAME: YYYY-MM-DD-영문키워드 형식으로 파일명 출력`;
 
-  const generatedText = await callGemini(prompt);
+  let generatedText = '';
+  let lastFinishReason = '';
+  const maxAttempts = 3;
 
-  if (!generatedText) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const retryHint = attempt > 1
+      ? `\n\n[재시도 지시]\n방금 응답은 중간에 끊겼어요. 처음부터 다시 완성본으로 작성하고, 마지막 줄 FILENAME까지 반드시 출력해줘.`
+      : '';
+
+    const gemini = await callGemini(`${prompt}${retryHint}`);
+    generatedText = gemini.text || '';
+    lastFinishReason = gemini.finishReason || '';
+
+    const isIncomplete =
+      lastFinishReason === 'MAX_TOKENS' ||
+      looksIncompleteGeminiOutput(generatedText);
+
+    if (!isIncomplete) break;
+
+    if (attempt < maxAttempts) {
+      console.warn(`  ⚠️ 응답 불완전 감지(finishReason=${lastFinishReason || 'N/A'}). 재시도 ${attempt + 1}/${maxAttempts}`);
+      await sleep(2000);
+    }
+  }
+
+  if (!generatedText || looksIncompleteGeminiOutput(generatedText)) {
+    console.error(`Gemini 응답 불완전(최종 finishReason=${lastFinishReason || 'N/A'})`);
     console.error('Gemini API 응답 없음');
     return false;
   }

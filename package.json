@@ -6,8 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "postbuild": "node scripts/generate-sitemap.js",
+    "generate:blog": "node scripts/generate-blog-post.js",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
@@ -21,6 +24,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

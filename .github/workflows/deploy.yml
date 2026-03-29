@@ -78,6 +78,14 @@ jobs:
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
+      - name: Playwright 브라우저 설치
+        run: npx playwright install --with-deps chromium
+
+      - name: Playwright E2E 테스트 (배포 전)
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
       - name: Cloudflare Pages 배포
         run: npx wrangler pages deploy out --project-name=my-local-info
         env:

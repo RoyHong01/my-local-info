@@ -13,13 +13,70 @@ import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 
+function extractFirstSentenceFromMarkdown(markdown: string): string {
+  const plain = (markdown || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/[*_~]/g, ' ')
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!plain) return '';
+
+  const sentenceMatch = plain.match(/.+?[.!?。！？…](?=\s|$)/);
+  return sentenceMatch ? sentenceMatch[0].trim() : plain;
+}
+
+function buildMetaDescription(content: string): string {
+  const firstSentence = extractFirstSentenceFromMarkdown(content);
+  if (!firstSentence) return '';
+  return firstSentence.length > 160 ? `${firstSentence.slice(0, 157).trimEnd()}...` : firstSentence;
+}
+
+function classifyPostForSeo(post: { title: string; category?: string; tags?: string[] }) {
+  const source = [post.title, post.category || '', ...(post.tags || [])].join(' ');
+
+  if (/맛집|restaurant|food|카페|먹거리/i.test(source)) {
+    return {
+      articleSection: '맛집 리뷰',
+      about: [
+        { '@type': 'Thing', name: '맛집 리뷰' },
+        { '@type': 'Thing', name: '식음료 정보' },
+      ],
+      additionalType: 'https://schema.org/Review',
+    };
+  }
+
+  if (/축제|여행|festival|trip/i.test(source)) {
+    return {
+      articleSection: '축제 정보',
+      about: [
+        { '@type': 'Thing', name: '축제 정보' },
+        { '@type': 'Thing', name: '여행 정보' },
+      ],
+      additionalType: 'https://schema.org/Event',
+    };
+  }
+
+  return {
+    articleSection: post.category || '생활정보',
+    about: [{ '@type': 'Thing', name: post.category || '생활정보' }],
+    additionalType: 'https://schema.org/Article',
+  };
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = await params;
   const post = getPostData(p.slug);
   if (!post) {
     return { title: 'Not Found' };
   }
-  const description = post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
+  const description = buildMetaDescription(post.content) || post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
   return {
     title: `${post.title} | 픽앤조이`,
     description,
@@ -66,13 +123,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     // ignore
   }
 
+  const description = buildMetaDescription(post.content) || post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
+  const seoClassification = classifyPostForSeo(post);
+
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     datePublished: post.date,
     dateModified: post.date,
-    description: post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' '),
+    description,
+    articleSection: seoClassification.articleSection,
+    about: seoClassification.about,
+    additionalType: seoClassification.additionalType,
+    keywords: (post.tags && post.tags.length > 0) ? post.tags.join(', ') : undefined,
+    inLanguage: 'ko-KR',
     author: {
       "@type": "Organization",
       name: "픽앤조이",
@@ -84,7 +149,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://pick-n-joy.com/blog/${p.slug}`,
+      "@id": `https://pick-n-joy.com/blog/${p.slug}/`,
     },
   };
 
