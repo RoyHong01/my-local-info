@@ -28,6 +28,19 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 
 ## 최근 중요 반영 사항 (2026-03-29 추가-4)
 
+- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
+  - `scripts/generate-life-restaurant-posts.mjs`
+    - 생성 건수: 3~5건 클램프(기본 3)
+    - 저장 경로: `src/content/life`로 전환
+    - slug를 `지역명-상호명` 영문 조합으로 생성
+    - 프롬프트 훅/톤 강화(도발형 Hook, 금지어 강화, 동선 문구 강화)
+  - `scripts/collect-life-restaurants.mjs`
+    - 오마카세/퓨전한식/화덕피자 키워드 확장
+    - Google 평점 strict 컷오프(미확인 제외 + 4.2 미만 제외)
+  - `src/lib/posts.ts`: `posts` + `life` 디렉터리 통합 로딩
+  - `.github/workflows/deploy.yml`: 생성 건수 기본값 3으로 상향
+  - 검증: `node --check` 통과, `npm run build` 성공
+
 - **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
   - `scripts/collect-life-restaurants.mjs`:
     - Kakao 결과 사이즈: 15 → 20 (쿼리당)

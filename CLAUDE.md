@@ -146,6 +146,21 @@ src/app/life/restaurant/data/
 - 2026-03-29: 전국 축제·여행 블로그 11편 Gemini 스타일 재작성 (경어체 통일, 번호 소제목 제거, 분리선 최대 1회, 제목 연도·총정리 제거)
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
+
+- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
+  - `scripts/generate-life-restaurant-posts.mjs`
+    - 실행당 생성 건수: 기본 2건 → **3~5건 클램프**(`LIFE_RESTAURANT_POSTS_PER_RUN`, 기본 3)
+    - 저장 경로를 `src/content/posts` → `src/content/life`로 전환
+    - slug 규칙 강화: `지역명-상호명` 영문 조합 기반 slug 생성(`songdo-...` 형태)
+    - 파일명은 날짜 접두 유지(`YYYY-MM-DD-slug.md`), frontmatter `slug`는 영문 조합값 유지
+    - 프롬프트 훅을 도발형으로 강화, 금지어/감각 묘사/동선 가이드 규칙 보강
+  - `scripts/collect-life-restaurants.mjs`
+    - 키워드 확장: 오마카세/퓨전한식/화덕피자 추가
+    - Google 평점 strict 컷오프: **평점 미확인 업장 제외 + 4.2 미만 제외**
+  - `src/lib/posts.ts`: `src/content/posts` + `src/content/life`를 함께 읽도록 확장
+  - `.github/workflows/deploy.yml`: `LIFE_RESTAURANT_POSTS_PER_RUN` 기본값 `3`으로 상향
+  - 검증: `node --check` 통과, `npm run build` 성공
+
 - **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
   - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
     - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)

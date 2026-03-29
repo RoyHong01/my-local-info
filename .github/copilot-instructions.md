@@ -143,6 +143,19 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 ## 최근 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
+  - `scripts/generate-life-restaurant-posts.mjs`
+    - 실행당 생성 건수 3~5 클램프(기본 3)
+    - 저장 경로: `src/content/life`로 전환
+    - slug를 `지역명-상호명` 영문 조합 기반으로 생성
+    - 훅/톤 규칙 강화(도발형 Hook, 금지어 강화, 동선 가이드 문구 강화)
+  - `scripts/collect-life-restaurants.mjs`
+    - 오마카세/퓨전한식/화덕피자 키워드 추가
+    - Google 평점 strict 컷오프(미확인 제외, 4.2 미만 제외)
+  - `src/lib/posts.ts`: `src/content/posts` + `src/content/life` 통합 로딩
+  - `.github/workflows/deploy.yml`: `LIFE_RESTAURANT_POSTS_PER_RUN` 기본값 `3`
+  - 검증: `npm run build` 성공, 커밋/푸시 `a42ee87`
+
 - **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
   - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
     - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)
