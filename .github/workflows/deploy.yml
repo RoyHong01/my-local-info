@@ -67,6 +67,13 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: 일상의 즐거움 맛집 포스트 생성
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: node scripts/generate-life-restaurant-posts.mjs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          LIFE_RESTAURANT_POSTS_PER_RUN: '2'
+
       - name: 변경사항 커밋 & 푸시
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |

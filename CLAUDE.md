@@ -24,7 +24,8 @@
 | GEMINI_API_KEY | Gemini API 블로그 글 생성 | ✅ |
 | PUBLIC_DATA_API_KEY | 공공데이터포털 (보조금4, 인천) | ✅ |
 | TOUR_API_KEY | 한국관광공사 TourAPI | ✅ |
-| KAKAO_API_KEY | 카카오 로컬 API | 미사용 (2단계) |
+| KAKAO_API_KEY | 카카오 로컬 API 호환용 | ✅ |
+| KAKAO_REST_API_KEY | 일상의 즐거움 맛집 수집용 카카오 로컬 API | ✅ |
 | NEXT_PUBLIC_GA_ID | Google Analytics | ✅ G-6VNKGES4FW |
 | NEXT_PUBLIC_ADSENSE_ID | Google AdSense | 미설정 |
 | NEXT_PUBLIC_COUPANG_PARTNER_ID | 쿠팡 파트너스 | ✅ AF5831775 |
@@ -35,6 +36,8 @@
 - PUBLIC_DATA_API_KEY ✅
 - TOUR_API_KEY ✅
 - ANTHROPIC_API_KEY ✅
+- GEMINI_API_KEY ✅
+- KAKAO_REST_API_KEY ✅
 
 ## API 엔드포인트
 - 보조금4: https://apis.data.go.kr/1741000/Subsidy24
@@ -46,7 +49,7 @@
 | 인천 지역 정보 | public/data/incheon.json | ✅ |
 | 전국 보조금·복지 | public/data/subsidy.json | ✅ |
 | 전국 축제·여행 | public/data/festival.json | ✅ |
-| 전국 맛집 | public/data/restaurant.json | 미구현 (2단계) |
+| 전국 맛집 | src/app/life/restaurant/data/restaurants.json | ✅ (카카오 API + Gemini 스냅샷) |
 
 ## 만료 처리 방식
 - 삭제 하지 않음 (SEO 보존) → `expired: true` 마킹
@@ -83,6 +86,8 @@ scripts/
   collect-incheon.js    # 인천 데이터 수집
   collect-subsidy.js    # 보조금 데이터 수집
   collect-festival.js   # 축제 데이터 수집 (overview 포함)
+  collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집
+  generate-life-restaurant-posts.mjs # 맛집 전용 블로그 포스트 생성
   generate-blog-post.js # Claude API 블로그 자동 생성 (카테고리당 2편)
   cleanup-expired.js    # 만료 콘텐츠 처리
   generate-sitemap.js   # sitemap.xml 생성 (postbuild)
@@ -98,6 +103,9 @@ e2e/
   blog-filter.spec.ts   # 블로그 카테고리 필터 유지 E2E
 
 playwright.config.ts    # Playwright 실행 설정 (CI/로컬 공용)
+
+src/app/life/restaurant/data/
+  restaurants.json      # 카카오 API + Gemini 기반 맛집 스냅샷 데이터
 ```
 
 ## 작업 규칙
@@ -138,6 +146,13 @@ playwright.config.ts    # Playwright 실행 설정 (CI/로컬 공용)
 - 2026-03-29: 전국 축제·여행 블로그 11편 Gemini 스타일 재작성 (경어체 통일, 번호 소제목 제거, 분리선 최대 1회, 제목 연도·총정리 제거)
 
 ## 최신 동기화 메모 (2026-03-29 추가)
+- **일상의 즐거움 맛집 자동화 파이프라인 추가**:
+  - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 기반 수집으로 고도화, 지역당 15개 상한, Gemini 문제해결형 서사 요약 반영
+  - `scripts/collect-life-restaurants.mjs`: 카카오 API + Gemini로 맛집 스냅샷 생성 → `src/app/life/restaurant/data/restaurants.json` 저장
+  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 생성 (지역+상황+보상 제목, 페인포인트→발견→디테일→팁 구조)
+  - `/life` 페이지는 생성된 맛집 포스트가 있으면 우선 노출, 없으면 카카오맵 직접 링크 카드로 fallback
+  - `.github/workflows/deploy.yml`에 맛집 수집/포스트 생성 스텝 추가
+
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
   - `2026-03-29-jindo-canolaflower-festival.md`
@@ -178,4 +193,5 @@ playwright.config.ts    # Playwright 실행 설정 (CI/로컬 공용)
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
 - ~~쿠팡 파트너스 배너 삽입~~ ✅ 완료
 - Google AdSense 신청 (페이지 15개 이상 완료)
-- 카카오 API 맛집 페이지 구축 (2단계)
+- 에러 핸들링 및 자동화 모니터링
+- 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후)

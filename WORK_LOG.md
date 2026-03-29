@@ -7,6 +7,28 @@
 
 ## 2026-03-29
 
+### 일상의 즐거움 맛집 포스트 자동화
+- `src/lib/life-restaurants.ts`:
+  - 카카오 로컬 API 검색어를 `찐맛집/현지인 맛집/줄서는 식당` 조합으로 고도화
+  - 지역별 최대 15개까지 수집, snapshot JSON 우선 로딩 구조 추가
+  - Gemini 요약 프롬프트를 문제 해결형 서사 + place_url 문맥 참고 방식으로 강화
+- `scripts/collect-life-restaurants.mjs` 신규:
+  - 지역별 맛집 스냅샷을 `src/app/life/restaurant/data/restaurants.json`에 저장
+- `scripts/generate-life-restaurant-posts.mjs` 신규:
+  - `픽앤조이 맛집 탐방` 카테고리 전용 포스트 생성
+  - 제목 규칙: 지역 + 상황 + 보상
+  - 본문 규칙: 페인 포인트 → 발견 → 디테일 → 팁
+  - 주차/웨이팅/인테리어 등 확인 불가 정보는 단정 금지, 필요 시 `확인 필요` 사용
+- `src/app/life/page.tsx`:
+  - 생성된 맛집 포스트가 있으면 맛집 탭에서 우선 노출
+  - 아직 포스트가 없을 때만 카카오맵 외부 링크 카드 fallback
+- `.github/workflows/deploy.yml`:
+  - 스케줄 시 맛집 스냅샷 수집 후 맛집 포스트 생성 단계 추가
+- 검증:
+  - `npm run build` 성공
+- 반영:
+  - 커밋 `4509056` → `main` 푸시 완료
+
 ### SEO 보강 + E2E/배포 게이트 + 실포스트 2건 발행
 - `src/app/blog/[slug]/page.tsx` SEO 보강:
   - 본문 첫 문장 기반 `description` 생성 로직 추가

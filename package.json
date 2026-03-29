@@ -8,6 +8,7 @@
     "postbuild": "node scripts/generate-sitemap.js",
     "generate:blog": "node scripts/generate-blog-post.js",
     "collect:life-restaurants": "node scripts/collect-life-restaurants.mjs",
+    "generate:life-restaurant-posts": "node scripts/generate-life-restaurant-posts.mjs",
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",

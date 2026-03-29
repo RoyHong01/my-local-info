@@ -18,6 +18,18 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-29 추가 완료 (3)
+- **일상의 즐거움 맛집 자동화 파이프라인 구축**:
+  - `src/lib/life-restaurants.ts`에 찐맛집/현지인/줄서는 식당 키워드 기반 검색 로직 반영, 지역당 15개 추출
+  - Gemini 2.5 Pro 요약 프롬프트를 문제 해결형 서사 중심으로 강화 (place_url 문맥 참고, 허위 단정 금지)
+  - `scripts/collect-life-restaurants.mjs` 신규: 맛집 스냅샷을 `src/app/life/restaurant/data/restaurants.json`에 저장
+  - `scripts/generate-life-restaurant-posts.mjs` 신규: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 자동 생성
+  - `/life` 페이지는 생성된 맛집 포스트를 우선 노출하고, 없으면 카카오맵 카드로 fallback
+  - `.github/workflows/deploy.yml`에 맛집 수집 및 포스트 생성 스텝 추가
+- **검증/반영**:
+  - `npm run build` 성공
+  - 커밋/푸시: `4509056` (`main`)
+
 ### 2026-03-29 추가 완료 (2)
 - **실제 전국 축제·여행 포스트 2편 발행**:
   - `src/content/posts/2026-03-29-gangjin-jeollabyeongseong-festival.md`
@@ -115,4 +127,5 @@
 - [ ] 쿠팡 배너 렌더링 확인 (배포 후 브라우저 콘솔 점검)
 - [ ] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정
 - [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
-- [ ] 2단계: 전국 맛집 기능 (restaurant.json, 카카오 API 연동)
+- [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)
+- [ ] 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후 다중 이미지 적용)

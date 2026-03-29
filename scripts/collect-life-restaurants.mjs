@@ -74,6 +74,9 @@ async function fetchKakaoByKeyword(query, apiKey) {
 
   if (!response.ok) {
     const errorText = await response.text();
+    if (response.status === 403 && /NotAuthorizedError|OPEN_MAP_AND_LOCAL/i.test(errorText)) {
+      throw new Error('Kakao Developers에서 OPEN_MAP_AND_LOCAL(카카오맵/로컬) 서비스 활성화가 필요합니다. 앱 설정을 확인해주세요.');
+    }
     throw new Error(`Kakao API 오류(${response.status}): ${errorText}`);
   }
 

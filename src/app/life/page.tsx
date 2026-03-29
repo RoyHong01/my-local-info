@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { getRestaurantsByRegion } from '@/lib/life-restaurants';
 import { getChoiceArticles } from '@/lib/life-choice';
+import { getSortedPostsData } from '@/lib/posts';
 import LifeFilterClient, { type LifePageItem } from '@/components/LifeFilterClient';
 
 export default async function LifePage() {
@@ -8,32 +9,54 @@ export default async function LifePage() {
     getRestaurantsByRegion('incheon-gyeongin'),
     getRestaurantsByRegion('seoul-gyeonggi'),
   ]);
+  const posts = getSortedPostsData();
   const choices = getChoiceArticles(6);
 
-  const restaurantItems: LifePageItem[] = [
-    ...incheonGyeongin.map((r) => ({
-      type: 'restaurant' as const,
-      id: r.id,
-      title: r.name,
-      description: r.summary.split('\n\n')[0].trim() || r.summary.slice(0, 100),
-      href: r.mapUrl,
-      external: true,
-      badge: '맛집 탐방',
-      badgeClass: 'bg-amber-50 text-amber-700',
-      meta: '인천/경인',
-    })),
-    ...seoulGyeonggi.map((r) => ({
-      type: 'restaurant' as const,
-      id: r.id,
-      title: r.name,
-      description: r.summary.split('\n\n')[0].trim() || r.summary.slice(0, 100),
-      href: r.mapUrl,
-      external: true,
-      badge: '맛집 탐방',
-      badgeClass: 'bg-amber-50 text-amber-700',
-      meta: '서울/경기',
-    })),
-  ];
+  const restaurantPosts = posts
+    .filter((post) => post.category === '픽앤조이 맛집 탐방')
+    .slice(0, 12);
+
+  const restaurantItems: LifePageItem[] = restaurantPosts.length > 0
+    ? restaurantPosts.map((post) => ({
+        type: 'restaurant' as const,
+        id: post.slug,
+        title: post.title,
+        description: post.description || post.summary,
+        date: post.date,
+        image: post.image,
+        href: `/blog/${post.slug}`,
+        badge: '맛집 탐방',
+        badgeClass: 'bg-amber-50 text-amber-700',
+        meta: post.tags?.includes('인천/경인')
+          ? '인천/경인'
+          : post.tags?.includes('서울/경기')
+            ? '서울/경기'
+            : '맛집 포스트',
+      }))
+    : [
+        ...incheonGyeongin.map((r) => ({
+          type: 'restaurant' as const,
+          id: r.id,
+          title: r.name,
+          description: r.summary.split('\n\n')[0].trim() || r.summary.slice(0, 100),
+          href: r.mapUrl,
+          external: true,
+          badge: '맛집 탐방',
+          badgeClass: 'bg-amber-50 text-amber-700',
+          meta: '인천/경인',
+        })),
+        ...seoulGyeonggi.map((r) => ({
+          type: 'restaurant' as const,
+          id: r.id,
+          title: r.name,
+          description: r.summary.split('\n\n')[0].trim() || r.summary.slice(0, 100),
+          href: r.mapUrl,
+          external: true,
+          badge: '맛집 탐방',
+          badgeClass: 'bg-amber-50 text-amber-700',
+          meta: '서울/경기',
+        })),
+      ];
 
   const choiceItems: LifePageItem[] = choices.map((c) => ({
     type: 'choice' as const,

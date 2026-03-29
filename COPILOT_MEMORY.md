@@ -28,6 +28,14 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 
 ## 최근 중요 반영 사항 (2026-03-29 추가)
 
+- **일상의 즐거움 맛집 자동화 1차 구축**:
+  - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 + 정확도순으로 지역별 최대 15개 수집
+  - `scripts/collect-life-restaurants.mjs`: 맛집 스냅샷 JSON 생성
+  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 자동 생성
+  - `/life` 탭은 생성된 맛집 포스트 우선 노출, 없으면 카카오맵 카드 fallback
+  - `.github/workflows/deploy.yml`에 수집/포스트 생성 스텝 추가
+  - 검증: `npm run build` 성공, 커밋/푸시 `4509056`
+
 - **쿠팡 사이드바 배너 ID 교체 및 버그 수정**:
   - `CoupangBanner.tsx`에 `'use client'` 추가 → Server Component 상태에서 발생하던 Hydration mismatch 에러 해결 (빈 흰 박스 문제)
   - 사이드바 배너 ID: `976088` (미활성) → `976244` (고객 관심 기반 추천, 배너명: 픽앤조이_사이드바_여행_최종) 교체

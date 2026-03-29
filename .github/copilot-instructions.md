@@ -24,7 +24,8 @@
 - GEMINI_API_KEY: Gemini API 블로그 생성
 - PUBLIC_DATA_API_KEY: 공공데이터포털 (보조금24, 인천 데이터)
 - TOUR_API_KEY: 한국관광공사 TourAPI
-- KAKAO_API_KEY: 카카오 로컬 API (2단계, 미사용)
+- KAKAO_API_KEY: 카카오 로컬 API 호환용
+- KAKAO_REST_API_KEY: 일상의 즐거움 맛집 수집용 카카오 로컬 API
 - NEXT_PUBLIC_ADSENSE_ID: Google AdSense (미설정)
 - NEXT_PUBLIC_GA_ID: Google Analytics (✅ G-6VNKGES4FW)
 - NEXT_PUBLIC_COUPANG_PARTNER_ID: 쿠팡 파트너스 (✅ AF5831775)
@@ -40,7 +41,7 @@
 1. 인천 지역 정보 → `public/data/incheon.json`
 2. 전국 보조금·복지 → `public/data/subsidy.json`
 3. 전국 축제·여행 → `public/data/festival.json`
-4. 전국 맛집 (2단계) → `public/data/restaurant.json` (미구현)
+4. 전국 맛집 → `src/app/life/restaurant/data/restaurants.json` (카카오 API + Gemini 스냅샷)
 
 ## 만료 처리 방식
 - 파일 삭제 X (SEO 보존)
@@ -67,6 +68,8 @@ scripts/
   collect-incheon.js  # 인천 데이터 수집
   collect-subsidy.js  # 보조금 데이터 수집
   collect-festival.js # 축제 데이터 수집 (detailCommon2로 overview 포함)
+  collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집
+  generate-life-restaurant-posts.mjs # 맛집 전용 블로그 포스트 생성
   generate-blog-post.js # Claude API 블로그 생성 (카테고리별 2편)
   cleanup-expired.js  # 만료 콘텐츠 처리
   generate-sitemap.js # sitemap.xml 생성 (postbuild)
@@ -151,6 +154,12 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 ### 2026-03-29 (추가)
 
+- **일상의 즐거움 맛집 자동화 추가**:
+  - `collect-life-restaurants.mjs`: 카카오 로컬 API 정확도순 + 찐맛집/현지인/줄서는 식당 키워드로 지역별 15개 맛집 스냅샷 생성
+  - `generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 생성 (문제 해결형 서사, 과장/환각 방지 규칙 포함)
+  - `/life` 페이지 맛집 탭은 생성 포스트 우선, 없으면 카카오맵 카드 fallback
+  - `deploy.yml`에 맛집 수집/포스트 생성 스케줄 단계 추가
+
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
   - `2026-03-29-jindo-canolaflower-festival.md`
@@ -183,4 +192,4 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - [x] 쿠팡 파트너스 배너 삽입 ✅
 - [ ] Google AdSense 설정
 - [ ] 에러 핸들링 및 자동화 모니터링
-- [ ] 2단계: 전국 맛집 기능 (restaurant.json, 카카오 API)
+- [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)
