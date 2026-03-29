@@ -39,11 +39,11 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - **논산딸기축제 포스트 수정** (`2026-03-28-post-1774739294677.md`):
   - date: `2024-05-21` → `2026-03-29` 수정
   - Gemini가 잘린 본문 완성 재작성 (훅 → ### 1~3 → 방문정보 표 → 작가 주관 마무리)
-- **쿠팡 배너 근본 문제 해결** (이전 세션 이어서 완료):
-  - `ads-partners.coupang.com/widgets.html` X-Frame-Options 제한 확인
-  - same-origin iframe 방식으로 전환: `public/coupang-sidebar.html`, `public/coupang-bottom.html`
-  - 두 HTML 파일에서 `g.js` 직접 로드 → `PartnersCoupang.G()` 호출
-  - `CoupangBanner.tsx`, `CoupangBottomBanner.tsx` → iframe src를 `/coupang-sidebar.html`, `/coupang-bottom.html`로 변경
+- **쿠팡 배너 최종 수정** (Claude Cowork 작업):
+  - same-origin HTML 중첩 iframe 방식 → iframe 안의 iframe 중첩 구조에서 렌더링 실패 확인
+  - `CoupangBanner.tsx`: 파트너스 공식 iframe URL(`ads-partners.coupang.com/widgets.html?id=976088&...`) 직접 사용 + `referrerPolicy="unsafe-url"` 추가
+  - `about/page.tsx`: TaeheoAdBanner + CoupangBanner 사이드바 추가 (다른 페이지들과 동일 레이아웃)
+  - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
 
 ## 이전 중요 반영 사항 (2026-03-28)
 

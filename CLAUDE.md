@@ -137,10 +137,11 @@ public/
   - src: `https://ads-partners.coupang.com/widgets.html?id=976088&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
 - 하단: id 976089, 680x300, `CoupangBottomBanner`
   - src: `https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource=`
-- 구현 방식: **공식 iframe 직접 임베드** (useEffect/script 방식 완전 제거)
-  - `referrerPolicy="unsafe-url"` 필수
+- 구현 방식: **파트너스 공식 iframe URL 직접 사용** (same-origin HTML 중첩 iframe 방식 제거)
+  - `referrerPolicy="unsafe-url"` 필수 (트래킹 정상 동작)
   - `bannerId` prop은 인터페이스 호환용으로만 유지 (실제 미사용)
-- 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세 (총 8곳)
+  - `public/coupang-sidebar.html`, `public/coupang-bottom.html` — 더 이상 사용 안 함 (삭제 가능)
+- 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
 - 공정위 문구: 전 페이지 footer에 추가 완료
 
 ## 다음 작업 예정
