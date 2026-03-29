@@ -66,6 +66,7 @@ jobs:
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
 
       - name: 일상의 즐거움 맛집 포스트 생성
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

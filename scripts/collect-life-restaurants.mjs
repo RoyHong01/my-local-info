@@ -3,6 +3,8 @@ import path from 'path';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const MAX_ITEMS_PER_REGION = 15;
+const GOOGLE_PRE_FILTER_SIZE = 20;  // Google 필터 전 Kakao 후보 최대 수
+const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 
 const REGION_QUERY_MAP = {
   'incheon-gyeongin': [
@@ -71,7 +73,7 @@ function getTrendScore(item, meta) {
 async function fetchKakaoByKeyword(query, apiKey) {
   const url = new URL('https://dapi.kakao.com/v2/local/search/keyword.json');
   url.searchParams.set('query', query);
-  url.searchParams.set('size', '15');
+  url.searchParams.set('size', '20');
   url.searchParams.set('sort', 'accuracy');
 
   const response = await fetch(url.toString(), {
@@ -107,6 +109,74 @@ function toRestaurantItem(place, meta) {
     cuisineHint: meta.cuisineHint,
   };
 }
+
+// ─── Google Places API (New) ────────────────────────────────────────────────
+async function fetchGooglePlaceRating(name, address, apiKey) {
+  let res;
+  try {
+    res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'places.rating,places.userRatingCount',
+      },
+      body: JSON.stringify({
+        textQuery: `${name} ${address}`,
+        languageCode: 'ko',
+        maxResultCount: 1,
+      }),
+    });
+  } catch {
+    return null;
+  }
+  if (!res.ok) return null;
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    return null;
+  }
+  const place = data?.places?.[0];
+  if (!place) return null;
+  return {
+    rating: typeof place.rating === 'number' ? place.rating : null,
+    userRatingCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : null,
+  };
+}
+
+async function filterByGoogleRating(items, googleApiKey) {
+  if (!googleApiKey) {
+    console.warn('[Google Places] API 키 없음 — 평점 필터 건너뜀');
+    return items.map((item) => ({ ...item, googleRating: null, googleRatingCount: null }));
+  }
+  const filtered = [];
+  for (const item of items) {
+    let rating = null;
+    let ratingCount = null;
+    try {
+      const result = await fetchGooglePlaceRating(item.name, item.address, googleApiKey);
+      rating = result?.rating ?? null;
+      ratingCount = result?.userRatingCount ?? null;
+    } catch (error) {
+      console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
+    }
+    if (rating !== null && rating < GOOGLE_PLACES_MIN_RATING) {
+      console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
+    } else {
+      if (rating !== null) {
+        console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
+      } else {
+        console.log(`  ⚠️  구글 정보 없음(포함): ${item.name}`);
+      }
+      filtered.push({ ...item, googleRating: rating, googleRatingCount: ratingCount });
+    }
+    // 구글 API 속도 제한 방지 (200ms 간격)
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  return filtered;
+}
+// ────────────────────────────────────────────────────────────────────────────
 
 function extractJsonArray(text) {
   const fenced = text.match(/```json\s*([\s\S]*?)```/i);
@@ -193,7 +263,7 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
   return map;
 }
 
-async function collectRegion(region, kakaoKey, geminiKey) {
+async function collectRegion(region, kakaoKey, geminiKey, googleKey) {
   const queries = REGION_QUERY_MAP[region];
   const results = await Promise.all(
     queries.map(async (meta) => ({ meta, places: await fetchKakaoByKeyword(meta.query, kakaoKey) }))
@@ -212,11 +282,20 @@ async function collectRegion(region, kakaoKey, geminiKey) {
     }
   }
 
-  const items = Array.from(deduped.values())
+  // 구글 필터 전 상위 N개 추출
+  const preFilterItems = Array.from(deduped.values())
     .sort((a, b) => b.score - a.score)
-    .slice(0, MAX_ITEMS_PER_REGION)
+    .slice(0, GOOGLE_PRE_FILTER_SIZE)
     .map((entry) => entry.item);
-  if (items.length === 0) return [];
+  if (preFilterItems.length === 0) return [];
+
+  console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상)`);
+  const googleFiltered = await filterByGoogleRating(preFilterItems, googleKey);
+  const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
+  if (items.length === 0) {
+    console.warn(`  [${region}] Google 평점 필터 후 후보 없음`);
+    return [];
+  }
 
   let summaryMap = new Map();
   try {
@@ -234,6 +313,11 @@ async function collectRegion(region, kakaoKey, geminiKey) {
 async function run() {
   const kakaoKey = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
+  const googleKey = process.env.GOOGLE_PLACES_API_KEY;
+
+  if (!googleKey) {
+    console.warn('⚠️  GOOGLE_PLACES_API_KEY 없음 — 구글 평점 필터 건너뜀');
+  }
 
   if (!kakaoKey) {
     console.error('KAKAO_REST_API_KEY(또는 KAKAO_API_KEY)가 없습니다. 수집을 중단합니다.');
@@ -243,13 +327,13 @@ async function run() {
   console.log('🥢 일상의 즐거움 맛집 데이터 수집 시작');
 
   const [incheon, seoul] = await Promise.all([
-    collectRegion('incheon-gyeongin', kakaoKey, geminiKey),
-    collectRegion('seoul-gyeonggi', kakaoKey, geminiKey),
+    collectRegion('incheon-gyeongin', kakaoKey, geminiKey, googleKey),
+    collectRegion('seoul-gyeonggi', kakaoKey, geminiKey, googleKey),
   ]);
 
   const payload = {
     updatedAt: new Date().toISOString(),
-    source: 'kakao+gemini',
+    source: googleKey ? 'kakao+google+gemini' : 'kakao+gemini',
     regions: {
       'incheon-gyeongin': incheon,
       'seoul-gyeonggi': seoul,
