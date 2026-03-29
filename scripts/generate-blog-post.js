@@ -294,6 +294,7 @@ async function generatePost(candidate, postsDir) {
 
   const itemName = candidate['서비스명'] || candidate['title'] || candidate['name'] || '';
   const sourceId = candidate['서비스ID'] || candidate['contentid'] || candidate['id'] || '';
+  const today = new Date().toISOString().split('T')[0];
 
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
 카테고리: ${candidate._category}
@@ -303,7 +304,7 @@ async function generatePost(candidate, postsDir) {
 아래 형식으로 출력해줘. 반드시 이 형식만 출력하고 다른 텍스트는 없이:
 ---
 title: (친근하고 흥미로운 제목. 콜론(:) 포함 시 반드시 큰따옴표로 감싸기)
-date: (오늘 날짜 YYYY-MM-DD)
+date: ${today}
 summary: (130~160자 한국어 요약. 핵심 키워드를 앞에 배치. Google 검색 결과에 표시되는 문장이므로 금액·날짜·장소 등 구체적 정보 포함)
 description: (summary와 동일한 내용)
 category: ${candidate._category}
@@ -434,7 +435,6 @@ overview: 상세 설명 전체
   });
 
   if (!filename) {
-    const today = new Date().toISOString().split('T')[0];
     filename = `${today}-post-${Date.now()}`;
   }
   if (!filename.endsWith('.md')) filename += '.md';
