@@ -33,7 +33,7 @@ export default function AboutPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex gap-8 items-start">
+        <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0 max-w-3xl">
             <h1 className="text-4xl font-extrabold mb-8">사이트 소개</h1>
             

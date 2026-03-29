@@ -168,7 +168,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex gap-8 items-start">
+        <div className="flex gap-12 items-start">
           {/* 메인 콘텐츠 */}
           <div className="flex-1 min-w-0">
             <Link href="/subsidy" className="text-sm text-amber-600 hover:underline mb-6 inline-block">

@@ -211,7 +211,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex gap-8 items-start">
+        <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
         <BlogBackButton />
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">

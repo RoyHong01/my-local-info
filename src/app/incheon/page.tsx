@@ -64,7 +64,7 @@ export default async function IncheonPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex gap-8 items-start">
+        <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
             <div className="mb-8">
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
