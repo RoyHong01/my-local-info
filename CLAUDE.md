@@ -145,8 +145,9 @@ public/
   - `bannerId` prop은 인터페이스 호환용으로만 유지 (실제 미사용)
 - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
 - 해결 과정: useEffect+g.js → same-origin iframe → 직접 iframe URL → `'use client'` 추가 + ID 교체 (최종 해결)
+- **실제 원인**: 코드/구조 문제 아님 → 구 ID(976088, 976244 초기발급분) 자체가 Coupang 측에서 비정상 상태. 하단 배너 ID로 사이드바 테스트 시 즉시 정상 작동 확인 → 새 ID 발급으로 해결
 - 공정위 문구: 전 페이지 footer에 추가 완료
-- 구 ID 976088: Coupang 파트너스에서 정상 활성화 안 됨 → 976244로 교체
+- 구 ID 976088 → 중간 ID → 현재 976244 (새 발급): Coupang 파트너스 측 활성화 문제
 
 ## 다음 작업 예정
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
