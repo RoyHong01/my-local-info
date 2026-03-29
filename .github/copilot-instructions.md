@@ -135,8 +135,29 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 카드 크기를 축제/블로그와 유사한 자연 높이로 복구
   - 긴 텍스트는 기존 `line-clamp` 범위 내에서만 노출
 
+## 최근 동기화 메모 (2026-03-29)
+
+- **쿠팡 파트너스 사이드바 배너 최종 확정**:
+  - 사이드바 배너 ID: `976088` (미활성화) → `976244` 교체 (배너명: 픽앤조이_사이드바_여행_최종, 고객 관심 기반 추천)
+  - `CoupangBanner.tsx`에 `'use client'` 추가 → Server Component에서 발생하던 Hydration mismatch(빈 흰 블록 현상) 해결
+  - 하단 배너 ID 976089는 변경 없음 유지
+- **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):
+  - 경어체 종결어미(`~해요/~거든요/~입니다`) 필수, 평어체(`~이다/~한다`) 절대 금지
+  - AI 금지어 목록 추가, 마무리 공식 문구 폐지 → 작가 주관 한 줄 평으로 변경
+  - `date` 필드 Node.js 변수로 직접 주입 (Gemini 임의 날짜 생성 버그 차단)
+
+## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
+- 파트너ID: AF5831775
+- 사이드바: id **976244** (고객 관심 기반 추천), 240×600, `CoupangBanner` (`'use client'` 포함)
+  - src: `https://ads-partners.coupang.com/widgets.html?id=976244&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
+- 하단: id **976089** (카테고리 베스트 - 패션의류/잡화), 680×300, `CoupangBottomBanner`
+  - src: `https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource=`
+- 구현 방식: 파트너스 공식 iframe URL 직접 사용, `referrerPolicy="unsafe-url"` 필수
+- 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
+
 ## 백로그
-- [ ] Google Analytics 설정
+- [x] Google Analytics 설정 ✅
+- [x] 쿠팡 파트너스 배너 삽입 ✅
 - [ ] Google AdSense 설정
 - [ ] 에러 핸들링 및 자동화 모니터링
 - [ ] 2단계: 전국 맛집 기능 (restaurant.json, 카카오 API)

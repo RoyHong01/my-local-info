@@ -26,7 +26,15 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
-## 최근 중요 반영 사항 (2026-03-29)
+## 최근 중요 반영 사항 (2026-03-29 추가)
+
+- **쿠팡 사이드바 배너 ID 교체 및 버그 수정**:
+  - `CoupangBanner.tsx`에 `'use client'` 추가 → Server Component 상태에서 발생하던 Hydration mismatch 에러 해결 (빈 흰 박스 문제)
+  - 사이드바 배너 ID: `976088` (미활성) → `976244` (고객 관심 기반 추천, 배너명: 픽앤조이_사이드바_여행_최종) 교체
+  - 구 ID 976088은 Coupang 파트너스에서 정상 활성화가 안 된 것이 원인이었음
+  - 하단 배너 ID 976089는 변경 없음 유지
+
+## 이전 중요 반영 사항 (2026-03-29)
 
 - **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):
   - 페르소나: 30대 초반 여행·생활정보 에디터

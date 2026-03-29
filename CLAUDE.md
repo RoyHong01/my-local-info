@@ -133,17 +133,20 @@ public/
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775
-- 사이드바: id 976088, 240x600, `CoupangBanner`
-  - src: `https://ads-partners.coupang.com/widgets.html?id=976088&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
-- 하단: id 976089, 680x300, `CoupangBottomBanner`
+- 사이드바: id **976244** (고객 관심 기반 추천), 240x600, `CoupangBanner`
+  - src: `https://ads-partners.coupang.com/widgets.html?id=976244&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
+  - 배너명: `픽앤조이_사이드바_여행_최종`
+- 하단: id 976089 (카테고리 베스트 - 패션의류/잡화), 680x300, `CoupangBottomBanner`
   - src: `https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource=`
-- 구현 방식: **파트너스 공식 iframe URL 직접 사용** (사이드바·하단 모두 통일, Cowork 협업으로 최종 해결)
+  - 배너명: `픽앤조이_본문하단_여행캠핑`
+- 구현 방식: **파트너스 공식 iframe URL 직접 사용** (사이드바·하단 모두 통일)
   - `referrerPolicy="unsafe-url"` 필수 (트래킹 정상 동작)
+  - `CoupangBanner.tsx`에 `'use client'` 추가 → Hydration mismatch 해결
   - `bannerId` prop은 인터페이스 호환용으로만 유지 (실제 미사용)
-  - `public/coupang-sidebar.html`, `public/coupang-bottom.html` — 더 이상 사용 안 함 (삭제 가능)
 - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
-- 해결 과정: useEffect+g.js → script afterInteractive → same-origin iframe → **직접 iframe URL** (최종 해결)
+- 해결 과정: useEffect+g.js → same-origin iframe → 직접 iframe URL → `'use client'` 추가 + ID 교체 (최종 해결)
 - 공정위 문구: 전 페이지 footer에 추가 완료
+- 구 ID 976088: Coupang 파트너스에서 정상 활성화 안 됨 → 976244로 교체
 
 ## 다음 작업 예정
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
