@@ -25,10 +25,14 @@ const TABS = [
 ] as const;
 
 function RestaurantThumbnail({ meta }: { meta?: string }) {
-  const isSeoul = meta === '서울/경기';
+  const isSeoul = meta === '서울 맛집';
+  const isIncheon = meta === '인천 맛집';
+  const label = isSeoul ? '서울 맛집' : isIncheon ? '인천 맛집' : '경기 맛집';
   const gradient = isSeoul
     ? 'from-emerald-400 to-teal-600'
-    : 'from-amber-400 to-orange-500';
+    : isIncheon
+      ? 'from-amber-400 to-orange-500'
+      : 'from-sky-400 to-blue-600';
   return (
     <div className={`w-full h-full bg-gradient-to-br ${gradient} flex flex-col items-center justify-center gap-2`}>
       <svg
@@ -42,7 +46,7 @@ function RestaurantThumbnail({ meta }: { meta?: string }) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
       </svg>
-      <span className="text-white text-sm font-bold drop-shadow">{meta ?? '맛집'} 맛집</span>
+      <span className="text-white text-sm font-bold drop-shadow">{label}</span>
     </div>
   );
 }
@@ -87,7 +91,7 @@ function LifeCard({ item, activeTab }: { item: LifePageItem; activeTab: string }
   const inner = (
     <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
       {/* 썸네일 */}
-      <div className="relative h-40 w-full flex-shrink-0">
+      <div className="relative h-20 w-full flex-shrink-0">
         {item.image && !item.image.endsWith('.svg') ? (
           <Image
             src={item.image}

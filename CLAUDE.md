@@ -147,6 +147,12 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **일상의 즐거움 맛집 카드 썸네일 3종 분리 + 높이 축소**:
+  - `src/app/life/page.tsx`: 맛집 카드 메타 라벨을 `서울 맛집 / 인천 맛집 / 경기 맛집`으로 분기
+  - `src/components/LifeFilterClient.tsx`: 썸네일 라벨/그라데이션을 3종으로 분리
+  - 카드 썸네일 높이 `h-40 → h-20`으로 축소(상하 높이 반)
+  - 검증: `npm run build` 성공
+
 - **맛집 기본 썸네일 추가 + 상세 상단 이미지 노출**:
   - `public/images/default-restaurant.svg` 신규 추가 (직접 제작한 안전한 기본 썸네일)
   - `scripts/generate-life-restaurant-posts.mjs`: 기본 image를 `/images/default-restaurant.svg`로 변경

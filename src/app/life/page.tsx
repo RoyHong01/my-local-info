@@ -28,11 +28,17 @@ export default async function LifePage() {
         href: `/blog/${post.slug}`,
         badge: '맛집 탐방',
         badgeClass: 'bg-amber-50 text-amber-700',
-        meta: post.tags?.includes('인천/경인')
-          ? '인천/경인'
-          : post.tags?.includes('서울/경기')
-            ? '서울/경기'
-            : '맛집 포스트',
+        meta: post.placeLocality === '인천'
+          ? '인천 맛집'
+          : post.placeLocality === '서울'
+            ? '서울 맛집'
+            : post.placeLocality === '경기'
+              ? '경기 맛집'
+              : post.tags?.includes('인천/경인')
+                ? '인천 맛집'
+                : post.tags?.includes('서울/경기')
+                  ? '서울 맛집'
+                  : '경기 맛집',
       }))
     : [
         ...incheonGyeongin.map((r) => ({
@@ -44,7 +50,7 @@ export default async function LifePage() {
           external: true,
           badge: '맛집 탐방',
           badgeClass: 'bg-amber-50 text-amber-700',
-          meta: '인천/경인',
+          meta: '인천 맛집',
         })),
         ...seoulGyeonggi.map((r) => ({
           type: 'restaurant' as const,
@@ -55,7 +61,7 @@ export default async function LifePage() {
           external: true,
           badge: '맛집 탐방',
           badgeClass: 'bg-amber-50 text-amber-700',
-          meta: '서울/경기',
+          meta: r.address.startsWith('서울') ? '서울 맛집' : '경기 맛집',
         })),
       ];
 
