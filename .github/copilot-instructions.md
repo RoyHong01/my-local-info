@@ -143,6 +143,15 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 ## 최근 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
+  - `scripts/generate-life-restaurant-posts.mjs`에 버킷 분배 로직 추가
+    - 서울 2 / 인천 2 / 경기기타 2 우선 선발
+    - 버킷 부족 시 경고 로그 출력
+  - `.github/workflows/deploy.yml`
+    - `LIFE_RESTAURANT_POSTS_PER_RUN: '6'`
+    - `LIFE_RESTAURANT_POSTS_PER_BUCKET: '2'`
+  - 검증: `npm run build` 성공, 커밋/푸시 `f337cf5`
+
 - **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
   - `scripts/generate-life-restaurant-posts.mjs`
     - 실행당 생성 건수 3~5 클램프(기본 3)

@@ -18,6 +18,20 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-29 추가 완료 (6)
+
+- **맛집 자동생성 6건 분배 로직 고정**:
+  - `scripts/generate-life-restaurant-posts.mjs`에 버킷 분배 로직 추가
+    - 서울 2 / 인천 2 / 경기기타 2 선발
+    - 버킷 후보 부족 시 경고 로그 출력
+  - `.github/workflows/deploy.yml`에 환경변수 추가
+    - `LIFE_RESTAURANT_POSTS_PER_RUN=6`
+    - `LIFE_RESTAURANT_POSTS_PER_BUCKET=2`
+- **검증/반영**:
+  - `node --check` 통과
+  - `npm run build` 성공
+  - 커밋/푸시: `f337cf5`
+
 ### 2026-03-29 추가 완료 (5)
 - **맛집 글 생성 규칙 3차 고도화**:
   - `scripts/generate-life-restaurant-posts.mjs`
