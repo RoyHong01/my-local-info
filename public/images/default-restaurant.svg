@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F59E0B"/>
+      <stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="card" x1="780" y1="80" x2="1080" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="rgba(255,255,255,0.2)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.08)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)"/>
+  <circle cx="1010" cy="135" r="120" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="1110" cy="545" r="180" fill="rgba(255,255,255,0.05)"/>
+
+  <g opacity="0.95">
+    <rect x="92" y="118" width="88" height="88" rx="24" fill="rgba(255,255,255,0.14)"/>
+    <path d="M136 140C117.222 140 102 155.222 102 174C102 206 136 238 136 238C136 238 170 206 170 174C170 155.222 154.778 140 136 140ZM136 189C127.716 189 121 182.284 121 174C121 165.716 127.716 159 136 159C144.284 159 151 165.716 151 174C151 182.284 144.284 189 136 189Z" fill="white"/>
+  </g>
+
+  <text x="92" y="286" fill="white" font-size="32" font-family="Pretendard, Noto Sans KR, sans-serif" font-weight="700">픽앤조이 맛집 탐방</text>
+  <text x="92" y="372" fill="white" font-size="76" font-family="Pretendard, Noto Sans KR, sans-serif" font-weight="800">저장해둘 만한</text>
+  <text x="92" y="466" fill="white" font-size="76" font-family="Pretendard, Noto Sans KR, sans-serif" font-weight="800">진짜 핫플 맛집</text>
+  <text x="92" y="536" fill="rgba(255,255,255,0.9)" font-size="30" font-family="Pretendard, Noto Sans KR, sans-serif" font-weight="500">광고 느낌 말고, 오늘 동선에 바로 넣을 수 있는 한 끼</text>
+
+  <g>
+    <rect x="776" y="82" width="312" height="214" rx="28" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.18)"/>
+    <circle cx="844" cy="150" r="24" fill="rgba(255,255,255,0.92)"/>
+    <circle cx="911" cy="150" r="24" fill="rgba(255,255,255,0.78)"/>
+    <circle cx="978" cy="150" r="24" fill="rgba(255,255,255,0.64)"/>
+    <rect x="812" y="206" width="236" height="16" rx="8" fill="rgba(255,255,255,0.72)"/>
+    <rect x="812" y="238" width="184" height="16" rx="8" fill="rgba(255,255,255,0.48)"/>
+  </g>
+
+  <text x="92" y="86" fill="rgba(255,255,255,0.88)" font-size="24" font-family="Pretendard, Noto Sans KR, sans-serif" font-weight="600">Pick-n-Joy Restaurant Picks</text>
+</svg>

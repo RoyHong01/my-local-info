@@ -291,7 +291,7 @@ async function generateRestaurantPost(candidate) {
   const locality = inferLocality(candidate.item.address, candidate.regionLabel);
   const slugBase = buildRestaurantSlug(candidate, locality);
   const fileStem = `${today}-${slugBase}`;
-  const defaultImage = '/images/default-og.svg';
+  const defaultImage = '/images/default-restaurant.svg';
 
   // Google 평점이 있으면 frontmatter에 평점 필드 포함 (posts.ts → JSON-LD aggregateRating 연결)
   const ratingFrontmatter = candidate.item.googleRating != null

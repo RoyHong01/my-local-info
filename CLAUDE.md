@@ -147,6 +147,14 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 기본 썸네일 추가 + 상세 상단 이미지 노출**:
+  - `public/images/default-restaurant.svg` 신규 추가 (직접 제작한 안전한 기본 썸네일)
+  - `scripts/generate-life-restaurant-posts.mjs`: 기본 image를 `/images/default-restaurant.svg`로 변경
+  - 기존 2개 맛집 포스트 image도 restaurant 기본 썸네일로 교체
+  - `src/app/blog/[slug]/page.tsx`: SVG도 상세 상단에서 노출되도록 조건 완화
+  - `src/components/BlogFilter.tsx`: `픽앤조이 맛집 탐방` 카드 배지/썸네일 스타일 추가
+  - 검증: `npm run build` 성공
+
 - **맛집 상세 → 일상의 즐거움 목록 복귀 흐름 보정**:
   - `src/components/LifeFilterClient.tsx`
     - 맛집 카드 클릭 시 `lifeScrollY` 저장
