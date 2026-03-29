@@ -73,7 +73,7 @@ jobs:
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          LIFE_RESTAURANT_POSTS_PER_RUN: '2'
+          LIFE_RESTAURANT_POSTS_PER_RUN: '3'
 
       - name: 변경사항 커밋 & 푸시
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

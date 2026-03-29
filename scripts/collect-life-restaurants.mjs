@@ -9,7 +9,10 @@ const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const REGION_QUERY_MAP = {
   'incheon-gyeongin': [
     { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
+    { query: '송도 오마카세', scenarioHint: '기념일 저녁 약속', vibeHint: '집중도 높은 다이닝', cuisineHint: '오마카세' },
     { query: '송도 오픈런 파스타', scenarioHint: '데이트 코스 첫 식사', vibeHint: '오픈런 저장각 파스타', cuisineHint: '파스타' },
+    { query: '인천 퓨전 한식 맛집', scenarioHint: '한식인데 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 다이닝', cuisineHint: '퓨전 한식' },
+    { query: '인천 화덕피자 맛집', scenarioHint: '캐주얼하지만 무드 있는 저녁', vibeHint: '따뜻한 오븐 무드', cuisineHint: '화덕피자' },
     { query: '청라 분위기 술집', scenarioHint: '퇴근 후 하이볼 한잔', vibeHint: '조도 낮은 저녁 약속', cuisineHint: '주점' },
     { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
     { query: '부평 웨이팅 맛집', scenarioHint: '기다려서라도 가는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
@@ -20,7 +23,10 @@ const REGION_QUERY_MAP = {
   ],
   'seoul-gyeonggi': [
     { query: '성수동 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '성수 핫플 동선', cuisineHint: '다이닝' },
+    { query: '성수 오마카세', scenarioHint: '분위기 잡는 저녁 약속', vibeHint: '긴장감 있는 코스 다이닝', cuisineHint: '오마카세' },
     { query: '성수 파스타 맛집', scenarioHint: '저장해둔 데이트 코스', vibeHint: '힙한 파스타 스팟', cuisineHint: '파스타' },
+    { query: '연남동 퓨전 한식', scenarioHint: '익숙한 메뉴를 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 감도', cuisineHint: '퓨전 한식' },
+    { query: '서울 화덕피자 맛집', scenarioHint: '캐주얼 데이트 저녁', vibeHint: '바삭한 피자 무드', cuisineHint: '화덕피자' },
     { query: '연남동 웨이팅 맛집', scenarioHint: '줄 서도 납득되는 한 끼', vibeHint: '연남 웨이팅 핫플', cuisineHint: '핫플 맛집' },
     { query: '연남동 내추럴 와인바', scenarioHint: '2차까지 예쁘게 이어가는 밤', vibeHint: '와인바 무드', cuisineHint: '와인바' },
     { query: '강남역 사진 잘 나오는 식당', scenarioHint: '사진 남기는 모임', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
@@ -161,14 +167,15 @@ async function filterByGoogleRating(items, googleApiKey) {
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
     }
-    if (rating !== null && rating < GOOGLE_PLACES_MIN_RATING) {
+    if (rating === null) {
+      console.log(`  ❌ 구글 평점 미확인 제외: ${item.name}`);
+      continue;
+    }
+
+    if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
     } else {
-      if (rating !== null) {
-        console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
-      } else {
-        console.log(`  ⚠️  구글 정보 없음(포함): ${item.name}`);
-      }
+      console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
       filtered.push({ ...item, googleRating: rating, googleRatingCount: ratingCount });
     }
     // 구글 API 속도 제한 방지 (200ms 간격)

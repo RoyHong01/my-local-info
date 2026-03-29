@@ -3,7 +3,12 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '2');
+const MIN_POSTS_PER_RUN = 3;
+const MAX_POSTS_PER_RUN = 5;
+const POSTS_PER_RUN = Math.max(
+  MIN_POSTS_PER_RUN,
+  Math.min(MAX_POSTS_PER_RUN, Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3'))
+);
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
     .split(',')
@@ -11,7 +16,7 @@ const FORCE_RESTAURANT_SOURCE_IDS = new Set(
     .filter(Boolean)
 );
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
-const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
+const postsDir = path.join(process.cwd(), 'src', 'content', 'life');
 
 function slugifyKorean(value) {
   return String(value || '')
@@ -21,6 +26,58 @@ function slugifyKorean(value) {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .toLowerCase();
+}
+
+function slugifyAscii(value) {
+  return String(value || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9\s-]/g, ' ')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .toLowerCase();
+}
+
+function inferAreaSlug(candidate, locality) {
+  const sourceText = [
+    locality,
+    candidate?.item?.sourceQuery || '',
+    candidate?.item?.address || '',
+  ].join(' ');
+
+  const areaMap = [
+    ['송도', 'songdo'],
+    ['청라', 'cheongna'],
+    ['구월', 'guwol'],
+    ['부평', 'bupyeong'],
+    ['부천', 'bucheon'],
+    ['김포', 'gimpo'],
+    ['성수', 'seongsu'],
+    ['연남', 'yeonnam'],
+    ['강남', 'gangnam'],
+    ['잠실', 'jamsil'],
+    ['행궁', 'haenggung'],
+    ['수원', 'suwon'],
+    ['판교', 'pangyo'],
+    ['서울', 'seoul'],
+    ['인천', 'incheon'],
+    ['경기', 'gyeonggi'],
+  ];
+
+  for (const [korean, romanized] of areaMap) {
+    if (sourceText.includes(korean)) return romanized;
+  }
+
+  const localitySlug = slugifyAscii(locality);
+  return localitySlug || 'korea';
+}
+
+function buildRestaurantSlug(candidate, locality) {
+  const areaSlug = inferAreaSlug(candidate, locality);
+  const nameSlugAscii = slugifyAscii(candidate?.item?.name || '');
+  const nameSlug = nameSlugAscii || `restaurant-${candidate?.item?.id || 'unknown'}`;
+  return `${areaSlug}-${nameSlug}`;
 }
 
 function inferLocality(address, regionLabel) {
@@ -193,8 +250,8 @@ function buildRoundRobinCandidates(regions) {
 async function generateRestaurantPost(candidate) {
   const today = new Date().toISOString().split('T')[0];
   const locality = inferLocality(candidate.item.address, candidate.regionLabel);
-  const slugKeyword = slugifyKorean(`${locality} ${candidate.item.name}`) || `restaurant-${candidate.item.id}`;
-  const slugBase = `${today}-${slugKeyword}`;
+  const slugBase = buildRestaurantSlug(candidate, locality);
+  const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-og.svg';
 
   // Google 평점이 있으면 frontmatter에 평점 필드 포함 (posts.ts → JSON-LD aggregateRating 연결)
@@ -202,7 +259,7 @@ async function generateRestaurantPost(candidate) {
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
     : '';
 
-  const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. 지역명/상호명/상황 키워드가 자연스럽게 들어간 검색용 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"${ratingFrontmatter}\n---\n\n[핫플 맛집 생성 규칙]\n- 페르소나는 '힙한 핫플을 너무 과장 없이 골라주는 30대 초반 에디터'예요.\n- 글은 교과서 설명처럼 쓰지 말고, 친구에게 '여긴 저장해둬도 되겠다'라고 말해주는 톤으로 써줘.\n- 제목은 '지역 + 상황 + 왜 여기 체크하는지' 흐름으로, 너무 길지 않게 써줘.\n- 연도/숫자/TOP/베스트/총정리/완전정복/맛집 추천 리스트 같은 제목은 금지.\n- slug는 이미 정해져 있으니 바꾸지 마.\n- 첫 단락은 반드시 '뭐 먹지'보다 '오늘 약속 분위기 어디로 잡지' 같은 현실 고민에서 시작해줘.\n- 첫 훅은 너무 모범답안 같지 않게, 감정적으로 툭 던지는 문장이어야 해.\n- 본문 구조는 [공감되는 상황 → 왜 후보에 남는지 → 공간/동선/메뉴 결 → 가기 전 체크포인트] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 템포 있게. 2문장마다 반드시 줄바꿈.\n- 경어체(~해요/~네요/~입니다)만 사용. 평어체(~이다/~한다) 금지.\n- 반드시 아래 입력값을 자연스럽게 활용해줘: sourceQuery, scenarioHint, vibeHint, cuisineHint.\n- 입력 데이터로 확인되지 않는 메뉴 세부, 웨이팅 시간, 인테리어 디테일, 대표 메뉴, 주차 가능 여부는 절대 단정하지 마.\n- 모르면 '확인 필요', '이럴 가능성이 있어 보여요', '이런 결을 기대하게 돼요'처럼 안전하게 써줘.\n- 금지어: 추천합니다, 방문해보세요, 만족도가 높습니다, 다양한 메뉴, 최고의 선택, 무조건, 찐으로, 인생맛집 TOP, 총정리.\n- 생활형 참견 한 줄을 2개 이상 넣어줘. 예: '이럴 땐 1차 후보에서 안 빼게 되더라고요.'\n- 조도, 공간감, 음식 결(질감·온도)처럼 감각적 묘사를 2개 이상 포함해줘. 단, 입력 데이터로 확인된 범위 내에서만.\n- 센서리 표현은 가능하지만, 입력 데이터로 확인 가능한 범위를 넘어서 구체적 맛/향/음악/인테리어를 지어내면 안 돼.\n- 마지막 문장은 광고 카피처럼 끝내지 말고, 에디터의 개인적인 여운 한 줄로 마무리해줘.\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄\n- 식사 후 동선: 근처에서 자연스럽게 이어갈 수 있는 스팟 한 곳 제안(카페·공원·편집샵 등, 확인되지 않으면 생략 가능)\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${slugBase} 형식으로 출력\n`;
+  const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. '평점 4.2가 증명하는 찐맛집' 뉘앙스를 포함해 클릭을 유도하는 검색 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"${ratingFrontmatter}\n---\n\n[핫플 맛집 생성 규칙]\n- 페르소나는 '인스타 팔로워 수만 명을 둔 픽앤조이 메인 에디터'예요.\n- 글은 광고 문구처럼 쓰지 말고, 진짜 다녀온 사람처럼 체감 중심으로 써줘.\n- 제목은 '지역 + 상황 + 왜 여기 체크하는지' 흐름으로, 너무 길지 않게 써줘.\n- 연도/숫자/TOP/베스트/총정리/완전정복/맛집 추천 리스트 같은 제목은 금지.\n- slug는 이미 정해져 있으니 바꾸지 마.\n- 첫 줄 훅은 반드시 도발적으로 시작해줘. 예: '여기 안 가본 사람 아직도 있어요?', '나만 알고 싶었는데 이미 웨이팅 1시간이더라고요.'\n- 본문 구조는 [공감되는 상황 → 왜 후보에 남는지 → 공간/동선/메뉴 결 → 가기 전 체크포인트] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 템포 있게. 2~3문장마다 반드시 줄바꿈.\n- 경어체(~해요/~네요/~입니다)만 사용. 평어체(~이다/~한다) 금지.\n- 반드시 아래 입력값을 자연스럽게 활용해줘: sourceQuery, scenarioHint, vibeHint, cuisineHint.\n- 입력 데이터로 확인되지 않는 메뉴 세부, 웨이팅 시간, 인테리어 디테일, 대표 메뉴, 주차 가능 여부는 절대 단정하지 마.\n- 모르면 '확인 필요', '이럴 가능성이 있어 보여요', '이런 결을 기대하게 돼요'처럼 안전하게 써줘.\n- 금지어: 추천합니다, 방문해보세요, 만족도가 높습니다, 다양한 메뉴가 있어요, 최고의 선택, 주말 고민 해결, 무조건, 찐으로, 인생맛집 TOP, 총정리.\n- 조도, 채광, 사진 잘 나오는 각도, 음식 결(질감·온도) 등 감각적 묘사를 2개 이상 포함해줘.\n- 표현 예시는 '미친 식감', '영롱한 비주얼', '입안에서 터지는 육즙', '꾸덕함의 극치' 같은 결로 가능하지만, 확인 가능한 범위 내에서만 사용해줘.\n- 마지막 문장은 광고 카피 대신 개인적 여운으로 마무리해줘. 예: '다음에 비 올 때 또 생각날 것 같아요.'\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄\n- 식사 후 동선: '여기서 식사하고 도보 5분 거리의 OO 카페까지 이어가면 코스가 완성돼요' 같은 형태로 한 줄\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${fileStem} 형식으로 출력\n`;
 
   let generatedText = '';
   let lastFinishReason = '';
@@ -226,7 +283,7 @@ async function generateRestaurantPost(candidate) {
   }
 
   const lines = generatedText.split('\n');
-  let filename = `${slugBase}.md`;
+  let filename = `${fileStem}.md`;
   const contentLines = [];
   for (const line of lines) {
     if (line.trim().startsWith('FILENAME:')) {
@@ -290,7 +347,7 @@ async function run() {
     }))
     .slice(0, POSTS_PER_RUN);
 
-  console.log(`🥢 맛집 포스트 생성 후보: ${candidates.length}건`);
+  console.log(`🥢 맛집 포스트 생성 후보: ${candidates.length}건 (실행당 ${MIN_POSTS_PER_RUN}~${MAX_POSTS_PER_RUN}건)`);
   if (candidates.length === 0) {
     console.log('생성할 새 맛집 포스트가 없습니다.');
     return;
