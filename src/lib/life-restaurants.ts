@@ -1,3 +1,6 @@
+import fs from 'fs/promises';
+import path from 'path';
+
 export type LifeRegionTab = 'incheon-gyeongin' | 'seoul-gyeonggi';
 
 export interface RestaurantItem {
@@ -19,9 +22,32 @@ interface KakaoPlace {
 }
 
 const REGION_QUERY_MAP: Record<LifeRegionTab, string[]> = {
-  'incheon-gyeongin': ['인천 맛집', '부천 맛집', '김포 맛집'],
-  'seoul-gyeonggi': ['서울 맛집', '경기 맛집', '수원 맛집'],
+  'incheon-gyeongin': [
+    '인천 찐맛집',
+    '인천 현지인 맛집',
+    '인천 줄서는 식당',
+    '부천 찐맛집',
+    '부천 현지인 맛집',
+    '부천 줄서는 식당',
+    '김포 찐맛집',
+    '김포 현지인 맛집',
+    '김포 줄서는 식당',
+  ],
+  'seoul-gyeonggi': [
+    '서울 찐맛집',
+    '서울 현지인 맛집',
+    '서울 줄서는 식당',
+    '경기 찐맛집',
+    '경기 현지인 맛집',
+    '경기 줄서는 식당',
+    '수원 찐맛집',
+    '수원 현지인 맛집',
+    '수원 줄서는 식당',
+  ],
 };
+
+const SNAPSHOT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
+const MAX_ITEMS_PER_REGION = 15;
 
 const REGION_FALLBACK: Record<LifeRegionTab, RestaurantItem[]> = {
   'incheon-gyeongin': [
@@ -63,6 +89,30 @@ const REGION_FALLBACK: Record<LifeRegionTab, RestaurantItem[]> = {
 };
 
 const cache = new Map<LifeRegionTab, Promise<RestaurantItem[]>>();
+
+interface RestaurantSnapshotData {
+  updatedAt: string;
+  regions: Partial<Record<LifeRegionTab, RestaurantItem[]>>;
+}
+
+async function readSnapshotRegion(region: LifeRegionTab): Promise<RestaurantItem[] | null> {
+  try {
+    const raw = await fs.readFile(SNAPSHOT_PATH, 'utf-8');
+    const parsed = JSON.parse(raw) as RestaurantSnapshotData;
+    const items = parsed?.regions?.[region];
+    if (!Array.isArray(items) || items.length === 0) {
+      return null;
+    }
+    return items
+      .filter((item) => item?.id && item?.name && item?.address && item?.mapUrl)
+      .map((item) => ({
+        ...item,
+        summary: item.summary || buildFallbackSummary(item.name, item.address),
+      }));
+  } catch {
+    return null;
+  }
+}
 
 function normalizeLineBreakBySentence(text: string): string {
   const trimmed = (text || '').trim();
@@ -138,11 +188,15 @@ async function summarizeWithGemini(regionLabel: string, items: RestaurantItem[])
     name: item.name,
     address: item.address,
     phone: item.phone,
+    mapUrl: item.mapUrl,
   }));
 
   const prompt = [
     '당신은 30대 생활정보 에디터입니다.',
-    '아래 JSON 배열의 각 맛집에 대해 감성적인 한 줄 요약을 작성해주세요.',
+    '아래 JSON 배열의 각 맛집에 대해 문제 해결형 서사 요약을 작성해주세요.',
+    'mapUrl(place_url) 문맥을 참고해 리뷰 톤앤매너를 추론하되, 확인 불가 사실을 단정하지 마세요.',
+    '반드시 "무엇을 먹을지/어디 갈지 고민" 같은 문제 제기를 한 문장 포함하세요.',
+    '다음 문장에는 조사/검토 맥락(검색 상위 노출, 재방문 언급, 동선 장점 등)을 자연스럽게 포함하세요.',
     '문체 규칙:',
     '1) 반드시 친절한 경어체(~해요/~입니다)만 사용',
     '2) 항목당 2~3문장',
@@ -225,6 +279,11 @@ export async function getRestaurantsByRegion(region: LifeRegionTab): Promise<Res
 }
 
 async function loadRestaurantsByRegion(region: LifeRegionTab): Promise<RestaurantItem[]> {
+  const snapshotItems = await readSnapshotRegion(region);
+  if (snapshotItems && snapshotItems.length > 0) {
+    return snapshotItems;
+  }
+
   const kakaoKey = process.env.KAKAO_REST_API_KEY;
 
   if (!kakaoKey) {
@@ -241,7 +300,7 @@ async function loadRestaurantsByRegion(region: LifeRegionTab): Promise<Restauran
       if (!deduped.has(row.id)) {
         deduped.set(row.id, toRestaurantItem(row));
       }
-      if (deduped.size >= 10) break;
+      if (deduped.size >= MAX_ITEMS_PER_REGION) break;
     }
 
     const items = Array.from(deduped.values());
