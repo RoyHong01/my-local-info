@@ -333,6 +333,13 @@ function postProcessGeneratedMarkdown(markdown, context) {
     normalizedBody = injectMidArticleImage(normalizedBody, context.imageUrl, context.itemName);
   }
 
+  // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)
+  // ~~취소선~~ 은 건드리지 않고, 단독 ~ 만 교체
+  normalizedBody = normalizedBody
+    .split('\n')
+    .map((line) => line.replace(/(?<!~)~(?!~)/g, '-'))
+    .join('\n');
+
   normalizedBody = normalizedBody.replace(/\n{3,}/g, '\n\n').trim();
 
   const toneScore = calculateToneScore(normalizedBody);
