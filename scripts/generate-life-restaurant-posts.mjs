@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '6');
 const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '2');
+const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi-other'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
@@ -14,6 +15,10 @@ const FORCE_RESTAURANT_SOURCE_IDS = new Set(
 );
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const postsDir = path.join(process.cwd(), 'src', 'content', 'life');
+const existingPostDirs = [
+  path.join(process.cwd(), 'src', 'content', 'posts'),
+  path.join(process.cwd(), 'src', 'content', 'life'),
+];
 
 function slugifyKorean(value) {
   return String(value || '')
@@ -108,7 +113,25 @@ function toAreaTag(bucket) {
   return '경기(기타)';
 }
 
-function selectCandidatesByBucket(candidates) {
+function classifyBucketFromPostFrontmatter(data) {
+  const locality = String(data?.place_locality || data?.placeLocality || '').trim();
+  if (locality === '서울') return 'seoul';
+  if (locality === '인천') return 'incheon';
+  if (locality === '경기') return 'gyeonggi-other';
+
+  const tags = Array.isArray(data?.tags) ? data.tags.join(' ') : String(data?.tags || '');
+  const source = [
+    tags,
+    String(data?.place_address || data?.placeAddress || ''),
+    String(data?.title || ''),
+  ].join(' ');
+
+  if (/서울/.test(source)) return 'seoul';
+  if (/인천/.test(source)) return 'incheon';
+  return 'gyeonggi-other';
+}
+
+function selectCandidatesByBucket(candidates, existingBucketCounts) {
   const buckets = new Map(TARGET_BUCKETS.map((bucket) => [bucket, []]));
 
   for (const candidate of candidates) {
@@ -118,16 +141,32 @@ function selectCandidatesByBucket(candidates) {
   }
 
   const selected = [];
+  const desiredByBucket = new Map();
+
+  for (const bucket of TARGET_BUCKETS) {
+    if (BOOTSTRAP_MIN_PER_BUCKET > 0) {
+      const existing = existingBucketCounts.get(bucket) || 0;
+      desiredByBucket.set(bucket, Math.max(0, BOOTSTRAP_MIN_PER_BUCKET - existing));
+    } else {
+      desiredByBucket.set(bucket, TARGET_POSTS_PER_BUCKET);
+    }
+  }
+
+  const totalWanted = BOOTSTRAP_MIN_PER_BUCKET > 0
+    ? Array.from(desiredByBucket.values()).reduce((acc, count) => acc + count, 0)
+    : TARGET_POSTS_PER_RUN;
+
   for (const bucket of TARGET_BUCKETS) {
     const list = buckets.get(bucket) || [];
-    const picked = list.slice(0, TARGET_POSTS_PER_BUCKET);
-    if (picked.length < TARGET_POSTS_PER_BUCKET) {
-      console.warn(`⚠️ ${bucket} 버킷 후보 부족: ${picked.length}/${TARGET_POSTS_PER_BUCKET}`);
+    const desired = desiredByBucket.get(bucket) || 0;
+    const picked = list.slice(0, desired);
+    if (picked.length < desired) {
+      console.warn(`⚠️ ${bucket} 버킷 후보 부족: ${picked.length}/${desired}`);
     }
     selected.push(...picked);
   }
 
-  return selected.slice(0, TARGET_POSTS_PER_RUN);
+  return selected.slice(0, totalWanted);
 }
 
 function sleep(ms) {
@@ -237,28 +276,44 @@ function postProcessRestaurantMarkdown(markdown, context) {
   return `${frontmatter}\n\n${normalizedBody}`.trim();
 }
 
-async function getExistingRestaurantSourceIds() {
+async function getExistingRestaurantStats() {
   const ids = new Set();
+  const bucketCounts = new Map(TARGET_BUCKETS.map((bucket) => [bucket, 0]));
+
   await fs.mkdir(postsDir, { recursive: true });
-  const files = await fs.readdir(postsDir);
 
-  for (const file of files) {
-    if (!file.endsWith('.md')) continue;
-    const fullPath = path.join(postsDir, file);
-    const raw = await fs.readFile(fullPath, 'utf-8');
-    const parsed = matter(raw);
-    if (parsed.data.category !== '픽앤조이 맛집 탐방') continue;
-    const sourceId = String(parsed.data.source_id || parsed.data.sourceId || '').trim();
-    if (sourceId) ids.add(sourceId);
+  for (const dir of existingPostDirs) {
+    let files = [];
+    try {
+      await fs.mkdir(dir, { recursive: true });
+      files = await fs.readdir(dir);
+    } catch {
+      continue;
+    }
 
-    if (sourceId && FORCE_RESTAURANT_SOURCE_IDS.has(sourceId)) {
-      await fs.unlink(fullPath);
-      ids.delete(sourceId);
-      console.log(`♻️ 기존 맛집 포스트 재생성 준비: ${file} (${sourceId})`);
+    for (const file of files) {
+      if (!file.endsWith('.md')) continue;
+      const fullPath = path.join(dir, file);
+      const raw = await fs.readFile(fullPath, 'utf-8');
+      const parsed = matter(raw);
+      if (parsed.data.category !== '픽앤조이 맛집 탐방') continue;
+
+      const sourceId = String(parsed.data.source_id || parsed.data.sourceId || '').trim();
+      if (sourceId) ids.add(sourceId);
+
+      const bucket = classifyBucketFromPostFrontmatter(parsed.data);
+      bucketCounts.set(bucket, (bucketCounts.get(bucket) || 0) + 1);
+
+      if (sourceId && FORCE_RESTAURANT_SOURCE_IDS.has(sourceId)) {
+        await fs.unlink(fullPath);
+        ids.delete(sourceId);
+        bucketCounts.set(bucket, Math.max(0, (bucketCounts.get(bucket) || 1) - 1));
+        console.log(`♻️ 기존 맛집 포스트 재생성 준비: ${file} (${sourceId})`);
+      }
     }
   }
 
-  return ids;
+  return { ids, bucketCounts };
 }
 
 async function readSnapshot() {
@@ -366,7 +421,8 @@ async function run() {
   }
 
   const snapshot = await readSnapshot();
-  const existingIds = await getExistingRestaurantSourceIds();
+  const existing = await getExistingRestaurantStats();
+  const existingIds = existing.ids;
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
 
   const candidates = rawCandidates
@@ -385,7 +441,15 @@ async function run() {
       item,
     }));
 
-  const selectedCandidates = selectCandidatesByBucket(candidates);
+  const selectedCandidates = selectCandidatesByBucket(candidates, existing.bucketCounts);
+
+  const bucketCountLog = TARGET_BUCKETS
+    .map((bucket) => `${bucket}:${existing.bucketCounts.get(bucket) || 0}`)
+    .join(', ');
+
+  if (BOOTSTRAP_MIN_PER_BUCKET > 0) {
+    console.log(`🥢 부트스트랩 모드: 버킷별 최소 ${BOOTSTRAP_MIN_PER_BUCKET}건 보정 (현재 ${bucketCountLog})`);
+  }
 
   console.log(`🥢 맛집 포스트 생성 후보: ${selectedCandidates.length}건 (목표 ${TARGET_POSTS_PER_RUN}건: 서울/인천/경기기타 각 ${TARGET_POSTS_PER_BUCKET}건)`);
   if (selectedCandidates.length === 0) {

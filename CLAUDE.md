@@ -147,6 +147,19 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 버킷 부트스트랩(초기 기준치 보정) 추가**:
+  - `scripts/generate-life-restaurant-posts.mjs`
+    - `LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET` 환경변수 추가
+    - 기존 포스트(`src/content/posts` + `src/content/life`)를 스캔해 버킷별 현재 개수 계산
+    - 부족한 버킷만 추가 생성(예: 서울1/인천1/경기0일 때 최소2 기준으로 4건만 생성)
+  - 1회 실행 결과(부트스트랩 2): `seoul:2, incheon:2, gyeonggi:2` 달성
+  - 생성된 신규 파일(4건):
+    - `src/content/life/2026-03-29-seongsu-restaurant-13289056.md`
+    - `src/content/life/2026-03-29-songdo-restaurant-1840452915.md`
+    - `src/content/life/2026-03-29-pangyo-restaurant-1352135383.md`
+    - `src/content/life/2026-03-29-gimpo-restaurant-585118326.md`
+  - 워크플로우는 유지: 내일부터 `서울2/인천2/경기기타2` 일일 자동 생성
+
 - **일상의 즐거움 맛집 카드 썸네일 3종 분리 + 높이 축소**:
   - `src/app/life/page.tsx`: 맛집 카드 메타 라벨을 `서울 맛집 / 인천 맛집 / 경기 맛집`으로 분기
   - `src/components/LifeFilterClient.tsx`: 썸네일 라벨/그라데이션을 3종으로 분리
