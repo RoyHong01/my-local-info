@@ -29,9 +29,15 @@ const CURATED_CHOICES: ChoiceArticle[] = [
   },
 ];
 
+const CORE_CATEGORIES = ['인천 지역 정보', '전국 보조금·복지 정책', '전국 축제·여행'];
+
 function isChoiceCandidate(post: PostData): boolean {
-  const source = [post.title, post.category || '', ...(post.tags || [])].join(' ');
-  return /쿠팡|쇼핑|가전|디지털|생활|꿀팁|추천/i.test(source);
+  // 기존 3대 카테고리 포스트는 무조건 제외
+  if (post.category && CORE_CATEGORIES.includes(post.category)) return false;
+  // '픽앤조이 초이스' 카테고리이거나 review 관련 태그가 있으면 포함
+  if (post.category === '픽앤조이 초이스') return true;
+  if (post.tags?.some((t) => /리뷰|review|쿠팡|추천상품/i.test(t))) return true;
+  return false;
 }
 
 function mapPostToChoice(post: PostData): ChoiceArticle {
