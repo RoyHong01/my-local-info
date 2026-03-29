@@ -270,6 +270,43 @@ function ensureEmotionalIntro(body, category) {
   return `${fallback}\n\n${body}`;
 }
 
+function injectMidArticleImage(body, imageUrl, itemName) {
+  if (!body || !imageUrl) return body;
+
+  // 이미 본문에 이미지가 있으면 중복 삽입 방지
+  if (/!\[[^\]]*\]\([^\)]+\)/.test(body)) return body;
+
+  const lines = body.split('\n');
+  const h3Indexes = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^###\s+/.test(lines[i].trim())) h3Indexes.push(i);
+  }
+
+  const imageBlock = [
+    `![${itemName || '축제 현장'} 관련 이미지](${imageUrl})`,
+    '',
+    '*현장 분위기를 미리 느낄 수 있는 대표 이미지예요.*',
+    ''
+  ];
+
+  // 가장 자연스러운 위치: 첫 번째 ### 섹션이 끝나고 두 번째 ### 시작 직전
+  if (h3Indexes.length >= 2) {
+    const insertAt = h3Indexes[1];
+    const next = [...lines.slice(0, insertAt), '', ...imageBlock, ...lines.slice(insertAt)];
+    return next.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  // 대체 위치: 구분선(---) 직전
+  const dividerIndex = lines.findIndex((line) => /^---\s*$/.test(line.trim()));
+  if (dividerIndex > 0) {
+    const next = [...lines.slice(0, dividerIndex), '', ...imageBlock, ...lines.slice(dividerIndex)];
+    return next.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  // 마지막 대체: 본문 끝
+  return `${body.trim()}\n\n${imageBlock.join('\n')}`.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function postProcessGeneratedMarkdown(markdown, context) {
   const { frontmatter, body } = splitMarkdownSections(markdown);
   let normalizedBody = (body || '').trim();
@@ -290,6 +327,12 @@ function postProcessGeneratedMarkdown(markdown, context) {
   normalizedBody = normalizeNumberedInlineSections(normalizedBody);
   normalizedBody = removeFalseCodeBlockIndentation(normalizedBody);
   normalizedBody = ensureEmotionalIntro(normalizedBody, context.category);
+
+  // 전국 축제·여행 카테고리는 본문 중간 이미지 1장 자동 삽입
+  if (context.category === '전국 축제·여행') {
+    normalizedBody = injectMidArticleImage(normalizedBody, context.imageUrl, context.itemName);
+  }
+
   normalizedBody = normalizedBody.replace(/\n{3,}/g, '\n\n').trim();
 
   const toneScore = calculateToneScore(normalizedBody);
@@ -346,6 +389,11 @@ async function generatePost(candidate, postsDir) {
 ■ 분리선 사용 규칙:
 - 본문에서 '---' 또는 '***' 분리선은 전체 글에서 최대 1번만 사용해.
 - 단락 구분은 분리선 대신 자연스러운 문맥 흐름이나 빈 줄로 처리해.
+
+■ 본문 이미지 배치 규칙:
+- 훅 시작 전 썸네일(상단 이미지)과 별개로, 본문 중간에 관련 이미지 1장을 반드시 추가해.
+- 위치는 첫 번째 핵심 소제목(###) 설명이 끝난 뒤, 다음 소제목으로 넘어가기 직전이 가장 자연스럽게 보이도록 배치해.
+- 이미지는 축제와 직접 관련된 이미지(기본 image URL과 동일 이미지 사용 가능)를 사용해.
 ` : '';
 
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
@@ -434,6 +482,9 @@ ${festivalStyleOverride}
 8) 표(table)를 적절히 활용하면 가독성 UP (방문 시간대, 코스 비교 등)
 9) 전체 1000자 이상, 신청/방문 방법 안내 포함
 10) 마무리는 "함께 가면 좋은 사람" 같은 공식 추천 문구 금지. 작가 본인의 솔직한 한 줄 소감이나 특정 상황/감정을 자연스럽게 언급하며 끝낼 것
+11) 강제 줄바꿈: 문단은 길게 쓰지 말고, 최대 2~3문장마다 반드시 줄바꿈(Enter)할 것
+12) 문단 길이 제한: 한 문단이 스마트폰 화면 기준 4~5줄을 넘지 않도록 짧게 끊을 것
+13) 문단 전환 시 시각 포인트: 필요한 곳에 이모지(예: ✨ 🌸 📌)를 가볍게 활용해 가독성을 높일 것 (남발 금지)
 
 마지막 줄에 FILENAME: YYYY-MM-DD-영문키워드 형식으로 파일명 출력`;
 
@@ -528,6 +579,7 @@ ${festivalStyleOverride}
   const postProcessed = postProcessGeneratedMarkdown(finalContent, {
     itemName,
     category: candidate._category,
+    imageUrl,
   });
   finalContent = postProcessed.content;
   console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);
