@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import CoupangBanner from '@/components/CoupangBanner';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
-import LifeHeader from '@/components/life/LifeHeader';
+import SiteHeader from '@/components/SiteHeader';
 
 export const metadata: Metadata = {
   title: '일상의 즐거움 | 픽앤조이',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function LifeLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
-      <LifeHeader />
+      <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start">

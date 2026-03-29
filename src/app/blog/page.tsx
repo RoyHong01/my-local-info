@@ -5,6 +5,7 @@ import BlogFilter from '@/components/BlogFilter';
 import BlogScrollRestorer from '@/components/BlogScrollRestorer';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import SiteHeader from '@/components/SiteHeader';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -23,21 +24,7 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-3xl font-bold text-orange-500">픽앤조이 🎯</Link>
-          <nav>
-            <ul className="flex space-x-4 md:space-x-6 text-base font-medium text-stone-600">
-              <li><Link href="/incheon" className="hover:text-blue-600 transition">인천시 정보</Link></li>
-              <li><Link href="/subsidy" className="hover:text-amber-600 transition">전국 보조금·복지 정책</Link></li>
-              <li><Link href="/festival" className="hover:text-rose-600 transition">전국 축제·여행 정보</Link></li>
-              <li><Link href="/blog" className="text-orange-500 font-bold">블로그</Link></li>
-              <li><Link href="/life" className="hover:text-orange-500 transition">일상의 즐거움</Link></li>
-              <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start">

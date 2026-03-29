@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
+import SiteHeader from '@/components/SiteHeader';
 
 interface DataItem {
   [key: string]: unknown;
@@ -112,21 +113,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-3xl font-bold text-orange-500">픽앤조이 🎯</Link>
-          <nav>
-            <ul className="flex space-x-4 md:space-x-6 text-base font-medium text-stone-600">
-              <li><Link href="/incheon" className="hover:text-blue-600 transition">인천시 정보</Link></li>
-              <li><Link href="/subsidy" className="hover:text-amber-600 transition">전국 보조금·복지 정책</Link></li>
-              <li><Link href="/festival" className="hover:text-rose-600 transition">전국 축제·여행 정보</Link></li>
-              <li><Link href="/blog" className="hover:text-orange-500 transition">블로그</Link></li>
-              <li><Link href="/life" className="hover:text-orange-500 transition">일상의 즐거움</Link></li>
-              <li><Link href="/about" className="hover:text-orange-500 transition">소개</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-orange-500 to-amber-400 text-white py-16 px-4 text-center">
