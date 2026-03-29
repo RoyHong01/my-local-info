@@ -13,6 +13,7 @@ export interface PostData {
   category?: string;
   tags?: string[];
   image?: string;
+  sourceId?: string;
   content: string;
 }
 
@@ -180,6 +181,7 @@ export function getSortedPostsData(): PostData[] {
         category: matterResult.data.category,
         tags: matterResult.data.tags,
         image: matterResult.data.image,
+        sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
         content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
       };
     });
@@ -218,6 +220,7 @@ export function getPostData(slug: string): PostData | null {
       category: matterResult.data.category,
       tags: matterResult.data.tags,
       image: matterResult.data.image,
+      sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
       content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
     };
   } catch (e) {

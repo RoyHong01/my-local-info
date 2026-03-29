@@ -70,6 +70,53 @@ function classifyPostForSeo(post: { title: string; category?: string; tags?: str
   };
 }
 
+async function resolveSourceLink(post: { sourceId?: string; category?: string }): Promise<string | null> {
+  if (!post.sourceId) return null;
+  const cat = post.category || '';
+  type FileConfig = { file: string; idFields: string[]; linkFields: string[] };
+  let configs: FileConfig[];
+  if (/축제|여행/.test(cat)) {
+    configs = [
+      { file: 'festival.json', idFields: ['contentid', 'id'], linkFields: ['homepage', 'link', '상세조회URL'] },
+      { file: 'incheon.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+      { file: 'subsidy.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+    ];
+  } else if (/인천/.test(cat)) {
+    configs = [
+      { file: 'incheon.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link', 'homepage'] },
+      { file: 'festival.json', idFields: ['contentid', 'id'], linkFields: ['homepage', 'link'] },
+      { file: 'subsidy.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+    ];
+  } else if (/보조금|복지/.test(cat)) {
+    configs = [
+      { file: 'subsidy.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link', 'homepage'] },
+      { file: 'incheon.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+      { file: 'festival.json', idFields: ['contentid', 'id'], linkFields: ['homepage', 'link'] },
+    ];
+  } else {
+    configs = [
+      { file: 'festival.json', idFields: ['contentid', 'id'], linkFields: ['homepage', 'link', '상세조회URL'] },
+      { file: 'incheon.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+      { file: 'subsidy.json', idFields: ['서비스ID', 'id'], linkFields: ['상세조회URL', 'link'] },
+    ];
+  }
+  for (const config of configs) {
+    try {
+      const raw = await fs.readFile(path.join(process.cwd(), `public/data/${config.file}`), 'utf8');
+      const items: Record<string, string>[] = JSON.parse(raw);
+      const item = items.find((row) => config.idFields.some((f) => String(row[f]) === String(post.sourceId)));
+      if (item) {
+        for (const lf of config.linkFields) {
+          if (item[lf]?.trim() && item[lf] !== '#') return item[lf];
+        }
+      }
+    } catch {
+      // ignore missing file
+    }
+  }
+  return null;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = await params;
   const post = getPostData(p.slug);
@@ -110,18 +157,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
-  const filePath = path.join(process.cwd(), 'public/data/local-info.json');
-  let sourceLink = '#';
-  try {
-    const fileContents = await fs.readFile(filePath, 'utf8');
-    const items = JSON.parse(fileContents);
-    const sourceItem = items.find((item: any) => item.name === post.title);
-    if (sourceItem && sourceItem.link) {
-      sourceLink = sourceItem.link;
-    }
-  } catch (e) {
-    // ignore
-  }
+  const sourceLink = await resolveSourceLink(post);
 
   const description = buildMetaDescription(post.content) || post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
   const seoClassification = classifyPostForSeo(post);
@@ -207,9 +243,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <AdBanner />
           <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-4">
             <p className="text-sm text-stone-500 leading-6">
-              이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다. 정확한 내용은 원문 링크를 통해 확인해주세요.
+              이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.{' '}
+              {sourceLink
+                ? '정확한 내용은 원문 링크를 통해 확인해주세요.'
+                : '최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.'}
             </p>
-            {sourceLink !== '#' && (
+            {sourceLink && (
               <p>
                 <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
                   <span>공식 원문 바로가기</span>
