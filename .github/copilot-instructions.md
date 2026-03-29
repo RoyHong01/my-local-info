@@ -143,6 +143,13 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 ## 최근 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 상세 404(slug 매핑) 복구**:
+  - `src/lib/posts.ts`의 slug 조회를 정규화 + fallback 스캔으로 강화
+  - 문제 포스트 slug를 영문화
+    - `incheon-zenzen-bonjeom`
+    - `seoul-mitable-seongsu-bonjeom`
+  - 검증: `npm run build` 후 `out/blog` 경로 생성 확인
+
 - **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
   - `scripts/generate-life-restaurant-posts.mjs`에 버킷 분배 로직 추가
     - 서울 2 / 인천 2 / 경기기타 2 우선 선발

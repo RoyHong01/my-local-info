@@ -28,6 +28,11 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 
 ## 최근 중요 반영 사항 (2026-03-29 추가-4)
 
+- **맛집 상세 404(slug 매핑) 복구**:
+  - `getPostData()`에 slug 정규화(NFC/decodeURIComponent) + 파일명/frontmatter fallback 조회 추가
+  - 2개 맛집 포스트 slug를 영문으로 교체하여 링크 안정화
+  - 빌드 산출물에 영문 slug 경로 생성 확인
+
 - **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
   - 생성 스크립트에서 지역 버킷(서울/인천/경기기타) 분류 후 2건씩 선발
   - 워크플로우 환경변수: `LIFE_RESTAURANT_POSTS_PER_RUN=6`, `LIFE_RESTAURANT_POSTS_PER_BUCKET=2`

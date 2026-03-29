@@ -147,6 +147,16 @@ src/app/life/restaurant/data/
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
+- **맛집 상세 404(slug 매핑) 복구**:
+  - 증상: `2026-03-29-인천-젠젠-본점`, `2026-03-29-서울-미테이블-성수본점` 클릭 시 404
+  - 원인: slug/frontmatter와 파일명 매핑이 취약해 일부 케이스에서 상세 파일 조회 실패 가능
+  - 조치:
+    - `src/lib/posts.ts` `getPostData()`를 slug 정규화(NFC/URL decode) + 파일명/frontmatter fallback 스캔 방식으로 강화
+    - 두 포스트의 slug를 영문 고정값으로 변경
+      - `incheon-zenzen-bonjeom`
+      - `seoul-mitable-seongsu-bonjeom`
+  - 검증: `npm run build` 결과 `out/blog/incheon-zenzen-bonjeom`, `out/blog/seoul-mitable-seongsu-bonjeom` 생성 확인
+
 - **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
   - `scripts/generate-life-restaurant-posts.mjs`
     - 일일 생성 수를 `LIFE_RESTAURANT_POSTS_PER_RUN=6` 기준으로 고정

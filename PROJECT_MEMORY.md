@@ -18,6 +18,19 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-29 추가 완료 (7)
+
+- **맛집 상세 404(slug 매핑) 복구**:
+  - `src/lib/posts.ts`
+    - `getPostData()`에 slug 정규화(NFC/URL decode) 및 파일명/frontmatter fallback 조회 로직 추가
+  - 문제 포스트 2건 slug 영문화
+    - `incheon-zenzen-bonjeom`
+    - `seoul-mitable-seongsu-bonjeom`
+- **검증/반영**:
+  - `npm run build` 성공
+  - `out/blog/incheon-zenzen-bonjeom`
+  - `out/blog/seoul-mitable-seongsu-bonjeom` 생성 확인
+
 ### 2026-03-29 추가 완료 (6)
 
 - **맛집 자동생성 6건 분배 로직 고정**:

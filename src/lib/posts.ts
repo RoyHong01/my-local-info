@@ -224,8 +224,53 @@ export function getSortedPostsData(): PostData[] {
 }
 
 export function getPostData(slug: string): PostData | null {
-  const fullPaths = postsDirectories.map((dir) => path.join(dir, `${slug}.md`));
-  const existingPath = fullPaths.find((candidatePath) => fs.existsSync(candidatePath));
+  const normalizeSlug = (value: string) => {
+    let decoded = value;
+    try {
+      decoded = decodeURIComponent(value);
+    } catch {
+      // ignore decode error and keep raw value
+    }
+    return String(decoded || '').trim().normalize('NFC');
+  };
+
+  const requestedSlug = normalizeSlug(slug);
+
+  const directPaths = postsDirectories.map((dir) => path.join(dir, `${requestedSlug}.md`));
+  let existingPath = directPaths.find((candidatePath) => fs.existsSync(candidatePath));
+
+  // 파일명과 frontmatter slug가 다를 수 있으므로 fallback 스캔 수행
+  if (!existingPath) {
+    for (const dir of postsDirectories) {
+      if (!fs.existsSync(dir)) continue;
+      const fileNames = fs.readdirSync(dir).filter((fileName) => fileName.endsWith('.md'));
+
+      for (const fileName of fileNames) {
+        const fileSlug = normalizeSlug(fileName.replace(/\.md$/, ''));
+        const fullPath = path.join(dir, fileName);
+
+        if (fileSlug === requestedSlug) {
+          existingPath = fullPath;
+          break;
+        }
+
+        try {
+          const fileContents = fs.readFileSync(fullPath, 'utf8');
+          const parsed = matter(fileContents);
+          const frontmatterSlug = normalizeSlug(String(parsed.data.slug || ''));
+          if (frontmatterSlug && frontmatterSlug === requestedSlug) {
+            existingPath = fullPath;
+            break;
+          }
+        } catch {
+          // ignore broken markdown and continue
+        }
+      }
+
+      if (existingPath) break;
+    }
+  }
+
   if (!existingPath) return null;
 
   try {
