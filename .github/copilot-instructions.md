@@ -13,18 +13,21 @@
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
 - 정적 HTML 배포 (`next.config.ts`의 `output: "export"`, `trailingSlash: true`)
-- Claude API (claude-haiku-4-5) — 블로그 글 자동 생성
+- Gemini API (gemini-2.5-pro) — 블로그 글 자동 생성
+- Claude API (claude-haiku-4-5) — 데이터 description_markdown 생성
 - 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
 - GitHub Actions — 매일 07:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
 
 ## 환경변수 (.env.local)
-- ANTHROPIC_API_KEY: Claude API 블로그 생성
+- ANTHROPIC_API_KEY: Claude API 데이터 본문(description_markdown) 생성
+- GEMINI_API_KEY: Gemini API 블로그 생성
 - PUBLIC_DATA_API_KEY: 공공데이터포털 (보조금24, 인천 데이터)
 - TOUR_API_KEY: 한국관광공사 TourAPI
 - KAKAO_API_KEY: 카카오 로컬 API (2단계, 미사용)
 - NEXT_PUBLIC_ADSENSE_ID: Google AdSense (미설정)
-- NEXT_PUBLIC_GA_ID: Google Analytics (미설정)
+- NEXT_PUBLIC_GA_ID: Google Analytics (✅ G-6VNKGES4FW)
+- NEXT_PUBLIC_COUPANG_PARTNER_ID: 쿠팡 파트너스 (✅ AF5831775)
 
 ## API 엔드포인트
 - 보조금24: https://apis.data.go.kr/1741000/Subsidy24
@@ -145,6 +148,26 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 경어체 종결어미(`~해요/~거든요/~입니다`) 필수, 평어체(`~이다/~한다`) 절대 금지
   - AI 금지어 목록 추가, 마무리 공식 문구 폐지 → 작가 주관 한 줄 평으로 변경
   - `date` 필드 Node.js 변수로 직접 주입 (Gemini 임의 날짜 생성 버그 차단)
+
+### 2026-03-29 (추가)
+
+- **실제 전국 축제·여행 포스트 2편 발행 완료**:
+  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
+  - `2026-03-29-jindo-canolaflower-festival.md`
+- **SEO 강화** (`src/app/blog/[slug]/page.tsx`):
+  - 메타 description을 본문 첫 문장으로 생성
+  - JSON-LD를 카테고리 인지형(`articleSection/about/additionalType/keywords/inLanguage`)으로 확장
+- **Playwright 도입 + 배포 전 자동 검증 연결**:
+  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 신규
+  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 추가
+  - `deploy.yml`에 Playwright 설치 + 배포 전 E2E 테스트 단계 추가
+- **블로그 생성 안정화** (`generate-blog-post.js`):
+  - `maxOutputTokens: 4096` 상향
+  - 불완전 응답 감지(`finishReason`, 본문 길이, 문장 종결, FILENAME 포함 여부) + 최대 3회 재시도
+- **검증/반영 상태**:
+  - `npm run build` 성공
+  - `npm run test:e2e` 성공
+  - 커밋/푸시: `da64479` (`main`)
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775

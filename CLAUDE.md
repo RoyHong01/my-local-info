@@ -93,6 +93,11 @@ public/
 
 .github/workflows/
   deploy.yml            # push 또는 07:00 KST 자동 배포
+
+e2e/
+  blog-filter.spec.ts   # 블로그 카테고리 필터 유지 E2E
+
+playwright.config.ts    # Playwright 실행 설정 (CI/로컬 공용)
 ```
 
 ## 작업 규칙
@@ -131,6 +136,25 @@ public/
 - 2026-03-28: 인천 봄꽃 축제 중복 제거(1편 삭제), 유지본 제목·이미지·source_id 수정
 - 2026-03-28: 블로그 썸네일 TourAPI 실제 이미지로 교체 (진해/여의도/경포/구례/광안리)
 - 2026-03-29: 전국 축제·여행 블로그 11편 Gemini 스타일 재작성 (경어체 통일, 번호 소제목 제거, 분리선 최대 1회, 제목 연도·총정리 제거)
+
+## 최신 동기화 메모 (2026-03-29 추가)
+- **실제 전국 축제·여행 포스트 2편 발행 완료**:
+  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
+  - `2026-03-29-jindo-canolaflower-festival.md`
+- **SEO 강화** (`src/app/blog/[slug]/page.tsx`):
+  - 메타 설명을 본문 첫 문장 기반으로 생성
+  - JSON-LD에 `articleSection`, `about`, `additionalType`, `keywords`, `inLanguage` 확장
+- **Playwright 최소 E2E 도입 및 배포 전 게이트 연결**:
+  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 추가
+  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 반영
+  - `.github/workflows/deploy.yml`에 배포 전 E2E 테스트 단계 추가
+- **블로그 생성 안정화** (`scripts/generate-blog-post.js`):
+  - `maxOutputTokens` 4096 상향
+  - 불완전 응답 감지(`finishReason`, 길이/종결/파일명 검사) + 최대 3회 재시도
+- **검증/반영 완료**:
+  - `npm run build` 성공
+  - `npm run test:e2e` 성공
+  - 커밋/푸시: `da64479` (`main`)
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775

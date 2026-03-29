@@ -34,6 +34,26 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
   - 구 ID 976088은 Coupang 파트너스에서 정상 활성화가 안 된 것이 원인이었음
   - 하단 배너 ID 976089는 변경 없음 유지
 
+## 최근 중요 반영 사항 (2026-03-29 추가-2)
+
+- **실제 전국 축제·여행 포스트 2편 발행**:
+  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
+  - `2026-03-29-jindo-canolaflower-festival.md`
+- **블로그 상세 SEO 강화** (`src/app/blog/[slug]/page.tsx`):
+  - 메타 description을 본문 첫 문장 기반으로 생성
+  - JSON-LD에 `articleSection/about/additionalType/keywords/inLanguage` 확장
+- **Playwright 최소 E2E + 배포 전 게이트 연결**:
+  - `playwright.config.ts` / `e2e/blog-filter.spec.ts` 신규
+  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 추가
+  - `.github/workflows/deploy.yml`에 배포 전 `npm run test:e2e` 단계 추가
+- **Gemini 생성 안정화** (`scripts/generate-blog-post.js`):
+  - `maxOutputTokens`를 4096으로 상향
+  - `finishReason`/본문 완결성 검사 + 최대 3회 재시도 로직 추가
+- **검증 및 반영**:
+  - `npm run build` 성공
+  - `npm run test:e2e` 성공
+  - 커밋/푸시 완료: `da64479` (`main`)
+
 ## 이전 중요 반영 사항 (2026-03-29)
 
 - **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):

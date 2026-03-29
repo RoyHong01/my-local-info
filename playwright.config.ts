@@ -20,7 +20,7 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   webServer: {
-    command: isCI ? 'npm run start' : 'npm run dev',
+    command: isCI ? 'npx serve@latest out -l 3000' : 'npm run dev',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !isCI,
     timeout: 120 * 1000,

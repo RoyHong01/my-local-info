@@ -7,6 +7,27 @@
 
 ## 2026-03-29
 
+### SEO 보강 + E2E/배포 게이트 + 실포스트 2건 발행
+- `src/app/blog/[slug]/page.tsx` SEO 보강:
+  - 본문 첫 문장 기반 `description` 생성 로직 추가
+  - JSON-LD 확장: `articleSection`, `about`, `additionalType`, `keywords`, `inLanguage`
+- Playwright 최소 검증 세트 도입:
+  - `playwright.config.ts` 신규
+  - `e2e/blog-filter.spec.ts` 신규 (카테고리 필터 유지 동선)
+  - `src/components/BlogFilter.tsx`, `src/components/BlogBackButton.tsx`에 `data-testid` 반영
+  - `.github/workflows/deploy.yml`에 배포 전 `npm run test:e2e` 단계 추가
+- 블로그 생성 안정화 (`scripts/generate-blog-post.js`):
+  - `maxOutputTokens` 4096 상향
+  - `finishReason`/본문 완결성 검사 + 최대 3회 재시도
+- 실제 전국 축제·여행 포스트 2편 발행:
+  - `src/content/posts/2026-03-29-gangjin-jeollabyeongseong-festival.md`
+  - `src/content/posts/2026-03-29-jindo-canolaflower-festival.md`
+- 검증 결과:
+  - `npm run build` 성공
+  - `npm run test:e2e` 성공
+- 반영:
+  - 커밋 `da64479` → `main` 푸시 완료
+
 ### 블로그 생성 문체 가이드 개선
 - `generate-blog-post.js` 프롬프트 문체 섹션 교체:
   - `[Gemini 감성 글쓰기 지침]` → `[글쓰기 스타일 가이드]`

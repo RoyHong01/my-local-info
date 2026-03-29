@@ -18,6 +18,25 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-29 추가 완료 (2)
+- **실제 전국 축제·여행 포스트 2편 발행**:
+  - `src/content/posts/2026-03-29-gangjin-jeollabyeongseong-festival.md`
+  - `src/content/posts/2026-03-29-jindo-canolaflower-festival.md`
+- **SEO 보강** (`src/app/blog/[slug]/page.tsx`):
+  - 메타 description을 본문 첫 문장 기반으로 생성
+  - JSON-LD를 카테고리 인지형(`articleSection`, `about`, `additionalType`, `keywords`, `inLanguage`)으로 확장
+- **Playwright 도입 및 배포 전 검증 게이트 구축**:
+  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 추가
+  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 테스트 식별자(`data-testid`) 반영
+  - `.github/workflows/deploy.yml`에 Playwright 설치 + `npm run test:e2e` 단계 추가
+- **블로그 생성 안정화** (`scripts/generate-blog-post.js`):
+  - `maxOutputTokens` 4096 상향
+  - 불완전 응답 감지(`finishReason`, 본문 길이/종결, FILENAME 포함 여부) + 최대 3회 재시도
+- **최종 검증/반영**:
+  - `npm run build` 성공
+  - `npm run test:e2e` 성공
+  - 커밋/푸시: `da64479` (`main`)
+
 ### 2026-03-29 추가 완료
 - **쿠팡 사이드바 배너 수정** (`CoupangBanner.tsx`):
   - `'use client'` 지시어 추가 → Hydration mismatch 해결 (빈 흰 박스 증상 제거)
