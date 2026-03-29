@@ -141,6 +141,19 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 카드 크기를 축제/블로그와 유사한 자연 높이로 복구
   - 긴 텍스트는 기존 `line-clamp` 범위 내에서만 노출
 
+## 최근 동기화 메모 (2026-03-29 추가-4)
+
+- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
+  - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
+    - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)
+    - restaurants.json에 `googleRating` / `googleRatingCount` 추가
+  - `scripts/generate-life-restaurant-posts.mjs`:
+    - googleRating 있으면 `rating_value` / `review_count` frontmatter 자동 삽입 → JSON-LD `aggregateRating` 자동 연결
+    - 프롬프트: 조도·공간감·음식 결 감각적 묘사 2개 이상 규칙 추가
+    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가
+  - `.github/workflows/deploy.yml`: `GOOGLE_PLACES_API_KEY` Secret 추가 (**GitHub Actions Secrets 수동 추가 필요**)
+  - 검증: `npm run build` 성공, 커밋/푸시 `8a98b87`
+
 ## 최근 동기화 메모 (2026-03-29)
 
 - **쿠팡 파트너스 사이드바 배너 최종 확정**:

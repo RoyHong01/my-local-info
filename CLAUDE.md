@@ -145,6 +145,18 @@ src/app/life/restaurant/data/
 - 2026-03-28: 블로그 썸네일 TourAPI 실제 이미지로 교체 (진해/여의도/경포/구례/광안리)
 - 2026-03-29: 전국 축제·여행 블로그 11편 Gemini 스타일 재작성 (경어체 통일, 번호 소제목 제거, 분리선 최대 1회, 제목 연도·총정리 제거)
 
+## 최신 동기화 메모 (2026-03-29 추가-4)
+- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
+  - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
+    - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)
+    - restaurants.json에 `googleRating` / `googleRatingCount` 추가
+  - `scripts/generate-life-restaurant-posts.mjs`:
+    - googleRating 있으면 `rating_value` / `review_count` frontmatter 자동 삽입 → JSON-LD `aggregateRating` 자동 연결
+    - 프롬프트: 조도·공간감·음식 결 감각적 묘사 2개 이상 규칙 추가
+    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가
+  - `.github/workflows/deploy.yml`: `GOOGLE_PLACES_API_KEY` Secret 추가 (GitHub Actions Secrets에도 추가 필요)
+  - 검증: `npm run build` 성공, 커밋/푸시 `8a98b87`
+
 ## 최신 동기화 메모 (2026-03-29 추가)
 - **일상의 즐거움 맛집 자동화 파이프라인 추가**:
   - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 기반 수집으로 고도화, 지역당 15개 상한, Gemini 문제해결형 서사 요약 반영

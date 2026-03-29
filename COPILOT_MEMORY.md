@@ -26,6 +26,26 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
+## 최근 중요 반영 사항 (2026-03-29 추가-4)
+
+- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
+  - `scripts/collect-life-restaurants.mjs`:
+    - Kakao 결과 사이즈: 15 → 20 (쿼리당)
+    - `GOOGLE_PRE_FILTER_SIZE = 20`, `GOOGLE_PLACES_MIN_RATING = 4.2` 상수 추가
+    - `fetchGooglePlaceRating()`: Google Places API (New) Text Search, 필드 마스크 `places.rating,places.userRatingCount` 최적화
+    - `filterByGoogleRating()`: 평점 4.2 미만 자동 제외, 정보 없으면 통과 처리, 호출 간 200ms 딜레이
+    - `collectRegion()`: Google 필터 후 최종 15개 슬라이스 → Gemini 요약
+    - `run()`: `GOOGLE_PLACES_API_KEY` 환경변수 연동, source 레이블 `kakao+google+gemini` 갱신
+    - restaurants.json에 `googleRating` / `googleRatingCount` 필드 추가
+  - `scripts/generate-life-restaurant-posts.mjs`:
+    - `ratingFrontmatter`: googleRating 있을 때 `rating_value` / `review_count` frontmatter 자동 삽입
+    - posts.ts → `ratingValue`/`reviewCount` → blog/[slug]/page.tsx → `aggregateRating` JSON-LD 자동 연결
+    - 프롬프트: 조도/공간감/음식 결 감각적 묘사 2개 이상 규칙 추가
+    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가 (근처 스팟 제안)
+  - `.github/workflows/deploy.yml`: 맛집 수집 스텝에 `GOOGLE_PLACES_API_KEY` Secret 추가
+  - GitHub Actions Secret에 `GOOGLE_PLACES_API_KEY` 추가 필요
+  - 검증: `npm run build` 성공, `node --check` 구문 통과, 커밋/푸시 완료
+
 ## 최근 중요 반영 사항 (2026-03-29 추가-3)
 
 - **맛집 자동화 2차 톤 리프레시**:
