@@ -126,10 +126,10 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
             key={value}
             onClick={() => handleCategoryClick(value)}
             data-testid={`blog-filter-${value || 'all'}`}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-1.5 rounded-full text-sm font-medium cursor-pointer transform-gpu will-change-transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-sm ${
               activeCategory === value || (value === '' && !activeCategory)
-                ? 'bg-orange-500 text-white'
-                : 'bg-white text-stone-600 border border-stone-200 hover:border-orange-300'
+                ? 'bg-orange-500 text-white hover:bg-orange-600'
+                : 'bg-white text-stone-600 border border-stone-200 hover:border-orange-300 hover:bg-orange-50/40'
             }`}
           >
             {label}
