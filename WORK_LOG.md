@@ -7,6 +7,29 @@
 
 ## 2026-03-29
 
+### 맛집 톤 리프레시 + 저품질 포스트 교체
+- `scripts/collect-life-restaurants.mjs`:
+  - 2030 취향 핫플형 검색어 세트로 전면 교체 (예: 송도 브런치 카페, 성수동 팝업 근처 맛집, 연남동 내추럴 와인바)
+  - `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터 저장 및 trend score 정렬 적용
+- `src/lib/life-restaurants.ts`:
+  - 런타임 로더도 동일한 쿼리/메타데이터/정렬 규칙으로 동기화
+- `scripts/generate-life-restaurant-posts.mjs`:
+  - 프롬프트를 교과서형 정보문에서 저장형 핫플 큐레이션 톤으로 전환
+  - `FORCE_RESTAURANT_SOURCE_IDS` 환경변수로 특정 source_id 재생성 지원
+- 콘텐츠 정리:
+  - 기존 저품질 포스트 2건 삭제
+    - `2026-03-29-restaurant-18763742.md`
+    - `2026-03-29-restaurant-870136692.md`
+  - 신규 포스트 2건 생성
+    - `2026-03-29-인천-젠젠-본점.md`
+    - `2026-03-29-서울-미테이블-성수본점.md`
+- 데이터 갱신:
+  - `src/app/life/restaurant/data/restaurants.json` 재수집 완료 (인천/경인 15건, 서울/경기 15건)
+- 검증:
+  - `npm run collect:life-restaurants` 성공
+  - `npm run generate:life-restaurant-posts` 성공
+  - `npm run build` 성공
+
 ### 일상의 즐거움 맛집 포스트 자동화
 - `src/lib/life-restaurants.ts`:
   - 카카오 로컬 API 검색어를 `찐맛집/현지인 맛집/줄서는 식당` 조합으로 고도화

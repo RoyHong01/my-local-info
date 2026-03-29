@@ -161,6 +161,15 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - `deploy.yml`에 맛집 수집/포스트 생성 스케줄 단계 추가
   - `blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 적용
 
+- **맛집 자동화 2차 톤 리프레시**:
+  - `collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 핫플형 검색어 세트로 재구성
+    - 예: 송도 브런치 카페 / 성수동 팝업 근처 맛집 / 연남동 내추럴 와인바 / 망원동 에스프레소 바
+  - 수집 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터 저장 + trend score 우선 정렬
+  - `generate-life-restaurant-posts.mjs` 프롬프트를 "생활정보 설명문"에서 "저장해둘 만한 핫플 큐레이션" 톤으로 전환
+  - `FORCE_RESTAURANT_SOURCE_IDS`로 특정 맛집 포스트 재생성 가능
+  - 초기 저품질 포스트 2건 삭제 후 신규 2건 발행:
+    - `2026-03-29-인천-젠젠-본점.md`
+    - `2026-03-29-서울-미테이블-성수본점.md`
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
   - `2026-03-29-jindo-canolaflower-festival.md`

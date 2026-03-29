@@ -18,6 +18,19 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
+### 2026-03-29 추가 완료 (4)
+- **맛집 자동화 2차 톤 리프레시**:
+  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 취향 핫플형 검색어 세트로 재구성
+  - 수집 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터 저장 및 trend score 기반 정렬 적용
+  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 교과서형 설명에서 저장형 핫플 큐레이션 톤으로 교체
+  - `FORCE_RESTAURANT_SOURCE_IDS` 환경변수로 특정 맛집 포스트 강제 재생성 가능
+  - 기존 저품질 포스트 2건 삭제 후 신규 2건 발행:
+    - `src/content/posts/2026-03-29-인천-젠젠-본점.md`
+    - `src/content/posts/2026-03-29-서울-미테이블-성수본점.md`
+- **검증/반영**:
+  - `npm run collect:life-restaurants` 성공 (인천/경인 15건, 서울/경기 15건)
+  - `npm run build` 성공
+
 ### 2026-03-29 추가 완료 (3)
 - **일상의 즐거움 맛집 자동화 파이프라인 구축**:
   - `src/lib/life-restaurants.ts`에 찐맛집/현지인/줄서는 식당 키워드 기반 검색 로직 반영, 지역당 15개 추출

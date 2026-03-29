@@ -10,6 +10,10 @@ export interface RestaurantItem {
   phone: string;
   mapUrl: string;
   summary: string;
+  sourceQuery?: string;
+  scenarioHint?: string;
+  vibeHint?: string;
+  cuisineHint?: string;
 }
 
 interface KakaoPlace {
@@ -21,28 +25,33 @@ interface KakaoPlace {
   place_url: string;
 }
 
-const REGION_QUERY_MAP: Record<LifeRegionTab, string[]> = {
+interface RegionQueryMeta {
+  query: string;
+  scenarioHint: string;
+  vibeHint: string;
+  cuisineHint: string;
+}
+
+const REGION_QUERY_MAP: Record<LifeRegionTab, RegionQueryMeta[]> = {
   'incheon-gyeongin': [
-    '인천 찐맛집',
-    '인천 현지인 맛집',
-    '인천 줄서는 식당',
-    '부천 찐맛집',
-    '부천 현지인 맛집',
-    '부천 줄서는 식당',
-    '김포 찐맛집',
-    '김포 현지인 맛집',
-    '김포 줄서는 식당',
+    { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '통창·채광', cuisineHint: '브런치·카페' },
+    { query: '송도 오픈런 파스타', scenarioHint: '데이트 코스 첫 식사', vibeHint: '세련된 무드', cuisineHint: '파스타·양식' },
+    { query: '청라 분위기 술집', scenarioHint: '2차까지 이어지는 저녁 약속', vibeHint: '무드 있는 저녁', cuisineHint: '와인바·주점' },
+    { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉', cuisineHint: '트렌디 다이닝' },
+    { query: '부평 웨이팅 맛집', scenarioHint: '줄 서도 한 번쯤 가볼 만한 곳 탐색', vibeHint: '핫플', cuisineHint: '인기 맛집' },
+    { query: '부천 감성 카페 디저트', scenarioHint: '카페 투어 데이트', vibeHint: '디저트 감성', cuisineHint: '카페·디저트' },
+    { query: '김포 데이트 맛집', scenarioHint: '드라이브 끝에 들를 저녁 코스', vibeHint: '편하게 분위기 내기 좋은', cuisineHint: '데이트 맛집' },
+    { query: '을왕리 오션뷰 카페', scenarioHint: '바다 보고 쉬는 반나절 코스', vibeHint: '오션뷰', cuisineHint: '카페·브런치' },
   ],
   'seoul-gyeonggi': [
-    '서울 찐맛집',
-    '서울 현지인 맛집',
-    '서울 줄서는 식당',
-    '경기 찐맛집',
-    '경기 현지인 맛집',
-    '경기 줄서는 식당',
-    '수원 찐맛집',
-    '수원 현지인 맛집',
-    '수원 줄서는 식당',
+    { query: '성수동 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '힙한 동선', cuisineHint: '트렌디 다이닝' },
+    { query: '연남동 웨이팅 맛집', scenarioHint: '주말에 줄 서서라도 가는 한 끼', vibeHint: '핫플', cuisineHint: '인기 맛집' },
+    { query: '연남동 내추럴 와인바', scenarioHint: '저녁 데이트 2차', vibeHint: '와인 감성', cuisineHint: '와인바' },
+    { query: '한남동 분위기 좋은 레스토랑', scenarioHint: '특별한 날 약속', vibeHint: '고급스럽고 세련된', cuisineHint: '레스토랑' },
+    { query: '강남역 사진 잘 나오는 식당', scenarioHint: '친구랑 기분 내는 약속', vibeHint: '포토제닉', cuisineHint: '트렌디 다이닝' },
+    { query: '망원동 에스프레소 바', scenarioHint: '짧고 진한 카페 투어', vibeHint: '힙한 카페 무드', cuisineHint: '커피·디저트' },
+    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 산책 후 저녁', vibeHint: '감성적인 저녁', cuisineHint: '와인바·주점' },
+    { query: '판교 브런치 맛집', scenarioHint: '주말 낮 약속', vibeHint: '깔끔한 브런치 무드', cuisineHint: '브런치·카페' },
   ],
 };
 
@@ -138,8 +147,14 @@ function normalizeLineBreakBySentence(text: string): string {
 }
 
 function buildFallbackSummary(placeName: string, address: string): string {
-  const base = `${placeName}은(는) ${address} 근처에서 동선이 좋아서 가볍게 들르기 편해요. 분위기와 접근성을 함께 챙기고 싶을 때 만족도가 높은 편입니다.`;
+  const base = `${placeName}은(는) ${address} 근처에서 약속 잡을 때 한 번 체크해보기 좋은 곳이에요. 너무 과장된 설명보다 동선이 편하고 분위기 괜찮은 곳 찾을 때 무난하게 보기 좋습니다.`;
   return normalizeLineBreakBySentence(base);
+}
+
+function getTrendScore(item: RestaurantItem): number {
+  const source = `${item.sourceQuery || ''} ${item.name} ${item.summary} ${item.vibeHint || ''} ${item.cuisineHint || ''}`.toLowerCase();
+  const tokens = ['브런치', '파스타', '와인', '에스프레소', '팝업', '사진', '웨이팅', '데이트', '술집', '카페'];
+  return tokens.reduce((score, token) => score + (source.includes(token) ? 1 : 0), 0);
 }
 
 async function fetchKakaoByKeyword(query: string, apiKey: string): Promise<KakaoPlace[]> {
@@ -192,20 +207,21 @@ async function summarizeWithGemini(regionLabel: string, items: RestaurantItem[])
     address: item.address,
     phone: item.phone,
     mapUrl: item.mapUrl,
+    sourceQuery: item.sourceQuery || '',
+    scenarioHint: item.scenarioHint || '',
+    vibeHint: item.vibeHint || '',
+    cuisineHint: item.cuisineHint || '',
   }));
 
   const prompt = [
-    '당신은 30대 생활정보 에디터입니다.',
-    '아래 JSON 배열의 각 맛집에 대해 문제 해결형 서사 요약을 작성해주세요.',
-    'mapUrl(place_url) 문맥을 참고해 리뷰 톤앤매너를 추론하되, 확인 불가 사실을 단정하지 마세요.',
-    '반드시 "무엇을 먹을지/어디 갈지 고민" 같은 문제 제기를 한 문장 포함하세요.',
-    '다음 문장에는 조사/검토 맥락(검색 상위 노출, 재방문 언급, 동선 장점 등)을 자연스럽게 포함하세요.',
-    '문체 규칙:',
-    '1) 반드시 친절한 경어체(~해요/~입니다)만 사용',
-    '2) 항목당 2~3문장',
-    '3) 2문장마다 줄바꿈(\\n\\n) 적용',
-    '4) 과장/허위 금지',
-    '5) 반드시 JSON 배열만 반환',
+    '당신은 2030 독자를 위한 라이프스타일 큐레이터입니다.',
+    '아래 JSON 배열의 각 맛집에 대해 카드형 요약을 작성해주세요.',
+    '중요: 제공된 sourceQuery, scenarioHint, vibeHint, cuisineHint를 참고하되, 입력 데이터로 확인되지 않는 사실은 절대 단정하지 마세요.',
+    '문체 방향: 너무 교과서적이지 않게, 실제로 저장해둘 만한 곳처럼 짧고 리듬감 있게 작성해주세요.',
+    '각 항목은 2문장으로 작성하고, 2문장 사이에 반드시 줄바꿈(\\n\\n)을 넣어주세요.',
+    '첫 문장은 어떤 상황에서 보기 좋은지, 두 번째 문장은 분위기/동선/메뉴 결을 자연스럽게 정리해주세요.',
+    '금지: "방문해보셔도 좋아요", "만족도가 높습니다", "추천합니다"처럼 뻔한 마무리.',
+    '반드시 JSON 배열만 반환하세요.',
     '반환 스키마: [{"id":"...","summary":"..."}]',
     `지역: ${regionLabel}`,
     '입력 데이터:',
@@ -262,7 +278,7 @@ async function summarizeWithGemini(regionLabel: string, items: RestaurantItem[])
   return map;
 }
 
-function toRestaurantItem(place: KakaoPlace): RestaurantItem {
+function toRestaurantItem(place: KakaoPlace, meta: RegionQueryMeta): RestaurantItem {
   const address = (place.road_address_name || place.address_name || '').trim();
   return {
     id: String(place.id),
@@ -271,6 +287,10 @@ function toRestaurantItem(place: KakaoPlace): RestaurantItem {
     phone: (place.phone || '').trim() || '전화번호 정보 없음',
     mapUrl: place.place_url || 'https://map.kakao.com/',
     summary: '',
+    sourceQuery: meta.query,
+    scenarioHint: meta.scenarioHint,
+    vibeHint: meta.vibeHint,
+    cuisineHint: meta.cuisineHint,
   };
 }
 
@@ -295,18 +315,29 @@ async function loadRestaurantsByRegion(region: LifeRegionTab): Promise<Restauran
 
   try {
     const queries = REGION_QUERY_MAP[region];
-    const results = await Promise.all(queries.map((query) => fetchKakaoByKeyword(query, kakaoKey)));
+    const results = await Promise.all(
+      queries.map(async (meta) => ({
+        meta,
+        places: await fetchKakaoByKeyword(meta.query, kakaoKey),
+      }))
+    );
 
     const deduped = new Map<string, RestaurantItem>();
-    for (const row of results.flat()) {
-      if (!row.id) continue;
-      if (!deduped.has(row.id)) {
-        deduped.set(row.id, toRestaurantItem(row));
+    for (const { meta, places } of results) {
+      for (const row of places) {
+        if (!row.id) continue;
+        const nextItem = toRestaurantItem(row, meta);
+        const currentItem = deduped.get(row.id);
+        if (!currentItem || getTrendScore(nextItem) > getTrendScore(currentItem)) {
+          deduped.set(row.id, nextItem);
+        }
       }
-      if (deduped.size >= MAX_ITEMS_PER_REGION) break;
     }
 
-    const items = Array.from(deduped.values());
+    const items = Array.from(deduped.values())
+      .sort((a, b) => getTrendScore(b) - getTrendScore(a))
+      .slice(0, MAX_ITEMS_PER_REGION);
+
     if (items.length === 0) {
       return REGION_FALLBACK[region];
     }

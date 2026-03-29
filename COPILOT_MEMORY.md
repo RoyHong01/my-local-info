@@ -26,6 +26,17 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
+## 최근 중요 반영 사항 (2026-03-29 추가-3)
+
+- **맛집 자동화 2차 톤 리프레시**:
+  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 취향 핫플 검색어 세트 중심으로 재구성
+  - snapshot 데이터에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 저장 + trend score 정렬 적용
+  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 저장형 핫플 큐레이션 톤으로 전환하고 `FORCE_RESTAURANT_SOURCE_IDS` 재생성 스위치 추가
+  - 초기 저품질 맛집 포스트 2건 삭제 후 신규 2건 발행:
+    - `2026-03-29-인천-젠젠-본점.md`
+    - `2026-03-29-서울-미테이블-성수본점.md`
+  - 검증: `npm run collect:life-restaurants` 성공, `npm run build` 성공
+
 ## 최근 중요 반영 사항 (2026-03-29 추가)
 
 - **일상의 즐거움 맛집 자동화 1차 구축**:

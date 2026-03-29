@@ -4,6 +4,12 @@ import matter from 'gray-matter';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '2');
+const FORCE_RESTAURANT_SOURCE_IDS = new Set(
+  String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+);
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
 
@@ -148,6 +154,12 @@ async function getExistingRestaurantSourceIds() {
     if (parsed.data.category !== '픽앤조이 맛집 탐방') continue;
     const sourceId = String(parsed.data.source_id || parsed.data.sourceId || '').trim();
     if (sourceId) ids.add(sourceId);
+
+    if (sourceId && FORCE_RESTAURANT_SOURCE_IDS.has(sourceId)) {
+      await fs.unlink(fullPath);
+      ids.delete(sourceId);
+      console.log(`♻️ 기존 맛집 포스트 재생성 준비: ${file} (${sourceId})`);
+    }
   }
 
   return ids;
@@ -185,7 +197,7 @@ async function generateRestaurantPost(candidate) {
   const slugBase = `${today}-${slugKeyword}`;
   const defaultImage = '/images/default-og.svg';
 
-  const prompt = `아래 맛집 데이터를 바탕으로 'AI 티 나지 않는 고품격 맛집 블로그 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 문제 상황 + 왜 이곳을 보게 됐는지 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. API 데이터 요약 + 에디터가 직접 분석한 팁 1개를 자연스럽게 포함한 검색용 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, 로컬맛집, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"\n---\n\n[맛집 카테고리 전용 생성 규칙]\n- 제목은 '지역 + 상황 + 보상' 구조로 작성해.\n- 연도/숫자/TOP/베스트/총정리/완전정복 같은 나열형 제목은 금지.\n- 예: \"송도에서 메뉴 고민 길어질 때, 결국 여기로 정하면 마음이 편해져요\"\n- slug는 이미 정해져 있으니 바꾸지 말고, 제목과 description에서 지역명/상호명이 자연스럽게 드러나게 작성해.\n- 첫 단락은 반드시 '뭐 먹을지/어디 갈지 고민' 같은 페인 포인트로 시작해.\n- 첫 번째 섹션 제목(##)은 감정적 의문문 또는 도발적 문장으로 시작해. 예: \"## 왜 이곳만 저장해두게 될까요?\"\n- 본문 구조는 [공감 → 발견 근거 → 디테일 → 가기 전 팁] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 모바일 가독성 좋게. 2문장마다 반드시 줄바꿈.\n- 경어체(~해요/~입니다/~네요)만 사용. 평어체(~이다/~한다) 금지.\n- 금지어: 추천합니다, 최고의 선택, 다양한 메뉴, 방문해보세요, 무조건, 인생맛집 TOP, 총정리.\n- 리뷰/카카오맵 톤을 참고한 것처럼 쓰되, 입력 데이터에 없는 사실은 단정하지 마.\n- 메뉴명, 맛, 인테리어, 주차, 웨이팅, 예약 팁은 입력 데이터로 확인되거나 상호명에서 합리적으로 추론 가능한 범위만 언급해.\n- 모르면 '확인 필요' 또는 조심스럽게 표현해. 절대 지어내지 마.\n- 과장 광고 문구 금지. 대신 생활형 참견 한 줄은 1개 이상 넣어.\n  예: '이럴 땐 후보에서 제일 먼저 남겨두게 되더라고요.'\n- 본문 끝에는 작가의 개인적인 여운 한 줄로 마무리해.\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${slugBase} 형식으로 출력\n`;
+  const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. 지역명/상호명/상황 키워드가 자연스럽게 들어간 검색용 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"\n---\n\n[핫플 맛집 생성 규칙]\n- 페르소나는 '힙한 핫플을 너무 과장 없이 골라주는 30대 초반 에디터'예요.\n- 글은 교과서 설명처럼 쓰지 말고, 친구에게 '여긴 저장해둬도 되겠다'라고 말해주는 톤으로 써줘.\n- 제목은 '지역 + 상황 + 왜 여기 체크하는지' 흐름으로, 너무 길지 않게 써줘.\n- 연도/숫자/TOP/베스트/총정리/완전정복/맛집 추천 리스트 같은 제목은 금지.\n- slug는 이미 정해져 있으니 바꾸지 마.\n- 첫 단락은 반드시 '뭐 먹지'보다 '오늘 약속 분위기 어디로 잡지' 같은 현실 고민에서 시작해줘.\n- 첫 훅은 너무 모범답안 같지 않게, 감정적으로 툭 던지는 문장이어야 해.\n- 본문 구조는 [공감되는 상황 → 왜 후보에 남는지 → 공간/동선/메뉴 결 → 가기 전 체크포인트] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 템포 있게. 2문장마다 반드시 줄바꿈.\n- 경어체(~해요/~네요/~입니다)만 사용. 평어체(~이다/~한다) 금지.\n- 반드시 아래 입력값을 자연스럽게 활용해줘: sourceQuery, scenarioHint, vibeHint, cuisineHint.\n- 입력 데이터로 확인되지 않는 메뉴 세부, 웨이팅 시간, 인테리어 디테일, 대표 메뉴, 주차 가능 여부는 절대 단정하지 마.\n- 모르면 '확인 필요', '이럴 가능성이 있어 보여요', '이런 결을 기대하게 돼요'처럼 안전하게 써줘.\n- 금지어: 추천합니다, 방문해보세요, 만족도가 높습니다, 다양한 메뉴, 최고의 선택, 무조건, 찐으로, 인생맛집 TOP, 총정리.\n- 생활형 참견 한 줄을 2개 이상 넣어줘. 예: '이럴 땐 1차 후보에서 안 빼게 되더라고요.'\n- 센서리 표현은 가능하지만, 입력 데이터로 확인 가능한 범위를 넘어서 구체적 맛/향/음악/인테리어를 지어내면 안 돼.\n- 마지막 문장은 광고 카피처럼 끝내지 말고, 에디터의 개인적인 여운 한 줄로 마무리해줘.\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${slugBase} 형식으로 출력\n`;
 
   let generatedText = '';
   let lastFinishReason = '';
@@ -257,7 +269,14 @@ async function run() {
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
 
   const candidates = rawCandidates
-    .filter(({ item }) => item?.id && item?.name && !existingIds.has(String(item.id)))
+    .filter(({ item }) => item?.id && item?.name)
+    .filter(({ item }) => {
+      const sourceId = String(item.id);
+      if (FORCE_RESTAURANT_SOURCE_IDS.size > 0) {
+        return FORCE_RESTAURANT_SOURCE_IDS.has(sourceId);
+      }
+      return !existingIds.has(sourceId);
+    })
     .map(({ region, item }) => ({
       region,
       regionLabel: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',

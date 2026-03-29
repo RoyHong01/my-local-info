@@ -154,6 +154,15 @@ src/app/life/restaurant/data/
   - `.github/workflows/deploy.yml`에 맛집 수집/포스트 생성 스텝 추가
   - `src/app/blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 추가 (별점/리뷰수는 검증 가능한 값이 있을 때만 삽입)
 
+- **맛집 자동화 2차 톤 리프레시**:
+  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 핫플형 검색어 세트로 재구성
+    - 예: 송도 브런치 카페 / 성수동 팝업 근처 맛집 / 연남동 내추럴 와인바 / 망원동 에스프레소 바
+  - 검색 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터를 함께 저장하고 trend score로 우선순위 정렬
+  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 교과서형 설명 대신 "저장해둘 만한 핫플 큐레이션" 톤으로 재작성
+  - `FORCE_RESTAURANT_SOURCE_IDS` 환경변수로 특정 source_id 포스트 재생성 가능
+  - 저품질 초기 맛집 포스트 2건 제거 후 신규 2건 발행:
+    - `2026-03-29-인천-젠젠-본점.md`
+    - `2026-03-29-서울-미테이블-성수본점.md`
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
   - `2026-03-29-jindo-canolaflower-festival.md`
