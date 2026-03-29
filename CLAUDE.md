@@ -131,17 +131,18 @@ public/
 - 2026-03-28: 인천 봄꽃 축제 중복 제거(1편 삭제), 유지본 제목·이미지·source_id 수정
 - 2026-03-28: 블로그 썸네일 TourAPI 실제 이미지로 교체 (진해/여의도/경포/구례/광안리)
 
-## 쿠팡 파트너스 배너 현황 (2026-03-28)
+## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775
 - 사이드바: id 976088, 240x600, `CoupangBanner`
   - src: `https://ads-partners.coupang.com/widgets.html?id=976088&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
 - 하단: id 976089, 680x300, `CoupangBottomBanner`
   - src: `https://ads-partners.coupang.com/widgets.html?id=976089&template=carousel&trackingCode=AF5831775&subId=&width=680&height=300&tsource=`
-- 구현 방식: **파트너스 공식 iframe URL 직접 사용** (same-origin HTML 중첩 iframe 방식 제거)
+- 구현 방식: **파트너스 공식 iframe URL 직접 사용** (사이드바·하단 모두 통일, Cowork 협업으로 최종 해결)
   - `referrerPolicy="unsafe-url"` 필수 (트래킹 정상 동작)
   - `bannerId` prop은 인터페이스 호환용으로만 유지 (실제 미사용)
   - `public/coupang-sidebar.html`, `public/coupang-bottom.html` — 더 이상 사용 안 함 (삭제 가능)
 - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
+- 해결 과정: useEffect+g.js → script afterInteractive → same-origin iframe → **직접 iframe URL** (최종 해결)
 - 공정위 문구: 전 페이지 footer에 추가 완료
 
 ## 다음 작업 예정
