@@ -7,6 +7,27 @@ const POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '2');
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
 
+function slugifyKorean(value) {
+  return String(value || '')
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}\s-]/gu, ' ')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .toLowerCase();
+}
+
+function inferLocality(address, regionLabel) {
+  const text = String(address || '').trim();
+  if (text.startsWith('인천')) return '인천';
+  if (text.startsWith('서울')) return '서울';
+  if (text.startsWith('경기')) return '경기';
+  if (text.startsWith('부천')) return '경기';
+  if (text.startsWith('김포')) return '경기';
+  if (text.startsWith('수원')) return '경기';
+  return regionLabel.includes('인천') ? '인천' : '서울/경기';
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -159,10 +180,12 @@ function buildRoundRobinCandidates(regions) {
 
 async function generateRestaurantPost(candidate) {
   const today = new Date().toISOString().split('T')[0];
-  const slugBase = `${today}-restaurant-${candidate.item.id}`;
+  const locality = inferLocality(candidate.item.address, candidate.regionLabel);
+  const slugKeyword = slugifyKorean(`${locality} ${candidate.item.name}`) || `restaurant-${candidate.item.id}`;
+  const slugBase = `${today}-${slugKeyword}`;
   const defaultImage = '/images/default-og.svg';
 
-  const prompt = `아래 맛집 데이터를 바탕으로 'AI 티 나지 않는 고품격 맛집 블로그 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 문제 상황 + 왜 이곳을 보게 됐는지 + 기대 포인트를 자연스럽게 담기)\ndescription: (summary와 동일)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, 로컬맛집, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\n---\n\n[맛집 카테고리 전용 생성 규칙]\n- 제목은 '지역 + 상황 + 보상' 구조로 작성해.\n- 연도/숫자/TOP/베스트/총정리/완전정복 같은 나열형 제목은 금지.\n- 예: \"송도에서 메뉴 고민 길어질 때, 결국 여기로 정하면 마음이 편해져요\"\n- 첫 단락은 반드시 '뭐 먹을지/어디 갈지 고민' 같은 페인 포인트로 시작해.\n- 본문 구조는 [공감 → 발견 근거 → 디테일 → 가기 전 팁] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 모바일 가독성 좋게. 2문장마다 반드시 줄바꿈.\n- 경어체(~해요/~입니다/~네요)만 사용. 평어체(~이다/~한다) 금지.\n- 금지어: 추천합니다, 최고의 선택, 다양한 메뉴, 방문해보세요, 무조건, 인생맛집 TOP, 총정리.\n- 리뷰/카카오맵 톤을 참고한 것처럼 쓰되, 입력 데이터에 없는 사실은 단정하지 마.\n- 메뉴명, 맛, 인테리어, 주차, 웨이팅, 예약 팁은 입력 데이터로 확인되거나 상호명에서 합리적으로 추론 가능한 범위만 언급해.\n- 모르면 '확인 필요' 또는 조심스럽게 표현해. 절대 지어내지 마.\n- 과장 광고 문구 금지. 대신 생활형 참견 한 줄은 1개 이상 넣어.\n  예: '이럴 땐 후보에서 제일 먼저 남겨두게 되더라고요.'\n- 본문 끝에는 작가의 개인적인 여운 한 줄로 마무리해.\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${slugBase} 형식으로 출력\n`;
+  const prompt = `아래 맛집 데이터를 바탕으로 'AI 티 나지 않는 고품격 맛집 블로그 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 문제 상황 + 왜 이곳을 보게 됐는지 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. API 데이터 요약 + 에디터가 직접 분석한 팁 1개를 자연스럽게 포함한 검색용 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, 로컬맛집, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"\n---\n\n[맛집 카테고리 전용 생성 규칙]\n- 제목은 '지역 + 상황 + 보상' 구조로 작성해.\n- 연도/숫자/TOP/베스트/총정리/완전정복 같은 나열형 제목은 금지.\n- 예: \"송도에서 메뉴 고민 길어질 때, 결국 여기로 정하면 마음이 편해져요\"\n- slug는 이미 정해져 있으니 바꾸지 말고, 제목과 description에서 지역명/상호명이 자연스럽게 드러나게 작성해.\n- 첫 단락은 반드시 '뭐 먹을지/어디 갈지 고민' 같은 페인 포인트로 시작해.\n- 첫 번째 섹션 제목(##)은 감정적 의문문 또는 도발적 문장으로 시작해. 예: \"## 왜 이곳만 저장해두게 될까요?\"\n- 본문 구조는 [공감 → 발견 근거 → 디테일 → 가기 전 팁] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 모바일 가독성 좋게. 2문장마다 반드시 줄바꿈.\n- 경어체(~해요/~입니다/~네요)만 사용. 평어체(~이다/~한다) 금지.\n- 금지어: 추천합니다, 최고의 선택, 다양한 메뉴, 방문해보세요, 무조건, 인생맛집 TOP, 총정리.\n- 리뷰/카카오맵 톤을 참고한 것처럼 쓰되, 입력 데이터에 없는 사실은 단정하지 마.\n- 메뉴명, 맛, 인테리어, 주차, 웨이팅, 예약 팁은 입력 데이터로 확인되거나 상호명에서 합리적으로 추론 가능한 범위만 언급해.\n- 모르면 '확인 필요' 또는 조심스럽게 표현해. 절대 지어내지 마.\n- 과장 광고 문구 금지. 대신 생활형 참견 한 줄은 1개 이상 넣어.\n  예: '이럴 땐 후보에서 제일 먼저 남겨두게 되더라고요.'\n- 본문 끝에는 작가의 개인적인 여운 한 줄로 마무리해.\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄은 반드시 ## 훅 소제목\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${slugBase} 형식으로 출력\n`;
 
   let generatedText = '';
   let lastFinishReason = '';
@@ -207,6 +230,12 @@ async function generateRestaurantPost(candidate) {
       return `${prefix}"${value.replace(/"/g, '\\"')}"`;
     }
     return match;
+  });
+
+  finalContent = finalContent.replace(/^(description:\s*)(.+)$/m, (match, prefix, value) => {
+    const clean = String(value || '').replace(/^"|"$/g, '').trim();
+    const shortened = clean.length > 160 ? `${clean.slice(0, 157).trimEnd()}...` : clean;
+    return `${prefix}"${shortened.replace(/"/g, '\\"')}"`;
   });
 
   finalContent = postProcessRestaurantMarkdown(finalContent, {

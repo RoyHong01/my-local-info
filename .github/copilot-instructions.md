@@ -156,9 +156,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - **일상의 즐거움 맛집 자동화 추가**:
   - `collect-life-restaurants.mjs`: 카카오 로컬 API 정확도순 + 찐맛집/현지인/줄서는 식당 키워드로 지역별 15개 맛집 스냅샷 생성
-  - `generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 생성 (문제 해결형 서사, 과장/환각 방지 규칙 포함)
+  - `generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 생성 (문제 해결형 서사, SEO용 slug/description/frontmatter, 과장/환각 방지 규칙 포함)
   - `/life` 페이지 맛집 탭은 생성 포스트 우선, 없으면 카카오맵 카드 fallback
   - `deploy.yml`에 맛집 수집/포스트 생성 스케줄 단계 추가
+  - `blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 적용
 
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`

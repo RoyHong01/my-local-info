@@ -149,9 +149,10 @@ src/app/life/restaurant/data/
 - **일상의 즐거움 맛집 자동화 파이프라인 추가**:
   - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 기반 수집으로 고도화, 지역당 15개 상한, Gemini 문제해결형 서사 요약 반영
   - `scripts/collect-life-restaurants.mjs`: 카카오 API + Gemini로 맛집 스냅샷 생성 → `src/app/life/restaurant/data/restaurants.json` 저장
-  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 생성 (지역+상황+보상 제목, 페인포인트→발견→디테일→팁 구조)
+  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 생성 (지역+상황+보상 제목, SEO용 slug/description/frontmatter, 페인포인트→발견→디테일→팁 구조)
   - `/life` 페이지는 생성된 맛집 포스트가 있으면 우선 노출, 없으면 카카오맵 직접 링크 카드로 fallback
   - `.github/workflows/deploy.yml`에 맛집 수집/포스트 생성 스텝 추가
+  - `src/app/blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 추가 (별점/리뷰수는 검증 가능한 값이 있을 때만 삽입)
 
 - **실제 전국 축제·여행 포스트 2편 발행 완료**:
   - `2026-03-29-gangjin-jeollabyeongseong-festival.md`

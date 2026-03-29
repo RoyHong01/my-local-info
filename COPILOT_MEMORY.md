@@ -31,9 +31,10 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - **일상의 즐거움 맛집 자동화 1차 구축**:
   - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 + 정확도순으로 지역별 최대 15개 수집
   - `scripts/collect-life-restaurants.mjs`: 맛집 스냅샷 JSON 생성
-  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 자동 생성
+  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 자동 생성 + SEO용 slug/description/frontmatter 강화
   - `/life` 탭은 생성된 맛집 포스트 우선 노출, 없으면 카카오맵 카드 fallback
   - `.github/workflows/deploy.yml`에 수집/포스트 생성 스텝 추가
+  - `src/app/blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 추가
   - 검증: `npm run build` 성공, 커밋/푸시 `4509056`
 
 - **쿠팡 사이드바 배너 ID 교체 및 버그 수정**:

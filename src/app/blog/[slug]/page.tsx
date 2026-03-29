@@ -39,8 +39,103 @@ function buildMetaDescription(content: string): string {
   return firstSentence.length > 160 ? `${firstSentence.slice(0, 157).trimEnd()}...` : firstSentence;
 }
 
+function extractRestaurantDetails(post: ReturnType<typeof getPostData>) {
+  if (!post) return null;
+
+  const content = post.content || '';
+  const linkedNameMatch = content.match(/-\s+\*\*상호명\*\*:\s+\[([^\]]+)\]\(([^)]+)\)/);
+  const addressMatch = content.match(/-\s+\*\*주소\*\*:\s+(.+)/);
+  const phoneMatch = content.match(/-\s+\*\*전화번호\*\*:\s+(.+)/);
+  const parkingMatch = content.match(/-\s+\*\*주차\*\*:\s+(.+)/);
+
+  const name = post.placeName || linkedNameMatch?.[1]?.trim() || post.title;
+  const url = post.placeUrl || linkedNameMatch?.[2]?.trim() || `https://pick-n-joy.com/blog/${post.slug}/`;
+  const streetAddress = post.placeAddress || addressMatch?.[1]?.trim() || '';
+  const telephone = post.placePhone || phoneMatch?.[1]?.trim() || '';
+  const parkingInfo = post.parkingInfo || parkingMatch?.[1]?.trim() || '';
+  const addressLocality = post.placeLocality
+    || (streetAddress.startsWith('인천') ? '인천' : streetAddress.startsWith('서울') ? '서울' : streetAddress.startsWith('경기') ? '경기' : '');
+  const addressRegion = post.placeRegion || 'KR';
+
+  return {
+    name,
+    url,
+    streetAddress,
+    telephone,
+    parkingInfo,
+    addressLocality,
+    addressRegion,
+    ratingValue: post.ratingValue || '',
+    reviewCount: post.reviewCount || '',
+    priceRange: post.priceRange || '',
+    openingHours: post.openingHours || '',
+  };
+}
+
+function buildRestaurantJsonLd(post: NonNullable<ReturnType<typeof getPostData>>) {
+  const details = extractRestaurantDetails(post);
+  if (!details) return null;
+
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Restaurant',
+    name: details.name,
+    url: `https://pick-n-joy.com/blog/${post.slug}/`,
+    telephone: details.telephone || undefined,
+    servesCuisine: 'Korean',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: details.streetAddress || undefined,
+      addressLocality: details.addressLocality || undefined,
+      addressRegion: details.addressRegion,
+      addressCountry: 'KR',
+    },
+    image: post.image ? [post.image] : undefined,
+    priceRange: details.priceRange || undefined,
+    openingHours: details.openingHours || undefined,
+    sameAs: details.url !== `https://pick-n-joy.com/blog/${post.slug}/` ? [details.url] : undefined,
+  };
+
+  if (details.ratingValue && details.reviewCount) {
+    jsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: details.ratingValue,
+      reviewCount: details.reviewCount,
+    };
+  }
+
+  return jsonLd;
+}
+
+function buildProductJsonLd(post: NonNullable<ReturnType<typeof getPostData>>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: post.title,
+    description: post.description || post.summary,
+    image: post.image ? [post.image] : undefined,
+    category: post.category || '픽앤조이 초이스',
+    brand: {
+      '@type': 'Brand',
+      name: '픽앤조이',
+    },
+    url: `https://pick-n-joy.com/blog/${post.slug}/`,
+  };
+}
+
 function classifyPostForSeo(post: { title: string; category?: string; tags?: string[] }) {
   const source = [post.title, post.category || '', ...(post.tags || [])].join(' ');
+
+  if (/픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test(source)) {
+    return {
+      articleSection: '상품 리뷰',
+      about: [
+        { '@type': 'Thing', name: '상품 리뷰' },
+        { '@type': 'Thing', name: '쇼핑 정보' },
+      ],
+      additionalType: 'https://schema.org/Product',
+    };
+  }
 
   if (/맛집|restaurant|food|카페|먹거리/i.test(source)) {
     return {
@@ -190,12 +285,29 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
   };
 
+  const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
+  const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
+  const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
+  const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
       />
+      {restaurantJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantJsonLd) }}
+        />
+      )}
+      {productJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        />
+      )}
       <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-12">

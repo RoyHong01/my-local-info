@@ -19,9 +19,13 @@
   - 제목 규칙: 지역 + 상황 + 보상
   - 본문 규칙: 페인 포인트 → 발견 → 디테일 → 팁
   - 주차/웨이팅/인테리어 등 확인 불가 정보는 단정 금지, 필요 시 `확인 필요` 사용
+  - SEO용 slug/description/frontmatter(place_name, place_address, place_url 등) 추가
 - `src/app/life/page.tsx`:
   - 생성된 맛집 포스트가 있으면 맛집 탭에서 우선 노출
   - 아직 포스트가 없을 때만 카카오맵 외부 링크 카드 fallback
+- `src/app/blog/[slug]/page.tsx`:
+  - 맛집 포스트는 `Restaurant` JSON-LD, 초이스 포스트는 `Product` JSON-LD 출력
+  - 검증 가능한 별점/리뷰수 없으면 `aggregateRating`는 생략해 구조화 데이터 신뢰도 유지
 - `.github/workflows/deploy.yml`:
   - 스케줄 시 맛집 스냅샷 수집 후 맛집 포스트 생성 단계 추가
 - 검증:

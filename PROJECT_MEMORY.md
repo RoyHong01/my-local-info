@@ -26,6 +26,7 @@
   - `scripts/generate-life-restaurant-posts.mjs` 신규: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 자동 생성
   - `/life` 페이지는 생성된 맛집 포스트를 우선 노출하고, 없으면 카카오맵 카드로 fallback
   - `.github/workflows/deploy.yml`에 맛집 수집 및 포스트 생성 스텝 추가
+  - 맛집 포스트 slug/description/frontmatter를 SEO 친화적으로 강화하고, `blog/[slug]`에 맛집 `Restaurant`/초이스 `Product` JSON-LD 추가
 - **검증/반영**:
   - `npm run build` 성공
   - 커밋/푸시: `4509056` (`main`)

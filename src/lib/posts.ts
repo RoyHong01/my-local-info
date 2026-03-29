@@ -14,6 +14,17 @@ export interface PostData {
   tags?: string[];
   image?: string;
   sourceId?: string;
+  placeName?: string;
+  placeAddress?: string;
+  placeLocality?: string;
+  placeRegion?: string;
+  placePhone?: string;
+  placeUrl?: string;
+  parkingInfo?: string;
+  ratingValue?: string;
+  reviewCount?: string;
+  priceRange?: string;
+  openingHours?: string;
   content: string;
 }
 
@@ -182,6 +193,17 @@ export function getSortedPostsData(): PostData[] {
         tags: matterResult.data.tags,
         image: matterResult.data.image,
         sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+        placeName: matterResult.data.place_name || matterResult.data.placeName || '',
+        placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
+        placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
+        placeRegion: matterResult.data.place_region || matterResult.data.placeRegion || '',
+        placePhone: matterResult.data.place_phone || matterResult.data.placePhone || '',
+        placeUrl: matterResult.data.place_url || matterResult.data.placeUrl || '',
+        parkingInfo: matterResult.data.parking_info || matterResult.data.parkingInfo || '',
+        ratingValue: matterResult.data.rating_value || matterResult.data.ratingValue || '',
+        reviewCount: matterResult.data.review_count || matterResult.data.reviewCount || '',
+        priceRange: matterResult.data.price_range || matterResult.data.priceRange || '',
+        openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
         content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
       };
     });
@@ -221,6 +243,17 @@ export function getPostData(slug: string): PostData | null {
       tags: matterResult.data.tags,
       image: matterResult.data.image,
       sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+      placeName: matterResult.data.place_name || matterResult.data.placeName || '',
+      placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
+      placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
+      placeRegion: matterResult.data.place_region || matterResult.data.placeRegion || '',
+      placePhone: matterResult.data.place_phone || matterResult.data.placePhone || '',
+      placeUrl: matterResult.data.place_url || matterResult.data.placeUrl || '',
+      parkingInfo: matterResult.data.parking_info || matterResult.data.parkingInfo || '',
+      ratingValue: matterResult.data.rating_value || matterResult.data.ratingValue || '',
+      reviewCount: matterResult.data.review_count || matterResult.data.reviewCount || '',
+      priceRange: matterResult.data.price_range || matterResult.data.priceRange || '',
+      openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
       content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
     };
   } catch (e) {
