@@ -3,12 +3,9 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const MIN_POSTS_PER_RUN = 3;
-const MAX_POSTS_PER_RUN = 5;
-const POSTS_PER_RUN = Math.max(
-  MIN_POSTS_PER_RUN,
-  Math.min(MAX_POSTS_PER_RUN, Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3'))
-);
+const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '6');
+const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '2');
+const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi-other'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
     .split(',')
@@ -89,6 +86,48 @@ function inferLocality(address, regionLabel) {
   if (text.startsWith('김포')) return '경기';
   if (text.startsWith('수원')) return '경기';
   return regionLabel.includes('인천') ? '인천' : '서울/경기';
+}
+
+function classifyRegionBucket(item) {
+  const source = [item?.address || '', item?.sourceQuery || '', item?.name || ''].join(' ');
+
+  if (/서울/.test(source)) return 'seoul';
+  if (/인천/.test(source)) return 'incheon';
+
+  if (/경기|수원|성남|용인|고양|안양|화성|하남|의왕|의정부|광명|군포|파주|남양주|김포|부천|판교|분당|광교|동탄/.test(source)) {
+    return 'gyeonggi-other';
+  }
+
+  // 기본값: 서울/인천이 아닌 수도권 후보는 경기기타로 분류
+  return 'gyeonggi-other';
+}
+
+function toAreaTag(bucket) {
+  if (bucket === 'seoul') return '서울';
+  if (bucket === 'incheon') return '인천';
+  return '경기(기타)';
+}
+
+function selectCandidatesByBucket(candidates) {
+  const buckets = new Map(TARGET_BUCKETS.map((bucket) => [bucket, []]));
+
+  for (const candidate of candidates) {
+    const bucket = classifyRegionBucket(candidate.item);
+    if (!buckets.has(bucket)) buckets.set(bucket, []);
+    buckets.get(bucket).push({ ...candidate, regionBucket: bucket, areaTag: toAreaTag(bucket) });
+  }
+
+  const selected = [];
+  for (const bucket of TARGET_BUCKETS) {
+    const list = buckets.get(bucket) || [];
+    const picked = list.slice(0, TARGET_POSTS_PER_BUCKET);
+    if (picked.length < TARGET_POSTS_PER_BUCKET) {
+      console.warn(`⚠️ ${bucket} 버킷 후보 부족: ${picked.length}/${TARGET_POSTS_PER_BUCKET}`);
+    }
+    selected.push(...picked);
+  }
+
+  return selected.slice(0, TARGET_POSTS_PER_RUN);
 }
 
 function sleep(ms) {
@@ -342,21 +381,22 @@ async function run() {
     .map(({ region, item }) => ({
       region,
       regionLabel: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',
-      areaTag: region === 'incheon-gyeongin' ? '송도·부천·김포' : '서울·경기·수원',
+      areaTag: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',
       item,
-    }))
-    .slice(0, POSTS_PER_RUN);
+    }));
 
-  console.log(`🥢 맛집 포스트 생성 후보: ${candidates.length}건 (실행당 ${MIN_POSTS_PER_RUN}~${MAX_POSTS_PER_RUN}건)`);
-  if (candidates.length === 0) {
+  const selectedCandidates = selectCandidatesByBucket(candidates);
+
+  console.log(`🥢 맛집 포스트 생성 후보: ${selectedCandidates.length}건 (목표 ${TARGET_POSTS_PER_RUN}건: 서울/인천/경기기타 각 ${TARGET_POSTS_PER_BUCKET}건)`);
+  if (selectedCandidates.length === 0) {
     console.log('생성할 새 맛집 포스트가 없습니다.');
     return;
   }
 
-  for (let i = 0; i < candidates.length; i++) {
-    const candidate = candidates[i];
+  for (let i = 0; i < selectedCandidates.length; i++) {
+    const candidate = selectedCandidates[i];
     await generateRestaurantPost(candidate);
-    if (i < candidates.length - 1) {
+    if (i < selectedCandidates.length - 1) {
       console.log('  ⏳ 5초 대기 중...');
       await sleep(5000);
     }
