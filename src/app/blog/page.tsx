@@ -42,7 +42,7 @@ export default function BlogPage() {
               <BlogFilter posts={posts} />
             </Suspense>
           </div>
-          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-blog-list" />

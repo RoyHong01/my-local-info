@@ -193,7 +193,7 @@ export default function LifeFilterClient({
             key={value}
             onClick={() => handleTabClick(value)}
             data-testid={`life-filter-${value || 'all'}`}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 hover:-translate-y-1 ${
               activeTab === value || (value === '' && !activeTab)
                 ? 'bg-orange-500 text-white'
                 : 'bg-white text-stone-600 border border-stone-200 hover:border-orange-300'
