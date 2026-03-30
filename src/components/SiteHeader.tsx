@@ -16,7 +16,6 @@ export default function SiteHeader() {
               { label: '전국 축제·여행 정보', href: '/festival' },
               { label: '블로그', href: '/blog' },
               { label: '일상의 즐거움', href: '/life' },
-              { label: '소개', href: '/about' },
             ].map(link => (
               <Link
                 key={link.label}
