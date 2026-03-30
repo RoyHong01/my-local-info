@@ -53,17 +53,75 @@ function looksIncompleteGeminiOutput(text) {
   const value = (text || '').trim();
   if (!value) return true;
 
+  // frontmatter 기본 구조 확인
+  if (!value.startsWith('---\n') || value.indexOf('\n---\n', 4) === -1) return true;
+
   // FILENAME은 누락돼도 fallback으로 생성 가능하므로 필수 조건으로 두지 않음
 
-  // 본문 최소 길이 가드 (모델 출력 특성상 과도한 재시도 방지를 위해 현실적인 하한 사용)
+  // 본문 최소 길이 가드 (짤린 글 방지)
   const withoutFilename = value
     .split('\n')
     .filter((line) => !line.trim().startsWith('FILENAME:'))
     .join('\n')
     .trim();
-  if (withoutFilename.length < 700) return true;
+  if (withoutFilename.length < 1000) return true;
+
+  // 핵심 소제목 개수 확인 (중간 절단 방지)
+  const h3Count = (withoutFilename.match(/^###\s+/gm) || []).length;
+  if (h3Count < 2) return true;
+
+  // 이미지 캡션/이미지 줄에서 끝나면 절단 가능성이 높음
+  const tail = withoutFilename.split('\n').map((line) => line.trim()).filter(Boolean).slice(-2).join('\n');
+  if (/^!\[[^\]]*\]\([^\)]*\)$/.test(tail) || /\*현장 분위기를 미리 느낄 수 있는 대표 이미지예요\.\*/.test(tail)) {
+    return true;
+  }
 
   return false;
+}
+
+function normalizeMatchText(value) {
+  return String(value || '')
+    .normalize('NFC')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]/gu, '');
+}
+
+function extractFrontmatterValue(content, key) {
+  const m = content.match(new RegExp(`^${key}:\\s*(.+)\\s*$`, 'm'));
+  if (!m) return '';
+  return m[1].trim().replace(/^['"]|['"]$/g, '');
+}
+
+function buildSourceSnapshotKey({ title, startDate, endDate, addr1 }) {
+  const t = normalizeMatchText(title);
+  const s = String(startDate || '').trim();
+  const e = String(endDate || '').trim();
+  const a = normalizeMatchText(addr1);
+  if (!t) return '';
+  return `${t}|${s}|${e}|${a}`;
+}
+
+function upsertFrontmatterField(content, key, rawValue) {
+  if (!rawValue) return content;
+  const value = String(rawValue).replace(/"/g, '\\"').trim();
+  if (!value) return content;
+
+  const line = `${key}: "${value}"`;
+  const fieldRegex = new RegExp(`^${key}:.*$`, 'm');
+  if (fieldRegex.test(content)) {
+    return content.replace(fieldRegex, line);
+  }
+
+  if (/^source_id:.*$/m.test(content)) {
+    return content.replace(/^source_id:.*$/m, `$&\n${line}`);
+  }
+  if (/^image:.*$/m.test(content)) {
+    return content.replace(/^image:.*$/m, `$&\n${line}`);
+  }
+  if (/^tags:\s*\[.*\]$/m.test(content)) {
+    return content.replace(/^(tags:\s*\[.*\])$/m, `$1\n${line}`);
+  }
+  return content;
 }
 
 // 카테고리별 우선순위 정렬 함수
@@ -100,12 +158,36 @@ async function getExistingPosts(postsDir) {
   const serviceIds = new Set();
   // source_id가 없는 파일: 파일명 키워드로 부분 매칭
   const filenameKeywords = [];
+  // 기존 포스트 제목 키워드
+  const titleKeys = [];
+  // source snapshot key (title+date+addr)
+  const sourceSnapshotKeys = new Set();
 
   try {
     const files = await fs.readdir(postsDir);
     for (const file of files) {
       if (!file.endsWith('.md')) continue;
       const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
+
+      const titleValue = extractFrontmatterValue(content, 'title');
+      const sourceTitle = extractFrontmatterValue(content, 'source_title');
+      const sourceStartDate = extractFrontmatterValue(content, 'source_start_date');
+      const sourceEndDate = extractFrontmatterValue(content, 'source_end_date');
+      const sourceAddr1 = extractFrontmatterValue(content, 'source_addr1');
+      const sourceSnapshotKey = extractFrontmatterValue(content, 'source_snapshot_key')
+        || buildSourceSnapshotKey({
+          title: sourceTitle || titleValue,
+          startDate: sourceStartDate,
+          endDate: sourceEndDate,
+          addr1: sourceAddr1,
+        });
+
+      if (titleValue) {
+        titleKeys.push(normalizeMatchText(titleValue));
+      }
+      if (sourceSnapshotKey) {
+        sourceSnapshotKeys.add(sourceSnapshotKey);
+      }
 
       // source_id 추출 — 따옴표 제거 후 저장
       const idMatch = content.match(/^source_id:\s*(.+)\s*$/m);
@@ -119,7 +201,7 @@ async function getExistingPosts(postsDir) {
     }
   } catch (_) {}
 
-  return { serviceIds, filenameKeywords };
+  return { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys };
 }
 
 // 30초 대기
@@ -383,6 +465,16 @@ async function generatePost(candidate, postsDir) {
 
   const itemName = candidate['서비스명'] || candidate['title'] || candidate['name'] || '';
   const sourceId = candidate['서비스ID'] || candidate['contentid'] || candidate['id'] || '';
+  const sourceTitle = itemName;
+  const sourceStartDate = candidate['eventstartdate'] || candidate['startDate'] || '';
+  const sourceEndDate = candidate['eventenddate'] || candidate['endDate'] || '';
+  const sourceAddr1 = candidate['addr1'] || candidate['location'] || '';
+  const sourceSnapshotKey = buildSourceSnapshotKey({
+    title: sourceTitle,
+    startDate: sourceStartDate,
+    endDate: sourceEndDate,
+    addr1: sourceAddr1,
+  });
   const today = new Date().toISOString().split('T')[0];
 
   // 전국 축제·여행 전용 스타일 오버라이드
@@ -586,6 +678,12 @@ ${festivalStyleOverride}
     }
   }
 
+  finalContent = upsertFrontmatterField(finalContent, 'source_title', sourceTitle);
+  finalContent = upsertFrontmatterField(finalContent, 'source_start_date', sourceStartDate);
+  finalContent = upsertFrontmatterField(finalContent, 'source_end_date', sourceEndDate);
+  finalContent = upsertFrontmatterField(finalContent, 'source_addr1', sourceAddr1);
+  finalContent = upsertFrontmatterField(finalContent, 'source_snapshot_key', sourceSnapshotKey);
+
   // title 콜론 처리
   finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
     if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {
@@ -636,8 +734,8 @@ async function run() {
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
   await fs.mkdir(postsDir, { recursive: true });
 
-  const { serviceIds, filenameKeywords } = await getExistingPosts(postsDir);
-  console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건`);
+  const { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys } = await getExistingPosts(postsDir);
+  console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건, 제목 키워드 ${titleKeys.length}건, 스냅샷키 ${sourceSnapshotKeys.size}건`);
   const runStartedAt = Date.now();
 
   let totalGenerated = 0;
@@ -664,13 +762,26 @@ async function run() {
     const candidates = validItems.filter(item => {
       const name = item['서비스명'] || item['title'] || item['name'] || '';
       const id = String(item['서비스ID'] || item['contentid'] || item['id'] || '');
+      const startDate = item['eventstartdate'] || item['startDate'] || '';
+      const endDate = item['eventenddate'] || item['endDate'] || '';
+      const addr1 = item['addr1'] || item['location'] || '';
+      const snapshotKey = buildSourceSnapshotKey({ title: name, startDate, endDate, addr1 });
+      const normalizedName = normalizeMatchText(name);
       if (!name) return false;
 
       // 1순위: source_id 정확 매칭
       if (id && serviceIds.has(id)) return false;
 
+      // 1.5순위: 제목+일정+주소 스냅샷 키 매칭
+      if (snapshotKey && sourceSnapshotKeys.has(snapshotKey)) return false;
+
       // 2순위: source_id 없는 기존 파일의 파일명 키워드 부분 매칭
       if (filenameKeywords.some(kw => name.includes(kw) || kw.includes(name.slice(0, 6)))) return false;
+
+      // 3순위: 기존 제목 키워드 정규화 부분 매칭 (수동 포스트 중복 방지)
+      if (normalizedName && titleKeys.some((tk) => tk.length >= 6 && (tk.includes(normalizedName.slice(0, 6)) || normalizedName.includes(tk.slice(0, 6))))) {
+        return false;
+      }
 
       return true;
     });

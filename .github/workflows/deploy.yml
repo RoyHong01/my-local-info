@@ -74,7 +74,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
+          git add public/data scripts/cleanup-expired.js
           if ! git diff-index --quiet HEAD; then
             git commit -m "자동 업데이트(1단계): 공공데이터 동기화 $(date +'%Y-%m-%d')"
             git push
@@ -120,7 +120,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
+          git add src/content/posts
           if ! git diff-index --quiet HEAD; then
             git commit -m "자동 업데이트(2단계): 블로그 3건 생성 $(date +'%Y-%m-%d')"
             git push
@@ -168,7 +168,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
+          git add src/app/life/restaurant/data/restaurants.json src/content/life
           if ! git diff-index --quiet HEAD; then
             git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
             git push
