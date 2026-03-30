@@ -10,6 +10,9 @@ rating_value: "4.8"
 review_count: "1540"
 image: "https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg"
 source_id: "manual-choice-nutridday-lutein-omega3"
+coupang_link: "https://link.coupang.com/a/eekIni"
+coupang_banner_image: "https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg"
+coupang_banner_alt: "뉴트리디데이 프리미엄 루테인 오메가3 골드, 90정, 2개"
 ---
 
 ## 오후 4시, 당신의 눈은 안녕하신가요?

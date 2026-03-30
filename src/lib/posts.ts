@@ -17,6 +17,9 @@ export interface PostData {
   tags?: string[];
   image?: string;
   sourceId?: string;
+  coupangLink?: string;
+  coupangBannerImage?: string;
+  coupangBannerAlt?: string;
   placeName?: string;
   placeAddress?: string;
   placeLocality?: string;
@@ -199,6 +202,9 @@ export function getSortedPostsData(): PostData[] {
         tags: matterResult.data.tags,
         image: matterResult.data.image,
         sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+        coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
+        coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',
+        coupangBannerAlt: matterResult.data.coupang_banner_alt || matterResult.data.coupangBannerAlt || '',
         placeName: matterResult.data.place_name || matterResult.data.placeName || '',
         placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
         placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
@@ -297,6 +303,9 @@ export function getPostData(slug: string): PostData | null {
       tags: matterResult.data.tags,
       image: matterResult.data.image,
       sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+      coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
+      coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',
+      coupangBannerAlt: matterResult.data.coupang_banner_alt || matterResult.data.coupangBannerAlt || '',
       placeName: matterResult.data.place_name || matterResult.data.placeName || '',
       placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
       placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',

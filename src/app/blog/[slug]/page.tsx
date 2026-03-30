@@ -289,7 +289,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
-  const isNutriddayChoicePost = post.slug === 'choice-nutridday-lutein-omega3';
+  const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
 
@@ -380,12 +380,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
-              {isNutriddayChoicePost ? (
+              {hasChoiceSidebarBanner ? (
                 <ProductSidebarBanner
-                  href="https://link.coupang.com/a/eekIni"
-                  imageSrc="https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg"
-                  alt="뉴트리디데이 프리미엄 루테인 오메가3 골드, 90정, 2개"
-                  title="루테인 오메가3 단독 배너"
+                  href={post.coupangLink!}
+                  imageSrc={post.coupangBannerImage!}
+                  alt={post.coupangBannerAlt || post.title}
+                  title="픽앤조이 초이스 단독 배너"
                 />
               ) : (
                 <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
