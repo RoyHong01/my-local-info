@@ -172,10 +172,10 @@ export default async function Home() {
         <header className="absolute top-0 left-0 right-0 z-20 pt-2">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
-              <Link href="/" className="flex items-center">
+              <Link href="/" className="flex items-center ml-10">
                 <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={180} height={60} className="h-14 w-auto drop-shadow-md" priority />
               </Link>
-              <nav className="hidden lg:flex items-center gap-1">
+              <nav className="hidden lg:flex items-center gap-1 mr-10">
                 {[
                   { label: '인천시 정보', href: '/incheon' },
                   { label: '전국 보조금·복지 정책', href: '/subsidy' },
@@ -327,14 +327,14 @@ export default async function Home() {
             {categories.map(cat => (
               <div key={cat.id} id={cat.id} className="space-y-4 scroll-mt-24">
                 {/* Category Header */}
-                <div className={`relative overflow-hidden rounded-2xl shadow-md group`}>
+                <Link href={cat.href} className={`relative overflow-hidden rounded-2xl shadow-md group block hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 cursor-pointer`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient}`} />
                   <div className="relative p-5">
                     <h3 className="text-xl font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] tracking-wide">{cat.title}</h3>
                     <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
                     <p className="text-xs text-white/80 mt-1">{cat.detail}</p>
                   </div>
-                </div>
+                </Link>
 
                 {/* Item Cards */}
                 {cat.items.length === 0 ? (
@@ -394,21 +394,15 @@ export default async function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center">
-              <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={300} height={100} className="h-20 w-auto" />
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-400">
-              <span>데이터 출처: 공공데이터포털 · 한국관광공사</span>
-              <span className="text-gray-700">|</span>
+      <footer className="bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span>데이터 분석 기반 프리미엄 라이프스타일 큐레이션</span>
+              <span className="text-gray-600">|</span>
               <Link href="/about" className="hover:text-orange-400 transition-colors">소개</Link>
             </div>
-            <div className="text-center text-sm text-gray-500 space-y-1">
-              <p>© 2026 픽앤조이. All rights reserved.</p>
-              <p className="text-xs text-gray-600">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-            </div>
+            <p className="text-sm text-gray-400">© 2026 픽앤조이. All rights reserved.</p>
           </div>
         </div>
       </footer>
