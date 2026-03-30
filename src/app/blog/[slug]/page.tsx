@@ -290,7 +290,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
-  const choiceHeroObjectPosition = /lutein|omega3|nutridday/i.test(post.slug) ? '50% 45%' : '50% 43%';
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
 
@@ -331,14 +330,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </header>
           {post.image && !post.image.endsWith('.svg') && (
             isChoicePost ? (
-              <div className="mb-8 flex justify-center">
+              <div className="mb-14 flex justify-center">
                 <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
                   <Image
                     src={post.image}
                     alt={post.title}
                     fill
-                    className="object-cover"
-                    style={{ objectPosition: choiceHeroObjectPosition }}
+                    className="object-contain"
                     sizes="(max-width: 640px) 75vw, 480px"
                     priority
                   />
@@ -364,7 +362,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
           <AdBanner />
           <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-4">
-            <p className={isChoicePost ? 'text-base font-semibold text-stone-700 leading-7' : 'text-sm text-stone-500 leading-6'}>
+            <p className={isChoicePost ? 'text-base font-semibold text-stone-800 leading-7' : 'text-sm text-stone-500 leading-6'}>
               {isRestaurantPost ? (
                 <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
               ) : isChoicePost ? (
