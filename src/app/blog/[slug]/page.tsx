@@ -294,7 +294,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
+    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}

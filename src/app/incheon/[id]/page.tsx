@@ -153,7 +153,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
   const detailMarkdown = getField(item, ['description_markdown']) || generatedMarkdown;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
+    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
       <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-10">

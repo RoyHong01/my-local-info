@@ -24,7 +24,7 @@ export default function BlogPage() {
   const posts = allPosts.filter(p => p.category !== '픽앤조이 초이스');
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
+    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
       <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-10">

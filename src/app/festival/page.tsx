@@ -45,7 +45,7 @@ export default async function FestivalPage() {
   const items = apiItems.length > 0 ? apiItems : activeItems;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-stone-800">
+    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
       <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-10">

@@ -105,6 +105,15 @@ body {
   margin-bottom: 0.25em;
 }
 
+/* ── 벚꽃 배경 ── */
+.bg-cherry-blossom {
+  background-image: url('/images/bg-cherry-blossom.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 /* ── Hero animations ── */
 @keyframes fade-in {
   from { opacity: 0; }
