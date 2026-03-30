@@ -24,6 +24,13 @@
   - nav 우측에 SearchButton 배치, 서버 컴포넌트 구조 유지
 - 커밋: `8c90b5b`
 
+### CTA 버튼 스타일 통일 + 텍스트 축소 + 맛집 제목 1줄 처리
+
+- 보조금 CTA `bg-white text-orange-600` → `bg-white/15 backdrop-blur-sm text-white` (축제/맛집과 동일 글래스 스타일)
+- 3개 CTA 텍스트 `text-lg px-8 py-4` → `text-sm sm:text-base px-6 py-3.5` + `whitespace-nowrap`
+- 맛집 페이지 제목 `text-3xl md:text-4xl` → `text-2xl md:text-3xl` (1줄 표시)
+- 커밋: `aadfb30`
+
 ### 히어로 맛집 CTA 추가 + 상단 여백 축소
 
 - 히어로 CTA 버튼 3번째 추가: `🍽️ 요즘 뜨는 맛집 보러가기` → `/life/restaurant`
