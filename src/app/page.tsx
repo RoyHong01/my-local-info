@@ -173,7 +173,7 @@ export default async function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
               <Link href="/" className="flex items-center">
-                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={120} height={40} className="h-9 w-auto drop-shadow-md" priority />
+                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={360} height={120} className="h-28 w-auto drop-shadow-md" priority />
               </Link>
               <nav className="hidden lg:flex items-center gap-1">
                 {[
@@ -398,7 +398,7 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center">
-              <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={100} height={33} className="h-7 w-auto" />
+              <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={300} height={100} className="h-20 w-auto" />
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <span>데이터 출처: 공공데이터포털 · 한국관광공사</span>
