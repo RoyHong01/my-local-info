@@ -189,3 +189,71 @@
 - [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
 - [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)
 - [ ] 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후 다중 이미지 적용)
+
+## 4. 쿠팡 파트너스 자동화 계획 (Coupang Partners Automation - 선제 준비, 2026-03-30)
+
+### 완료한 기초 작업
+
+- ✅ `src/lib/coupang-partners-config.ts` 생성 및 정책/규칙 데이터화
+  - **COUPANG_PARTNERS_POLICY**: 실적 인정 규칙(24시간 쿠키), 링크 정확성 필수(1글자 오류도 미인정)
+  - **COUPANG_LINK_RULES**: 링크 생성 방식, HTML 템플릿(이미지+텍스트), 삽입 위치 가이드
+  - **COUPANG_AUTO_POST_RULES**: 포스트 구조(제목/훅/문제/솔루션/상품설명/팁/CTA), 톤(감성+실용), 이미지 우선순위, SEO, Frontmatter 필드
+  - **AUTOMATION_READINESS**: 3단계 자동화 준비 상태 (현재 Phase 1 완료)
+  - 유틸리티 함수: `validateCoupangLink()` (URL 유효성 검증), `sanitizeCoupangHtml()` (XSS 방지)
+
+### 핵심 정책 (내재화됨)
+
+1. **실적 인정**: 링크를 통해 접속 후 24시간 내 구매한 모든 상품에 대해 수수료 인정
+2. **링크 정확성**: 절대 변경 금지, 1글자 오류도 실적 미인정 (트래킹 코드 반드시 정확히)
+3. **콘텐츠 형식**: 이미지 + 텍스트 HTML이 텍스트 링크보다 클릭률 높음
+4. **배너/위젯 전략**: 블로그에 항상 노출되는 위젯이 수익 극대화에 가장 유리
+5. **현재 파트너 정보**: AF5831775, 사이드바(976244, 240x600), 하단(976089, 680x300)
+
+### Phase 2: API 준비 (쿠팡 API 발급 후 진행)
+
+- 쿠팡 파트너스에서 API 신청 및 발급 대기
+- 예상 API 엔드포인트:
+  - `POST /api/v1/products/search`: 상품 검색
+  - `GET /api/v1/products/{productId}`: 상품 상세 정보 (이미지, 가격, 설명)
+  - `POST /api/v1/links/generate`: 파트너 링크 생성
+- API 레이트 리밋 및 인증 방식 확인 필요
+
+### Phase 3: 자동화 스크립트 개발 (API 발급 후, 2026-Q2 예정)
+
+- `scripts/collect-coupang-products.mjs`: Coupang API로 오늘의 추천 상품 15~20개 수집 및 `src/data/coupang-products.json` 저장
+  - 필터: 판매량·별점·리뷰수 기반 우선순위
+  - 메타데이터: 상품명, 가격, 이미지 URL, 상세 설명, 파트너 링크
+- `scripts/generate-coupang-posts.mjs`: 수집된 상품을 바탕으로 블로그 포스트 자동 생성
+  - 카테고리: `픽앤조이 초이스` / 서브: `추천 물품`
+  - 포스트 구조: 제목(상황+상품명) / 훅 / 문제 / 솔루션 / 상품상세(HTML) / 팁 / CTA
+  - Frontmatter: title, date, slug(영문), category, productName, productUrl, productImage, rating(선택), price(선택), tags
+  - Gemini API로 생성 (마찬가지로 Gemini 2.5 Pro, MZ 감성 규칙 준용)
+- `.github/workflows/deploy.yml`에 쿠팡 자동화 단계 통합
+  - 스케줄: 매일 07:00 KST 실행 (기존 맛집 자동화와 동시 실행)
+  - 환경변수: COUPANG_API_KEY, COUPANG_PARTNER_ID, COUPANG_PRODUCTS_PER_RUN (예: 3)
+
+### Frontmatter 필드 표준 (Phase 3 참고용)
+
+```yaml
+title: '[상황/감성] + [상품명] 조합'
+date: YYYY-MM-DD
+slug: 'example-slug-in-english'
+category: '픽앤조이 초이스'
+subcategory: '추천 물품'
+productName: '[쿠팡 공식 상품명]'
+productUrl: '[쿠팡 파트너 링크 - AF5831775 포함]'
+productImage: '[쿠팡 공식 이미지 URL 또는 /images/... 경로]'
+rating: 4.5  # 선택, 쿠팡 별점
+price: '₩29,900'  # 선택
+description: '[검색 최적화용 한 줄 요약]'
+keywords: ['픽앤조이 초이스', '[상품 카테고리]', '[상품명]', '[감정/상황 키워드]']
+tags: ['초이스', '추천물품', '생활용품']
+```
+
+### 주의사항 & 체크리스트
+
+- [ ] 쿠팡 API 문서 확인 시 `referrerPolicy="unsafe-url"` 등 iframe 트래킹 요구사항 반영
+- [ ] 개발 단계: .env.local에 COUPANG_API_KEY 추가 (GitHub Secrets에도 등록)
+- [ ] Phase 3 시작 전 `src/lib/coupang-partners-config.ts`의 API 엔드포인트 예상값을 실제 API 문서로 업데이트
+- [ ] 글 생성 시 "이 글의 추천 링크를 통해 구매 시 쿠팡 파트너스 수수료를 받습니다" 공정위 필수 문구 포함
+- [ ] 실적 추적 가능성: 생성된 글의 링크에 파트너 ID(AF5831775) 정확히 포함되었는지 코드 레벨에서 검증
