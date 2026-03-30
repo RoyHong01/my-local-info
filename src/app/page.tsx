@@ -33,15 +33,15 @@ function IncheonCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/incheon/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">인천</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2">{summary}</p>
+        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {org && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
             <span>🏛</span><span>{org}</span>
           </div>
         )}
@@ -57,15 +57,15 @@ function SubsidyCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-600">보조금</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2">{summary}</p>
+        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {target && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
             <span>🎯</span><span>{target}</span>
           </div>
         )}
@@ -81,15 +81,15 @@ function FestivalCard({ item }: { item: DataItem }) {
   const id = getField(item, ['contentid', 'id']);
   return (
     <Link href={`/festival/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-600">축제·여행</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2">{summary}</p>
+        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {location && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
             <span>📍</span><span>{location}</span>
           </div>
         )}
@@ -282,26 +282,26 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
-              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❶</div>
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-0.5">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">복지로, 정부24, 인천시 홈페이지, 고용24… 탭만 열다가 30분이 지납니다. 지원금 종류만 2,000개가 넘는데, 어디서부터 봐야 할지 막막하죠.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❶</div>
+              <div className="min-w-0">
+                <h3 className="text-xs font-bold text-gray-900 mb-0.5">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
+                <p className="text-[11px] text-gray-500 leading-relaxed">탭만 열다가 30분. 지원금 2,000개 중 어디서부터?</p>
               </div>
             </div>
-            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
-              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❷</div>
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-0.5">알았을 때는 이미 신청 마감</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">에너지 바우처, 청년 월세 지원, 인천시 출산 지원금— 마감일 하루 전날 알면 이미 늦습니다.</p>
+            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❷</div>
+              <div className="min-w-0">
+                <h3 className="text-xs font-bold text-gray-900 mb-0.5">알았을 때는 이미 신청 마감</h3>
+                <p className="text-[11px] text-gray-500 leading-relaxed">마감일 하루 전날 알면 이미 늦습니다.</p>
               </div>
             </div>
-            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
-              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❸</div>
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-0.5">주말마다 &quot;어디 가지?&quot; 검색만 하다 집에 있는다</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">전국 축제가 연간 1,000개 이상 열리지만, 내 주변에서 이번 주말에 즐길 수 있는 행사는 아무도 정리해주지 않습니다.</p>
+            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❸</div>
+              <div className="min-w-0">
+                <h3 className="text-xs font-bold text-gray-900 mb-0.5">주말마다 &quot;어디 가지?&quot; 검색만 하다 끝</h3>
+                <p className="text-[11px] text-gray-500 leading-relaxed">내 주변 축제, 아무도 정리해주지 않습니다.</p>
               </div>
             </div>
           </div>
@@ -359,15 +359,13 @@ export default async function Home() {
       </section>
 
       {/* ── Features + CTA Section ── */}
-      <section className="py-16 sm:py-20 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
+      <section className="py-10 sm:py-12 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold">
-              왜 픽앤조이인가요?
-            </h2>
-          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-6">
+            왜 픽앤조이인가요?
+          </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
             {[
               { icon: '🔍', title: '매일 직접 수집', desc: '공공기관 사이트에서 최신 정보를 매일 수집' },
               { icon: '🔔', title: '놓치지 않는 알림', desc: '새로운 보조금·축제 정보를 바로 확인' },
@@ -376,22 +374,21 @@ export default async function Home() {
               { icon: '⏰', title: '시간 절약', desc: '여러 사이트 대신 한 곳에서 모두 확인' },
               { icon: '❤️', title: '맞춤 추천', desc: '나이·지역·상황에 맞는 맞춤형 정보' },
             ].map((f, idx) => (
-              <div key={idx} className="text-center p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
-                <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg mx-auto mb-3">
+              <div key={idx} className="text-center p-3 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-base mx-auto mb-2">
                   {f.icon}
                 </div>
-                <h3 className="text-sm font-bold text-white mb-1">{f.title}</h3>
-                <p className="text-xs text-white/70 leading-relaxed">{f.desc}</p>
+                <h3 className="text-xs font-bold text-white mb-0.5">{f.title}</h3>
+                <p className="text-[11px] text-white font-medium leading-snug">{f.desc}</p>
               </div>
             ))}
           </div>
 
           <div className="text-center">
-            <h3 className="text-xl sm:text-2xl font-extrabold mb-2">오늘부터 시작하세요, 완전 무료입니다</h3>
-            <p className="text-base sm:text-lg font-bold text-white/90 mb-4">회원가입도, 앱 설치도 필요 없어요</p>
-            <p className="text-sm sm:text-base text-white/70 leading-relaxed max-w-md mx-auto">
-              픽앤조이의 모든 서비스는 100% 무료입니다.<br />
-              그냥 들어와서, 필요한 정보 가져가시면 됩니다.
+            <h3 className="text-lg sm:text-xl font-extrabold mb-1">오늘부터 시작하세요, 완전 무료입니다</h3>
+            <p className="text-sm sm:text-base font-bold text-white/90 mb-2">회원가입도, 앱 설치도 필요 없어요</p>
+            <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-md mx-auto">
+              픽앤조이의 모든 서비스는 100% 무료입니다. 그냥 들어와서, 필요한 정보 가져가시면 됩니다.
             </p>
           </div>
         </div>
