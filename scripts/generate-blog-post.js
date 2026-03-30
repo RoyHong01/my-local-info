@@ -677,7 +677,7 @@ async function run() {
 
     console.log(`  미작성 항목: ${candidates.length}개`);
 
-    // 카테고리당 2편 생성 (시간/후보 상한 적용)
+    // 카테고리당 1편 생성 (배치 사이즈 축소, 토큰 압박 완화)
     let generated = 0;
     let triedCandidates = 0;
     for (const candidate of candidates) {
@@ -692,7 +692,7 @@ async function run() {
         break;
       }
 
-      if (generated >= 2) break;
+      if (generated >= 1) break;
       triedCandidates++;
       try {
         const ok = await generatePost({ ...candidate, _category: category }, postsDir);

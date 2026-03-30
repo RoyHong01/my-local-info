@@ -3,8 +3,8 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '6');
-const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '2');
+const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3');
+const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '1');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi-other'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
