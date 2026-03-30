@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface DataItem {
   [key: string]: unknown;
@@ -33,7 +34,7 @@ function IncheonCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/incheon/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">인천</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
@@ -57,7 +58,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-600">보조금</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
@@ -81,7 +82,7 @@ function FestivalCard({ item }: { item: DataItem }) {
   const id = getField(item, ['contentid', 'id']);
   return (
     <Link href={`/festival/${encodeURIComponent(id)}`} className="block group">
-      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 min-h-[140px] flex flex-col">
+      <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-600">축제·여행</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
@@ -171,9 +172,8 @@ export default async function Home() {
         <header className="absolute top-0 left-0 right-0 z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
-              <Link href="/" className="flex items-center gap-2">
-                <span className="text-2xl font-extrabold text-white drop-shadow-md">픽앤조이</span>
-                <span className="text-2xl">🎯</span>
+              <Link href="/" className="flex items-center">
+                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={120} height={40} className="h-9 w-auto drop-shadow-md" priority />
               </Link>
               <nav className="hidden lg:flex items-center gap-1">
                 {[
@@ -200,7 +200,7 @@ export default async function Home() {
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 pb-24">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-12 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-5 animate-fade-in">
             ✨ 매일 업데이트되는 생활정보 플랫폼
           </div>
 
@@ -330,7 +330,6 @@ export default async function Home() {
                 <div className={`relative overflow-hidden rounded-2xl shadow-md group`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient}`} />
                   <div className="relative p-5">
-                    <div className="text-2xl mb-1">{cat.emoji}</div>
                     <h3 className="text-xl font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] tracking-wide">{cat.title}</h3>
                     <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
                     <p className="text-xs text-white/80 mt-1">{cat.detail}</p>
@@ -398,11 +397,8 @@ export default async function Home() {
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-extrabold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
-                픽앤조이
-              </span>
-              <span className="text-lg">🎯</span>
+            <div className="flex items-center">
+              <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={100} height={33} className="h-7 w-auto" />
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <span>데이터 출처: 공공데이터포털 · 한국관광공사</span>
