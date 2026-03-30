@@ -1,7 +1,7 @@
 # 픽앤조이 (pick-n-joy.com) — Copilot 프로젝트 가이드
 
 > GitHub Copilot이 이 프로젝트 작업 시 항상 먼저 읽어야 할 파일입니다.
-> Claude Code는 CLAUDE.md를 사용합니다. 둘 중 어느 도구로 작업하든 양쪽 파일을 동기화 상태로 유지해주세요.
+> Copilot 작업은 이 파일과 `COPILOT_MEMORY.md`, `WORK_LOG.md`를 기준으로 운영합니다.
 
 ## 프로젝트 기본 정보
 - 사이트명: 픽앤조이 (pick-n-joy.com)
@@ -79,17 +79,17 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ```
 
 ## 작업 규칙
-1. 작업 전 이 파일과 CLAUDE.md, PROJECT_MEMORY.md, COPILOT_MEMORY.md를 먼저 확인
-2. 새 파일 생성 시 CLAUDE.md 폴더 구조 섹션 업데이트
-3. 새 환경변수 추가 시 CLAUDE.md 환경변수 섹션 업데이트
+1. 작업 전 이 파일과 `COPILOT_MEMORY.md`를 먼저 확인
+2. 세부 작업 이력은 `WORK_LOG.md`에 기록
+3. Copilot 운영 문서는 `.github/copilot-instructions.md`와 `COPILOT_MEMORY.md`를 기준으로 유지
 4. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
 5. 빌드 성공 후 `git add . → git commit → git push` 순서로 배포
-6. 세션 종료 시 CLAUDE.md, PROJECT_MEMORY.md, COPILOT_MEMORY.md, 이 파일(copilot-instructions.md) 모두 업데이트
+6. 세션 종료 시 `WORK_LOG.md`, `COPILOT_MEMORY.md`, `.github/copilot-instructions.md` 업데이트
 7. **항상 적용할 종료 루틴(필수)**
   - 코드 변경 작업 완료 후, 반드시 `build 성공 → commit/push → 문서/메모리 동기화` 순서를 수행
-  - 문서/메모리 동기화 대상: `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+  - 문서/메모리 동기화 대상: `WORK_LOG.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`
   - 위 루틴 미완료 상태에서는 작업 완료로 보지 않음
-8. **커밋/배포 완료 직후 필수 확인 질문**: 사용자에게 반드시 다음을 먼저 질문한다 — **"`WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)도 지금 업데이트할까요?"**. 위 확인 질문 없이 작업 완료로 종료하지 않는다.
+8. **커밋/배포 완료 직후 필수 확인 질문**: 사용자에게 반드시 다음을 먼저 질문한다 — **"`WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`)도 지금 업데이트할까요?"**. 위 확인 질문 없이 작업 완료로 종료하지 않는다.
 
 ## 헤더/네비게이션 패턴
 - 헤더는 10개 페이지에 동일 패턴 반복 (컴포넌트 미분리 상태)
@@ -106,150 +106,18 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - ✅ favicon (ico + svg)
 - ✅ og:image 자동화 (TourAPI firstimage + 카테고리별 기본 SVG)
 
-## 최근 동기화 메모 (2026-03-27)
-- 축제 상세 설명 복구: `collect-festival.js` overview 절삭 제거로 원문 보존
-- 오래된 샘플 3건(`festival-001~003`) 정리: API 원본 매핑/교체 + 매칭 실패 샘플 자동 제거
-- `festival.json`은 API 기반 항목 중심으로 재정리 (중복 제거 포함)
-- 상세 페이지 typography/prose 적용: `@tailwindcss/typography` 활성화 + 상세 4페이지 본문 가독성 강화
-- 상세 페이지 폭 조정: `max-w-5xl → 7xl → 6xl`로 사용자 피드백 기반 미세 조정
-- 블로그 구조 보정 고도화:
-  - 훅(Hook) 우선 시작 규칙 + H1→H2 자동 보정(훅이 메인 제목보다 커 보이지 않게)
-  - 번호 소제목(`1.` / `1️⃣`) 자동 헤딩화(`### 1.`) 및 설명 단락 분리
-  - 들여쓰기 code block 오인 제거로 좌우 스크롤(`pre`) 이슈 해결
-- 상세 콘텐츠 블로그형 전환:
-  - `incheon/subsidy/festival` 상세 본문을 Markdown + prose 렌더링 방식으로 통일
-  - `description_markdown` 우선 사용 + 기존 데이터 fallback markdown 생성으로 즉시 반영
-  - 수집 스크립트에서 Anthropic으로 `description_markdown` 생성(해시 캐시 기반 재생성)
-  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`로 실행당 생성 건수 제한(기본 10건)
+## 최근 동기화 메모 (압축판)
 
-### 2026-03-27 (2)
-
-- **description_markdown 전체 백필 완료:**
-  - incheon 103/103건, subsidy 103/103건, festival 107/107건 100% 완료
-  - Anthropic Haiku 4.5 실측 단가: 입력 $1/MTok, 출력 $5/MTok
-  - 10건 기준 실측 비용: ~$0.037 (1건당 ~$0.004, ₩5 수준)
-  - 월 예산: 하루 10건 기준 ~$1.10/월 (예산 여유 충분)
-  - 커벗: `1041ef9`
-
-### 2026-03-27 (3)
-
-- **카드 UI 전역 인터랙션 적용:**
-  - 전역 스타일(`src/app/globals.css`)에 `.menu-card`, `.menu-card-icon` 추가
-  - hover 시 미세 확대/배경 틴트/아이콘 톤다운을 인천·보조금·축제·블로그 카드에 공통 적용
-  - 접근성 대응: `prefers-reduced-motion` 환경에서 애니메이션 비활성화
-- **그리드 높이 조정 재수정:**
-  - 인천/보조금 카드에 적용했던 `auto-rows-fr` + `h-full` 강제 높이 로직 제거
-  - 카드 크기를 축제/블로그와 유사한 자연 높이로 복구
-  - 긴 텍스트는 기존 `line-clamp` 범위 내에서만 노출
-
-## 최근 동기화 메모 (2026-03-29 추가-4)
-
-- **맛집 상세 404(slug 매핑) 복구**:
-  - `src/lib/posts.ts`의 slug 조회를 정규화 + fallback 스캔으로 강화
-  - 문제 포스트 slug를 영문화
-    - `incheon-zenzen-bonjeom`
-    - `seoul-mitable-seongsu-bonjeom`
-  - 검증: `npm run build` 후 `out/blog` 경로 생성 확인
-
-- **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
-  - `scripts/generate-life-restaurant-posts.mjs`에 버킷 분배 로직 추가
-    - 서울 2 / 인천 2 / 경기기타 2 우선 선발
-    - 버킷 부족 시 경고 로그 출력
-  - `.github/workflows/deploy.yml`
-    - `LIFE_RESTAURANT_POSTS_PER_RUN: '6'`
-    - `LIFE_RESTAURANT_POSTS_PER_BUCKET: '2'`
-  - 검증: `npm run build` 성공, 커밋/푸시 `f337cf5`
-
-- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - 실행당 생성 건수 3~5 클램프(기본 3)
-    - 저장 경로: `src/content/life`로 전환
-    - slug를 `지역명-상호명` 영문 조합 기반으로 생성
-    - 훅/톤 규칙 강화(도발형 Hook, 금지어 강화, 동선 가이드 문구 강화)
-  - `scripts/collect-life-restaurants.mjs`
-    - 오마카세/퓨전한식/화덕피자 키워드 추가
-    - Google 평점 strict 컷오프(미확인 제외, 4.2 미만 제외)
-  - `src/lib/posts.ts`: `src/content/posts` + `src/content/life` 통합 로딩
-  - `.github/workflows/deploy.yml`: `LIFE_RESTAURANT_POSTS_PER_RUN` 기본값 `3`
-  - 검증: `npm run build` 성공, 커밋/푸시 `a42ee87`
-
-- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
-  - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
-    - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)
-    - restaurants.json에 `googleRating` / `googleRatingCount` 추가
-  - `scripts/generate-life-restaurant-posts.mjs`:
-    - googleRating 있으면 `rating_value` / `review_count` frontmatter 자동 삽입 → JSON-LD `aggregateRating` 자동 연결
-    - 프롬프트: 조도·공간감·음식 결 감각적 묘사 2개 이상 규칙 추가
-    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가
-  - `.github/workflows/deploy.yml`: `GOOGLE_PLACES_API_KEY` Secret 추가 (**GitHub Actions Secrets 수동 추가 필요**)
-  - 검증: `npm run build` 성공, 커밋/푸시 `8a98b87`
-
-## 최근 동기화 메모 (2026-03-29)
-
-- **쿠팡 파트너스 사이드바 배너 최종 확정**:
-  - 사이드바 배너 ID: `976088` (미활성화) → `976244` 교체 (배너명: 픽앤조이_사이드바_여행_최종, 고객 관심 기반 추천)
-  - `CoupangBanner.tsx`에 `'use client'` 추가 → Server Component에서 발생하던 Hydration mismatch(빈 흰 블록 현상) 해결
-  - 하단 배너 ID 976089는 변경 없음 유지
-- **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):
-  - 경어체 종결어미(`~해요/~거든요/~입니다`) 필수, 평어체(`~이다/~한다`) 절대 금지
-  - AI 금지어 목록 추가, 마무리 공식 문구 폐지 → 작가 주관 한 줄 평으로 변경
-  - `date` 필드 Node.js 변수로 직접 주입 (Gemini 임의 날짜 생성 버그 차단)
-
-### 2026-03-29 (추가)
-
-- **일상의 즐거움 맛집 자동화 추가**:
-  - `collect-life-restaurants.mjs`: 카카오 로컬 API 정확도순 + 찐맛집/현지인/줄서는 식당 키워드로 지역별 15개 맛집 스냅샷 생성
-  - `generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 생성 (문제 해결형 서사, SEO용 slug/description/frontmatter, 과장/환각 방지 규칙 포함)
-  - `/life` 페이지 맛집 탭은 생성 포스트 우선, 없으면 카카오맵 카드 fallback
-  - `deploy.yml`에 맛집 수집/포스트 생성 스케줄 단계 추가
-  - `blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 적용
-
-- **맛집 자동화 2차 톤 리프레시**:
-  - `collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 핫플형 검색어 세트로 재구성
-    - 예: 송도 브런치 카페 / 성수동 팝업 근처 맛집 / 연남동 내추럴 와인바 / 망원동 에스프레소 바
-  - 수집 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터 저장 + trend score 우선 정렬
-  - `generate-life-restaurant-posts.mjs` 프롬프트를 "생활정보 설명문"에서 "저장해둘 만한 핫플 큐레이션" 톤으로 전환
-  - `FORCE_RESTAURANT_SOURCE_IDS`로 특정 맛집 포스트 재생성 가능
-  - 초기 저품질 포스트 2건 삭제 후 신규 2건 발행:
-    - `2026-03-29-인천-젠젠-본점.md`
-    - `2026-03-29-서울-미테이블-성수본점.md`
-- **실제 전국 축제·여행 포스트 2편 발행 완료**:
-  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
-  - `2026-03-29-jindo-canolaflower-festival.md`
-- **SEO 강화** (`src/app/blog/[slug]/page.tsx`):
-  - 메타 description을 본문 첫 문장으로 생성
-  - JSON-LD를 카테고리 인지형(`articleSection/about/additionalType/keywords/inLanguage`)으로 확장
-- **Playwright 도입 + 배포 전 자동 검증 연결**:
-  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 신규
-  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 추가
-  - `deploy.yml`에 Playwright 설치 + 배포 전 E2E 테스트 단계 추가
-- **블로그 생성 안정화** (`generate-blog-post.js`):
-  - `maxOutputTokens: 4096` 상향
-  - 불완전 응답 감지(`finishReason`, 본문 길이, 문장 종결, FILENAME 포함 여부) + 최대 3회 재시도
-- **검증/반영 상태**:
-  - `npm run build` 성공
-  - `npm run test:e2e` 성공
-  - 커밋/푸시: `da64479` (`main`)
-
-## 최근 동기화 메모 (2026-03-30)
-
-- **픽앤조이 초이스 카테고리 신설**:
-  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
-    - `category: "픽앤조이 초이스"` 또는 `tags`에 `리뷰|review|쿠팡|추천상품` 포함 시 자동 수집
-    - 기존 3대 카테고리(인천/보조금/축제) 포스트는 제외 처리
-  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
-  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
-  - 포스트 저장 위치: `src/content/life/` (맛집 포스트와 동일 디렉터리, category로 구분)
-  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
-  - JSON-LD `aggregateRating`: `rating_value` + `review_count` 있을 때만 삽입
-
-- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성**:
-  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
-    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
-    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
-  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
-    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
-    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
+- 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-03-29~30 핵심 반영:
+  - `픽앤조이 초이스` 카테고리 신설 및 포스트 2편 반영
+  - 초이스 상세 UI/안내문구 개선 + 히어로 이미지 로컬 교체
+  - 맛집 자동화 고도화(지역 버킷 분배, Google 평점 필터, slug 안정화)
+  - 블로그 생성/배포 품질 강화(E2E, 생성 재시도, SEO/JSON-LD)
+- 고정 참고값:
+  - 쿠팡 파트너ID `AF5831775`
+  - 사이드바 배너 `976244`, 하단 배너 `976089`
+  - 쿠팡 배너는 공식 iframe URL 직접 사용 + `referrerPolicy="unsafe-url"`
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775
@@ -263,3 +131,6 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 백로그
 
 - [x] Google Analytics 설정 ✅
+- [ ] Google AdSense 설정
+- [ ] 자동화 오류 모니터링 강화
+- [ ] 맛집 포스트 이미지 전략 고도화

@@ -18,211 +18,32 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
-### 2026-03-30 완료
+- 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
-- **초이스 히어로/문구 미세조정 반영**:
-  - `src/app/blog/[slug]/page.tsx`
-    - 초이스 히어로 이미지 잘림 방지: `object-cover` → `object-contain`
-    - 히어로 하단 간격 확대: `mb-8` → `mb-14`
-    - 초이스 고지문 색상 강화: `text-stone-700` → `text-stone-800`
-  - 검증/반영:
-    - `npm run build` 성공
-    - 커밋/푸시: `ee72b92`
+### 2026-03-30 기준 핵심 요약
 
-- **픽앤조이 초이스 상세 안내문구 최종 교체**:
-  - `src/app/blog/[slug]/page.tsx`의 초이스 글 하단 문구를 최종 고지문으로 교체
-    - AI 기술 기반 분석 + 픽앤조이 에디터 큐레이션 고지
-    - 쿠팡 파트너스 수수료/가격 비영향/주관 의견 고지
-  - 검증/반영:
-    - `npm run build` 성공
-    - 커밋/푸시: `4d8f9c9`
+- `픽앤조이 초이스` 카테고리 신설 및 목록/카드/필터 반영
+  - `src/lib/life-choice.ts`
+  - `src/app/life/choice/page.tsx`
+  - `src/components/life/ChoiceArticleCard.tsx`
+- 초이스 수동 리뷰 포스트 2편 작성 및 히어로 이미지 로컬화
+  - `src/content/life/2026-03-30-choice-*.md`
+  - `public/images/choice-*.jpg`
+- 블로그 상세 초이스 UI/문구 개선
+  - `src/app/blog/[slug]/page.tsx` (`object-contain`, 간격 조정, 고지문 정리)
+- 맛집 자동화 안정화
+  - 지역 버킷 분배(서울/인천/경기기타)
+  - Google Places 평점 필터(4.2+)
+  - slug 정규화로 상세 404 복구
+- 품질/배포 안정화
+  - Playwright E2E 게이트
+  - 생성 재시도 로직 및 SEO/JSON-LD 강화
 
-- **초이스 포스트 히어로 이미지 공식 캡처본 교체**:
-  - 로컬 정적 이미지 추가:
-    - `public/images/choice-lemouton.jpg`
-    - `public/images/choice-omega3.jpg`
-  - 포스트 이미지 경로 교체:
-    - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
-    - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
-  - 검증/반영:
-    - `npm run build` 성공
-    - 커밋/푸시: `153a721`
+### 고정 운영 사실
 
-- **픽앤조이 초이스 카테고리 신설**:
-  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
-    - `category: "픽앤조이 초이스"` 또는 `tags`에 리뷰/쿠팡 관련 태그 포함 시 자동 수집
-    - 기존 3대 카테고리 포스트 제외
-  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 신규 생성
-  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
-  - 초이스 포스트 저장 위치: `src/content/life/`
-  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
-
-- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성 (수정 중)**:
-  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
-    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
-    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
-  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
-    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
-    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
-
-### 2026-03-29 추가 완료 (7)
-- **맛집 상세 404(slug 매핑) 복구**:
-  - `src/lib/posts.ts`
-    - `getPostData()`에 slug 정규화(NFC/URL decode) 및 파일명/frontmatter fallback 조회 로직 추가
-  - 문제 포스트 2건 slug 영문화
-    - `incheon-zenzen-bonjeom`
-    - `seoul-mitable-seongsu-bonjeom`
-- **검증/반영**:
-  - `npm run build` 성공
-  - `out/blog/incheon-zenzen-bonjeom`
-  - `out/blog/seoul-mitable-seongsu-bonjeom` 생성 확인
-
-### 2026-03-29 추가 완료 (6)
-
-- **맛집 자동생성 6건 분배 로직 고정**:
-  - `scripts/generate-life-restaurant-posts.mjs`에 버킷 분배 로직 추가
-    - 서울 2 / 인천 2 / 경기기타 2 선발
-    - 버킷 후보 부족 시 경고 로그 출력
-  - `.github/workflows/deploy.yml`에 환경변수 추가
-    - `LIFE_RESTAURANT_POSTS_PER_RUN=6`
-    - `LIFE_RESTAURANT_POSTS_PER_BUCKET=2`
-- **검증/반영**:
-  - `node --check` 통과
-  - `npm run build` 성공
-  - 커밋/푸시: `f337cf5`
-
-### 2026-03-29 추가 완료 (5)
-- **맛집 글 생성 규칙 3차 고도화**:
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - 실행당 생성 건수를 3~5 범위로 클램프(기본 3)
-    - 출력 경로를 `src/content/life`로 전환
-    - `slug`를 `지역명-상호명` 영문 조합 형태로 생성
-    - 도발형 Hook, 금지어 강화, 동선 가이드 문구 강화
-  - `scripts/collect-life-restaurants.mjs`
-    - 오마카세/퓨전한식/화덕피자 키워드 추가
-    - Google 평점 strict 컷오프(평점 미확인 제외, 4.2 미만 제외)
-  - `src/lib/posts.ts`
-    - `src/content/posts` + `src/content/life` 통합 로딩
-  - `.github/workflows/deploy.yml`
-    - `LIFE_RESTAURANT_POSTS_PER_RUN` 기본값 `3` 반영
-- **검증/반영**:
-  - `node --check` 통과
-  - `npm run build` 성공
-  - 커밋/푸시: `a42ee87`
-
-### 2026-03-29 추가 완료 (4)
-- **맛집 자동화 2차 톤 리프레시**:
-  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 취향 핫플형 검색어 세트로 재구성
-  - 수집 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터 저장 및 trend score 기반 정렬 적용
-  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 교과서형 설명에서 저장형 핫플 큐레이션 톤으로 교체
-  - `FORCE_RESTAURANT_SOURCE_IDS` 환경변수로 특정 맛집 포스트 강제 재생성 가능
-  - 기존 저품질 포스트 2건 삭제 후 신규 2건 발행:
-    - `src/content/posts/2026-03-29-인천-젠젠-본점.md`
-    - `src/content/posts/2026-03-29-서울-미테이블-성수본점.md`
-- **검증/반영**:
-  - `npm run collect:life-restaurants` 성공 (인천/경인 15건, 서울/경기 15건)
-  - `npm run build` 성공
-
-### 2026-03-29 추가 완료 (3)
-- **일상의 즐거움 맛집 자동화 파이프라인 구축**:
-  - `src/lib/life-restaurants.ts`에 찐맛집/현지인/줄서는 식당 키워드 기반 검색 로직 반영, 지역당 15개 추출
-  - Gemini 2.5 Pro 요약 프롬프트를 문제 해결형 서사 중심으로 강화 (place_url 문맥 참고, 허위 단정 금지)
-  - `scripts/collect-life-restaurants.mjs` 신규: 맛집 스냅샷을 `src/app/life/restaurant/data/restaurants.json`에 저장
-  - `scripts/generate-life-restaurant-posts.mjs` 신규: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 자동 생성
-  - `/life` 페이지는 생성된 맛집 포스트를 우선 노출하고, 없으면 카카오맵 카드로 fallback
-  - `.github/workflows/deploy.yml`에 맛집 수집 및 포스트 생성 스텝 추가
-  - 맛집 포스트 slug/description/frontmatter를 SEO 친화적으로 강화하고, `blog/[slug]`에 맛집 `Restaurant`/초이스 `Product` JSON-LD 추가
-- **검증/반영**:
-  - `npm run build` 성공
-  - 커밋/푸시: `4509056` (`main`)
-
-### 2026-03-29 추가 완료 (2)
-- **실제 전국 축제·여행 포스트 2편 발행**:
-  - `src/content/posts/2026-03-29-gangjin-jeollabyeongseong-festival.md`
-  - `src/content/posts/2026-03-29-jindo-canolaflower-festival.md`
-- **SEO 보강** (`src/app/blog/[slug]/page.tsx`):
-  - 메타 description을 본문 첫 문장 기반으로 생성
-  - JSON-LD를 카테고리 인지형(`articleSection`, `about`, `additionalType`, `keywords`, `inLanguage`)으로 확장
-- **Playwright 도입 및 배포 전 검증 게이트 구축**:
-  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 추가
-  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 테스트 식별자(`data-testid`) 반영
-  - `.github/workflows/deploy.yml`에 Playwright 설치 + `npm run test:e2e` 단계 추가
-- **블로그 생성 안정화** (`scripts/generate-blog-post.js`):
-  - `maxOutputTokens` 4096 상향
-  - 불완전 응답 감지(`finishReason`, 본문 길이/종결, FILENAME 포함 여부) + 최대 3회 재시도
-- **최종 검증/반영**:
-  - `npm run build` 성공
-  - `npm run test:e2e` 성공
-  - 커밋/푸시: `da64479` (`main`)
-
-### 2026-03-29 추가 완료
-- **쿠팡 사이드바 배너 수정** (`CoupangBanner.tsx`):
-  - `'use client'` 지시어 추가 → Hydration mismatch 해결 (빈 흰 박스 증상 제거)
-  - 배너 ID `976088` → `976244` 교체 (구 ID 미활성화 확인, 신규 발급 ID 적용)
-  - 신규 배너명: `픽앤조이_사이드바_여행_최종` (고객 관심 기반 추천 타입)
-
-### 2026-03-29 완료
-- **블로그 생성 문체 가이드 전면 개선** (`generate-blog-post.js`):
-  - 경어체 종결어미 필수, 평어체(~이다/~한다) 절대 금지
-  - AI 금지어 목록 (결론적으로/다양한/인상적인/포착한 등) 추가
-  - 마무리: "함께 가면 좋은 사람" 공식 추천 → 작가 주관 한 줄 평·상황 여운으로 변경
-  - `date` 필드: Gemini 임의 생성 → Node.js `today` 변수 직접 주입 (날짜 오류 재발 방지)
-- **논산딸기축제 포스트 수정**: date `2024-05-21` → `2026-03-29`, 잘린 본문 완성 재작성
-
-### 2026-03-28 완료
-- **블로그 썸네일 TourAPI 실제 이미지로 교체**: 진해군항제/여의도벚꽃/경포벚꽃/구례산수유/광안리 5개 포스트
-- **태허철학관 배너 추가**: `TaeheoAdBanner.tsx` 가로형 + 도장 로고(`taeheo-logo.png`) 삽입, 전 페이지 사이드바 상단 배치
-- **Google Analytics 설정**: `G-6VNKGES4FW` 적용 완료, `layout.tsx`에 Script 삽입
-- **블로그 카테고리 필터 URL 파라미터 방식 전환**: `BlogFilter.tsx`를 `useSearchParams` 기반으로 재작성, 뒤로가기 시 필터 유지
-- **블로그 생성 AI Gemini 2.5 Pro 전환**: `generate-blog-post.js` Gemini 2.5 Pro로 교체, MZ 감성 + 정보 완전성 규칙 추가
-- **쿠팡 파트너스 배너 전면 구현**:
-  - `CoupangBanner.tsx` (사이드바 240x600, id:976088) + `CoupangBottomBanner.tsx` (하단 680x300, id:976089)
-  - 파트너ID: AF5831775
-  - useEffect + g.js 중복 로드 방지 + `bannerId` prop으로 페이지별 고유 container id 지정
-  - blog/incheon/subsidy/festival 목록·상세 8개 페이지 전체 적용
-- **공정위 필수 문구**: 전 페이지 footer에 "쿠팡 파트너스 활동을 통해 수수료를 제공받습니다" 추가
-- **인천/보조금/축제 상세 페이지 사이드바 추가**: `TaeheoAdBanner` + `CoupangBanner` 사이드바 3개 상세 페이지 전부 적용
-- **블로그 중복 제거**: 진해군항제 1편 삭제 → 고창청보리밭 축제 1편 추가, 인천 봄꽃 축제 중복 제거
-
-- **멀티카테고리 구조 전면 재설계**: 인천/전국 보조금/축제·여행 3개 카테고리 + 블로그
-- **SEO 전면 보강 (2026-03-27)**:
-  - sitemap.xml 도메인 수정 (pages.dev → pick-n-joy.com)
-  - 전 페이지 metadata export 추가 (title, description, OG, canonical)
-  - og:image 자동화 (TourAPI firstimage → frontmatter, 카테고리별 기본 SVG)
-  - favicon 추가 (ico + svg)
-  - robots.txt 도메인 수정
-- **블로그 자동 생성**: Claude API(claude-haiku-4-5) + 공공데이터 기반 블로그 포스트 자동 생성 스크립트
-- **CI/CD 워크플로우**: GitHub Actions (매일 07:00 KST) + Cloudflare Pages 자동 배포
-- **RSS 피드**: /rss.xml 경로 제공
-- **네이버 서치어드바이저**: 사이트 인증 완료
-- **네비 메뉴명 변경**: 인천정보→인천시 정보, 보조금→전국 보조금·복지 정책, 축제·여행→전국 축제·여행 정보
-- **헤더 UI 확대**: 로고·네비 폰트 사이즈 업
-- **축제 overview 수집 보강**: collect-festival.js에 detailCommon2 API 추가, 기존 100건 보강 완료
-- **축제 상세 데이터 복구**: overview 절삭 제거, 샘플 3건 API 매핑/교체(매칭 실패 샘플 정리), festival.json API 기반 재정리 완료
-- **상세 페이지 가독성 개선**:
-  - 전역 폰트 스택 개선(Pretendard/Noto Sans KR) 및 텍스트 톤 강화
-  - 상세 본문 prose 적용(`@tailwindcss/typography`)
-  - 상세 4페이지 폭 조정(`max-w-5xl → 7xl → 6xl`)
-- **블로그 본문 구조화 자동 보정**:
-  - 훅(Hook) 우선 시작 보정, 본문 H1→H2 보정
-  - `1.`/`1️⃣` 번호 소제목 자동 헤딩화 + 설명 단락 분리
-  - 번호 항목 설명 들여쓰기 code block 오인(pre/code 좌우 스크롤) 제거
-  - 블로그 생성 프롬프트에 훅/번호 소제목 규칙 반영
-- **상세 페이지 콘텐츠 구조 고도화**:
-  - 인천/보조금/축제 상세 페이지를 Markdown + prose 중심 렌더링으로 통일
-  - `description_markdown` 필드 우선 사용, 기존 데이터는 fallback markdown 생성으로 즉시 적용
-  - 수집 스크립트(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에서 Anthropic으로 `description_markdown` 생성
-  - source hash 기반 재생성 방지(`description_markdown_source_hash`)로 비용 최소화
-  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)으로 실행당 생성량 제한해 초기 백필 시간을 분산
-  - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
-  - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월
-- **카드 UI 인터랙션 전역화 (2026-03-27)**:
-  - `src/app/globals.css`에 공통 카드 인터랙션 클래스(`.menu-card`, `.menu-card-icon`) 도입
-  - 인천/보조금/축제/블로그/홈 카드 hover 동작을 일관화(미세 확대 + 배경 틴트 + 아이콘 톤다운)
-  - `prefers-reduced-motion`에서 애니메이션 비활성화로 접근성 대응
-- **카드 높이 정책 재조정 (2026-03-27)**:
-  - 인천/보조금 목록의 강제 동일 높이(`auto-rows-fr`, `h-full`) 적용을 롤백
-  - 과도한 카드 확장 이슈를 해소하고 축제/블로그와 유사한 카드 체감 크기로 복구
+- 쿠팡 파트너ID: `AF5831775`
+- 사이드바 배너: `976244`, 하단 배너: `976089`
+- 쿠팡 배너는 공식 iframe URL + `referrerPolicy="unsafe-url"` 유지
 
 ## 3. 앞으로 해결해야 할 과제 / 백로그 (Backlog & Next Steps)
 
@@ -230,76 +51,15 @@
 - [x] 사이트맵(`sitemap.xml`) 및 웹 로봇(`robots.txt`) 추가하여 신규 글들에 대한 크롤링 최적화 진행
 - [x] Google Analytics (NEXT_PUBLIC_GA_ID) 설정 ✅ 2026-03-28
 - [x] 쿠팡 파트너스 배너 구현 ✅ 2026-03-28
-- [ ] 쿠팡 배너 렌더링 확인 (배포 후 브라우저 콘솔 점검)
 - [ ] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정
 - [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
 - [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)
 - [ ] 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후 다중 이미지 적용)
 
-## 4. 쿠팡 파트너스 자동화 계획 (Coupang Partners Automation - 선제 준비, 2026-03-30)
+## 4. 쿠팡 자동화 메모 (압축)
 
-### 완료한 기초 작업
-
-- ✅ `src/lib/coupang-partners-config.ts` 생성 및 정책/규칙 데이터화
-  - **COUPANG_PARTNERS_POLICY**: 실적 인정 규칙(24시간 쿠키), 링크 정확성 필수(1글자 오류도 미인정)
-  - **COUPANG_LINK_RULES**: 링크 생성 방식, HTML 템플릿(이미지+텍스트), 삽입 위치 가이드
-  - **COUPANG_AUTO_POST_RULES**: 포스트 구조(제목/훅/문제/솔루션/상품설명/팁/CTA), 톤(감성+실용), 이미지 우선순위, SEO, Frontmatter 필드
-  - **AUTOMATION_READINESS**: 3단계 자동화 준비 상태 (현재 Phase 1 완료)
-  - 유틸리티 함수: `validateCoupangLink()` (URL 유효성 검증), `sanitizeCoupangHtml()` (XSS 방지)
-
-### 핵심 정책 (내재화됨)
-
-1. **실적 인정**: 링크를 통해 접속 후 24시간 내 구매한 모든 상품에 대해 수수료 인정
-2. **링크 정확성**: 절대 변경 금지, 1글자 오류도 실적 미인정 (트래킹 코드 반드시 정확히)
-3. **콘텐츠 형식**: 이미지 + 텍스트 HTML이 텍스트 링크보다 클릭률 높음
-4. **배너/위젯 전략**: 블로그에 항상 노출되는 위젯이 수익 극대화에 가장 유리
-5. **현재 파트너 정보**: AF5831775, 사이드바(976244, 240x600), 하단(976089, 680x300)
-
-### Phase 2: API 준비 (쿠팡 API 발급 후 진행)
-
-- 쿠팡 파트너스에서 API 신청 및 발급 대기
-- 예상 API 엔드포인트:
-  - `POST /api/v1/products/search`: 상품 검색
-  - `GET /api/v1/products/{productId}`: 상품 상세 정보 (이미지, 가격, 설명)
-  - `POST /api/v1/links/generate`: 파트너 링크 생성
-- API 레이트 리밋 및 인증 방식 확인 필요
-
-### Phase 3: 자동화 스크립트 개발 (API 발급 후, 2026-Q2 예정)
-
-- `scripts/collect-coupang-products.mjs`: Coupang API로 오늘의 추천 상품 15~20개 수집 및 `src/data/coupang-products.json` 저장
-  - 필터: 판매량·별점·리뷰수 기반 우선순위
-  - 메타데이터: 상품명, 가격, 이미지 URL, 상세 설명, 파트너 링크
-- `scripts/generate-coupang-posts.mjs`: 수집된 상품을 바탕으로 블로그 포스트 자동 생성
-  - 카테고리: `픽앤조이 초이스` / 서브: `추천 물품`
-  - 포스트 구조: 제목(상황+상품명) / 훅 / 문제 / 솔루션 / 상품상세(HTML) / 팁 / CTA
-  - Frontmatter: title, date, slug(영문), category, productName, productUrl, productImage, rating(선택), price(선택), tags
-  - Gemini API로 생성 (마찬가지로 Gemini 2.5 Pro, MZ 감성 규칙 준용)
-- `.github/workflows/deploy.yml`에 쿠팡 자동화 단계 통합
-  - 스케줄: 매일 07:00 KST 실행 (기존 맛집 자동화와 동시 실행)
-  - 환경변수: COUPANG_API_KEY, COUPANG_PARTNER_ID, COUPANG_PRODUCTS_PER_RUN (예: 3)
-
-### Frontmatter 필드 표준 (Phase 3 참고용)
-
-```yaml
-title: '[상황/감성] + [상품명] 조합'
-date: YYYY-MM-DD
-slug: 'example-slug-in-english'
-category: '픽앤조이 초이스'
-subcategory: '추천 물품'
-productName: '[쿠팡 공식 상품명]'
-productUrl: '[쿠팡 파트너 링크 - AF5831775 포함]'
-productImage: '[쿠팡 공식 이미지 URL 또는 /images/... 경로]'
-rating: 4.5  # 선택, 쿠팡 별점
-price: '₩29,900'  # 선택
-description: '[검색 최적화용 한 줄 요약]'
-keywords: ['픽앤조이 초이스', '[상품 카테고리]', '[상품명]', '[감정/상황 키워드]']
-tags: ['초이스', '추천물품', '생활용품']
-```
-
-### 주의사항 & 체크리스트
-
-- [ ] 쿠팡 API 문서 확인 시 `referrerPolicy="unsafe-url"` 등 iframe 트래킹 요구사항 반영
-- [ ] 개발 단계: .env.local에 COUPANG_API_KEY 추가 (GitHub Secrets에도 등록)
-- [ ] Phase 3 시작 전 `src/lib/coupang-partners-config.ts`의 API 엔드포인트 예상값을 실제 API 문서로 업데이트
-- [ ] 글 생성 시 "이 글의 추천 링크를 통해 구매 시 쿠팡 파트너스 수수료를 받습니다" 공정위 필수 문구 포함
-- [ ] 실적 추적 가능성: 생성된 글의 링크에 파트너 ID(AF5831775) 정확히 포함되었는지 코드 레벨에서 검증
+- 현재 상태: `src/lib/coupang-partners-config.ts`에 정책/검증 유틸 정리 완료(Phase 1)
+- 다음 단계:
+  - [ ] 쿠팡 API 발급 후 실제 엔드포인트/인증값으로 설정 확정
+  - [ ] 수집/생성 스크립트(`collect-coupang-products.mjs`, `generate-coupang-posts.mjs`) 구현
+  - [ ] 워크플로우 통합 및 링크 무결성(파트너 ID 포함) 자동 검증

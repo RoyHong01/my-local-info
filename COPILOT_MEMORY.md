@@ -1,23 +1,22 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
 이 파일은 GitHub Copilot 작업 기준의 운영 메모입니다.
-Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와 항상 동기화합니다.
+Copilot 기준 문서는 `.github/copilot-instructions.md`와 `WORK_LOG.md`를 함께 관리합니다.
 
 ## 시작 전 체크리스트
 
-1. `CLAUDE.md` 확인
-2. `.github/copilot-instructions.md` 확인
-3. `PROJECT_MEMORY.md` 확인
-4. 이 파일(`COPILOT_MEMORY.md`) 확인
+1. `.github/copilot-instructions.md` 확인
+2. 이 파일(`COPILOT_MEMORY.md`) 확인
+3. 최근 작업 이력(`WORK_LOG.md`) 확인
 
 ## 운영 규칙
 
-- 세션 시작 시 위 4개 파일의 최신 상태를 확인한다.
+- 세션 시작 시 위 3개 파일의 최신 상태를 확인한다.
 - 세션 종료 전 사용자 확인 여부와 관계없이, 작업 이력이 있으면 문서/메모리 동기화를 수행한다.
-- 업데이트 시 최소 `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`를 함께 반영한다.
+- 업데이트 시 최소 `WORK_LOG.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`를 함께 반영한다.
 - 코드 변경 후에는 반드시 `npm run build`로 검증한다.
 - 코드 작업 완료 시 반드시 `git add → git commit → git push`를 수행한다.
-- **작업 종료 체크리스트(필수)**: build 성공 + commit/push 완료 + 4개 문서 동기화
+- **작업 종료 체크리스트(필수)**: build 성공 + commit/push 완료 + 3개 문서 동기화
 
 ## 핵심 프로젝트 요약
 
@@ -26,203 +25,25 @@ Claude Code의 `CLAUDE.md`, 프로젝트 공통 메모인 `PROJECT_MEMORY.md`와
 - 배포: Cloudflare Pages + GitHub Actions(매일 07:00 KST)
 - 데이터 소스: 공공데이터포털 + 한국관광공사 TourAPI + Claude API(claude-haiku-4-5)
 
-## 최근 중요 반영 사항 (2026-03-30)
+## 최근 변경 요약 (압축판)
 
-- **초이스 히어로/문구 미세조정 반영** (`ee72b92`):
-  - `src/app/blog/[slug]/page.tsx`
-    - 초이스 히어로 이미지: `object-cover` → `object-contain` 변경(잘림 방지)
-    - 히어로 하단 간격: `mb-8` → `mb-14`로 확대
-    - 초이스 고지문 색상: `text-stone-700` → `text-stone-800`로 조정
-  - 검증: `npm run build` 성공, 커밋/푸시 `ee72b92`
+- 상세 이력은 `WORK_LOG.md`를 기준 문서로 사용하고, 이 파일은 작업 규칙과 최신 상태만 유지한다.
+- 2026-03-29~30 핵심 반영:
+  - `픽앤조이 초이스` 카테고리 신설 (`src/lib/life-choice.ts`, `src/app/life/choice/page.tsx`, `src/components/life/ChoiceArticleCard.tsx`)
+  - 초이스 수동 리뷰 포스트 2편 추가 (`src/content/life/2026-03-30-choice-*.md`)
+  - 초이스 상세 히어로/고지문 개선 + 로컬 이미지 교체 (`src/app/blog/[slug]/page.tsx`, `public/images/choice-*.jpg`)
+  - 맛집 자동화 고도화(지역 버킷 분배, Google 평점 필터, slug 안정화)
+  - 블로그/배포 안정화(E2E 게이트, 생성 재시도, SEO/JSON-LD 강화)
 
-- **픽앤조이 초이스 상세 안내문구 최종 교체**:
-  - `src/app/blog/[slug]/page.tsx`에서 `isChoicePost` 분기 하단 안내를 초이스 전용 고지문으로 변경
-  - 문구: AI 분석·에디터 큐레이션 고지 + 쿠팡 파트너스 수수료/가격 비영향/주관 의견 고지
-  - 검증: `npm run build` 성공, 커밋/푸시 `4d8f9c9`
+## 고정 운영 사실 (반복 참조용)
 
-- **초이스 히어로 이미지 공식 캡처본으로 교체**:
-  - 다운로드 원본을 프로젝트 정적 이미지로 반영
-    - `public/images/choice-lemouton.jpg`
-    - `public/images/choice-omega3.jpg`
-  - 포스트 frontmatter `image`를 로컬 경로로 교체
-    - `2026-03-30-choice-lemouton-mate-navy.md`
-    - `2026-03-30-choice-nutridday-lutein-omega3.md`
-  - 검증: `npm run build` 성공, 커밋/푸시 `153a721`
+- 쿠팡 파트너스: `AF5831775`
+- 사이드바 배너: `976244` / 하단 배너: `976089`
+- 쿠팡 iframe은 공식 URL 직접 사용 + `referrerPolicy="unsafe-url"` 유지
+- `CoupangBanner.tsx`는 `'use client'` 유지 (Hydration mismatch 방지)
 
-- **픽앤조이 초이스 카테고리 신설**:
-  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직 추가
-    - `category: "픽앤조이 초이스"` 또는 `tags`에 `리뷰|review|쿠팡|추천상품` 포함 시 자동 수집
-    - 기존 3대 카테고리(인천/보조금/축제) 포스트는 제외 처리
-  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
-  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
-  - 포스트 저장 위치: `src/content/life/` (맛집 포스트와 동일 디렉터리, category로 구분)
-  - 초이스 포스트 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
-  - JSON-LD `aggregateRating`: `rating_value` + `review_count` 있을 때만 삽입
+## 유지 백로그 (요약)
 
-- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성 (수정 중)**:
-  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
-    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
-    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
-  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
-    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
-    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
-
-## 최근 중요 반영 사항 (2026-03-29 추가-4)
-
-- **맛집 상세 404(slug 매핑) 복구**:
-  - `getPostData()`에 slug 정규화(NFC/decodeURIComponent) + 파일명/frontmatter fallback 조회 추가
-  - 2개 맛집 포스트 slug를 영문으로 교체하여 링크 안정화
-  - 빌드 산출물에 영문 slug 경로 생성 확인
-
-- **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
-  - 생성 스크립트에서 지역 버킷(서울/인천/경기기타) 분류 후 2건씩 선발
-  - 워크플로우 환경변수: `LIFE_RESTAURANT_POSTS_PER_RUN=6`, `LIFE_RESTAURANT_POSTS_PER_BUCKET=2`
-  - 검증: `node --check` 및 `npm run build` 성공
-
-- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - 생성 건수: 3~5건 클램프(기본 3)
-    - 저장 경로: `src/content/life`로 전환
-    - slug를 `지역명-상호명` 영문 조합으로 생성
-    - 프롬프트 훅/톤 강화(도발형 Hook, 금지어 강화, 동선 문구 강화)
-  - `scripts/collect-life-restaurants.mjs`
-    - 오마카세/퓨전한식/화덕피자 키워드 확장
-    - Google 평점 strict 컷오프(미확인 제외 + 4.2 미만 제외)
-  - `src/lib/posts.ts`: `posts` + `life` 디렉터리 통합 로딩
-  - `.github/workflows/deploy.yml`: 생성 건수 기본값 3으로 상향
-  - 검증: `node --check` 통과, `npm run build` 성공
-
-- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
-  - `scripts/collect-life-restaurants.mjs`:
-    - Kakao 결과 사이즈: 15 → 20 (쿼리당)
-    - `GOOGLE_PRE_FILTER_SIZE = 20`, `GOOGLE_PLACES_MIN_RATING = 4.2` 상수 추가
-    - `fetchGooglePlaceRating()`: Google Places API (New) Text Search, 필드 마스크 `places.rating,places.userRatingCount` 최적화
-    - `filterByGoogleRating()`: 평점 4.2 미만 자동 제외, 정보 없으면 통과 처리, 호출 간 200ms 딜레이
-    - `collectRegion()`: Google 필터 후 최종 15개 슬라이스 → Gemini 요약
-    - `run()`: `GOOGLE_PLACES_API_KEY` 환경변수 연동, source 레이블 `kakao+google+gemini` 갱신
-    - restaurants.json에 `googleRating` / `googleRatingCount` 필드 추가
-  - `scripts/generate-life-restaurant-posts.mjs`:
-    - `ratingFrontmatter`: googleRating 있을 때 `rating_value` / `review_count` frontmatter 자동 삽입
-    - posts.ts → `ratingValue`/`reviewCount` → blog/[slug]/page.tsx → `aggregateRating` JSON-LD 자동 연결
-    - 프롬프트: 조도/공간감/음식 결 감각적 묘사 2개 이상 규칙 추가
-    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가 (근처 스팟 제안)
-  - `.github/workflows/deploy.yml`: 맛집 수집 스텝에 `GOOGLE_PLACES_API_KEY` Secret 추가
-  - GitHub Actions Secret에 `GOOGLE_PLACES_API_KEY` 추가 필요
-  - 검증: `npm run build` 성공, `node --check` 구문 통과, 커밋/푸시 완료
-
-## 최근 중요 반영 사항 (2026-03-29 추가-3)
-
-- **맛집 자동화 2차 톤 리프레시**:
-  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 취향 핫플 검색어 세트 중심으로 재구성
-  - snapshot 데이터에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 저장 + trend score 정렬 적용
-  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 저장형 핫플 큐레이션 톤으로 전환하고 `FORCE_RESTAURANT_SOURCE_IDS` 재생성 스위치 추가
-  - 초기 저품질 맛집 포스트 2건 삭제 후 신규 2건 발행:
-    - `2026-03-29-인천-젠젠-본점.md`
-    - `2026-03-29-서울-미테이블-성수본점.md`
-  - 검증: `npm run collect:life-restaurants` 성공, `npm run build` 성공
-
-## 최근 중요 반영 사항 (2026-03-29 추가)
-
-- **일상의 즐거움 맛집 자동화 1차 구축**:
-  - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 + 정확도순으로 지역별 최대 15개 수집
-  - `scripts/collect-life-restaurants.mjs`: 맛집 스냅샷 JSON 생성
-  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 포스트 자동 생성 + SEO용 slug/description/frontmatter 강화
-  - `/life` 탭은 생성된 맛집 포스트 우선 노출, 없으면 카카오맵 카드 fallback
-  - `.github/workflows/deploy.yml`에 수집/포스트 생성 스텝 추가
-  - `src/app/blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 추가
-  - 검증: `npm run build` 성공, 커밋/푸시 `4509056`
-
-- **쿠팡 사이드바 배너 ID 교체 및 버그 수정**:
-  - `CoupangBanner.tsx`에 `'use client'` 추가 → Server Component 상태에서 발생하던 Hydration mismatch 에러 해결 (빈 흰 박스 문제)
-  - 사이드바 배너 ID: `976088` (미활성) → `976244` (고객 관심 기반 추천, 배너명: 픽앤조이_사이드바_여행_최종) 교체
-  - 구 ID 976088은 Coupang 파트너스에서 정상 활성화가 안 된 것이 원인이었음
-  - 하단 배너 ID 976089는 변경 없음 유지
-
-## 최근 중요 반영 사항 (2026-03-29 추가-2)
-
-- **실제 전국 축제·여행 포스트 2편 발행**:
-  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
-  - `2026-03-29-jindo-canolaflower-festival.md`
-- **블로그 상세 SEO 강화** (`src/app/blog/[slug]/page.tsx`):
-  - 메타 description을 본문 첫 문장 기반으로 생성
-  - JSON-LD에 `articleSection/about/additionalType/keywords/inLanguage` 확장
-- **Playwright 최소 E2E + 배포 전 게이트 연결**:
-  - `playwright.config.ts` / `e2e/blog-filter.spec.ts` 신규
-  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 추가
-  - `.github/workflows/deploy.yml`에 배포 전 `npm run test:e2e` 단계 추가
-- **Gemini 생성 안정화** (`scripts/generate-blog-post.js`):
-  - `maxOutputTokens`를 4096으로 상향
-  - `finishReason`/본문 완결성 검사 + 최대 3회 재시도 로직 추가
-- **검증 및 반영**:
-  - `npm run build` 성공
-  - `npm run test:e2e` 성공
-  - 커밋/푸시 완료: `da64479` (`main`)
-
-## 이전 중요 반영 사항 (2026-03-29)
-
-- **블로그 생성 문체 가이드 전면 교체** (`generate-blog-post.js`):
-  - 페르소나: 30대 초반 여행·생활정보 에디터
-  - 경어체 종결어미 (`~해요/~거든요/~입니다`) 필수, 평어체 (`~이다/~한다`) 절대 금지
-  - AI 금지어 목록 추가: 결론적으로/다양한/인상적인/포착한/대명사가 됐다/라고 불린다 등
-  - 마무리: "함께 가면 좋은 사람" 공식 문구 → 작가 주관 한 줄 평 또는 상황 여운으로 변경
-- **블로그 date 하드코딩** (`generate-blog-post.js`):
-  - `const today = new Date().toISOString().split('T')[0]` → 프롬프트 frontmatter에 직접 주입
-  - Gemini가 임의로 날짜를 생성하던 버그 완전 차단
-- **논산딸기축제 포스트 수정** (`2026-03-28-post-1774739294677.md`):
-  - date: `2024-05-21` → `2026-03-29` 수정
-  - Gemini가 잘린 본문 완성 재작성 (훅 → ### 1~3 → 방문정보 표 → 작가 주관 마무리)
-- **쿠팡 배너 최종 수정** (Claude Cowork 작업):
-  - same-origin HTML 중첩 iframe 방식 → iframe 안의 iframe 중첩 구조에서 렌더링 실패 확인
-  - `CoupangBanner.tsx`: 파트너스 공식 iframe URL(`ads-partners.coupang.com/widgets.html?id=976088&...`) 직접 사용 + `referrerPolicy="unsafe-url"` 추가
-  - `about/page.tsx`: TaeheoAdBanner + CoupangBanner 사이드바 추가 (다른 페이지들과 동일 레이아웃)
-  - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
-
-## 이전 중요 반영 사항 (2026-03-28)
-
-- **Google Analytics**: `layout.tsx`에 `G-6VNKGES4FW` Script 삽입 완료
-- **블로그 카테고리 필터**: `BlogFilter.tsx` → `useSearchParams` 기반 URL 파라미터 방식으로 전환 (뒤로가기 시 필터 유지)
-- **블로그 생성 AI**: `generate-blog-post.js` Gemini 2.5 Pro 전환 + MZ 감성 + 정보 완전성 규칙
-- **태허철학관 배너**: `TaeheoAdBanner.tsx` 신규, 가로형 + `taeheo-logo.png` 도장 로고. 전 사이드바 상단 배치
-- **쿠팡 파트너스 배너**:
-  - `CoupangBanner.tsx` (사이드바 240x600, 쿠팡 id:976088) / `CoupangBottomBanner.tsx` (하단 680x300, id:976089)
-  - 파트너 트래킹 코드: AF5831775
-  - `bannerId` prop으로 페이지별 고유 DOM id 지정 (중복 방지)
-  - useEffect + g.js 중복 로드 방지 로직 (window.PartnersCoupang 체크 → 즉시 실행 / 로드 중이면 500ms 후 재시도)
-  - 적용: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세 (총 8곳)
-- **인천/보조금/축제 상세 페이지 사이드바 추가**: `incheon/[id]`, `subsidy/[id]`, `festival/[id]` 에 `flex gap-8 items-start` 레이아웃 + TaeheoAdBanner + CoupangBanner 삽입
-- **공정위 문구**: 전 페이지 footer에 쿠팡 파트너스 고지 문구 추가
-- **블로그 썸네일**: TourAPI 실제 이미지로 5개 포스트 교체 (진해/여의도/경포/구례/광안리)
-
-## 이전 반영 사항 (2026-03-27 이전)
-
-- 네비 메뉴명 통일: 인천시 정보 / 전국 보조금·복지 정책 / 전국 축제·여행 정보
-- 헤더 UI 확대: 로고 `text-3xl`, 네비 `text-base`
-- 축제 설명 보강: `scripts/collect-festival.js`에서 `detailCommon2`로 `overview` 수집
-- 주의: KorService2 `detailCommon2`는 `defaultYN`, `overviewYN` 파라미터를 사용하면 오류 발생 (파라미터 없이 호출)
-- 축제 상세 데이터 복구(2026-03-27):
-  - `overview` 200자 절삭 제거 → 상세 원문 보존
-  - 오래된 샘플 3건(`festival-001~003`) API 원본 매핑/교체 로직 추가
-  - 매칭 실패 샘플 자동 제거 + `contentid/id` 기준 중복 제거
-  - `festival.json` 재수집 완료
-- 상세 페이지 typography/prose 개선(2026-03-27):
-  - `@tailwindcss/typography` 활성화 및 상세 페이지 본문 `prose` 적용
-  - 상세 4페이지 폭 `max-w-5xl → 7xl → 6xl` 사용자 피드백 기반 조정
-- 블로그 가독성 규칙 강화(2026-03-27):
-  - 본문 훅(Hook) 시작 강제, H1→H2 자동 보정
-  - 번호 소제목 자동 변환: `1.`/`1️⃣` 패턴을 `### 1.` 헤딩 + 설명 단락으로 분리
-  - 번호 항목 아래 들여쓰기 코드블록 오인(`pre`) 제거 로직 추가
-  - 생성 스크립트(`generate-blog-post.js`)에 훅/번호 소제목 형식 가이드 반영
-- 상세 콘텐츠 블로그형 고도화(2026-03-27):
-  - 상세 3페이지 본문을 `ReactMarkdown + prose` 렌더링으로 전환
-  - `description_markdown` 우선 렌더링, 미존재 시 필드 기반 fallback markdown 생성
-  - 수집 스크립트 3종에 Anthropic 기반 `description_markdown` 생성 및 해시 캐시 적용
-  - 로그에 input/output 토큰 사용량 출력(비용 모니터링)
-  - `DESCRIPTION_MARKDOWN_BATCH_LIMIT`(기본 10)로 실행당 AI 가공 수 제한
-  - **description_markdown 전체 백필 완료 (2026-03-27)**: incheon 103건, subsidy 103건, festival 107건 모두 100% 생성 완료
-  - 실측 Anthropic 비용: 10건당 ~$0.037, 1건당 ~$0.004(₩5), 월 10건/일 기준 ~$1.10/월
-- 카드 UI 전역 인터랙션 정리(2026-03-27):
-  - `globals.css`에 `.menu-card`, `.menu-card-icon` 추가 (미세 확대/배경 틴트/아이콘 톤다운)
-  - 인천/보조금/축제/블로그/홈 카드에 공통 적용
-- 카드 그리드 높이 복구(2026-03-27):
-  - 인천/보조금 목록에서 `auto-rows-fr`, `h-full` 강제 적용 제거
-  - 카드가 과도하게 커지는 문제 해결, 축제/블로그와 유사한 자연 높이 유지
+- [ ] Google AdSense 설정
+- [ ] 자동화 에러 알림/모니터링 강화
+- [ ] 맛집 포스트 이미지 소스 전략 고도화

@@ -150,134 +150,21 @@ src/app/life/restaurant/data/
 - 총 28편(posts/) + 초이스 2편(life/): 인천 9, 보조금 9, 축제 9, 기타 1 / 픽앤조이 초이스 2
 - 2026-03-30: 픽앤조이 초이스 카테고리 신설, 쿠팡 제휴 리뷰 포스트 2편 수동 작성
 
-## 최신 동기화 메모 (2026-03-29 추가-4)
+## 최신 동기화 메모 (압축판)
 
-- **맛집 버킷 부트스트랩(초기 기준치 보정) 추가**:
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - `LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET` 환경변수 추가
-    - 기존 포스트(`src/content/posts` + `src/content/life`)를 스캔해 버킷별 현재 개수 계산
-    - 부족한 버킷만 추가 생성(예: 서울1/인천1/경기0일 때 최소2 기준으로 4건만 생성)
-  - 1회 실행 결과(부트스트랩 2): `seoul:2, incheon:2, gyeonggi:2` 달성
-  - 생성된 신규 파일(4건):
-    - `src/content/life/2026-03-29-seongsu-restaurant-13289056.md`
-    - `src/content/life/2026-03-29-songdo-restaurant-1840452915.md`
-    - `src/content/life/2026-03-29-pangyo-restaurant-1352135383.md`
-    - `src/content/life/2026-03-29-gimpo-restaurant-585118326.md`
-  - 워크플로우는 유지: 내일부터 `서울2/인천2/경기기타2` 일일 자동 생성
-
-- **일상의 즐거움 맛집 카드 썸네일 3종 분리 + 높이 축소**:
-  - `src/app/life/page.tsx`: 맛집 카드 메타 라벨을 `서울 맛집 / 인천 맛집 / 경기 맛집`으로 분기
-  - `src/components/LifeFilterClient.tsx`: 썸네일 라벨/그라데이션을 3종으로 분리
-  - 카드 썸네일 높이 `h-40 → h-20`으로 축소(상하 높이 반)
-  - 검증: `npm run build` 성공
-
-- **맛집 기본 썸네일 추가 + 상세 상단 이미지 노출**:
-  - `public/images/default-restaurant.svg` 신규 추가 (직접 제작한 안전한 기본 썸네일)
-  - `scripts/generate-life-restaurant-posts.mjs`: 기본 image를 `/images/default-restaurant.svg`로 변경
-  - 기존 2개 맛집 포스트 image도 restaurant 기본 썸네일로 교체
-  - `src/app/blog/[slug]/page.tsx`: SVG도 상세 상단에서 노출되도록 조건 완화
-  - `src/components/BlogFilter.tsx`: `픽앤조이 맛집 탐방` 카드 배지/썸네일 스타일 추가
-  - 검증: `npm run build` 성공
-
-- **맛집 상세 → 일상의 즐거움 목록 복귀 흐름 보정**:
-  - `src/components/LifeFilterClient.tsx`
-    - 맛집 카드 클릭 시 `lifeScrollY` 저장
-    - 블로그 상세 링크에 `?from=life&returnTo=/life?tab=...` 복귀 정보 추가
-  - `src/components/BlogBackButton.tsx`
-    - `from=life`, `returnTo` 쿼리가 있으면 `/blog` 대신 원래 보던 `/life` 목록으로 복귀
-    - `useSearchParams()`는 `Suspense`로 감싼 상태에서 사용
-  - `src/app/life/page.tsx`
-    - `ScrollRestorer` 적용으로 목록 복귀 시 스크롤 위치 복원
-  - 검증: `npm run build` 성공
-
-- **블로그 상세 본문 spacing 미세 조정**:
-  - `src/app/blog/[slug]/page.tsx`: 본문 컨테이너에서 `lg:prose-lg`, `prose-p:leading-8` 제거 후 `blog-prose` 전용 클래스 적용
-  - `src/app/globals.css`: 문단/헤딩/리스트 간격을 조금 더 타이트하게 줄이는 `blog-prose` 스타일 추가
-  - 검증: `npm run build` 성공
-
-- **맛집 상세 404(slug 매핑) 복구**:
-  - 증상: `2026-03-29-인천-젠젠-본점`, `2026-03-29-서울-미테이블-성수본점` 클릭 시 404
-  - 원인: slug/frontmatter와 파일명 매핑이 취약해 일부 케이스에서 상세 파일 조회 실패 가능
-  - 조치:
-    - `src/lib/posts.ts` `getPostData()`를 slug 정규화(NFC/URL decode) + 파일명/frontmatter fallback 스캔 방식으로 강화
-    - 두 포스트의 slug를 영문 고정값으로 변경
-      - `incheon-zenzen-bonjeom`
-      - `seoul-mitable-seongsu-bonjeom`
-  - 검증: `npm run build` 결과 `out/blog/incheon-zenzen-bonjeom`, `out/blog/seoul-mitable-seongsu-bonjeom` 생성 확인
-
-- **맛집 자동생성 6건 분배 로직 고정** (`f337cf5`):
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - 일일 생성 수를 `LIFE_RESTAURANT_POSTS_PER_RUN=6` 기준으로 고정
-    - 버킷 분배 로직 추가: `서울 2 / 인천 2 / 경기기타 2` 우선 선발
-    - 주소/쿼리 기반 `seoul | incheon | gyeonggi-other` 분류 함수 추가
-    - 버킷 후보 부족 시 경고 로그 출력
-  - `.github/workflows/deploy.yml`
-    - `LIFE_RESTAURANT_POSTS_PER_RUN: '6'`
-    - `LIFE_RESTAURANT_POSTS_PER_BUCKET: '2'` 추가
-  - 검증: `node --check` 통과, `npm run build` 성공, 커밋/푸시 완료
-
-- **맛집 글 생성 규칙 3차 고도화** (`a42ee87`):
-  - `scripts/generate-life-restaurant-posts.mjs`
-    - 실행당 생성 건수: 기본 2건 → **3~5건 클램프**(`LIFE_RESTAURANT_POSTS_PER_RUN`, 기본 3)
-    - 저장 경로를 `src/content/posts` → `src/content/life`로 전환
-    - slug 규칙 강화: `지역명-상호명` 영문 조합 기반 slug 생성(`songdo-...` 형태)
-    - 파일명은 날짜 접두 유지(`YYYY-MM-DD-slug.md`), frontmatter `slug`는 영문 조합값 유지
-    - 프롬프트 훅을 도발형으로 강화, 금지어/감각 묘사/동선 가이드 규칙 보강
-  - `scripts/collect-life-restaurants.mjs`
-    - 키워드 확장: 오마카세/퓨전한식/화덕피자 추가
-    - Google 평점 strict 컷오프: **평점 미확인 업장 제외 + 4.2 미만 제외**
-  - `src/lib/posts.ts`: `src/content/posts` + `src/content/life`를 함께 읽도록 확장
-  - `.github/workflows/deploy.yml`: `LIFE_RESTAURANT_POSTS_PER_RUN` 기본값 `3`으로 상향
-  - 검증: `node --check` 통과, `npm run build` 성공
-
-- **맛집 엔진 고도화 — Google Places API 평점 필터 + 프롬프트 업그레이드** (`8a98b87`):
-  - `scripts/collect-life-restaurants.mjs`: Kakao 20개 추출 → Google Places API (New) 평점 4.2+ 필터 → 상위 15개 → Gemini 요약
-    - 필드 마스크: `places.rating,places.userRatingCount` (비용 최적화)
-    - restaurants.json에 `googleRating` / `googleRatingCount` 추가
-  - `scripts/generate-life-restaurant-posts.mjs`:
-    - googleRating 있으면 `rating_value` / `review_count` frontmatter 자동 삽입 → JSON-LD `aggregateRating` 자동 연결
-    - 프롬프트: 조도·공간감·음식 결 감각적 묘사 2개 이상 규칙 추가
-    - 프롬프트: 방문 정보 박스에 "식사 후 동선" 항목 추가
-  - `.github/workflows/deploy.yml`: `GOOGLE_PLACES_API_KEY` Secret 추가 (GitHub Actions Secrets에도 추가 필요)
-  - 검증: `npm run build` 성공, 커밋/푸시 `8a98b87`
-
-## 최신 동기화 메모 (2026-03-29 추가)
-- **일상의 즐거움 맛집 자동화 파이프라인 추가**:
-  - `src/lib/life-restaurants.ts`: 찐맛집/현지인/줄서는 식당 키워드 기반 수집으로 고도화, 지역당 15개 상한, Gemini 문제해결형 서사 요약 반영
-  - `scripts/collect-life-restaurants.mjs`: 카카오 API + Gemini로 맛집 스냅샷 생성 → `src/app/life/restaurant/data/restaurants.json` 저장
-  - `scripts/generate-life-restaurant-posts.mjs`: `픽앤조이 맛집 탐방` 카테고리 전용 블로그 포스트 생성 (지역+상황+보상 제목, SEO용 slug/description/frontmatter, 페인포인트→발견→디테일→팁 구조)
-  - `/life` 페이지는 생성된 맛집 포스트가 있으면 우선 노출, 없으면 카카오맵 직접 링크 카드로 fallback
-  - `.github/workflows/deploy.yml`에 맛집 수집/포스트 생성 스텝 추가
-  - `src/app/blog/[slug]/page.tsx`에 맛집 `Restaurant` / 초이스 `Product` JSON-LD 추가 (별점/리뷰수는 검증 가능한 값이 있을 때만 삽입)
-
-- **맛집 자동화 2차 톤 리프레시**:
-  - `scripts/collect-life-restaurants.mjs`, `src/lib/life-restaurants.ts`를 2030 핫플형 검색어 세트로 재구성
-    - 예: 송도 브런치 카페 / 성수동 팝업 근처 맛집 / 연남동 내추럴 와인바 / 망원동 에스프레소 바
-  - 검색 결과에 `sourceQuery`, `scenarioHint`, `vibeHint`, `cuisineHint` 메타데이터를 함께 저장하고 trend score로 우선순위 정렬
-  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트를 교과서형 설명 대신 "저장해둘 만한 핫플 큐레이션" 톤으로 재작성
-  - `FORCE_RESTAURANT_SOURCE_IDS` 환경변수로 특정 source_id 포스트 재생성 가능
-  - 저품질 초기 맛집 포스트 2건 제거 후 신규 2건 발행:
-    - `2026-03-29-인천-젠젠-본점.md`
-    - `2026-03-29-서울-미테이블-성수본점.md`
-- **실제 전국 축제·여행 포스트 2편 발행 완료**:
-  - `2026-03-29-gangjin-jeollabyeongseong-festival.md`
-  - `2026-03-29-jindo-canolaflower-festival.md`
-- **SEO 강화** (`src/app/blog/[slug]/page.tsx`):
-  - 메타 설명을 본문 첫 문장 기반으로 생성
-  - JSON-LD에 `articleSection`, `about`, `additionalType`, `keywords`, `inLanguage` 확장
-- **Playwright 최소 E2E 도입 및 배포 전 게이트 연결**:
-  - `playwright.config.ts`, `e2e/blog-filter.spec.ts` 추가
-  - `BlogFilter.tsx`, `BlogBackButton.tsx`에 `data-testid` 반영
-  - `.github/workflows/deploy.yml`에 배포 전 E2E 테스트 단계 추가
-- **블로그 생성 안정화** (`scripts/generate-blog-post.js`):
-  - `maxOutputTokens` 4096 상향
-  - 불완전 응답 감지(`finishReason`, 길이/종결/파일명 검사) + 최대 3회 재시도
-- **검증/반영 완료**:
-  - `npm run build` 성공
-  - `npm run test:e2e` 성공
-  - 커밋/푸시: `da64479` (`main`)
+- 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 규칙/현행 상태 중심으로 유지한다.
+- 2026-03-29~30 핵심 반영:
+  - `픽앤조이 초이스` 카테고리/목록/카드/포스트 체계 반영
+  - 초이스 상세 UI/고지문/히어로 이미지 개선
+  - 맛집 자동화 고도화(버킷 분배, 평점 필터, slug 안정화)
+  - 블로그 생성 안정화(E2E 게이트, 재시도 로직, SEO/JSON-LD 강화)
+- 고정 참고값:
+  - 쿠팡 파트너ID `AF5831775`
+  - 사이드바 `976244`, 하단 `976089`
+  - 배너는 공식 iframe URL + `referrerPolicy="unsafe-url"` + `CoupangBanner.tsx` `'use client'`
 
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
+
 - 파트너ID: AF5831775
 - 사이드바: id **976244** (고객 관심 기반 추천), 240x600, `CoupangBanner`
   - src: `https://ads-partners.coupang.com/widgets.html?id=976244&template=carousel&trackingCode=AF5831775&subId=&width=240&height=600&tsource=`
@@ -296,28 +183,9 @@ src/app/life/restaurant/data/
 - 구 ID 976088 → 중간 ID → 현재 976244 (새 발급): Coupang 파트너스 측 활성화 문제
 
 ## 다음 작업 예정
+
 - ~~Google Analytics (GA ID) 설정~~ ✅ 완료
 - ~~쿠팡 파트너스 배너 삽입~~ ✅ 완료
 - Google AdSense 신청 (페이지 15개 이상 완료)
 - 에러 핸들링 및 자동화 모니터링
 - 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후)
-
-## 최신 동기화 메모 (2026-03-30)
-
-- **픽앤조이 초이스 카테고리 신설**:
-  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
-    - `category: "픽앤조이 초이스"` 또는 `tags`에 `리뷰|review|쿠팡|추천상품` 포함 시 자동 수집
-    - 기존 3대 카테고리(인천/보조금/축제) 포스트는 제외 처리
-  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
-  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
-  - 포스트 저장 위치: `src/content/life/` (맛집 포스트와 동일 디렉터리, category로 구분)
-  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
-  - JSON-LD `aggregateRating`: `rating_value` + `review_count` 있을 때만 삽입
-
-- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성**:
-  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
-    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
-    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
-  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
-    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
-    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
