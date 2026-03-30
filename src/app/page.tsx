@@ -358,20 +358,16 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Features Section ── */}
-      <section className="py-14 bg-white">
+      {/* ── Features + CTA Section ── */}
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-              왜{' '}
-              <span className="bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">
-                픽앤조이
-              </span>
-              인가요?
+            <h2 className="text-2xl sm:text-3xl font-extrabold">
+              왜 픽앤조이인가요?
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-14">
             {[
               { icon: '🔍', title: '매일 직접 수집', desc: '공공기관 사이트에서 최신 정보를 매일 수집' },
               { icon: '🔔', title: '놓치지 않는 알림', desc: '새로운 보조금·축제 정보를 바로 확인' },
@@ -380,52 +376,24 @@ export default async function Home() {
               { icon: '⏰', title: '시간 절약', desc: '여러 사이트 대신 한 곳에서 모두 확인' },
               { icon: '❤️', title: '맞춤 추천', desc: '나이·지역·상황에 맞는 맞춤형 정보' },
             ].map((f, idx) => (
-              <div key={idx} className="text-center p-4 rounded-xl bg-gray-50 hover:bg-orange-50 transition-colors duration-300">
-                <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-lg mx-auto mb-3">
+              <div key={idx} className="text-center p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
+                <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg mx-auto mb-3">
                   {f.icon}
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">{f.title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+                <h3 className="text-sm font-bold text-white mb-1">{f.title}</h3>
+                <p className="text-xs text-white/70 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── CTA Section ── */}
-      <section className="py-16 sm:py-20 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">오늘부터 시작하세요, 완전 무료입니다</h2>
-          <p className="text-lg sm:text-xl font-bold text-white/90 mb-6">회원가입도, 앱 설치도 필요 없어요</p>
-          <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-10 max-w-xl mx-auto">
-            픽앤조이의 모든 서비스는 100% 무료입니다.<br />
-            광고 클릭을 강요하지 않고, 개인정보를 요구하지 않아요.<br />
-            그냥 들어와서, 필요한 정보 가져가시면 됩니다.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 max-w-lg mx-auto text-left">
-            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-              <span className="text-lg">📋</span>
-              <p className="text-sm text-white/90">오늘 마감되는 지원금 신청이 있을 수 있고</p>
-            </div>
-            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-              <span className="text-lg">🎊</span>
-              <p className="text-sm text-white/90">이번 주말 근처에서 축제가 열리고 있을 수 있고</p>
-            </div>
-            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-              <span className="text-lg">🍽️</span>
-              <p className="text-sm text-white/90">아직 몰랐던 동네 맛집이 기다리고 있을 수 있습니다</p>
-            </div>
+          <div className="text-center">
+            <h3 className="text-xl sm:text-2xl font-extrabold mb-2">오늘부터 시작하세요, 완전 무료입니다</h3>
+            <p className="text-base sm:text-lg font-bold text-white/90 mb-4">회원가입도, 앱 설치도 필요 없어요</p>
+            <p className="text-sm sm:text-base text-white/70 leading-relaxed max-w-md mx-auto">
+              픽앤조이의 모든 서비스는 100% 무료입니다.<br />
+              그냥 들어와서, 필요한 정보 가져가시면 됩니다.
+            </p>
           </div>
-
-          <Link
-            href="/subsidy"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
-          >
-            👉 pick-n-joy.com 지금 바로 둘러보기
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </Link>
-          <p className="text-xs text-white/50 mt-6">매일 아침 업데이트 · 완전 무료 · 광고 없는 큐레이션</p>
         </div>
       </section>
 
