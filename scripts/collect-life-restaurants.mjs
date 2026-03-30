@@ -272,9 +272,11 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
 
 async function collectRegion(region, kakaoKey, geminiKey, googleKey) {
   const queries = REGION_QUERY_MAP[region];
-  const results = await Promise.all(
-    queries.map(async (meta) => ({ meta, places: await fetchKakaoByKeyword(meta.query, kakaoKey) }))
-  );
+  const results = [];
+  for (const meta of queries) {
+    const places = await fetchKakaoByKeyword(meta.query, kakaoKey);
+    results.push({ meta, places });
+  }
 
   const deduped = new Map();
   for (const { meta, places } of results) {
@@ -333,10 +335,8 @@ async function run() {
 
   console.log('🥢 일상의 즐거움 맛집 데이터 수집 시작');
 
-  const [incheon, seoul] = await Promise.all([
-    collectRegion('incheon-gyeongin', kakaoKey, geminiKey, googleKey),
-    collectRegion('seoul-gyeonggi', kakaoKey, geminiKey, googleKey),
-  ]);
+  const incheon = await collectRegion('incheon-gyeongin', kakaoKey, geminiKey, googleKey);
+  const seoul = await collectRegion('seoul-gyeonggi', kakaoKey, geminiKey, googleKey);
 
   const payload = {
     updatedAt: new Date().toISOString(),

@@ -28,7 +28,7 @@ jobs:
   update-and-deploy:
     if: ${{ github.event_name != 'push' || github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 120
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: 인천 지역 정보 수집
+      - name: '[1단계] 인천 지역 정보 수집'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-incheon.js
         env:
@@ -49,7 +49,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
-      - name: 전국 보조금 정책 수집
+      - name: '[1단계] 전국 보조금 정책 수집'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-subsidy.js
         env:
@@ -57,7 +57,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
-      - name: 전국 축제·여행 정보 수집
+      - name: '[1단계] 전국 축제·여행 정보 수집'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-festival.js
         env:
@@ -65,11 +65,47 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
-      - name: 만료 콘텐츠 처리
+      - name: '[1단계] 만료 콘텐츠 처리'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/cleanup-expired.js
 
-      - name: AI 블로그 글 자동 생성
+      - name: '[1단계] 변경사항 커밋 & 푸시 (공공데이터)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(1단계): 공공데이터 동기화 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "변경사항 없음"
+          fi
+
+      - name: '[1단계] Next.js 빌드'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[1단계] Playwright 브라우저 설치'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npx playwright install --with-deps chromium
+
+      - name: '[1단계] Playwright E2E 테스트 (배포 전)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[1단계] Cloudflare Pages 배포'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npx wrangler pages deploy out --project-name=my-local-info
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: '[2단계] AI 블로그 글 자동 생성 (카테고리별 1편)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-blog-post.js
         timeout-minutes: 30
@@ -79,7 +115,39 @@ jobs:
           BLOG_MAX_GENERATION_SECONDS: '900'
           BLOG_MAX_CANDIDATES_PER_CATEGORY: '8'
 
-      - name: 일상의 즐거움 맛집 데이터 수집
+      - name: '[2단계] 변경사항 커밋 & 푸시 (블로그)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(2단계): 블로그 3건 생성 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "변경사항 없음"
+          fi
+
+      - name: '[2단계] Next.js 빌드'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[2단계] Playwright E2E 테스트 (배포 전)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[2단계] Cloudflare Pages 배포'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npx wrangler pages deploy out --project-name=my-local-info
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: '[3단계] 일상의 즐거움 맛집 데이터 수집'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-life-restaurants.mjs
         env:
@@ -87,41 +155,64 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
 
-      - name: 일상의 즐거움 맛집 포스트 생성
+      - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          LIFE_RESTAURANT_POSTS_PER_RUN: '6'
-          LIFE_RESTAURANT_POSTS_PER_BUCKET: '2'
+          LIFE_RESTAURANT_POSTS_PER_RUN: '3'
+          LIFE_RESTAURANT_POSTS_PER_BUCKET: '1'
 
-      - name: 변경사항 커밋 & 푸시
+      - name: '[3단계] 변경사항 커밋 & 푸시 (일상의 즐거움)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add .
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트: 데이터 수집 및 블로그 글 생성 $(date +'%Y-%m-%d')"
+            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
             git push
           else
             echo "변경사항 없음"
           fi
 
-      - name: Next.js 빌드
+      - name: '[3단계] Next.js 빌드'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
-      - name: Playwright 브라우저 설치
-        run: npx playwright install --with-deps chromium
-
-      - name: Playwright E2E 테스트 (배포 전)
+      - name: '[3단계] Playwright E2E 테스트 (배포 전)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
-      - name: Cloudflare Pages 배포
+      - name: '[3단계] Cloudflare Pages 배포'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: npx wrangler pages deploy out --project-name=my-local-info
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: '[공통] Playwright 브라우저 설치 (deploy_only / push)'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
+        run: npx playwright install --with-deps chromium
+
+      - name: '[공통] Next.js 빌드 (deploy_only / push)'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[공통] Playwright E2E 테스트 (deploy_only / push)'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+
+      - name: '[공통] Cloudflare Pages 배포 (deploy_only / push)'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: npx wrangler pages deploy out --project-name=my-local-info
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
