@@ -273,43 +273,43 @@ export default async function Home() {
       </section>
 
       {/* ── Problem Section ── */}
-      <section className="py-16 sm:py-20 bg-[#FAFAFA]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 rounded-full bg-red-50 text-red-500 text-sm font-bold mb-4">😤 혹시 이런 경험 있으신가요?</span>
+      <section className="pt-10 pb-6 bg-[#FAFAFA]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-6">
+            <span className="inline-block px-5 py-1.5 rounded-full bg-red-50 text-red-500 text-sm font-bold mb-3">😤 혹시 이런 경험 있으신가요?</span>
             <p className="text-sm sm:text-base text-gray-500">
               대한민국 평균 가구가 매년 신청하지 못해 놓치는 정부 지원금, <span className="font-bold text-red-500">약 127만 원</span>
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❶</div>
-              <h3 className="text-base font-bold text-gray-900 mb-2">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                복지로, 정부24, 인천시 홈페이지, 고용24… 탭만 열다가 30분이 지납니다. 지원금 종류만 전국 기준 2,000개가 넘는데, 어디서부터 봐야 할지 막막하죠.
-              </p>
+          <div className="flex flex-col gap-3">
+            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
+              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❶</div>
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-0.5">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">복지로, 정부24, 인천시 홈페이지, 고용24… 탭만 열다가 30분이 지납니다. 지원금 종류만 2,000개가 넘는데, 어디서부터 봐야 할지 막막하죠.</p>
+              </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❷</div>
-              <h3 className="text-base font-bold text-gray-900 mb-2">알았을 때는 이미 신청 마감</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                에너지 바우처, 청년 월세 지원, 인천시 출산 지원금— 마감일 하루 전날 알면 이미 늦습니다. 놓친 지원금은 다음 해까지 기다려야 해요.
-              </p>
+            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
+              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❷</div>
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-0.5">알았을 때는 이미 신청 마감</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">에너지 바우처, 청년 월세 지원, 인천시 출산 지원금— 마감일 하루 전날 알면 이미 늦습니다.</p>
+              </div>
             </div>
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❸</div>
-              <h3 className="text-base font-bold text-gray-900 mb-2">주말마다 &quot;어디 가지?&quot; 검색만 하다 집에 있는다</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                전국 축제가 연간 1,000개 이상 열리지만, 정작 내 주변에서 이번 주말에 즐길 수 있는 행사는 아무도 정리해주지 않습니다.
-              </p>
+            <div className="bg-white rounded-xl px-5 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-start gap-4">
+              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center text-base shrink-0 mt-0.5">❸</div>
+              <div>
+                <h3 className="text-sm font-bold text-gray-900 mb-0.5">주말마다 &quot;어디 가지?&quot; 검색만 하다 집에 있는다</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">전국 축제가 연간 1,000개 이상 열리지만, 내 주변에서 이번 주말에 즐길 수 있는 행사는 아무도 정리해주지 않습니다.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Category Cards Section ── */}
-      <section className="py-20 bg-[#FAFAFA]" id="categories">
+      <section className="pt-10 pb-20 bg-[#FAFAFA]" id="categories">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="text-center">
             <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-600 text-sm font-bold mb-4">✅ 픽앤조이가 하는 일</span>
