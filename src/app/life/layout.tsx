@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import CoupangBanner from '@/components/CoupangBanner';
-import TaeheoAdBanner from '@/components/TaeheoAdBanner';
+import { Suspense } from 'react';
+import LifeSidebarAds from '@/components/LifeSidebarAds';
 import SiteHeader from '@/components/SiteHeader';
 
 export const metadata: Metadata = {
@@ -23,10 +23,9 @@ export default function LifeLayout({ children }: { children: React.ReactNode }) 
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">{children}</div>
           <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
-            <div className="flex flex-col gap-4">
-              <TaeheoAdBanner />
-              <CoupangBanner bannerId="coupang-sidebar-life" />
-            </div>
+            <Suspense fallback={null}>
+              <LifeSidebarAds />
+            </Suspense>
           </aside>
         </div>
       </main>
