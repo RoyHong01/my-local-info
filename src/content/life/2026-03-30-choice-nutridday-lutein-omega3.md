@@ -8,7 +8,7 @@ category: "픽앤조이 초이스"
 tags: ["눈건강", "루테인오메가3", "직장인영양제", "자기관리", "갓생템", "쿠팡", "리뷰"]
 rating_value: "4.8"
 review_count: "1540"
-image: "https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg"
+image: "/images/choice-omega3.jpg"
 source_id: "manual-choice-nutridday-lutein-omega3"
 coupang_link: "https://link.coupang.com/a/eekIni"
 coupang_banner_image: "https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg"

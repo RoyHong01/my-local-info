@@ -89,6 +89,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 코드 변경 작업 완료 후, 반드시 `build 성공 → commit/push → 문서/메모리 동기화` 순서를 수행
   - 문서/메모리 동기화 대상: `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
   - 위 루틴 미완료 상태에서는 작업 완료로 보지 않음
+8. **커밋/배포 완료 직후 필수 확인 질문**: 사용자에게 반드시 다음을 먼저 질문한다 — **"`WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)도 지금 업데이트할까요?"**. 위 확인 질문 없이 작업 완료로 종료하지 않는다.
 
 ## 헤더/네비게이션 패턴
 - 헤더는 10개 페이지에 동일 패턴 반복 (컴포넌트 미분리 상태)

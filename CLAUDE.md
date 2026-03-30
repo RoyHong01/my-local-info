@@ -132,6 +132,7 @@ src/app/life/restaurant/data/
      - URL 형식: `https://tong.visitkorea.or.kr/cms/resource/...`
    - 3순위: 카테고리 기본 SVG — 1,2순위 없을 때만 사용
    - ※ **절대 사용 금지**: Unsplash 외부 이미지 (주제 무관 사진 나올 수 있음)
+10. **커밋/배포 완료 직후 필수 확인 질문**: 사용자에게 반드시 다음을 먼저 질문한다 — **"`WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)도 지금 업데이트할까요?"**. 위 확인 질문 없이 작업 완료로 종료하지 않는다.
 
 ## 블로그 글 생성 스타일 가이드 (2026-03-29 고정)
 - 페르소나: 30대 초반 여행·생활정보 에디터 (친절한 형/오빠 톤)

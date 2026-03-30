@@ -8,7 +8,7 @@ category: "픽앤조이 초이스"
 tags: ["르무통", "메리노울운동화", "발편한신발", "직장인운동화", "데일리룩", "쿠팡", "리뷰"]
 rating_value: "4.9"
 review_count: "2850"
-image: "https://img4a.coupangcdn.com/image/affiliate/banner/4c6ec25ca3f6e06f517912784628e6dc@2x.jpg"
+image: "/images/choice-lemouton.jpg"
 source_id: "manual-choice-lemouton-mate-navy"
 coupang_link: "https://link.coupang.com/a/eeover"
 coupang_banner_image: "https://img4a.coupangcdn.com/image/affiliate/banner/4c6ec25ca3f6e06f517912784628e6dc@2x.jpg"
