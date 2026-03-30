@@ -79,7 +79,7 @@ function getTrendScore(item, meta) {
 async function fetchKakaoByKeyword(query, apiKey) {
   const url = new URL('https://dapi.kakao.com/v2/local/search/keyword.json');
   url.searchParams.set('query', query);
-  url.searchParams.set('size', '20');
+  url.searchParams.set('size', '15');
   url.searchParams.set('sort', 'accuracy');
 
   const response = await fetch(url.toString(), {
