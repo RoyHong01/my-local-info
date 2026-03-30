@@ -7,6 +7,32 @@
 
 ## 2026-03-31
 
+### 글로벌 네비/푸터 적용 + 소개 메뉴 제거
+
+- **SiteHeader 그라디언트 리디자인** (`src/components/SiteHeader.tsx`):
+  - `'use client'` + `usePathname()` 제거 → 서버 컴포넌트로 변환
+  - 그라디언트 배경(`from-orange-500 via-orange-600 to-purple-700`), `sticky top-0 z-20`
+  - Image 로고(`h-14 w-auto`), `ml-10`/`mr-10` 중앙 정렬
+  - 흰색 텍스트 링크(`text-white/90 hover:text-white hover:bg-white/10`)
+- **SiteFooter 신규 생성** (`src/components/SiteFooter.tsx`):
+  - `bg-gray-900`, 좌측 큐레이션 문구 + 우측 코피라이트, `text-gray-400`
+- **layout.tsx 글로벌 반영** (`src/app/layout.tsx`):
+  - `SiteHeader` + `SiteFooter` import 및 body 내 전역 렌더링
+  - `flex flex-col min-h-screen` + children `flex-1` wrapper로 sticky footer
+- **홈페이지 내장 네비/푸터 제거** (`src/app/page.tsx`):
+  - 임베디드 `<header>` 네비(25줄), `<footer>`, `Image` import, `min-h-screen` 제거
+- **10개 페이지 개별 헤더/푸터 제거**:
+  - incheon/page, subsidy/page, festival/page, blog/page: SiteHeader import/사용 + footer 전체 제거
+  - incheon/[id], subsidy/[id], festival/[id]: SiteHeader + footer 제거
+  - about/page: SiteHeader + 미사용 Link import 제거
+  - blog/[slug]: SiteHeader 제거
+  - life/layout: SiteHeader + footer 제거
+  - 전 페이지 `min-h-screen` 제거 (layout.tsx에서 처리)
+- **소개 메뉴 제거** (`SiteHeader.tsx`, `SiteFooter.tsx`):
+  - 네비에서 `{ label: '소개', href: '/about' }` 항목 삭제
+  - 푸터에서 `| 소개` 링크 제거
+- **커밋 이력**: `8881fde` → `ad28901` → `b21f9f4`
+
 ### 홈페이지 전면 개편 + 레이아웃 미세조정
 
 - **블로그 목록에서 초이스 포스트 필터링** (`src/app/blog/page.tsx`):
