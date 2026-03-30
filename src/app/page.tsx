@@ -169,11 +169,11 @@ export default async function Home() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] bg-[length:40px_40px]" />
 
         {/* Navigation */}
-        <header className="absolute top-0 left-0 right-0 z-20">
+        <header className="absolute top-0 left-0 right-0 z-20 pt-2">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
               <Link href="/" className="flex items-center">
-                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={360} height={120} className="h-28 w-auto drop-shadow-md" priority />
+                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={180} height={60} className="h-14 w-auto drop-shadow-md" priority />
               </Link>
               <nav className="hidden lg:flex items-center gap-1">
                 {[
@@ -187,7 +187,7 @@ export default async function Home() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="px-3 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-all duration-200"
+                    className="px-3 py-2 text-base font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-all duration-200"
                   >
                     {link.label}
                   </Link>
