@@ -33,6 +33,34 @@
   - CTA를 간결한 무료 안내 문구로 축소 (3개 카드·CTA 버튼·부가 텍스트 제거)
 - **커밋 이력**: `262a81a` → `9e3d1b7` → `9b34197` → `d9ac45f` → `6a03ca1` → `5cba1fb`
 
+### 홈페이지 레이아웃 미세조정 (2차)
+
+- **Problem 카드 3열 가로 배치** (`src/app/page.tsx`):
+  - 세로 스택 → `md:grid-cols-3` 1행 가로 배치로 변경
+- **카테고리 카드 높이 통일** (`src/app/page.tsx`):
+  - 홈페이지 카드 `min-h-[140px]` → `h-[150px]` 고정 높이
+- **Features+CTA 섹션 컴팩트화** (`src/app/page.tsx`):
+  - 패딩/카드 크기 축소, 설명 텍스트 `text-white font-medium`으로 가독성 개선
+- **로고 이미지 적용** (`src/app/page.tsx`, `public/images/logo-pick-n-joy.png`):
+  - 홈 네비 + 푸터의 텍스트 로고를 `next/image` 로고 이미지로 교체
+- **배지↔타이틀 간격 축소** (`src/app/page.tsx`):
+  - 히어로 배지 `mb-12` → `mb-5`
+- **카테고리 헤더 이모티콘 제거** (`src/app/page.tsx`):
+  - `{cat.emoji}` div 제거
+- **벗꽃 배경 이미지 적용** (`globals.css`, 10개 페이지/레이아웃):
+  - `public/images/bg-cherry-blossom.png` 추가
+  - `.bg-cherry-blossom` CSS 클래스 (cover, fixed, no-repeat)
+  - 홈 제외 전 페이지 `bg-slate-50` → `bg-cherry-blossom`
+- **네비 로고 크기 조정** (`src/app/page.tsx`):
+  - `h-28` → `h-14`, 헤더 `pt-2` 추가로 브라우저 바와 간격 확보
+- **홈 네비 폰트** (`src/app/page.tsx`):
+  - `text-sm` → `text-base font-medium` (SiteHeader와 동일)
+- **목록 페이지 카드 높이 통일** (IncheonCardList/SubsidyCardList/FestivalCardList):
+  - `min-h-[220px]` → `h-full` (CSS Grid 행 내 동일 높이 자동 적용, 블로그 카드와 동일 방식)
+- **copilot-instructions.md 규칙 추가**:
+  - 작업 규칙 9번: 사용자 미승인 수정 금지 + 불분명 시 확인 질문 후 진행
+- **커밋 이력**: `eb6d727` → `57844c6` → `a6589fe` → `f32db5a` → `5121862` → `6201afb`
+
 ---
 
 ## 2026-03-30
