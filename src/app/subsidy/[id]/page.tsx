@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import SiteHeader from '@/components/SiteHeader';
 
 interface DataItem {
   [key: string]: unknown;
@@ -153,8 +152,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
   const detailMarkdown = getField(item, ['description_markdown']) || generatedMarkdown;
 
   return (
-    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
-      <SiteHeader />
+    <div className="bg-cherry-blossom font-sans text-stone-800">
 
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start">
@@ -210,18 +208,6 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
           </aside>
         </div>
       </main>
-
-      <footer className="bg-stone-900 text-stone-400 py-10 mt-16 text-sm">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-center md:text-left">
-            <p className="font-bold text-lg text-white mb-1">픽앤조이</p>
-            <p className="text-stone-500">pick-n-joy.com</p>
-          </div>
-          <div className="text-center md:text-right text-stone-500">
-            <p>데이터 출처: 공공데이터포털 · 한국관광공사</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

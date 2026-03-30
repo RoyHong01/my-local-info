@@ -1,8 +1,6 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import SiteHeader from '@/components/SiteHeader';
 
 export const metadata: Metadata = {
   title: '사이트 소개 | 픽앤조이',
@@ -17,8 +15,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
-      <SiteHeader />
+    <div className="bg-cherry-blossom font-sans text-stone-800">
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex gap-12 items-start">

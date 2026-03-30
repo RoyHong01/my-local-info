@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
-import Image from 'next/image';
 
 interface DataItem {
   [key: string]: unknown;
@@ -152,7 +151,7 @@ export default async function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-sans text-stone-800">
+    <div className="bg-[#FAFAFA] font-sans text-stone-800">
       {/* ── Hero Section ── */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {/* Background gradient */}
@@ -167,35 +166,6 @@ export default async function Home() {
 
         {/* Dot pattern overlay */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] bg-[length:40px_40px]" />
-
-        {/* Navigation */}
-        <header className="absolute top-0 left-0 right-0 z-20 pt-2">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16 md:h-20">
-              <Link href="/" className="flex items-center ml-10">
-                <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={180} height={60} className="h-14 w-auto drop-shadow-md" priority />
-              </Link>
-              <nav className="hidden lg:flex items-center gap-1 mr-10">
-                {[
-                  { label: '인천시 정보', href: '/incheon' },
-                  { label: '전국 보조금·복지 정책', href: '/subsidy' },
-                  { label: '전국 축제·여행 정보', href: '/festival' },
-                  { label: '블로그', href: '/blog' },
-                  { label: '일상의 즐거움', href: '/life' },
-                  { label: '소개', href: '/about' },
-                ].map(link => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="px-3 py-2 text-base font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-all duration-200"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </header>
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 pb-24">
@@ -392,20 +362,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* ── Footer ── */}
-      <footer className="bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <span>데이터 분석 기반 프리미엄 라이프스타일 큐레이션</span>
-              <span className="text-gray-600">|</span>
-              <Link href="/about" className="hover:text-orange-400 transition-colors">소개</Link>
-            </div>
-            <p className="text-sm text-gray-400">© 2026 픽앤조이. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

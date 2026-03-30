@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -99,7 +101,7 @@ gtag('config', '${gaId}');`,
         )}
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <script
           type="application/ld+json"
@@ -109,7 +111,11 @@ gtag('config', '${gaId}');`,
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
-        {children}
+        <SiteHeader />
+        <div className="flex-1">
+          {children}
+        </div>
+        <SiteFooter />
       </body>
     </html>
   );

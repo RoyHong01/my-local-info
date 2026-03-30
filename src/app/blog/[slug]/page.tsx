@@ -13,7 +13,6 @@ import CoupangBanner from '@/components/CoupangBanner';
 import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
-import SiteHeader from '@/components/SiteHeader';
 import ProductSidebarBanner from '@/components/ProductSidebarBanner';
 
 function extractFirstSentenceFromMarkdown(markdown: string): string {
@@ -294,7 +293,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
 
   return (
-    <div className="min-h-screen bg-cherry-blossom font-sans text-stone-800">
+    <div className="bg-cherry-blossom font-sans text-stone-800">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
@@ -311,7 +310,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
         />
       )}
-      <SiteHeader />
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex gap-12 items-start">

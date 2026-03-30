@@ -1,37 +1,33 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-
-function navClass(isActive: boolean, activeClass: string, hoverClass: string): string {
-  if (isActive) return `${activeClass} font-bold`;
-  return `${hoverClass} transition`;
-}
+import Image from 'next/image';
 
 export default function SiteHeader() {
-  const pathname = usePathname() || '';
-
-  const isIncheon = pathname.startsWith('/incheon');
-  const isSubsidy = pathname.startsWith('/subsidy');
-  const isFestival = pathname.startsWith('/festival');
-  const isBlog = pathname.startsWith('/blog');
-  const isLife = pathname.startsWith('/life');
-  const isAbout = pathname.startsWith('/about');
-
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-10">
-      <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-3xl font-bold text-orange-500">픽앤조이 🎯</Link>
-        <nav>
-          <ul className="flex space-x-4 md:space-x-6 text-base font-medium text-stone-600">
-            <li><Link href="/incheon" className={navClass(isIncheon, 'text-blue-600', 'hover:text-blue-600')}>인천시 정보</Link></li>
-            <li><Link href="/subsidy" className={navClass(isSubsidy, 'text-amber-600', 'hover:text-amber-600')}>전국 보조금·복지 정책</Link></li>
-            <li><Link href="/festival" className={navClass(isFestival, 'text-rose-600', 'hover:text-rose-600')}>전국 축제·여행 정보</Link></li>
-            <li><Link href="/blog" className={navClass(isBlog, 'text-orange-500', 'hover:text-orange-500')}>블로그</Link></li>
-            <li><Link href="/life" className={navClass(isLife, 'text-orange-500', 'hover:text-orange-500')}>일상의 즐거움</Link></li>
-            <li><Link href="/about" className={navClass(isAbout, 'text-orange-500', 'hover:text-orange-500')}>소개</Link></li>
-          </ul>
-        </nav>
+    <header className="bg-gradient-to-r from-orange-500 via-orange-600 to-purple-700 sticky top-0 z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          <Link href="/" className="flex items-center ml-10">
+            <Image src="/images/logo-pick-n-joy.png" alt="픽앤조이" width={180} height={60} className="h-14 w-auto drop-shadow-md" priority />
+          </Link>
+          <nav className="hidden lg:flex items-center gap-1 mr-10">
+            {[
+              { label: '인천시 정보', href: '/incheon' },
+              { label: '전국 보조금·복지 정책', href: '/subsidy' },
+              { label: '전국 축제·여행 정보', href: '/festival' },
+              { label: '블로그', href: '/blog' },
+              { label: '일상의 즐거움', href: '/life' },
+              { label: '소개', href: '/about' },
+            ].map(link => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="px-3 py-2 text-base font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition-all duration-200"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
     </header>
   );
