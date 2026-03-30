@@ -23,9 +23,7 @@ coupang_banner_alt: "르무통 메이트 발 편한 운동화 다크네이비"
 
 저 역시 퇴근길마다 퉁퉁 부은 발을 이끌고 집에 돌아오며 **"제발 내 발 좀 살려줄 신발 없나"** 간절히 찾다가 이 녀석을 만났어요.
 
----
-
-## Investigation: TV 광고만큼이나 솔직한 리뷰들
+## TV 광고만큼이나 솔직한 리뷰들
 
 **요즘 TV 광고에서 르무통 광고 많이 보이죠?**
 
@@ -39,15 +37,11 @@ coupang_banner_alt: "르무통 메이트 발 편한 운동화 다크네이비"
 
 결론은 명확했어요. 르무통 메이트는 단순 광고발 제품이 아니라 **실사용 만족도가 높은 데일리 슈즈**에 가까웠어요.
 
----
-
 ## The Choice
 
-[![르무통 메이트 발 편한 운동화 다크네이비](https://img4a.coupangcdn.com/image/affiliate/banner/4c6ec25ca3f6e06f517912784628e6dc@2x.jpg)](https://link.coupang.com/a/eeover)
+[👉 르무통 메이트 발 편한 운동화 다크네이비 보러가기](https://link.coupang.com/a/eeover)
 
----
-
-## Curation: 2030 라이프스타일의 완성
+## 2030 라이프스타일의 완성
 
 ### 💎 추천하는 3가지 포인트
 
@@ -64,29 +58,8 @@ coupang_banner_alt: "르무통 메이트 발 편한 운동화 다크네이비"
 
 울 소재 특성상 일반 가죽 스니커즈처럼 각 잡힌 느낌은 약할 수 있어요. 다만 오래 신었을 때 발 피로도를 우선으로 두면, 이 부드러운 착화감이 오히려 장점으로 느껴질 가능성이 커요.
 
----
-
 ## 💡 에디터의 한마디
 
 "TV 광고가 과장이 아니었네요. **결국 여기에 정착했습니다.** 발의 피로가 줄어드니 하루 리듬이 달라지더라고요."
 
 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "르무통 메이트 발 편한 운동화 다크네이비",
-  "image": "https://img4a.coupangcdn.com/image/affiliate/banner/4c6ec25ca3f6e06f517912784628e6dc@2x.jpg",
-  "description": "메리노 울 소재를 사용하여 양말 없이 신어도 쾌적하고 가벼운 발 편한 운동화",
-  "brand": {
-    "@type": "Brand",
-    "name": "르무통 (LeMouton)"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "2850"
-  }
-}
-```

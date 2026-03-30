@@ -329,16 +329,30 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
           </header>
           {post.image && !post.image.endsWith('.svg') && (
-            <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-10">
-              <Image
-                src={post.image}
-                alt={post.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 1200px"
-                priority
-              />
-            </div>
+            isChoicePost ? (
+              <div className="mb-8 flex justify-center">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  width={240}
+                  height={480}
+                  className="h-auto w-[240px] rounded-xl border border-stone-100"
+                  sizes="240px"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-10">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  priority
+                />
+              </div>
+            )
           )}
           <div className="blog-prose prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>

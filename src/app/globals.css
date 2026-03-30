@@ -76,28 +76,28 @@ body {
 /* 블로그 상세 본문 spacing 미세 조정 */
 .blog-prose {
   font-size: 1.05rem;
-  line-height: 1.8;
+  line-height: 1.68;
 }
 
 .blog-prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 0.9em;
-  margin-bottom: 0.9em;
-  line-height: 1.8;
+  margin-top: 0.72em;
+  margin-bottom: 0.72em;
+  line-height: 1.68;
 }
 
 .blog-prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 1.6em;
-  margin-bottom: 0.7em;
+  margin-top: 1.25em;
+  margin-bottom: 0.45em;
 }
 
 .blog-prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 1.3em;
-  margin-bottom: 0.55em;
+  margin-top: 1.05em;
+  margin-bottom: 0.38em;
 }
 
 .blog-prose :where(ul, ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 0.9em;
-  margin-bottom: 0.9em;
+  margin-top: 0.72em;
+  margin-bottom: 0.72em;
 }
 
 .blog-prose :where(li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {

@@ -23,9 +23,7 @@ coupang_banner_alt: "뉴트리디데이 프리미엄 루테인 오메가3 골드
 
 저 역시 "눈이 피로한 건 당연한 거지"라며 방치하다가, 어느 날 거울 속 충혈된 눈을 보고 나서야 비로소 **제대로 된 관리**를 시작했어요.
 
----
-
-## Investigation: 깐깐한 에디터의 필터링 결과
+## 깐깐한 에디터의 필터링 결과
 
 시중에 널린 수많은 영양제 중 `픽앤조이`가 이 제품을 선택한 기준은 명확해요.
 
@@ -37,15 +35,11 @@ coupang_banner_alt: "뉴트리디데이 프리미엄 루테인 오메가3 골드
 
 이 모든 조건을 통과하고 **평점 4.8**을 기록 중인 제품, 바로 `뉴트리디데이 프리미엄 루테인 오메가3 골드`예요.
 
----
-
 ## The Choice
 
-[![뉴트리디데이 프리미엄 루테인 오메가3 골드, 90정, 2개](https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg)](https://link.coupang.com/a/eekIni)
+[👉 뉴트리디데이 프리미엄 루테인 오메가3 골드 보러가기](https://link.coupang.com/a/eekIni)
 
----
-
-## Curation: 결국 여기에 정착하게 된 이유
+## 결국 여기에 정착하게 된 이유
 
 ### 💎 추천하는 3가지 포인트
 
@@ -62,29 +56,8 @@ coupang_banner_alt: "뉴트리디데이 프리미엄 루테인 오메가3 골드
 
 캡슐 크기가 아주 작은 편은 아니에요. 알약을 잘 못 드시는 분들이라면 처음엔 조금 크게 느껴질 수 있어요. 다만 **매끄러운 젤라틴 제형**이라 물과 함께 섭취하면 금방 익숙해져요.
 
----
-
 ## 💡 에디터의 한마디
 
 "이거 없던 시절의 뻑뻑한 일상으로 다시는 못 돌아가겠더라고요. **오후의 선명함**이 달라지는 걸 직접 체감해 보세요."
 
 이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "뉴트리디데이 프리미엄 루테인 오메가3 골드",
-  "image": "https://image8.coupangcdn.com/image/affiliate/banner/dfeead4a9e1ae83d77687d2fb051e86b@2x.jpg",
-  "description": "눈 건강과 혈행 개선을 한 번에 관리하는 프리미엄 복합 기능성 영양제",
-  "brand": {
-    "@type": "Brand",
-    "name": "뉴트리디데이"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "1540"
-  }
-}
-```
