@@ -290,6 +290,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
+  const choiceHeroObjectPosition = /lutein|omega3|nutridday/i.test(post.slug) ? '50% 45%' : '50% 43%';
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
 
@@ -331,15 +332,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {post.image && !post.image.endsWith('.svg') && (
             isChoicePost ? (
               <div className="mb-8 flex justify-center">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  width={480}
-                  height={960}
-                  className="h-auto w-full max-w-[480px] rounded-xl border border-stone-100 shadow-sm"
-                  sizes="(max-width: 640px) 75vw, 480px"
-                  priority
-                />
+                <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
+                    style={{ objectPosition: choiceHeroObjectPosition }}
+                    sizes="(max-width: 640px) 75vw, 480px"
+                    priority
+                  />
+                </div>
               </div>
             ) : (
               <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-10">
@@ -366,8 +369,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
               ) : isChoicePost ? (
                 <>
-                  <span className="block">이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.</span>
-                  <span className="block">최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.</span>
+                  <span className="block">본 콘텐츠는 AI 기술을 활용하여 제품 사양 및 실제 사용자 리뷰 데이터를 정밀 분석하고, 픽앤조이(Pick-n-Joy) 에디터의 엄격한 큐레이션을 거쳐 제작되었습니다.</span>
+                  <span className="block">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 단, 구매 가격에는 영향을 미치지 않으며 에디터의 주관적인 의견이 반영된 정보임을 밝힙니다.</span>
                 </>
               ) : (
                 <>
