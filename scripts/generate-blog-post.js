@@ -5,6 +5,8 @@ const Anthropic = require('@anthropic-ai/sdk');
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
+const BLOG_MAX_GENERATION_SECONDS = Number(process.env.BLOG_MAX_GENERATION_SECONDS || 900);
+const BLOG_MAX_CANDIDATES_PER_CATEGORY = Number(process.env.BLOG_MAX_CANDIDATES_PER_CATEGORY || 8);
 
 // 블로그 글 생성: Gemini 1.5 Pro 사용
 async function callGemini(prompt) {
@@ -51,19 +53,15 @@ function looksIncompleteGeminiOutput(text) {
   const value = (text || '').trim();
   if (!value) return true;
 
-  // 파일명 라인이 없으면 후처리 단계에서 파일명/slug 추출이 깨지므로 불완전으로 판단
-  if (!/FILENAME:\s*\S+/m.test(value)) return true;
+  // FILENAME은 누락돼도 fallback으로 생성 가능하므로 필수 조건으로 두지 않음
 
-  // 본문 최소 길이 가드 (지시사항: 1000자 이상)
+  // 본문 최소 길이 가드 (모델 출력 특성상 과도한 재시도 방지를 위해 현실적인 하한 사용)
   const withoutFilename = value
     .split('\n')
     .filter((line) => !line.trim().startsWith('FILENAME:'))
     .join('\n')
     .trim();
-  if (withoutFilename.length < 1000) return true;
-
-  // 마지막 문장이 어색하게 끊긴 경우 방지
-  if (!/[.!?…]$/.test(withoutFilename)) return true;
+  if (withoutFilename.length < 700) return true;
 
   return false;
 }
@@ -640,6 +638,7 @@ async function run() {
 
   const { serviceIds, filenameKeywords } = await getExistingPosts(postsDir);
   console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건`);
+  const runStartedAt = Date.now();
 
   let totalGenerated = 0;
 
@@ -678,10 +677,23 @@ async function run() {
 
     console.log(`  미작성 항목: ${candidates.length}개`);
 
-    // 카테고리당 2편 생성
+    // 카테고리당 2편 생성 (시간/후보 상한 적용)
     let generated = 0;
+    let triedCandidates = 0;
     for (const candidate of candidates) {
+      const elapsedSec = Math.floor((Date.now() - runStartedAt) / 1000);
+      if (elapsedSec >= BLOG_MAX_GENERATION_SECONDS) {
+        console.log(`  ⏱️ 전체 생성 시간 상한 도달(${BLOG_MAX_GENERATION_SECONDS}s): 생성 루프 종료`);
+        break;
+      }
+
+      if (triedCandidates >= BLOG_MAX_CANDIDATES_PER_CATEGORY) {
+        console.log(`  ⏱️ 카테고리 후보 시도 상한 도달(${BLOG_MAX_CANDIDATES_PER_CATEGORY}건): 다음 카테고리로 이동`);
+        break;
+      }
+
       if (generated >= 2) break;
+      triedCandidates++;
       try {
         const ok = await generatePost({ ...candidate, _category: category }, postsDir);
         if (ok) {

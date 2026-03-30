@@ -72,10 +72,12 @@ jobs:
       - name: AI 블로그 글 자동 생성
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-blog-post.js
-        timeout-minutes: 20
+        timeout-minutes: 30
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_TIMEOUT_MS: '120000'
+          BLOG_MAX_GENERATION_SECONDS: '900'
+          BLOG_MAX_CANDIDATES_PER_CATEGORY: '8'
 
       - name: 일상의 즐거움 맛집 데이터 수집
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
