@@ -20,6 +20,34 @@
 
 ### 2026-03-30 완료
 
+- **초이스 히어로/문구 미세조정 반영**:
+  - `src/app/blog/[slug]/page.tsx`
+    - 초이스 히어로 이미지 잘림 방지: `object-cover` → `object-contain`
+    - 히어로 하단 간격 확대: `mb-8` → `mb-14`
+    - 초이스 고지문 색상 강화: `text-stone-700` → `text-stone-800`
+  - 검증/반영:
+    - `npm run build` 성공
+    - 커밋/푸시: `ee72b92`
+
+- **픽앤조이 초이스 상세 안내문구 최종 교체**:
+  - `src/app/blog/[slug]/page.tsx`의 초이스 글 하단 문구를 최종 고지문으로 교체
+    - AI 기술 기반 분석 + 픽앤조이 에디터 큐레이션 고지
+    - 쿠팡 파트너스 수수료/가격 비영향/주관 의견 고지
+  - 검증/반영:
+    - `npm run build` 성공
+    - 커밋/푸시: `4d8f9c9`
+
+- **초이스 포스트 히어로 이미지 공식 캡처본 교체**:
+  - 로컬 정적 이미지 추가:
+    - `public/images/choice-lemouton.jpg`
+    - `public/images/choice-omega3.jpg`
+  - 포스트 이미지 경로 교체:
+    - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
+    - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
+  - 검증/반영:
+    - `npm run build` 성공
+    - 커밋/푸시: `153a721`
+
 - **픽앤조이 초이스 카테고리 신설**:
   - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
     - `category: "픽앤조이 초이스"` 또는 `tags`에 리뷰/쿠팡 관련 태그 포함 시 자동 수집
