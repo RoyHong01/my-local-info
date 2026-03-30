@@ -4,21 +4,37 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 
 // 블로그 글 생성: Gemini 1.5 Pro 사용
 async function callGemini(prompt) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.9,
-        maxOutputTokens: 4096,
-      },
-    }),
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.9,
+          maxOutputTokens: 4096,
+        },
+      }),
+    });
+  } catch (err) {
+    if (err?.name === 'AbortError') {
+      throw new Error(`Gemini API 타임아웃: ${GEMINI_TIMEOUT_MS}ms`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
+
   if (!res.ok) {
     const err = await res.text();
     throw new Error(`Gemini API 오류: ${res.status} ${err}`);
@@ -504,7 +520,18 @@ ${festivalStyleOverride}
       ? `\n\n[재시도 지시]\n방금 응답은 중간에 끊겼어요. 처음부터 다시 완성본으로 작성하고, 마지막 줄 FILENAME까지 반드시 출력해줘.`
       : '';
 
-    const gemini = await callGemini(`${prompt}${retryHint}`);
+    let gemini;
+    try {
+      gemini = await callGemini(`${prompt}${retryHint}`);
+    } catch (err) {
+      if (attempt < maxAttempts) {
+        console.warn(`  ⚠️ Gemini 호출 실패(시도 ${attempt}/${maxAttempts}): ${err.message}`);
+        await sleep(2000);
+        continue;
+      }
+      throw err;
+    }
+
     generatedText = gemini.text || '';
     lastFinishReason = gemini.finishReason || '';
 
