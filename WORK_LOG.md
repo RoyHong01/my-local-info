@@ -7,6 +7,24 @@
 
 ## 2026-03-31
 
+### 모바일 햄버거 네비게이션 추가
+
+- **MobileNav 컴포넌트** (`src/components/MobileNav.tsx`) 신규 생성
+  - `lg:hidden` 모바일 전용 햄버거(☰) + 검색(🔍) 버튼
+  - 드롭다운으로 5개 네비 링크 표시, 클릭 시 자동 닫힘
+  - 검색 버튼은 SearchOverlay 직접 토글
+- **SiteHeader 수정** (`src/components/SiteHeader.tsx`):
+  - MobileNav import + 렌더링 추가
+  - 로고 `ml-10` → `ml-2 lg:ml-10`, `h-14` → `h-10 sm:h-14` (모바일 최적화)
+  - `relative` 추가 (드롭다운 위치 기준)
+- 커밋: `df4b994`
+
+### 왕가의 산책 블로그 글 본문 완성
+
+- `2026-03-30-post-1774856309930.md` (source_id: 2433596) 잘린 본문 보완
+  - 기념사진 하이라이트, 추천 대상 리스트, 방문 정보 테이블 추가
+- 커밋: `e084acc`
+
 ### 사이트 전체 검색 기능 추가 (Fuse.js)
 
 - **빌드타임 검색 인덱스** (`scripts/generate-search-index.js`):
