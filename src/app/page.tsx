@@ -204,20 +204,19 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
             <Link
               href="/subsidy"
-              className="group flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-bold text-lg rounded-2xl shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 hover:-translate-y-0.5 transition-all duration-300"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
             >
               👉 내가 받을 수 있는 보조금 보러가기
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </Link>
             <Link
               href="/festival"
-              className="group flex items-center gap-3 px-8 py-4 bg-white/15 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
             >
               🎉 이번 주말 근처 축제 확인하기
             </Link>
             <Link
               href="/life/restaurant"
-              className="group flex items-center gap-3 px-8 py-4 bg-white/15 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
             >
               🍽️ 요즘 뜨는 맛집 보러가기
             </Link>
