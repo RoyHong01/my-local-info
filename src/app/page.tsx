@@ -153,7 +153,7 @@ export default async function Home() {
   return (
     <div className="bg-[#FAFAFA] font-sans text-stone-800">
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700" />
 
@@ -214,6 +214,12 @@ export default async function Home() {
               className="group flex items-center gap-3 px-8 py-4 bg-white/15 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300"
             >
               🎉 이번 주말 근처 축제 확인하기
+            </Link>
+            <Link
+              href="/life/restaurant"
+              className="group flex items-center gap-3 px-8 py-4 bg-white/15 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300"
+            >
+              🍽️ 요즘 뜨는 맛집 보러가기
             </Link>
           </div>
 
