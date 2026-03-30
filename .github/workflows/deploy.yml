@@ -7,12 +7,21 @@ on:
   schedule:
     - cron: '0 22 * * *'
   workflow_dispatch:
+    inputs:
+      mode:
+        description: '실행 모드 선택 (full: 데이터수집+글생성+배포, deploy_only: 현재 main 기준 배포만)'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - deploy_only
 
 permissions:
   contents: write
 
 concurrency:
-  group: daily-update-deploy-${{ github.ref }}
+  group: daily-update-deploy-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
@@ -33,7 +42,7 @@ jobs:
         run: npm ci
 
       - name: 인천 지역 정보 수집
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-incheon.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
@@ -41,7 +50,7 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 전국 보조금 정책 수집
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-subsidy.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
@@ -49,7 +58,7 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 전국 축제·여행 정보 수집
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-festival.js
         env:
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
@@ -57,17 +66,17 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: 만료 콘텐츠 처리
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/cleanup-expired.js
 
       - name: AI 블로그 글 자동 생성
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-blog-post.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: 일상의 즐거움 맛집 데이터 수집
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-life-restaurants.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
@@ -75,7 +84,7 @@ jobs:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
 
       - name: 일상의 즐거움 맛집 포스트 생성
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -83,7 +92,7 @@ jobs:
           LIFE_RESTAURANT_POSTS_PER_BUCKET: '2'
 
       - name: 변경사항 커밋 & 푸시
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
