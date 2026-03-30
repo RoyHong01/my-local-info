@@ -115,8 +115,9 @@ export default async function Home() {
     {
       id: 'incheon',
       emoji: '🏙️',
-      title: '인천 지역 정보',
-      description: '인천시 생활정보, 행사, 지역 소식을 한눈에',
+      title: '인천시 정보',
+      description: '우리 동네 혜택, 놓치지 마세요',
+      detail: '복잡한 공문서 대신 "신청 대상 / 금액 / 기간" 3줄 요약',
       gradient: 'from-blue-500 to-cyan-500',
       items: incheon,
       CardComponent: IncheonCard,
@@ -127,7 +128,8 @@ export default async function Home() {
       id: 'subsidy',
       emoji: '💰',
       title: '전국 보조금·복지',
-      description: '놓치기 쉬운 보조금과 복지 혜택을 모아서',
+      description: '나도 모르게 받을 수 있는 돈',
+      detail: '신청 링크와 마감일 함께 제공, 읽자마자 신청 가능',
       gradient: 'from-orange-500 to-amber-500',
       items: subsidy,
       CardComponent: SubsidyCard,
@@ -138,7 +140,8 @@ export default async function Home() {
       id: 'festival',
       emoji: '🎪',
       title: '전국 축제·여행',
-      description: '전국 곳곳의 축제와 여행 정보를 놓치지 마세요',
+      description: '이번 주말 뭐할지 5초 만에 결정',
+      detail: '날짜·지역·테마별 필터링 + 상황별 추천',
       gradient: 'from-purple-500 to-pink-500',
       items: festival,
       CardComponent: FestivalCard,
@@ -216,8 +219,15 @@ export default async function Home() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium mb-14 animate-fade-in-up">
-            몰라서 못 받은 돈, 놓친 축제, 실망한 맛집— 이제 픽앤조이가 대신 찾아드립니다
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-semibold mb-4 animate-fade-in-up">
+            몰라서 못 받은 돈, 놓친 축제, 실망한 맛집ㅡ이제 픽앤조이가 대신 찾아드립니다
+          </p>
+
+          {/* Sub-description */}
+          <p className="text-xs sm:text-sm md:text-base text-white/60 font-normal max-w-2xl mx-auto mb-14 animate-fade-in-up leading-relaxed">
+            인천 생활정보부터 전국 보조금·복지·축제까지 —<br className="hidden sm:inline" />
+            흩어진 공공정보를 매일 직접 수집해서 딱 한 곳에 정리해드려요.<br className="hidden sm:inline" />
+            검색하다 지치셨다면, 오늘이 마지막 검색입니다.
           </p>
 
           {/* CTA Buttons */}
@@ -262,18 +272,52 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Problem Section ── */}
+      <section className="py-16 sm:py-20 bg-[#FAFAFA]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="inline-block px-5 py-2 rounded-full bg-red-50 text-red-500 text-sm font-bold mb-4">😤 혹시 이런 경험 있으신가요?</span>
+            <p className="text-sm sm:text-base text-gray-500">
+              대한민국 평균 가구가 매년 신청하지 못해 놓치는 정부 지원금, <span className="font-bold text-red-500">약 127만 원</span>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❶</div>
+              <h3 className="text-base font-bold text-gray-900 mb-2">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                복지로, 정부24, 인천시 홈페이지, 고용24… 탭만 열다가 30분이 지납니다. 지원금 종류만 전국 기준 2,000개가 넘는데, 어디서부터 봐야 할지 막막하죠.
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❷</div>
+              <h3 className="text-base font-bold text-gray-900 mb-2">알았을 때는 이미 신청 마감</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                에너지 바우처, 청년 월세 지원, 인천시 출산 지원금— 마감일 하루 전날 알면 이미 늦습니다. 놓친 지원금은 다음 해까지 기다려야 해요.
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-lg mb-4">❸</div>
+              <h3 className="text-base font-bold text-gray-900 mb-2">주말마다 &quot;어디 가지?&quot; 검색만 하다 집에 있는다</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                전국 축제가 연간 1,000개 이상 열리지만, 정작 내 주변에서 이번 주말에 즐길 수 있는 행사는 아무도 정리해주지 않습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Category Cards Section ── */}
       <section className="py-20 bg-[#FAFAFA]" id="categories">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="text-center">
-            <span className="inline-block px-6 py-2.5 rounded-full bg-orange-100 text-orange-600 text-base font-bold mb-4 tracking-wide shadow-sm">
-              📋 카테고리별 정보
-            </span>
+            <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-600 text-sm font-bold mb-4">✅ 픽앤조이가 하는 일</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
-              필요한 정보를 <span className="bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">한눈에</span>
+              공공 API + 직접 큐레이션, <span className="bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">매일 업데이트</span>
             </h2>
             <p className="text-base text-gray-500 max-w-xl mx-auto">
-              인천 지역 소식부터 전국 보조금, 축제 정보까지 카테고리별로 정리했습니다
+              흩어진 공공정보를 매일 직접 수집해서 카테고리별로 정리합니다
             </p>
           </div>
         </div>
@@ -288,7 +332,8 @@ export default async function Home() {
                   <div className="relative p-5">
                     <div className="text-2xl mb-1">{cat.emoji}</div>
                     <h3 className="text-xl font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] tracking-wide">{cat.title}</h3>
-                    <p className="text-sm font-semibold text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
+                    <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
+                    <p className="text-xs text-white/80 mt-1">{cat.detail}</p>
                   </div>
                 </div>
 
@@ -344,6 +389,43 @@ export default async function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── CTA Section ── */}
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">오늘부터 시작하세요, 완전 무료입니다</h2>
+          <p className="text-lg sm:text-xl font-bold text-white/90 mb-6">회원가입도, 앱 설치도 필요 없어요</p>
+          <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-10 max-w-xl mx-auto">
+            픽앤조이의 모든 서비스는 100% 무료입니다.<br />
+            광고 클릭을 강요하지 않고, 개인정보를 요구하지 않아요.<br />
+            그냥 들어와서, 필요한 정보 가져가시면 됩니다.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 max-w-lg mx-auto text-left">
+            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+              <span className="text-lg">📋</span>
+              <p className="text-sm text-white/90">오늘 마감되는 지원금 신청이 있을 수 있고</p>
+            </div>
+            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+              <span className="text-lg">🎊</span>
+              <p className="text-sm text-white/90">이번 주말 근처에서 축제가 열리고 있을 수 있고</p>
+            </div>
+            <div className="flex items-start gap-3 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+              <span className="text-lg">🍽️</span>
+              <p className="text-sm text-white/90">아직 몰랐던 동네 맛집이 기다리고 있을 수 있습니다</p>
+            </div>
+          </div>
+
+          <Link
+            href="/subsidy"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-orange-600 font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+          >
+            👉 pick-n-joy.com 지금 바로 둘러보기
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </Link>
+          <p className="text-xs text-white/50 mt-6">매일 아침 업데이트 · 완전 무료 · 광고 없는 큐레이션</p>
         </div>
       </section>
 
