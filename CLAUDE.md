@@ -72,6 +72,14 @@ src/app/
   about/page.tsx        # 소개 페이지
 
 src/components/
+    life/
+      ChoiceArticleCard.tsx  # 픽앤조이 초이스 블로그형 카드 (ReactMarkdown 렌더링)
+      RestaurantExplorer.tsx
+    # life-choice.ts: ChoiceArticle 인터페이스, getChoiceArticles() 필터 로직
+    # 픽앤조이 초이스 카테고리 포스트를 자동 수집 (3대 카테고리 제외)
+    # choice/page.tsx: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
+    # 초이스 포스트 전용 frontmatter: coupang_link, coupang_banner_image, coupang_banner_alt
+    # rating_value, review_count (JSON-LD aggregateRating 자동 연결)
   BlogFilter.tsx        # 블로그 카테고리 필터 (use client, URL 파라미터 방식)
   IncheonCardList.tsx   # 인천 카드 목록 (use client, 스크롤 저장)
   SubsidyCardList.tsx   # 보조금 카드 목록 (use client, 스크롤 저장)
@@ -137,13 +145,9 @@ src/app/life/restaurant/data/
   - 소제목: 숫자 번호(1. 2. 3.) 금지, 감성 소제목으로 자유롭게 2~4개
   - 분리선(---/***): 글 전체에서 최대 1회만 허용
 
-## 블로그 현황 (2026-03-29 기준)
-- 총 28편: 인천 지역 정보 9편, 전국 보조금·복지 9편, 전국 축제·여행 9편, 기타 1편
-- 자동 생성: GitHub Actions 매일 07:00 KST, 카테고리당 2편 (Gemini 2.5 Pro, MZ 감성)
-- 2026-03-28: 진해군항제 수동 중복 제거(1편 삭제) → 고창청보리밭 축제 추가(1편)
-- 2026-03-28: 인천 봄꽃 축제 중복 제거(1편 삭제), 유지본 제목·이미지·source_id 수정
-- 2026-03-28: 블로그 썸네일 TourAPI 실제 이미지로 교체 (진해/여의도/경포/구례/광안리)
-- 2026-03-29: 전국 축제·여행 블로그 11편 Gemini 스타일 재작성 (경어체 통일, 번호 소제목 제거, 분리선 최대 1회, 제목 연도·총정리 제거)
+## 블로그 현황 (2026-03-30 기준)
+- 총 28편(posts/) + 초이스 2편(life/): 인천 9, 보조금 9, 축제 9, 기타 1 / 픽앤조이 초이스 2
+- 2026-03-30: 픽앤조이 초이스 카테고리 신설, 쿠팡 제휴 리뷰 포스트 2편 수동 작성
 
 ## 최신 동기화 메모 (2026-03-29 추가-4)
 
@@ -296,3 +300,23 @@ src/app/life/restaurant/data/
 - Google AdSense 신청 (페이지 15개 이상 완료)
 - 에러 핸들링 및 자동화 모니터링
 - 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후)
+
+## 최신 동기화 메모 (2026-03-30)
+
+- **픽앤조이 초이스 카테고리 신설**:
+  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
+    - `category: "픽앤조이 초이스"` 또는 `tags`에 `리뷰|review|쿠팡|추천상품` 포함 시 자동 수집
+    - 기존 3대 카테고리(인천/보조금/축제) 포스트는 제외 처리
+  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
+  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
+  - 포스트 저장 위치: `src/content/life/` (맛집 포스트와 동일 디렉터리, category로 구분)
+  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
+  - JSON-LD `aggregateRating`: `rating_value` + `review_count` 있을 때만 삽입
+
+- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성**:
+  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
+    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
+    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
+  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
+    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
+    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`

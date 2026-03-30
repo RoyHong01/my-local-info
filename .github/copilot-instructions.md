@@ -230,6 +230,26 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - `npm run test:e2e` 성공
   - 커밋/푸시: `da64479` (`main`)
 
+## 최근 동기화 메모 (2026-03-30)
+
+- **픽앤조이 초이스 카테고리 신설**:
+  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
+    - `category: "픽앤조이 초이스"` 또는 `tags`에 `리뷰|review|쿠팡|추천상품` 포함 시 자동 수집
+    - 기존 3대 카테고리(인천/보조금/축제) 포스트는 제외 처리
+  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 (ChoiceArticleCard + CoupangBottomBanner)
+  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
+  - 포스트 저장 위치: `src/content/life/` (맛집 포스트와 동일 디렉터리, category로 구분)
+  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
+  - JSON-LD `aggregateRating`: `rating_value` + `review_count` 있을 때만 삽입
+
+- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성**:
+  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
+    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
+    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
+  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
+    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
+    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
+
 ## 쿠팡 파트너스 배너 현황 (2026-03-29 최종)
 - 파트너ID: AF5831775
 - 사이드바: id **976244** (고객 관심 기반 추천), 240×600, `CoupangBanner` (`'use client'` 포함)
@@ -240,8 +260,5 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - 적용 페이지: blog목록/상세, incheon목록/상세, subsidy목록/상세, festival목록/상세, about (총 9곳)
 
 ## 백로그
+
 - [x] Google Analytics 설정 ✅
-- [x] 쿠팡 파트너스 배너 삽입 ✅
-- [ ] Google AdSense 설정
-- [ ] 에러 핸들링 및 자동화 모니터링
-- [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)

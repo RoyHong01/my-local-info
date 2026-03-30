@@ -18,8 +18,26 @@
 
 ## 2. 최근 완료한 주요 작업 (Recently Completed)
 
-### 2026-03-29 추가 완료 (7)
+### 2026-03-30 완료
 
+- **픽앤조이 초이스 카테고리 신설**:
+  - `src/lib/life-choice.ts`: `ChoiceArticle` 인터페이스 + `getChoiceArticles()` 필터 로직
+    - `category: "픽앤조이 초이스"` 또는 `tags`에 리뷰/쿠팡 관련 태그 포함 시 자동 수집
+    - 기존 3대 카테고리 포스트 제외
+  - `src/app/life/choice/page.tsx`: 초이스 목록 페이지 신규 생성
+  - `src/components/life/ChoiceArticleCard.tsx`: 블로그형 전문 카드 (ReactMarkdown 풀렌더링)
+  - 초이스 포스트 저장 위치: `src/content/life/`
+  - 초이스 전용 frontmatter: `coupang_link`, `coupang_banner_image`, `coupang_banner_alt`
+
+- **픽앤조이 초이스 수동 리뷰 포스트 2편 작성 (수정 중)**:
+  - `src/content/life/2026-03-30-choice-lemouton-mate-navy.md`
+    - 제목: "TV 광고 속 그 운동화, 르무통 메이트에 결국 정착한 진짜 이유"
+    - 평점: 4.9 / 리뷰수: 2,850 / 쿠팡 링크: `https://link.coupang.com/a/eeover`
+  - `src/content/life/2026-03-30-choice-nutridday-lutein-omega3.md`
+    - 제목: "충혈된 눈과 이별하는 가장 확실한 방법, 루테인 오메가3 정착기"
+    - 평점: 4.8 / 리뷰수: 1,540 / 쿠팡 링크: `https://link.coupang.com/a/eekIni`
+
+### 2026-03-29 추가 완료 (7)
 - **맛집 상세 404(slug 매핑) 복구**:
   - `src/lib/posts.ts`
     - `getPostData()`에 slug 정규화(NFC/URL decode) 및 파일명/frontmatter fallback 조회 로직 추가
