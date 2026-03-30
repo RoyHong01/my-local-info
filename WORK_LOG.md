@@ -7,6 +7,23 @@
 
 ## 2026-03-31
 
+### 사이트 전체 검색 기능 추가 (Fuse.js)
+
+- **빌드타임 검색 인덱스** (`scripts/generate-search-index.js`):
+  - incheon/subsidy/festival JSON + 블로그/맛집/초이스 마크다운 전체 인덱싱 (총 377건)
+  - 만료 항목 자동 제외, `out/data/search-index.json` 출력
+  - `postbuild`에 연동 (`generate-sitemap.js && generate-search-index.js`)
+- **SearchOverlay 컴포넌트** (`src/components/SearchOverlay.tsx`):
+  - `'use client'`, Fuse.js 퍼지 검색 (threshold 0.35, 가중치: title 0.5 > summary > tags > category)
+  - 카테고리별 컬러 배지 (인천=blue, 보조금=orange, 축제=purple, 블로그=green, 초이스=amber, 맛집=red)
+  - ESC/배경클릭 닫기, 최대 15건 표시, 첫 열기 시 lazy load
+- **SearchButton 클라이언트 래퍼** (`src/components/SearchButton.tsx`):
+  - SiteHeader(서버 컴포넌트) 유지하면서 검색 상태 관리
+  - 🔍 아이콘 버튼 → SearchOverlay 토글
+- **SiteHeader 통합** (`src/components/SiteHeader.tsx`):
+  - nav 우측에 SearchButton 배치, 서버 컴포넌트 구조 유지
+- 커밋: `8c90b5b`
+
 ### 히어로 맛집 CTA 추가 + 상단 여백 축소
 
 - 히어로 CTA 버튼 3번째 추가: `🍽️ 요즘 뜨는 맛집 보러가기` → `/life/restaurant`
