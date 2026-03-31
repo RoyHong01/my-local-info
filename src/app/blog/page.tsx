@@ -20,7 +20,12 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const allPosts = getSortedPostsData();
-  const posts = allPosts.filter(p => p.category !== '픽앤조이 초이스');
+  const posts = allPosts.filter((p) => {
+    const source = [p.title, p.category || '', ...(p.tags || [])].join(' ');
+    const isChoice = p.category === '픽앤조이 초이스';
+    const isRestaurant = p.category === '픽앤조이 맛집 탐방' || /맛집|restaurant/i.test(source);
+    return !isChoice && !isRestaurant;
+  });
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">

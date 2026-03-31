@@ -8,8 +8,8 @@ const links = [
   { label: '인천시 정보', href: '/incheon' },
   { label: '전국 보조금·복지 정책', href: '/subsidy' },
   { label: '전국 축제·여행 정보', href: '/festival' },
-  { label: '블로그', href: '/blog' },
   { label: '일상의 즐거움', href: '/life' },
+  { label: '블로그', href: '/blog' },
 ];
 
 export default function MobileNav() {
@@ -26,7 +26,7 @@ export default function MobileNav() {
           aria-label="검색"
           className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>

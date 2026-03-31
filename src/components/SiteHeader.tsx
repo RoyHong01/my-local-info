@@ -18,8 +18,8 @@ export default function SiteHeader() {
                 { label: '인천시 정보', href: '/incheon' },
                 { label: '전국 보조금·복지 정책', href: '/subsidy' },
                 { label: '전국 축제·여행 정보', href: '/festival' },
-                { label: '블로그', href: '/blog' },
                 { label: '일상의 즐거움', href: '/life' },
+                { label: '블로그', href: '/blog' },
               ].map(link => (
                 <Link
                   key={link.label}
