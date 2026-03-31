@@ -109,12 +109,12 @@ function buildRestaurantJsonLd(post: NonNullable<ReturnType<typeof getPostData>>
 }
 
 function buildProductJsonLd(post: NonNullable<ReturnType<typeof getPostData>>) {
-  return {
+  const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: post.title,
     description: post.description || post.summary,
-    image: post.image ? [post.image] : undefined,
+    image: post.image ? [post.image] : post.coupangBannerImage ? [post.coupangBannerImage] : undefined,
     category: post.category || '픽앤조이 초이스',
     brand: {
       '@type': 'Brand',
@@ -122,6 +122,25 @@ function buildProductJsonLd(post: NonNullable<ReturnType<typeof getPostData>>) {
     },
     url: `https://pick-n-joy.com/blog/${post.slug}/`,
   };
+
+  if (post.ratingValue && post.reviewCount) {
+    jsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: post.ratingValue,
+      reviewCount: post.reviewCount,
+    };
+  }
+
+  if (post.coupangLink) {
+    jsonLd.offers = {
+      '@type': 'Offer',
+      url: post.coupangLink,
+      priceCurrency: 'KRW',
+      availability: 'https://schema.org/InStock',
+    };
+  }
+
+  return jsonLd;
 }
 
 function classifyPostForSeo(post: { title: string; category?: string; tags?: string[] }) {
