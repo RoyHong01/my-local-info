@@ -7,6 +7,51 @@
 
 ## 2026-03-31
 
+### admin/runs 상세 보기 - 날짜 행 클릭 확장 패널 (RunsDetailPanel)
+
+- **배경**: `/admin/runs/[date]` 동적 라우트 방식은 `output: export` + `generateStaticParams` 빈 배열 시 빌드 에러 발생 → accordion 방식으로 전환
+- **`src/lib/daily-runs.ts`**: `getDailyRunReport(date)` 단건 조회 함수 추가
+- **`src/components/RunsDetailPanel.tsx`** (신규 클라이언트 컴포넌트):
+  - 날짜 행 클릭 시 그 아래 확장 패널 표시 (▶/▼ 토글)
+  - 상세 내용: 요약 수치(블로그/맛집/데이터/전체 파일), Gemini 예산 현황, 단계별 실행 결과(세부 스텝 포함), 커밋 목록(SHA GitHub 링크 + 변경 파일 태그), 생성 파일 분류(블로그=orange, 맛집=sky, 데이터=emerald)
+  - 동시에 하나만 열림 (`expandedDate` state)
+- **`src/app/admin/runs/page.tsx`**: `RunsDetailPanel` import 및 날짜 이력 섹션 교체, 안내 문구 추가
+- 커밋: `740615a`
+
+### Gemini API 비용 가드 + 모델 전환 + maxOutputTokens
+
+- **문제**: Gemini 2.5 Pro 과금 폭탄 (₩28,920, 원인: aggressive retry + 고가 모델)
+- **모델 전환**: `gemini-2.5-pro` → `gemini-2.5-flash-lite` (실제 API 호출로 가용성 확인)
+  - `gemini-2.0-flash`, `gemini-1.5-flash` → 404 (이 계정에서 미지원)
+  - `gemini-2.5-flash`, `gemini-2.5-flash-lite` → 200 ✅
+- **추가된 상수** (`generate-blog-post.js`):
+  - `GEMINI_MODEL`: 기본값 `gemini-2.5-flash-lite`
+  - `GEMINI_MAX_OUTPUT_TOKENS`: 기본값 `8192` (블로그 짤림 방지)
+  - `BLOG_GEMINI_MIN_DELAY_MS`: 호출 간 최소 지연 (5000ms)
+  - `BLOG_MAX_API_CALLS`: 일일 최대 API 호출 횟수 (10)
+  - `BLOG_DAILY_BUDGET_KRW`: 일일 예산 상한 (500원 초과 시 자동 중단)
+  - `GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS`: 비용 추정 단가
+- **GitHub Actions** (`deploy.yml`) 환경변수 동기화
+- **`write-daily-report.mjs`**: 예산 사용 현황 리포트 섹션 추가
+- **`src/lib/daily-runs.ts`**: `DailyRunReport.budget` 인터페이스 추가
+- **`src/app/admin/runs/page.tsx`**: 예산 상태 배너 + 히스토리 테이블 컬럼 추가
+- 커밋: `58f4ef7` (비용 가드), `f550316` (maxOutputTokens 8192)
+
+### Cloudflare Access — /admin/* 접근 보호 설정
+
+- **Cloudflare Zero Trust** `pick-n-joy-admin` Application 생성 완료
+  - Domain: `pick-n-joy.com` / Path: `/admin/*` / Session: 24시간
+  - Login 방식: One-time PIN (OTP) 이메일 인증
+- **2025년 11월 이후 Cloudflare Zero Trust UI 경로 변경 사항**:
+  | 기능 | 구 경로 | 현재 경로 |
+  |------|--------|----------|
+  | Login methods / IdP | Settings → Authentication | Integrations → Identity providers |
+  | Access Applications | Access → Applications | Access controls → Applications |
+  | WARP 설정 | Settings → WARP | Team & Resources → Devices |
+  | 로그/모니터링 | Logs | Insights |
+- OTP 설정: Zero Trust → Integrations → Identity providers → Add new → One-time PIN
+- Application 생성: Zero Trust → Access controls → Applications → Add an application → Self-hosted
+
 ### 모바일 햄버거 네비게이션 추가
 
 - **MobileNav 컴포넌트** (`src/components/MobileNav.tsx`) 신규 생성
