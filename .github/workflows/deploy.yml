@@ -300,6 +300,17 @@ jobs:
             echo "리포트 변경사항 없음"
           fi
 
+      - name: '[리포트] Telegram 알림 발송 (full 모드)'
+        if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
+        run: node scripts/notify-telegram.mjs
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          REPORT_DATE_KST: ${{ env.REPORT_DATE_KST }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+
       - name: '[공통] Playwright 브라우저 설치 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: npx playwright install --with-deps chromium
