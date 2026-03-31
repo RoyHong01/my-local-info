@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
             </p>
           </header>
 
-          <section className="mt-4">
+          <section className="pt-4">
             <h2 className="text-2xl font-bold mb-3 text-orange-600">1. 수집하는 정보 및 이용 목적</h2>
             <p className="text-stone-600 leading-relaxed mb-3">
               본 사이트는 회원가입 없이 대부분의 콘텐츠를 이용할 수 있습니다. 서비스 운영 과정에서 아래 정보를 수집할 수 있으며,

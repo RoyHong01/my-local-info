@@ -20,6 +20,17 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+### 2026-04-01 기준 핵심 요약
+
+- 정책/소개 페이지 마감 보정
+  - `src/app/privacy/page.tsx` 상단-본문 간격 확대
+  - `src/app/about/page.tsx` 우측 사이드 광고 배너 제거
+- 운영 문의 이메일 프로젝트 계정으로 통일
+  - `royshong01@gmail.com`으로 교체 (`about`, `privacy`)
+- Figma MCP 연결 정리
+  - SethFord WebSocket 확장 제거
+  - Copilot MCP 설정 파일(`.vscode/mcp.json`) 단일 사용
+
 ### 2026-03-31 기준 핵심 요약
 
 - AdSense 심사 대응 마무리

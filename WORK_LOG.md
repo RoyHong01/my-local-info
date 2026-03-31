@@ -7,6 +7,29 @@
 
 ## 2026-03-31
 
+## 2026-04-01
+
+### 정책/소개 페이지 UI 정리 + 문의 이메일 교체
+
+- **개인정보 처리방침 여백 보정**: `src/app/privacy/page.tsx`
+  - 상단 설명문과 `1. 수집하는 정보 및 이용 목적` 섹션 사이 여백 확대 (가독성 개선)
+- **사이트 소개 우측 광고 배너 제거**: `src/app/about/page.tsx`
+  - 태허철학관/쿠팡 사이드 영역 삭제, 본문 중심 단일 레이아웃으로 정리
+- **프로젝트 문의 이메일 교체**:
+  - 기존: `roysshong@gmail.com`
+  - 변경: `royshong01@gmail.com`
+  - 반영 파일: `src/app/about/page.tsx`, `src/app/privacy/page.tsx`
+- **검증**: `npm run build` 성공
+- 커밋: `794460b` (여백/배너 정리), `5cbfdeb` (문의 메일 교체)
+
+### Figma MCP 연결 이슈 정리
+
+- 원인: SethFord MCP Figma Extension(WebSocket 방식)과 Copilot MCP 설정 혼재로 연결 실패
+- 조치:
+  - 충돌 확장(`sethford.mcp-figma-extension`) 제거
+  - 로컬 Copilot MCP 설정 유지: `.vscode/mcp.json`
+  - 토큰 파일 비커밋 처리: `.gitignore`에 `.vscode/mcp.json` 추가
+
 ### AdSense 검증 오류 원인 분석 및 배포 파이프라인 수정
 
 - **현상**: AdSense 콘솔에서 "사이트를 확인할 수 없습니다" 반복 발생
