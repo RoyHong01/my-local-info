@@ -7,6 +7,16 @@
 
 ## 2026-03-31
 
+### 캐츠랑 20kg 초이스 포스트 추가
+
+- **신규 초이스 포스트 추가**: `src/content/life/2026-03-31-choice-catsrang-20kg.md`
+  - 쿠팡 링크 `https://link.coupang.com/a/efdAq0` 기반으로 고양이 사료 초이스 글 작성
+  - 상단 이미지는 전면 패키지 사진, 본문 중간 이미지는 후면 QR/성분 안내 사진 사용
+- **로컬 이미지 추가**:
+  - `public/images/choice/catsrang-20kg-front.jpg`
+  - `public/images/choice/catsrang-20kg-back.jpg`
+- **검증**: `npm run build` 성공
+
 ### 쿠팡 초이스 수동 입력 기반 자동 글 생성 스크립트 추가
 
 - **신규 스크립트**: `scripts/generate-choice-post.js`
