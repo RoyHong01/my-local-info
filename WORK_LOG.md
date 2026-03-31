@@ -7,6 +7,19 @@
 
 ## 2026-03-31
 
+### 쿠팡 초이스 수동 입력 기반 자동 글 생성 스크립트 추가
+
+- **신규 스크립트**: `scripts/generate-choice-post.js`
+  - 수동 입력 JSON(`--input`)을 받아 Gemini 프롬프트 생성 후 초이스 포스트 마크다운 자동 생성
+  - 필수 입력: `title`, `englishName`, `summary`, `coupangUrl`, `coupangHtml`
+  - frontmatter 정규화(카테고리/평점/쿠팡 필드), 파일명 안전화, 본문 정리 후 `src/content/life`에 저장
+- **예시 입력 파일 추가**: `scripts/choice-input.example.json`
+- **npm 스크립트 추가**: `package.json`에 `generate:choice` 등록
+- **검증**:
+  - `node scripts/generate-choice-post.js --help` 실행 성공
+  - `npm run build` 성공
+- 커밋: `07d015b`
+
 ### 초이스 포스트 운영 보정 + 네비/목록 동작 정리
 
 - **초이스 신규 포스트 추가**: `src/content/life/2026-03-31-choice-cj-biocore-probiotics.md`
