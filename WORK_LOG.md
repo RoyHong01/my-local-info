@@ -7,6 +7,17 @@
 
 ## 2026-03-31
 
+### 초이스 생성기 Gemini 키 로딩 오류 복구
+
+- **원인**: `scripts/generate-choice-post.js`의 환경변수 로더가 `.env`를 먼저 읽고, 이미 값이 있으면 `.env.local` 값을 덮어쓰지 않도록 구현되어 있었음
+  - 저장소 `.env`의 `GEMINI_API_KEY`가 플레이스홀더(`your_key_here`)여서 Google API에서 `API_KEY_INVALID` 발생
+- **조치**:
+  - `.env.local`이 `.env`를 override 하도록 로더 우선순위/덮어쓰기 규칙 수정
+  - CJ 입력 파일로 재실행하여 자동 생성 성공 확인
+- **검증**:
+  - `node scripts/generate-choice-post.js --input scripts/choice-input.cj-biocore.json` 성공
+  - `npm run build` 성공
+
 ### CJ 바이오코어 초이스 포스트 재작성 + 생성기 프롬프트 보강
 
 - **초이스 생성기 개선**: `scripts/generate-choice-post.js`

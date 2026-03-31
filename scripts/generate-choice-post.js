@@ -8,12 +8,13 @@ const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000)
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 8192);
 
 function loadLocalEnvFiles() {
-  const envPaths = [
-    path.join(process.cwd(), '.env'),
-    path.join(process.cwd(), '.env.local'),
+  const envFiles = [
+    { file: '.env', override: false },
+    { file: '.env.local', override: true },
   ];
 
-  for (const envPath of envPaths) {
+  for (const envFile of envFiles) {
+    const envPath = path.join(process.cwd(), envFile.file);
     if (!fsSync.existsSync(envPath)) continue;
 
     const raw = fsSync.readFileSync(envPath, 'utf-8');
@@ -26,7 +27,8 @@ function loadLocalEnvFiles() {
 
       const key = trimmed.slice(0, eqIndex).trim();
       let value = trimmed.slice(eqIndex + 1).trim();
-      if (!key || process.env[key]) continue;
+      if (!key) continue;
+      if (process.env[key] && !envFile.override) continue;
 
       if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
         value = value.slice(1, -1);
