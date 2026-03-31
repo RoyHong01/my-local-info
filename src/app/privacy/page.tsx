@@ -64,7 +64,12 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-bold mb-3 text-orange-600">4. 문의처</h2>
             <p className="text-stone-600 leading-relaxed">
-              개인정보 처리방침 또는 사이트 운영 관련 문의는 사이트 소개 페이지를 통해 접수해 주세요.
+              개인정보 처리방침 또는 사이트 운영 관련 문의는 아래 이메일로 접수해 주세요.
+              <br />
+              이메일: <a className="text-orange-500 hover:underline" href="mailto:roysshong@gmail.com">roysshong@gmail.com</a>
+              <br />
+              사이트 소개 페이지는 <a className="text-orange-500 hover:underline" href="/about">/about</a>에서 확인할 수 있습니다.
+              <br />
               본 방침은 서비스 운영 정책 및 관련 법령 변경에 따라 업데이트될 수 있습니다.
             </p>
           </section>

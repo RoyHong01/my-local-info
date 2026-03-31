@@ -49,6 +49,13 @@ export default function AboutPage() {
                   검색 시간을 줄이는 "프리미엄 생활 큐레이션" 경험을 제공하는 것이 운영 원칙입니다.
                 </p>
               </section>
+
+              <section>
+                <h2 className="text-2xl font-bold mb-4 text-orange-600">문의</h2>
+                <p className="text-stone-600 leading-relaxed">
+                  사이트 운영 및 제휴 관련 문의: <a href="mailto:roysshong@gmail.com" className="text-orange-500 hover:underline">roysshong@gmail.com</a>
+                </p>
+              </section>
             </article>
           </div>
           <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
