@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://pick-n-joy.com"),
   title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
-  description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
+  description: "픽앤조이는 공공데이터와 데이터 분석을 바탕으로 인천 생활정보, 전국 복지·보조금, 축제·여행, 라이프스타일 정보를 시민 관점에서 쉽게 큐레이션하는 플랫폼입니다.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
-    description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
+    description: "공공데이터 기반 복지 큐레이션과 데이터 분석 기반 라이프스타일 큐레이션으로 시민 체감형 생활정보를 전달합니다.",
     url: "https://pick-n-joy.com",
     siteName: "픽앤조이",
     type: "website",
@@ -44,7 +44,16 @@ export default function RootLayout({
     "@type": "WebSite",
     name: "픽앤조이",
     url: "https://pick-n-joy.com",
-    description: "인천 및 전국의 최신 행사, 축제, 보조금, 여행 정보를 매일 업데이트합니다.",
+    description: "공공데이터와 데이터 분석을 바탕으로 인천 생활정보, 전국 복지·보조금, 축제·여행, 라이프스타일 정보를 시민 관점에서 큐레이션하는 플랫폼",
+  };
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "픽앤조이",
+    url: "https://pick-n-joy.com",
+    description: "시민 체감형 공공 복지 플랫폼이자 공공데이터 기반 복지 큐레이션, 데이터 분석 기반 라이프스타일 큐레이션, 전국 축제·여행 정보 플랫폼",
+    sameAs: ["https://github.com/RoyHong01/my-local-info"],
   };
 
   const breadcrumbJsonLd = {
@@ -106,6 +115,10 @@ gtag('config', '${gaId}');`,
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <script
           type="application/ld+json"
