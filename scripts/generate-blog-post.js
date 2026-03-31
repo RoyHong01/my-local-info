@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const fsSync = require('fs');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -7,15 +8,62 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const BLOG_MAX_GENERATION_SECONDS = Number(process.env.BLOG_MAX_GENERATION_SECONDS || 900);
 const BLOG_MAX_CANDIDATES_PER_CATEGORY = Number(process.env.BLOG_MAX_CANDIDATES_PER_CATEGORY || 8);
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const BLOG_GEMINI_MIN_DELAY_MS = Number(process.env.BLOG_GEMINI_MIN_DELAY_MS || 5000);
+const BLOG_MAX_API_CALLS = Number(process.env.BLOG_MAX_API_CALLS || 12);
+const BLOG_DAILY_BUDGET_KRW = Number(process.env.BLOG_DAILY_BUDGET_KRW || 0);
+const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS || 0);
 
-// 블로그 글 생성: Gemini 1.5 Pro 사용
+let geminiApiCallCount = 0;
+let lastGeminiCallAt = 0;
+let estimatedCostKrw = 0;
+let budgetStopped = false;
+let budgetStopReason = '';
+
+const budgetEnabled = BLOG_DAILY_BUDGET_KRW > 0 && GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS > 0;
+
+function setGithubOutput(key, value) {
+  const outputPath = process.env.GITHUB_OUTPUT;
+  if (!outputPath) return;
+  try {
+    const safe = String(value ?? '').replace(/\r?\n/g, ' ');
+    fsSync.appendFileSync(outputPath, `${key}=${safe}\n`);
+  } catch {
+    // ignore output write failures
+  }
+}
+
+function publishBudgetOutputs() {
+  setGithubOutput('budget_enabled', budgetEnabled ? 'true' : 'false');
+  setGithubOutput('budget_limit_krw', BLOG_DAILY_BUDGET_KRW);
+  setGithubOutput('estimated_cost_krw', estimatedCostKrw.toFixed(2));
+  setGithubOutput('budget_stopped', budgetStopped ? 'true' : 'false');
+  setGithubOutput('budget_stop_reason', budgetStopReason || '');
+}
+
+// 블로그 글 생성: 기본 모델은 비용 최적화를 위해 gemini-2.5-flash-lite
 async function callGemini(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+  if (budgetStopped) {
+    throw new Error(`BLOG_BUDGET_STOP:${budgetStopReason || '일일 예산 상한 도달'}`);
+  }
+
+  if (geminiApiCallCount >= BLOG_MAX_API_CALLS) {
+    throw new Error(`Gemini API 호출 상한 도달: ${BLOG_MAX_API_CALLS}회`);
+  }
+
+  const elapsedSinceLastCall = Date.now() - lastGeminiCallAt;
+  if (lastGeminiCallAt > 0 && elapsedSinceLastCall < BLOG_GEMINI_MIN_DELAY_MS) {
+    await sleep(BLOG_GEMINI_MIN_DELAY_MS - elapsedSinceLastCall);
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_API_KEY}`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
 
   let res;
   try {
+    geminiApiCallCount++;
+    lastGeminiCallAt = Date.now();
     res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -43,6 +91,18 @@ async function callGemini(prompt) {
   }
   const data = await res.json();
   const candidate = data?.candidates?.[0] || {};
+
+  const outputTokens = Number(data?.usageMetadata?.candidatesTokenCount || data?.usageMetadata?.outputTokenCount || 0);
+  if (budgetEnabled && outputTokens > 0) {
+    estimatedCostKrw += (outputTokens / 1000) * GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS;
+
+    if (estimatedCostKrw >= BLOG_DAILY_BUDGET_KRW) {
+      budgetStopped = true;
+      budgetStopReason = `일일 예산 상한 도달 (추정 ${estimatedCostKrw.toFixed(2)}원 / 한도 ${BLOG_DAILY_BUDGET_KRW}원)`;
+      console.warn(`  ⛔ ${budgetStopReason}`);
+    }
+  }
+
   return {
     text: candidate?.content?.parts?.[0]?.text || '',
     finishReason: candidate?.finishReason || '',
@@ -614,6 +674,9 @@ ${festivalStyleOverride}
     try {
       gemini = await callGemini(`${prompt}${retryHint}`);
     } catch (err) {
+      if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
+        throw err;
+      }
       if (attempt < maxAttempts) {
         console.warn(`  ⚠️ Gemini 호출 실패(시도 ${attempt}/${maxAttempts}): ${err.message}`);
         await sleep(2000);
@@ -722,7 +785,18 @@ ${festivalStyleOverride}
 async function run() {
   if (!GEMINI_API_KEY) {
     console.error("Missing GEMINI_API_KEY");
+    publishBudgetOutputs();
     return;
+  }
+
+  console.log(`GEMINI_MODEL: ${GEMINI_MODEL}`);
+  console.log(`BLOG_GEMINI_MIN_DELAY_MS: ${BLOG_GEMINI_MIN_DELAY_MS}`);
+  console.log(`BLOG_MAX_API_CALLS: ${BLOG_MAX_API_CALLS}`);
+  if (budgetEnabled) {
+    console.log(`BLOG_DAILY_BUDGET_KRW: ${BLOG_DAILY_BUDGET_KRW}`);
+    console.log(`GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS: ${GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS}`);
+  } else {
+    console.log('BLOG_DAILY_BUDGET_KRW: 비활성 (예산 제한 없음)');
   }
 
   const dataFiles = [
@@ -741,6 +815,11 @@ async function run() {
   let totalGenerated = 0;
 
   for (const { file, category } of dataFiles) {
+    if (budgetStopped) {
+      console.log(`\n⛔ 예산 상한으로 블로그 생성 중단: ${budgetStopReason}`);
+      break;
+    }
+
     console.log(`\n📂 카테고리: ${category}`);
     const dataPath = path.join(process.cwd(), 'public', 'data', file);
     let items = [];
@@ -798,6 +877,16 @@ async function run() {
         break;
       }
 
+      if (budgetStopped) {
+        console.log(`  ⛔ 예산 상한 도달: ${budgetStopReason}`);
+        break;
+      }
+
+      if (geminiApiCallCount >= BLOG_MAX_API_CALLS) {
+        console.log(`  ⛔ Gemini API 호출 상한 도달(${BLOG_MAX_API_CALLS}회): 생성 루프 종료`);
+        break;
+      }
+
       if (triedCandidates >= BLOG_MAX_CANDIDATES_PER_CATEGORY) {
         console.log(`  ⏱️ 카테고리 후보 시도 상한 도달(${BLOG_MAX_CANDIDATES_PER_CATEGORY}건): 다음 카테고리로 이동`);
         break;
@@ -816,6 +905,12 @@ async function run() {
           }
         }
       } catch (err) {
+        if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
+          budgetStopped = true;
+          budgetStopReason = String(err.message).replace(/^BLOG_BUDGET_STOP:/, '').trim();
+          console.log(`  ⛔ 예산 상한 도달: ${budgetStopReason}`);
+          break;
+        }
         console.error(`  생성 오류: ${err.message}`);
       }
     }
@@ -826,6 +921,12 @@ async function run() {
   }
 
   console.log(`\n🎉 총 ${totalGenerated}편 생성 완료`);
+  console.log(`📊 Gemini API 호출 횟수: ${geminiApiCallCount}회`);
+  if (budgetEnabled) {
+    console.log(`💰 Gemini 추정 비용: ${estimatedCostKrw.toFixed(2)}원 / ${BLOG_DAILY_BUDGET_KRW}원`);
+  }
+
+  publishBudgetOutputs();
 }
 
 run();

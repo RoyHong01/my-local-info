@@ -73,6 +73,20 @@ export default async function AdminRunsPage() {
                 </div>
               </div>
 
+              {latest.budget?.enabled && (
+                <div className={`mt-4 rounded-xl border p-4 ${latest.budget.stopped ? 'bg-rose-50 border-rose-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                  <p className={`text-sm font-bold ${latest.budget.stopped ? 'text-rose-700' : 'text-emerald-700'}`}>
+                    {latest.budget.stopped ? '⛔ 블로그 예산 가드로 자동 생성 중단됨' : '✅ 블로그 예산 가드 정상 작동 중'}
+                  </p>
+                  <p className="text-xs text-stone-600 mt-1">
+                    추정 비용: {Number(latest.budget.estimatedCostKrw || 0).toFixed(2)}원 / 일일 한도: {Number(latest.budget.limitKrw || 0).toFixed(0)}원
+                  </p>
+                  {latest.budget.stopReason && (
+                    <p className="text-xs text-stone-600 mt-1">사유: {latest.budget.stopReason}</p>
+                  )}
+                </div>
+              )}
+
               <div className="mt-4 overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
@@ -132,6 +146,7 @@ export default async function AdminRunsPage() {
                       <th className="py-2 pr-4">실행</th>
                       <th className="py-2 pr-4">블로그</th>
                       <th className="py-2 pr-4">맛집</th>
+                      <th className="py-2 pr-4">블로그 예산</th>
                       <th className="py-2 pr-4">파일 변경</th>
                       <th className="py-2">링크</th>
                     </tr>
@@ -151,6 +166,13 @@ export default async function AdminRunsPage() {
                           </td>
                           <td className="py-3 pr-4 text-stone-700">{item.generatedBlogCount}건</td>
                           <td className="py-3 pr-4 text-stone-700">{item.generatedLifeCount}건</td>
+                          <td className="py-3 pr-4 text-stone-700">
+                            {item.blogBudgetEnabled
+                              ? (item.blogBudgetStopped
+                                ? `중단 (${Number(item.blogEstimatedCostKrw || 0).toFixed(0)}/${Number(item.blogBudgetLimitKrw || 0).toFixed(0)}원)`
+                                : `정상 (${Number(item.blogEstimatedCostKrw || 0).toFixed(0)}/${Number(item.blogBudgetLimitKrw || 0).toFixed(0)}원)`)
+                              : '-'}
+                          </td>
                           <td className="py-3 pr-4 text-stone-700">{item.totalChangedFiles}개</td>
                           <td className="py-3">
                             <a href={item.runUrl} target="_blank" rel="noreferrer" className="text-orange-600 hover:text-orange-700 underline underline-offset-2">

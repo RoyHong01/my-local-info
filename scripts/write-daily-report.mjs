@@ -34,6 +34,11 @@ function normalizeOutcome(value) {
   return String(value).trim().toLowerCase();
 }
 
+function normalizeBoolean(value) {
+  const v = String(value || '').trim().toLowerCase();
+  return v === 'true' || v === '1' || v === 'yes';
+}
+
 function classifyStageStatus(stage) {
   const outcomes = Object.values(stage.steps || {}).map(normalizeOutcome);
   if (outcomes.some((value) => value === 'failure')) return 'failure';
@@ -228,7 +233,23 @@ function toMarkdown(report) {
   lines.push(`| 생성된 맛집 글 | ${report.changes.generatedLifePosts.length}건 |`);
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
   lines.push(`| 최종 배포 URL | ${latestDeployUrl || '-'} |`);
+  if (report.budget?.enabled) {
+    lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
+    lines.push(`| 블로그 비용(추정) | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
+  }
   lines.push('');
+
+  if (report.budget?.enabled) {
+    lines.push('## 💸 블로그 예산 가드 상태');
+    lines.push('');
+    lines.push('| 항목 | 값 |');
+    lines.push('|---|---|');
+    lines.push(`| 상태 | ${report.budget.stopped ? '⛔ 중단됨' : '✅ 정상'} |`);
+    lines.push(`| 일일 한도 | ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
+    lines.push(`| 추정 비용 | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 |`);
+    lines.push(`| 중단 사유 | ${report.budget.stopReason || '-'} |`);
+    lines.push('');
+  }
 
   lines.push('## 🧭 단계별 실행 결과');
   lines.push('');
@@ -336,6 +357,10 @@ async function updateIndex(indexPath, report) {
     generatedBlogCount: report.changes.generatedBlogPosts.length,
     generatedLifeCount: report.changes.generatedLifePosts.length,
     totalChangedFiles: report.changes.totalChangedFiles,
+    blogBudgetEnabled: !!report.budget?.enabled,
+    blogBudgetStopped: !!report.budget?.stopped,
+    blogBudgetLimitKrw: Number(report.budget?.limitKrw || 0),
+    blogEstimatedCostKrw: Number(report.budget?.estimatedCostKrw || 0),
     generatedAtUtc: report.generatedAtUtc,
   };
 
@@ -386,6 +411,13 @@ async function main() {
     stages,
     commits,
     changes,
+    budget: {
+      enabled: normalizeBoolean(process.env.BLOG_BUDGET_ENABLED),
+      limitKrw: Number(process.env.BLOG_BUDGET_LIMIT_KRW || 0),
+      estimatedCostKrw: Number(process.env.BLOG_ESTIMATED_COST_KRW || 0),
+      stopped: normalizeBoolean(process.env.BLOG_BUDGET_STOPPED),
+      stopReason: process.env.BLOG_BUDGET_STOP_REASON || '',
+    },
   };
 
   if (dryRun) {

@@ -37,6 +37,13 @@ export interface DailyRunReport {
     generatedLifePosts: string[];
     allChangedFiles: string[];
   };
+  budget?: {
+    enabled: boolean;
+    limitKrw: number;
+    estimatedCostKrw: number;
+    stopped: boolean;
+    stopReason?: string;
+  };
 }
 
 export interface DailyRunIndexItem {
@@ -50,6 +57,10 @@ export interface DailyRunIndexItem {
   generatedBlogCount: number;
   generatedLifeCount: number;
   totalChangedFiles: number;
+  blogBudgetEnabled?: boolean;
+  blogBudgetStopped?: boolean;
+  blogBudgetLimitKrw?: number;
+  blogEstimatedCostKrw?: number;
   generatedAtUtc: string;
 }
 
