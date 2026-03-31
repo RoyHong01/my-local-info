@@ -7,6 +7,20 @@
 
 ## 2026-03-31
 
+### 서울 축제 1건 자동 생성 테스트 (Gemini 키 재발급 검증)
+
+- **자동 생성 스크립트 개선**: `scripts/generate-blog-post.js`
+  - `BLOG_ONLY_KEYWORD` 환경변수 추가
+  - `title/name/addr1/overview`에 키워드가 포함된 항목만 후보로 필터링 가능
+- **테스트 실행**:
+  - `BLOG_ONLY_CATEGORY="전국 축제·여행"`
+  - `BLOG_ONLY_KEYWORD="서울"`
+  - 위 조건으로 Gemini 자동 생성 1회 실행
+- **생성 결과**:
+  - `src/content/posts/2026-03-31-yangjaecheon-cherryblossom-lantern-festival.md`
+  - source_id: `2540520` (양재천 벚꽃 등(燈) 축제, 서울 서초구)
+- **검증**: `npm run build` 성공
+
 ### 초이스 생성기 Gemini 키 로딩 오류 복구
 
 - **원인**: `scripts/generate-choice-post.js`의 환경변수 로더가 `.env`를 먼저 읽고, 이미 값이 있으면 `.env.local` 값을 덮어쓰지 않도록 구현되어 있었음

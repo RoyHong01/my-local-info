@@ -16,6 +16,8 @@ const BLOG_DAILY_BUDGET_KRW = Number(process.env.BLOG_DAILY_BUDGET_KRW || 0);
 const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS || 0);
 // 특정 카테고리만 실행 (예: "전국 축제·여행"). 미설정 시 전체 실행
 const BLOG_ONLY_CATEGORY = process.env.BLOG_ONLY_CATEGORY || '';
+// 후보 텍스트(title/name/addr1/overview)에 키워드가 포함된 항목만 생성
+const BLOG_ONLY_KEYWORD = (process.env.BLOG_ONLY_KEYWORD || '').trim();
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -815,6 +817,9 @@ async function run() {
   if (BLOG_ONLY_CATEGORY) {
     console.log(`\n🎯 BLOG_ONLY_CATEGORY="${BLOG_ONLY_CATEGORY}" — 해당 카테고리만 실행합니다.`);
   }
+  if (BLOG_ONLY_KEYWORD) {
+    console.log(`🎯 BLOG_ONLY_KEYWORD="${BLOG_ONLY_KEYWORD}" — 키워드 포함 항목만 생성합니다.`);
+  }
 
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
   await fs.mkdir(postsDir, { recursive: true });
@@ -844,7 +849,22 @@ async function run() {
 
     // 만료 제외 + 우선순위 정렬
     const validItems = sortByPriority(
-      items.filter(item => !item.expired),
+      items
+        .filter(item => !item.expired)
+        .filter((item) => {
+          if (!BLOG_ONLY_KEYWORD) return true;
+          const haystack = [
+            item['서비스명'],
+            item['title'],
+            item['name'],
+            item['addr1'],
+            item['location'],
+            item['overview'],
+          ]
+            .filter(Boolean)
+            .join(' ');
+          return haystack.includes(BLOG_ONLY_KEYWORD);
+        }),
       category
     );
 
