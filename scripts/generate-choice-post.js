@@ -1,11 +1,46 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
+const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 8192);
+
+function loadLocalEnvFiles() {
+  const envPaths = [
+    path.join(process.cwd(), '.env'),
+    path.join(process.cwd(), '.env.local'),
+  ];
+
+  for (const envPath of envPaths) {
+    if (!fsSync.existsSync(envPath)) continue;
+
+    const raw = fsSync.readFileSync(envPath, 'utf-8');
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const eqIndex = trimmed.indexOf('=');
+      if (eqIndex < 0) continue;
+
+      const key = trimmed.slice(0, eqIndex).trim();
+      let value = trimmed.slice(eqIndex + 1).trim();
+      if (!key || process.env[key]) continue;
+
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+
+      process.env[key] = value;
+    }
+  }
+}
+
+function getGeminiApiKey() {
+  loadLocalEnvFiles();
+  return process.env.GEMINI_API_KEY || '';
+}
 
 function parseArgs(argv) {
   const args = { input: '', outdir: '', help: false };
@@ -40,7 +75,7 @@ function printHelp() {
   console.log('- coupangUrl');
   console.log('- coupangHtml');
   console.log('');
-  console.log('Optional fields: sourceUrl, rating, reviewCount, tags, image, fileName, brand');
+  console.log('Optional fields: sourceUrl, rating, reviewCount, tags, image, fileName, outputFileName, brand');
 }
 
 function todayIso() {
@@ -74,6 +109,7 @@ function normalizeTags(tags) {
 }
 
 function buildChoicePrompt(candidate, today) {
+  const outputFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName || 'choice-item'}.md`;
   return `당신은 픽앤조이(Pick-n-Joy)의 30대 초반 라이프스타일 에디터입니다.
 아래 [입력 데이터]만 근거로, 호기심을 유발하지만 과장하지 않는 제품 큐레이션 포스트를 작성하세요.
 
@@ -87,18 +123,20 @@ function buildChoicePrompt(candidate, today) {
 [출력 계약 - 반드시 준수]
 1) 출력은 markdown 코드블록 하나만
 2) frontmatter + 본문만 출력
-3) 마지막 줄은 반드시: FILENAME: ${today}-${candidate.englishName || 'choice-item'}.md
+3) 마지막 줄은 반드시: FILENAME: ${outputFileName}
 4) 아래 금지 항목 포함 시 실패:
    - 1단계, 2단계, The Hook, The Choice, Curation 같은 구조 라벨
    - 본문 내 JSON-LD 코드
    - 본문 내 쿠팡 파트너스 고지문(하단 공통영역에서 자동 처리됨)
+  - "가장 확실한 방법", "정착기", "완벽한", "무조건", "끝판왕" 같은 과장형 제목 문구
+  - 입력 데이터에 없는 통계, 임상 수치, 비교 실험 결과, 사용자 후기 비율
 
 [Frontmatter 스키마 - 키 이름 정확히]
 ---
-title: "(페인포인트 해결형 제목, 콜론 포함 시 큰따옴표 필수)"
+title: "(자연스러운 한국어 제목. 번역투 금지. 문제 제기 + 제품명 + 선택 이유 구조 권장)"
 date: "${today}"
 slug: "choice-${candidate.englishName}"
-summary: "(130~160자, 검색 노출용. 핵심 키워드를 앞에 배치)"
+summary: "(110~150자, 검색 노출용. 과장 없이 제품명/용도/선택 이유를 설명)"
 description: "(summary와 동일)"
 category: "픽앤조이 초이스"
 tags: ["태그1", "태그2", "태그3", "태그4", "태그5", "쿠팡", "리뷰"]
@@ -121,12 +159,20 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
   4) 반론 처리: 아쉬운 점 1개 + 누구에게 맞는지/안 맞는지
   5) 마무리: 상황형 한 줄 평(여운)
 
+[제목/리드 품질 규칙]
+- 제목은 한국어로 자연스럽게 읽혀야 하며, 억지 번역투나 광고 문구처럼 보이면 실패
+- 제목은 "왜 오래 살아남는 이유"처럼 중복 표현 금지
+- 건강기능식품/영양제는 치료를 암시하는 표현 금지
+- 리드 문단은 독자의 생활 장면을 먼저 보여주고, 바로 제품 자랑으로 뛰어들지 말 것
+
 [호기심 유발 장치 - 최소 3개 반영]
 - 반전 문장: "좋다는 말보다 먼저 봐야 할 건..."
 - 대비 문장: "고함량인데도 불편함이 적은 이유는..."
 - 구체 장면: "오후 3시 회의 전에 배가 묵직해질 때..."
 - 데이터 갈등: "후기 평점은 높은데, 실제로 갈리는 포인트는..."
 - 독자 질문: "그래서 내 루틴에 넣을 만하냐고요?"
+
+※ 단, 위 장치는 입력 데이터와 어울릴 때만 사용하고 억지로 모두 넣지 말 것
 
 [쿠팡태그 삽입 규칙]
 - ${candidate.coupangHtml} 는 본문 중간, 선택 근거 단락 직후 그대로 삽입
@@ -160,8 +206,10 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 
 [사실성/컴플라이언스]
 - 입력 데이터 밖의 수치/효능/비교결과를 임의 생성 금지
+- 입력 데이터 밖의 임상 결과, 만족도 수치, 검색량, 키워드 빈도, 타 제품 비교 우위 생성 금지
 - 건강 제품은 질병 치료/예방 단정 금지
 - 개인 체감, 사용자 후기 기반, 제품 정보 기준 같은 안전한 표현 사용
+- 성분이나 설계가 좋아 보여도 "해결된다"보다 "기대하는 분이 많다", "이 점을 보고 고른다"처럼 완곡하게 표현
 
 [품질 체크리스트 - 출력 전 자체 검증]
 - frontmatter 필수 키 누락 없음
@@ -172,11 +220,12 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 }
 
 async function callGemini(prompt) {
-  if (!GEMINI_API_KEY) {
+  const geminiApiKey = getGeminiApiKey();
+  if (!geminiApiKey) {
     throw new Error('Missing GEMINI_API_KEY');
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${geminiApiKey}`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
 
@@ -298,6 +347,7 @@ async function loadCandidate(inputPath) {
   }
 
   parsed.tags = normalizeTags(parsed.tags);
+  parsed.outputFileName = String(parsed.outputFileName || '').trim();
   parsed.fileName = toSlug(parsed.fileName || parsed.englishName || parsed.title);
   parsed.englishName = toSlug(parsed.englishName || parsed.fileName || parsed.title);
   parsed.coupangBannerImage = parsed.coupangBannerImage || extractCoupangBannerImage(parsed.coupangHtml);
@@ -338,7 +388,7 @@ async function run() {
   }
 
   const stripped = removeCodeFence(generated);
-  const fallbackName = `${today}-choice-${candidate.englishName}.md`;
+  const fallbackName = candidate.outputFileName || `${today}-choice-${candidate.englishName}.md`;
   const withFilename = splitFilenameLine(stripped, fallbackName);
   const normalized = normalizeGeneratedContent(withFilename.content, candidate);
 

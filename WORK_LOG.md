@@ -7,6 +7,20 @@
 
 ## 2026-03-31
 
+### CJ 바이오코어 초이스 포스트 재작성 + 생성기 프롬프트 보강
+
+- **초이스 생성기 개선**: `scripts/generate-choice-post.js`
+  - 제목 과장 표현 금지(`가장 확실한 방법`, `정착기`, `완벽한`, `끝판왕` 등) 규칙 추가
+  - 입력 데이터 밖의 통계/임상 수치/비교 우위 생성 금지 규칙 강화
+  - `outputFileName` 지원 추가로 기존 포스트 파일을 지정 재생성할 수 있게 보강
+  - 로컬 실행 시 `.env`, `.env.local` 자동 로드 기능 추가
+- **CJ 포스트 본문 재작성**: `src/content/life/2026-03-31-choice-cj-biocore-probiotics.md`
+  - 번역투/과장형 제목 제거
+  - 근거 없는 비교 수치/효능성 문구 제거
+  - 캐츠랑 포스트와 유사한 자연어형 초이스 톤으로 본문 전면 재정비
+- **입력 파일 추가**: `scripts/choice-input.cj-biocore.json`
+- **검증**: `npm run build` 성공
+
 ### 캐츠랑 20kg 초이스 포스트 추가
 
 - **신규 초이스 포스트 추가**: `src/content/life/2026-03-31-choice-catsrang-20kg.md`
