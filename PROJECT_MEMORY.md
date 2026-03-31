@@ -20,6 +20,17 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+### 2026-03-31 기준 핵심 요약
+
+- AdSense 심사 대응 마무리
+  - `public/ads.txt` 배포 및 크롤러 접근 확인(200)
+  - `src/app/layout.tsx`의 AdSense script 주입 로직 실서버 반영 확인
+  - `.github/workflows/deploy.yml`의 빌드 env에 `NEXT_PUBLIC_ADSENSE_ID` 누락 문제 수정
+- 개인정보 처리방침 페이지 신설 + Footer 링크 반영
+  - `src/app/privacy/page.tsx`
+  - `src/components/SiteFooter.tsx` (`/privacy`, `/about` 링크)
+  - AdSense 심사 필수 항목(쿠키, DART, 광고설정, 수집정보/목적) 문구 반영
+
 ### 2026-03-30 기준 핵심 요약
 
 - `픽앤조이 초이스` 카테고리 신설 및 목록/카드/필터 반영
@@ -51,7 +62,7 @@
 - [x] 사이트맵(`sitemap.xml`) 및 웹 로봇(`robots.txt`) 추가하여 신규 글들에 대한 크롤링 최적화 진행
 - [x] Google Analytics (NEXT_PUBLIC_GA_ID) 설정 ✅ 2026-03-28
 - [x] 쿠팡 파트너스 배너 구현 ✅ 2026-03-28
-- [ ] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정
+- [x] Google AdSense (NEXT_PUBLIC_ADSENSE_ID) 설정 및 ads.txt/CI 반영 ✅ 2026-03-31 (심사 진행 중)
 - [ ] 에러 핸들링 및 자동화 모니터링: 스크립트 실행 오류 시 알림 채널 검토
 - [x] 2단계: 전국 맛집 기능 1차 구축 (카카오 API + Gemini 스냅샷 + 맛집 포스트 자동 생성)
 - [ ] 맛집 포스트 이미지 전략 고도화 (검증 가능한 이미지 소스 확보 후 다중 이미지 적용)

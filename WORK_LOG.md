@@ -7,6 +7,34 @@
 
 ## 2026-03-31
 
+### AdSense 검증 오류 원인 분석 및 배포 파이프라인 수정
+
+- **현상**: AdSense 콘솔에서 "사이트를 확인할 수 없습니다" 반복 발생
+- **진단 결과**:
+  - `ads.txt` 자체는 정상 서빙(200) 및 Googlebot/Mediapartners-Google 접근 가능
+  - 라이브 HTML 검사 시 `adsbygoogle.js` 스크립트가 누락된 배포본 존재
+  - 원인: GitHub Actions `deploy.yml`의 빌드 env에 `NEXT_PUBLIC_ADSENSE_ID` 미주입
+- **조치**:
+  - `.github/workflows/deploy.yml`의 모든 Next.js 빌드 단계(1단계/2단계/3단계/공통)에
+    `NEXT_PUBLIC_ADSENSE_ID='ca-pub-5984189992308575'` 추가
+  - 실서버 재검증: 홈 HTML에 AdSense script 포함 확인
+- **검증**:
+  - Mediapartners-Google 기준 홈/`/ads.txt` 모두 200 응답
+  - `/ads.txt` 내용 정상: `google.com, pub-5984189992308575, DIRECT, f08c47fec0942fa0`
+
+### 개인정보 처리방침 페이지 추가 (AdSense 심사용 필수 항목 대응)
+
+- **신규 페이지**: `src/app/privacy/page.tsx`
+  - 쿠키 사용 고지
+  - Google DART 쿠키 안내
+  - 맞춤형 광고 거부 안내(광고 설정)
+  - 수집 정보 및 이용 목적 안내
+- **Footer 링크 추가**: `src/components/SiteFooter.tsx`
+  - `개인정보 처리방침(/privacy)`
+  - `사이트 소개(/about)`
+- **검증**: `npm run build` 성공 (`/privacy` 라우트 생성 확인)
+- 커밋: `848871b` (CI AdSense env 반영), `8dc883b` (privacy 페이지 + footer 링크)
+
 ### 서울 축제 1건 자동 생성 테스트 (Gemini 키 재발급 검증)
 
 - **자동 생성 스크립트 개선**: `scripts/generate-blog-post.js`
