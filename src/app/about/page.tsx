@@ -53,7 +53,7 @@ export default function AboutPage() {
               <section>
                 <h2 className="text-2xl font-bold mb-4 text-orange-600">문의</h2>
                 <p className="text-stone-600 leading-relaxed">
-                  사이트 운영 및 제휴 관련 문의: <a href="mailto:roysshong@gmail.com" className="text-orange-500 hover:underline">roysshong@gmail.com</a>
+                  사이트 운영 및 제휴 관련 문의: <a href="mailto:royshong01@gmail.com" className="text-orange-500 hover:underline">royshong01@gmail.com</a>
                 </p>
               </section>
             </article>

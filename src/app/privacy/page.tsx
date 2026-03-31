@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-stone-600 leading-relaxed">
               개인정보 처리방침 또는 사이트 운영 관련 문의는 아래 이메일로 접수해 주세요.
               <br />
-              이메일: <a className="text-orange-500 hover:underline" href="mailto:roysshong@gmail.com">roysshong@gmail.com</a>
+              이메일: <a className="text-orange-500 hover:underline" href="mailto:royshong01@gmail.com">royshong01@gmail.com</a>
               <br />
               사이트 소개 페이지는 <a className="text-orange-500 hover:underline" href="/about">/about</a>에서 확인할 수 있습니다.
               <br />
