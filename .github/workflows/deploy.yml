@@ -132,6 +132,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MAX_OUTPUT_TOKENS: '8192'
           GEMINI_TIMEOUT_MS: '120000'
           BLOG_MAX_GENERATION_SECONDS: '900'
           BLOG_MAX_CANDIDATES_PER_CATEGORY: '3'

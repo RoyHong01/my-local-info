@@ -11,6 +11,7 @@ const BLOG_MAX_CANDIDATES_PER_CATEGORY = Number(process.env.BLOG_MAX_CANDIDATES_
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 const BLOG_GEMINI_MIN_DELAY_MS = Number(process.env.BLOG_GEMINI_MIN_DELAY_MS || 5000);
 const BLOG_MAX_API_CALLS = Number(process.env.BLOG_MAX_API_CALLS || 12);
+const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 8192);
 const BLOG_DAILY_BUDGET_KRW = Number(process.env.BLOG_DAILY_BUDGET_KRW || 0);
 const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS || 0);
 
@@ -72,7 +73,7 @@ async function callGemini(prompt) {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.9,
-          maxOutputTokens: 4096,
+          maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
         },
       }),
     });
@@ -790,6 +791,7 @@ async function run() {
   }
 
   console.log(`GEMINI_MODEL: ${GEMINI_MODEL}`);
+  console.log(`GEMINI_MAX_OUTPUT_TOKENS: ${GEMINI_MAX_OUTPUT_TOKENS}`);
   console.log(`BLOG_GEMINI_MIN_DELAY_MS: ${BLOG_GEMINI_MIN_DELAY_MS}`);
   console.log(`BLOG_MAX_API_CALLS: ${BLOG_MAX_API_CALLS}`);
   if (budgetEnabled) {
