@@ -7,6 +7,52 @@
 
 ## 2026-03-31
 
+### 초이스 포스트 운영 보정 + 네비/목록 동작 정리
+
+- **초이스 신규 포스트 추가**: `src/content/life/2026-03-31-choice-cj-biocore-probiotics.md`
+  - 카테고리 `픽앤조이 초이스`, 쿠팡 필드(`coupang_link`, `coupang_banner_image`, `coupang_banner_alt`), 평점 필드(`rating_value`, `review_count`) 반영
+- **이미지 운영 수정**:
+  - 상단 히어로 이미지를 로컬 첨부 이미지로 교체: `public/images/choice/cj-biocore-detail.jpg`
+  - 본문 중간의 중복 이미지 제거 (상단 이미지와 중복 노출 방지)
+- **본문 품질 보정**:
+  - 단계형 영어 헤딩 제거 및 자연스러운 한국어 소제목으로 통일
+  - 본문 내 중복 고지문 제거 (상세 페이지 하단 공통 고지문과 중복 방지)
+  - 인코딩 깨짐 이슈 발생분 복구 (프론트매터/본문 정상화)
+- **네비/목록 UX 수정**:
+  - 헤더 메뉴 순서 변경: `일상의 즐거움`을 `블로그` 앞에 배치 (데스크톱/모바일 공통)
+  - 검색 돋보기 아이콘 크기 소폭 확대 (`20 → 22`)
+  - 블로그 목록에서 맛집 글 제외 (`픽앤조이 맛집 탐방` 및 맛집성 글), 맛집 글은 `일상의 즐거움` 영역에서만 노출
+- 커밋: `de1dbce`, `4902539`, `897d63a`, `0b180bb`, `b10f4d1`, `3ff606d`
+
+### sitemap 확장 + 사이트 목적 문구 SEO 반영
+
+- **sitemap 생성 로직 고도화** (`scripts/generate-sitemap.js`):
+  - 기존 블로그 중심 구조에서 전체 섹션 기반으로 확장
+  - 포함 대상: `/incheon`, `/subsidy`, `/festival`, `/life`, `/life/choice`, `/life/restaurant`, `/rss.xml` 및 각 상세 페이지
+  - URL 인코딩/중복 제거/lastmod 보정 처리
+  - 생성 결과: `399개 URL`(당시)
+- **사이트 목적 문구 SEO 반영**:
+  - `src/app/layout.tsx`: 전역 metadata description/OG description 보강, `WebSite` JSON-LD description 업데이트, `Organization` JSON-LD 추가
+  - `src/app/page.tsx`: 홈 전용 metadata(description/OG/canonical) 추가
+  - `src/app/about/page.tsx`: 운영 목적/데이터 출처/콘텐츠 생성 방식 문구를 시민 체감형 큐레이션 톤으로 재작성
+- 커밋: `6e3a175`, `ebe1a5c`
+
+### admin/runs 수동 트리거 버튼 + Cloudflare Worker 연동
+
+- **Cloudflare Worker 준비 완료**: GitHub Actions `deploy.yml`의 `workflow_dispatch`를 호출하는 별도 Worker 구성
+  - Worker URL: `https://pick-n-joy-trigger.royshong01.workers.dev`
+  - 보안: `GITHUB_TOKEN` + `ADMIN_SECRET` 시크릿 검증 방식
+  - 입력값: `mode = full | deploy_only`
+- **`src/components/AdminTriggerPanel.tsx`** (신규 클라이언트 컴포넌트):
+  - 버튼 2개 추가: `전체 업데이트 실행`, `배포만 실행`
+  - 실행 중 스피너 표시 + 버튼 비활성화
+  - Worker POST 호출 후 성공/실패 메시지 표시
+- **`src/app/admin/runs/page.tsx`**:
+  - 페이지 상단에 `AdminTriggerPanel` 연결
+  - 최신 리포트 유무와 무관하게 수동 실행 UI 노출
+- **검증**: `npm run build` 성공 확인 후 커밋/푸시 완료
+- 커밋: `a769647`
+
 ### admin/runs 상세 보기 - 날짜 행 클릭 확장 패널 (RunsDetailPanel)
 
 - **배경**: `/admin/runs/[date]` 동적 라우트 방식은 `output: export` + `generateStaticParams` 빈 배열 시 빌드 에러 발생 → accordion 방식으로 전환
@@ -43,12 +89,14 @@
   - Domain: `pick-n-joy.com` / Path: `/admin/*` / Session: 24시간
   - Login 방식: One-time PIN (OTP) 이메일 인증
 - **2025년 11월 이후 Cloudflare Zero Trust UI 경로 변경 사항**:
+
   | 기능 | 구 경로 | 현재 경로 |
-  |------|--------|----------|
+  | ------ | -------- | ---------- |
   | Login methods / IdP | Settings → Authentication | Integrations → Identity providers |
   | Access Applications | Access → Applications | Access controls → Applications |
   | WARP 설정 | Settings → WARP | Team & Resources → Devices |
   | 로그/모니터링 | Logs | Insights |
+
 - OTP 설정: Zero Trust → Integrations → Identity providers → Add new → One-time PIN
 - Application 생성: Zero Trust → Access controls → Applications → Add an application → Self-hosted
 
