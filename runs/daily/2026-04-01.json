@@ -1,0 +1,102 @@
+{
+  "reportDateKst": "2026-04-01",
+  "generatedAtUtc": "2026-03-31T23:09:59.094Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "23823565676",
+    "runNumber": 283,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23823565676",
+    "runStartedAtUtc": "2026-03-31T23:05:04Z",
+    "headSha": "76228a3d6c77f3a266e8445fee979d4c66418d71"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://ba5bbe57.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateBlog": "success",
+        "build": "failure",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "8f5fc8cd372cc73d39dfaca729e21cabb234b8ed",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-03-31",
+      "authoredAt": "2026-03-31T23:09:47Z",
+      "files": [
+        "src/content/posts/2026-03-31-driving-license-support-for-foreigners.md",
+        "src/content/posts/2026-03-31-incheon-donggu-birth-incentive.md",
+        "src/content/posts/2026-03-31-seocheon-festival.md"
+      ]
+    },
+    {
+      "sha": "95aa2d9cf375b8f3814b528c8a5226b327b49a6b",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-03-31",
+      "authoredAt": "2026-03-31T23:08:01Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 4,
+    "dataChangedFiles": [
+      "public/data/festival.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-03-31-driving-license-support-for-foreigners.md",
+      "src/content/posts/2026-03-31-incheon-donggu-birth-incentive.md",
+      "src/content/posts/2026-03-31-seocheon-festival.md"
+    ],
+    "generatedLifePosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/content/posts/2026-03-31-driving-license-support-for-foreigners.md",
+      "src/content/posts/2026-03-31-incheon-donggu-birth-incentive.md",
+      "src/content/posts/2026-03-31-seocheon-festival.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 8.21,
+    "stopped": false,
+    "stopReason": ""
+  }
+}
