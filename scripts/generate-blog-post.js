@@ -14,6 +14,8 @@ const BLOG_MAX_API_CALLS = Number(process.env.BLOG_MAX_API_CALLS || 12);
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 8192);
 const BLOG_DAILY_BUDGET_KRW = Number(process.env.BLOG_DAILY_BUDGET_KRW || 0);
 const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS || 0);
+// 특정 카테고리만 실행 (예: "전국 축제·여행"). 미설정 시 전체 실행
+const BLOG_ONLY_CATEGORY = process.env.BLOG_ONLY_CATEGORY || '';
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -807,6 +809,13 @@ async function run() {
     { file: 'festival.json', category: '전국 축제·여행' }
   ];
 
+  const targetFiles = BLOG_ONLY_CATEGORY
+    ? dataFiles.filter(d => d.category === BLOG_ONLY_CATEGORY)
+    : dataFiles;
+  if (BLOG_ONLY_CATEGORY) {
+    console.log(`\n🎯 BLOG_ONLY_CATEGORY="${BLOG_ONLY_CATEGORY}" — 해당 카테고리만 실행합니다.`);
+  }
+
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
   await fs.mkdir(postsDir, { recursive: true });
 
@@ -816,7 +825,7 @@ async function run() {
 
   let totalGenerated = 0;
 
-  for (const { file, category } of dataFiles) {
+  for (const { file, category } of targetFiles) {
     if (budgetStopped) {
       console.log(`\n⛔ 예산 상한으로 블로그 생성 중단: ${budgetStopReason}`);
       break;
