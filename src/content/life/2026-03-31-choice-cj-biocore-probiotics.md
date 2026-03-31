@@ -8,7 +8,7 @@ category: "픽앤조이 초이스"
 tags: ["500억유산균", "CJ바이오코어", "직장인영양제", "장건강관리", "자기관리템", "쿠팡", "리뷰"]
 rating_value: "4.8"
 review_count: "1250"
-image: "https://static.coupangcdn.com/image/affiliate/banner/170da3a732fb86fa71e748dad6f4ea23@2x.jpg"
+image: "/images/choice/cj-biocore-detail.jpg"
 source_id: "manual-choice-cj-biocore-probiotics"
 coupang_link: "https://link.coupang.com/a/ee6UtM"
 coupang_banner_image: "https://static.coupangcdn.com/image/affiliate/banner/170da3a732fb86fa71e748dad6f4ea23@2x.jpg"
