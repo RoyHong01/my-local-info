@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getDailyRunIndex, getDailyRunReports } from '@/lib/daily-runs';
 import RunsDetailPanel from '@/components/RunsDetailPanel';
+import AdminTriggerPanel from '@/components/AdminTriggerPanel';
 
 export const metadata: Metadata = {
   title: '운영 리포트 | 픽앤조이',
@@ -46,6 +47,8 @@ export default async function AdminRunsPage() {
             자동 수집/생성/배포 작업 결과를 날짜별로 확인하는 관리자 화면입니다.
           </p>
         </div>
+
+        <AdminTriggerPanel />
 
         {!latest ? (
           <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center text-stone-500 shadow-sm">
