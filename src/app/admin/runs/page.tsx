@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getDailyRunIndex, getDailyRunReports } from '@/lib/daily-runs';
+import RunsDetailPanel from '@/components/RunsDetailPanel';
 
 export const metadata: Metadata = {
   title: '운영 리포트 | 픽앤조이',
@@ -136,54 +137,9 @@ export default async function AdminRunsPage() {
 
             <section className="rounded-2xl border border-stone-200 bg-white p-5 md:p-6 shadow-sm">
               <h2 className="text-lg font-bold text-stone-900">날짜별 리포트 이력</h2>
-              <p className="mt-1 text-sm text-stone-500">최근 {indexItems.length}건의 실행 결과를 보여줍니다.</p>
-
-              <div className="mt-4 overflow-x-auto">
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr className="text-left text-stone-500 border-b border-stone-200">
-                      <th className="py-2 pr-4">날짜</th>
-                      <th className="py-2 pr-4">실행</th>
-                      <th className="py-2 pr-4">블로그</th>
-                      <th className="py-2 pr-4">맛집</th>
-                      <th className="py-2 pr-4">블로그 예산</th>
-                      <th className="py-2 pr-4">파일 변경</th>
-                      <th className="py-2">링크</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {indexItems.map((item) => {
-                      const failed = item.stageStatuses.some((stage) => stage.status === 'failure');
-                      const summaryClass = failed ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
-
-                      return (
-                        <tr key={`${item.date}-${item.runId}`} className="border-b border-stone-100 last:border-0">
-                          <td className="py-3 pr-4 font-semibold text-stone-900">{item.date}</td>
-                          <td className="py-3 pr-4">
-                            <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${summaryClass}`}>
-                              {failed ? '부분 실패' : '정상'}
-                            </span>
-                          </td>
-                          <td className="py-3 pr-4 text-stone-700">{item.generatedBlogCount}건</td>
-                          <td className="py-3 pr-4 text-stone-700">{item.generatedLifeCount}건</td>
-                          <td className="py-3 pr-4 text-stone-700">
-                            {item.blogBudgetEnabled
-                              ? (item.blogBudgetStopped
-                                ? `중단 (${Number(item.blogEstimatedCostKrw || 0).toFixed(0)}/${Number(item.blogBudgetLimitKrw || 0).toFixed(0)}원)`
-                                : `정상 (${Number(item.blogEstimatedCostKrw || 0).toFixed(0)}/${Number(item.blogBudgetLimitKrw || 0).toFixed(0)}원)`)
-                              : '-'}
-                          </td>
-                          <td className="py-3 pr-4 text-stone-700">{item.totalChangedFiles}개</td>
-                          <td className="py-3">
-                            <a href={item.runUrl} target="_blank" rel="noreferrer" className="text-orange-600 hover:text-orange-700 underline underline-offset-2">
-                              Run #{item.runNumber}
-                            </a>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <p className="mt-1 text-sm text-stone-500">최근 {indexItems.length}건 · 날짜 행을 클릭하면 상세 내용을 펼쳐볼 수 있습니다.</p>
+              <div className="mt-4">
+                <RunsDetailPanel indexItems={indexItems} reports={reports} />
               </div>
             </section>
           </>

@@ -101,3 +101,8 @@ export async function getDailyRunReports(limit = 30): Promise<DailyRunReport[]> 
 
   return reports.filter((report): report is DailyRunReport => Boolean(report));
 }
+
+export async function getDailyRunReport(date: string): Promise<DailyRunReport | null> {
+  const reportPath = path.join(runsDailyDir(), `${date}.json`);
+  return safeReadJson<DailyRunReport | null>(reportPath, null);
+}
