@@ -99,6 +99,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
       - name: '[1단계] Playwright 브라우저 설치'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
@@ -160,6 +161,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
       - name: '[2단계] Playwright E2E 테스트 (배포 전)'
         id: e2e_stage2
@@ -218,6 +220,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
       - name: '[3단계] Playwright E2E 테스트 (배포 전)'
         id: e2e_stage3
@@ -320,6 +323,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
       - name: '[공통] Playwright E2E 테스트 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
