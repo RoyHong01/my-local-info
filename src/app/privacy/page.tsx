@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
       <main className="max-w-4xl mx-auto px-4 py-12">
         <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100 space-y-8">
           <header>
-            <h1 className="text-4xl font-extrabold mb-3">개인정보 처리방침 (Privacy Policy)</h1>
+            <h1 className="text-4xl font-extrabold mb-5">개인정보 처리방침 (Privacy Policy)</h1>
             <p className="text-stone-600 leading-relaxed">
               픽앤조이(pick-n-joy.com)는 이용자의 개인정보를 중요하게 생각하며, 관련 법령을 준수합니다.
               본 페이지는 서비스 이용 중 처리되는 정보와 광고 제공 과정에서의 쿠키 사용에 대해 안내합니다.
