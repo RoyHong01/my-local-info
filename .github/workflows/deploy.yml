@@ -33,6 +33,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: '[공통] 리포트 실행 컨텍스트 초기화 (full 모드)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          echo "RUN_STARTED_AT_UTC=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
+          echo "REPORT_DATE_KST=$(TZ=Asia/Seoul date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+          mkdir -p runs/daily
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,6 +49,7 @@ jobs:
         run: npm ci
 
       - name: '[1단계] 인천 지역 정보 수집'
+        id: collect_incheon
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-incheon.js
         env:
@@ -50,6 +58,7 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: '[1단계] 전국 보조금 정책 수집'
+        id: collect_subsidy
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-subsidy.js
         env:
@@ -58,6 +67,7 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: '[1단계] 전국 축제·여행 정보 수집'
+        id: collect_festival
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-festival.js
         env:
@@ -66,6 +76,7 @@ jobs:
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: '[1단계] 만료 콘텐츠 처리'
+        id: cleanup_expired
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/cleanup-expired.js
 
@@ -83,6 +94,7 @@ jobs:
           fi
 
       - name: '[1단계] Next.js 빌드'
+        id: build_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
         env:
@@ -93,19 +105,27 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: '[1단계] Playwright E2E 테스트 (배포 전)'
+        id: e2e_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: '[1단계] Cloudflare Pages 배포'
+        id: deploy_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: npx wrangler pages deploy out --project-name=my-local-info
+        run: |
+          set -eo pipefail
+          DEPLOY_LOG=$(mktemp)
+          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
+          echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: '[2단계] AI 블로그 글 자동 생성 (카테고리별 1편)'
+        id: generate_blog
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-blog-post.js
         timeout-minutes: 30
@@ -129,25 +149,34 @@ jobs:
           fi
 
       - name: '[2단계] Next.js 빌드'
+        id: build_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: '[2단계] Playwright E2E 테스트 (배포 전)'
+        id: e2e_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: '[2단계] Cloudflare Pages 배포'
+        id: deploy_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: npx wrangler pages deploy out --project-name=my-local-info
+        run: |
+          set -eo pipefail
+          DEPLOY_LOG=$(mktemp)
+          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
+          echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: '[3단계] 일상의 즐거움 맛집 데이터 수집'
+        id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-life-restaurants.mjs
         env:
@@ -156,6 +185,7 @@ jobs:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
 
       - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
+        id: generate_restaurant_posts
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
@@ -177,23 +207,87 @@ jobs:
           fi
 
       - name: '[3단계] Next.js 빌드'
+        id: build_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: '[3단계] Playwright E2E 테스트 (배포 전)'
+        id: e2e_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
       - name: '[3단계] Cloudflare Pages 배포'
+        id: deploy_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: npx wrangler pages deploy out --project-name=my-local-info
+        run: |
+          set -eo pipefail
+          DEPLOY_LOG=$(mktemp)
+          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
+          echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: '[리포트] 일일 실행 요약 생성 (full 모드)'
+        if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
+        run: node scripts/write-daily-report.mjs
+        env:
+          RUN_STARTED_AT_UTC: ${{ env.RUN_STARTED_AT_UTC }}
+          REPORT_DATE_KST: ${{ env.REPORT_DATE_KST }}
+          COLLECT_INCHEON_OUTCOME: ${{ steps.collect_incheon.outcome }}
+          COLLECT_SUBSIDY_OUTCOME: ${{ steps.collect_subsidy.outcome }}
+          COLLECT_FESTIVAL_OUTCOME: ${{ steps.collect_festival.outcome }}
+          CLEANUP_EXPIRED_OUTCOME: ${{ steps.cleanup_expired.outcome }}
+          BUILD_STAGE1_OUTCOME: ${{ steps.build_stage1.outcome }}
+          E2E_STAGE1_OUTCOME: ${{ steps.e2e_stage1.outcome }}
+          DEPLOY_STAGE1_OUTCOME: ${{ steps.deploy_stage1.outcome }}
+          DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
+          GENERATE_BLOG_OUTCOME: ${{ steps.generate_blog.outcome }}
+          BUILD_STAGE2_OUTCOME: ${{ steps.build_stage2.outcome }}
+          E2E_STAGE2_OUTCOME: ${{ steps.e2e_stage2.outcome }}
+          DEPLOY_STAGE2_OUTCOME: ${{ steps.deploy_stage2.outcome }}
+          DEPLOY_STAGE2_URL: ${{ steps.deploy_stage2.outputs.deploy_url }}
+          COLLECT_RESTAURANTS_OUTCOME: ${{ steps.collect_restaurants.outcome }}
+          GENERATE_RESTAURANT_POSTS_OUTCOME: ${{ steps.generate_restaurant_posts.outcome }}
+          BUILD_STAGE3_OUTCOME: ${{ steps.build_stage3.outcome }}
+          E2E_STAGE3_OUTCOME: ${{ steps.e2e_stage3.outcome }}
+          DEPLOY_STAGE3_OUTCOME: ${{ steps.deploy_stage3.outcome }}
+          DEPLOY_STAGE3_URL: ${{ steps.deploy_stage3.outputs.deploy_url }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_SHA: ${{ github.sha }}
+
+      - name: '[리포트] GitHub Actions Summary 출력 (full 모드)'
+        if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
+        run: |
+          REPORT_MD="runs/daily/${REPORT_DATE_KST}.md"
+          if [ -f "$REPORT_MD" ]; then
+            cat "$REPORT_MD" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- 리포트 파일이 아직 생성되지 않았습니다." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: '[리포트] 일일 실행 요약 커밋 & 푸시 (full 모드)'
+        if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add runs/daily
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(리포트): 일일 실행 요약 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "리포트 변경사항 없음"
+          fi
 
       - name: '[공통] Playwright 브라우저 설치 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
