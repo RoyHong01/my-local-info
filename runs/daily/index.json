@@ -1,6 +1,36 @@
 {
   "reports": [
     {
+      "date": "2026-04-02",
+      "runId": "23855469636",
+      "runNumber": 309,
+      "runAttempt": 1,
+      "eventName": "workflow_dispatch",
+      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23855469636",
+      "stageStatuses": [
+        {
+          "key": "stage1-data",
+          "status": "success"
+        },
+        {
+          "key": "stage2-blog",
+          "status": "skipped"
+        },
+        {
+          "key": "stage3-life",
+          "status": "skipped"
+        }
+      ],
+      "generatedBlogCount": 0,
+      "generatedLifeCount": 0,
+      "totalChangedFiles": 0,
+      "blogBudgetEnabled": false,
+      "blogBudgetStopped": false,
+      "blogBudgetLimitKrw": 0,
+      "blogEstimatedCostKrw": 0,
+      "generatedAtUtc": "2026-04-01T15:04:37.491Z"
+    },
+    {
       "date": "2026-04-01",
       "runId": "23823565676",
       "runNumber": 283,

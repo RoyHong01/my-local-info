@@ -1,0 +1,72 @@
+{
+  "reportDateKst": "2026-04-02",
+  "generatedAtUtc": "2026-04-01T15:04:37.491Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "23855469636",
+    "runNumber": 309,
+    "runAttempt": 1,
+    "eventName": "workflow_dispatch",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23855469636",
+    "runStartedAtUtc": "2026-04-01T15:03:37Z",
+    "headSha": "36c51639ed491e441a9fc151e2181917e1823793"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "cancelled",
+        "cleanupExpired": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateBlog": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [],
+  "changes": {
+    "totalChangedFiles": 0,
+    "dataChangedFiles": [],
+    "generatedBlogPosts": [],
+    "generatedLifePosts": [],
+    "allChangedFiles": []
+  },
+  "budget": {
+    "enabled": false,
+    "limitKrw": 0,
+    "estimatedCostKrw": 0,
+    "stopped": false,
+    "stopReason": ""
+  }
+}
