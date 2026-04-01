@@ -32,7 +32,9 @@ coupang_banner_alt: "바이아우어 블랙 비어 이스트 샴푸 앰버우드
 
 ![바이아우어 블랙 비어 이스트 샴푸 제품 상세](/images/choice/byour-black-beer-shampoo-detail.jpg)
 
-<a href="https://link.coupang.com/a/ef3CIc" target="_blank" referrerpolicy="unsafe-url"><img src="https://image15.coupangcdn.com/image/affiliate/banner/14d5be95f788d790ee71151e1ad6e75f@2x.jpg" alt="바이아우어 블랙 비어 이스트 샴푸 앰버우드향, 1.017L, 4개" width="120" height="240"></a>
+## 픽앤조이의 선택
+
+[![바이아우어 블랙 비어 이스트 샴푸 앰버우드향, 1.017L, 4개](https://image15.coupangcdn.com/image/affiliate/banner/14d5be95f788d790ee71151e1ad6e75f@2x.jpg)](https://link.coupang.com/a/ef3CIc)
 
 ### 8,500명의 선택, 평점 4.5점은 어떤 의미일까요?
 
