@@ -24,7 +24,24 @@ const TABS = [
   { label: '픽앤조이 초이스', value: 'choice' },
 ] as const;
 
+const RESTAURANT_THUMBNAIL_IMAGES: Record<string, string> = {
+  '인천 맛집': '/images/restaurant-incheon-thumbnail.png',
+};
+
 function RestaurantThumbnail({ meta }: { meta?: string }) {
+  const imageUrl = meta ? RESTAURANT_THUMBNAIL_IMAGES[meta] : null;
+  if (imageUrl) {
+    return (
+      <Image
+        src={imageUrl}
+        alt={meta!}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
+    );
+  }
+
   const isSeoul = meta === '서울 맛집';
   const isIncheon = meta === '인천 맛집';
   const label = isSeoul ? '서울 맛집' : isIncheon ? '인천 맛집' : '경기 맛집';
