@@ -1,0 +1,8 @@
+name = "pick-n-joy-trigger"
+main = "index.js"
+compatibility_date = "2024-03-17"
+
+[vars]
+ALLOWED_ORIGIN = "https://pick-n-joy.com"
+GITHUB_REPO = "RoyHong01/my-local-info"
+GITHUB_WORKFLOW = "deploy.yml"
