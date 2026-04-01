@@ -9,6 +9,25 @@
 
 ## 2026-04-01
 
+### Cloudflare Worker `pick-n-joy-trigger` 배포
+
+- `/admin/runs/`의 수동 실행 버튼(전체 업데이트/배포만)이 Worker 미배포로 "Failed to fetch" 오류 발생
+- Worker 코드 작성 및 Cloudflare에 배포 완료
+  - 코드: `workers/trigger/index.js`, `workers/trigger/wrangler.toml`
+  - URL: `https://pick-n-joy-trigger.royshong01.workers.dev`
+  - Secrets: `ADMIN_SECRET`, `GITHUB_TOKEN` (wrangler secret put)
+  - 인증: `X-Admin-Secret` 헤더 검증
+  - 동작: GitHub API `workflow_dispatch` → `deploy.yml` 트리거 (mode: full/deploy_only)
+- 테스트 완료: 잘못된 시크릿 → 401 거부, 올바른 시크릿 → workflow dispatch 성공
+- 커밋: `686ddd8`
+
+### Admin 페이지 UI 수정
+
+- **admin/runs 상단 여백**: `py-10` → `pt-20 pb-10` (네비바와 콘텐츠 간격 확보)
+- **admin 메인 상단 여백**: 동일하게 `pt-20 pb-10` 적용
+- **admin 메인 "수동 실행 트리거" 플레이스홀더 카드 제거** (runs 페이지에 이미 기능 존재)
+- 커밋: `982b288`, `04bac69`(revert), `b564589`, `a9e1210`
+
 ### 블로그/맛집 카테고리 썸네일 이미지 교체
 
 - **기존**: 카테고리별 단색 그라데이션 + 텍스트 라벨 (CSS only)
