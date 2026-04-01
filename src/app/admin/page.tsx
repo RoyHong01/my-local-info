@@ -64,12 +64,6 @@ export default async function AdminPage() {
               <p className="text-xs text-stone-400 mt-3">최근 {indexItems.length}건 기록됨 · 마지막 {latest.date}</p>
             )}
           </Link>
-
-          <div className="rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-6 flex flex-col justify-center items-center text-center opacity-60">
-            <div className="text-2xl mb-3">🚀</div>
-            <h2 className="text-base font-bold text-stone-600">수동 실행 트리거</h2>
-            <p className="text-xs text-stone-400 mt-1">준비 중</p>
-          </div>
         </div>
 
         <div className="mt-8">
