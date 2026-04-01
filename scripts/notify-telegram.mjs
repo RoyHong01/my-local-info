@@ -37,11 +37,39 @@ async function loadReport() {
   }
 }
 
-function buildMessage(report) {
+function stripQuotes(value) {
+  return String(value || '').trim().replace(/^['"]|['"]$/g, '');
+}
+
+async function readPostTitle(filePath) {
+  try {
+    const raw = await readFile(join(process.cwd(), filePath), 'utf8');
+    const m = raw.match(/^title:\s*(.+)$/m);
+    if (!m) return '';
+    return stripQuotes(m[1]);
+  } catch {
+    return '';
+  }
+}
+
+function formatFailedStages(stages) {
+  return (stages || [])
+    .filter((stage) => stage.status === 'failure')
+    .map((stage) => {
+      const failedStepKeys = Object.entries(stage.steps || {})
+        .filter(([, outcome]) => String(outcome || '').toLowerCase() === 'failure')
+        .map(([stepKey]) => stepKey);
+      if (failedStepKeys.length === 0) return `  • ${stage.title}`;
+      return `  • ${stage.title} (${failedStepKeys.join(', ')})`;
+    })
+    .join('\n');
+}
+
+async function buildMessage(report) {
   const runUrl = GITHUB_RUN_ID && GITHUB_REPOSITORY
     ? `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`
     : null;
-  const adminUrl = 'https://pick-n-joy.com/admin/runs';
+  const adminUrl = 'https://pick-n-joy.com/admin/runs/';
 
   if (!report) {
     const lines = [
@@ -51,34 +79,31 @@ function buildMessage(report) {
       '',
       runUrl ? `🔗 [Actions 로그](${runUrl})` : '',
     ];
-    return lines.filter(l => l !== null).join('\n');
+    return lines.filter((l) => l !== null).join('\n');
   }
 
-  const hasFailed = report.stages?.some(s => s.status === 'failure');
-  const blogCount = report.changes?.generatedBlogPosts?.length ?? 0;
-  const lifeCount = report.changes?.generatedLifePosts?.length ?? 0;
+  const hasFailed = report.stages?.some((s) => s.status === 'failure');
+  const generatedBlogPosts = report.changes?.generatedBlogPosts || [];
+  const generatedLifePosts = report.changes?.generatedLifePosts || [];
+  const blogCount = generatedBlogPosts.length;
+  const lifeCount = generatedLifePosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const budget = report.budget;
 
   const statusIcon = hasFailed ? '⚠️' : '✅';
   const statusText = hasFailed ? '일부 단계 실패' : '전체 정상 완료';
+  const failedStages = formatFailedStages(report.stages || []);
 
-  // 단계별 실패 목록
-  const failedStages = (report.stages || [])
-    .filter(s => s.status === 'failure')
-    .map(s => `  • ${s.title}`)
-    .join('\n');
+  const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
+  const lifeTitles = await Promise.all(generatedLifePosts.map((file) => readPostTitle(file)));
 
-  // 예산 라인
   let budgetLine = '';
   if (budget?.enabled) {
     const cost = Number(budget.estimatedCostKrw || 0).toFixed(1);
     const limit = Number(budget.limitKrw || 0).toFixed(0);
-    if (budget.stopped) {
-      budgetLine = `⛔ Gemini 예산 초과 중단: ${cost}원 / ${limit}원`;
-    } else {
-      budgetLine = `💰 Gemini 비용: ${cost}원 / ${limit}원`;
-    }
+    budgetLine = budget.stopped
+      ? `⛔ Gemini 예산 초과 중단: ${cost}원 / ${limit}원`
+      : `💰 Gemini 비용: ${cost}원 / ${limit}원`;
   }
 
   const lines = [
@@ -90,13 +115,30 @@ function buildMessage(report) {
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
     budgetLine,
-    '',
-    hasFailed && failedStages ? `*실패 단계:*\n${failedStages}\n` : '',
-    `🔗 [Admin 대시보드](${adminUrl})`,
-    runUrl ? `🔗 [Actions 로그](${runUrl})` : '',
   ];
 
-  return lines.filter(l => l !== '' && l !== null && l !== undefined).join('\n');
+  if (blogTitles.filter(Boolean).length > 0) {
+    lines.push('');
+    lines.push('*생성된 블로그 제목:*');
+    blogTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (lifeTitles.filter(Boolean).length > 0) {
+    lines.push('');
+    lines.push('*생성된 맛집 제목:*');
+    lifeTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  lines.push('');
+  if (hasFailed && failedStages) {
+    lines.push(`*실패 단계:*\n${failedStages}`);
+    lines.push('');
+  }
+
+  lines.push(`🔗 [Admin 대시보드](${adminUrl})`);
+  if (runUrl) lines.push(`🔗 [Actions 로그](${runUrl})`);
+
+  return lines.filter((l) => l !== '' && l !== null && l !== undefined).join('\n');
 }
 
 async function sendTelegram(text) {
@@ -123,6 +165,6 @@ async function sendTelegram(text) {
 }
 
 const report = await loadReport();
-const message = buildMessage(report);
+const message = await buildMessage(report);
 console.log('[notify-telegram] 전송 메시지:\n', message);
 await sendTelegram(message);

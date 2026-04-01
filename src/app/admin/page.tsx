@@ -54,7 +54,7 @@ export default async function AdminPage() {
         {/* 관리 메뉴 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link
-            href="/admin/runs"
+            href="/admin/runs/"
             className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-orange-300 transition-all group"
           >
             <div className="text-2xl mb-3">📊</div>

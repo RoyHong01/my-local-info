@@ -157,6 +157,33 @@ function extractFrontmatterValue(content, key) {
   return m[1].trim().replace(/^['"]|['"]$/g, '');
 }
 
+function quoteYamlScalar(value) {
+  return `"${String(value || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/\"/g, '"')
+    .replace(/"/g, '\\"')
+    .replace(/\r?\n/g, ' ')
+    .trim()}"`;
+}
+
+function ensureQuotedFrontmatterField(content, key) {
+  const fieldRegex = new RegExp(`^(${key}:\\s*)(.+)$`, 'm');
+  return content.replace(fieldRegex, (match, prefix, rawValue) => {
+    const value = String(rawValue || '').trim();
+    if (!value || value === '""' || value === "''") {
+      return `${prefix}""`;
+    }
+
+    // YAML block scalar(>|)는 그대로 유지
+    if (value === '|' || value === '>') {
+      return match;
+    }
+
+    const unwrapped = value.replace(/^['"]|['"]$/g, '');
+    return `${prefix}${quoteYamlScalar(unwrapped)}`;
+  });
+}
+
 function buildSourceSnapshotKey({ title, startDate, endDate, addr1 }) {
   const t = normalizeMatchText(title);
   const s = String(startDate || '').trim();
@@ -752,13 +779,12 @@ ${festivalStyleOverride}
   finalContent = upsertFrontmatterField(finalContent, 'source_addr1', sourceAddr1);
   finalContent = upsertFrontmatterField(finalContent, 'source_snapshot_key', sourceSnapshotKey);
 
-  // title 콜론 처리
-  finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
-    if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {
-      return `${prefix}"${value.replace(/"/g, '\\"')}"`;
-    }
-    return match;
-  });
+  // YAML 파싱 안정성을 위해 문자열 frontmatter는 항상 따옴표로 정규화
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'title');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'summary');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'description');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'source_title');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'source_addr1');
 
   if (!filename) {
     filename = `${today}-post-${Date.now()}`;

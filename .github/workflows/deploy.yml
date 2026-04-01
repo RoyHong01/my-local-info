@@ -142,19 +142,6 @@ jobs:
           BLOG_DAILY_BUDGET_KRW: '500'
           GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS: '2.0'
 
-      - name: '[2단계] 변경사항 커밋 & 푸시 (블로그)'
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/content/posts
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(2단계): 블로그 3건 생성 $(date +'%Y-%m-%d')"
-            git push
-          else
-            echo "변경사항 없음"
-          fi
-
       - name: '[2단계] Next.js 빌드'
         id: build_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
@@ -183,6 +170,19 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      - name: '[2단계] 변경사항 커밋 & 푸시 (블로그)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/content/posts
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(2단계): 블로그 3건 생성 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "변경사항 없음"
+          fi
+
       - name: '[3단계] 일상의 즐거움 맛집 데이터 수집'
         id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
@@ -200,19 +200,6 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           LIFE_RESTAURANT_POSTS_PER_RUN: '3'
           LIFE_RESTAURANT_POSTS_PER_BUCKET: '1'
-
-      - name: '[3단계] 변경사항 커밋 & 푸시 (일상의 즐거움)'
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/app/life/restaurant/data/restaurants.json src/content/life
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
-            git push
-          else
-            echo "변경사항 없음"
-          fi
 
       - name: '[3단계] Next.js 빌드'
         id: build_stage3
@@ -241,6 +228,19 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: '[3단계] 변경사항 커밋 & 푸시 (일상의 즐거움)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app/life/restaurant/data/restaurants.json src/content/life
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "변경사항 없음"
+          fi
 
       - name: '[리포트] 일일 실행 요약 생성 (full 모드)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
