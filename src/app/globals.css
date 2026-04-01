@@ -100,6 +100,10 @@ body {
   margin-bottom: 0.72em;
 }
 
+.blog-prose :where(ul, ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) + :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 1.4em;
+}
+
 .blog-prose :where(li):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin-top: 0.25em;
   margin-bottom: 0.25em;

@@ -516,9 +516,9 @@ function postProcessGeneratedMarkdown(markdown, context) {
   normalizedBody = removeFalseCodeBlockIndentation(normalizedBody);
   normalizedBody = ensureEmotionalIntro(normalizedBody, context.category);
 
-  // 전국 축제·여행 카테고리는 본문 중간 이미지 1장 자동 삽입
+  // 전국 축제·여행 카테고리는 "상단 대표 이미지와 다른 URL"이 있을 때만 본문 중간 이미지 삽입
   if (context.category === '전국 축제·여행') {
-    normalizedBody = injectMidArticleImage(normalizedBody, context.imageUrl, context.itemName);
+    normalizedBody = injectMidArticleImage(normalizedBody, context.midImageUrl, context.itemName);
   }
 
   // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)
@@ -554,6 +554,9 @@ async function generatePost(candidate, postsDir) {
   const imageUrl = candidate.firstimage || candidate.firstimage2
     || defaultImages[candidate._category]
     || 'https://pick-n-joy.com/images/default-og.svg';
+  const midImageUrl = (candidate.firstimage && candidate.firstimage2 && candidate.firstimage2 !== candidate.firstimage)
+    ? candidate.firstimage2
+    : '';
 
   const itemName = candidate['서비스명'] || candidate['title'] || candidate['name'] || '';
   const sourceId = candidate['서비스ID'] || candidate['contentid'] || candidate['id'] || '';
@@ -596,9 +599,10 @@ async function generatePost(candidate, postsDir) {
 - 단락 구분은 분리선 대신 자연스러운 문맥 흐름이나 빈 줄로 처리해.
 
 ■ 본문 이미지 배치 규칙:
-- 훅 시작 전 썸네일(상단 이미지)과 별개로, 본문 중간에 관련 이미지 1장을 반드시 추가해.
+- 본문 중간 이미지는 선택 사항이며, 상단 대표 이미지와 "다른" 이미지 URL이 있을 때만 1장 추가해.
+- 상단 image 필드 URL과 동일한 이미지는 본문 중간에 절대 다시 쓰지 마.
 - 위치는 첫 번째 핵심 소제목(###) 설명이 끝난 뒤, 다음 소제목으로 넘어가기 직전이 가장 자연스럽게 보이도록 배치해.
-- 이미지는 축제와 직접 관련된 이미지(기본 image URL과 동일 이미지 사용 가능)를 사용해.
+- TourAPI에 추가 이미지가 없으면 본문 중간 이미지는 생략해.
 ` : '';
 
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
@@ -804,6 +808,7 @@ ${festivalStyleOverride}
     itemName,
     category: candidate._category,
     imageUrl,
+    midImageUrl,
   });
   finalContent = postProcessed.content;
   console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);
