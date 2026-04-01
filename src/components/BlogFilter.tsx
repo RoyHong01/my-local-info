@@ -28,13 +28,26 @@ function getCategoryLabel(category?: string) {
   return category ?? '기타';
 }
 
-// 카테고리별 SVG 썸네일 컴포넌트
+// 카테고리별 썸네일 컴포넌트
+const CATEGORY_THUMBNAIL_IMAGES: Record<string, string> = {
+  '인천 지역 정보': '/images/incheon-thumbnail.png',
+};
+
 function CategoryThumbnail({ category }: { category?: string }) {
+  const imageUrl = category ? CATEGORY_THUMBNAIL_IMAGES[category] : null;
+  if (imageUrl) {
+    return (
+      <Image
+        src={imageUrl}
+        alt={category!}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
+    );
+  }
+
   const configs: Record<string, { gradient: string; label: string }> = {
-    '인천 지역 정보': {
-      gradient: 'from-sky-400 to-blue-600',
-      label: '인천 지역 정보',
-    },
     '전국 보조금·복지 정책': {
       gradient: 'from-amber-400 to-orange-500',
       label: '전국 보조금·복지',
