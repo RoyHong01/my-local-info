@@ -26,7 +26,7 @@ const TABS = [
 
 const RESTAURANT_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 맛집': '/images/restaurant-incheon-thumbnail.png',
-  '서울 맛집': '/images/restaurant-seoul-thumbnail.jpg',
+  '서울 맛집': '/images/restaurant-seoul-thumbnail.png',
   '경기 맛집': '/images/restaurant-gyeonggi-thumbnail.png',
 };
 
