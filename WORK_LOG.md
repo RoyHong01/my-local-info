@@ -9,6 +9,21 @@
 
 ## 2026-04-01
 
+### 블로그/맛집 카테고리 썸네일 이미지 교체
+
+- **기존**: 카테고리별 단색 그라데이션 + 텍스트 라벨 (CSS only)
+- **변경**: 카테고리별 커스텀 일러스트 이미지로 교체
+- **블로그 목록** (`BlogFilter.tsx`):
+  - 인천 지역 정보 → `/images/incheon-thumbnail.jpg`
+  - 전국 보조금·복지 → `/images/subsidy-thumbnail.png`
+  - 전국 축제·여행 → 기존 그라데이션 유지 (이미지 미준비)
+- **맛집 목록** (`LifeFilterClient.tsx`):
+  - 인천 맛집 → `/images/restaurant-incheon-thumbnail.png`
+  - 서울 맛집 → `/images/restaurant-seoul-thumbnail.png`
+  - 경기 맛집 → `/images/restaurant-gyeonggi-thumbnail.png`
+- 구현 방식: `CATEGORY_THUMBNAIL_IMAGES` / `RESTAURANT_THUMBNAIL_IMAGES` 매핑 → 이미지 있으면 `<Image>`, 없으면 기존 그라데이션 fallback
+- 커밋: `075f6a8` ~ `0237f4e` (다수 교체 반복)
+
 ### 정책/소개 페이지 UI 정리 + 문의 이메일 교체
 
 - **개인정보 처리방침 여백 보정**: `src/app/privacy/page.tsx`
