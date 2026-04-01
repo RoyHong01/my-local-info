@@ -37,7 +37,7 @@ export default async function AdminRunsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50/40 via-white to-stone-50">
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10">
         <div className="mb-6">
           <p className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700">
             내부 운영용 (검색 비노출)
