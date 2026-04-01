@@ -31,6 +31,7 @@ function getCategoryLabel(category?: string) {
 // 카테고리별 썸네일 컴포넌트
 const CATEGORY_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 지역 정보': '/images/incheon-thumbnail.png',
+  '전국 보조금·복지 정책': '/images/subsidy-thumbnail.png',
 };
 
 function CategoryThumbnail({ category }: { category?: string }) {
