@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T00:14:30.295Z",
+  "updatedAt": "2026-04-01T23:58:16.915Z",
   "source": "kakao+google+gemini",
   "regions": {
     "incheon-gyeongin": [
@@ -43,7 +43,7 @@
         "vibeHint": "채광 좋은 브런치 무드",
         "cuisineHint": "브런치",
         "googleRating": 4.6,
-        "googleRatingCount": 330
+        "googleRatingCount": 333
       },
       {
         "id": "23373225",
@@ -114,20 +114,6 @@
         "cuisineHint": "브런치",
         "googleRating": 4.3,
         "googleRatingCount": 12
-      },
-      {
-        "id": "2147383650",
-        "name": "카페린",
-        "address": "인천 연수구 아트센터대로 203",
-        "phone": "전화번호 정보 없음",
-        "mapUrl": "http://place.map.kakao.com/2147383650",
-        "summary": "카페린은(는) 인천 연수구 아트센터대로 203 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "송도 브런치 카페",
-        "scenarioHint": "주말 브런치 약속",
-        "vibeHint": "채광 좋은 브런치 무드",
-        "cuisineHint": "브런치",
-        "googleRating": 4.5,
-        "googleRatingCount": 48
       },
       {
         "id": "1589299108",
@@ -227,7 +213,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.5,
-        "googleRatingCount": 480
+        "googleRatingCount": 481
       },
       {
         "id": "1352135383",
@@ -258,6 +244,20 @@
         "googleRatingCount": 33
       },
       {
+        "id": "144753549",
+        "name": "카페&펍 연무장 성수점",
+        "address": "서울 성동구 연무장길 36",
+        "phone": "02-499-4434",
+        "mapUrl": "http://place.map.kakao.com/144753549",
+        "summary": "카페&펍 연무장 성수점은(는) 서울 성동구 연무장길 36 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.2,
+        "googleRatingCount": 135
+      },
+      {
         "id": "1836636382",
         "name": "권식족발",
         "address": "서울 성동구 아차산로7길 4",
@@ -272,46 +272,18 @@
         "googleRatingCount": 260
       },
       {
-        "id": "1787967425",
-        "name": "스시메이 성수점",
-        "address": "서울 성동구 연무장7길 7-1",
-        "phone": "02-466-4918",
-        "mapUrl": "http://place.map.kakao.com/1787967425",
-        "summary": "스시메이 성수점은(는) 서울 성동구 연무장7길 7-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.3,
-        "googleRatingCount": 47
-      },
-      {
-        "id": "1302549042",
-        "name": "로우키",
-        "address": "서울 성동구 연무장3길 6",
-        "phone": "070-8824-2010",
-        "mapUrl": "http://place.map.kakao.com/1302549042",
-        "summary": "로우키은(는) 서울 성동구 연무장3길 6 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.6,
-        "googleRatingCount": 417
-      },
-      {
-        "id": "17886165",
-        "name": "광장족발 본가",
-        "address": "서울 성동구 아차산로 96",
-        "phone": "02-463-5800",
-        "mapUrl": "http://place.map.kakao.com/17886165",
-        "summary": "광장족발 본가은(는) 서울 성동구 아차산로 96 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "1128989913",
+        "name": "성수동대림창고갤러리",
+        "address": "서울 성동구 성수이로 78",
+        "phone": "0507-1390-9669",
+        "mapUrl": "http://place.map.kakao.com/1128989913",
+        "summary": "성수동대림창고갤러리은(는) 서울 성동구 성수이로 78 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
         "googleRating": 4.2,
-        "googleRatingCount": 172
+        "googleRatingCount": 2761
       },
       {
         "id": "301697712",
@@ -328,60 +300,60 @@
         "googleRatingCount": 394
       },
       {
-        "id": "144753549",
-        "name": "카페&펍 연무장 성수점",
-        "address": "서울 성동구 연무장길 36",
-        "phone": "02-499-4434",
-        "mapUrl": "http://place.map.kakao.com/144753549",
-        "summary": "카페&펍 연무장 성수점은(는) 서울 성동구 연무장길 36 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "1787967425",
+        "name": "스시메이 성수점",
+        "address": "서울 성동구 연무장7길 7-1",
+        "phone": "02-466-4918",
+        "mapUrl": "http://place.map.kakao.com/1787967425",
+        "summary": "스시메이 성수점은(는) 서울 성동구 연무장7길 7-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.3,
+        "googleRatingCount": 47
+      },
+      {
+        "id": "17886165",
+        "name": "광장족발 본가",
+        "address": "서울 성동구 아차산로 96",
+        "phone": "02-463-5800",
+        "mapUrl": "http://place.map.kakao.com/17886165",
+        "summary": "광장족발 본가은(는) 서울 성동구 아차산로 96 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
         "googleRating": 4.2,
-        "googleRatingCount": 135
+        "googleRatingCount": 172
       },
       {
-        "id": "12447534",
-        "name": "까사아지오",
-        "address": "서울 성동구 연무장5가길 20",
-        "phone": "0507-1428-9194",
-        "mapUrl": "http://place.map.kakao.com/12447534",
-        "summary": "까사아지오은(는) 서울 성동구 연무장5가길 20 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "1869562416",
+        "name": "가조쿠",
+        "address": "서울 성동구 연무장길 31-2",
+        "phone": "전화번호 정보 없음",
+        "mapUrl": "http://place.map.kakao.com/1869562416",
+        "summary": "가조쿠은(는) 서울 성동구 연무장길 31-2 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
-        "googleRating": 4.9,
-        "googleRatingCount": 79
+        "googleRating": 4.4,
+        "googleRatingCount": 305
       },
       {
-        "id": "1263750578",
-        "name": "다이닝목로 성수점",
-        "address": "서울 성동구 연무장7가길 1",
-        "phone": "02-498-5180",
-        "mapUrl": "http://place.map.kakao.com/1263750578",
-        "summary": "다이닝목로 성수점은(는) 서울 성동구 연무장7가길 1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "1564339195",
+        "name": "HDD",
+        "address": "서울 성동구 성수이로7길 46",
+        "phone": "전화번호 정보 없음",
+        "mapUrl": "http://place.map.kakao.com/1564339195",
+        "summary": "HDD은(는) 서울 성동구 성수이로7길 46 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
-        "googleRating": 4.9,
-        "googleRatingCount": 103
-      },
-      {
-        "id": "1702538501",
-        "name": "보끔당 성수점",
-        "address": "서울 성동구 아차산로 103",
-        "phone": "02-466-1559",
-        "mapUrl": "http://place.map.kakao.com/1702538501",
-        "summary": "보끔당 성수점은(는) 서울 성동구 아차산로 103 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.2,
-        "googleRatingCount": 14
+        "googleRating": 5,
+        "googleRatingCount": 5
       },
       {
         "id": "1022082330",
