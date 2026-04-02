@@ -5,6 +5,63 @@
 
 ---
 
+## 2026-04-02
+
+### 일간 자동화 리포트 한글 파일명 인코딩 버그 수정
+
+- **현상**: 텔레그램 알림과 admin/runs에서 블로그 3건 생성 중 1건만 표시
+- **근본 원인**: `write-daily-report.mjs`의 `git log --name-only`에서 Git 기본 설정 `core.quotePath=true`가 한글 파일명을 octal 이스케이프(`\354\225\204\353\271\240...`)로 출력 → `summarizeChanges()`가 `src/content/posts/*.md` 패턴 매칭 실패
+- **수정**: `git -c core.quotePath=false log ...` 옵션 추가 → 한글 파일명 정상 출력
+- **향후 효과**: 앞으로 모든 일일 리포트에서 한글 파일명 블로그/맛집 포스트가 정확히 카운트됨
+- 커밋: `cdec179`
+
+### 텔레그램 알림에 데이터 수집 결과 추가
+
+- **요청 배경**: 텔레그램 알림에 데이터 수집 성공/실패 여부 및 건수 미표시
+- **수집 스크립트 수정** (`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`):
+  - 각 스크립트에 `GITHUB_OUTPUT`으로 `collect_summary` 출력 추가
+  - 형식: `신규 N건, 총 M건` (인천/보조금) / `신규 N건, 업데이트 M건, 총 K건` (축제)
+- **deploy.yml 수정**: `COLLECT_INCHEON_SUMMARY`, `COLLECT_SUBSIDY_SUMMARY`, `COLLECT_FESTIVAL_SUMMARY` 환경변수 전달
+- **write-daily-report.mjs**: Stage1 데이터에 `collectSummary` 객체 추가
+- **notify-telegram.mjs**: 3개 신규 라인 추가
+  - `📡 데이터 수집:` 각 단계 ✅/❌/🚫/⏭️ 아이콘
+  - `📋 수집 결과:` 항목별 신규/업데이트/총 건수
+  - `📂 데이터 변경:` 변경된 데이터 파일명
+- 커밋: `cdec179`
+
+### 맛집 포스트 제목 가이드라인 개선
+
+- **문제**: 맛집 포스트 제목이 `지역 + 상황` 조합으로만 구성되어 음식/메뉴 정체성 부재
+- **수정**: `generate-life-restaurant-posts.mjs` 프롬프트의 제목 규칙 변경
+  - 기존: `"지역 + 상황 + 왜 여기 체크하는지"`
+  - 변경: `"지역 + 음식 장르/특색 + 왜 여기 체크하는지"` + 좋은/나쁜 예시 추가
+- 커밋: `cdec179`
+
+### admin/runs 대시보드 데이터 보정 (4/2)
+
+- **현상**: admin 대시보드에 "블로그 1건"으로 표시 (실제 3건 생성)
+- **원인**: 이미 저장된 `runs/daily/2026-04-02.json`에 인코딩 버그 데이터가 고정
+- **수동 보정**:
+  - `2026-04-02.json`: `generatedBlogPosts` 1→3건, `allChangedFiles`/`commits` 한글 파일명 복원
+  - `index.json`: `generatedBlogCount` 1→3
+- 커밋: `632782f`
+
+### BY.OUR 블랙 맥주 샴푸 초이스 포스트 작성
+
+- **신규 초이스 포스트**: `src/content/life/2026-04-02-choice-byour-black-beer-shampoo.md`
+- **로컬 이미지**: `public/images/choice/byour-black-beer-shampoo.jpg`
+- **쿠팡 링크**: `https://link.coupang.com/a/efCy9F`
+
+### 초이스 포스트 본문 쿠팡 배너 일괄 제거
+
+- **규칙 확립**: 초이스 포스트 본문(마크다운 body)에 쿠팡 배너/링크/iframe 삽입 금지
+- **사이드바 배너**: frontmatter `coupang_banner_image`를 통해 자동 렌더링 (기존 방식 유지)
+- **수정 대상**: byour, cj-biocore, catsrang 3개 포스트에서 본문 내 쿠팡 배너 HTML 제거
+- **생성기 규칙 추가**: `generate-choice-post.js`에 본문 배너 삽입 금지 규칙 명문화
+- **copilot-instructions.md**: 규칙 10번 "초이스 포스트 본문 배너 금지" 추가
+
+---
+
 ## 2026-03-31
 
 ## 2026-04-01
