@@ -249,8 +249,11 @@ jobs:
           RUN_STARTED_AT_UTC: ${{ env.RUN_STARTED_AT_UTC }}
           REPORT_DATE_KST: ${{ env.REPORT_DATE_KST }}
           COLLECT_INCHEON_OUTCOME: ${{ steps.collect_incheon.outcome }}
+          COLLECT_INCHEON_SUMMARY: ${{ steps.collect_incheon.outputs.collect_summary }}
           COLLECT_SUBSIDY_OUTCOME: ${{ steps.collect_subsidy.outcome }}
+          COLLECT_SUBSIDY_SUMMARY: ${{ steps.collect_subsidy.outputs.collect_summary }}
           COLLECT_FESTIVAL_OUTCOME: ${{ steps.collect_festival.outcome }}
+          COLLECT_FESTIVAL_SUMMARY: ${{ steps.collect_festival.outputs.collect_summary }}
           CLEANUP_EXPIRED_OUTCOME: ${{ steps.cleanup_expired.outcome }}
           BUILD_STAGE1_OUTCOME: ${{ steps.build_stage1.outcome }}
           E2E_STAGE1_OUTCOME: ${{ steps.e2e_stage1.outcome }}
@@ -262,6 +265,8 @@ jobs:
           BLOG_ESTIMATED_COST_KRW: ${{ steps.generate_blog.outputs.estimated_cost_krw }}
           BLOG_BUDGET_STOPPED: ${{ steps.generate_blog.outputs.budget_stopped }}
           BLOG_BUDGET_STOP_REASON: ${{ steps.generate_blog.outputs.budget_stop_reason }}
+          MID_IMAGE_INSERTED_COUNT: ${{ steps.generate_blog.outputs.mid_image_inserted_count }}
+          MID_IMAGE_OMITTED_COUNT: ${{ steps.generate_blog.outputs.mid_image_omitted_count }}
           BUILD_STAGE2_OUTCOME: ${{ steps.build_stage2.outcome }}
           E2E_STAGE2_OUTCOME: ${{ steps.e2e_stage2.outcome }}
           DEPLOY_STAGE2_OUTCOME: ${{ steps.deploy_stage2.outcome }}

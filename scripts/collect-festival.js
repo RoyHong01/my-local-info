@@ -276,6 +276,12 @@ async function run() {
   if (markdownGenerated > 0) {
     console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
+
+  // GitHub Actions output
+  if (process.env.GITHUB_OUTPUT) {
+    const { appendFileSync } = require('fs');
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 업데이트 ${updatedCount}건, 총 ${merged.length}건\n`);
+  }
 }
 
 run();

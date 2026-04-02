@@ -65,7 +65,7 @@ function getGitLogSince(runStartedAtUtc) {
   let output = '';
   try {
     output = execSync(
-      `git log --since="${runStartedAtUtc}" --pretty=format:"__COMMIT__%n%H%x1f%s%x1f%aI" --name-only --no-merges`,
+      `git -c core.quotePath=false log --since="${runStartedAtUtc}" --pretty=format:"__COMMIT__%n%H%x1f%s%x1f%aI" --name-only --no-merges`,
       { encoding: 'utf8' }
     );
   } catch {
@@ -140,6 +140,11 @@ function buildStagesFromEnv(env) {
         build: normalizeOutcome(env.BUILD_STAGE1_OUTCOME),
         e2e: normalizeOutcome(env.E2E_STAGE1_OUTCOME),
         deploy: normalizeOutcome(env.DEPLOY_STAGE1_OUTCOME),
+      },
+      collectSummary: {
+        incheon: env.COLLECT_INCHEON_SUMMARY || '',
+        subsidy: env.COLLECT_SUBSIDY_SUMMARY || '',
+        festival: env.COLLECT_FESTIVAL_SUMMARY || '',
       },
     },
     {
@@ -233,6 +238,9 @@ function toMarkdown(report) {
   lines.push(`| 생성된 맛집 글 | ${report.changes.generatedLifePosts.length}건 |`);
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
   lines.push(`| 최종 배포 URL | ${latestDeployUrl || '-'} |`);
+  if (report.imagePolicy) {
+    lines.push(`| 축제 중간 이미지(삽입/생략) | ${Number(report.imagePolicy.midImageInsertedCount || 0)} / ${Number(report.imagePolicy.midImageOmittedCount || 0)} |`);
+  }
   if (report.budget?.enabled) {
     lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
     lines.push(`| 블로그 비용(추정) | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
@@ -361,6 +369,8 @@ async function updateIndex(indexPath, report) {
     blogBudgetStopped: !!report.budget?.stopped,
     blogBudgetLimitKrw: Number(report.budget?.limitKrw || 0),
     blogEstimatedCostKrw: Number(report.budget?.estimatedCostKrw || 0),
+    midImageInsertedCount: Number(report.imagePolicy?.midImageInsertedCount || 0),
+    midImageOmittedCount: Number(report.imagePolicy?.midImageOmittedCount || 0),
     generatedAtUtc: report.generatedAtUtc,
   };
 
@@ -417,6 +427,10 @@ async function main() {
       estimatedCostKrw: Number(process.env.BLOG_ESTIMATED_COST_KRW || 0),
       stopped: normalizeBoolean(process.env.BLOG_BUDGET_STOPPED),
       stopReason: process.env.BLOG_BUDGET_STOP_REASON || '',
+    },
+    imagePolicy: {
+      midImageInsertedCount: Number(process.env.MID_IMAGE_INSERTED_COUNT || 0),
+      midImageOmittedCount: Number(process.env.MID_IMAGE_OMITTED_COUNT || 0),
     },
   };
 

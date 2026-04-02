@@ -100,6 +100,7 @@ async function buildMessage(report) {
   // 1단계 데이터 수집 결과 추출
   const stage1 = report.stages?.find((s) => s.key === 'stage1-data');
   const stage1Steps = stage1?.steps || {};
+  const collectSummary = stage1?.collectSummary || {};
 
   const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
   const lifeTitles = await Promise.all(generatedLifePosts.map((file) => readPostTitle(file)));
@@ -125,6 +126,15 @@ async function buildMessage(report) {
     ? `📡 데이터 수집: 인천 ${stepIcon(stage1Steps.collectIncheon)} 보조금 ${stepIcon(stage1Steps.collectSubsidy)} 축제 ${stepIcon(stage1Steps.collectFestival)} 만료처리 ${stepIcon(stage1Steps.cleanupExpired)}`
     : '';
 
+  // 수집 건수 상세
+  const summaryParts = [];
+  if (collectSummary.incheon) summaryParts.push(`인천: ${collectSummary.incheon}`);
+  if (collectSummary.subsidy) summaryParts.push(`보조금: ${collectSummary.subsidy}`);
+  if (collectSummary.festival) summaryParts.push(`축제: ${collectSummary.festival}`);
+  const collectDetailLine = summaryParts.length > 0
+    ? `📋 수집 결과: ${summaryParts.join(' | ')}`
+    : '';
+
   const dataChangedFiles = report.changes?.dataChangedFiles || [];
   const dataChangeLine = dataChangedFiles.length > 0
     ? `📂 데이터 변경: ${dataChangedFiles.map((f) => f.split('/').pop()).join(', ')}`
@@ -136,6 +146,7 @@ async function buildMessage(report) {
     `${statusIcon} *${statusText}*`,
     '',
     dataCollectionLine,
+    collectDetailLine,
     dataChangeLine,
     `📝 블로그 생성: ${blogCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
