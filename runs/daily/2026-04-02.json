@@ -72,8 +72,8 @@
       "authoredAt": "2026-04-01T23:56:38Z",
       "files": [
         "src/content/posts/2026-04-01-nonsan-strawberry-festival.md",
-        "\"src/content/posts/2026-04-01-\\354\\225\\204\\353\\271\\240\\354\\234\\241\\354\\225\\204\\355\\234\\264\\354\\247\\201\\354\\236\\245\\353\\240\\244\\352\\270\\210\\354\\247\\200\\354\\233\\220.md\"",
-        "\"src/content/posts/2026-04-01-\\354\\267\\250\\353\\223\\235\\354\\204\\270\\352\\260\\220\\353\\251\\264-\\352\\265\\255\\352\\260\\200\\354\\234\\240\\352\\263\\265\\354\\236\\220.md\""
+        "src/content/posts/2026-04-01-아빠육아휴직장려금지원.md",
+        "src/content/posts/2026-04-01-취득세감면-국가유공자.md"
       ]
     },
     {
@@ -92,7 +92,9 @@
       "src/app/life/restaurant/data/restaurants.json"
     ],
     "generatedBlogPosts": [
-      "src/content/posts/2026-04-01-nonsan-strawberry-festival.md"
+      "src/content/posts/2026-04-01-nonsan-strawberry-festival.md",
+      "src/content/posts/2026-04-01-아빠육아휴직장려금지원.md",
+      "src/content/posts/2026-04-01-취득세감면-국가유공자.md"
     ],
     "generatedLifePosts": [
       "src/content/life/2026-04-01-seongsu-restaurant-1128989913.md",
@@ -100,8 +102,8 @@
       "src/content/life/2026-04-02-bucheon-restaurant-225253022.md"
     ],
     "allChangedFiles": [
-      "\"src/content/posts/2026-04-01-\\354\\225\\204\\353\\271\\240\\354\\234\\241\\354\\225\\204\\355\\234\\264\\354\\247\\201\\354\\236\\245\\353\\240\\244\\352\\270\\210\\354\\247\\200\\354\\233\\220.md\"",
-      "\"src/content/posts/2026-04-01-\\354\\267\\250\\353\\223\\235\\354\\204\\270\\352\\260\\220\\353\\251\\264-\\352\\265\\255\\352\\260\\200\\354\\234\\240\\352\\263\\265\\354\\236\\220.md\"",
+      "src/content/posts/2026-04-01-아빠육아휴직장려금지원.md",
+      "src/content/posts/2026-04-01-취득세감면-국가유공자.md",
       "public/data/festival.json",
       "src/app/life/restaurant/data/restaurants.json",
       "src/content/life/2026-04-01-seongsu-restaurant-1128989913.md",
