@@ -24,6 +24,8 @@ let lastGeminiCallAt = 0;
 let estimatedCostKrw = 0;
 let budgetStopped = false;
 let budgetStopReason = '';
+let midImageInsertedCount = 0;
+let midImageOmittedCount = 0;
 
 const budgetEnabled = BLOG_DAILY_BUDGET_KRW > 0 && GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS > 0;
 
@@ -44,6 +46,8 @@ function publishBudgetOutputs() {
   setGithubOutput('estimated_cost_krw', estimatedCostKrw.toFixed(2));
   setGithubOutput('budget_stopped', budgetStopped ? 'true' : 'false');
   setGithubOutput('budget_stop_reason', budgetStopReason || '');
+  setGithubOutput('mid_image_inserted_count', midImageInsertedCount);
+  setGithubOutput('mid_image_omitted_count', midImageOmittedCount);
 }
 
 // 블로그 글 생성: 기본 모델은 비용 최적화를 위해 gemini-2.5-flash-lite
@@ -301,6 +305,27 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// 종료일이 이미 지난 항목인지 판별 (날짜 기반)
+// festival: eventenddate (YYYYMMDD), incheon/subsidy: endDate (YYYY-MM-DD)
+function isEndDatePassed(item) {
+  const todayStr = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
+
+  // 축제: eventenddate (YYYYMMDD)
+  const eventEnd = (item.eventenddate || '').trim();
+  if (eventEnd && /^\d{8}$/.test(eventEnd)) {
+    return eventEnd < todayStr;
+  }
+
+  // 인천/보조금: endDate (YYYY-MM-DD)
+  const endDate = (item.endDate || '').trim();
+  if (endDate && /^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    return endDate.replace(/-/g, '') < todayStr;
+  }
+
+  // 종료일 없으면 (상시 등) 만료 아님
+  return false;
+}
+
 function splitMarkdownSections(markdown) {
   const normalized = (markdown || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
   if (!normalized.startsWith('---\n')) {
@@ -459,10 +484,14 @@ function ensureEmotionalIntro(body, category) {
 }
 
 function injectMidArticleImage(body, imageUrl, itemName) {
-  if (!body || !imageUrl) return body;
+  if (!body || !imageUrl) {
+    return { body, status: 'omitted(no_alt_image)' };
+  }
 
   // 이미 본문에 이미지가 있으면 중복 삽입 방지
-  if (/!\[[^\]]*\]\([^\)]+\)/.test(body)) return body;
+  if (/!\[[^\]]*\]\([^\)]+\)/.test(body)) {
+    return { body, status: 'omitted(existing_image_in_body)' };
+  }
 
   const lines = body.split('\n');
   const h3Indexes = [];
@@ -481,18 +510,21 @@ function injectMidArticleImage(body, imageUrl, itemName) {
   if (h3Indexes.length >= 2) {
     const insertAt = h3Indexes[1];
     const next = [...lines.slice(0, insertAt), '', ...imageBlock, ...lines.slice(insertAt)];
-    return next.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    return { body: next.join('\n').replace(/\n{3,}/g, '\n\n').trim(), status: 'inserted(between_sections)' };
   }
 
   // 대체 위치: 구분선(---) 직전
   const dividerIndex = lines.findIndex((line) => /^---\s*$/.test(line.trim()));
   if (dividerIndex > 0) {
     const next = [...lines.slice(0, dividerIndex), '', ...imageBlock, ...lines.slice(dividerIndex)];
-    return next.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    return { body: next.join('\n').replace(/\n{3,}/g, '\n\n').trim(), status: 'inserted(before_divider)' };
   }
 
   // 마지막 대체: 본문 끝
-  return `${body.trim()}\n\n${imageBlock.join('\n')}`.replace(/\n{3,}/g, '\n\n').trim();
+  return {
+    body: `${body.trim()}\n\n${imageBlock.join('\n')}`.replace(/\n{3,}/g, '\n\n').trim(),
+    status: 'inserted(at_end)'
+  };
 }
 
 function postProcessGeneratedMarkdown(markdown, context) {
@@ -516,9 +548,13 @@ function postProcessGeneratedMarkdown(markdown, context) {
   normalizedBody = removeFalseCodeBlockIndentation(normalizedBody);
   normalizedBody = ensureEmotionalIntro(normalizedBody, context.category);
 
+  let midImageStatus = 'not_applicable';
+
   // 전국 축제·여행 카테고리는 "상단 대표 이미지와 다른 URL"이 있을 때만 본문 중간 이미지 삽입
   if (context.category === '전국 축제·여행') {
-    normalizedBody = injectMidArticleImage(normalizedBody, context.midImageUrl, context.itemName);
+    const midImageResult = injectMidArticleImage(normalizedBody, context.midImageUrl, context.itemName);
+    normalizedBody = midImageResult.body;
+    midImageStatus = midImageResult.status;
   }
 
   // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)
@@ -536,6 +572,7 @@ function postProcessGeneratedMarkdown(markdown, context) {
     hasHook: /^##\s+/.test((normalizedBody.split('\n').find((line) => line.trim()) || '')),
     hasReasonStructure: /###\s+1\./.test(normalizedBody) && /###\s+2\./.test(normalizedBody) && /###\s+3\./.test(normalizedBody),
     length: normalizedBody.length,
+    midImageStatus,
   };
 
   return {
@@ -812,6 +849,12 @@ ${festivalStyleOverride}
   });
   finalContent = postProcessed.content;
   console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);
+  if (candidate._category === '전국 축제·여행') {
+    const midStatus = postProcessed.summary.midImageStatus || 'unknown';
+    if (midStatus.startsWith('inserted')) midImageInsertedCount++;
+    if (midStatus.startsWith('omitted')) midImageOmittedCount++;
+    console.log(`  🖼️ 중간 이미지 상태: ${midStatus}`);
+  }
 
   await fs.writeFile(path.join(postsDir, filename), finalContent, 'utf-8');
   console.log(`✅ 생성 완료: ${filename} (${itemName})`);
@@ -878,10 +921,11 @@ async function run() {
       continue;
     }
 
-    // 만료 제외 + 우선순위 정렬
+    // 만료 제외 + 종료일 지난 항목 제외 + 우선순위 정렬
     const validItems = sortByPriority(
       items
         .filter(item => !item.expired)
+        .filter(item => !isEndDatePassed(item))
         .filter((item) => {
           if (!BLOG_ONLY_KEYWORD) return true;
           const haystack = [
@@ -984,6 +1028,7 @@ async function run() {
 
   console.log(`\n🎉 총 ${totalGenerated}편 생성 완료`);
   console.log(`📊 Gemini API 호출 횟수: ${geminiApiCallCount}회`);
+  console.log(`🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`);
   if (budgetEnabled) {
     console.log(`💰 Gemini 추정 비용: ${estimatedCostKrw.toFixed(2)}원 / ${BLOG_DAILY_BUDGET_KRW}원`);
   }
