@@ -46,13 +46,21 @@
   - `index.json`: `generatedBlogCount` 1→3
 - 커밋: `632782f`
 
+### 종료일 지난 항목 블로그 생성 방지
+
+- **문제**: `generate-blog-post.js`가 `expired` 플래그만 체크 → 수집 시점 기준이라 종료일 지나도 `false`인 채 후보에 포함
+- **예시**: 논산딸기축제 (`eventenddate: 20260329`) — 3/29 종료 후 4/1에 다시 블로그 생성됨
+- **수정**: `isEndDatePassed()` 함수 추가 — 오늘 날짜 vs 실제 종료일 비교
+  - 축제: `eventenddate` (YYYYMMDD)
+  - 인천/보조금: `endDate` (YYYY-MM-DD)
+  - 종료일 없음/상시 → 필터링 안 함 (정상 후보 유지)
+- 커밋: `a23b203`
+
 ### BY.OUR 블랙 맥주 샴푸 초이스 포스트 작성
 
 - **신규 초이스 포스트**: `src/content/life/2026-04-02-choice-byour-black-beer-shampoo.md`
 - **로컬 이미지**: `public/images/choice/byour-black-beer-shampoo.jpg`
 - **쿠팡 링크**: `https://link.coupang.com/a/efCy9F`
-
-### 초이스 포스트 본문 쿠팡 배너 일괄 제거
 
 - **규칙 확립**: 초이스 포스트 본문(마크다운 body)에 쿠팡 배너/링크/iframe 삽입 금지
 - **사이드바 배너**: frontmatter `coupang_banner_image`를 통해 자동 렌더링 (기존 방식 유지)
