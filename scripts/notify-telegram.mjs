@@ -89,10 +89,17 @@ async function buildMessage(report) {
   const lifeCount = generatedLifePosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const budget = report.budget;
+  const imagePolicy = report.imagePolicy || {};
+  const midImageInsertedCount = Number(imagePolicy.midImageInsertedCount || 0);
+  const midImageOmittedCount = Number(imagePolicy.midImageOmittedCount || 0);
 
   const statusIcon = hasFailed ? '⚠️' : '✅';
   const statusText = hasFailed ? '일부 단계 실패' : '전체 정상 완료';
   const failedStages = formatFailedStages(report.stages || []);
+
+  // 1단계 데이터 수집 결과 추출
+  const stage1 = report.stages?.find((s) => s.key === 'stage1-data');
+  const stage1Steps = stage1?.steps || {};
 
   const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
   const lifeTitles = await Promise.all(generatedLifePosts.map((file) => readPostTitle(file)));
@@ -106,14 +113,34 @@ async function buildMessage(report) {
       : `💰 Gemini 비용: ${cost}원 / ${limit}원`;
   }
 
+  // 데이터 수집 결과 한 줄 포맷
+  function stepIcon(outcome) {
+    if (outcome === 'success') return '✅';
+    if (outcome === 'failure') return '❌';
+    if (outcome === 'cancelled') return '🚫';
+    return '⏭️'; // skipped
+  }
+
+  const dataCollectionLine = stage1
+    ? `📡 데이터 수집: 인천 ${stepIcon(stage1Steps.collectIncheon)} 보조금 ${stepIcon(stage1Steps.collectSubsidy)} 축제 ${stepIcon(stage1Steps.collectFestival)} 만료처리 ${stepIcon(stage1Steps.cleanupExpired)}`
+    : '';
+
+  const dataChangedFiles = report.changes?.dataChangedFiles || [];
+  const dataChangeLine = dataChangedFiles.length > 0
+    ? `📂 데이터 변경: ${dataChangedFiles.map((f) => f.split('/').pop()).join(', ')}`
+    : '';
+
   const lines = [
     `📊 *픽앤조이 자동화 리포트* (${REPORT_DATE})`,
     '',
     `${statusIcon} *${statusText}*`,
     '',
+    dataCollectionLine,
+    dataChangeLine,
     `📝 블로그 생성: ${blogCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
+    `🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`,
     budgetLine,
   ];
 
