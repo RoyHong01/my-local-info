@@ -1,71 +1,119 @@
 {
   "reportDateKst": "2026-04-02",
-  "generatedAtUtc": "2026-04-01T15:04:37.491Z",
+  "generatedAtUtc": "2026-04-02T00:01:28.130Z",
   "workflow": {
     "name": "Daily Update & Deploy",
     "repository": "RoyHong01/my-local-info",
-    "runId": "23855469636",
-    "runNumber": 309,
+    "runId": "23876543969",
+    "runNumber": 315,
     "runAttempt": 1,
-    "eventName": "workflow_dispatch",
-    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23855469636",
-    "runStartedAtUtc": "2026-04-01T15:03:37Z",
-    "headSha": "36c51639ed491e441a9fc151e2181917e1823793"
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23876543969",
+    "runStartedAtUtc": "2026-04-01T23:51:11Z",
+    "headSha": "b1dd3b5af4fa5ca69e0d1028419fa6a12eef1226"
   },
   "stages": [
     {
       "key": "stage1-data",
       "title": "1단계: 공공데이터 수집/만료처리",
-      "deployUrl": "",
+      "deployUrl": "https://606a84f6.my-local-info-2gs.pages.dev",
       "steps": {
         "collectIncheon": "success",
         "collectSubsidy": "success",
-        "collectFestival": "cancelled",
-        "cleanupExpired": "skipped",
-        "build": "skipped",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
       "status": "success"
     },
     {
       "key": "stage2-blog",
       "title": "2단계: AI 블로그 생성",
-      "deployUrl": "",
+      "deployUrl": "https://0a793491.my-local-info-2gs.pages.dev",
       "steps": {
-        "generateBlog": "skipped",
-        "build": "skipped",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
-      "status": "skipped"
+      "status": "success"
     },
     {
       "key": "stage3-life",
       "title": "3단계: 일상의 즐거움 맛집",
-      "deployUrl": "",
+      "deployUrl": "https://69c24fc3.my-local-info-2gs.pages.dev",
       "steps": {
-        "collectRestaurants": "skipped",
-        "generateRestaurantPosts": "skipped",
-        "build": "skipped",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
-      "status": "skipped"
+      "status": "success"
     }
   ],
-  "commits": [],
+  "commits": [
+    {
+      "sha": "355b724718289b4ec38508a330604d28c83b62c7",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-02",
+      "authoredAt": "2026-04-02T00:01:27Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-04-01-seongsu-restaurant-1128989913.md",
+        "src/content/life/2026-04-01-songdo-restaurant-839782597.md",
+        "src/content/life/2026-04-02-bucheon-restaurant-225253022.md"
+      ]
+    },
+    {
+      "sha": "0bbd4a45391c8862d54958f4fc1909ca4e34f43d",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-01",
+      "authoredAt": "2026-04-01T23:56:38Z",
+      "files": [
+        "src/content/posts/2026-04-01-nonsan-strawberry-festival.md",
+        "\"src/content/posts/2026-04-01-\\354\\225\\204\\353\\271\\240\\354\\234\\241\\354\\225\\204\\355\\234\\264\\354\\247\\201\\354\\236\\245\\353\\240\\244\\352\\270\\210\\354\\247\\200\\354\\233\\220.md\"",
+        "\"src/content/posts/2026-04-01-\\354\\267\\250\\353\\223\\235\\354\\204\\270\\352\\260\\220\\353\\251\\264-\\352\\265\\255\\352\\260\\200\\354\\234\\240\\352\\263\\265\\354\\236\\220.md\""
+      ]
+    },
+    {
+      "sha": "feda6f380f96a4b3ffea571d040a965616823cd0",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-01",
+      "authoredAt": "2026-04-01T23:54:07Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
   "changes": {
-    "totalChangedFiles": 0,
-    "dataChangedFiles": [],
-    "generatedBlogPosts": [],
-    "generatedLifePosts": [],
-    "allChangedFiles": []
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-01-nonsan-strawberry-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-01-seongsu-restaurant-1128989913.md",
+      "src/content/life/2026-04-01-songdo-restaurant-839782597.md",
+      "src/content/life/2026-04-02-bucheon-restaurant-225253022.md"
+    ],
+    "allChangedFiles": [
+      "\"src/content/posts/2026-04-01-\\354\\225\\204\\353\\271\\240\\354\\234\\241\\354\\225\\204\\355\\234\\264\\354\\247\\201\\354\\236\\245\\353\\240\\244\\352\\270\\210\\354\\247\\200\\354\\233\\220.md\"",
+      "\"src/content/posts/2026-04-01-\\354\\267\\250\\353\\223\\235\\354\\204\\270\\352\\260\\220\\353\\251\\264-\\352\\265\\255\\352\\260\\200\\354\\234\\240\\352\\263\\265\\354\\236\\220.md\"",
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-04-01-seongsu-restaurant-1128989913.md",
+      "src/content/life/2026-04-01-songdo-restaurant-839782597.md",
+      "src/content/life/2026-04-02-bucheon-restaurant-225253022.md",
+      "src/content/posts/2026-04-01-nonsan-strawberry-festival.md"
+    ]
   },
   "budget": {
-    "enabled": false,
-    "limitKrw": 0,
-    "estimatedCostKrw": 0,
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 8.22,
     "stopped": false,
     "stopReason": ""
   }
