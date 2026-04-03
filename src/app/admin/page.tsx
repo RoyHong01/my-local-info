@@ -14,7 +14,7 @@ export default async function AdminPage() {
   const latestFailed = latest?.stageStatuses.some((s) => s.status === 'failure');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/40 via-white to-stone-50">
+    <div className="bg-cherry-blossom font-sans text-stone-800">
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10">
         <div className="mb-8">
           <p className="inline-flex items-center rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-700">
