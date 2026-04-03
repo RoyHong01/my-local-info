@@ -63,7 +63,7 @@ export default async function FestivalPage() {
               <FestivalCardList items={items} />
             )}
           </div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-festival-list" />

@@ -14,7 +14,7 @@
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -125,6 +125,14 @@ body {
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
+}
+
+/* ── Sticky 사이드바 GPU 가속 (macOS 관성 스크롤 떨림 방지) ── */
+.sticky-sidebar {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ── Hero animations ── */

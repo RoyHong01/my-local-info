@@ -200,7 +200,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
             </article>
           </div>
           {/* 사이드바 */}
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24">
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-incheon-detail" />
