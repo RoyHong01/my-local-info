@@ -167,7 +167,7 @@ export default async function Home() {
   return (
     <div className="bg-[#F9F9F7] font-sans text-stone-800">
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
         {/* Background gradient: white → soft orange */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-orange-50 to-orange-300" />
 
@@ -182,14 +182,14 @@ export default async function Home() {
         <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,_#92400e_1px,transparent_0)] bg-[length:40px_40px]" />
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 pb-24">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-24">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 border border-orange-200 text-orange-700 text-sm font-medium mb-5 animate-fade-in">
             ✨ 매일 업데이트되는 생활정보 플랫폼
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug tracking-tight mb-5 animate-fade-in-up">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug tracking-tight mb-5 mt-3 animate-fade-in-up">
             당신의 일상을{' '}
             <span className="relative inline-block">
               <span className="relative z-10 text-orange-600">Pick</span>
