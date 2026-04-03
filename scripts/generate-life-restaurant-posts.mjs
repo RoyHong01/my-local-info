@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
+import { execFileSync } from 'child_process';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3');
@@ -432,18 +433,9 @@ async function generateRestaurantPost(candidate) {
   console.log(`✅ 맛집 포스트 생성: ${filename} (${candidate.item.name})`);
 }
 
-async function run() {
-  if (!GEMINI_API_KEY) {
-    console.error('Missing GEMINI_API_KEY');
-    process.exit(1);
-  }
-
-  const snapshot = await readSnapshot();
-  const existing = await getExistingRestaurantStats();
-  const existingIds = existing.ids;
+function buildFilteredCandidates(snapshot, existingIds) {
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
-
-  const candidates = rawCandidates
+  return rawCandidates
     .filter(({ item }) => item?.id && item?.name)
     .filter(({ item }) => {
       const sourceId = String(item.id);
@@ -458,6 +450,55 @@ async function run() {
       areaTag: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',
       item,
     }));
+}
+
+function findEmptyBuckets(candidates) {
+  const bucketHas = new Map(TARGET_BUCKETS.map((b) => [b, false]));
+  for (const c of candidates) {
+    const bucket = classifyRegionBucket(c.item);
+    bucketHas.set(bucket, true);
+  }
+  return TARGET_BUCKETS.filter((b) => !bucketHas.get(b));
+}
+
+function recollectRestaurants() {
+  const collectScript = path.join(process.cwd(), 'scripts', 'collect-life-restaurants.mjs');
+  execFileSync(process.execPath, [collectScript], {
+    stdio: 'inherit',
+    env: process.env,
+  });
+}
+
+async function run() {
+  if (!GEMINI_API_KEY) {
+    console.error('Missing GEMINI_API_KEY');
+    process.exit(1);
+  }
+
+  let snapshot = await readSnapshot();
+  const existing = await getExistingRestaurantStats();
+  const existingIds = existing.ids;
+
+  let candidates = buildFilteredCandidates(snapshot, existingIds);
+
+  // 후보 소진된 버킷이 있으면 Kakao API 재수집 후 후보 갱신
+  const emptyBuckets = findEmptyBuckets(candidates);
+  if (emptyBuckets.length > 0 && FORCE_RESTAURANT_SOURCE_IDS.size === 0) {
+    console.log(`\n🔄 ${emptyBuckets.join(', ')} 버킷 후보 소진 — Kakao API 재수집 시작...`);
+    try {
+      recollectRestaurants();
+      snapshot = await readSnapshot();
+      candidates = buildFilteredCandidates(snapshot, existingIds);
+      const stillEmpty = findEmptyBuckets(candidates);
+      if (stillEmpty.length > 0) {
+        console.warn(`⚠️ 재수집 후에도 ${stillEmpty.join(', ')} 버킷 후보 부족 — 다른 버킷에서 재분배합니다.`);
+      } else {
+        console.log('✅ 재수집으로 모든 버킷 후보 확보 완료');
+      }
+    } catch (err) {
+      console.warn(`⚠️ 맛집 데이터 재수집 실패: ${err.message || err}`);
+    }
+  }
 
   const selectedCandidates = selectCandidatesByBucket(candidates, existing.bucketCounts);
 
