@@ -140,8 +140,12 @@ body {
 .sticky-sidebar {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: translateZ(0);
-  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, top;
+  perspective: 1000px;
+  contain: layout style;
+  transition: none;
+  top: 5.95rem; /* 서브픽셀 렌더링으로 미세 떨림 방지 */
 }
 
 /* ── Hero animations ── */
