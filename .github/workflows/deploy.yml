@@ -319,6 +319,16 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
 
+      - name: '[리포트] 최종 빌드 & 배포 (리포트 포함)'
+        if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
+        run: |
+          npm run build
+          npx wrangler pages deploy out --project-name=my-local-info
+        env:
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: '[공통] Playwright 브라우저 설치 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: npx playwright install --with-deps chromium

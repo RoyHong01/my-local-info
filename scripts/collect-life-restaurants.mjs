@@ -33,6 +33,8 @@ const REGION_QUERY_MAP = {
     { query: '잠실 브런치 카페', scenarioHint: '주말 낮 약속', vibeHint: '브런치 카페', cuisineHint: '브런치' },
     { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 저녁 코스', vibeHint: '감도 높은 주점', cuisineHint: '주점' },
     { query: '판교 데이트 맛집', scenarioHint: '퇴근 후 데이트', vibeHint: '깔끔한 데이트 스팟', cuisineHint: '다이닝' },
+    { query: '하남 미사 브런치 맛집', scenarioHint: '주말 드라이브 후 브런치', vibeHint: '채광 좋은 브런치 카페', cuisineHint: '브런치' },
+    { query: '광교 파스타 맛집', scenarioHint: '광교 주말 데이트', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
     { query: '성수 에스프레소 바', scenarioHint: '짧지만 강한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
   ],
 };

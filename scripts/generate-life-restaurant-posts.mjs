@@ -156,14 +156,32 @@ function selectCandidatesByBucket(candidates, existingBucketCounts) {
     ? Array.from(desiredByBucket.values()).reduce((acc, count) => acc + count, 0)
     : TARGET_POSTS_PER_RUN;
 
+  let remaining = 0;
   for (const bucket of TARGET_BUCKETS) {
     const list = buckets.get(bucket) || [];
     const desired = desiredByBucket.get(bucket) || 0;
     const picked = list.slice(0, desired);
     if (picked.length < desired) {
       console.warn(`⚠️ ${bucket} 버킷 후보 부족: ${picked.length}/${desired}`);
+      remaining += desired - picked.length;
     }
     selected.push(...picked);
+  }
+
+  // 부족한 버킷의 남은 슬롯을 다른 버킷에 재분배
+  if (remaining > 0) {
+    for (const bucket of TARGET_BUCKETS) {
+      if (remaining <= 0) break;
+      const list = buckets.get(bucket) || [];
+      const alreadyPicked = desiredByBucket.get(bucket) || 0;
+      const extra = list.slice(alreadyPicked);
+      const fill = extra.slice(0, remaining);
+      if (fill.length > 0) {
+        console.log(`♻️ ${bucket} 버킷에서 ${fill.length}건 추가 선택 (부족 버킷 재분배)`);
+        selected.push(...fill);
+        remaining -= fill.length;
+      }
+    }
   }
 
   return selected.slice(0, totalWanted);

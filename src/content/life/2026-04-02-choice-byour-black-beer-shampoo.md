@@ -32,10 +32,6 @@ coupang_banner_alt: "바이아우어 블랙 비어 이스트 샴푸 앰버우드
 
 ![바이아우어 블랙 비어 이스트 샴푸 제품 상세](/images/choice/byour-black-beer-shampoo-detail.jpg)
 
-## 픽앤조이의 선택
-
-[![바이아우어 블랙 비어 이스트 샴푸 앰버우드향, 1.017L, 4개](https://image15.coupangcdn.com/image/affiliate/banner/14d5be95f788d790ee71151e1ad6e75f@2x.jpg)](https://link.coupang.com/a/ef3CIc)
-
 ### 8,500명의 선택, 평점 4.5점은 어떤 의미일까요?
 
 수많은 후기들 속에서 8,500명이나 되는 분들이 선택하고 4.5점이라는 높은 평점을 준 데에는 분명한 이유가 있을 거예요. 단순히 '좋다'는 말보다, 실제 사용자들이 어떤 부분에서 만족감을 느꼈는지, 그래서 '내 루틴에 넣을 만한 가치가 있을까?' 궁금해하는 분들이 많으실 것 같아요.

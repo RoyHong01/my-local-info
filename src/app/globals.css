@@ -79,6 +79,11 @@ body {
   line-height: 1.68;
 }
 
+/* 블로그 테이블 항목(첫 번째) 컬럼 줄바꿈 방지 */
+.blog-prose :where(table td:first-child, table th:first-child):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  white-space: nowrap;
+}
+
 .blog-prose :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin-top: 0.72em;
   margin-bottom: 0.72em;
