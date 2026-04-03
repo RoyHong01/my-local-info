@@ -165,11 +165,11 @@ export default async function Home() {
   ];
 
   return (
-    <div className="bg-[#FAFAFA] font-sans text-stone-800">
+    <div className="bg-forsythia font-sans text-stone-800">
       {/* ── Hero Section ── */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-orange-400 to-purple-500" />
 
         {/* Animated background shapes */}
         <div className="absolute inset-0 overflow-hidden">
@@ -256,13 +256,13 @@ export default async function Home() {
         {/* Bottom wave */}
         <div className="absolute bottom-0 left-0 right-0 leading-none translate-y-px">
           <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full block">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FAFAFA"/>
+            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFBF0"/>
           </svg>
         </div>
       </section>
 
       {/* ── Problem Section ── */}
-      <section className="pt-10 pb-6 bg-[#FAFAFA]">
+      <section className="pt-10 pb-6">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <span className="inline-block px-5 py-1.5 rounded-full bg-red-50 text-red-500 text-sm font-bold mb-3">😤 혹시 이런 경험 있으신가요?</span>
@@ -298,12 +298,12 @@ export default async function Home() {
       </section>
 
       {/* ── Category Cards Section ── */}
-      <section className="pt-10 pb-20 bg-[#FAFAFA]" id="categories">
+      <section className="pt-10 pb-20" id="categories">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="text-center">
             <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-600 text-sm font-bold mb-4">✅ 픽앤조이가 하는 일</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
-              공공 API + 직접 큐레이션, <span className="bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">매일 업데이트</span>
+              공공 API + 직접 큐레이션, <span className="bg-gradient-to-r from-amber-500 to-purple-500 bg-clip-text text-transparent">매일 업데이트</span>
             </h2>
             <p className="text-base text-gray-500 max-w-xl mx-auto">
               흩어진 공공정보를 매일 직접 수집해서 카테고리별로 정리합니다
@@ -347,7 +347,7 @@ export default async function Home() {
       </section>
 
       {/* ── Features + CTA Section ── */}
-      <section className="py-10 sm:py-12 bg-gradient-to-br from-orange-500 via-orange-600 to-purple-700 text-white">
+      <section className="py-10 sm:py-12 bg-gradient-to-br from-amber-500 via-orange-400 to-purple-500 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-6">
             왜 픽앤조이인가요?
