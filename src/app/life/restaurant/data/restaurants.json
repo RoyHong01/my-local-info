@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-03T04:05:22.195Z",
+  "updatedAt": "2026-04-03T20:10:20.301Z",
   "source": "kakao+google+gemini",
   "regions": {
     "incheon": [
@@ -56,8 +56,8 @@
         "scenarioHint": "주말 브런치 약속",
         "vibeHint": "채광 좋은 브런치 무드",
         "cuisineHint": "브런치",
-        "googleRating": 4.3,
-        "googleRatingCount": 725
+        "googleRating": 4.8,
+        "googleRatingCount": 22
       },
       {
         "id": "2109943386",
@@ -196,8 +196,8 @@
         "scenarioHint": "짧고 진한 카페 타임",
         "vibeHint": "에스프레소 바",
         "cuisineHint": "카페",
-        "googleRating": 4.8,
-        "googleRatingCount": 17
+        "googleRating": 5,
+        "googleRatingCount": 2
       },
       {
         "id": "172523332",
@@ -225,7 +225,7 @@
         "vibeHint": "에스프레소 바",
         "cuisineHint": "카페",
         "googleRating": 5,
-        "googleRatingCount": 277
+        "googleRatingCount": 278
       },
       {
         "id": "26941015",
@@ -310,6 +310,20 @@
         "cuisineHint": "디저트",
         "googleRating": 4.2,
         "googleRatingCount": 18
+      },
+      {
+        "id": "945528027",
+        "name": "올더레이어드타르트 인천송도점",
+        "address": "인천 연수구 컨벤시아대로 55",
+        "phone": "032-851-2223",
+        "mapUrl": "http://place.map.kakao.com/945528027",
+        "summary": "올더레이어드타르트 인천송도점은(는) 인천 연수구 컨벤시아대로 55 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "송도 디저트 카페",
+        "scenarioHint": "식후 디저트 코스",
+        "vibeHint": "감성 디저트 카페",
+        "cuisineHint": "디저트",
+        "googleRating": 4.4,
+        "googleRatingCount": 2125
       },
       {
         "id": "1045198476",
@@ -408,20 +422,6 @@
         "cuisineHint": "일식",
         "googleRating": 5,
         "googleRatingCount": 1
-      },
-      {
-        "id": "1552525580",
-        "name": "오마카세오사이초밥 송도점",
-        "address": "인천 연수구 아트센터대로 149",
-        "phone": "032-834-5425",
-        "mapUrl": "http://place.map.kakao.com/1552525580",
-        "summary": "오마카세오사이초밥 송도점은(는) 인천 연수구 아트센터대로 149 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "송도 오마카세",
-        "scenarioHint": "기념일 저녁 약속",
-        "vibeHint": "집중도 높은 다이닝",
-        "cuisineHint": "오마카세",
-        "googleRating": 5,
-        "googleRatingCount": 20
       }
     ],
     "seoul": [
@@ -524,6 +524,20 @@
         "googleRatingCount": 143
       },
       {
+        "id": "804984272",
+        "name": "브루잉세레모니",
+        "address": "서울 성동구 연무장5가길 22-1",
+        "phone": "0507-1317-4771",
+        "mapUrl": "http://place.map.kakao.com/804984272",
+        "summary": "브루잉세레모니은(는) 서울 성동구 연무장5가길 22-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.6,
+        "googleRatingCount": 145
+      },
+      {
         "id": "1263750578",
         "name": "다이닝목로 성수점",
         "address": "서울 성동구 연무장7가길 1",
@@ -552,32 +566,18 @@
         "googleRatingCount": 80
       },
       {
-        "id": "804984272",
-        "name": "브루잉세레모니",
-        "address": "서울 성동구 연무장5가길 22-1",
-        "phone": "0507-1317-4771",
-        "mapUrl": "http://place.map.kakao.com/804984272",
-        "summary": "브루잉세레모니은(는) 서울 성동구 연무장5가길 22-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "1978832315",
+        "name": "희희 더블해피니스",
+        "address": "서울 성동구 연무장길 39-25",
+        "phone": "0507-1387-3322",
+        "mapUrl": "http://place.map.kakao.com/1978832315",
+        "summary": "희희 더블해피니스은(는) 서울 성동구 연무장길 39-25 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
-        "googleRating": 4.6,
-        "googleRatingCount": 145
-      },
-      {
-        "id": "2054320372",
-        "name": "굿갓레스토랑 성수역점",
-        "address": "서울 성동구 연무장길 41-22",
-        "phone": "0507-1330-2497",
-        "mapUrl": "http://place.map.kakao.com/2054320372",
-        "summary": "굿갓레스토랑 성수역점은(는) 서울 성동구 연무장길 41-22 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.4,
-        "googleRatingCount": 39
+        "googleRating": 4.3,
+        "googleRatingCount": 30
       },
       {
         "id": "1022082330",
@@ -633,7 +633,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.9,
-        "googleRatingCount": 2618
+        "googleRatingCount": 2619
       },
       {
         "id": "1759130915",
@@ -745,7 +745,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.9,
-        "googleRatingCount": 575
+        "googleRatingCount": 578
       },
       {
         "id": "1420415383",
@@ -886,8 +886,8 @@
         "scenarioHint": "광교 주말 데이트",
         "vibeHint": "깔끔한 양식 스팟",
         "cuisineHint": "파스타",
-        "googleRating": 4.5,
-        "googleRatingCount": 35
+        "googleRating": 4.4,
+        "googleRatingCount": 321
       },
       {
         "id": "585118326",
@@ -1055,7 +1055,7 @@
         "vibeHint": "깔끔한 데이트 스팟",
         "cuisineHint": "다이닝",
         "googleRating": 4.9,
-        "googleRatingCount": 284
+        "googleRatingCount": 286
       },
       {
         "id": "1837479176",
