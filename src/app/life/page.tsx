@@ -6,9 +6,10 @@ import LifeFilterClient, { type LifePageItem } from '@/components/LifeFilterClie
 import ScrollRestorer from '@/components/ScrollRestorer';
 
 export default async function LifePage() {
-  const [incheonGyeongin, seoulGyeonggi] = await Promise.all([
-    getRestaurantsByRegion('incheon-gyeongin'),
-    getRestaurantsByRegion('seoul-gyeonggi'),
+  const [incheon, seoul, gyeonggi] = await Promise.all([
+    getRestaurantsByRegion('incheon'),
+    getRestaurantsByRegion('seoul'),
+    getRestaurantsByRegion('gyeonggi'),
   ]);
   const posts = getSortedPostsData();
   const choices = getChoiceArticles(6);
@@ -41,7 +42,7 @@ export default async function LifePage() {
                   : '경기 맛집',
       }))
     : [
-        ...incheonGyeongin.map((r) => ({
+        ...incheon.map((r) => ({
           type: 'restaurant' as const,
           id: r.id,
           title: r.name,
@@ -52,7 +53,7 @@ export default async function LifePage() {
           badgeClass: 'bg-amber-50 text-amber-700',
           meta: '인천 맛집',
         })),
-        ...seoulGyeonggi.map((r) => ({
+        ...seoul.map((r) => ({
           type: 'restaurant' as const,
           id: r.id,
           title: r.name,
@@ -61,7 +62,18 @@ export default async function LifePage() {
           external: true,
           badge: '맛집 탐방',
           badgeClass: 'bg-amber-50 text-amber-700',
-          meta: r.address.startsWith('서울') ? '서울 맛집' : '경기 맛집',
+          meta: '서울 맛집',
+        })),
+        ...gyeonggi.map((r) => ({
+          type: 'restaurant' as const,
+          id: r.id,
+          title: r.name,
+          description: r.summary.split('\n\n')[0].trim() || r.summary.slice(0, 100),
+          href: r.mapUrl,
+          external: true,
+          badge: '맛집 탐방',
+          badgeClass: 'bg-amber-50 text-amber-700',
+          meta: '경기 맛집',
         })),
       ];
 

@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-export type LifeRegionTab = 'incheon-gyeongin' | 'seoul-gyeonggi';
+export type LifeRegionTab = 'incheon' | 'seoul' | 'gyeonggi';
 
 export interface RestaurantItem {
   id: string;
@@ -33,33 +33,43 @@ interface RegionQueryMeta {
 }
 
 const REGION_QUERY_MAP: Record<LifeRegionTab, RegionQueryMeta[]> = {
-  'incheon-gyeongin': [
+  incheon: [
     { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '통창·채광', cuisineHint: '브런치·카페' },
     { query: '송도 오픈런 파스타', scenarioHint: '데이트 코스 첫 식사', vibeHint: '세련된 무드', cuisineHint: '파스타·양식' },
     { query: '청라 분위기 술집', scenarioHint: '2차까지 이어지는 저녁 약속', vibeHint: '무드 있는 저녁', cuisineHint: '와인바·주점' },
     { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉', cuisineHint: '트렌디 다이닝' },
     { query: '부평 웨이팅 맛집', scenarioHint: '줄 서도 한 번쯤 가볼 만한 곳 탐색', vibeHint: '핫플', cuisineHint: '인기 맛집' },
-    { query: '부천 감성 카페 디저트', scenarioHint: '카페 투어 데이트', vibeHint: '디저트 감성', cuisineHint: '카페·디저트' },
-    { query: '김포 데이트 맛집', scenarioHint: '드라이브 끝에 들를 저녁 코스', vibeHint: '편하게 분위기 내기 좋은', cuisineHint: '데이트 맛집' },
     { query: '을왕리 오션뷰 카페', scenarioHint: '바다 보고 쉬는 반나절 코스', vibeHint: '오션뷰', cuisineHint: '카페·브런치' },
+    { query: '인천 퓨전 한식 맛집', scenarioHint: '특별한 한식 저녁', vibeHint: '트렌디', cuisineHint: '퓨전 한식' },
+    { query: '인천 화덕피자 맛집', scenarioHint: '가족 외식', vibeHint: '캐주얼', cuisineHint: '피자·양식' },
   ],
-  'seoul-gyeonggi': [
+  seoul: [
     { query: '성수동 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '힙한 동선', cuisineHint: '트렌디 다이닝' },
     { query: '연남동 웨이팅 맛집', scenarioHint: '주말에 줄 서서라도 가는 한 끼', vibeHint: '핫플', cuisineHint: '인기 맛집' },
     { query: '연남동 내추럴 와인바', scenarioHint: '저녁 데이트 2차', vibeHint: '와인 감성', cuisineHint: '와인바' },
     { query: '한남동 분위기 좋은 레스토랑', scenarioHint: '특별한 날 약속', vibeHint: '고급스럽고 세련된', cuisineHint: '레스토랑' },
     { query: '강남역 사진 잘 나오는 식당', scenarioHint: '친구랑 기분 내는 약속', vibeHint: '포토제닉', cuisineHint: '트렌디 다이닝' },
     { query: '망원동 에스프레소 바', scenarioHint: '짧고 진한 카페 투어', vibeHint: '힙한 카페 무드', cuisineHint: '커피·디저트' },
-    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 산책 후 저녁', vibeHint: '감성적인 저녁', cuisineHint: '와인바·주점' },
+    { query: '잠실 브런치 카페', scenarioHint: '잠실 나들이 후 브런치', vibeHint: '넓고 쾌적한', cuisineHint: '브런치·카페' },
+    { query: '을지로 히든 맛집', scenarioHint: '숨은 골목 탐방', vibeHint: '레트로', cuisineHint: '로컬 맛집' },
+  ],
+  gyeonggi: [
     { query: '판교 브런치 맛집', scenarioHint: '주말 낮 약속', vibeHint: '깔끔한 브런치 무드', cuisineHint: '브런치·카페' },
+    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 산책 후 저녁', vibeHint: '감성적인 저녁', cuisineHint: '와인바·주점' },
+    { query: '부천 감성 카페 디저트', scenarioHint: '카페 투어 데이트', vibeHint: '디저트 감성', cuisineHint: '카페·디저트' },
+    { query: '김포 데이트 맛집', scenarioHint: '드라이브 끝에 들를 저녁 코스', vibeHint: '편하게 분위기 내기 좋은', cuisineHint: '데이트 맛집' },
+    { query: '하남 미사 브런치 맛집', scenarioHint: '미사 대로변 주말 코스', vibeHint: '여유로운', cuisineHint: '브런치·카페' },
+    { query: '광교 파스타 맛집', scenarioHint: '광교 호수공원 산책 후', vibeHint: '세련된 무드', cuisineHint: '파스타·양식' },
+    { query: '분당 서현역 맛집', scenarioHint: '퇴근 후 가볍게', vibeHint: '접근성 좋은', cuisineHint: '로컬 맛집' },
+    { query: '일산 라페스타 맛집', scenarioHint: '일산 나들이', vibeHint: '활기찬', cuisineHint: '인기 맛집' },
   ],
 };
 
 const SNAPSHOT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
-const MAX_ITEMS_PER_REGION = 15;
+const MAX_ITEMS_PER_REGION = 30;
 
 const REGION_FALLBACK: Record<LifeRegionTab, RestaurantItem[]> = {
-  'incheon-gyeongin': [
+  incheon: [
     {
       id: 'fallback-icn-1',
       name: '송도 센트럴파크 근처 로컬 맛집',
@@ -77,17 +87,19 @@ const REGION_FALLBACK: Record<LifeRegionTab, RestaurantItem[]> = {
       summary: '가격 부담을 줄이면서도 메뉴 선택 폭이 넓은 편이에요.\n\n퇴근 후 짧게 들르기에도 동선이 괜찮아서 만족도가 높습니다.',
     },
   ],
-  'seoul-gyeonggi': [
+  seoul: [
     {
-      id: 'fallback-sgg-1',
+      id: 'fallback-sel-1',
       name: '서울 성수 감성 다이닝 맛집',
       address: '서울 성동구 성수동 일대',
       phone: '정보 확인 필요',
       mapUrl: 'https://map.kakao.com/',
       summary: '가게 분위기와 플레이팅이 좋아서 데이트 코스로 추천하기 좋아요.\n\n대기 시간을 감안해도 한 번쯤 방문해볼 만합니다.',
     },
+  ],
+  gyeonggi: [
     {
-      id: 'fallback-sgg-2',
+      id: 'fallback-gg-1',
       name: '수원 행궁동 로컬 맛집',
       address: '경기 수원시 팔달구 행궁동 일대',
       phone: '정보 확인 필요',
@@ -344,7 +356,7 @@ async function loadRestaurantsByRegion(region: LifeRegionTab): Promise<Restauran
 
     let summaryMap = new Map<string, string>();
     try {
-      summaryMap = await summarizeWithGemini(region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기', items);
+      summaryMap = await summarizeWithGemini({ incheon: '인천', seoul: '서울', gyeonggi: '경기' }[region] ?? region, items);
     } catch {
       summaryMap = new Map();
     }

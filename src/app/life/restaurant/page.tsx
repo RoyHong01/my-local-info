@@ -4,19 +4,20 @@ import { getRestaurantsByRegion } from '@/lib/life-restaurants';
 
 export const metadata: Metadata = {
   title: '맛집 탐방 | 일상의 즐거움 | 픽앤조이',
-  description: '카카오 로컬 API 기반으로 인천/경인, 서울/경기 맛집 정보를 한 번에 확인해보세요.',
+  description: '카카오 로컬 API 기반으로 인천, 서울, 경기 맛집 정보를 한 번에 확인해보세요.',
   alternates: { canonical: '/life/restaurant/' },
   openGraph: {
     title: '맛집 탐방 | 일상의 즐거움 | 픽앤조이',
-    description: '카카오 로컬 API 기반으로 인천/경인, 서울/경기 맛집 정보를 한 번에 확인해보세요.',
+    description: '카카오 로컬 API 기반으로 인천, 서울, 경기 맛집 정보를 한 번에 확인해보세요.',
     url: 'https://pick-n-joy.com/life/restaurant/',
   },
 };
 
 export default async function LifeRestaurantPage() {
-  const [incheonGyeongin, seoulGyeonggi] = await Promise.all([
-    getRestaurantsByRegion('incheon-gyeongin'),
-    getRestaurantsByRegion('seoul-gyeonggi'),
+  const [incheon, seoul, gyeonggi] = await Promise.all([
+    getRestaurantsByRegion('incheon'),
+    getRestaurantsByRegion('seoul'),
+    getRestaurantsByRegion('gyeonggi'),
   ]);
 
   return (
@@ -32,8 +33,9 @@ export default async function LifeRestaurantPage() {
 
       <RestaurantExplorer
         datasets={{
-          'incheon-gyeongin': incheonGyeongin,
-          'seoul-gyeonggi': seoulGyeonggi,
+          incheon,
+          seoul,
+          gyeonggi,
         }}
       />
     </section>

@@ -6,12 +6,13 @@ import type { LifeRegionTab, RestaurantItem } from '@/lib/life-restaurants';
 type RegionDataset = Record<LifeRegionTab, RestaurantItem[]>;
 
 const tabMeta: Array<{ key: LifeRegionTab; label: string; description: string }> = [
-  { key: 'incheon-gyeongin', label: '인천/경인', description: '인천·부천·김포 중심으로 골랐어요' },
-  { key: 'seoul-gyeonggi', label: '서울/경기', description: '서울·수원 포함 수도권 동선으로 모았어요' },
+  { key: 'incheon', label: '인천', description: '송도·청라·부평 중심으로 골랐어요' },
+  { key: 'seoul', label: '서울', description: '성수·연남·한남 중심으로 모았어요' },
+  { key: 'gyeonggi', label: '경기', description: '판교·수원·하남 중심으로 모았어요' },
 ];
 
 export default function RestaurantExplorer({ datasets }: { datasets: RegionDataset }) {
-  const [activeTab, setActiveTab] = useState<LifeRegionTab>('incheon-gyeongin');
+  const [activeTab, setActiveTab] = useState<LifeRegionTab>('incheon');
 
   const activeItems = useMemo(() => datasets[activeTab] || [], [activeTab, datasets]);
 

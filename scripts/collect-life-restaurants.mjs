@@ -2,12 +2,12 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
-const MAX_ITEMS_PER_REGION = 15;
-const GOOGLE_PRE_FILTER_SIZE = 20;  // Google 필터 전 Kakao 후보 최대 수
+const MAX_ITEMS_PER_REGION = 30;
+const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 
 const REGION_QUERY_MAP = {
-  'incheon-gyeongin': [
+  'incheon': [
     { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
     { query: '송도 오마카세', scenarioHint: '기념일 저녁 약속', vibeHint: '집중도 높은 다이닝', cuisineHint: '오마카세' },
     { query: '송도 오픈런 파스타', scenarioHint: '데이트 코스 첫 식사', vibeHint: '오픈런 저장각 파스타', cuisineHint: '파스타' },
@@ -16,12 +16,15 @@ const REGION_QUERY_MAP = {
     { query: '청라 분위기 술집', scenarioHint: '퇴근 후 하이볼 한잔', vibeHint: '조도 낮은 저녁 약속', cuisineHint: '주점' },
     { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
     { query: '부평 웨이팅 맛집', scenarioHint: '기다려서라도 가는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
-    { query: '부천 데이트 맛집', scenarioHint: '분위기 챙기는 데이트', vibeHint: '데이트 스팟', cuisineHint: '다이닝' },
-    { query: '김포 파스타 맛집', scenarioHint: '가볍지 않게 식사하고 싶은 날', vibeHint: '클래식 양식 무드', cuisineHint: '파스타' },
     { query: '인천 내추럴 와인바', scenarioHint: '친구와 느슨한 저녁 모임', vibeHint: '와인바 감도', cuisineHint: '와인바' },
     { query: '송도 에스프레소 바', scenarioHint: '짧고 진한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
+    { query: '인천 스테이크 맛집', scenarioHint: '특별한 날 고기 한 판', vibeHint: '스테이크 다이닝', cuisineHint: '스테이크' },
+    { query: '주안 맛집', scenarioHint: '동네 숨은 맛집 탐방', vibeHint: '로컬 핫플', cuisineHint: '한식' },
+    { query: '인천 일식 오마카세', scenarioHint: '일식 코스가 땡기는 날', vibeHint: '정갈한 일식 다이닝', cuisineHint: '일식' },
+    { query: '송도 디저트 카페', scenarioHint: '식후 디저트 코스', vibeHint: '감성 디저트 카페', cuisineHint: '디저트' },
+    { query: '인천 태국음식 맛집', scenarioHint: '이국적인 한 끼', vibeHint: '동남아 무드', cuisineHint: '태국음식' },
   ],
-  'seoul-gyeonggi': [
+  'seoul': [
     { query: '성수동 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '성수 핫플 동선', cuisineHint: '다이닝' },
     { query: '성수 오마카세', scenarioHint: '분위기 잡는 저녁 약속', vibeHint: '긴장감 있는 코스 다이닝', cuisineHint: '오마카세' },
     { query: '성수 파스타 맛집', scenarioHint: '저장해둔 데이트 코스', vibeHint: '힙한 파스타 스팟', cuisineHint: '파스타' },
@@ -31,17 +34,36 @@ const REGION_QUERY_MAP = {
     { query: '연남동 내추럴 와인바', scenarioHint: '2차까지 예쁘게 이어가는 밤', vibeHint: '와인바 무드', cuisineHint: '와인바' },
     { query: '강남역 사진 잘 나오는 식당', scenarioHint: '사진 남기는 모임', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
     { query: '잠실 브런치 카페', scenarioHint: '주말 낮 약속', vibeHint: '브런치 카페', cuisineHint: '브런치' },
-    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 저녁 코스', vibeHint: '감도 높은 주점', cuisineHint: '주점' },
+    { query: '성수 에스프레소 바', scenarioHint: '짧지만 강한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
+    { query: '홍대 맛집', scenarioHint: '약속 동선 짜기 편한 홍대', vibeHint: '핫플 밀집 지역', cuisineHint: '다이닝' },
+    { query: '을지로 힙플레이스 맛집', scenarioHint: '을지로 감성 식사', vibeHint: '레트로 감성 맛집', cuisineHint: '한식' },
+    { query: '이태원 브런치 맛집', scenarioHint: '주말 이태원 코스', vibeHint: '이국적 브런치', cuisineHint: '브런치' },
+    { query: '서울 스테이크 맛집', scenarioHint: '특별한 저녁 고기 다이닝', vibeHint: '스테이크 하우스', cuisineHint: '스테이크' },
+    { query: '망원동 디저트 카페', scenarioHint: '카페 호핑 코스', vibeHint: '감성 디저트', cuisineHint: '디저트' },
+  ],
+  'gyeonggi': [
     { query: '판교 데이트 맛집', scenarioHint: '퇴근 후 데이트', vibeHint: '깔끔한 데이트 스팟', cuisineHint: '다이닝' },
     { query: '하남 미사 브런치 맛집', scenarioHint: '주말 드라이브 후 브런치', vibeHint: '채광 좋은 브런치 카페', cuisineHint: '브런치' },
     { query: '광교 파스타 맛집', scenarioHint: '광교 주말 데이트', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
-    { query: '성수 에스프레소 바', scenarioHint: '짧지만 강한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
+    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 저녁 코스', vibeHint: '감도 높은 주점', cuisineHint: '주점' },
+    { query: '부천 데이트 맛집', scenarioHint: '분위기 챙기는 데이트', vibeHint: '데이트 스팟', cuisineHint: '다이닝' },
+    { query: '김포 파스타 맛집', scenarioHint: '가볍지 않게 식사하고 싶은 날', vibeHint: '클래식 양식 무드', cuisineHint: '파스타' },
+    { query: '분당 서현역 맛집', scenarioHint: '분당 저녁 약속', vibeHint: '접근성 좋은 핫플', cuisineHint: '다이닝' },
+    { query: '일산 라페스타 맛집', scenarioHint: '일산 주말 데이트', vibeHint: '라페스타 동선 맛집', cuisineHint: '다이닝' },
+    { query: '동탄 카페 맛집', scenarioHint: '신도시 카페 투어', vibeHint: '넓고 쾌적한 카페', cuisineHint: '카페' },
+    { query: '위례 브런치 맛집', scenarioHint: '위례 주말 나들이', vibeHint: '힙한 신도시 브런치', cuisineHint: '브런치' },
+    { query: '용인 수지 파스타', scenarioHint: '드라이브 후 양식 한 끼', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
+    { query: '고양 화정 맛집', scenarioHint: '화정역 근처 약속', vibeHint: '동네 핫플 탐방', cuisineHint: '한식' },
+    { query: '안양 범계 맛집', scenarioHint: '범계역 저녁 약속', vibeHint: '접근성 좋은 맛집', cuisineHint: '다이닝' },
+    { query: '하남 스타필드 근처 맛집', scenarioHint: '쇼핑 후 식사 코스', vibeHint: '스타필드 연계 동선', cuisineHint: '다이닝' },
+    { query: '판교 카페 맛집', scenarioHint: '판교 주말 감성 카페', vibeHint: '테크밸리 감성 카페', cuisineHint: '카페' },
   ],
 };
 
 const REGION_LABEL = {
-  'incheon-gyeongin': '인천/경인',
-  'seoul-gyeonggi': '서울/경기',
+  'incheon': '인천',
+  'seoul': '서울',
+  'gyeonggi': '경기',
 };
 
 function normalizeLineBreakBySentence(text) {
@@ -337,24 +359,24 @@ async function run() {
 
   console.log('🥢 일상의 즐거움 맛집 데이터 수집 시작');
 
-  const incheon = await collectRegion('incheon-gyeongin', kakaoKey, geminiKey, googleKey);
-  const seoul = await collectRegion('seoul-gyeonggi', kakaoKey, geminiKey, googleKey);
+  const regions = {};
+  for (const regionKey of Object.keys(REGION_QUERY_MAP)) {
+    regions[regionKey] = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey);
+  }
 
   const payload = {
     updatedAt: new Date().toISOString(),
     source: googleKey ? 'kakao+google+gemini' : 'kakao+gemini',
-    regions: {
-      'incheon-gyeongin': incheon,
-      'seoul-gyeonggi': seoul,
-    },
+    regions,
   };
 
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await fs.writeFile(OUTPUT_PATH, JSON.stringify(payload, null, 2), 'utf-8');
 
   console.log(`✅ 저장 완료: ${OUTPUT_PATH}`);
-  console.log(`   - 인천/경인: ${incheon.length}건`);
-  console.log(`   - 서울/경기: ${seoul.length}건`);
+  for (const [key, items] of Object.entries(regions)) {
+    console.log(`   - ${REGION_LABEL[key] || key}: ${items.length}건`);
+  }
 }
 
 run().catch((error) => {

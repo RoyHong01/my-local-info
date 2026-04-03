@@ -7,7 +7,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3');
 const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '1');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
-const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi-other'];
+const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
     .split(',')
@@ -101,24 +101,24 @@ function classifyRegionBucket(item) {
   if (/인천/.test(source)) return 'incheon';
 
   if (/경기|수원|성남|용인|고양|안양|화성|하남|의왕|의정부|광명|군포|파주|남양주|김포|부천|판교|분당|광교|동탄/.test(source)) {
-    return 'gyeonggi-other';
+    return 'gyeonggi';
   }
 
-  // 기본값: 서울/인천이 아닌 수도권 후보는 경기기타로 분류
-  return 'gyeonggi-other';
+  // 기본값: 서울/인천이 아닌 수도권 후보는 경기로 분류
+  return 'gyeonggi';
 }
 
 function toAreaTag(bucket) {
   if (bucket === 'seoul') return '서울';
   if (bucket === 'incheon') return '인천';
-  return '경기(기타)';
+  return '경기';
 }
 
 function classifyBucketFromPostFrontmatter(data) {
   const locality = String(data?.place_locality || data?.placeLocality || '').trim();
   if (locality === '서울') return 'seoul';
   if (locality === '인천') return 'incheon';
-  if (locality === '경기') return 'gyeonggi-other';
+  if (locality === '경기') return 'gyeonggi';
 
   const tags = Array.isArray(data?.tags) ? data.tags.join(' ') : String(data?.tags || '');
   const source = [
@@ -446,8 +446,8 @@ function buildFilteredCandidates(snapshot, existingIds) {
     })
     .map(({ region, item }) => ({
       region,
-      regionLabel: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',
-      areaTag: region === 'incheon-gyeongin' ? '인천/경인' : '서울/경기',
+      regionLabel: { incheon: '인천', seoul: '서울', gyeonggi: '경기' }[region] || region,
+      areaTag: { incheon: '인천', seoul: '서울', gyeonggi: '경기' }[region] || region,
       item,
     }));
 }
