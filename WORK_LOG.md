@@ -56,6 +56,22 @@
   - 기존 `bg-white` → `bg-content-floral` 교체
 - 커밋: `1a02ed5` (1차), `afc063d` (2차 히어로), `759373e` (벚꽃 원복 + 콘텐츠 배경 최종)
 
+### 홈페이지 히어로 아래 섹션 흰색 배경 + 하단 복원
+
+- **히어로 아래 전체 배경**: `bg-cherry-blossom` → `bg-white` (웨이브 아래 벚꽃 제거)
+- **웨이브 SVG fill**: `#FFFBF0` → `#ffffff`
+- **"왜 픽앤조이인가요?" 섹션**: 흰색으로 변경했다가 사용자 요청으로 `from-orange-50 to-orange-100` 복원
+- 커밋: `7b09aae` (흰색 변경), `38a8217` (하단 주황색 복원)
+
+### Sticky 사이드바 GPU 레이어 프로모션 강화
+
+- **macOS 관성 스크롤 미세 떨림 수정** (이전 수정 후 잔존 jitter 대응)
+- `transform`: `translateZ(0)` → `translate3d(0, 0, 0)`
+- `will-change`: `transform` → `transform, top`
+- 신규: `perspective: 1000px`, `contain: layout style`, `transition: none`
+- `top`: Tailwind `6rem` → CSS `5.95rem` (서브픽셀 렌더링 최적화)
+- 커밋: `194100e`
+
 ### 텔레그램 4/3 리포트 이슈 4건 수정
 
 1. **경기 맛집 포스트 미생성 (2/3)**: 버킷 재분배 로직 + 경기 포스트 수동 생성 (`파스타예요 광교본점`)
