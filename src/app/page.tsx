@@ -218,7 +218,7 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
             <Link
               href="/subsidy"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-orange-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-md hover:bg-orange-600 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
             >
               👉 내가 받을 수 있는 보조금 보러가기
             </Link>
