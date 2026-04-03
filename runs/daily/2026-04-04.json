@@ -1,0 +1,131 @@
+{
+  "reportDateKst": "2026-04-04",
+  "generatedAtUtc": "2026-04-03T20:12:50.409Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "23960314779",
+    "runNumber": 351,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23960314779",
+    "runStartedAtUtc": "2026-04-03T20:03:31Z",
+    "headSha": "c9689685e172bfc825323782fed919555f73846c"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://2d1a08dd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 5건, 업데이트 95건, 총 140건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://7a78c8c6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://e43f9263.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "2e4575891257b1a1b96ba8a6b5990350c399a6ea",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-03",
+      "authoredAt": "2026-04-03T20:12:49Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-04-03-gyeonggi-restaurant-1715349386.md",
+        "src/content/life/2026-04-03-seoul-restaurant-445276408.md",
+        "src/content/life/2026-04-03-songdo-restaurant-2147383650.md"
+      ]
+    },
+    {
+      "sha": "b7248f99868e89ff44b9fd89678263cf89e3a10b",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-03",
+      "authoredAt": "2026-04-03T20:07:14Z",
+      "files": [
+        "src/content/posts/2026-04-03-incheon-garbage-support.md",
+        "src/content/posts/2026-04-03-okcheon-seedling-festival.md",
+        "src/content/posts/2026-04-03-special-mission-compensation.md"
+      ]
+    },
+    {
+      "sha": "fafecf8a8cd00990c21ab9c5435612883de89c38",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-03",
+      "authoredAt": "2026-04-03T20:04:48Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-03-incheon-garbage-support.md",
+      "src/content/posts/2026-04-03-okcheon-seedling-festival.md",
+      "src/content/posts/2026-04-03-special-mission-compensation.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-03-gyeonggi-restaurant-1715349386.md",
+      "src/content/life/2026-04-03-seoul-restaurant-445276408.md",
+      "src/content/life/2026-04-03-songdo-restaurant-2147383650.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-04-03-gyeonggi-restaurant-1715349386.md",
+      "src/content/life/2026-04-03-seoul-restaurant-445276408.md",
+      "src/content/life/2026-04-03-songdo-restaurant-2147383650.md",
+      "src/content/posts/2026-04-03-incheon-garbage-support.md",
+      "src/content/posts/2026-04-03-okcheon-seedling-festival.md",
+      "src/content/posts/2026-04-03-special-mission-compensation.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 8.74,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  }
+}
