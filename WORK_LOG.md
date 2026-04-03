@@ -5,6 +5,48 @@
 
 ---
 
+## 2026-04-03
+
+### 맛집 파이프라인 3지역 분리 (인천/서울/경기)
+
+- **배경**: 기존 2지역(`incheon-gyeongin`, `seoul-gyeonggi`) 구조에서 경기 후보 소진 → 매일 수집 필요
+- **목표**: 3지역 분리 + 지역당 30개 후보로 월 1회 수집으로 충분하도록 변경
+- **collect 스크립트 변경** (`collect-life-restaurants.mjs`):
+  - `REGION_QUERY_MAP`: 2지역 → 3지역(`incheon`, `seoul`, `gyeonggi`) 각 8개 검색어
+  - `MAX_ITEMS_PER_REGION`: 15 → 30
+  - `GOOGLE_PRE_FILTER_SIZE`: 20 → 50
+  - `run()`: 하드코딩 2지역 → `Object.keys(REGION_QUERY_MAP)` 동적 순회
+- **generate 스크립트 변경** (`generate-life-restaurant-posts.mjs`):
+  - `TARGET_BUCKETS`: `gyeonggi-other` → `gyeonggi` 통일
+  - `classifyRegionBucket()`, `toAreaTag()`, `classifyBucketFromPostFrontmatter()` 업데이트
+  - `regionLabel`/`areaTag` 매핑: 3지역 객체 룩업 방식으로 변경
+- **프론트엔드 변경**:
+  - `src/lib/life-restaurants.ts`: `LifeRegionTab` 타입 3지역, `REGION_QUERY_MAP`/`REGION_FALLBACK`/`MAX_ITEMS_PER_REGION` 업데이트
+  - `src/components/life/RestaurantExplorer.tsx`: 탭 2개 → 3개 (인천/서울/경기)
+  - `src/app/life/restaurant/page.tsx`: 3지역 데이터 로드
+  - `src/app/life/page.tsx`: 3지역 데이터 로드 + 폴백 매핑
+- **수집 결과**: 인천 30건, 서울 30건, 경기 30건 (총 90개 후보)
+- 커밋: `bd8a7d7`
+
+### 맛집 후보 자동 재수집 로직 추가
+
+- **요청**: 어느 버킷이든 후보가 0이면 자동으로 Kakao API 재수집
+- **변경** (`generate-life-restaurant-posts.mjs`):
+  - `buildFilteredCandidates()`, `findEmptyBuckets()`, `recollectRestaurants()` 함수 분리
+  - `run()`: 빈 버킷 감지 시 `collect-life-restaurants.mjs` 자동 호출 후 재시도
+- 커밋: `26c9a9a`
+
+### 텔레그램 4/3 리포트 이슈 4건 수정
+
+1. **경기 맛집 포스트 미생성 (2/3)**: 버킷 재분배 로직 + 경기 포스트 수동 생성 (`파스타예요 광교본점`)
+2. **블로그 테이블 1열 줄바꿈**: `globals.css`에 `.blog-prose table td:first-child, th:first-child { white-space: nowrap }` 추가
+3. **admin/runs에 4/3 리포트 미표시**: `deploy.yml`에 리포트 커밋 후 최종 빌드+배포 단계 추가
+4. **경기 맛집 포스트 생성**: `2026-04-03-suwon-restaurant-390921841.md`
+
+- 커밋: `5290e53`
+
+---
+
 ## 2026-04-02
 
 ### 일간 자동화 리포트 한글 파일명 인코딩 버그 수정
