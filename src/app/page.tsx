@@ -50,7 +50,7 @@ function IncheonCard({ item }: { item: DataItem }) {
       <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">인천</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400 group-hover:text-blue-600 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
         <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
@@ -74,7 +74,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
       <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-600">보조금</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-400 group-hover:text-orange-600 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
         <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
@@ -98,7 +98,7 @@ function FestivalCard({ item }: { item: DataItem }) {
       <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-600">축제·여행</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 group-hover:text-gray-500 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 group-hover:text-purple-600 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
         <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
@@ -318,7 +318,7 @@ export default async function Home() {
                 {/* Category Header */}
                 <Link href={cat.href} className={`relative overflow-hidden rounded-2xl shadow-md group block hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 cursor-pointer`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient}`} />
-                  <div className="relative p-5">
+                  <div className="relative p-5 text-center">
                     <h3 className="text-xl font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] tracking-wide">{cat.title}</h3>
                     <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
                     <p className="text-xs text-white/80 mt-1">{cat.detail}</p>
@@ -335,7 +335,7 @@ export default async function Home() {
                 {/* View More */}
                 <Link
                   href={cat.href}
-                  className="flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-sm font-medium text-gray-400 hover:border-orange-300 hover:text-orange-500 transition-colors"
+                  className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium ${cat.linkColor} transition-colors`}
                 >
                   더보기
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
