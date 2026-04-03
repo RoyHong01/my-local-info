@@ -165,50 +165,50 @@ export default async function Home() {
   ];
 
   return (
-    <div className="bg-forsythia font-sans text-stone-800">
+    <div className="bg-cherry-blossom font-sans text-stone-800">
       {/* ── Hero Section ── */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-orange-400 to-purple-500" />
+        {/* Background gradient: white → soft orange */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-orange-50 to-orange-300" />
 
         {/* Animated background shapes */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-white/5 animate-pulse" />
-          <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-white/5 animate-[pulse_3s_ease-in-out_infinite_1s]" />
-          <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-purple-400/10 animate-[pulse_3s_ease-in-out_infinite_0.5s]" />
+          <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-orange-200/20 animate-pulse" />
+          <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-amber-200/20 animate-[pulse_3s_ease-in-out_infinite_1s]" />
+          <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-yellow-200/15 animate-[pulse_3s_ease-in-out_infinite_0.5s]" />
         </div>
 
         {/* Dot pattern overlay */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] bg-[length:40px_40px]" />
+        <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle_at_1px_1px,_#92400e_1px,transparent_0)] bg-[length:40px_40px]" />
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 pb-24">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-5 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 border border-orange-200 text-orange-700 text-sm font-medium mb-5 animate-fade-in">
             ✨ 매일 업데이트되는 생활정보 플랫폼
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-snug tracking-tight mb-5 animate-fade-in-up">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-snug tracking-tight mb-5 animate-fade-in-up">
             당신의 일상을{' '}
             <span className="relative inline-block">
-              <span className="relative z-10">Pick</span>
-              <span className="absolute bottom-0.5 left-0 right-0 h-2.5 bg-yellow-400/40 rounded-sm -z-0" />
+              <span className="relative z-10 text-orange-600">Pick</span>
+              <span className="absolute bottom-0.5 left-0 right-0 h-2.5 bg-orange-200/60 rounded-sm -z-0" />
             </span>
             , 당신의 주말을{' '}
             <span className="relative inline-block">
-              <span className="relative z-10">Enjoy!</span>
-              <span className="absolute bottom-0.5 left-0 right-0 h-2.5 bg-yellow-400/40 rounded-sm -z-0" />
+              <span className="relative z-10 text-orange-600">Enjoy!</span>
+              <span className="absolute bottom-0.5 left-0 right-0 h-2.5 bg-orange-200/60 rounded-sm -z-0" />
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg md:text-xl text-white/90 font-semibold mb-4 animate-fade-in-up">
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 font-semibold mb-4 animate-fade-in-up">
             몰라서 못 받은 돈, 놓친 축제, 실망한 맛집ㅡ이제 픽앤조이가 대신 찾아드립니다
           </p>
 
           {/* Sub-description */}
-          <p className="text-xs sm:text-sm md:text-base text-white/60 font-normal max-w-2xl mx-auto mb-14 animate-fade-in-up leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 font-normal max-w-2xl mx-auto mb-14 animate-fade-in-up leading-relaxed">
             인천 생활정보부터 전국 보조금·복지·축제까지 —<br className="hidden sm:inline" />
             흩어진 공공정보를 매일 직접 수집해서 딱 한 곳에 정리해드려요.<br className="hidden sm:inline" />
             검색하다 지치셨다면, 오늘이 마지막 검색입니다.
@@ -218,19 +218,19 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
             <Link
               href="/subsidy"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-orange-500 text-white font-bold text-sm sm:text-base rounded-2xl shadow-md hover:bg-orange-600 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 whitespace-nowrap"
             >
               👉 내가 받을 수 있는 보조금 보러가기
             </Link>
             <Link
               href="/festival"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
             >
               🎉 이번 주말 근처 축제 확인하기
             </Link>
             <Link
               href="/life/restaurant"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white/15 backdrop-blur-sm text-white font-bold text-sm sm:text-base rounded-2xl border border-white/30 hover:bg-white/25 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
             >
               🍽️ 요즘 뜨는 맛집 보러가기
             </Link>
@@ -239,16 +239,16 @@ export default async function Home() {
           {/* Stats */}
           <div className="mt-14 grid grid-cols-3 gap-8 max-w-md mx-auto animate-fade-in-up">
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-extrabold text-white">{subsidyAll.filter(i => !i.expired).length}+</div>
-              <div className="text-sm text-white/60 mt-1">보조금 정보</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyAll.filter(i => !i.expired).length}+</div>
+              <div className="text-sm text-gray-500 mt-1">보조금 정보</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-extrabold text-white">{festivalAll.filter(i => !i.expired).length}+</div>
-              <div className="text-sm text-white/60 mt-1">축제·행사</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{festivalAll.filter(i => !i.expired).length}+</div>
+              <div className="text-sm text-gray-500 mt-1">축제·행사</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-extrabold text-white">매일</div>
-              <div className="text-sm text-white/60 mt-1">업데이트</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">매일</div>
+              <div className="text-sm text-gray-500 mt-1">업데이트</div>
             </div>
           </div>
         </div>
@@ -303,7 +303,7 @@ export default async function Home() {
           <div className="text-center">
             <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-600 text-sm font-bold mb-4">✅ 픽앤조이가 하는 일</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">
-              공공 API + 직접 큐레이션, <span className="bg-gradient-to-r from-amber-500 to-purple-500 bg-clip-text text-transparent">매일 업데이트</span>
+              공공 API + 직접 큐레이션, <span className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">매일 업데이트</span>
             </h2>
             <p className="text-base text-gray-500 max-w-xl mx-auto">
               흩어진 공공정보를 매일 직접 수집해서 카테고리별로 정리합니다
@@ -347,9 +347,9 @@ export default async function Home() {
       </section>
 
       {/* ── Features + CTA Section ── */}
-      <section className="py-10 sm:py-12 bg-gradient-to-br from-amber-500 via-orange-400 to-purple-500 text-white">
+      <section className="py-10 sm:py-12 bg-gradient-to-b from-orange-50 to-orange-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-6">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-6 text-gray-900">
             왜 픽앤조이인가요?
           </h2>
 
@@ -362,20 +362,20 @@ export default async function Home() {
               { icon: '⏰', title: '시간 절약', desc: '여러 사이트 대신 한 곳에서 모두 확인' },
               { icon: '❤️', title: '맞춤 추천', desc: '나이·지역·상황에 맞는 맞춤형 정보' },
             ].map((f, idx) => (
-              <div key={idx} className="text-center p-3 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors duration-300">
-                <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-base mx-auto mb-2">
+              <div key={idx} className="text-center p-3 rounded-xl bg-white shadow-sm border border-orange-100 hover:shadow-md transition-shadow duration-300">
+                <div className="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center text-base mx-auto mb-2">
                   {f.icon}
                 </div>
-                <h3 className="text-xs font-bold text-white mb-0.5">{f.title}</h3>
-                <p className="text-[11px] text-white font-medium leading-snug">{f.desc}</p>
+                <h3 className="text-xs font-bold text-gray-900 mb-0.5">{f.title}</h3>
+                <p className="text-[11px] text-gray-500 font-medium leading-snug">{f.desc}</p>
               </div>
             ))}
           </div>
 
           <div className="text-center">
-            <h3 className="text-lg sm:text-xl font-extrabold mb-1">오늘부터 시작하세요, 완전 무료입니다</h3>
-            <p className="text-sm sm:text-base font-bold text-white/90 mb-2">회원가입도, 앱 설치도 필요 없어요</p>
-            <p className="text-xs sm:text-sm text-white/80 leading-relaxed whitespace-nowrap mx-auto">
+            <h3 className="text-lg sm:text-xl font-extrabold mb-1 text-gray-900">오늘부터 시작하세요, 완전 무료입니다</h3>
+            <p className="text-sm sm:text-base font-bold text-gray-700 mb-2">회원가입도, 앱 설치도 필요 없어요</p>
+            <p className="text-xs sm:text-sm text-gray-500 leading-relaxed whitespace-nowrap mx-auto">
               픽앤조이의 모든 서비스는 100% 무료입니다. 그냥 들어와서, 필요한 정보 가져가시면 됩니다.
             </p>
           </div>

@@ -118,17 +118,8 @@ body {
   margin-bottom: 0.25em;
 }
 
-/* ── 벚꽃 배경 ── */
+/* ── 꽃 배경 (전 콘텐츠 페이지 공통) ── */
 .bg-cherry-blossom {
-  background-image: url('/images/bg-cherry-blossom.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-}
-
-/* ── 개나리 배경 (메인 콘텐츠) ── */
-.bg-forsythia {
   background-color: #FFFBF0;
   background-image: url('/images/bg-forsythia.png');
   background-size: cover;
