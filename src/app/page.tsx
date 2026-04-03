@@ -347,7 +347,7 @@ export default async function Home() {
       </section>
 
       {/* ── Features + CTA Section ── */}
-      <section className="py-10 sm:py-12 bg-white">
+      <section className="py-10 sm:py-12 bg-gradient-to-b from-orange-50 to-orange-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl sm:text-2xl font-extrabold text-center mb-6 text-gray-900">
             왜 픽앤조이인가요?
