@@ -336,7 +336,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <Suspense fallback={<span className="text-orange-600 mb-8 inline-block">&larr; 목록으로 돌아가기</span>}>
           <BlogBackButton fallbackHref="/blog" />
         </Suspense>
-        <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
+        <article className="bg-content-floral p-8 rounded-3xl shadow-sm border border-stone-100">
           <header className="mb-8 border-b border-stone-100 pb-8">
             <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>
             <div className="flex items-center gap-4 text-sm">

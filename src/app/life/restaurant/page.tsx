@@ -22,7 +22,7 @@ export default async function LifeRestaurantPage() {
 
   return (
     <section>
-      <header className="mb-8 bg-white rounded-3xl p-8 shadow-sm border border-stone-100">
+      <header className="mb-8 bg-content-floral rounded-3xl p-8 shadow-sm border border-stone-100">
         <p className="text-sm font-semibold text-orange-500 mb-2">맛집 탐방</p>
         <h1 className="text-2xl md:text-3xl font-extrabold mb-4">오늘 어디 갈지 고민될 때, 지역별로 바로 골라드릴게요</h1>
         <p className="text-stone-600 leading-8">

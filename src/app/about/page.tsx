@@ -18,7 +18,7 @@ export default function AboutPage() {
       <main className="max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold mb-8">사이트 소개</h1>
             
-        <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100 space-y-8">
+        <article className="bg-content-floral p-8 rounded-3xl shadow-sm border border-stone-100 space-y-8">
           <section>
             <h2 className="text-2xl font-bold mb-4 text-orange-600">운영 목적</h2>
             <p className="text-stone-600 leading-relaxed">

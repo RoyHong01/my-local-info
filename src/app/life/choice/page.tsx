@@ -19,7 +19,7 @@ export default function LifeChoicePage() {
 
   return (
     <section>
-      <header className="mb-8 bg-white rounded-3xl p-8 shadow-sm border border-stone-100">
+      <header className="mb-8 bg-content-floral rounded-3xl p-8 shadow-sm border border-stone-100">
         <p className="text-sm font-semibold text-orange-500 mb-2">픽앤조이 초이스</p>
         <h1 className="text-3xl md:text-4xl font-extrabold mb-4">가전·디지털·생활 꿀팁, 블로그처럼 편하게 읽어보세요</h1>
         <p className="text-stone-600 leading-8">
@@ -34,7 +34,7 @@ export default function LifeChoicePage() {
         ))}
       </div>
 
-      <div className="mt-10 bg-white rounded-3xl p-8 shadow-sm border border-stone-100">
+      <div className="mt-10 bg-content-floral rounded-3xl p-8 shadow-sm border border-stone-100">
         <h2 className="text-2xl font-extrabold mb-2">추천 상품도 함께 확인해보세요</h2>
         <p className="text-stone-600 leading-7 mb-4">
           글에서 다룬 생활 동선과 연결되는 상품을 함께 보시면 비교가 훨씬 쉬워요.

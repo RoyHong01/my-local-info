@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
       <main className="max-w-4xl mx-auto px-4 py-12">
-        <article className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100 space-y-8">
+        <article className="bg-content-floral p-8 rounded-3xl shadow-sm border border-stone-100 space-y-8">
           <header>
             <h1 className="text-4xl font-extrabold mb-5">개인정보 처리방침 (Privacy Policy)</h1>
             <p className="text-stone-600 leading-relaxed">

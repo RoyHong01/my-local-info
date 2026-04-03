@@ -162,7 +162,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
               ← 인천 지역 정보 목록
             </Link>
 
-            <article className="bg-white rounded-3xl shadow-sm border border-stone-100 p-8">
+            <article className="bg-content-floral rounded-3xl shadow-sm border border-stone-100 p-8">
               <header className="mb-6 pb-6 border-b border-stone-100">
                 {field && (
                   <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full mb-3">
