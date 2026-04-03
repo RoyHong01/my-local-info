@@ -42,6 +42,20 @@
   - `run()`: 빈 버킷 감지 시 `collect-life-restaurants.mjs` 자동 호출 후 재시도
 - 커밋: `26c9a9a`
 
+### 홈페이지 디자인 개편 (히어로 + 콘텐츠 배경)
+
+- **히어로 섹션 리디자인**: 기존 진한 오렌지/보라 그라데이션 → 흰색→오렌지 부드러운 그라데이션 + 어두운 텍스트 (눈의 피로도 감소)
+  - 배경: `from-white via-orange-50 to-orange-300`
+  - 텍스트: `text-gray-900`/`text-gray-700` + Pick/Enjoy `text-orange-600`
+  - CTA: `bg-orange-500 text-white` / `bg-white text-orange-600`
+  - 닷 패턴, 애니메이션 도형 톤다운
+- **“왜 픽앤조이인가요?” 섹션**: 다채 금속 그라데이션 → `from-orange-50 to-orange-100` + 흰색 카드 UI
+- **콘텐츠 페이지 배경 (bg-cherry-blossom)**: 벚꽃 이미지 원복 (`bg-cherry-blossom.png`)
+- **콘텐츠 컨테이너 배경 (bg-content-floral)**: 새 개나리 꽃 이미지 적용 (`bg-content.png`)
+  - 적용 9곳: incheon/subsidy/festival/blog 상세, about, privacy, life/choice(헤더+하단), life/restaurant(헤더)
+  - 기존 `bg-white` → `bg-content-floral` 교체
+- 커밋: `1a02ed5` (1차), `afc063d` (2차 히어로), `759373e` (벚꽃 원복 + 콘텐츠 배경 최종)
+
 ### 텔레그램 4/3 리포트 이슈 4건 수정
 
 1. **경기 맛집 포스트 미생성 (2/3)**: 버킷 재분배 로직 + 경기 포스트 수동 생성 (`파스타예요 광교본점`)
