@@ -16,7 +16,7 @@
 - Gemini API (gemini-2.5-pro) — 블로그 글 자동 생성
 - Claude API (claude-haiku-4-5) — 데이터 description_markdown 생성
 - 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
-- GitHub Actions — 매일 07:00 KST 자동 실행
+- GitHub Actions — 매일 04:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
 
 ## 환경변수 (.env.local)
@@ -112,6 +112,8 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-03 핵심 반영:
+  - GitHub Actions 스케줄 04:00 KST로 변경 (`0 19 * * *`)
+  - admin/admin/runs 배경 bg-cherry-blossom 통일
   - 맛집 파이프라인 2지역 → 3지역(`incheon`/`seoul`/`gyeonggi`) 분리
   - 지역당 30개 후보 수집 (월 1회 수집 목표)
   - 빈 버킷 자동 재수집 로직 추가

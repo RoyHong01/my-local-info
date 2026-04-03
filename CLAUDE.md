@@ -14,7 +14,7 @@
 - Claude API (claude-haiku-4-5) → 인천/보조금/축제 데이터 description 생성
 - Gemini API (gemini-2.5-pro) → 블로그 글 자동 생성 (MZ 감성 + 정보 완전성 규칙)
 - 공공데이터포털 API + 한국관광공사 TourAPI → 데이터 수집
-- GitHub Actions → 매일 07:00 KST 자동 실행 (cron: `0 22 * * *`)
+- GitHub Actions → 매일 04:00 KST 자동 실행 (cron: `0 19 * * *`)
 - Cloudflare Pages (wrangler) → 빌드 후 자동 배포
 
 ## 환경변수 (.env.local)
@@ -105,7 +105,7 @@ public/
   images/               # 공식 포스터 이미지 저장소
 
 .github/workflows/
-  deploy.yml            # push 또는 07:00 KST 자동 배포
+  deploy.yml            # push 또는 04:00 KST 자동 배포
 
 e2e/
   blog-filter.spec.ts   # 블로그 카테고리 필터 유지 E2E

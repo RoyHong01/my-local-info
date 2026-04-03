@@ -7,6 +7,12 @@
 
 ## 2026-04-03
 
+### GitHub Actions 스케줄 변경 + Admin 배경 통일
+
+- **cron 변경**: `0 22 * * *` (07:00 KST) → `0 19 * * *` (04:00 KST)
+- **admin 배경**: `admin/page.tsx`, `admin/runs/page.tsx` gradient → `bg-cherry-blossom` (다른 페이지와 동일한 꽃무늬 배경)
+- 커밋: `1dd82f9`
+
 ### 맛집 파이프라인 3지역 분리 (인천/서울/경기)
 
 - **배경**: 기존 2지역(`incheon-gyeongin`, `seoul-gyeonggi`) 구조에서 경기 후보 소진 → 매일 수집 필요
