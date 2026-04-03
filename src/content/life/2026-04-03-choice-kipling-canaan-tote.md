@@ -6,7 +6,7 @@ summary: "가볍고 수납력 좋은 토트백을 찾고 계셨다면, 키플링
 description: "가볍고 수납력 좋은 토트백을 찾고 계셨다면, 키플링 카나안 토트백을 실사용 관점에서 꼼꼼히 정리해 봤어요."
 category: "픽앤조이 초이스"
 tags: ["키플링", "카나안토트백", "여성토트백", "출퇴근가방", "크로스백", "가벼운가방", "쿠팡", "리뷰"]
-image: "/images/choice/kipling-canaan-tote-front.jpg"
+image: "/images/choice/kipling-canaan-tote-side.jpg"
 source_id: "manual-choice-kipling-canaan-tote"
 coupang_link: "https://link.coupang.com/a/ehe43t"
 coupang_banner_image: "https://image3.coupangcdn.com/image/affiliate/banner/b8913c7a672b072d346f7f0b701e6cca@2x.jpg"
@@ -16,8 +16,6 @@ coupang_banner_alt: "키플링 여성용 카나안 토트백"
 ## 매일 드는 가방인데, 왜 이렇게 고르기 어려운 걸까요?
 
 출퇴근길, 주말 외출, 가벼운 쇼핑까지. 매일 들고 다니는 가방이라 생각보다 조건이 까다로워지더라고요. 가벼워야 하고, 물건은 넉넉히 들어가야 하고, 크로스백으로도 쓸 수 있으면 좋겠고. 그런 분들이라면 키플링 카나안 토트백, 한번 살펴볼 만해요.
-
-![키플링 카나안 토트백 사이드뷰](/images/choice/kipling-canaan-tote-side.jpg)
 
 ### 가볍다는 건 진짜 체감돼요 ✨
 
