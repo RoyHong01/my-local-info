@@ -84,6 +84,20 @@ export const COUPANG_LINK_RULES = {
     secondary: '글 하단 (결론 or 추천 섹션)',
     widget: '사이드바 또는 상단 고정 배너 (항상 노출)',
   },
+  unifiedContentRevenuePolicy: {
+    coreDirective: '일상의 즐거움 / 픽앤조이 초이스의 신규 및 기존 포스트는 Web/Mobile 모두 본문에 쿠팡 파트너스 제휴 링크를 반드시 포함해야 한다.',
+    placement: {
+      primary: '이미지 바로 아래 clear CTA 링크/버튼',
+      secondary: '이미지 없을 경우 본문 2~3문단 뒤 자연스러운 전환점',
+    },
+    ctaStyle: '별도 줄에 굵게 표시하고 모바일에서도 클릭하기 쉬운 문구를 사용',
+    examples: [
+      '👉 [제품명] 최저가 확인 및 상세정보 보기',
+      '🛒 오늘의 추천 상품, 실시간 할인 가격 확인하기',
+    ],
+    retroactiveUpdate: '기존 글 수정 시에도 원문 맥락을 유지하며 자연스럽게 제휴 링크를 후방 삽입',
+    toneConsistency: '프리미엄 라이프스타일 큐레이션 톤을 유지하며 intrusive 하지 않게 배치',
+  },
 } as const;
 
 /**

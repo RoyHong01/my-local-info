@@ -19,6 +19,8 @@ coupang_banner_alt: "고려은단 루테인 지아잔틴 아스타잔틴, 60정,
 
 ![고려은단 루테인 지아잔틴 아스타잔틴 제품 상세](/images/choice/goreyeundan-lutein-detail.jpg)
 
+**👉 [고려은단 루테인 지아잔틴 아스타잔틴 60정 3개 세트 보러가기](https://link.coupang.com/a/ehsDWX)**
+
 ### 눈 건강의 핵심, 세 가지 성분이 한 번에 ✨
 
 **1. 루테인 + 지아잔틴, 망막 보호의 든든한 파트너.**
