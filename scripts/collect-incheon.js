@@ -17,6 +17,16 @@ function sourceHash(item) {
   ].join('||');
 }
 
+function validateFetchedData(sourceName, existingCount, fetchedCount) {
+  if (fetchedCount === 0 && existingCount > 0) {
+    return `warning: ${sourceName} API 조회 결과가 0건입니다. 데이터 존재 여부를 확인하세요.`;
+  }
+  if (existingCount > 0 && fetchedCount < Math.max(1, Math.floor(existingCount * 0.5))) {
+    return `warning: ${sourceName} API 조회 결과가 기존 데이터(${existingCount}건)의 절반 미만입니다.`;
+  }
+  return 'ok';
+}
+
 async function generateIncheonMarkdown(item) {
   if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
   const prompt = `아래 인천 지역 공공서비스 정보를 블로그처럼 읽기 쉬운 한국어 Markdown으로 재작성해줘.
@@ -87,6 +97,8 @@ async function run() {
     existing = JSON.parse(fileContent);
   } catch (_) {}
 
+  const validationStatus = validateFetchedData('인천 지역 정보', existing.length, filtered.length);
+
   // 중복 제거 후 신규 항목 추가
   const existingNames = new Set(existing.map(e => e['서비스명'] || e.name));
   const newItems = filtered.filter(item => !existingNames.has(item['서비스명'] || item.name));
@@ -139,11 +151,16 @@ async function run() {
   if (markdownGenerated > 0) {
     console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
+  if (validationStatus !== 'ok') {
+    console.warn(`  데이터 검증 경고: ${validationStatus}`);
+  }
 
   // GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
   }
 }
 

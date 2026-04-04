@@ -58,6 +58,16 @@ function sourceHash(item) {
   ].join('||');
 }
 
+function validateFetchedData(sourceName, existingCount, fetchedCount) {
+  if (fetchedCount === 0 && existingCount > 0) {
+    return `warning: ${sourceName} API 조회 결과가 0건입니다. 데이터 존재 여부를 확인하세요.`;
+  }
+  if (existingCount > 0 && fetchedCount < Math.max(1, Math.floor(existingCount * 0.5))) {
+    return `warning: ${sourceName} API 조회 결과가 기존 데이터(${existingCount}건)의 절반 미만입니다.`;
+  }
+  return 'ok';
+}
+
 async function generateFestivalMarkdown(item) {
   if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
 
@@ -145,6 +155,8 @@ async function run() {
     const fileContent = await fs.readFile(dataPath, 'utf-8');
     existing = JSON.parse(fileContent);
   } catch (_) {}
+
+  const validationStatus = validateFetchedData('전국 축제·여행 정보', existing.length, items.length);
 
   // 오래된 샘플 3건(id 기반)을 TourAPI 원본 항목으로 교체
   const legacyKeywordMap = {
@@ -276,11 +288,16 @@ async function run() {
   if (markdownGenerated > 0) {
     console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
+  if (validationStatus !== 'ok') {
+    console.warn(`  데이터 검증 경고: ${validationStatus}`);
+  }
 
   // GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 업데이트 ${updatedCount}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
   }
 }
 

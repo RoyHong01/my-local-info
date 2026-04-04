@@ -80,7 +80,8 @@ async function callGemini(prompt) {
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature: 0.9,
+          temperature: 0.4,
+          topP: 0.92,
           maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
         },
       }),

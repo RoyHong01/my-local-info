@@ -250,10 +250,16 @@ jobs:
           REPORT_DATE_KST: ${{ env.REPORT_DATE_KST }}
           COLLECT_INCHEON_OUTCOME: ${{ steps.collect_incheon.outcome }}
           COLLECT_INCHEON_SUMMARY: ${{ steps.collect_incheon.outputs.collect_summary }}
+          COLLECT_INCHEON_VALIDATION: ${{ steps.collect_incheon.outputs.collect_validation }}
+          COLLECT_INCHEON_ANTHROPIC_USAGE: ${{ steps.collect_incheon.outputs.anthropic_usage }}
           COLLECT_SUBSIDY_OUTCOME: ${{ steps.collect_subsidy.outcome }}
           COLLECT_SUBSIDY_SUMMARY: ${{ steps.collect_subsidy.outputs.collect_summary }}
+          COLLECT_SUBSIDY_VALIDATION: ${{ steps.collect_subsidy.outputs.collect_validation }}
+          COLLECT_SUBSIDY_ANTHROPIC_USAGE: ${{ steps.collect_subsidy.outputs.anthropic_usage }}
           COLLECT_FESTIVAL_OUTCOME: ${{ steps.collect_festival.outcome }}
           COLLECT_FESTIVAL_SUMMARY: ${{ steps.collect_festival.outputs.collect_summary }}
+          COLLECT_FESTIVAL_VALIDATION: ${{ steps.collect_festival.outputs.collect_validation }}
+          COLLECT_FESTIVAL_ANTHROPIC_USAGE: ${{ steps.collect_festival.outputs.anthropic_usage }}
           CLEANUP_EXPIRED_OUTCOME: ${{ steps.cleanup_expired.outcome }}
           BUILD_STAGE1_OUTCOME: ${{ steps.build_stage1.outcome }}
           E2E_STAGE1_OUTCOME: ${{ steps.e2e_stage1.outcome }}

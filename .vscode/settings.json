@@ -1,0 +1,9 @@
+{
+    "chat.mcp.serverSampling": {
+        "my-local-info/.vscode/mcp.json: figma": {
+            "allowedModels": [
+                "copilot/auto"
+            ]
+        }
+    }
+}

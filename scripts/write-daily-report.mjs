@@ -207,6 +207,7 @@ function toMarkdown(report) {
   const stage1 = report.stages.find((s) => s.key === 'stage1-data');
   const stage2 = report.stages.find((s) => s.key === 'stage2-blog');
   const stage3 = report.stages.find((s) => s.key === 'stage3-life');
+  const dataValidation = report.dataValidation || {};
 
   const stageRows = report.stages.map((stage) => {
     const deployUrl = stage.deployUrl || '-';
@@ -240,6 +241,22 @@ function toMarkdown(report) {
   lines.push(`| 최종 배포 URL | ${latestDeployUrl || '-'} |`);
   if (report.imagePolicy) {
     lines.push(`| 축제 중간 이미지(삽입/생략) | ${Number(report.imagePolicy.midImageInsertedCount || 0)} / ${Number(report.imagePolicy.midImageOmittedCount || 0)} |`);
+  }
+  if (report.dataValidation) {
+    const validationSegments = [];
+    if (report.dataValidation.incheon?.validation) validationSegments.push(`인천: ${report.dataValidation.incheon.validation}`);
+    if (report.dataValidation.subsidy?.validation) validationSegments.push(`보조금: ${report.dataValidation.subsidy.validation}`);
+    if (report.dataValidation.festival?.validation) validationSegments.push(`축제: ${report.dataValidation.festival.validation}`);
+    if (validationSegments.length > 0) {
+      lines.push(`| 데이터 검증 | ${validationSegments.join(' | ')} |`);
+    }
+    const usageSegments = [];
+    if (report.dataValidation.incheon?.anthropicUsage) usageSegments.push(`인천 ${report.dataValidation.incheon.anthropicUsage}`);
+    if (report.dataValidation.subsidy?.anthropicUsage) usageSegments.push(`보조금 ${report.dataValidation.subsidy.anthropicUsage}`);
+    if (report.dataValidation.festival?.anthropicUsage) usageSegments.push(`축제 ${report.dataValidation.festival.anthropicUsage}`);
+    if (usageSegments.length > 0) {
+      lines.push(`| Anthropic 사용량 | ${usageSegments.join(' | ')} |`);
+    }
   }
   if (report.budget?.enabled) {
     lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
@@ -431,6 +448,23 @@ async function main() {
     imagePolicy: {
       midImageInsertedCount: Number(process.env.MID_IMAGE_INSERTED_COUNT || 0),
       midImageOmittedCount: Number(process.env.MID_IMAGE_OMITTED_COUNT || 0),
+    },
+    dataValidation: {
+      incheon: {
+        summary: process.env.COLLECT_INCHEON_SUMMARY || '',
+        validation: process.env.COLLECT_INCHEON_VALIDATION || '',
+        anthropicUsage: process.env.COLLECT_INCHEON_ANTHROPIC_USAGE || '',
+      },
+      subsidy: {
+        summary: process.env.COLLECT_SUBSIDY_SUMMARY || '',
+        validation: process.env.COLLECT_SUBSIDY_VALIDATION || '',
+        anthropicUsage: process.env.COLLECT_SUBSIDY_ANTHROPIC_USAGE || '',
+      },
+      festival: {
+        summary: process.env.COLLECT_FESTIVAL_SUMMARY || '',
+        validation: process.env.COLLECT_FESTIVAL_VALIDATION || '',
+        anthropicUsage: process.env.COLLECT_FESTIVAL_ANTHROPIC_USAGE || '',
+      },
     },
   };
 
