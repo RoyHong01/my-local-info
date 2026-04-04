@@ -7,7 +7,35 @@
 
 ## 2026-04-04
 
-### 자동화 첫 완전 성공 리포트
+### 자동화 개선 완료: 검증 + 비용 모니터링 + 프롬프트 안정화
+
+**1단계) 데이터 수집 검증 강화 + Anthropic 사용량 추적**
+- 3개 수집 스크립트(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에 `validateFetchedData()` 헬퍼 함수 추가
+  - API 조회 결과 0건이면 경고 표시
+  - API 조회 결과가 기존 데이터의 50% 이하면 경고 표시
+- GitHub Actions output으로 Anthropic 토큰 사용량 보고 (`anthropic_usage={inputTokens}/{outputTokens}`)
+- 워크플로우에서 수집 단계 output 수신 정의:
+  - `COLLECT_{지역}_VALIDATION`: 검증 상태(ok/warning)
+  - `COLLECT_{지역}_ANTHROPIC_USAGE`: 토큰 사용량 문자열
+- 일일 리포트(`write-daily-report.mjs`)에 데이터 검증 상태 및 Anthropic 사용량 섹션 추가
+  - 핵심 요약에 "데이터 검증" 행 표시
+  - 핵심 요약에 "Anthropic 사용량" 행으로 각 지역별 input/output 토큰 누적 표시
+
+**2단계) 블로그/초이스 포스트 프롬프트 안정화**
+- `generate-blog-post.js`: temperature 0.9 → 0.4, topP 0.92 추가
+- `generate-choice-post.js`: temperature 0.9 → 0.35, topP 0.92 추가
+- 목표: 생성 결과의 형식/구조 일관성 향상 (출력 편차 감소)
+
+**3단계) 문서 규칙 자동화 변경**
+- `.github/copilot-instructions.md` 규칙 8번: 커밋/배포 후 "필수 확인 질문" → "자동 동기화" 정책으로 변경
+- `CLAUDE.md` 규칙 10번: 동일 내용으로 변경
+- `COPILOT_MEMORY.md` 운영 규칙에 "별도 사용자 확인 질문 없이 자동 동기화" 명시
+- 효과: 작업 중단 방지, 문서 업데이트 루프 해소
+
+- **커밋**: `5c4fcc8` (자동화 개선: 데이터 검증, Anthropic 사용량 보고, Prompt 안정화)
+- **검증**: `npm run build` 성공 (454페이지 정적 생성 완료)
+
+### 자동화 첫 완전 성공 리포트 (2026-04-03 → 2026-04-04)
 
 - **자동화 리포트 정상 완료**: 인천/보조금/축제/만료처리 모두 에러 없이 실행됨
 - **데이터 수집 결과**:
@@ -26,7 +54,6 @@
   - 망원동 빙수: 약속 동선 짤 때 일단 저장부터 하는 이유
   - 송도 브런치, 햇살 잘 드는 자리부터 잡고 싶을 때
 - **텔레그램 알림**: 정상 전송
-- **빌드/커밋 상태**: 페이지 수정 및 자동화 지침 변경 사항까지 점검 후 커밋/푸시 완료
 
 ### 자동화 개선 과제
 
