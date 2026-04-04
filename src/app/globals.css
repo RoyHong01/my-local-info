@@ -14,15 +14,18 @@
 }
 
 html {
-  overflow-x: clip;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
+  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: "Pretendard Variable", "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
   font-feature-settings: "ss01" on, "ss02" on;
   text-rendering: optimizeLegibility;
+  max-width: 100vw;
 }
 
 /* 전역 카드 인터랙션 (메뉴 카드 공통) */

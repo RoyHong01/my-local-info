@@ -167,15 +167,15 @@ export default async function Home() {
   return (
     <div className="bg-[#F9F9F7] font-sans text-stone-800">
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[75vh] flex items-center justify-center overflow-x-hidden overflow-y-visible w-full">
         {/* Background gradient: white → soft orange */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-orange-50 to-orange-300" />
 
         {/* Animated background shapes */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-orange-200/20 animate-pulse" />
-          <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-amber-200/20 animate-[pulse_3s_ease-in-out_infinite_1s]" />
-          <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-yellow-200/15 animate-[pulse_3s_ease-in-out_infinite_0.5s]" />
+          <div className="absolute -top-32 -right-32 sm:-top-40 sm:-right-40 w-64 h-64 sm:w-[500px] sm:h-[500px] rounded-full bg-orange-200/20 animate-pulse" />
+          <div className="absolute -bottom-16 -left-16 sm:-bottom-20 sm:-left-20 w-56 h-56 sm:w-[400px] sm:h-[400px] rounded-full bg-amber-200/20 animate-[pulse_3s_ease-in-out_infinite_1s]" />
+          <div className="absolute top-1/3 left-1/4 w-48 h-48 sm:w-[300px] sm:h-[300px] rounded-full bg-yellow-200/15 animate-[pulse_3s_ease-in-out_infinite_0.5s]" />
         </div>
 
         {/* Dot pattern overlay */}
@@ -215,24 +215,27 @@ export default async function Home() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 animate-fade-in-up px-2">
             <Link
               href="/subsidy"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3.5 bg-white text-orange-600 font-bold text-xs sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 flex-shrink-0 w-full sm:w-auto"
             >
-              👉 내가 받을 수 있는 보조금 보러가기
+              <span>👉</span>
+              <span className="line-clamp-2 sm:line-clamp-1">내가 받을 수 있는 보조금</span>
             </Link>
             <Link
               href="/festival"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3.5 bg-white text-orange-600 font-bold text-xs sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 flex-shrink-0 w-full sm:w-auto"
             >
-              🎉 이번 주말 근처 축제 확인하기
+              <span>🎉</span>
+              <span className="line-clamp-2 sm:line-clamp-1">이번 주말 축제</span>
             </Link>
             <Link
               href="/life/restaurant"
-              className="group flex items-center gap-3 px-6 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 whitespace-nowrap"
+              className="group flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3.5 bg-white text-orange-600 font-bold text-xs sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 flex-shrink-0 w-full sm:w-auto"
             >
-              🍽️ 요즘 뜨는 맛집 보러가기
+              <span>🍽️</span>
+              <span className="line-clamp-2 sm:line-clamp-1">요즘 뜨는 맛집</span>
             </Link>
           </div>
 
@@ -254,8 +257,8 @@ export default async function Home() {
         </div>
 
         {/* Bottom wave */}
-        <div className="absolute bottom-0 left-0 right-0 leading-none translate-y-px">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full block">
+        <div className="absolute bottom-0 left-0 right-0 leading-none translate-y-px overflow-x-hidden">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full block" preserveAspectRatio="xMidYMid meet">
             <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#F9F9F7"/>
           </svg>
         </div>
