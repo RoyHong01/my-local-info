@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-04T20:04:06.345Z",
+  "updatedAt": "2026-04-05T20:04:59.039Z",
   "source": "kakao+google+gemini",
   "regions": {
     "incheon": [
@@ -43,7 +43,7 @@
         "vibeHint": "채광 좋은 브런치 무드",
         "cuisineHint": "브런치",
         "googleRating": 4.6,
-        "googleRatingCount": 333
+        "googleRatingCount": 334
       },
       {
         "id": "23373225",
@@ -71,7 +71,7 @@
         "vibeHint": "채광 좋은 브런치 무드",
         "cuisineHint": "브런치",
         "googleRating": 4.8,
-        "googleRatingCount": 309
+        "googleRatingCount": 311
       },
       {
         "id": "1190728712",
@@ -114,34 +114,6 @@
         "cuisineHint": "브런치",
         "googleRating": 4.3,
         "googleRatingCount": 12
-      },
-      {
-        "id": "2147383650",
-        "name": "카페린",
-        "address": "인천 연수구 아트센터대로 203",
-        "phone": "전화번호 정보 없음",
-        "mapUrl": "http://place.map.kakao.com/2147383650",
-        "summary": "카페린은(는) 인천 연수구 아트센터대로 203 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "송도 브런치 카페",
-        "scenarioHint": "주말 브런치 약속",
-        "vibeHint": "채광 좋은 브런치 무드",
-        "cuisineHint": "브런치",
-        "googleRating": 4.5,
-        "googleRatingCount": 48
-      },
-      {
-        "id": "1589299108",
-        "name": "카페드모임",
-        "address": "인천 연수구 해돋이로 107",
-        "phone": "032-212-5997",
-        "mapUrl": "http://place.map.kakao.com/1589299108",
-        "summary": "카페드모임은(는) 인천 연수구 해돋이로 107 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "송도 브런치 카페",
-        "scenarioHint": "주말 브런치 약속",
-        "vibeHint": "채광 좋은 브런치 무드",
-        "cuisineHint": "브런치",
-        "googleRating": 4.6,
-        "googleRatingCount": 96
       },
       {
         "id": "171805187",
@@ -196,8 +168,8 @@
         "scenarioHint": "짧고 진한 카페 타임",
         "vibeHint": "에스프레소 바",
         "cuisineHint": "카페",
-        "googleRating": 4.8,
-        "googleRatingCount": 17
+        "googleRating": 5,
+        "googleRatingCount": 2
       },
       {
         "id": "172523332",
@@ -225,7 +197,7 @@
         "vibeHint": "에스프레소 바",
         "cuisineHint": "카페",
         "googleRating": 5,
-        "googleRatingCount": 280
+        "googleRatingCount": 283
       },
       {
         "id": "26941015",
@@ -323,7 +295,7 @@
         "vibeHint": "감성 디저트 카페",
         "cuisineHint": "디저트",
         "googleRating": 4.4,
-        "googleRatingCount": 2125
+        "googleRatingCount": 2126
       },
       {
         "id": "1045198476",
@@ -365,7 +337,7 @@
         "vibeHint": "스테이크 다이닝",
         "cuisineHint": "스테이크",
         "googleRating": 4.9,
-        "googleRatingCount": 130
+        "googleRatingCount": 129
       },
       {
         "id": "588890379",
@@ -410,18 +382,46 @@
         "googleRatingCount": 116
       },
       {
-        "id": "1648556071",
-        "name": "싱싱초밥 인천검단본점",
-        "address": "인천 서구 이음2로 29",
-        "phone": "032-724-8947",
-        "mapUrl": "http://place.map.kakao.com/1648556071",
-        "summary": "싱싱초밥 인천검단본점은(는) 인천 서구 이음2로 29 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "인천 일식 오마카세",
-        "scenarioHint": "일식 코스가 땡기는 날",
-        "vibeHint": "정갈한 일식 다이닝",
-        "cuisineHint": "일식",
+        "id": "1552525580",
+        "name": "오마카세오사이초밥 송도점",
+        "address": "인천 연수구 아트센터대로 149",
+        "phone": "032-834-5425",
+        "mapUrl": "http://place.map.kakao.com/1552525580",
+        "summary": "오마카세오사이초밥 송도점은(는) 인천 연수구 아트센터대로 149 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "송도 오마카세",
+        "scenarioHint": "기념일 저녁 약속",
+        "vibeHint": "집중도 높은 다이닝",
+        "cuisineHint": "오마카세",
         "googleRating": 5,
-        "googleRatingCount": 1
+        "googleRatingCount": 21
+      },
+      {
+        "id": "381900374",
+        "name": "돌핀커피 오마카세",
+        "address": "인천 연수구 인천타워대로 257",
+        "phone": "070-8287-0221",
+        "mapUrl": "http://place.map.kakao.com/381900374",
+        "summary": "돌핀커피 오마카세은(는) 인천 연수구 인천타워대로 257 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "송도 오마카세",
+        "scenarioHint": "기념일 저녁 약속",
+        "vibeHint": "집중도 높은 다이닝",
+        "cuisineHint": "오마카세",
+        "googleRating": 4.8,
+        "googleRatingCount": 15
+      },
+      {
+        "id": "1417846836",
+        "name": "스시이와",
+        "address": "인천 연수구 센트럴로 194",
+        "phone": "032-278-5725",
+        "mapUrl": "http://place.map.kakao.com/1417846836",
+        "summary": "스시이와은(는) 인천 연수구 센트럴로 194 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "송도 오마카세",
+        "scenarioHint": "기념일 저녁 약속",
+        "vibeHint": "집중도 높은 다이닝",
+        "cuisineHint": "오마카세",
+        "googleRating": 4.3,
+        "googleRatingCount": 200
       }
     ],
     "seoul": [
@@ -482,6 +482,20 @@
         "googleRatingCount": 394
       },
       {
+        "id": "17886165",
+        "name": "광장족발 본가",
+        "address": "서울 성동구 아차산로 96",
+        "phone": "02-463-5800",
+        "mapUrl": "http://place.map.kakao.com/17886165",
+        "summary": "광장족발 본가은(는) 서울 성동구 아차산로 96 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.2,
+        "googleRatingCount": 172
+      },
+      {
         "id": "1869562416",
         "name": "가조쿠",
         "address": "서울 성동구 연무장길 31-2",
@@ -496,18 +510,74 @@
         "googleRatingCount": 305
       },
       {
-        "id": "1978832315",
-        "name": "희희 더블해피니스",
-        "address": "서울 성동구 연무장길 39-25",
-        "phone": "0507-1387-3322",
-        "mapUrl": "http://place.map.kakao.com/1978832315",
-        "summary": "희희 더블해피니스은(는) 서울 성동구 연무장길 39-25 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "id": "21332688",
+        "name": "해밀칼국수&김밥",
+        "address": "서울 성동구 연무장5가길 25",
+        "phone": "전화번호 정보 없음",
+        "mapUrl": "http://place.map.kakao.com/21332688",
+        "summary": "해밀칼국수&김밥은(는) 서울 성동구 연무장5가길 25 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
         "sourceQuery": "성수동 팝업 근처 맛집",
         "scenarioHint": "팝업 보고 바로 이어지는 식사",
         "vibeHint": "성수 핫플 동선",
         "cuisineHint": "다이닝",
         "googleRating": 4.3,
-        "googleRatingCount": 30
+        "googleRatingCount": 143
+      },
+      {
+        "id": "909350537",
+        "name": "요이치 성수",
+        "address": "서울 성동구 연무장길 39-21",
+        "phone": "0507-0091-7047",
+        "mapUrl": "http://place.map.kakao.com/909350537",
+        "summary": "요이치 성수은(는) 서울 성동구 연무장길 39-21 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 5,
+        "googleRatingCount": 40
+      },
+      {
+        "id": "134679676",
+        "name": "자연도소금빵 in성수",
+        "address": "서울 성동구 연무장길 56-1",
+        "phone": "전화번호 정보 없음",
+        "mapUrl": "http://place.map.kakao.com/134679676",
+        "summary": "자연도소금빵 in성수은(는) 서울 성동구 연무장길 56-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.4,
+        "googleRatingCount": 727
+      },
+      {
+        "id": "1263750578",
+        "name": "다이닝목로 성수점",
+        "address": "서울 성동구 연무장7가길 1",
+        "phone": "02-498-5180",
+        "mapUrl": "http://place.map.kakao.com/1263750578",
+        "summary": "다이닝목로 성수점은(는) 서울 성동구 연무장7가길 1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.9,
+        "googleRatingCount": 105
+      },
+      {
+        "id": "698746976",
+        "name": "돈골약방 성수점",
+        "address": "서울 성동구 성수일로8길 28",
+        "phone": "070-8118-1751",
+        "mapUrl": "http://place.map.kakao.com/698746976",
+        "summary": "돈골약방 성수점은(는) 서울 성동구 성수일로8길 28 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
+        "sourceQuery": "성수동 팝업 근처 맛집",
+        "scenarioHint": "팝업 보고 바로 이어지는 식사",
+        "vibeHint": "성수 핫플 동선",
+        "cuisineHint": "다이닝",
+        "googleRating": 4.9,
+        "googleRatingCount": 80
       },
       {
         "id": "804984272",
@@ -522,62 +592,6 @@
         "cuisineHint": "다이닝",
         "googleRating": 4.6,
         "googleRatingCount": 145
-      },
-      {
-        "id": "134679676",
-        "name": "자연도소금빵 in성수",
-        "address": "서울 성동구 연무장길 56-1",
-        "phone": "전화번호 정보 없음",
-        "mapUrl": "http://place.map.kakao.com/134679676",
-        "summary": "자연도소금빵 in성수은(는) 서울 성동구 연무장길 56-1 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.4,
-        "googleRatingCount": 724
-      },
-      {
-        "id": "1416679952",
-        "name": "호랑이초밥",
-        "address": "서울 성동구 아차산로7길 14",
-        "phone": "02-498-4499",
-        "mapUrl": "http://place.map.kakao.com/1416679952",
-        "summary": "호랑이초밥은(는) 서울 성동구 아차산로7길 14 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.4,
-        "googleRatingCount": 126
-      },
-      {
-        "id": "144753549",
-        "name": "카페&펍 연무장 성수점",
-        "address": "서울 성동구 연무장길 36",
-        "phone": "02-499-4434",
-        "mapUrl": "http://place.map.kakao.com/144753549",
-        "summary": "카페&펍 연무장 성수점은(는) 서울 성동구 연무장길 36 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.2,
-        "googleRatingCount": 135
-      },
-      {
-        "id": "1783691580",
-        "name": "쎈느",
-        "address": "서울 성동구 연무장5길 20",
-        "phone": "02-469-2122",
-        "mapUrl": "http://place.map.kakao.com/1783691580",
-        "summary": "쎈느은(는) 서울 성동구 연무장5길 20 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "성수동 팝업 근처 맛집",
-        "scenarioHint": "팝업 보고 바로 이어지는 식사",
-        "vibeHint": "성수 핫플 동선",
-        "cuisineHint": "다이닝",
-        "googleRating": 4.3,
-        "googleRatingCount": 305
       },
       {
         "id": "1022082330",
@@ -619,7 +633,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.3,
-        "googleRatingCount": 408
+        "googleRatingCount": 409
       },
       {
         "id": "780776735",
@@ -633,7 +647,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.9,
-        "googleRatingCount": 2626
+        "googleRatingCount": 2640
       },
       {
         "id": "1759130915",
@@ -647,7 +661,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.8,
-        "googleRatingCount": 477
+        "googleRatingCount": 476
       },
       {
         "id": "465733251",
@@ -689,7 +703,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.8,
-        "googleRatingCount": 228
+        "googleRatingCount": 229
       },
       {
         "id": "1057053940",
@@ -745,7 +759,7 @@
         "vibeHint": "힙한 파스타 스팟",
         "cuisineHint": "파스타",
         "googleRating": 4.9,
-        "googleRatingCount": 582
+        "googleRatingCount": 584
       },
       {
         "id": "1420415383",
@@ -815,7 +829,7 @@
         "vibeHint": "브런치 카페",
         "cuisineHint": "브런치",
         "googleRating": 4.9,
-        "googleRatingCount": 11
+        "googleRatingCount": 12
       },
       {
         "id": "1915095795",
@@ -828,22 +842,8 @@
         "scenarioHint": "주말 낮 약속",
         "vibeHint": "브런치 카페",
         "cuisineHint": "브런치",
-        "googleRating": 5,
-        "googleRatingCount": 6
-      },
-      {
-        "id": "890524751",
-        "name": "새러데이런치클럽",
-        "address": "서울 송파구 백제고분로7길 42-30",
-        "phone": "070-5223-2201",
-        "mapUrl": "http://place.map.kakao.com/890524751",
-        "summary": "새러데이런치클럽은(는) 서울 송파구 백제고분로7길 42-30 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다. 방문해보셔도 좋아요.",
-        "sourceQuery": "잠실 브런치 카페",
-        "scenarioHint": "주말 낮 약속",
-        "vibeHint": "브런치 카페",
-        "cuisineHint": "브런치",
-        "googleRating": 5,
-        "googleRatingCount": 1
+        "googleRating": 4.9,
+        "googleRatingCount": 7
       }
     ],
     "gyeonggi": [
@@ -886,8 +886,8 @@
         "scenarioHint": "광교 주말 데이트",
         "vibeHint": "깔끔한 양식 스팟",
         "cuisineHint": "파스타",
-        "googleRating": 4.2,
-        "googleRatingCount": 45
+        "googleRating": 4.5,
+        "googleRatingCount": 35
       },
       {
         "id": "585118326",
@@ -1055,7 +1055,7 @@
         "vibeHint": "깔끔한 데이트 스팟",
         "cuisineHint": "다이닝",
         "googleRating": 4.9,
-        "googleRatingCount": 287
+        "googleRatingCount": 292
       },
       {
         "id": "1837479176",
@@ -1166,8 +1166,8 @@
         "scenarioHint": "광교 주말 데이트",
         "vibeHint": "깔끔한 양식 스팟",
         "cuisineHint": "파스타",
-        "googleRating": 4.5,
-        "googleRatingCount": 35
+        "googleRating": 4.2,
+        "googleRatingCount": 368
       },
       {
         "id": "1550048150",
