@@ -1,0 +1,148 @@
+{
+  "reportDateKst": "2026-04-06",
+  "generatedAtUtc": "2026-04-05T20:08:08.649Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24009282457",
+    "runNumber": 357,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24009282457",
+    "runStartedAtUtc": "2026-04-05T19:58:06Z",
+    "headSha": "23c79d7b384fd2f6b66cbfb022ed23e7fb99762d"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://f76f9458.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 1건, 업데이트 99건, 총 142건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://7e77ba1c.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://64ce3d4c.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "c00361a610afc8fcbaf344ff722c34f595d162b1",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-05",
+      "authoredAt": "2026-04-05T20:08:07Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-04-05-pangyo-restaurant-17150937.md",
+        "src/content/life/2026-04-05-seongsu-restaurant-1869562416.md",
+        "src/content/life/2026-04-05-songdo-restaurant-171805187.md"
+      ]
+    },
+    {
+      "sha": "4a9b33e08fc3284d8ba394d5cd8fef55580ed047",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-05",
+      "authoredAt": "2026-04-05T20:01:46Z",
+      "files": [
+        "src/content/posts/2026-04-05-gimje-kkotbitdeuri-festival.md",
+        "src/content/posts/2026-04-05-incheon-small-business-guarantee-support.md",
+        "src/content/posts/2026-04-05-해양문화행사-해양영토대장정.md"
+      ]
+    },
+    {
+      "sha": "f0e4b531010441229f5fb97dada282ecb9eaab7d",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-05",
+      "authoredAt": "2026-04-05T19:59:12Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-05-gimje-kkotbitdeuri-festival.md",
+      "src/content/posts/2026-04-05-incheon-small-business-guarantee-support.md",
+      "src/content/posts/2026-04-05-해양문화행사-해양영토대장정.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-05-pangyo-restaurant-17150937.md",
+      "src/content/life/2026-04-05-seongsu-restaurant-1869562416.md",
+      "src/content/life/2026-04-05-songdo-restaurant-171805187.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-04-05-pangyo-restaurant-17150937.md",
+      "src/content/life/2026-04-05-seongsu-restaurant-1869562416.md",
+      "src/content/life/2026-04-05-songdo-restaurant-171805187.md",
+      "src/content/posts/2026-04-05-gimje-kkotbitdeuri-festival.md",
+      "src/content/posts/2026-04-05-incheon-small-business-guarantee-support.md",
+      "src/content/posts/2026-04-05-해양문화행사-해양영토대장정.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.04,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 1건, 업데이트 99건, 총 142건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
