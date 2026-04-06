@@ -1,6 +1,38 @@
 {
   "reports": [
     {
+      "date": "2026-04-07",
+      "runId": "24050976632",
+      "runNumber": 358,
+      "runAttempt": 1,
+      "eventName": "schedule",
+      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24050976632",
+      "stageStatuses": [
+        {
+          "key": "stage1-data",
+          "status": "success"
+        },
+        {
+          "key": "stage2-blog",
+          "status": "success"
+        },
+        {
+          "key": "stage3-life",
+          "status": "success"
+        }
+      ],
+      "generatedBlogCount": 3,
+      "generatedLifeCount": 3,
+      "totalChangedFiles": 8,
+      "blogBudgetEnabled": true,
+      "blogBudgetStopped": false,
+      "blogBudgetLimitKrw": 500,
+      "blogEstimatedCostKrw": 7.78,
+      "midImageInsertedCount": 1,
+      "midImageOmittedCount": 0,
+      "generatedAtUtc": "2026-04-06T21:10:39.334Z"
+    },
+    {
       "date": "2026-04-06",
       "runId": "24009282457",
       "runNumber": 357,

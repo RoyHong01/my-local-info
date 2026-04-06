@@ -1,0 +1,148 @@
+{
+  "reportDateKst": "2026-04-07",
+  "generatedAtUtc": "2026-04-06T21:10:39.334Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24050976632",
+    "runNumber": 358,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24050976632",
+    "runStartedAtUtc": "2026-04-06T20:59:09Z",
+    "headSha": "cb92465baa257c0dc1fe0813ca3621764dfb34fc"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://15d733c2.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 7건, 업데이트 93건, 총 149건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://a07f0103.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://200d619d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "b36ceb8c6769fc2719cbe57b53d45c184aa32de6",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-06",
+      "authoredAt": "2026-04-06T21:10:38Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-04-06-pangyo-restaurant-1726447229.md",
+        "src/content/life/2026-04-06-seongsu-restaurant-987431047.md",
+        "src/content/life/2026-04-06-songdo-restaurant-858796697.md"
+      ]
+    },
+    {
+      "sha": "8ce7b24c78c2a5f04b42c2f1117eec84837a59e5",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-06",
+      "authoredAt": "2026-04-06T21:04:39Z",
+      "files": [
+        "src/content/posts/2026-04-06-fishery-management-fund-support.md",
+        "src/content/posts/2026-04-06-incheon-yeonsugu-trash-bag-support.md",
+        "src/content/posts/2026-04-06-seokchonlake-cherryblossom-festival.md"
+      ]
+    },
+    {
+      "sha": "2b132aa598a288680872d2080b1de630cb67d47c",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-06",
+      "authoredAt": "2026-04-06T21:01:54Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-06-fishery-management-fund-support.md",
+      "src/content/posts/2026-04-06-incheon-yeonsugu-trash-bag-support.md",
+      "src/content/posts/2026-04-06-seokchonlake-cherryblossom-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-06-pangyo-restaurant-1726447229.md",
+      "src/content/life/2026-04-06-seongsu-restaurant-987431047.md",
+      "src/content/life/2026-04-06-songdo-restaurant-858796697.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-04-06-pangyo-restaurant-1726447229.md",
+      "src/content/life/2026-04-06-seongsu-restaurant-987431047.md",
+      "src/content/life/2026-04-06-songdo-restaurant-858796697.md",
+      "src/content/posts/2026-04-06-fishery-management-fund-support.md",
+      "src/content/posts/2026-04-06-incheon-yeonsugu-trash-bag-support.md",
+      "src/content/posts/2026-04-06-seokchonlake-cherryblossom-festival.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 7.78,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 93건, 총 149건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
