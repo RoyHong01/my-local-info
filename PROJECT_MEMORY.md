@@ -20,6 +20,15 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+### 2026-04-07 기준 핵심 요약
+
+- 픽앤조이 초이스 수동 포스트 1건 추가 (Panasonic ES-148 눈썹 바리깡)
+  - `src/content/life/2026-04-07-choice-panasonic-es148-eyebrow-trimmer.md`
+- 사용자 제공 다운로드 이미지 2종을 초이스 이미지 자산으로 반영
+  - `public/images/choice/panasonic-es148-hero.png`
+  - `public/images/choice/panasonic-es148-detail.png`
+- 쿠팡 제휴 링크/배너 메타를 frontmatter에 반영하여 상세/사이드바 연동 유지
+
 ### 2026-04-01 기준 핵심 요약
 
 - 정책/소개 페이지 마감 보정

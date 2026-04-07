@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-04-07
+
+### 픽앤조이 초이스 수동 포스트 생성: Panasonic ES-148
+
+- 사용자 제공 제품 태그 기준으로 신규 초이스 포스트 작성 완료
+  - 파일: `src/content/life/2026-04-07-choice-panasonic-es148-eyebrow-trimmer.md`
+  - slug: `panasonic-es148-eyebrow-trimmer`
+  - category: `픽앤조이 초이스`
+  - 쿠팡 링크/배너 frontmatter 반영 (`coupang_link`, `coupang_banner_image`, `coupang_banner_alt`)
+- 사용자 지정 이미지 2종을 다운로드 폴더에서 프로젝트로 반영
+  - `C:\Users\Roy Hong\Downloads\Panasonic.png` → `public/images/choice/panasonic-es148-hero.png`
+  - `C:\Users\Roy Hong\Downloads\Panasonic-1.png` → `public/images/choice/panasonic-es148-detail.png`
+- 본문 구성: 상단 이미지 + 중간 이미지 + CTA 링크 2회 배치(모바일 가독성 기준)
+- 최종 상태: build/commit/push 완료
+
 ## 2026-04-04
 
 ### 자동화 개선 완료: 검증 + 비용 모니터링 + 프롬프트 안정화
