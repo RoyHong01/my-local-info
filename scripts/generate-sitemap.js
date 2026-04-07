@@ -22,6 +22,8 @@ const staticPages = [
   { url: '/life/choice/', priority: '0.6', changefreq: 'weekly' },
   { url: '/life/restaurant/', priority: '0.6', changefreq: 'weekly' },
   { url: '/about/', priority: '0.5', changefreq: 'monthly' },
+  { url: '/privacy/', priority: '0.5', changefreq: 'monthly' },
+  { url: '/terms/', priority: '0.5', changefreq: 'monthly' },
   { url: '/rss.xml', priority: '0.4', changefreq: 'daily' },
 ];
 
