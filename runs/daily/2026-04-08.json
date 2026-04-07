@@ -1,0 +1,148 @@
+{
+  "reportDateKst": "2026-04-08",
+  "generatedAtUtc": "2026-04-07T21:43:26.938Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24105405520",
+    "runNumber": 373,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24105405520",
+    "runStartedAtUtc": "2026-04-07T21:30:48Z",
+    "headSha": "540b5c4d82be920c146ea880ce7facf5e041fec1"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://1821db72.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 7건, 업데이트 93건, 총 156건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://215b274d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://72b97817.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "61f5ce939aa93770efe7f33f9044372c0662aef0",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-07",
+      "authoredAt": "2026-04-07T21:43:26Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-04-07-pangyo-restaurant-21484277.md",
+        "src/content/life/2026-04-07-seongsu-in.md",
+        "src/content/life/2026-04-07-songdo-restaurant-1787297058.md"
+      ]
+    },
+    {
+      "sha": "b8566fdf524dd333d1d8637645059310e1475135",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-07",
+      "authoredAt": "2026-04-07T21:36:27Z",
+      "files": [
+        "src/content/posts/2026-04-07-boeun-cherryblossom-festival.md",
+        "src/content/posts/2026-04-07-fishery-revitalization-fund.md",
+        "src/content/posts/2026-04-07-incheon-gyeyang-childcare-support.md"
+      ]
+    },
+    {
+      "sha": "65168925c006ff0e90169737108bc74b0bfd6409",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-07",
+      "authoredAt": "2026-04-07T21:33:10Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-07-boeun-cherryblossom-festival.md",
+      "src/content/posts/2026-04-07-fishery-revitalization-fund.md",
+      "src/content/posts/2026-04-07-incheon-gyeyang-childcare-support.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-07-pangyo-restaurant-21484277.md",
+      "src/content/life/2026-04-07-seongsu-in.md",
+      "src/content/life/2026-04-07-songdo-restaurant-1787297058.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-04-07-pangyo-restaurant-21484277.md",
+      "src/content/life/2026-04-07-seongsu-in.md",
+      "src/content/life/2026-04-07-songdo-restaurant-1787297058.md",
+      "src/content/posts/2026-04-07-boeun-cherryblossom-festival.md",
+      "src/content/posts/2026-04-07-fishery-revitalization-fund.md",
+      "src/content/posts/2026-04-07-incheon-gyeyang-childcare-support.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 12.32,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 93건, 총 156건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
