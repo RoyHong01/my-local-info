@@ -41,6 +41,18 @@ function buildMetaDescription(content: string): string {
   return firstSentence.length > 160 ? `${firstSentence.slice(0, 157).trimEnd()}...` : firstSentence;
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function removeFirstDuplicateHeroImage(markdown: string, heroImage?: string): string {
+  const image = String(heroImage || '').trim();
+  if (!markdown || !image) return markdown;
+
+  const pattern = new RegExp(`!\\[[^\\]]*\\]\\(${escapeRegExp(image)}\\)\\s*\\n?`, 'i');
+  return markdown.replace(pattern, '');
+}
+
 function extractRestaurantDetails(post: ReturnType<typeof getPostData>) {
   if (!post) return null;
 
@@ -308,6 +320,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
+  const renderedContent = isChoicePost
+    ? removeFirstDuplicateHeroImage(sanitizedContent, post.image)
+    : sanitizedContent;
   const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
@@ -375,7 +390,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
           <div className="blog-prose prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {sanitizedContent}
+              {renderedContent}
             </ReactMarkdown>
           </div>
           <AdBanner />

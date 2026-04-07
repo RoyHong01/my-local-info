@@ -28,6 +28,9 @@
   - `public/images/choice/panasonic-es148-hero.png`
   - `public/images/choice/panasonic-es148-detail.png`
 - 쿠팡 제휴 링크/배너 메타를 frontmatter에 반영하여 상세/사이드바 연동 유지
+- 초이스 상세 중복 이미지 재발 방지 적용
+  - `src/app/blog/[slug]/page.tsx`에서 본문 첫 이미지와 `frontmatter.image` 중복 시 자동 제거
+  - `scripts/generate-choice-post.js` 이미지/CTA 규칙 문구 모순 보정
 
 ### 2026-04-01 기준 핵심 요약
 

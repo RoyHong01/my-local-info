@@ -20,6 +20,17 @@
 - 본문 구성: 상단 이미지 + 중간 이미지 + CTA 링크 2회 배치(모바일 가독성 기준)
 - 최종 상태: build/commit/push 완료
 
+### 픽앤조이 초이스 이미지 중복 재발 방지 보완
+
+- 문제 원인 확인: 상세 페이지에서 `frontmatter.image`를 상단에 자동 렌더링하는데, 본문에 같은 이미지를 다시 삽입해 중복 노출 발생
+- 즉시 수정: `2026-04-07-choice-panasonic-es148-eyebrow-trimmer.md` 본문의 동일 상단 이미지 제거
+- 재발 방지 코드 적용:
+  - `src/app/blog/[slug]/page.tsx`에 `removeFirstDuplicateHeroImage()` 추가
+  - 초이스 글(`isChoicePost`) 렌더링 시 본문 첫 이미지가 `frontmatter.image`와 같으면 자동 제거
+- 생성 지침 보완:
+  - `scripts/generate-choice-post.js` 이미지 규칙에 "대표 이미지와 동일 이미지 재삽입 금지" 명시
+  - 품질 체크리스트의 링크 규칙 모순 수정(배너 금지 + CTA 텍스트 링크 허용)
+
 ## 2026-04-04
 
 ### 자동화 개선 완료: 검증 + 비용 모니터링 + 프롬프트 안정화
