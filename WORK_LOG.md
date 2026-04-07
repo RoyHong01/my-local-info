@@ -25,6 +25,8 @@
   - 푸터 보조 문구 색상을 메인 문구와 동일 톤(`text-gray-400`)으로 통일
 - 네이버 URL 검사 대응
   - `src/app/page.tsx`: 홈 `metadata.description` + `openGraph.description`를 80자 이내 권장 길이로 축약
+- 네이버 크롤링 보강
+  - `scripts/generate-sitemap.js`: 정적 페이지 목록에 `/privacy/`, `/terms/` 추가 (sitemap URL 477 -> 479)
 
 - 관련 커밋:
   - `6a17d64` 카드 노출 제한 해제

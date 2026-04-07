@@ -35,6 +35,8 @@
   - 보조 문구 색상을 메인 문구와 동일 톤으로 통일
 - 네이버 URL 검사 대응
   - `src/app/page.tsx` 홈 `description`과 `openGraph.description`을 80자 이내 권장 길이로 축약
+- 네이버 크롤링 보강
+  - `scripts/generate-sitemap.js`에 `/privacy/`, `/terms/` 정적 경로를 추가해 정책 페이지 탐색성 강화
 
 ### 2026-04-07 기준 핵심 요약
 
