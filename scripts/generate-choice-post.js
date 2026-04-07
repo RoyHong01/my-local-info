@@ -180,8 +180,8 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 [쿠팡파트너스 제휴 링크 규칙]
 - 이 포스트는 Web/Mobile 모두 본문에 쿠팡 파트너스 제휴 링크를 반드시 포함해야 합니다.
 - 쿠팡 배너나 위젯 형태의 본문 삽입은 여전히 금지됩니다. 텍스트 기반 CTA 링크만 본문에 넣으세요.
-- 제품 이미지가 있으면, 이미지 바로 아래에 명확한 **CTA 링크 또는 버튼**을 삽입하세요.
-- 이미지가 없으면, 본문 2~3번째 문단 이후 자연스러운 전환 지점에 **굵은 CTA 링크**를 넣으세요.
+- 링크는 본문 중간에 **정확히 1회만** 삽입하세요.
+- 제품 이미지가 있어도 상단(첫 소제목 직후)에는 링크를 넣지 말고, 본문 중간 전환 지점에 배치하세요.
 - 링크는 별도 줄에 작성하고, 모바일에서 클릭하기 쉬운 문구로 만드세요.
 - 예시: **👉 [제품명] 최저가 확인 및 상세정보 보기** / **🛒 오늘의 추천 상품, 실시간 할인 가격 확인하기**
 - 기존 글 업데이트 시에도 원문 맥락을 유지하며 자연스럽게 제휴 링크를 후방 삽입하세요.
@@ -227,6 +227,28 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 - 본문에 단계 라벨 없음
 - 본문에 JSON-LD/법적고지 없음
 - 본문에 쿠팡 배너 삽입 없음 (CTA 텍스트 링크는 허용)`;
+}
+
+function dedupeAffiliateLinks(content, coupangUrl) {
+  const url = String(coupangUrl || '').trim();
+  if (!url) return content;
+
+  const escapedUrl = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const mdLinkRegex = new RegExp(`^\\*\\*[^\\n]*\\[[^\\]]+\\]\\(${escapedUrl}\\)[^\\n]*\\*\\*\\s*$`, 'gim');
+  const matches = Array.from(content.matchAll(mdLinkRegex));
+
+  if (matches.length <= 1) return content;
+
+  const last = matches[matches.length - 1][0];
+  let removed = content.replace(mdLinkRegex, '').replace(/\n{3,}/g, '\n\n').trim();
+
+  if (/\n\n###\s+/m.test(removed)) {
+    removed = removed.replace(/\n\n###\s+/, `\n\n${last}\n\n### `);
+  } else {
+    removed = `${removed}\n\n${last}`;
+  }
+
+  return removed.replace(/\n{3,}/g, '\n\n').trim();
 }
 
 async function callGemini(prompt) {
@@ -342,6 +364,7 @@ function normalizeGeneratedContent(content, candidate) {
   value = upsertFrontmatterField(value, 'coupang_link', String(candidate.coupangUrl || '').trim());
   if (bannerImage) value = upsertFrontmatterField(value, 'coupang_banner_image', bannerImage);
   value = upsertFrontmatterField(value, 'coupang_banner_alt', String(candidate.title || '').trim());
+  value = dedupeAffiliateLinks(value, candidate.coupangUrl);
 
   return value;
 }

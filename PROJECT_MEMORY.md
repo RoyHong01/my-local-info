@@ -31,6 +31,9 @@
 - 초이스 상세 중복 이미지 재발 방지 적용
   - `src/app/blog/[slug]/page.tsx`에서 본문 첫 이미지와 `frontmatter.image` 중복 시 자동 제거
   - `scripts/generate-choice-post.js` 이미지/CTA 규칙 문구 모순 보정
+- 초이스 CTA 링크 중복 재발 방지 적용
+  - 생성 프롬프트에서 CTA 링크를 본문 중간 1회로 강제
+  - `dedupeAffiliateLinks()` 후처리로 동일 쿠팡 링크 중복 시 마지막 1개만 유지
 
 ### 2026-04-01 기준 핵심 요약
 
