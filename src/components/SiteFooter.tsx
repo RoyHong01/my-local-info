@@ -7,7 +7,7 @@ export default function SiteFooter() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
             <p className="text-sm text-gray-400">공공데이터 활용 가이드라인을 준수하며, 시민들의 정보 접근성을 혁신합니다.</p>
-            <p className="text-xs text-gray-300">공공데이터포털 정식 API 활용 · 매일 자동 업데이트 · AI 기반 맞춤형 큐레이션</p>
+            <p className="text-xs text-gray-400">공공데이터포털 정식 API 활용 · 매일 자동 업데이트 · AI 기반 맞춤형 큐레이션</p>
           </div>
           <div className="flex items-center gap-3 text-sm text-gray-400">
             <Link href="/about" className="hover:text-white transition-colors">소개</Link>
