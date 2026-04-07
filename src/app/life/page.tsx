@@ -12,11 +12,10 @@ export default async function LifePage() {
     getRestaurantsByRegion('gyeonggi'),
   ]);
   const posts = getSortedPostsData();
-  const choices = getChoiceArticles(6);
+  const choices = getChoiceArticles();
 
   const restaurantPosts = posts
-    .filter((post) => post.category === '픽앤조이 맛집 탐방')
-    .slice(0, 12);
+    .filter((post) => post.category === '픽앤조이 맛집 탐방');
 
   const restaurantItems: LifePageItem[] = restaurantPosts.length > 0
     ? restaurantPosts.map((post) => ({

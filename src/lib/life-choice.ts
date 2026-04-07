@@ -35,7 +35,7 @@ function mapPostToChoice(post: PostData): ChoiceArticle {
   };
 }
 
-export function getChoiceArticles(limit = 4): ChoiceArticle[] {
+export function getChoiceArticles(limit = 1000): ChoiceArticle[] {
   const posts = getSortedPostsData();
   const matched = posts.filter(isChoiceCandidate).map(mapPostToChoice);
 
