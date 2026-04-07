@@ -10,9 +10,13 @@ export default function SiteFooter() {
             <p className="text-xs text-gray-300">공공데이터포털 정식 API 활용 · 매일 자동 업데이트 · AI 기반 맞춤형 큐레이션</p>
           </div>
           <div className="flex items-center gap-3 text-sm text-gray-400">
+            <Link href="/about" className="hover:text-white transition-colors">소개</Link>
+            <span aria-hidden="true">|</span>
             <Link href="/privacy" className="hover:text-white transition-colors">개인정보 처리방침</Link>
             <span aria-hidden="true">|</span>
-            <Link href="/about" className="hover:text-white transition-colors">사이트 소개</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">이용약관</Link>
+            <span aria-hidden="true">|</span>
+            <a href="mailto:royshong01@gmail.com" className="hover:text-white transition-colors">문의하기</a>
             <span aria-hidden="true">|</span>
             <p>© 2026 픽앤조이. All rights reserved.</p>
           </div>
