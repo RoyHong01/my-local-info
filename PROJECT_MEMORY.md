@@ -24,9 +24,14 @@
 
 - 픽앤조이 초이스 수동 포스트 1건 추가 (Panasonic ES-148 눈썹 바리깡)
   - `src/content/life/2026-04-07-choice-panasonic-es148-eyebrow-trimmer.md`
+- 픽앤조이 초이스 수동 포스트 1건 추가 (톰보 모노 제로 샤프형 지우개)
+  - `src/content/life/2026-04-07-choice-tombo-mono-zero-eraser.md`
 - 사용자 제공 다운로드 이미지 2종을 초이스 이미지 자산으로 반영
   - `public/images/choice/panasonic-es148-hero.png`
   - `public/images/choice/panasonic-es148-detail.png`
+- 사용자 제공 다운로드 이미지 2종을 초이스 이미지 자산으로 반영
+  - `public/images/choice/tombo-mono-zero-hero.png`
+  - `public/images/choice/tombo-mono-zero-detail.png`
 - 쿠팡 제휴 링크/배너 메타를 frontmatter에 반영하여 상세/사이드바 연동 유지
 - 초이스 상세 중복 이미지 재발 방지 적용
   - `src/app/blog/[slug]/page.tsx`에서 본문 첫 이미지와 `frontmatter.image` 중복 시 자동 제거

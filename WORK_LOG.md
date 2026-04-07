@@ -39,6 +39,18 @@
   - `scripts/generate-choice-post.js` 프롬프트를 "본문 중간 1회만 삽입"으로 명시
   - `dedupeAffiliateLinks()` 후처리 함수 추가: 동일 `coupang_link` 중복 시 마지막 1개만 남기고 나머지 제거
 
+### 픽앤조이 초이스 수동 포스트 생성: 톰보 모노 제로 샤프형 지우개
+
+- 사용자 제공 쿠팡 태그 기준으로 신규 초이스 포스트 작성 완료
+  - 파일: `src/content/life/2026-04-07-choice-tombo-mono-zero-eraser.md`
+  - slug: `tombo-mono-zero-eraser`
+  - category: `픽앤조이 초이스`
+  - 쿠팡 링크/배너 frontmatter 반영 (`coupang_link`, `coupang_banner_image`, `coupang_banner_alt`)
+- 사용자 지정 이미지 2종을 다운로드 폴더에서 프로젝트로 반영
+  - `C:\Users\Roy Hong\Downloads\Tombo.png` → `public/images/choice/tombo-mono-zero-hero.png`
+  - `C:\Users\Roy Hong\Downloads\Tombo-1.png` → `public/images/choice/tombo-mono-zero-detail.png`
+- 본문 구성: 상단 대표 이미지는 frontmatter로 노출, 본문 중간 상세 이미지 1장 + CTA 링크 1회만 배치
+
 ## 2026-04-04
 
 ### 자동화 개선 완료: 검증 + 비용 모니터링 + 프롬프트 안정화
