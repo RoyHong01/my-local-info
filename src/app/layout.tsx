@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://pick-n-joy.com"),
   title: "픽앤조이 | 인천·전국 행사·축제·보조금 정보",
-  description: "픽앤조이는 공공데이터와 데이터 분석을 바탕으로 인천 생활정보, 전국 복지·보조금, 축제·여행, 라이프스타일 정보를 시민 관점에서 쉽게 큐레이션하는 플랫폼입니다.",
+  description: "인천 보조금부터 전국 축제까지, 복잡한 공공 데이터를 AI가 분석하여 시민 눈높이로 알려드리는 픽앤조이입니다. 공공데이터포털 정식 API 활용, 매일 자동 업데이트.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
@@ -51,8 +51,14 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "픽앤조이",
+    alternateName: "Pick-n-Joy",
     url: "https://pick-n-joy.com",
-    description: "공공데이터와 데이터 분석을 바탕으로 인천 생활정보, 전국 복지·보조금, 축제·여행, 라이프스타일 정보를 시민 관점에서 큐레이션하는 플랫폼",
+    description: "인천 보조금부터 전국 축제까지, 복잡한 공공 데이터를 AI가 분석하여 시민 눈높이로 알려드리는 생활정보 서비스. 공공데이터포털 정식 API 활용, 매일 자동 업데이트.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://pick-n-joy.com/blog?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
   };
 
   const organizationJsonLd = {
@@ -60,7 +66,13 @@ export default function RootLayout({
     "@type": "Organization",
     name: "픽앤조이",
     url: "https://pick-n-joy.com",
-    description: "시민 체감형 공공 복지 플랫폼이자 공공데이터 기반 복지 큐레이션, 데이터 분석 기반 라이프스타일 큐레이션, 전국 축제·여행 정보 플랫폼",
+    logo: "https://pick-n-joy.com/favicon.svg",
+    description: "공공데이터포털 정식 API를 활용해 복지·보조금·축제 정보를 AI가 시민 관점으로 재구성하는 공공데이터 기반 생활정보 서비스. 데이터 투명성과 공익적 정보 접근성 개선을 핵심 운영 원칙으로 합니다.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "royshong01@gmail.com",
+      contactType: "customer service",
+    },
     sameAs: ["https://github.com/RoyHong01/my-local-info"],
   };
 
