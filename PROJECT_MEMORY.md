@@ -20,6 +20,22 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+### 2026-04-08 기준 핵심 요약
+
+- 일상의 즐거움 카드 노출 제한 제거
+  - `src/app/life/page.tsx`의 초이스/맛집 하드캡 제거
+  - `src/lib/life-choice.ts` 기본 limit 상향(`1000`)
+- 정책/신뢰도 보강
+  - `src/app/about/page.tsx` E-E-A-T 중심 소개 섹션 확장 + AboutPage JSON-LD
+  - `src/app/layout.tsx` 전역 메타 설명 및 `WebSite`/`Organization` schema 강화
+- 이용약관 페이지 추가
+  - `src/app/terms/page.tsx` 신규 생성 (목적/서비스 내용/면책/저작권/문의)
+- 푸터 신뢰도 링크 세트 완성
+  - `src/components/SiteFooter.tsx`에 `소개 | 개인정보 처리방침 | 이용약관 | 문의하기(mailto)` 반영
+  - 보조 문구 색상을 메인 문구와 동일 톤으로 통일
+- 네이버 URL 검사 대응
+  - `src/app/page.tsx` 홈 `description`과 `openGraph.description`을 80자 이내 권장 길이로 축약
+
 ### 2026-04-07 기준 핵심 요약
 
 - 픽앤조이 초이스 수동 포스트 1건 추가 (Panasonic ES-148 눈썹 바리깡)

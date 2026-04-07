@@ -5,6 +5,35 @@
 
 ---
 
+## 2026-04-08
+
+### 서비스 신뢰도/정책 페이지 보강 + SEO 메타 최적화
+
+- 일상의 즐거움 카드 노출 제한 해제
+  - `src/app/life/page.tsx`: 초이스 `getChoiceArticles(6)` 제한 제거, 맛집 `.slice(0, 12)` 제거
+  - `src/lib/life-choice.ts`: 기본 limit `4 -> 1000` 조정
+- AdSense/E-E-A-T 대응 보강
+  - `src/app/about/page.tsx`: 소개 페이지 6개 섹션 확장 + AboutPage JSON-LD 추가
+  - `src/app/layout.tsx`: 전역 description 정비, `WebSite`/`Organization` schema 강화
+  - `src/components/SiteFooter.tsx`: 공익 문구 2줄 구조 반영
+- 이용약관 페이지 신설
+  - `src/app/terms/page.tsx`: 개인정보처리방침과 동일한 배경/타이포 구조로 Terms of Service 신규 추가
+  - 핵심 조항 반영: 목적, 서비스 내용, 면책, 저작권, 문의
+- 푸터 신뢰도 링크 세트 완성
+  - `src/components/SiteFooter.tsx`: `소개 | 개인정보 처리방침 | 이용약관 | 문의하기(mailto)`로 개편
+- UI 가독성 미세 조정
+  - 푸터 보조 문구 색상을 메인 문구와 동일 톤(`text-gray-400`)으로 통일
+- 네이버 URL 검사 대응
+  - `src/app/page.tsx`: 홈 `metadata.description` + `openGraph.description`를 80자 이내 권장 길이로 축약
+
+- 관련 커밋:
+  - `6a17d64` 카드 노출 제한 해제
+  - `6c68fab` 소개/스키마/푸터 공익 문구
+  - `18cd552` 푸터 보조 문구 가독성 상향
+  - `05c81ec` 이용약관 페이지 + 푸터 링크 확장
+  - `1264588` 푸터 문구 색상 통일
+  - `0a694bf` 홈 메타 설명 길이 최적화
+
 ## 2026-04-07
 
 ### 픽앤조이 초이스 수동 포스트 생성: Panasonic ES-148
