@@ -6,12 +6,12 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '픽앤조이 | 시민 체감형 공공 복지·라이프 큐레이션',
   description:
-    '픽앤조이는 공공데이터 기반 복지 큐레이션과 데이터 분석 기반 라이프스타일 큐레이션으로 인천 생활정보, 전국 보조금, 축제·여행 정보를 쉽게 전달합니다.',
+    '공공데이터와 AI 분석으로 인천 생활정보, 전국 보조금·축제 정보를 쉽게 전하는 픽앤조이입니다.',
   alternates: { canonical: '/' },
   openGraph: {
     title: '픽앤조이 | 시민 체감형 공공 복지·라이프 큐레이션',
     description:
-      '공공데이터 기반 복지 큐레이션과 데이터 분석 기반 라이프스타일 큐레이션으로 시민 체감형 생활정보를 제공합니다.',
+      '공공데이터와 AI 분석으로 인천 생활정보, 전국 보조금·축제 정보를 쉽게 전하는 픽앤조이입니다.',
     url: 'https://pick-n-joy.com/',
   },
 };
