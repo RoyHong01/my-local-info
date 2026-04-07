@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
 
@@ -149,7 +150,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
     phone,
     org,
   });
-  const detailMarkdown = getField(item, ['description_markdown']) || generatedMarkdown;
+  const detailMarkdown = sanitizeMarkdown(getField(item, ['description_markdown']) || generatedMarkdown);
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">

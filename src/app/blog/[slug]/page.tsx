@@ -14,6 +14,7 @@ import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import ProductSidebarBanner from '@/components/ProductSidebarBanner';
+import { sanitizeMarkdown } from '@/lib/markdown-utils';
 
 function extractFirstSentenceFromMarkdown(markdown: string): string {
   const plain = (markdown || '')
@@ -274,8 +275,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   const sourceLink = await resolveSourceLink(post);
-
-  const description = buildMetaDescription(post.content) || post.description || post.summary || post.content.substring(0, 160).replace(/\n/g, ' ');
+  const sanitizedContent = sanitizeMarkdown(post.content || '');
+  const description = buildMetaDescription(sanitizedContent) || post.description || post.summary || sanitizedContent.substring(0, 160).replace(/\n/g, ' ');
   const seoClassification = classifyPostForSeo(post);
 
   const blogPostingJsonLd = {
@@ -374,7 +375,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
           <div className="blog-prose prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {post.content}
+              {sanitizedContent}
             </ReactMarkdown>
           </div>
           <AdBanner />
