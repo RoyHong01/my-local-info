@@ -43,6 +43,7 @@
   - 숫자 배지(1,2,3) 제거 후 텍스트 크기 확대, 두 줄 메시지 카드 중심으로 단순화
   - 섹션 분리 여백 강화: Problem 섹션 `pb-6 -> pb-8`, Category 섹션 `pt-10 -> pt-16 md:pt-20`로 조정해 "문제 제기 -> 해결책" 전환을 시각적으로 명확화
   - 시각적 전환 장치 추가: Category 섹션 상단에 1px 옅은 그라디언트 페이드 라인(`from-transparent via-stone-300/80 to-transparent`) 삽입
+  - 하단 마무리 가독성 보강: Features+CTA 섹션 하단 여백 확대(`pb-16 sm:pb-20`) + `SiteFooter` 상단 구분선(`border-t border-white/10`)과 상단 패딩(`pt-8`)으로 마지막 문구와 푸터 압박감 완화
 
 - 관련 커밋:
   - `6a17d64` 카드 노출 제한 해제
