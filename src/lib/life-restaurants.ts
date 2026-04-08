@@ -12,6 +12,8 @@ export interface RestaurantItem {
   summary: string;
   blogHref?: string;
   blogTitle?: string;
+  googleRating?: number | null;
+  googleRatingCount?: number | null;
   sourceQuery?: string;
   scenarioHint?: string;
   vibeHint?: string;
@@ -130,11 +132,62 @@ async function readSnapshotRegion(region: LifeRegionTab): Promise<RestaurantItem
       .filter((item) => item?.id && item?.name && item?.address && item?.mapUrl)
       .map((item) => ({
         ...item,
-        summary: item.summary || buildFallbackSummary(item.name, item.address),
+        summary: getRestaurantSummary(item),
       }));
   } catch {
     return null;
   }
+}
+
+function pickBySeed(seed: string, values: string[]): string {
+  const base = Array.from(seed).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return values[base % values.length];
+}
+
+function isGenericRestaurantSummary(text: string): boolean {
+  const normalized = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!normalized) return true;
+
+  return [
+    '약속 동선을 짜기 편한 편이에요',
+    '오늘 어디 갈지 빠르게 정하고 싶을 때',
+    '저장해둘 만한 후보가 되어줍니다',
+    '방문해보셔도 좋아요',
+  ].some((phrase) => normalized.includes(phrase));
+}
+
+function buildContextualRestaurantSummary(item: RestaurantItem): string {
+  const scenario = item.scenarioHint?.trim() || '오늘 약속 장소를 고를 때';
+  const vibe = item.vibeHint?.trim() || '무드가 과하지 않은 편';
+  const cuisine = item.cuisineHint?.trim() || '식사 결';
+  const ratingText = item.googleRating
+    ? item.googleRatingCount
+      ? `구글 평점 ${item.googleRating.toFixed(1)}점, 리뷰 ${item.googleRatingCount}개라 첫 선택지로 올려두기 괜찮아요.`
+      : `구글 평점 ${item.googleRating.toFixed(1)}점이라 기본 만족도는 기대해볼 만해요.`
+    : '';
+
+  const firstLine = pickBySeed(item.id, [
+    `${item.name}, ${scenario} 잡혀 있을 때 먼저 체크해볼 만해요.`,
+    `${scenario}에 맞춰 빠르게 고르려면 ${item.name}부터 열어봐도 흐름이 자연스러워요.`,
+    `${item.name}은(는) ${scenario}에 저장해두기 좋은 카드예요.`,
+  ]);
+
+  const secondLine = ratingText || pickBySeed(item.id + item.name, [
+    `${vibe} 쪽 결이 살아 있어서 ${cuisine} 찾는 날에 특히 잘 맞아요.`,
+    `${cuisine} 무드로 가볍게 방향을 잡고 싶을 때 꺼내보기 좋은 타입이에요.`,
+    `${vibe} 인상이 있어서 메뉴보다 분위기부터 보고 고르는 날에도 잘 어울려요.`,
+  ]);
+
+  return `${firstLine}\n\n${secondLine}`;
+}
+
+function getRestaurantSummary(item: RestaurantItem): string {
+  const rawSummary = normalizeLineBreakBySentence(String(item.summary || '').trim());
+  if (!isGenericRestaurantSummary(rawSummary)) {
+    return rawSummary;
+  }
+
+  return buildContextualRestaurantSummary(item);
 }
 
 function normalizeLineBreakBySentence(text: string): string {
@@ -365,7 +418,10 @@ async function loadRestaurantsByRegion(region: LifeRegionTab): Promise<Restauran
 
     return items.map((item) => ({
       ...item,
-      summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
+      summary: getRestaurantSummary({
+        ...item,
+        summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
+      }),
     }));
   } catch {
     return REGION_FALLBACK[region];
