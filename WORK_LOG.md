@@ -7,6 +7,11 @@
 
 ## 2026-04-08
 
+### 맛집 탐방 UI 문구 수정 (커밋 ca630e3)
+
+- `src/app/life/restaurant/page.tsx`: 소개 문구 교체 — API 기반 설명 → "실시간 매장 정보에 에디터의 감성 한 줄 요약을 더했습니다…"
+- `src/components/life/RestaurantExplorer.tsx`: 카드 링크 텍스트 "지도에서 바로 보기" → "카카오맵 바로 보기"
+
 ### 맛집 파이프라인 고도화 (커밋 160f9e9)
 
 - **Google Places 메타 필드 확장** (`scripts/collect-life-restaurants.mjs`)
