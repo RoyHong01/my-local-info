@@ -6,6 +6,7 @@ const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant',
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
+const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-1.5-flash';
 
 const REGION_QUERY_MAP = {
   'incheon': [
@@ -253,13 +254,9 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': apiKey,
         'X-Goog-FieldMask': [
+          'places.id',
           'places.rating',
           'places.userRatingCount',
-          'places.priceLevel',
-          'places.businessStatus',
-          'places.primaryTypeDisplayName.text',
-          'places.currentOpeningHours.openNow',
-          'places.regularOpeningHours.weekdayDescriptions',
         ].join(','),
       },
       body: JSON.stringify({
@@ -281,15 +278,9 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
   const place = data?.places?.[0];
   if (!place) return null;
   return {
+    placeId: place.id || '',
     rating: typeof place.rating === 'number' ? place.rating : null,
     userRatingCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : null,
-    priceLevel: place.priceLevel || '',
-    businessStatus: place.businessStatus || '',
-    primaryTypeDisplayName: place.primaryTypeDisplayName?.text || '',
-    openNow: typeof place.currentOpeningHours?.openNow === 'boolean' ? place.currentOpeningHours.openNow : null,
-    weekdayDescriptions: Array.isArray(place.regularOpeningHours?.weekdayDescriptions)
-      ? place.regularOpeningHours.weekdayDescriptions
-      : [],
   };
 }
 
@@ -309,32 +300,19 @@ async function filterByGoogleRating(items, googleApiKey) {
   }
   const filtered = [];
   for (const item of items) {
+    let placeId = '';
     let rating = null;
     let ratingCount = null;
-    let priceLevel = '';
-    let businessStatus = '';
-    let primaryType = '';
-    let openNow = null;
-    let weekdayText = [];
     try {
       const result = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
+      placeId = result?.placeId || '';
       rating = result?.rating ?? null;
       ratingCount = result?.userRatingCount ?? null;
-      priceLevel = result?.priceLevel || '';
-      businessStatus = result?.businessStatus || '';
-      primaryType = result?.primaryTypeDisplayName || '';
-      openNow = typeof result?.openNow === 'boolean' ? result.openNow : null;
-      weekdayText = Array.isArray(result?.weekdayDescriptions) ? result.weekdayDescriptions : [];
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
     }
     if (rating === null) {
       console.log(`  ❌ 구글 평점 미확인 제외: ${item.name}`);
-      continue;
-    }
-
-    if (businessStatus && businessStatus !== 'OPERATIONAL') {
-      console.log(`  ❌ 영업 상태 제외: ${item.name} (${businessStatus})`);
       continue;
     }
 
@@ -344,13 +322,14 @@ async function filterByGoogleRating(items, googleApiKey) {
       console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
       filtered.push({
         ...item,
+        googlePlaceId: placeId,
         googleRating: rating,
         googleRatingCount: ratingCount,
-        googlePriceLevel: priceLevel,
-        googleBusinessStatus: businessStatus,
-        googlePrimaryType: primaryType,
-        googleOpenNow: openNow,
-        googleWeekdayText: weekdayText,
+        googlePriceLevel: '',
+        googleBusinessStatus: '',
+        googlePrimaryType: '',
+        googleOpenNow: null,
+        googleWeekdayText: [],
       });
     }
     // 구글 API 속도 제한 방지 (200ms 간격)
@@ -376,6 +355,8 @@ function extractJsonArray(text) {
 async function summarizeWithGemini(regionLabel, items, geminiKey) {
   if (!geminiKey || items.length === 0) return new Map();
 
+  const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
+
   const safeInput = items.map((item) => ({
     id: item.id,
     name: item.name,
@@ -389,16 +370,13 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
     cuisineHint: item.cuisineHint || '',
     googleRating: item.googleRating ?? null,
     googleRatingCount: item.googleRatingCount ?? null,
-    googlePriceLevel: item.googlePriceLevel || '',
-    googlePrimaryType: item.googlePrimaryType || '',
-    googleOpenNow: item.googleOpenNow,
   }));
 
   const prompt = [
     '당신은 2030 취향을 잘 아는 맛집 큐레이터입니다.',
     '아래 JSON 배열의 각 맛집에 대해 카드용 2문장 요약을 작성해주세요.',
     '진부한 표현("고민될 때가 종종 있어요", "방문해보셔도 좋아요")은 금지합니다.',
-    'sourceQuery, scenarioHint, vibeHint, cuisineHint, googleRating, googlePriceLevel을 참고해 왜 저장해둘 만한지 짧고 세련되게 써주세요.',
+    'sourceQuery, scenarioHint, vibeHint, cuisineHint, googleRating을 참고해 왜 저장해둘 만한지 짧고 세련되게 써주세요.',
     '과장/허위 없이, 빠르게 본론만 전달해주세요.',
     '문체 규칙:',
     '1) 반드시 가벼운 존댓말(~해요/~네요/~거든요) 사용',
@@ -414,7 +392,7 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
     JSON.stringify(safeInput),
   ].join('\n');
 
-  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${encodeURIComponent(geminiKey)}`;
+  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(restaurantGeminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`;
 
   const response = await fetch(geminiUrl, {
     method: 'POST',
@@ -515,6 +493,7 @@ async function run() {
   const kakaoKey = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
   const googleKey = process.env.GOOGLE_PLACES_API_KEY;
+  const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
 
   if (!googleKey) {
     console.warn('⚠️  GOOGLE_PLACES_API_KEY 없음 — 구글 평점 필터 건너뜀');
@@ -526,6 +505,9 @@ async function run() {
   }
 
   console.log('🥢 일상의 즐거움 맛집 데이터 수집 시작');
+  if (geminiKey) {
+    console.log(`🤖 맛집 요약 Gemini 모델: ${restaurantGeminiModel}`);
+  }
 
   const regions = {};
   for (const regionKey of Object.keys(REGION_QUERY_MAP)) {

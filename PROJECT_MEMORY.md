@@ -22,6 +22,11 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 맛집 수집 API 비용 최적화
+  - `scripts/collect-life-restaurants.mjs`에서 Gemini 요약 모델을 환경변수 기반으로 전환 (`RESTAURANT_GEMINI_MODEL` -> `GEMINI_MODEL` -> `gemini-1.5-flash`)
+  - Google Places Text Search FieldMask를 `places.id`, `places.rating`, `places.userRatingCount`만 요청하도록 최소화
+  - 영업상태/가격/타입/영업시간 필드 조회 제거로 요청 payload 및 비용 부담 완화
+
 - 관리자 GitHub Actions 로그 링크 로그인 경유 적용
   - `src/lib/github-auth-link.ts` 추가
   - `src/app/admin/page.tsx`, `src/app/admin/runs/page.tsx`에서 GitHub 로그 링크를 `https://github.com/login?return_to=...` 형태로 변경

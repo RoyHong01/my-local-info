@@ -7,6 +7,16 @@
 
 ## 2026-04-08
 
+### 맛집 수집 API 비용 최적화 (Gemini/Google Places 경량화)
+
+- `scripts/collect-life-restaurants.mjs`:
+  - Gemini 요약 모델을 고정 `gemini-2.5-pro`에서 환경변수 기반 선택으로 변경
+    - 우선순위: `RESTAURANT_GEMINI_MODEL` -> `GEMINI_MODEL` -> 기본값 `gemini-1.5-flash`
+  - Google Places Text Search FieldMask를 최소 필드(`places.id`, `places.rating`, `places.userRatingCount`)만 요청하도록 축소
+  - 영업상태/가격/타입/영업시간 필드 조회 제거로 요청 단가 및 응답 크기 절감
+  - 수집 시작 시 실제 사용 Gemini 모델 콘솔 출력 추가
+- 빌드 검증: `npm run build` 성공 (492 sitemap URLs)
+
 ### 관리자 GitHub 로그 링크 로그인 경유 처리 + 보안 점검 정리
 
 - `src/lib/github-auth-link.ts`:
