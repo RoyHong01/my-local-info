@@ -53,9 +53,9 @@ function IncheonCard({ item }: { item: DataItem }) {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 group-hover:text-blue-700 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
+        <p className="text-[13px] sm:text-sm text-gray-700 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {org && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mt-auto">
             <span>🏛</span><span>{org}</span>
           </div>
         )}
@@ -77,9 +77,9 @@ function SubsidyCard({ item }: { item: DataItem }) {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600 group-hover:text-orange-700 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
+        <p className="text-[13px] sm:text-sm text-gray-700 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {target && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mt-auto">
             <span>🎯</span><span>{target}</span>
           </div>
         )}
@@ -101,9 +101,9 @@ function FestivalCard({ item }: { item: DataItem }) {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600 group-hover:text-purple-700 transition-colors"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
+        <p className="text-[13px] sm:text-sm text-gray-700 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
         {location && (
-          <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-auto">
+          <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mt-auto">
             <span>📍</span><span>{location}</span>
           </div>
         )}
@@ -334,7 +334,7 @@ export default async function Home() {
                   <div className="relative p-5 text-center">
                     <h3 className="text-xl font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] tracking-wide">{cat.title}</h3>
                     <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{cat.description}</p>
-                    <p className="text-xs text-white/80 mt-1">{cat.detail}</p>
+                    <p className="mt-1 text-[13px] sm:text-sm font-medium text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">{cat.detail}</p>
                   </div>
                 </Link>
 
@@ -388,7 +388,7 @@ export default async function Home() {
           <div className="text-center">
             <h3 className="text-lg sm:text-xl font-extrabold mb-1 text-gray-900">오늘부터 시작하세요, 완전 무료입니다</h3>
             <p className="text-sm sm:text-base font-bold text-gray-700 mb-2">회원가입도, 앱 설치도 필요 없어요</p>
-            <p className="text-xs sm:text-sm text-gray-500 leading-relaxed whitespace-nowrap mx-auto">
+            <p className="text-xs sm:text-sm text-gray-500 leading-relaxed whitespace-normal sm:whitespace-nowrap mx-auto">
               픽앤조이의 모든 서비스는 100% 무료입니다. 그냥 들어와서, 필요한 정보 가져가시면 됩니다.
             </p>
           </div>
