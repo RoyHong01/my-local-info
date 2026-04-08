@@ -271,7 +271,7 @@ export default async function Home() {
       </section>
 
       {/* ── Problem Section ── */}
-      <section className="pt-10 pb-6">
+      <section className="pt-10 pb-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <span className="inline-block px-5 py-1.5 rounded-full bg-red-50 text-red-500 text-sm font-bold mb-3">😤 혹시 이런 경험 있으신가요?</span>
@@ -304,7 +304,7 @@ export default async function Home() {
       </section>
 
       {/* ── Category Cards Section ── */}
-      <section className="pt-10 pb-20" id="categories">
+      <section className="pt-16 md:pt-20 pb-20" id="categories">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="text-center">
             <span className="inline-block px-5 py-2 rounded-full bg-green-50 text-green-600 text-sm font-bold mb-4">✅ 픽앤조이가 하는 일</span>
