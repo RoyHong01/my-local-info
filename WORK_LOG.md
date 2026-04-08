@@ -7,6 +7,25 @@
 
 ## 2026-04-08
 
+### 맛집 파이프라인 고도화 (커밋 160f9e9)
+
+- **Google Places 메타 필드 확장** (`scripts/collect-life-restaurants.mjs`)
+  - `.env` / `.env.local` 자동 로드 (`loadLocalEnvFiles()`)
+  - Kakao 항목에 `categoryName` 포함
+  - Google Places 필드마스크 확장: `priceLevel`, `businessStatus`, `primaryTypeDisplayName.text`, `currentOpeningHours.openNow`, `regularOpeningHours.weekdayDescriptions`
+  - `CLOSED_PERMANENTLY` 등 비정상 영업 상태 항목 수집 단계에서 자동 제외
+- **요약 생성 규칙 개선**
+  - 가격 힌트(`normalizePriceLevel`) 완전한 문장으로 수정 (이전: 단어 조각 반환했던 버그 수정)
+  - 미완성 문장(문장 부호로 끝나지 않는 텍스트) → `isGenericRestaurantSummary`에서 자동 탐지·교체
+  - Generic 패턴 추가 탐지: `일정 사이에 넣기 좋은 후보예요`, `저장해두고 필요할 때 다시 꺼내보기 편한 타입`
+  - `normalizeLineBreakBySentence`에서 자동 문장 추가 제거 (이전: `방문해보셔도 좋아요.` 자동 삽입됐던 동작 제거)
+- **RestaurantItem 타입 확장** (`src/lib/life-restaurants.ts`)
+  - 신규 선택 필드: `googlePriceLevel`, `googleBusinessStatus`, `googlePrimaryType`, `googleOpenNow`, `googleWeekdayText`, `categoryName`
+  - `buildContextualRestaurantSummary`: 가격/영업 여부/평점 힌트를 완전한 문장으로 조합
+  - `vibePhrase` 이중 "무드 무드" 방지 처리
+- **데이터 재생성**: `인천 30건 / 서울 30건 / 경기 28건` (경기 1건 영업종료 제외)
+- 빌드 성공 ✅, 에러 없음 ✅
+
 ### 서비스 신뢰도/정책 페이지 보강 + SEO 메타 최적화
 
 - 일상의 즐거움 카드 노출 제한 해제
