@@ -50,6 +50,21 @@
   - `1264588` 푸터 문구 색상 통일
   - `0a694bf` 홈 메타 설명 길이 최적화
 
+---
+
+## 2026-04-08 (추가)
+
+### posts.ts Turbopack 광범위 파일 접근 경고 수정
+
+- 원인: `postsDirectories`를 `path.join(process.cwd(), ...)` 런타임 계산 방식으로 정의하고, `getSortedPostsData()`에서 `markdownEntries`에 `{ fileName, fullPath }` 형태로 경로를 중간 저장한 뒤 나중에 `readFileSync` 호출 → Turbopack이 파일 접근 범위를 넓게 추정해 경고 발생 (L169, L256)
+- 수정 내용:
+  - `postsDirectories`: `path.join(process.cwd(), ...)` → `path.resolve('src/content/...')` 리터럴 문자열 방식으로 변경 (Turbopack이 정적으로 디렉터리 경로 분석 가능)
+  - `getSortedPostsData()`: 중간 `markdownEntries` 배열(fullPath 저장) 제거 → 단일 패스로 파일 읽기 + PostData 생성 처리
+  - 에러 처리: 디렉터리 순회 오류 / 개별 파일 파싱 오류 각각 분리 처리
+- 빌드: 497페이지 정상 생성, 커밋 `f35735e`
+
+---
+
 ## 2026-04-07
 
 ### 픽앤조이 초이스 수동 포스트 생성: Panasonic ES-148
