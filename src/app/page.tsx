@@ -240,7 +240,7 @@ export default async function Home() {
           </div>
 
           {/* Stats */}
-          <div className="mt-14 grid grid-cols-3 items-start gap-4 sm:gap-10 md:gap-20 max-w-3xl mx-auto px-4 animate-fade-in-up">
+          <div className="mt-14 grid w-full max-w-[38rem] grid-cols-3 items-start gap-6 sm:gap-8 md:gap-12 mx-auto px-4 animate-fade-in-up">
             <div className="text-center justify-self-start">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyAll.filter(i => !i.expired).length}+</div>
               <div className="text-sm text-gray-500 mt-1">보조금 정보</div>
