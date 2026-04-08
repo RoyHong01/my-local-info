@@ -68,7 +68,7 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
                     rel="noopener noreferrer"
                     className="whitespace-nowrap text-orange-500 hover:underline"
                   >
-                    지도에서 바로 보기
+                    카카오맵 바로 보기
                   </a>
                   {item.blogHref && (
                     <>

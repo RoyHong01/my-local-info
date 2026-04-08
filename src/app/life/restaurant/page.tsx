@@ -48,8 +48,7 @@ export default async function LifeRestaurantPage() {
         <p className="text-base md:text-lg font-semibold text-orange-500 mb-3">맛집 탐방</p>
         <h1 className="text-[1.75rem] md:text-[2rem] font-extrabold mb-5">오늘 어디 갈지 고민될 때, 지역별로 바로 골라드릴게요</h1>
         <p className="text-stone-600 leading-8">
-          카카오 로컬 API 결과를 기반으로 상호명, 주소, 전화번호, 카카오맵 링크를 정리해드려요.
-          여기에 30대 에디터 톤으로 감성 한 줄 요약까지 더해서 선택이 훨씬 쉬워집니다.
+          실시간 매장 정보에 에디터의 감성 한 줄 요약을 더했습니다. 주소와 전화번호는 기본, 광고 없는 진짜 추천으로 선택의 고민을 덜어드려요.
         </p>
       </header>
 
