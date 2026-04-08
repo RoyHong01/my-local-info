@@ -24,7 +24,7 @@
 
 - 맛집 후보 재수집 정책 조정
   - 04:00 자동화에서 매일 무조건 `collect-life-restaurants.mjs`를 실행하지 않도록 변경
-  - 새 점검 스크립트 `scripts/ensure-life-restaurant-candidates.mjs`가 기존 스냅샷 후보와 기발행 포스트를 비교해, 후보 부족 시에만 재수집 수행
+  - 새 점검 스크립트 `scripts/ensure-life-restaurant-candidates.mjs`가 기존 스냅샷 후보와 기발행 포스트를 비교해 unused 후보가 10건 이상이면 생략, 10건 미만일 때만 재수집 수행
   - 리포트/텔레그램에서 오늘 재수집이 실제로 있었는지 `실행/생략`으로 확인 가능
 
 - 맛집 발행 구조 유지 기준 명문화

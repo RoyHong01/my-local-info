@@ -7,6 +7,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3');
 const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '1');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
+const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
@@ -481,10 +482,9 @@ async function run() {
 
   let candidates = buildFilteredCandidates(snapshot, existingIds);
 
-  // 후보 소진된 버킷이 있으면 Kakao API 재수집 후 후보 갱신
   const emptyBuckets = findEmptyBuckets(candidates);
-  if (emptyBuckets.length > 0 && FORCE_RESTAURANT_SOURCE_IDS.size === 0) {
-    console.log(`\n🔄 ${emptyBuckets.join(', ')} 버킷 후보 소진 — Kakao API 재수집 시작...`);
+  if (candidates.length < MIN_UNUSED_CANDIDATES && FORCE_RESTAURANT_SOURCE_IDS.size === 0) {
+    console.log(`\n🔄 unused 후보 ${candidates.length}건으로 기준 ${MIN_UNUSED_CANDIDATES}건 미만 — Kakao API 재수집 시작...`);
     try {
       recollectRestaurants();
       snapshot = await readSnapshot();
@@ -498,6 +498,8 @@ async function run() {
     } catch (err) {
       console.warn(`⚠️ 맛집 데이터 재수집 실패: ${err.message || err}`);
     }
+  } else if (emptyBuckets.length > 0) {
+    console.log(`ℹ️ 일부 버킷이 비어 있어도 전체 unused 후보가 ${candidates.length}건으로 충분하므로 재수집 없이 기존 후보를 우선 사용합니다.`);
   }
 
   const selectedCandidates = selectCandidatesByBucket(candidates, existing.bucketCounts);

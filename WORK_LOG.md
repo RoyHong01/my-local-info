@@ -14,8 +14,8 @@
   - `collect_restaurants` step이 `scripts/ensure-life-restaurant-candidates.mjs`를 실행하도록 변경
   - `generate_restaurant_posts` step에도 Kakao/Google/Supabase env를 주입해 후보 부족 시 안전한 fallback 재수집 가능하도록 정리
 - `scripts/ensure-life-restaurant-candidates.mjs` 신규:
-  - 기존 `restaurants.json` + 이미 발행된 맛집 포스트(`source_id`)를 기준으로 남은 후보 수를 점검
-  - 후보가 충분하면 재수집 생략, 부족하면 그때만 `collect-life-restaurants.mjs` 실행
+  - 기존 `restaurants.json` + 이미 발행된 맛집 포스트(`source_id`)를 기준으로 남은 unused 후보 수를 점검
+  - unused 후보가 10건 이상이면 재수집 생략, 10건 미만일 때만 `collect-life-restaurants.mjs` 실행
   - GitHub Actions output으로 `recollect_performed`, `cache_hit`, `cache_miss`, `google_called` 기록
 - `scripts/write-daily-report.mjs`, `scripts/notify-telegram.mjs`:
   - 오늘 맛집 후보 재수집이 실제 실행됐는지(`실행/생략`) 표시 추가
