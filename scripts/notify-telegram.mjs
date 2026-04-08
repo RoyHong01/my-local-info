@@ -91,6 +91,7 @@ async function buildMessage(report) {
   const budget = report.budget;
   const imagePolicy = report.imagePolicy || {};
   const restaurantCache = report.restaurantCache || {};
+  const recollectPerformed = !!restaurantCache.recollectPerformed;
   const midImageInsertedCount = Number(imagePolicy.midImageInsertedCount || 0);
   const midImageOmittedCount = Number(imagePolicy.midImageOmittedCount || 0);
   const cacheHit = Number(restaurantCache.cacheHit || 0);
@@ -155,6 +156,7 @@ async function buildMessage(report) {
     `📝 블로그 생성: ${blogCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
+    `♻️ 맛집 후보 재수집: ${recollectPerformed ? '실행' : '생략'}`,
     `🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`,
     `🗄️ 맛집 캐시: hit ${cacheHit} / miss ${cacheMiss} / google ${googleCalled}`,
     budgetLine,

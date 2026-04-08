@@ -7,6 +7,19 @@
 
 ## 2026-04-08
 
+### 맛집 후보 재수집 정책 전환 (매일 재수집 제거)
+
+- `.github/workflows/deploy.yml`:
+  - 3단계 맛집 수집을 `매일 무조건 실행`에서 `후보 점검 후 필요 시만 재수집` 구조로 변경
+  - `collect_restaurants` step이 `scripts/ensure-life-restaurant-candidates.mjs`를 실행하도록 변경
+  - `generate_restaurant_posts` step에도 Kakao/Google/Supabase env를 주입해 후보 부족 시 안전한 fallback 재수집 가능하도록 정리
+- `scripts/ensure-life-restaurant-candidates.mjs` 신규:
+  - 기존 `restaurants.json` + 이미 발행된 맛집 포스트(`source_id`)를 기준으로 남은 후보 수를 점검
+  - 후보가 충분하면 재수집 생략, 부족하면 그때만 `collect-life-restaurants.mjs` 실행
+  - GitHub Actions output으로 `recollect_performed`, `cache_hit`, `cache_miss`, `google_called` 기록
+- `scripts/write-daily-report.mjs`, `scripts/notify-telegram.mjs`:
+  - 오늘 맛집 후보 재수집이 실제 실행됐는지(`실행/생략`) 표시 추가
+
 ### 맛집 캐시 절감 지표 추가 (리포트/텔레그램 연동)
 
 - `scripts/collect-life-restaurants.mjs`:

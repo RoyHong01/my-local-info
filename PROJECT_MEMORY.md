@@ -22,6 +22,11 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 맛집 후보 재수집 정책 조정
+  - 04:00 자동화에서 매일 무조건 `collect-life-restaurants.mjs`를 실행하지 않도록 변경
+  - 새 점검 스크립트 `scripts/ensure-life-restaurant-candidates.mjs`가 기존 스냅샷 후보와 기발행 포스트를 비교해, 후보 부족 시에만 재수집 수행
+  - 리포트/텔레그램에서 오늘 재수집이 실제로 있었는지 `실행/생략`으로 확인 가능
+
 - 맛집 발행 구조 유지 기준 명문화
   - 기본 구조: `Kakao 수집 -> Supabase 평점 캐시 -> restaurants.json -> 맛집 블로그 생성`
   - DB 직결 전환은 `restaurants_cache` 1,000건 이상, 스냅샷 성능 이슈, 동적 기능 요구가 확인될 때만 검토

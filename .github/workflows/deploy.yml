@@ -183,10 +183,10 @@ jobs:
             echo "변경사항 없음"
           fi
 
-      - name: '[3단계] 일상의 즐거움 맛집 데이터 수집'
+      - name: '[3단계] 일상의 즐거움 맛집 후보 점검/필요 시 재수집'
         id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
-        run: node scripts/collect-life-restaurants.mjs
+        run: node scripts/ensure-life-restaurant-candidates.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -199,7 +199,11 @@ jobs:
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
+          PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
           LIFE_RESTAURANT_POSTS_PER_RUN: '3'
           LIFE_RESTAURANT_POSTS_PER_BUCKET: '1'
 
@@ -280,6 +284,7 @@ jobs:
           DEPLOY_STAGE2_OUTCOME: ${{ steps.deploy_stage2.outcome }}
           DEPLOY_STAGE2_URL: ${{ steps.deploy_stage2.outputs.deploy_url }}
           COLLECT_RESTAURANTS_OUTCOME: ${{ steps.collect_restaurants.outcome }}
+          RESTAURANT_RECOLLECT_PERFORMED: ${{ steps.collect_restaurants.outputs.recollect_performed }}
           RESTAURANT_CACHE_HIT: ${{ steps.collect_restaurants.outputs.cache_hit }}
           RESTAURANT_CACHE_MISS: ${{ steps.collect_restaurants.outputs.cache_miss }}
           RESTAURANT_GOOGLE_CALLED: ${{ steps.collect_restaurants.outputs.google_called }}
