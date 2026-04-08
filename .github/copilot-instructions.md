@@ -78,13 +78,14 @@ scripts/
   collect-incheon.js  # 인천 데이터 수집
   collect-subsidy.js  # 보조금 데이터 수집
   collect-festival.js # 축제 데이터 수집 (detailCommon2로 overview 포함)
-  collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집
+  ensure-life-restaurant-candidates.mjs # 맛집 후보 충분 여부 점검 (guard 스크립트, GitHub Actions 진입점)
+  collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집 (guard에 의해 조건부 호출)
   generate-life-restaurant-posts.mjs # 맛집 전용 블로그 포스트 생성
   generate-blog-post.js # Claude API 블로그 생성 (카테고리별 2편)
   cleanup-expired.js  # 만료 콘텐츠 처리
   generate-sitemap.js # sitemap.xml 생성 (postbuild)
 .github/workflows/
-  deploy.yml          # 매일 07:00 KST 자동화
+  deploy.yml          # 매일 04:00 KST 자동화
 public/images/        # 기본 OG 이미지 4종 (SVG)
 ```
 
@@ -126,12 +127,17 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-08 핵심 반영:
+  - **맛집 재수집 정책 전환**: GitHub Actions에서 `collect-life-restaurants.mjs` 직접 호출 → `ensure-life-restaurant-candidates.mjs`(guard)로 교체
+  - guard 로직: unused 후보 10건 이상이면 재수집 생략, 10건 미만일 때만 실제 수집 실행 (`MIN_UNUSED_RESTAURANT_CANDIDATES` env로 override 가능)
+  - **비용 절감 KPI 가시화**: `cache_hit`, `cache_miss`, `google_called` 지표를 일일 리포트/텔레그램에 노출
+  - Supabase 평점 캐시(`restaurants_cache`) 적용: kakao_id 기준 hit 시 Google Places 호출 생략
 - 2026-04-03 핵심 반영:
   - GitHub Actions 스케줄 04:00 KST로 변경 (`0 19 * * *`)
   - admin/admin/runs 배경 bg-cherry-blossom 통일
   - 맛집 파이프라인 2지역 → 3지역(`incheon`/`seoul`/`gyeonggi`) 분리
   - 지역당 30개 후보 수집 (월 1회 수집 목표)
-  - 빈 버킷 자동 재수집 로직 추가
+  - 빈 버킷 자동 재수집 → unused 10건 미만일 때만 재수집으로 정책 변경
   - 프론트엔드 RestaurantExplorer 3탭 (인천/서울/경기)
   - 텔레그램 리포트 이슈 4건 수정 (경기 미생성, 테이블 CSS, 리포트 재배포)
 - 고정 참고값:
