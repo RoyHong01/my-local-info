@@ -284,7 +284,7 @@ export default async function Home() {
             <div className="bg-white rounded-xl px-5 py-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center min-h-[8.5rem]">
               <div className="min-w-0">
                 <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-2 leading-snug">수많은 정보 속 나에게 딱 맞는 혜택은?</h3>
-                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">탭만 열다가 30분. 지원금 2,000개 중 어디서부터?</p>
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">수천 개의 지원금 중 내 혜택만 쏙 골라보세요.</p>
               </div>
             </div>
             <div className="bg-white rounded-xl px-5 py-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center text-center min-h-[8.5rem]">
