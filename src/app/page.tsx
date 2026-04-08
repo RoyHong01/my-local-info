@@ -240,16 +240,16 @@ export default async function Home() {
           </div>
 
           {/* Stats */}
-          <div className="mt-14 grid grid-cols-3 gap-8 max-w-md mx-auto animate-fade-in-up">
-            <div className="text-center">
+          <div className="mt-14 grid grid-cols-3 items-start gap-4 sm:gap-10 md:gap-20 max-w-3xl mx-auto px-4 animate-fade-in-up">
+            <div className="text-center justify-self-start">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyAll.filter(i => !i.expired).length}+</div>
               <div className="text-sm text-gray-500 mt-1">보조금 정보</div>
             </div>
-            <div className="text-center">
+            <div className="text-center justify-self-center">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{festivalAll.filter(i => !i.expired).length}+</div>
               <div className="text-sm text-gray-500 mt-1">축제·행사</div>
             </div>
-            <div className="text-center">
+            <div className="text-center justify-self-end">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">매일</div>
               <div className="text-sm text-gray-500 mt-1">업데이트</div>
             </div>
