@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import PageContentShell from '@/components/PageContentShell';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -145,9 +146,7 @@ gtag('config', '${gaId}');`,
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <SiteHeader />
-        <div className="flex-1">
-          {children}
-        </div>
+        <PageContentShell>{children}</PageContentShell>
         <SiteFooter />
       </body>
     </html>

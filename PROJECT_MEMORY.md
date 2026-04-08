@@ -22,6 +22,13 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 공통 상단 여백(홈 제외) 일괄 적용
+  - `src/components/PageContentShell.tsx` 신규 추가, `src/app/layout.tsx`에서 연결
+  - 홈(`/`)은 기존 유지, 비홈 페이지는 `pt-8 md:pt-10` 상단 여백 추가
+- 일상의 즐거움 탭 라벨 명확화
+  - `src/components/LifeFilterClient.tsx`: `맛집 탐방` -> `서울·인천·경기 맛집 탐방`
+- 인천 리스트 헤더 타이틀 미세 보정
+  - `src/app/incheon/page.tsx`: 타이틀 아이콘과 텍스트 간격 `gap-2 -> gap-3`
 - 일상의 즐거움 카드 노출 제한 제거
   - `src/app/life/page.tsx`의 초이스/맛집 하드캡 제거
   - `src/lib/life-choice.ts` 기본 limit 상향(`1000`)

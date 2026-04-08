@@ -20,7 +20,7 @@ export interface LifePageItem {
 
 const TABS = [
   { label: '전체', value: '' },
-  { label: '맛집 탐방', value: 'restaurant' },
+  { label: '서울·인천·경기 맛집 탐방', value: 'restaurant' },
   { label: '픽앤조이 초이스', value: 'choice' },
 ] as const;
 

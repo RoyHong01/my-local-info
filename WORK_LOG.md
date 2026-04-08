@@ -7,6 +7,17 @@
 
 ## 2026-04-08
 
+### 상단 레이아웃 여백/타이틀 간격/탭 라벨 미세 조정
+
+- `src/app/layout.tsx` + `src/components/PageContentShell.tsx`:
+  - 홈(`/`)을 제외한 전 페이지에 네비게이션 아래 공통 상단 여백 추가 (`pt-8 md:pt-10`)
+  - 홈 히어로는 기존 레이아웃 유지
+- `src/components/LifeFilterClient.tsx`:
+  - 필터 탭 문구 `맛집 탐방` -> `서울·인천·경기 맛집 탐방`
+- `src/app/incheon/page.tsx`:
+  - 타이틀 아이콘(🏙)과 `인천 지역 정보` 텍스트 간격 `gap-2` -> `gap-3`
+- 빌드 검증: `npm run build` 성공 (497 페이지 정적 생성)
+
 ### 맛집 탐방 UI 문구 수정 (커밋 ca630e3)
 
 - `src/app/life/restaurant/page.tsx`: 소개 문구 교체 — API 기반 설명 → "실시간 매장 정보에 에디터의 감성 한 줄 요약을 더했습니다…"

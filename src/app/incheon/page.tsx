@@ -54,7 +54,7 @@ export default async function IncheonPage() {
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
             <div className="mb-8">
-              <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
+              <h1 className="text-2xl font-extrabold flex items-center gap-3 mb-2">
                 <span className="text-3xl">🏙</span> 인천 지역 정보
               </h1>
               <p className="text-stone-500 text-sm">인천광역시 내 행사·축제·보조금 정보 전체 목록입니다.</p>
