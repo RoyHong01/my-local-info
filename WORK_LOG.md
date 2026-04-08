@@ -7,6 +7,19 @@
 
 ## 2026-04-08
 
+### Supabase 캐시 연동 + 환경변수 `.env.local` 단일화
+
+- `scripts/collect-life-restaurants.mjs`:
+  - `@supabase/supabase-js` 연동 추가
+  - `restaurants_cache` 테이블을 `kakao_id` 기준으로 조회해 평점 캐시 hit 시 Google Places 호출을 건너뛰도록 구현
+  - 캐시 miss 시에만 Google Places 호출 후 결과를 `upsert` 저장
+  - Supabase 오류 발생 시 수집이 멈추지 않도록 try/catch fallback 유지
+- `package.json`, `package-lock.json`:
+  - `@supabase/supabase-js` 의존성 추가
+- 환경변수 정책:
+  - 로컬 민감키 파일을 `.env.local` 기준으로 통일, `.env` 제거
+  - `.github/copilot-instructions.md`에 `.env.local` 단일 사용 원칙 명시
+
 ### 맛집 수집 API 비용 최적화 (Gemini/Google Places 경량화)
 
 - `scripts/collect-life-restaurants.mjs`:

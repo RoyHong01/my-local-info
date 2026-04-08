@@ -22,6 +22,15 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- Supabase 기반 맛집 평점 캐시 도입
+  - `scripts/collect-life-restaurants.mjs`에 `@supabase/supabase-js` 연동
+  - `restaurants_cache`에서 `kakao_id` 캐시 조회 후 hit면 Google Places 호출 생략
+  - miss 시 Google 호출 후 결과(`place_id`, `rating`, `user_rating_count`)를 `upsert`
+  - DB 통신 오류 시 try/catch로 로깅 후 기존 Google 호출 흐름으로 fallback 유지
+- 환경변수 파일 운영 기준 통일
+  - 로컬 민감키는 `.env.local` 단일 사용, `.env` 미사용 원칙
+  - `.github/copilot-instructions.md`에 원칙 반영
+
 - 맛집 수집 API 비용 최적화
   - `scripts/collect-life-restaurants.mjs`에서 Gemini 요약 모델을 환경변수 기반으로 전환 (`RESTAURANT_GEMINI_MODEL` -> `GEMINI_MODEL` -> `gemini-1.5-flash`)
   - Google Places Text Search FieldMask를 `places.id`, `places.rating`, `places.userRatingCount`만 요청하도록 최소화

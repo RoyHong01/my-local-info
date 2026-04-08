@@ -20,6 +20,8 @@
 - Cloudflare Pages — 호스팅 및 배포
 
 ## 환경변수 (.env.local)
+- **환경변수 운영 원칙**: 민감 키는 `.env.local`만 사용하고 `.env`는 사용/유지하지 않는다.
+- **우선순위 원칙**: 동일 키가 있으면 `.env.local` 값을 기준으로 적용한다.
 - ANTHROPIC_API_KEY: Claude API 데이터 본문(description_markdown) 생성
 - GEMINI_API_KEY: Gemini API 블로그 생성
 - PUBLIC_DATA_API_KEY: 공공데이터포털 (보조금24, 인천 데이터)

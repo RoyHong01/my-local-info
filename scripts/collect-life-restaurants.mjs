@@ -1,12 +1,85 @@
 import fsSync from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-1.5-flash';
+
+function createSupabaseCacheClient() {
+  const supabaseUrl = process.env.PICKNJOY_SUPABASE_URL;
+  const supabaseSecret = process.env.PICKNJOY_SUPABASE_SECRET_KEY;
+  if (!supabaseUrl || !supabaseSecret) return null;
+
+  try {
+    return createClient(supabaseUrl, supabaseSecret, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  } catch (error) {
+    console.warn('[Supabase] 클라이언트 초기화 실패:', error?.message || error);
+    return null;
+  }
+}
+
+async function getCachedRestaurantRating(supabase, kakaoId) {
+  if (!supabase || !kakaoId) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('restaurants_cache')
+      .select('kakao_id, place_id, rating, user_rating_count')
+      .eq('kakao_id', String(kakaoId))
+      .maybeSingle();
+
+    if (error) {
+      console.warn(`[Supabase] 캐시 조회 실패(${kakaoId}):`, error.message || error);
+      return null;
+    }
+
+    const placeId = String(data?.place_id || '').trim();
+    const rating = typeof data?.rating === 'number' ? data.rating : Number(data?.rating);
+    const ratingCount = typeof data?.user_rating_count === 'number'
+      ? data.user_rating_count
+      : Number(data?.user_rating_count);
+
+    if (!placeId || Number.isNaN(rating)) return null;
+
+    return {
+      placeId,
+      rating,
+      ratingCount: Number.isNaN(ratingCount) ? null : ratingCount,
+    };
+  } catch (error) {
+    console.warn(`[Supabase] 캐시 조회 예외(${kakaoId}):`, error?.message || error);
+    return null;
+  }
+}
+
+async function upsertRestaurantRatingCache(supabase, item, googleResult) {
+  if (!supabase || !item?.id || !googleResult?.placeId || typeof googleResult?.rating !== 'number') {
+    return;
+  }
+
+  try {
+    const { error } = await supabase
+      .from('restaurants_cache')
+      .upsert({
+        kakao_id: String(item.id),
+        place_id: String(googleResult.placeId),
+        rating: googleResult.rating,
+        user_rating_count: googleResult.userRatingCount ?? null,
+      }, { onConflict: 'kakao_id' });
+
+    if (error) {
+      console.warn(`[Supabase] 캐시 upsert 실패(${item.id}):`, error.message || error);
+    }
+  } catch (error) {
+    console.warn(`[Supabase] 캐시 upsert 예외(${item.id}):`, error?.message || error);
+  }
+}
 
 const REGION_QUERY_MAP = {
   'incheon': [
@@ -284,7 +357,7 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
   };
 }
 
-async function filterByGoogleRating(items, googleApiKey) {
+async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
   if (!googleApiKey) {
     console.warn('[Google Places] API 키 없음 — 평점 필터 건너뜀');
     return items.map((item) => ({
@@ -300,17 +373,35 @@ async function filterByGoogleRating(items, googleApiKey) {
   }
   const filtered = [];
   for (const item of items) {
+    let usedCache = false;
     let placeId = '';
     let rating = null;
     let ratingCount = null;
+
+    const cached = await getCachedRestaurantRating(supabaseCacheClient, item.id);
+    if (cached) {
+      usedCache = true;
+      placeId = cached.placeId;
+      rating = cached.rating;
+      ratingCount = cached.ratingCount;
+    }
+
+    let googleResult = null;
     try {
-      const result = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
-      placeId = result?.placeId || '';
-      rating = result?.rating ?? null;
-      ratingCount = result?.userRatingCount ?? null;
+      if (!usedCache) {
+        googleResult = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
+        placeId = googleResult?.placeId || '';
+        rating = googleResult?.rating ?? null;
+        ratingCount = googleResult?.userRatingCount ?? null;
+      }
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
     }
+
+    if (!usedCache && googleResult) {
+      await upsertRestaurantRatingCache(supabaseCacheClient, item, googleResult);
+    }
+
     if (rating === null) {
       console.log(`  ❌ 구글 평점 미확인 제외: ${item.name}`);
       continue;
@@ -319,7 +410,7 @@ async function filterByGoogleRating(items, googleApiKey) {
     if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
     } else {
-      console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
+      console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰${usedCache ? ', cache' : ''})`);
       filtered.push({
         ...item,
         googlePlaceId: placeId,
@@ -333,7 +424,9 @@ async function filterByGoogleRating(items, googleApiKey) {
       });
     }
     // 구글 API 속도 제한 방지 (200ms 간격)
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    if (!usedCache) {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
   }
   return filtered;
 }
@@ -435,7 +528,7 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
   return map;
 }
 
-async function collectRegion(region, kakaoKey, geminiKey, googleKey) {
+async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCacheClient) {
   const queries = REGION_QUERY_MAP[region];
   const results = [];
   for (const meta of queries) {
@@ -464,7 +557,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey) {
   if (preFilterItems.length === 0) return [];
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상)`);
-  const googleFiltered = await filterByGoogleRating(preFilterItems, googleKey);
+  const googleFiltered = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient);
   const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
   if (items.length === 0) {
     console.warn(`  [${region}] Google 평점 필터 후 후보 없음`);
@@ -493,6 +586,7 @@ async function run() {
   const kakaoKey = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
   const googleKey = process.env.GOOGLE_PLACES_API_KEY;
+  const supabaseCacheClient = createSupabaseCacheClient();
   const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
 
   if (!googleKey) {
@@ -508,10 +602,11 @@ async function run() {
   if (geminiKey) {
     console.log(`🤖 맛집 요약 Gemini 모델: ${restaurantGeminiModel}`);
   }
+  console.log(`🗄️  Supabase 캐시 사용: ${supabaseCacheClient ? 'ON' : 'OFF'}`);
 
   const regions = {};
   for (const regionKey of Object.keys(REGION_QUERY_MAP)) {
-    regions[regionKey] = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey);
+    regions[regionKey] = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey, supabaseCacheClient);
   }
 
   const payload = {
