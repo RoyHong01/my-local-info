@@ -3,8 +3,8 @@ import path from 'path';
 import matter from 'gray-matter';
 
 const postsDirectories = [
-  path.join(process.cwd(), 'src/content/posts'),
-  path.join(process.cwd(), 'src/content/life'),
+  path.resolve('src/content/posts'),
+  path.resolve('src/content/life'),
 ];
 
 export interface PostData {
@@ -158,75 +158,68 @@ function normalizeBlogContent(content: string, title: string): string {
 }
 
 export function getSortedPostsData(): PostData[] {
-  const markdownEntries: Array<{ fileName: string; fullPath: string }> = [];
-  try {
-    for (const dir of postsDirectories) {
+  const allPostsData: PostData[] = [];
+
+  for (const dir of postsDirectories) {
+    try {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
+        continue;
       }
-      const fileNames = fs.readdirSync(dir).filter((fileName) => fileName.endsWith('.md'));
+      const fileNames = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
       for (const fileName of fileNames) {
-        markdownEntries.push({ fileName, fullPath: path.join(dir, fileName) });
+        try {
+          const fullPath = path.join(dir, fileName);
+          const fileContents = fs.readFileSync(fullPath, 'utf8');
+          const matterResult = matter(fileContents);
+
+          let dateStr = matterResult.data.date || '';
+          if (dateStr instanceof Date) {
+            const year = dateStr.getFullYear();
+            const month = String(dateStr.getMonth() + 1).padStart(2, '0');
+            const day = String(dateStr.getDate()).padStart(2, '0');
+            dateStr = `${year}-${month}-${day}`;
+          } else if (typeof dateStr === 'string' && dateStr) {
+            dateStr = dateStr.split('T')[0];
+          }
+
+          const slug = fileName.replace(/\.md$/, '');
+          allPostsData.push({
+            slug: matterResult.data.slug || slug,
+            title: matterResult.data.title || slug,
+            date: dateStr,
+            summary: matterResult.data.summary || '',
+            description: matterResult.data.description || matterResult.data.summary || '',
+            category: matterResult.data.category,
+            tags: matterResult.data.tags,
+            image: matterResult.data.image,
+            sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+            coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
+            coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',
+            coupangBannerAlt: matterResult.data.coupang_banner_alt || matterResult.data.coupangBannerAlt || '',
+            placeName: matterResult.data.place_name || matterResult.data.placeName || '',
+            placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
+            placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
+            placeRegion: matterResult.data.place_region || matterResult.data.placeRegion || '',
+            placePhone: matterResult.data.place_phone || matterResult.data.placePhone || '',
+            placeUrl: matterResult.data.place_url || matterResult.data.placeUrl || '',
+            parkingInfo: matterResult.data.parking_info || matterResult.data.parkingInfo || '',
+            ratingValue: matterResult.data.rating_value || matterResult.data.ratingValue || '',
+            reviewCount: matterResult.data.review_count || matterResult.data.reviewCount || '',
+            priceRange: matterResult.data.price_range || matterResult.data.priceRange || '',
+            openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
+            content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
+          });
+        } catch {
+          // skip individual broken files
+        }
       }
+    } catch {
+      // skip inaccessible directories
     }
-  } catch (error) {
-    return [];
   }
 
-  const allPostsData = markdownEntries
-    .map(({ fileName, fullPath }) => {
-      const slug = fileName.replace(/\.md$/, '');
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-      const matterResult = matter(fileContents);
-      
-      let dateStr = matterResult.data.date || '';
-      if (dateStr instanceof Date) {
-        // YYYY-MM-DD
-        const year = dateStr.getFullYear();
-        const month = String(dateStr.getMonth() + 1).padStart(2, '0');
-        const day = String(dateStr.getDate()).padStart(2, '0');
-        dateStr = `${year}-${month}-${day}`;
-      } else if (typeof dateStr === 'string' && dateStr) {
-        // Assume it's already YYYY-MM-DD or similar
-        dateStr = dateStr.split('T')[0];
-      }
-
-      return {
-        slug: matterResult.data.slug || slug,
-        title: matterResult.data.title || slug,
-        date: dateStr,
-        summary: matterResult.data.summary || '',
-        description: matterResult.data.description || matterResult.data.summary || '',
-        category: matterResult.data.category,
-        tags: matterResult.data.tags,
-        image: matterResult.data.image,
-        sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
-        coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
-        coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',
-        coupangBannerAlt: matterResult.data.coupang_banner_alt || matterResult.data.coupangBannerAlt || '',
-        placeName: matterResult.data.place_name || matterResult.data.placeName || '',
-        placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
-        placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
-        placeRegion: matterResult.data.place_region || matterResult.data.placeRegion || '',
-        placePhone: matterResult.data.place_phone || matterResult.data.placePhone || '',
-        placeUrl: matterResult.data.place_url || matterResult.data.placeUrl || '',
-        parkingInfo: matterResult.data.parking_info || matterResult.data.parkingInfo || '',
-        ratingValue: matterResult.data.rating_value || matterResult.data.ratingValue || '',
-        reviewCount: matterResult.data.review_count || matterResult.data.reviewCount || '',
-        priceRange: matterResult.data.price_range || matterResult.data.priceRange || '',
-        openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
-        content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
-      };
-    });
-
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export function getPostData(slug: string): PostData | null {
