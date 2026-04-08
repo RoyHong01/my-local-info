@@ -118,7 +118,8 @@
 
 ### 자동화 개선 완료: 검증 + 비용 모니터링 + 프롬프트 안정화
 
-**1단계) 데이터 수집 검증 강화 + Anthropic 사용량 추적**
+#### 1단계) 데이터 수집 검증 강화 + Anthropic 사용량 추적
+
 - 3개 수집 스크립트(`collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`)에 `validateFetchedData()` 헬퍼 함수 추가
   - API 조회 결과 0건이면 경고 표시
   - API 조회 결과가 기존 데이터의 50% 이하면 경고 표시
@@ -130,12 +131,14 @@
   - 핵심 요약에 "데이터 검증" 행 표시
   - 핵심 요약에 "Anthropic 사용량" 행으로 각 지역별 input/output 토큰 누적 표시
 
-**2단계) 블로그/초이스 포스트 프롬프트 안정화**
+#### 2단계) 블로그/초이스 포스트 프롬프트 안정화
+
 - `generate-blog-post.js`: temperature 0.9 → 0.4, topP 0.92 추가
 - `generate-choice-post.js`: temperature 0.9 → 0.35, topP 0.92 추가
 - 목표: 생성 결과의 형식/구조 일관성 향상 (출력 편차 감소)
 
-**3단계) 문서 규칙 자동화 변경**
+#### 3단계) 문서 규칙 자동화 변경
+
 - `.github/copilot-instructions.md` 규칙 8번: 커밋/배포 후 "필수 확인 질문" → "자동 동기화" 정책으로 변경
 - `CLAUDE.md` 규칙 10번: 동일 내용으로 변경
 - `COPILOT_MEMORY.md` 운영 규칙에 "별도 사용자 확인 질문 없이 자동 동기화" 명시
