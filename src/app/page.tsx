@@ -281,24 +281,24 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❶</div>
+            <div className="bg-white rounded-xl px-4 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0 mb-2">❶</div>
               <div className="min-w-0">
-                <h3 className="text-xs font-bold text-gray-900 mb-0.5">정보는 넘치는데, 정작 &quot;나에게 해당되는&quot; 것을 모른다</h3>
+                <h3 className="text-xs font-bold text-gray-900 mb-1 leading-snug">수많은 정보 속 나에게 딱 맞는 혜택은?</h3>
                 <p className="text-[11px] text-gray-500 leading-relaxed">탭만 열다가 30분. 지원금 2,000개 중 어디서부터?</p>
               </div>
             </div>
-            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❷</div>
+            <div className="bg-white rounded-xl px-4 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0 mb-2">❷</div>
               <div className="min-w-0">
-                <h3 className="text-xs font-bold text-gray-900 mb-0.5">알았을 때는 이미 신청 마감</h3>
+                <h3 className="text-xs font-bold text-gray-900 mb-1 leading-snug">알았을 때는 이미 신청 마감</h3>
                 <p className="text-[11px] text-gray-500 leading-relaxed">마감일 하루 전날 알면 이미 늦습니다.</p>
               </div>
             </div>
-            <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0">❸</div>
+            <div className="bg-white rounded-xl px-4 py-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center">
+              <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center text-sm shrink-0 mb-2">❸</div>
               <div className="min-w-0">
-                <h3 className="text-xs font-bold text-gray-900 mb-0.5">주말마다 &quot;어디 가지?&quot; 검색만 하다 끝</h3>
+                <h3 className="text-xs font-bold text-gray-900 mb-1 leading-snug">주말마다 &quot;어디 가지?&quot; 검색만 하다 끝</h3>
                 <p className="text-[11px] text-gray-500 leading-relaxed">내 주변 축제, 아무도 정리해주지 않습니다.</p>
               </div>
             </div>
