@@ -60,31 +60,29 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
                 <dd>{item.phone}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-stone-700">카카오맵</dt>
-                <dd>
+                <dt className="font-semibold text-stone-700">바로가기</dt>
+                <dd className="flex items-center gap-2 text-[13px] sm:text-sm">
                   <a
                     href={item.mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-500 hover:underline"
+                    className="whitespace-nowrap text-orange-500 hover:underline"
                   >
                     지도에서 바로 보기
                   </a>
+                  {item.blogHref && (
+                    <>
+                      <span className="text-stone-300">|</span>
+                      <a
+                        href={item.blogHref}
+                        className="whitespace-nowrap text-orange-500 hover:underline"
+                      >
+                        해당 블로그 내용 보기
+                      </a>
+                    </>
+                  )}
                 </dd>
               </div>
-              {item.blogHref && (
-                <div>
-                  <dt className="font-semibold text-stone-700">관련 콘텐츠</dt>
-                  <dd>
-                    <a
-                      href={item.blogHref}
-                      className="text-orange-500 hover:underline"
-                    >
-                      해당 블로그 내용 보기
-                    </a>
-                  </dd>
-                </div>
-              )}
             </dl>
             <p className="text-stone-600 leading-7 whitespace-pre-line">{item.summary}</p>
           </article>
