@@ -37,6 +37,8 @@
   - `src/app/page.tsx` 홈 `description`과 `openGraph.description`을 80자 이내 권장 길이로 축약
 - 네이버 크롤링 보강
   - `scripts/generate-sitemap.js`에 `/privacy/`, `/terms/` 정적 경로를 추가해 정책 페이지 탐색성 강화
+- 홈 히어로 하단 통계 정렬 보정
+  - `src/app/page.tsx`에서 중앙 지표 고정, 좌우 지표 간격 확장으로 CTA 버튼 하단 균형 개선
 
 ### 2026-04-07 기준 핵심 요약
 

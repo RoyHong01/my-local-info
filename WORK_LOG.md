@@ -27,6 +27,8 @@
   - `src/app/page.tsx`: 홈 `metadata.description` + `openGraph.description`를 80자 이내 권장 길이로 축약
 - 네이버 크롤링 보강
   - `scripts/generate-sitemap.js`: 정적 페이지 목록에 `/privacy/`, `/terms/` 추가 (sitemap URL 477 -> 479)
+- 홈 히어로 하단 통계 정렬 보정
+  - `src/app/page.tsx`: 하단 3개 지표(보조금/축제·행사/업데이트)에서 중앙 지표는 고정하고 좌우 지표 간격을 확장해 상단 CTA 버튼 하단 정렬감을 개선
 
 - 관련 커밋:
   - `6a17d64` 카드 노출 제한 해제
