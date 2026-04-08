@@ -7,6 +7,24 @@
 
 ## 2026-04-08
 
+### 관리자 GitHub 로그 링크 로그인 경유 처리 + 보안 점검 정리
+
+- `src/lib/github-auth-link.ts`:
+  - GitHub 로그 URL을 `https://github.com/login?return_to=...` 형태로 변환하는 유틸 추가
+- `src/app/admin/page.tsx`, `src/app/admin/runs/page.tsx`:
+  - `Actions 로그 보기`, `GitHub Actions 실행 로그 보기` 링크를 로그인 경유 URL로 변경
+- 보안 점검 결론:
+  - 현재 프로젝트는 정적 export(`output: "export"`) 기반이라 Next.js `middleware.ts`를 서버 보안 계층으로 사용할 수 없음
+  - `/admin` 보호는 Cloudflare Access 경로 정책(`/admin`, `/admin/`, `/admin/*`)을 정확히 묶어 운영하는 방식이 정답
+- 빌드 검증: `npm run build` 성공 (492 sitemap URLs)
+
+### 인천/보조금/축제 페이지 건수 표시 및 헤더-카드 간격 확대 (커밋 44b84d9)
+
+- `src/app/incheon/page.tsx`, `src/app/subsidy/page.tsx`, `src/app/festival/page.tsx`:
+  - 설명 문구 하단에 `총 N건` 카운트 라인 추가 (`text-xs text-stone-400 mt-1`)
+  - 헤더 블록 하단 여백 `mb-8` → `mb-12` 로 확대 (헤더-카드 간격 개선)
+- 빌드 검증: `npm run build` 성공 (492 sitemap URLs)
+
 ### 네비 메뉴 설명 문구 고급화 + 상단 여백 배경 복구
 
 - `src/app/incheon/page.tsx`, `src/app/subsidy/page.tsx`, `src/app/festival/page.tsx`, `src/app/life/page.tsx`, `src/app/blog/page.tsx`:

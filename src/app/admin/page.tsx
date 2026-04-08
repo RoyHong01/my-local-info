@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getDailyRunIndex } from '@/lib/daily-runs';
+import { toGitHubLoginUrl } from '@/lib/github-auth-link';
 
 export const metadata: Metadata = {
   title: '관리자 | 픽앤조이',
@@ -38,7 +39,7 @@ export default async function AdminPage() {
                 </p>
               </div>
               <a
-                href={latest.runUrl}
+                href={toGitHubLoginUrl(latest.runUrl)}
                 target="_blank"
                 rel="noreferrer"
                 className="text-xs font-semibold text-stone-700 underline underline-offset-2 hover:text-stone-900"

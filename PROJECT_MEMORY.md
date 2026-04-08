@@ -22,6 +22,12 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 관리자 GitHub Actions 로그 링크 로그인 경유 적용
+  - `src/lib/github-auth-link.ts` 추가
+  - `src/app/admin/page.tsx`, `src/app/admin/runs/page.tsx`에서 GitHub 로그 링크를 `https://github.com/login?return_to=...` 형태로 변경
+- 관리자 보안 구조 점검 결론
+  - 본 프로젝트는 정적 export 배포라 Next.js `middleware.ts`를 실보안 계층으로 사용할 수 없음
+  - `/admin` 경로 보안은 Cloudflare Access 경로 정책(`/admin`, `/admin/`, `/admin/*`)을 정확히 묶어 관리하는 방식이 필요
 - 네비 메뉴 설명 문구 고급화
   - `src/app/incheon/page.tsx`, `src/app/subsidy/page.tsx`, `src/app/festival/page.tsx`, `src/app/life/page.tsx`, `src/app/blog/page.tsx`
   - 설명을 "목록 안내"에서 "사용자 혜택/큐레이션" 중심 문장으로 교체

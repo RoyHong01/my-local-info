@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getDailyRunIndex, getDailyRunReports } from '@/lib/daily-runs';
 import RunsDetailPanel from '@/components/RunsDetailPanel';
 import AdminTriggerPanel from '@/components/AdminTriggerPanel';
+import { toGitHubLoginUrl } from '@/lib/github-auth-link';
 
 export const metadata: Metadata = {
   title: '운영 리포트 | 픽앤조이',
@@ -127,7 +128,7 @@ export default async function AdminRunsPage() {
               {latest.workflow.runUrl && (
                 <div className="mt-4">
                   <a
-                    href={latest.workflow.runUrl}
+                    href={toGitHubLoginUrl(latest.workflow.runUrl)}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center rounded-lg bg-stone-900 text-white px-4 py-2 text-sm font-semibold hover:bg-stone-700 transition-colors"
