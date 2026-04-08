@@ -14,6 +14,12 @@ export interface RestaurantItem {
   blogTitle?: string;
   googleRating?: number | null;
   googleRatingCount?: number | null;
+  googlePriceLevel?: string;
+  googleBusinessStatus?: string;
+  googlePrimaryType?: string;
+  googleOpenNow?: boolean | null;
+  googleWeekdayText?: string[];
+  categoryName?: string;
   sourceQuery?: string;
   scenarioHint?: string;
   vibeHint?: string;
@@ -153,13 +159,29 @@ function isGenericRestaurantSummary(text: string): boolean {
     '오늘 어디 갈지 빠르게 정하고 싶을 때',
     '저장해둘 만한 후보가 되어줍니다',
     '방문해보셔도 좋아요',
+    '일정 사이에 넣기 좋은 후보예요',
+    '저장해두고 필요할 때 다시 꺼내보기 편한 타입',
   ].some((phrase) => normalized.includes(phrase));
 }
 
 function buildContextualRestaurantSummary(item: RestaurantItem): string {
   const scenario = item.scenarioHint?.trim() || '오늘 약속 장소를 고를 때';
   const vibe = item.vibeHint?.trim() || '무드가 과하지 않은 편';
-  const cuisine = item.cuisineHint?.trim() || '식사 결';
+  const vibePhrase = /무드|감성|분위기/.test(vibe) ? vibe : `${vibe} 무드`;
+  const cuisine = item.cuisineHint?.trim() || item.categoryName?.trim() || '식사 결';
+  const priceHint = item.googlePriceLevel
+    ? {
+        PRICE_LEVEL_INEXPENSIVE: '가볍게 가기 좋은 편이라 첫 후보로 올려두기 편해요.',
+        PRICE_LEVEL_MODERATE: '부담이 과하지 않은 편이라 약속 잡을 때 무난하게 보기 좋아요.',
+        PRICE_LEVEL_EXPENSIVE: '조금 힘줘서 가는 쪽 무드라 특별한 날 카드로 남겨둘 만해요.',
+        PRICE_LEVEL_VERY_EXPENSIVE: '가격대가 높은 편이라 기념일 카드로 보는 쪽이 잘 맞아요.',
+      }[item.googlePriceLevel] || ''
+    : '';
+  const openHint = item.googleOpenNow === true
+    ? '영업 중 여부도 바로 확인돼서 일정 사이에 넣기 편해요.'
+    : item.googleOpenNow === false
+      ? '방문 전 영업시간만 한 번 더 보면 훨씬 안전하게 고를 수 있어요.'
+      : '';
   const ratingText = item.googleRating
     ? item.googleRatingCount
       ? `구글 평점 ${item.googleRating.toFixed(1)}점, 리뷰 ${item.googleRatingCount}개라 첫 선택지로 올려두기 괜찮아요.`
@@ -173,9 +195,9 @@ function buildContextualRestaurantSummary(item: RestaurantItem): string {
   ]);
 
   const secondLine = ratingText || pickBySeed(item.id + item.name, [
-    `${vibe} 쪽 결이 살아 있어서 ${cuisine} 찾는 날에 특히 잘 맞아요.`,
-    `${cuisine} 무드로 가볍게 방향을 잡고 싶을 때 꺼내보기 좋은 타입이에요.`,
-    `${vibe} 인상이 있어서 메뉴보다 분위기부터 보고 고르는 날에도 잘 어울려요.`,
+    priceHint || `${vibePhrase} 쪽 결이 살아 있어서 ${cuisine} 찾는 날에 특히 잘 맞아요.`,
+    openHint || `${cuisine} 무드로 가볍게 방향을 잡고 싶을 때 꺼내보기 좋은 타입이에요.`,
+    `${vibePhrase} 인상이 있어서 메뉴보다 분위기부터 보고 고르는 날에도 잘 어울려요.`,
   ]);
 
   return `${firstLine}\n\n${secondLine}`;
@@ -204,13 +226,7 @@ function normalizeLineBreakBySentence(text: string): string {
     chunks.push(sentences.slice(i, i + 2).join(' '));
   }
 
-  const normalized = chunks.join('\n\n').trim();
-
-  if (/(해요|어요|아요|입니다|있습니다|좋습니다|추천해요|권해요)\.?$/.test(normalized)) {
-    return normalized;
-  }
-
-  return `${normalized} 방문해보셔도 좋아요.`;
+  return chunks.join('\n\n').trim();
 }
 
 function buildFallbackSummary(placeName: string, address: string): string {

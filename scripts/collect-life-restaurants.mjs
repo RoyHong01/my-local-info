@@ -1,3 +1,4 @@
+import fsSync from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -66,6 +67,70 @@ const REGION_LABEL = {
   'gyeonggi': '경기',
 };
 
+function loadLocalEnvFiles() {
+  const envFiles = [
+    { file: '.env', override: false },
+    { file: '.env.local', override: true },
+  ];
+
+  for (const envFile of envFiles) {
+    const envPath = path.join(process.cwd(), envFile.file);
+    if (!fsSync.existsSync(envPath)) continue;
+
+    const raw = fsSync.readFileSync(envPath, 'utf-8');
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const eqIndex = trimmed.indexOf('=');
+      if (eqIndex < 0) continue;
+
+      const key = trimmed.slice(0, eqIndex).trim();
+      let value = trimmed.slice(eqIndex + 1).trim();
+      if (!key) continue;
+      if (process.env[key] && !envFile.override) continue;
+
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+
+      process.env[key] = value;
+    }
+  }
+}
+
+function pickBySeed(seed, values) {
+  const base = Array.from(String(seed || '')).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return values[base % values.length];
+}
+
+function normalizePriceLevel(priceLevel) {
+  const labels = {
+    PRICE_LEVEL_FREE: '가격 정보는 더 확인이 필요하지만, 가볍게 후보에 올려두기에는 무리가 없어요.',
+    PRICE_LEVEL_INEXPENSIVE: '가볍게 가기 좋은 편이라 첫 후보로 올려두기 편해요.',
+    PRICE_LEVEL_MODERATE: '부담이 과하지 않은 편이라 약속 잡을 때 무난하게 보기 좋아요.',
+    PRICE_LEVEL_EXPENSIVE: '조금 힘줘서 가는 편이라 특별한 날 카드로 남겨둘 만해요.',
+    PRICE_LEVEL_VERY_EXPENSIVE: '가격대가 높은 편이라 기념일 카드로 보는 쪽이 잘 맞아요.',
+  };
+
+  return labels[priceLevel] || '';
+}
+
+function isGenericRestaurantSummary(text) {
+  const normalized = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!normalized) return true;
+  if (!/[.!?…]$/.test(normalized)) return true;
+
+  return [
+    '약속 동선을 짜기 편한 편이에요',
+    '오늘 어디 갈지 빠르게 정하고 싶을 때',
+    '저장해둘 만한 후보가 되어줍니다',
+    '방문해보셔도 좋아요',
+    '일정 사이에 넣기 좋은 후보예요',
+    '저장해두고 필요할 때 다시 꺼내보기 편한 타입',
+  ].some((phrase) => normalized.includes(phrase));
+}
+
 function normalizeLineBreakBySentence(text) {
   const trimmed = String(text || '').trim();
   if (!trimmed) return '';
@@ -80,16 +145,53 @@ function normalizeLineBreakBySentence(text) {
     chunks.push(sentences.slice(i, i + 2).join(' '));
   }
 
-  const normalized = chunks.join('\n\n').trim();
-  if (/(해요|어요|아요|입니다|있습니다|좋습니다|추천해요|권해요)\.?$/.test(normalized)) {
-    return normalized;
-  }
-  return `${normalized} 방문해보셔도 좋아요.`;
+  return chunks.join('\n\n').trim();
 }
 
 function buildFallbackSummary(placeName, address) {
-  const base = `${placeName}은(는) ${address} 근처에서 약속 동선을 짜기 편한 편이에요. 오늘 어디 갈지 빠르게 정하고 싶을 때 저장해둘 만한 후보가 되어줍니다.`;
+  const base = `${placeName}은(는) ${address} 근처에서 일정 사이에 넣기 좋은 후보예요. 과장된 소개보다도, 저장해두고 필요할 때 다시 꺼내보기 편한 타입에 가까워요.`;
   return normalizeLineBreakBySentence(base);
+}
+
+function buildContextualRestaurantSummary(item) {
+  const scenario = item.scenarioHint || '오늘 약속 장소를 정할 때';
+  const vibe = item.vibeHint || '분위기 먼저 보고 고르기 좋은 결';
+  const vibePhrase = /무드|감성|분위기/.test(vibe) ? vibe : `${vibe} 무드`;
+  const cuisine = item.cuisineHint || item.categoryName || '식사 무드';
+  const priceHint = normalizePriceLevel(item.googlePriceLevel);
+  const openHint = item.googleOpenNow === true
+    ? '지금 영업 중 여부도 확인돼 동선 맞추기 편해요.'
+    : item.googleOpenNow === false
+      ? '방문 전 영업시간만 한 번 더 보면 더 안전해요.'
+      : '';
+  const ratingHint = item.googleRating
+    ? item.googleRatingCount
+      ? `구글 평점 ${item.googleRating.toFixed(1)}점, 리뷰 ${item.googleRatingCount}개라 첫 후보로 올려둘 이유는 충분해요.`
+      : `구글 평점 ${item.googleRating.toFixed(1)}점이라 기본 만족도는 기대해볼 만해요.`
+    : '';
+
+  const firstLine = pickBySeed(item.id, [
+    `${item.name}, ${scenario} 잡혔을 때 먼저 체크해볼 만해요.`,
+    `${scenario}에 맞춰 빠르게 고르려면 ${item.name}부터 열어봐도 흐름이 자연스러워요.`,
+    `${item.name}은(는) ${scenario}에 저장해두기 좋은 카드예요.`,
+  ]);
+
+  const secondLine = pickBySeed(`${item.id}:${item.name}`, [
+    ratingHint || `${vibePhrase} 인상이 살아 있어서 ${cuisine} 결로 방향 잡는 날에 잘 맞아요.`,
+    openHint || `${cuisine} 쪽으로 너무 무겁지 않게 고르고 싶을 때 꺼내보기 좋은 타입이에요.`,
+    priceHint || `${vibePhrase} 쪽 결이 보여서 메뉴보다 전체 분위기부터 보는 날에도 잘 어울려요.`,
+  ]);
+
+  return normalizeLineBreakBySentence(`${firstLine} ${secondLine}`.trim());
+}
+
+function getRestaurantSummary(item) {
+  const rawSummary = normalizeLineBreakBySentence(String(item.summary || '').trim());
+  if (!isGenericRestaurantSummary(rawSummary)) {
+    return rawSummary;
+  }
+
+  return buildContextualRestaurantSummary(item);
 }
 
 function getTrendScore(item, meta) {
@@ -132,6 +234,7 @@ function toRestaurantItem(place, meta) {
     address: address || '주소 정보 없음',
     phone: (place.phone || '').trim() || '전화번호 정보 없음',
     mapUrl: place.place_url || 'https://map.kakao.com/',
+    categoryName: (place.category_name || '').trim(),
     summary: '',
     sourceQuery: meta.query,
     scenarioHint: meta.scenarioHint,
@@ -141,7 +244,7 @@ function toRestaurantItem(place, meta) {
 }
 
 // ─── Google Places API (New) ────────────────────────────────────────────────
-async function fetchGooglePlaceRating(name, address, apiKey) {
+async function fetchGooglePlaceDetails(name, address, apiKey) {
   let res;
   try {
     res = await fetch('https://places.googleapis.com/v1/places:searchText', {
@@ -149,7 +252,15 @@ async function fetchGooglePlaceRating(name, address, apiKey) {
       headers: {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'places.rating,places.userRatingCount',
+        'X-Goog-FieldMask': [
+          'places.rating',
+          'places.userRatingCount',
+          'places.priceLevel',
+          'places.businessStatus',
+          'places.primaryTypeDisplayName.text',
+          'places.currentOpeningHours.openNow',
+          'places.regularOpeningHours.weekdayDescriptions',
+        ].join(','),
       },
       body: JSON.stringify({
         textQuery: `${name} ${address}`,
@@ -172,22 +283,48 @@ async function fetchGooglePlaceRating(name, address, apiKey) {
   return {
     rating: typeof place.rating === 'number' ? place.rating : null,
     userRatingCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : null,
+    priceLevel: place.priceLevel || '',
+    businessStatus: place.businessStatus || '',
+    primaryTypeDisplayName: place.primaryTypeDisplayName?.text || '',
+    openNow: typeof place.currentOpeningHours?.openNow === 'boolean' ? place.currentOpeningHours.openNow : null,
+    weekdayDescriptions: Array.isArray(place.regularOpeningHours?.weekdayDescriptions)
+      ? place.regularOpeningHours.weekdayDescriptions
+      : [],
   };
 }
 
 async function filterByGoogleRating(items, googleApiKey) {
   if (!googleApiKey) {
     console.warn('[Google Places] API 키 없음 — 평점 필터 건너뜀');
-    return items.map((item) => ({ ...item, googleRating: null, googleRatingCount: null }));
+    return items.map((item) => ({
+      ...item,
+      googleRating: null,
+      googleRatingCount: null,
+      googlePriceLevel: '',
+      googleBusinessStatus: '',
+      googlePrimaryType: '',
+      googleOpenNow: null,
+      googleWeekdayText: [],
+    }));
   }
   const filtered = [];
   for (const item of items) {
     let rating = null;
     let ratingCount = null;
+    let priceLevel = '';
+    let businessStatus = '';
+    let primaryType = '';
+    let openNow = null;
+    let weekdayText = [];
     try {
-      const result = await fetchGooglePlaceRating(item.name, item.address, googleApiKey);
+      const result = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
       rating = result?.rating ?? null;
       ratingCount = result?.userRatingCount ?? null;
+      priceLevel = result?.priceLevel || '';
+      businessStatus = result?.businessStatus || '';
+      primaryType = result?.primaryTypeDisplayName || '';
+      openNow = typeof result?.openNow === 'boolean' ? result.openNow : null;
+      weekdayText = Array.isArray(result?.weekdayDescriptions) ? result.weekdayDescriptions : [];
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
     }
@@ -196,11 +333,25 @@ async function filterByGoogleRating(items, googleApiKey) {
       continue;
     }
 
+    if (businessStatus && businessStatus !== 'OPERATIONAL') {
+      console.log(`  ❌ 영업 상태 제외: ${item.name} (${businessStatus})`);
+      continue;
+    }
+
     if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
     } else {
       console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
-      filtered.push({ ...item, googleRating: rating, googleRatingCount: ratingCount });
+      filtered.push({
+        ...item,
+        googleRating: rating,
+        googleRatingCount: ratingCount,
+        googlePriceLevel: priceLevel,
+        googleBusinessStatus: businessStatus,
+        googlePrimaryType: primaryType,
+        googleOpenNow: openNow,
+        googleWeekdayText: weekdayText,
+      });
     }
     // 구글 API 속도 제한 방지 (200ms 간격)
     await new Promise((resolve) => setTimeout(resolve, 200));
@@ -231,13 +382,23 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
     address: item.address,
     phone: item.phone,
     mapUrl: item.mapUrl,
+    categoryName: item.categoryName || '',
+    sourceQuery: item.sourceQuery || '',
+    scenarioHint: item.scenarioHint || '',
+    vibeHint: item.vibeHint || '',
+    cuisineHint: item.cuisineHint || '',
+    googleRating: item.googleRating ?? null,
+    googleRatingCount: item.googleRatingCount ?? null,
+    googlePriceLevel: item.googlePriceLevel || '',
+    googlePrimaryType: item.googlePrimaryType || '',
+    googleOpenNow: item.googleOpenNow,
   }));
 
   const prompt = [
     '당신은 2030 취향을 잘 아는 맛집 큐레이터입니다.',
-    '아래 JSON 배열의 각 맛집에 대해 카드용 한 줄 카피를 작성해주세요.',
+    '아래 JSON 배열의 각 맛집에 대해 카드용 2문장 요약을 작성해주세요.',
     '진부한 표현("고민될 때가 종종 있어요", "방문해보셔도 좋아요")은 금지합니다.',
-    'mapUrl(place_url)와 sourceQuery 문맥을 참고해 왜 저장해둘 만한지 짧고 세련되게 써주세요.',
+    'sourceQuery, scenarioHint, vibeHint, cuisineHint, googleRating, googlePriceLevel을 참고해 왜 저장해둘 만한지 짧고 세련되게 써주세요.',
     '과장/허위 없이, 빠르게 본론만 전달해주세요.',
     '문체 규칙:',
     '1) 반드시 가벼운 존댓말(~해요/~네요/~거든요) 사용',
@@ -245,6 +406,8 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
     '3) 2문장마다 줄바꿈(\\n\\n) 적용',
     '4) 과장/허위 금지',
     '5) 반드시 JSON 배열만 반환',
+    '6) 주소만 반복하거나 템플릿처럼 똑같은 문장 구조를 복붙하지 마세요.',
+    '7) 확인되지 않은 메뉴/주차/웨이팅 시간은 절대 단정하지 마세요.',
     '반환 스키마: [{"id":"...","summary":"..."}]',
     `지역: ${regionLabel}`,
     '입력 데이터:',
@@ -339,11 +502,16 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey) {
 
   return items.map((item) => ({
     ...item,
-    summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
+    summary: getRestaurantSummary({
+      ...item,
+      summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
+    }),
   }));
 }
 
 async function run() {
+  loadLocalEnvFiles();
+
   const kakaoKey = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
   const googleKey = process.env.GOOGLE_PLACES_API_KEY;
