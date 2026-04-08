@@ -49,11 +49,12 @@ export default async function FestivalPage() {
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
-            <div className="mb-8">
+            <div className="mb-12">
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
                 <span className="text-3xl">🎪</span> 전국 축제·여행 정보
               </h1>
               <p className="mt-3 text-gray-500 text-sm">떠나고 싶은 모든 순간을 위해, 전국의 계절 축제와 숨은 명소들을 에디터의 시선으로 큐레이션합니다.</p>
+              <p className="text-xs text-stone-400 mt-1">총 {items.length}건</p>
             </div>
 
             <ScrollRestorer storageKey="festivalScrollY" />

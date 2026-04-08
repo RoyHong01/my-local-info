@@ -43,11 +43,12 @@ export default async function SubsidyPage() {
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">
-            <div className="mb-8">
+            <div className="mb-12">
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
                 <span className="text-3xl">💰</span> 전국 보조금·복지 정책
               </h1>
               <p className="mt-3 text-gray-500 text-sm">당신의 삶을 든든하게 채워줄 정책 가이드. 생애주기별 꼭 필요한 혜택들을 꼼꼼하게 골라 담았습니다.</p>
+              <p className="text-xs text-stone-400 mt-1">총 {items.length}건</p>
             </div>
 
             <ScrollRestorer storageKey="subsidyScrollY" />
