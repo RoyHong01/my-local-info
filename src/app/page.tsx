@@ -208,7 +208,7 @@ export default async function Home() {
           </p>
 
           {/* Sub-description */}
-          <p className="text-xs sm:text-sm md:text-base text-gray-500 font-normal max-w-2xl mx-auto mb-14 animate-fade-in-up leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-gray-500 font-normal max-w-2xl mx-auto mb-16 md:mb-20 animate-fade-in-up leading-relaxed">
             인천 생활정보부터 전국 보조금·복지·축제까지 —<br className="hidden sm:inline" />
             흩어진 공공정보를 매일 직접 수집해서 딱 한 곳에 정리해드려요.<br className="hidden sm:inline" />
             검색하다 지치셨다면, 오늘이 마지막 검색입니다.
