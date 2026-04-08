@@ -167,7 +167,7 @@ export default async function Home() {
   return (
     <div className="bg-[#F9F9F7] font-sans text-stone-800">
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-x-hidden overflow-y-visible w-full">
+      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden w-full">
         {/* Background gradient: white → soft orange */}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-orange-50 to-orange-300" />
 
@@ -218,30 +218,36 @@ export default async function Home() {
           <div className="grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 animate-fade-in-up px-2 mx-auto">
             <Link
               href="/subsidy"
-              className="group flex min-h-[4.5rem] w-full items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
+              className="group flex min-h-[4.5rem] w-full items-center justify-center px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
             >
-              <span>👉</span>
-              <span className="text-center leading-snug">내가 받을 수 있는 보조금</span>
+              <span className="flex items-center justify-center gap-2 sm:gap-3 text-center leading-snug">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center">👉</span>
+                <span className="block">내가 받을 수 있는 보조금</span>
+              </span>
             </Link>
             <Link
               href="/festival"
-              className="group flex min-h-[4.5rem] w-full items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
+              className="group flex min-h-[4.5rem] w-full items-center justify-center px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
             >
-              <span>🎉</span>
-              <span className="text-center leading-snug">이번 주말 전국 행사·축제</span>
+              <span className="flex items-center justify-center gap-2 sm:gap-3 text-center leading-snug">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center">🎉</span>
+                <span className="block">이번 주말 전국 행사·축제</span>
+              </span>
             </Link>
             <Link
               href="/life/restaurant"
-              className="group flex min-h-[4.5rem] w-full items-center justify-center gap-2 sm:gap-3 px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
+              className="group flex min-h-[4.5rem] w-full items-center justify-center px-4 sm:px-5 py-3.5 bg-white text-orange-600 font-bold text-sm sm:text-base rounded-2xl border border-orange-200 shadow-sm hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-300"
             >
-              <span>🍽️</span>
-              <span className="text-center leading-snug">요즘 뜨는 인천·서울·경기 맛집</span>
+              <span className="flex items-center justify-center gap-2 sm:gap-3 text-center leading-snug">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center">🍽️</span>
+                <span className="block">요즘 뜨는 인천·서울·경기 맛집</span>
+              </span>
             </Link>
           </div>
 
           {/* Stats */}
           <div className="mt-14 grid w-full max-w-4xl grid-cols-3 items-start gap-6 sm:gap-8 md:gap-12 mx-auto px-4 animate-fade-in-up">
-            <div className="text-center justify-self-start">
+            <div className="text-center justify-self-center">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyAll.filter(i => !i.expired).length}+</div>
               <div className="text-sm text-gray-500 mt-1">보조금 정보</div>
             </div>
@@ -249,7 +255,7 @@ export default async function Home() {
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{festivalAll.filter(i => !i.expired).length}+</div>
               <div className="text-sm text-gray-500 mt-1">축제·행사</div>
             </div>
-            <div className="text-center justify-self-end">
+            <div className="text-center justify-self-center">
               <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">매일</div>
               <div className="text-sm text-gray-500 mt-1">업데이트</div>
             </div>
