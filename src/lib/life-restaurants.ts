@@ -10,6 +10,8 @@ export interface RestaurantItem {
   phone: string;
   mapUrl: string;
   summary: string;
+  blogHref?: string;
+  blogTitle?: string;
   sourceQuery?: string;
   scenarioHint?: string;
   vibeHint?: string;

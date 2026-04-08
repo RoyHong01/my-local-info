@@ -72,6 +72,19 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
                   </a>
                 </dd>
               </div>
+              {item.blogHref && (
+                <div>
+                  <dt className="font-semibold text-stone-700">관련 콘텐츠</dt>
+                  <dd>
+                    <a
+                      href={item.blogHref}
+                      className="text-orange-500 hover:underline"
+                    >
+                      해당 블로그 내용 보기
+                    </a>
+                  </dd>
+                </div>
+              )}
             </dl>
             <p className="text-stone-600 leading-7 whitespace-pre-line">{item.summary}</p>
           </article>
