@@ -7,6 +7,24 @@
 
 ## 2026-04-08
 
+### 맛집 캐시 절감 지표 추가 (리포트/텔레그램 연동)
+
+- `scripts/collect-life-restaurants.mjs`:
+  - 수집 단계에 `cache_hit`, `cache_miss`, `google_called` 카운터 추가
+  - 실행 로그에 지역별/합계 지표 출력
+  - GitHub Actions step output(`cache_hit`, `cache_miss`, `google_called`) 기록
+  - `restaurants.json`에 metrics 스냅샷 포함
+- `.github/workflows/deploy.yml`:
+  - 3단계 맛집 수집 step에 Supabase Secret 환경변수 주입
+  - 리포트 생성 step에 캐시 지표 env 전달
+- `scripts/write-daily-report.mjs`:
+  - 핵심 요약 테이블에 맛집 캐시 지표(hit/miss/called) 추가
+  - runs/daily/index compact 항목에 지표 포함
+- `scripts/notify-telegram.mjs`:
+  - 텔레그램 메시지에 `🗄️ 맛집 캐시: hit/miss/google` 라인 추가
+- `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`:
+  - 맛집 DB 직결 전환 기준(1000건/성능이슈/동적기능) 명문화
+
 ### Supabase 캐시 연동 + 환경변수 `.env.local` 단일화
 
 - `scripts/collect-life-restaurants.mjs`:

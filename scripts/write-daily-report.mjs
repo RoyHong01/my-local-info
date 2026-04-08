@@ -238,6 +238,7 @@ function toMarkdown(report) {
   lines.push(`| 생성된 블로그 글 | ${report.changes.generatedBlogPosts.length}건 |`);
   lines.push(`| 생성된 맛집 글 | ${report.changes.generatedLifePosts.length}건 |`);
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
+  lines.push(`| 맛집 캐시(hit/miss/called) | ${Number(report.restaurantCache?.cacheHit || 0)} / ${Number(report.restaurantCache?.cacheMiss || 0)} / ${Number(report.restaurantCache?.googleCalled || 0)} |`);
   lines.push(`| 최종 배포 URL | ${latestDeployUrl || '-'} |`);
   if (report.imagePolicy) {
     lines.push(`| 축제 중간 이미지(삽입/생략) | ${Number(report.imagePolicy.midImageInsertedCount || 0)} / ${Number(report.imagePolicy.midImageOmittedCount || 0)} |`);
@@ -381,6 +382,9 @@ async function updateIndex(indexPath, report) {
     stageStatuses: report.stages.map((stage) => ({ key: stage.key, status: stage.status })),
     generatedBlogCount: report.changes.generatedBlogPosts.length,
     generatedLifeCount: report.changes.generatedLifePosts.length,
+    restaurantCacheHit: Number(report.restaurantCache?.cacheHit || 0),
+    restaurantCacheMiss: Number(report.restaurantCache?.cacheMiss || 0),
+    restaurantGoogleCalled: Number(report.restaurantCache?.googleCalled || 0),
     totalChangedFiles: report.changes.totalChangedFiles,
     blogBudgetEnabled: !!report.budget?.enabled,
     blogBudgetStopped: !!report.budget?.stopped,
@@ -448,6 +452,11 @@ async function main() {
     imagePolicy: {
       midImageInsertedCount: Number(process.env.MID_IMAGE_INSERTED_COUNT || 0),
       midImageOmittedCount: Number(process.env.MID_IMAGE_OMITTED_COUNT || 0),
+    },
+    restaurantCache: {
+      cacheHit: Number(process.env.RESTAURANT_CACHE_HIT || 0),
+      cacheMiss: Number(process.env.RESTAURANT_CACHE_MISS || 0),
+      googleCalled: Number(process.env.RESTAURANT_GOOGLE_CALLED || 0),
     },
     dataValidation: {
       incheon: {

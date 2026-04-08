@@ -81,6 +81,25 @@ async function upsertRestaurantRatingCache(supabase, item, googleResult) {
   }
 }
 
+function mergeCacheMetrics(base, addition) {
+  return {
+    cacheHit: Number(base?.cacheHit || 0) + Number(addition?.cacheHit || 0),
+    cacheMiss: Number(base?.cacheMiss || 0) + Number(addition?.cacheMiss || 0),
+    googleCalled: Number(base?.googleCalled || 0) + Number(addition?.googleCalled || 0),
+  };
+}
+
+function appendGithubOutput(name, value) {
+  const outputPath = process.env.GITHUB_OUTPUT;
+  if (!outputPath) return;
+
+  try {
+    fsSync.appendFileSync(outputPath, `${name}=${value}\n`, 'utf-8');
+  } catch (error) {
+    console.warn(`[GitHub Output] ${name} 기록 실패:`, error?.message || error);
+  }
+}
+
 const REGION_QUERY_MAP = {
   'incheon': [
     { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
@@ -358,19 +377,29 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
 }
 
 async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
+  const metrics = {
+    cacheHit: 0,
+    cacheMiss: 0,
+    googleCalled: 0,
+  };
+
   if (!googleApiKey) {
     console.warn('[Google Places] API 키 없음 — 평점 필터 건너뜀');
-    return items.map((item) => ({
-      ...item,
-      googleRating: null,
-      googleRatingCount: null,
-      googlePriceLevel: '',
-      googleBusinessStatus: '',
-      googlePrimaryType: '',
-      googleOpenNow: null,
-      googleWeekdayText: [],
-    }));
+    return {
+      filtered: items.map((item) => ({
+        ...item,
+        googleRating: null,
+        googleRatingCount: null,
+        googlePriceLevel: '',
+        googleBusinessStatus: '',
+        googlePrimaryType: '',
+        googleOpenNow: null,
+        googleWeekdayText: [],
+      })),
+      metrics,
+    };
   }
+
   const filtered = [];
   for (const item of items) {
     let usedCache = false;
@@ -381,14 +410,18 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
     const cached = await getCachedRestaurantRating(supabaseCacheClient, item.id);
     if (cached) {
       usedCache = true;
+      metrics.cacheHit += 1;
       placeId = cached.placeId;
       rating = cached.rating;
       ratingCount = cached.ratingCount;
+    } else {
+      metrics.cacheMiss += 1;
     }
 
     let googleResult = null;
     try {
       if (!usedCache) {
+        metrics.googleCalled += 1;
         googleResult = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
         placeId = googleResult?.placeId || '';
         rating = googleResult?.rating ?? null;
@@ -428,7 +461,11 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
   }
-  return filtered;
+
+  return {
+    filtered,
+    metrics,
+  };
 }
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -554,14 +591,22 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
     .sort((a, b) => b.score - a.score)
     .slice(0, GOOGLE_PRE_FILTER_SIZE)
     .map((entry) => entry.item);
-  if (preFilterItems.length === 0) return [];
+  if (preFilterItems.length === 0) {
+    return {
+      items: [],
+      cacheMetrics: { cacheHit: 0, cacheMiss: 0, googleCalled: 0 },
+    };
+  }
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상)`);
-  const googleFiltered = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient);
+  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient);
   const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
   if (items.length === 0) {
     console.warn(`  [${region}] Google 평점 필터 후 후보 없음`);
-    return [];
+    return {
+      items: [],
+      cacheMetrics,
+    };
   }
 
   let summaryMap = new Map();
@@ -571,13 +616,16 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
     console.warn(`[${region}] Gemini 요약 생성 실패, fallback 사용`, error?.message || error);
   }
 
-  return items.map((item) => ({
-    ...item,
-    summary: getRestaurantSummary({
+  return {
+    items: items.map((item) => ({
       ...item,
-      summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
-    }),
-  }));
+      summary: getRestaurantSummary({
+        ...item,
+        summary: summaryMap.get(item.id) || buildFallbackSummary(item.name, item.address),
+      }),
+    })),
+    cacheMetrics,
+  };
 }
 
 async function run() {
@@ -605,13 +653,28 @@ async function run() {
   console.log(`🗄️  Supabase 캐시 사용: ${supabaseCacheClient ? 'ON' : 'OFF'}`);
 
   const regions = {};
+  let totalCacheMetrics = { cacheHit: 0, cacheMiss: 0, googleCalled: 0 };
   for (const regionKey of Object.keys(REGION_QUERY_MAP)) {
-    regions[regionKey] = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey, supabaseCacheClient);
+    const { items, cacheMetrics } = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey, supabaseCacheClient);
+    regions[regionKey] = items;
+    totalCacheMetrics = mergeCacheMetrics(totalCacheMetrics, cacheMetrics);
+
+    console.log(`   [${REGION_LABEL[regionKey] || regionKey}] cache_hit=${cacheMetrics.cacheHit}, cache_miss=${cacheMetrics.cacheMiss}, google_called=${cacheMetrics.googleCalled}`);
   }
+
+  console.log(`📊 맛집 캐시 지표 합계: cache_hit=${totalCacheMetrics.cacheHit}, cache_miss=${totalCacheMetrics.cacheMiss}, google_called=${totalCacheMetrics.googleCalled}`);
+  appendGithubOutput('cache_hit', totalCacheMetrics.cacheHit);
+  appendGithubOutput('cache_miss', totalCacheMetrics.cacheMiss);
+  appendGithubOutput('google_called', totalCacheMetrics.googleCalled);
 
   const payload = {
     updatedAt: new Date().toISOString(),
     source: googleKey ? 'kakao+google+gemini' : 'kakao+gemini',
+    metrics: {
+      cache_hit: totalCacheMetrics.cacheHit,
+      cache_miss: totalCacheMetrics.cacheMiss,
+      google_called: totalCacheMetrics.googleCalled,
+    },
     regions,
   };
 

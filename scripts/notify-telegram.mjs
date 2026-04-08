@@ -90,8 +90,12 @@ async function buildMessage(report) {
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const budget = report.budget;
   const imagePolicy = report.imagePolicy || {};
+  const restaurantCache = report.restaurantCache || {};
   const midImageInsertedCount = Number(imagePolicy.midImageInsertedCount || 0);
   const midImageOmittedCount = Number(imagePolicy.midImageOmittedCount || 0);
+  const cacheHit = Number(restaurantCache.cacheHit || 0);
+  const cacheMiss = Number(restaurantCache.cacheMiss || 0);
+  const googleCalled = Number(restaurantCache.googleCalled || 0);
 
   const statusIcon = hasFailed ? '⚠️' : '✅';
   const statusText = hasFailed ? '일부 단계 실패' : '전체 정상 완료';
@@ -152,6 +156,7 @@ async function buildMessage(report) {
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
     `🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`,
+    `🗄️ 맛집 캐시: hit ${cacheHit} / miss ${cacheMiss} / google ${googleCalled}`,
     budgetLine,
   ];
 

@@ -191,6 +191,8 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
+          PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
 
       - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
         id: generate_restaurant_posts
@@ -278,6 +280,9 @@ jobs:
           DEPLOY_STAGE2_OUTCOME: ${{ steps.deploy_stage2.outcome }}
           DEPLOY_STAGE2_URL: ${{ steps.deploy_stage2.outputs.deploy_url }}
           COLLECT_RESTAURANTS_OUTCOME: ${{ steps.collect_restaurants.outcome }}
+          RESTAURANT_CACHE_HIT: ${{ steps.collect_restaurants.outputs.cache_hit }}
+          RESTAURANT_CACHE_MISS: ${{ steps.collect_restaurants.outputs.cache_miss }}
+          RESTAURANT_GOOGLE_CALLED: ${{ steps.collect_restaurants.outputs.google_called }}
           GENERATE_RESTAURANT_POSTS_OUTCOME: ${{ steps.generate_restaurant_posts.outcome }}
           BUILD_STAGE3_OUTCOME: ${{ steps.build_stage3.outcome }}
           E2E_STAGE3_OUTCOME: ${{ steps.e2e_stage3.outcome }}

@@ -22,6 +22,13 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 맛집 발행 구조 유지 기준 명문화
+  - 기본 구조: `Kakao 수집 -> Supabase 평점 캐시 -> restaurants.json -> 맛집 블로그 생성`
+  - DB 직결 전환은 `restaurants_cache` 1,000건 이상, 스냅샷 성능 이슈, 동적 기능 요구가 확인될 때만 검토
+- 절감 지표 모니터링 추가
+  - 수집 단계에서 `cache_hit`, `cache_miss`, `google_called`를 집계
+  - 일일 리포트 및 텔레그램 요약 메시지에 동일 지표를 노출해 비용 절감 효과를 수치로 추적
+
 - Supabase 기반 맛집 평점 캐시 도입
   - `scripts/collect-life-restaurants.mjs`에 `@supabase/supabase-js` 연동
   - `restaurants_cache`에서 `kakao_id` 캐시 조회 후 hit면 Google Places 호출 생략
