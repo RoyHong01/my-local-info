@@ -47,7 +47,7 @@ export default async function SubsidyPage() {
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
                 <span className="text-3xl">💰</span> 전국 보조금·복지 정책
               </h1>
-              <p className="text-stone-500 text-sm">청년지원, 출산지원, 주거지원, 노인복지 등 전국 단위 정책 전체 목록입니다.</p>
+              <p className="mt-3 text-gray-500 text-sm">당신의 삶을 든든하게 채워줄 정책 가이드. 생애주기별 꼭 필요한 혜택들을 꼼꼼하게 골라 담았습니다.</p>
             </div>
 
             <ScrollRestorer storageKey="subsidyScrollY" />

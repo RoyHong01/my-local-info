@@ -22,6 +22,13 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 네비 메뉴 설명 문구 고급화
+  - `src/app/incheon/page.tsx`, `src/app/subsidy/page.tsx`, `src/app/festival/page.tsx`, `src/app/life/page.tsx`, `src/app/blog/page.tsx`
+  - 설명을 "목록 안내"에서 "사용자 혜택/큐레이션" 중심 문장으로 교체
+  - 제목-설명 간격 `mt-3`, 설명 텍스트 `text-gray-500`로 통일
+- 상단 여백 배경 복구
+  - `src/components/PageContentShell.tsx`에 `bg-cherry-blossom` 추가
+  - 비홈 페이지 네비 아래 추가 여백의 흰색 노출 이슈 해소
 - 공통 상단 여백(홈 제외) 일괄 적용
   - `src/components/PageContentShell.tsx` 신규 추가, `src/app/layout.tsx`에서 연결
   - 홈(`/`)은 기존 유지, 비홈 페이지는 `pt-8 md:pt-10` 상단 여백 추가

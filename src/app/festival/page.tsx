@@ -53,7 +53,7 @@ export default async function FestivalPage() {
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-2">
                 <span className="text-3xl">🎪</span> 전국 축제·여행 정보
               </h1>
-              <p className="text-stone-500 text-sm">전국 축제, 관광지, 여행 추천, 계절 이벤트 전체 목록입니다.</p>
+              <p className="mt-3 text-gray-500 text-sm">떠나고 싶은 모든 순간을 위해, 전국의 계절 축제와 숨은 명소들을 에디터의 시선으로 큐레이션합니다.</p>
             </div>
 
             <ScrollRestorer storageKey="festivalScrollY" />

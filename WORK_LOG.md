@@ -7,6 +7,15 @@
 
 ## 2026-04-08
 
+### 네비 메뉴 설명 문구 고급화 + 상단 여백 배경 복구
+
+- `src/app/incheon/page.tsx`, `src/app/subsidy/page.tsx`, `src/app/festival/page.tsx`, `src/app/life/page.tsx`, `src/app/blog/page.tsx`:
+  - 제목 하단 설명 문구를 사용자 혜택 중심 카피로 교체 ("목록입니다" 톤 제거)
+  - 제목-설명 간격을 `mt-3`로 통일, 설명 색상을 `text-gray-500`로 통일
+- `src/components/PageContentShell.tsx`:
+  - 비홈 페이지 상단 여백에 `bg-cherry-blossom` 적용하여 흰 여백 노출 문제 복구
+- 빌드 검증: `npm run build` 성공 (497 페이지 정적 생성)
+
 ### 상단 레이아웃 여백/타이틀 간격/탭 라벨 미세 조정
 
 - `src/app/layout.tsx` + `src/components/PageContentShell.tsx`:

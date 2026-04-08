@@ -98,7 +98,7 @@ export default async function LifePage() {
         <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
           <span className="text-3xl">🌟</span> 일상의 즐거움
         </h1>
-        <p className="text-stone-500 text-sm">맛집 탐방부터 쇼핑 초이스까지, 오늘의 선택을 도와드립니다</p>
+        <p className="mt-3 text-gray-500 text-sm">고민은 줄이고 즐거움은 더하고. 검증된 맛집과 감성 가득한 쇼핑 정보로 당신의 하루를 채워드릴게요.</p>
         <p className="text-xs text-stone-400 mt-1">총 {total}편</p>
       </div>
 

@@ -11,5 +11,5 @@ export default function PageContentShell({ children }: PageContentShellProps) {
   const pathname = usePathname();
   const isHome = pathname === '/';
 
-  return <div className={`flex-1 ${isHome ? '' : 'pt-8 md:pt-10'}`}>{children}</div>;
+  return <div className={`flex-1 ${isHome ? '' : 'bg-cherry-blossom pt-8 md:pt-10'}`}>{children}</div>;
 }

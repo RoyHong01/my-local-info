@@ -37,7 +37,7 @@ export default function BlogPage() {
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
                 <span className="text-3xl">📝</span> 픽앤조이 블로그
               </h1>
-              <p className="text-stone-500 text-sm">인천 및 전국의 생활정보를 쉽고 친근하게 전해드립니다</p>
+              <p className="mt-3 text-gray-500 text-sm">정보에 온기를 더하는 픽앤조이의 기록들. 우리 삶에 꼭 필요한 다채로운 이야기를 친근하게 들려드려요.</p>
               <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
             </div>
 

@@ -57,7 +57,7 @@ export default async function IncheonPage() {
               <h1 className="text-2xl font-extrabold flex items-center gap-3 mb-2">
                 <span className="text-3xl">🏙</span> 인천 지역 정보
               </h1>
-              <p className="text-stone-500 text-sm">인천광역시 내 행사·축제·보조금 정보 전체 목록입니다.</p>
+              <p className="mt-3 text-gray-500 text-sm">우리 동네 인천의 모든 소식. 놓치기 아까운 축제부터 든든한 보조금까지 한눈에 확인하세요.</p>
             </div>
 
             <ScrollRestorer storageKey="incheonScrollY" />
