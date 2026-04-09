@@ -394,9 +394,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-3">
+          <div className="mt-4 pt-4 border-t border-stone-100 text-sm text-stone-500">
             {sourceLink && !isChoicePost && (
-              <p>
+              <p className="mt-1 mb-7">
                 <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
                   <span>공식 원문 바로가기</span>
                   <span>&rarr;</span>
