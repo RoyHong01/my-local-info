@@ -1,0 +1,134 @@
+{
+  "reportDateKst": "2026-04-10",
+  "generatedAtUtc": "2026-04-09T21:39:41.806Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24214483367",
+    "runNumber": 428,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24214483367",
+    "runStartedAtUtc": "2026-04-09T21:34:40Z",
+    "headSha": "900914306cdd7c91ecfbb0f07440c090a865c8bf"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://271a0ec9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 6건, 업데이트 94건, 총 162건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://bd369170.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "failure",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "cacb5ce9479c1bc47cd9d1e9cdb951122b216692",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-09",
+      "authoredAt": "2026-04-09T21:39:40Z",
+      "files": [
+        "src/content/posts/2026-04-09-incheon-donggu-youth-support.md",
+        "src/content/posts/2026-04-09-jangjahosu-cherryblossom.md",
+        "src/content/posts/2026-04-09-social-enterprise-tax-reduction.md"
+      ]
+    },
+    {
+      "sha": "304e446f6d4430735a8e589ff4db80c7e9baa593",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-09",
+      "authoredAt": "2026-04-09T21:36:50Z",
+      "files": [
+        "public/data/festival.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 4,
+    "dataChangedFiles": [
+      "public/data/festival.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-09-incheon-donggu-youth-support.md",
+      "src/content/posts/2026-04-09-jangjahosu-cherryblossom.md",
+      "src/content/posts/2026-04-09-social-enterprise-tax-reduction.md"
+    ],
+    "generatedLifePosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "src/content/posts/2026-04-09-incheon-donggu-youth-support.md",
+      "src/content/posts/2026-04-09-jangjahosu-cherryblossom.md",
+      "src/content/posts/2026-04-09-social-enterprise-tax-reduction.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 11.15,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 6건, 업데이트 94건, 총 162건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
