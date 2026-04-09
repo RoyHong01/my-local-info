@@ -528,6 +528,100 @@ function injectMidArticleImage(body, imageUrl, itemName) {
   };
 }
 
+function getCandidateText(candidate, keys) {
+  for (const key of keys) {
+    const value = candidate?.[key];
+    if (typeof value === 'string' && value.trim()) return value.trim();
+    if (typeof value === 'number') return String(value);
+  }
+  return '';
+}
+
+function normalizeInlineInfo(value) {
+  if (!value) return '';
+  return String(value)
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/\|\|/g, ' / ')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(' / ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\|/g, ' / ')
+    .trim();
+}
+
+function buildOneGlanceRows(candidate, category) {
+  const rows = [];
+  const pushRow = (label, value) => {
+    const normalized = normalizeInlineInfo(value);
+    if (!normalized) return;
+    rows.push([label, normalized]);
+  };
+
+  const startDate = getCandidateText(candidate, ['eventstartdate', 'startDate']);
+  const endDate = getCandidateText(candidate, ['eventenddate', 'endDate']);
+  const eventPeriod = startDate && endDate ? `${startDate} ~ ${endDate}` : '';
+
+  pushRow('서비스명', getCandidateText(candidate, ['서비스명', 'title', 'name']));
+  if (category === '전국 축제·여행') {
+    pushRow('행사기간', eventPeriod || endDate || startDate);
+  }
+  pushRow('신청기한', getCandidateText(candidate, ['신청기한', 'endDate']));
+  pushRow('지원내용', getCandidateText(candidate, ['지원내용', 'overview']));
+  pushRow('지원대상', getCandidateText(candidate, ['지원대상', 'target']));
+  pushRow('신청방법', getCandidateText(candidate, ['신청방법']));
+  pushRow('접수기관', getCandidateText(candidate, ['접수기관', '접수기관명', 'location']));
+  pushRow('문의전화', getCandidateText(candidate, ['전화문의', 'tel']));
+  pushRow('소관기관', getCandidateText(candidate, ['소관기관명']));
+  pushRow('주소', getCandidateText(candidate, ['addr1', 'addr2', 'location']));
+  pushRow('지원유형', getCandidateText(candidate, ['지원유형']));
+  pushRow('상세정보', getCandidateText(candidate, ['상세조회URL', 'homepage', 'link']));
+
+  return rows;
+}
+
+function buildOneGlanceInfoSection(candidate, category) {
+  const rows = buildOneGlanceRows(candidate, category);
+  if (rows.length === 0) return '';
+
+  const lines = [
+    '### 📌 한눈에 보는 신청 정보',
+    '',
+    '| 항목 | 내용 |',
+    '|------|------|',
+    ...rows.map(([label, value]) => `| ${label} | ${value} |`),
+  ];
+
+  return lines.join('\n').trim();
+}
+
+function ensureOneGlanceInfoSection(body, candidate, category) {
+  const section = buildOneGlanceInfoSection(candidate, category);
+  if (!section) return body;
+
+  const normalized = (body || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  if (!normalized) return section;
+
+  const headingRegex = /^###\s+.*한눈에 보는.*(?:신청 정보|정보 요약|핵심 정보).*$/m;
+  const headingMatch = normalized.match(headingRegex);
+
+  if (!headingMatch || headingMatch.index === undefined) {
+    return `${normalized}\n\n${section}`.replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  const start = headingMatch.index;
+  const lineEnd = normalized.indexOf('\n', start);
+  const afterHeading = lineEnd >= 0 ? normalized.slice(lineEnd + 1) : '';
+  const nextHeadingIdx = afterHeading.search(/^###\s+/m);
+
+  const before = normalized.slice(0, start).trimEnd();
+  const tail = nextHeadingIdx >= 0 ? afterHeading.slice(nextHeadingIdx).trimStart() : '';
+
+  return [before, section, tail].filter(Boolean).join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function postProcessGeneratedMarkdown(markdown, context) {
   const { frontmatter, body } = splitMarkdownSections(markdown);
   let normalizedBody = (body || '').trim();
@@ -557,6 +651,9 @@ function postProcessGeneratedMarkdown(markdown, context) {
     normalizedBody = midImageResult.body;
     midImageStatus = midImageResult.status;
   }
+
+  // 표 헤더만 남는 케이스/핵심 항목 누락 케이스를 방지하기 위해 source 데이터를 기준으로 섹션을 고정 보정
+  normalizedBody = ensureOneGlanceInfoSection(normalizedBody, context.candidate || {}, context.category);
 
   // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)
   // ~~취소선~~ 은 건드리지 않고, 단독 ~ 만 교체
@@ -847,6 +944,7 @@ ${festivalStyleOverride}
     category: candidate._category,
     imageUrl,
     midImageUrl,
+    candidate,
   });
   finalContent = postProcessed.content;
   console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);

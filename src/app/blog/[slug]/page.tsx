@@ -395,6 +395,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
           <AdBanner />
           <div className="mt-8 pt-6 border-t border-stone-100 text-sm text-stone-500 space-y-4">
+            {sourceLink && !isChoicePost && (
+              <p>
+                <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
+                  <span>공식 원문 바로가기</span>
+                  <span>&rarr;</span>
+                </a>
+              </p>
+            )}
             <p className={isChoicePost ? 'text-base font-normal text-stone-700 leading-7' : 'text-sm text-stone-500 leading-6'}>
               {isRestaurantPost ? (
                 <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
@@ -412,14 +420,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </>
               )}
             </p>
-            {sourceLink && !isChoicePost && (
-              <p>
-                <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
-                  <span>공식 원문 바로가기</span>
-                  <span>&rarr;</span>
-                </a>
-              </p>
-            )}
           </div>
 
           <div className="mt-8">

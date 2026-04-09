@@ -148,10 +148,25 @@ function normalizeBlogContent(content: string, title: string): string {
     })
     .join('\n');
 
-  const firstNonEmpty = normalized.split('\n').find((line) => line.trim().length > 0) || '';
+  const lines = normalized.split('\n');
+  const firstNonEmptyIndex = lines.findIndex((line) => line.trim().length > 0);
+  const firstNonEmpty = firstNonEmptyIndex >= 0 ? lines[firstNonEmptyIndex] : '';
+
   if (!/^#{2,6}\s+/.test(firstNonEmpty)) {
     const hook = `## ${buildHookFromTitle(title)}`;
     normalized = `${hook}\n\n${normalized}`;
+  } else if (/^##\s+훅\s*$/.test(firstNonEmpty)) {
+    const nextContentIndex = lines.findIndex(
+      (line, index) => index > firstNonEmptyIndex && line.trim().length > 0
+    );
+
+    if (nextContentIndex > firstNonEmptyIndex) {
+      lines[firstNonEmptyIndex] = `## ${lines[nextContentIndex].trim()}`;
+      lines.splice(nextContentIndex, 1);
+      normalized = lines.join('\n');
+    } else {
+      normalized = normalized.replace(/^##\s+훅\s*$/m, `## ${buildHookFromTitle(title)}`);
+    }
   }
 
   return normalized.replace(/\n{3,}/g, '\n\n').trim();
