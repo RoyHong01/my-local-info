@@ -106,6 +106,13 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta name="naver-site-verification" content="e64f4446ce00f3d310e0c0fddce06498be24e86a" />
+        {/* LCP 최적화: 벚꽃 배경 WebP preload (홈 제외 전 페이지 공통 배경) */}
+        <link
+          rel="preload"
+          href="/images/bg-cherry-blossom.webp"
+          as="image"
+          type="image/webp"
+        />
         {showAdsense && (
           <script
             async

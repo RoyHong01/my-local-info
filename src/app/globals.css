@@ -123,11 +123,12 @@ body {
 
 /* ── 벚꽃 배경 (페이지 전체 배경) ── */
 .bg-cherry-blossom {
-  background-image: url('/images/bg-cherry-blossom.png');
+  background-image: url('/images/bg-cherry-blossom.webp');
   background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-position: center top;
+  background-attachment: scroll;
   background-repeat: no-repeat;
+  /* background-attachment: fixed 제거 → 모바일 GPU 합성 비활성화 이슈 및 LCP 지연 방지 */
 }
 
 /* ── 콘텐츠 컨테이너 배경 (개나리 꽃 패턴) ── */
