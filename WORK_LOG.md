@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-04-11 (이전 2로그 연속)
+
+### CLS(Cumulative Layout Shift) 수정 — commit `032b16b`
+
+**원인 분석**: Google Search Console에서 `/life/`, `/blog/` 등 Poor 등급 확인
+
+**핵심 원인: `<Suspense fallback={null}>`**
+- `blog/page.tsx`: `BlogFilter` (useSearchParams 사용 클라이언트 컴포넌트) 전체가 `fallback={null}`으로 감싸져 있어, 정적 HTML에 블로그 포스트 목록이 없음 → JS 로드 후 목록 출현 → footer 급락 (초대형 CLS)
+- `life/page.tsx`: `LifeFilterClient` 동일 패턴
+- `life/layout.tsx`: 사이드바 `LifeSidebarAds`도 `fallback={null}`로 높이 미확보 상태
+
+**수정 내용 (3개 파일)**:
+1. `src/app/blog/page.tsx`: `fallback={null}` → `fallback={<div className="min-h-[600px]" />}`
+2. `src/app/life/page.tsx`: 동일
+3. `src/app/life/layout.tsx`: 사이드바 → `fallback={<div className="h-[730px]" />}`
+4. `src/app/globals.css`: `.blog-prose img { aspect-ratio: 16/9; width: 100%; height: auto; }` — 마크다운 이미지 CLS 방지
+
+**결과**: 정적 HTML에 콘텐츠 영역 최소 높이 확보 → 레이아웃 안정
+---
+
 ## 2026-04-10
 
 ### HOOK/첫 소제목 레이아웃 정밀 포맷팅 고정
