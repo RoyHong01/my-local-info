@@ -206,7 +206,7 @@ async function callGemini(prompt) {
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
-        temperature: 0.85,
+        temperature: 0.7,
         maxOutputTokens: 4096,
       },
     }),
@@ -236,7 +236,7 @@ function looksIncompleteGeminiOutput(text) {
     .join('\n')
     .trim();
 
-  if (withoutFilename.length < 900) return true;
+  if (withoutFilename.length < 700) return true;
   if (!/[.!?…]$/.test(withoutFilename)) return true;
   return false;
 }
@@ -373,12 +373,84 @@ async function generateRestaurantPost(candidate) {
   const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-restaurant.svg';
 
-  // Google 평점이 있으면 frontmatter에 평점 필드 포함 (posts.ts → JSON-LD aggregateRating 연결)
   const ratingFrontmatter = candidate.item.googleRating != null
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
     : '';
 
-  const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.\n\n입력 데이터:\n${JSON.stringify(candidate, null, 2)}\n\n반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:\n---\ntitle: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)\ndate: ${today}\nsummary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)\ndescription: (130~160자. '평점 4.2가 증명하는 찐맛집' 뉘앙스를 포함해 클릭을 유도하는 검색 문장)\ncategory: 픽앤조이 맛집 탐방\ntags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]\nimage: \"${defaultImage}\"\nsource_id: \"${candidate.item.id}\"\nslug: \"${slugBase}\"\nplace_name: \"${candidate.item.name.replace(/"/g, '\\"')}\"\nplace_address: \"${candidate.item.address.replace(/"/g, '\\"')}\"\nplace_locality: \"${locality}\"\nplace_region: \"KR\"\nplace_phone: \"${candidate.item.phone.replace(/"/g, '\\"')}\"\nplace_url: \"${candidate.item.mapUrl.replace(/"/g, '\\"')}\"\nparking_info: \"확인 필요\"${ratingFrontmatter}\n---\n\n[핫플 맛집 생성 규칙]\n- 페르소나는 '인스타 팔로워 수만 명을 둔 픽앤조이 메인 에디터'예요.\n- 글은 광고 문구처럼 쓰지 말고, 진짜 다녀온 사람처럼 체감 중심으로 써줘.\n- 제목에는 반드시 음식 장르(한식, 양식, 일식, 카페, 브런치 등)나 대표 음식(파스타, 오마카세, 국밥 등)을 포함해서 어떤 맛집인지 한눈에 알 수 있게 써줘.\n- 제목 흐름: '지역 + 음식 장르/특색 + 왜 여기 체크하는지' — 상황만 나열하는 제목은 금지.\n- 좋은 예: '성수 파스타, 면 익힘도 골라주는 곳이 있다', '부천 한식 코스, 점심에 이 가격이요?'\n- 나쁜 예: '부천 데이트, 뭐 할지 고민될 때 꺼내보는 카드' (음식 종류가 없음)\n- 연도/숫자/TOP/베스트/총정리/완전정복/맛집 추천 리스트 같은 제목은 금지.\n- slug는 이미 정해져 있으니 바꾸지 마.\n- 첫 줄 훅은 반드시 도발적으로 시작해줘. 예: '여기 안 가본 사람 아직도 있어요?', '나만 알고 싶었는데 이미 웨이팅 1시간이더라고요.'\n- 본문 구조는 [공감되는 상황 → 왜 후보에 남는지 → 공간/동선/메뉴 결 → 가기 전 체크포인트] 흐름으로 써줘.\n- 소제목은 감성 문장형으로 3~4개. 숫자 번호(1. 2. 3.)는 사용 금지.\n- 문장은 짧고 템포 있게. 2~3문장마다 반드시 줄바꿈.\n- 경어체(~해요/~네요/~입니다)만 사용. 평어체(~이다/~한다) 금지.\n- 반드시 아래 입력값을 자연스럽게 활용해줘: sourceQuery, scenarioHint, vibeHint, cuisineHint.\n- 입력 데이터로 확인되지 않는 메뉴 세부, 웨이팅 시간, 인테리어 디테일, 대표 메뉴, 주차 가능 여부는 절대 단정하지 마.\n- 모르면 '확인 필요', '이럴 가능성이 있어 보여요', '이런 결을 기대하게 돼요'처럼 안전하게 써줘.\n- 금지어: 추천합니다, 방문해보세요, 만족도가 높습니다, 다양한 메뉴가 있어요, 최고의 선택, 주말 고민 해결, 무조건, 찐으로, 인생맛집 TOP, 총정리.\n- 조도, 채광, 사진 잘 나오는 각도, 음식 결(질감·온도) 등 감각적 묘사를 2개 이상 포함해줘.\n- 표현 예시는 '미친 식감', '영롱한 비주얼', '입안에서 터지는 육즙', '꾸덕함의 극치' 같은 결로 가능하지만, 확인 가능한 범위 내에서만 사용해줘.\n- 마지막 문장은 광고 카피 대신 개인적 여운으로 마무리해줘. 예: '다음에 비 올 때 또 생각날 것 같아요.'\n\n[반드시 포함할 정보 박스 섹션]\n본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.\n- 상호명: markdown 링크 형식으로 카카오맵 주소 연결\n- 주소\n- 전화번호\n- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)\n- 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄\n- 식사 후 동선: '여기서 식사하고 도보 5분 거리의 OO 카페까지 이어가면 코스가 완성돼요' 같은 형태로 한 줄\n- 에디터 한 줄 평\n\n[형식 규칙]\n- 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, \"훅\"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.\n- 표는 필요할 때만 간단히 사용\n- 마지막 줄에는 반드시 FILENAME: ${fileStem} 형식으로 출력\n`;
+  const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.
+
+입력 데이터:
+${JSON.stringify(candidate, null, 2)}
+
+반드시 아래 형식만 출력해줘. 다른 설명은 절대 붙이지 마:
+---
+title: (콜론(:) 포함 시 반드시 큰따옴표로 감싸기)
+date: ${today}
+summary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)
+description: (130~160자. '평점 4.2가 증명하는 찐맛집' 뉘앙스를 포함해 클릭을 유도하는 검색 문장)
+category: 픽앤조이 맛집 탐방
+tags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]
+image: "${defaultImage}"
+source_id: "${candidate.item.id}"
+slug: "${slugBase}"
+place_name: "${candidate.item.name.replace(/"/g, '\\"')}"
+place_address: "${candidate.item.address.replace(/"/g, '\\"')}"
+place_locality: "${locality}"
+place_region: "KR"
+place_phone: "${candidate.item.phone.replace(/"/g, '\\"')}"
+place_url: "${candidate.item.mapUrl.replace(/"/g, '\\"')}"
+parking_info: "확인 필요"${ratingFrontmatter}
+---
+
+[픽앤조이 메인 에디터 페르소나]
+- 당신은 2030 세대의 라이프스타일을 꿰뚫고 있는 센스 있는 맛집 에디터야.
+- 단순 정보 전달을 넘어, 독자의 상황에 공감하고 "여긴 진짜 가보고 싶다"는 감정을 만들 것.
+
+[필수]
+- 제목 규칙: [지역명] + [대표 메뉴/장르] + [호기심 유발 키워드] 조합으로 작성.
+- 제목에는 반드시 음식 장르(한식/양식/일식/카페/브런치 등) 또는 대표 메뉴(파스타/오마카세/국밥 등)를 포함.
+- slug는 이미 정해져 있으니 절대 변경하지 마.
+- 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 고민(웨이팅/동선/메뉴 고민)을 찌르는 질문 또는 공감 문장으로 작성.
+- 본문 전개는 아래 순서를 따를 것:
+  1) HOOK: 지금 겪는 고민을 찌르는 시작
+  2) SCENARIO: scenarioHint를 바탕으로 방문 상황을 구체적으로 묘사
+  3) SENSORY: 식감(쫄깃/바삭), 향(불향/고소함), 온도감 중심의 맛 표현
+  4) TRANSITION: 문단 전환은 부드러운 연결 문구 사용
+- TRANSITION 문구 예시: "이곳의 진짜 매력은 따로 있어요", "동선 안에서 답을 찾았네요".
+- 반드시 sourceQuery, scenarioHint, vibeHint, cuisineHint를 본문에 자연스럽게 녹여 쓸 것.
+- 소제목은 감성 문장형 3~4개, 숫자 번호(1. 2. 3.) 사용 금지.
+- 2~3문장마다 줄바꿈해 가독성을 유지.
+
+[스타일]
+- 경어체(~해요, ~예요, ~더라고요)만 사용하고 평어체(~이다/~한다)는 금지.
+- 같은 종결 어미 반복을 피하고 문장 리듬을 다양하게 유지.
+- 감탄사/의성어/의태어는 과하지 않게 섞어 생동감을 줄 것.
+- 광고 카피가 아니라 실제 다녀온 에디터의 체감 중심 톤으로 작성.
+- 과장 대신 "에디터의 사심"이 느껴지는 구체적 이유를 강조.
+- 마지막 문장은 홍보 문구 대신 개인적 여운으로 마무리.
+
+[금지]
+- 연도/숫자/TOP/베스트/총정리/완전정복/맛집 추천 리스트형 제목 금지.
+- 상황만 나열하고 음식 장르/메뉴가 빠진 제목 금지.
+- 확인되지 않은 정보 단정 금지(메뉴 세부, 웨이팅 시간, 인테리어 디테일, 대표 메뉴, 주차 가능 여부).
+- 아래 표현은 사용 금지: 추천합니다, 방문해보세요, 만족도가 높습니다, 다양한 메뉴가 있어요, 최고의 선택, 주말 고민 해결, 무조건, 찐으로, 인생맛집 TOP, 총정리.
+- 과한 광고성 문구(최고, 대박, 무조건) 반복 금지.
+
+[반드시 포함할 정보 박스 섹션]
+본문 후반에 '## 방문 정보 한눈에' 섹션을 만들고 아래를 모두 넣어줘.
+- 상호명: markdown 링크 형식으로 카카오맵 주소 연결
+- 주소
+- 전화번호
+- 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)
+- 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄
+- 식사 후 동선: '여기서 식사하고 도보 5분 거리의 OO 카페까지 이어가면 코스가 완성돼요' 같은 형태로 한 줄
+- 에디터 한 줄 평
+
+[형식 규칙]
+- 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, "훅"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.
+- 표는 필요할 때만 간단히 사용
+- 마지막 줄에는 반드시 FILENAME: ${fileStem} 형식으로 출력
+`;
 
   let generatedText = '';
   let lastFinishReason = '';

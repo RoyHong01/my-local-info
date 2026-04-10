@@ -128,6 +128,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-10 핵심 반영:
+  - **맛집 생성 프롬프트 Lite 최적화**: `scripts/generate-life-restaurant-posts.mjs`의 temperature를 `0.7`로 하향하고 지침을 `[필수]/[스타일]/[금지]` 블록으로 재구성, 본문 전개를 `HOOK -> SCENARIO -> SENSORY -> TRANSITION` 흐름으로 명확화
+  - **Lite 완결성 체크 보정**: `looksIncompleteGeminiOutput` 최소 길이 기준을 `900 -> 700`으로 조정해 정상 완성 응답 오탐 실패 완화
+  - **동일 후보 재생성 테스트 완료**: `FORCE_RESTAURANT_SOURCE_IDS`로 어니언 성수/스이또스이또/세렌 3건 재생성 검증
   - **블로그 상세 버튼 레이아웃 간격 보정(인천/보조금 한정)**: `src/app/blog/[slug]/page.tsx`에서 인천/보조금/복지 카테고리 글에만 하단 출처 영역을 `flex flex-col gap-8`로 구성하고 `공식 원문 바로가기` 래퍼를 `my-12`로 확대해 버튼-안내문 간 답답한 밀착 해소
   - **만료 보조금 자동 감지 보강**: `scripts/collect-subsidy.js` + `scripts/cleanup-expired.js`에서 `(YYYY.MM.DD.한)` 패턴을 파싱해 기한 경과 항목을 `expired: true`로 자동 보정
   - **만료 항목 정리**: `서비스ID 131200000013`(사회적기업 지방세 감면) `expired: true` 처리 및 연관 포스트 삭제
