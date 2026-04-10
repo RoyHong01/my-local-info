@@ -128,6 +128,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-10 핵심 반영:
+  - **맛집 본문 소제목 구조 복구**: `scripts/generate-life-restaurant-posts.mjs` 프롬프트에 문장형 소제목 3~4개를 필수화하고 `###`/`**` 마크다운 형식을 강제
+  - **후처리 검증 강화**: 소제목 개수/가독성(소제목 없이 긴 줄글) 검증을 추가하고, 필수 항목 체크를 `**상호명**:` 형태까지 허용하도록 정규식 기반으로 보강
+  - **Lite JSON 응답 복원**: 모델이 JSON 객체로 응답한 경우에도 frontmatter+본문 마크다운으로 자동 변환 저장
+  - **검증 오탐 보정**: 소수점(예: 4.2) 문장 분리로 인한 평어체 오탐을 완화
   - **맛집 생성 프롬프트 Lite 최적화**: `scripts/generate-life-restaurant-posts.mjs`의 temperature를 `0.7`로 하향하고 지침을 `[필수]/[스타일]/[금지]` 블록으로 재구성, 본문 전개를 `HOOK -> SCENARIO -> SENSORY -> TRANSITION` 흐름으로 명확화
   - **Lite 완결성 체크 보정**: `looksIncompleteGeminiOutput` 최소 길이 기준을 `900 -> 700`으로 조정해 정상 완성 응답 오탐 실패 완화
   - **동일 후보 재생성 테스트 완료**: `FORCE_RESTAURANT_SOURCE_IDS`로 어니언 성수/스이또스이또/세렌 3건 재생성 검증

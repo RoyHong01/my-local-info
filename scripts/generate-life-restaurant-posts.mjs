@@ -26,6 +26,13 @@ const existingPostDirs = [
   path.join(process.cwd(), 'src', 'content', 'posts'),
   path.join(process.cwd(), 'src', 'content', 'life'),
 ];
+const BANNED_WORDS = ['최고', '대박', '무조건'];
+const REQUIRED_SECTION_PATTERNS = [
+  { label: '방문 정보 한눈에', pattern: /##\s*방문 정보 한눈에/ },
+  { label: '상호명:', pattern: /(?:\*\*\s*)?상호명(?:\s*\*\*)?\s*:/ },
+  { label: '주소:', pattern: /(?:\*\*\s*)?주소(?:\s*\*\*)?\s*:/ },
+  { label: '전화번호:', pattern: /(?:\*\*\s*)?전화번호(?:\s*\*\*)?\s*:/ },
+];
 
 function slugifyKorean(value) {
   return String(value || '')
@@ -301,6 +308,266 @@ function postProcessRestaurantMarkdown(markdown, context) {
   return `${frontmatter}\n\n${normalizedBody}`.trim();
 }
 
+function tryConvertJsonResponseToMarkdown(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return null;
+
+  let candidate = raw;
+  if (/^json\s*\n/i.test(candidate)) {
+    candidate = candidate.replace(/^json\s*\n/i, '').trim();
+  }
+  if (candidate.startsWith('```json')) candidate = candidate.substring(7).trim();
+  else if (candidate.startsWith('```')) candidate = candidate.substring(3).trim();
+  if (candidate.endsWith('```')) candidate = candidate.slice(0, -3).trim();
+
+  if (!candidate.startsWith('{')) return null;
+
+  try {
+    const parsed = JSON.parse(candidate);
+    if (!parsed || typeof parsed !== 'object') return null;
+
+    const title = String(parsed.title || '').trim();
+    const date = String(parsed.date || '').trim();
+    const summary = String(parsed.summary || '').trim();
+    const description = String(parsed.description || '').trim();
+    const category = String(parsed.category || '픽앤조이 맛집 탐방').trim();
+    const tags = Array.isArray(parsed.tags) ? parsed.tags : [];
+    const image = String(parsed.image || '/images/default-restaurant.svg').trim();
+    const sourceId = String(parsed.source_id || parsed.sourceId || '').trim();
+    const slug = String(parsed.slug || '').trim();
+    const placeName = String(parsed.place_name || parsed.placeName || '').trim();
+    const placeAddress = String(parsed.place_address || parsed.placeAddress || '').trim();
+    const placeLocality = String(parsed.place_locality || parsed.placeLocality || '').trim();
+    const placeRegion = String(parsed.place_region || parsed.placeRegion || 'KR').trim();
+    const placePhone = String(parsed.place_phone || parsed.placePhone || '').trim();
+    const placeUrl = String(parsed.place_url || parsed.placeUrl || '').trim();
+    const parkingInfo = String(parsed.parking_info || parsed.parkingInfo || '확인 필요').trim();
+    const ratingValue = parsed.rating_value ?? parsed.ratingValue;
+    const reviewCount = parsed.review_count ?? parsed.reviewCount;
+    const content = String(parsed.content || '').trim();
+
+    if (!title || !date || !slug || !content) return null;
+
+    const escapedTitle = title.replace(/"/g, '\\"');
+    const escapedSummary = summary.replace(/"/g, '\\"');
+    const escapedDescription = description.replace(/"/g, '\\"');
+    const escapedPlaceName = placeName.replace(/"/g, '\\"');
+    const escapedPlaceAddress = placeAddress.replace(/"/g, '\\"');
+    const escapedPlaceLocality = placeLocality.replace(/"/g, '\\"');
+    const escapedPlaceRegion = placeRegion.replace(/"/g, '\\"');
+    const escapedPlacePhone = placePhone.replace(/"/g, '\\"');
+    const escapedPlaceUrl = placeUrl.replace(/"/g, '\\"');
+    const escapedParkingInfo = parkingInfo.replace(/"/g, '\\"');
+
+    const tagsLine = tags.length > 0 ? tags.join(', ') : '맛집탐방, 카카오맵';
+    const ratingBlock = (ratingValue != null || reviewCount != null)
+      ? `\nrating_value: "${String(ratingValue ?? '').replace(/"/g, '\\"')}"\nreview_count: "${String(reviewCount ?? '').replace(/"/g, '\\"')}"`
+      : '';
+
+    return `---
+title: "${escapedTitle}"
+date: ${date}
+summary: ${escapedSummary}
+description: "${escapedDescription}"
+category: ${category}
+tags: [${tagsLine}]
+image: "${image}"
+source_id: "${sourceId}"
+slug: "${slug}"
+place_name: "${escapedPlaceName}"
+place_address: "${escapedPlaceAddress}"
+place_locality: "${escapedPlaceLocality}"
+place_region: "${escapedPlaceRegion}"
+place_phone: "${escapedPlacePhone}"
+place_url: "${escapedPlaceUrl}"
+parking_info: "${escapedParkingInfo}"${ratingBlock}
+---
+
+${content}`.trim();
+  } catch {
+    return null;
+  }
+}
+
+function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
+  const lines = String(generatedText || '').split('\n');
+  let filename = `${fileStem}.md`;
+  const contentLines = [];
+
+  for (const line of lines) {
+    if (line.trim().startsWith('FILENAME:')) {
+      filename = `${line.replace('FILENAME:', '').trim().replace(/\.md$/i, '')}.md`;
+    } else {
+      contentLines.push(line);
+    }
+  }
+
+  let finalContent = contentLines.join('\n').trim();
+  const convertedFromJson = tryConvertJsonResponseToMarkdown(finalContent);
+  if (convertedFromJson) {
+    finalContent = convertedFromJson;
+  }
+  if (finalContent.startsWith('```markdown')) finalContent = finalContent.substring(11);
+  else if (finalContent.startsWith('```')) finalContent = finalContent.substring(3);
+  if (finalContent.endsWith('```')) finalContent = finalContent.slice(0, -3);
+  finalContent = finalContent.trim();
+
+  finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
+    if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {
+      return `${prefix}"${value.replace(/"/g, '\\"')}"`;
+    }
+    return match;
+  });
+
+  finalContent = finalContent.replace(/^(description:\s*)(.+)$/m, (match, prefix, value) => {
+    const clean = String(value || '').replace(/^"|"$/g, '').trim();
+    const shortened = clean.length > 160 ? `${clean.slice(0, 157).trimEnd()}...` : clean;
+    return `${prefix}"${shortened.replace(/"/g, '\\"')}"`;
+  });
+
+  finalContent = postProcessRestaurantMarkdown(finalContent, {
+    itemName: candidate.item.name,
+  });
+
+  return { filename, finalContent };
+}
+
+function isLikelyPoliteSentence(sentence) {
+  const text = String(sentence || '').trim().replace(/[.!?！？。]+$/g, '');
+  if (!text || !/[가-힣]/.test(text)) return true;
+  return /(요|니다|이에요|예요|더라고요|거든요|랍니다|네요|죠)$/.test(text);
+}
+
+function isSubheadingLine(line) {
+  const text = String(line || '').trim();
+  if (!text) return false;
+  if (/^###\s+\S+/.test(text)) return true;
+  if (/^\*\*[^*]+\*\*$/.test(text)) return true;
+  return false;
+}
+
+function countSentenceLike(text) {
+  const value = String(text || '').trim();
+  if (!value) return 0;
+  const protectedText = value.replace(/(\d)\.(\d)/g, '$1__DOT__$2');
+  return protectedText
+    .split(/(?<=[.!?！？。])/)
+    .map((s) => s.replace(/__DOT__/g, '.').trim())
+    .filter((s) => /[가-힣A-Za-z0-9]/.test(s)).length;
+}
+
+function validateSubheadingAndReadability(bodyText) {
+  const issues = [];
+  const mainBody = String(bodyText || '').split('## 방문 정보 한눈에')[0] || '';
+  const lines = mainBody.split('\n').map((line) => line.trim());
+
+  const subheadingCount = lines.filter((line) => isSubheadingLine(line)).length;
+  if (subheadingCount < 3) {
+    issues.push(`소제목 부족(${subheadingCount}개 / 최소 3개)`);
+  }
+
+  let consecutiveParagraphsWithoutHeading = 0;
+  for (const line of lines) {
+    if (!line) continue;
+
+    if (line.startsWith('#')) {
+      consecutiveParagraphsWithoutHeading = 0;
+      continue;
+    }
+
+    if (isSubheadingLine(line)) {
+      consecutiveParagraphsWithoutHeading = 0;
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(line)) continue;
+    if (/^\*\*[^*]+\*\*\s*:/.test(line)) continue;
+
+    const sentenceCount = countSentenceLike(line);
+    if (sentenceCount >= 3) {
+      issues.push(`가독성 저하: 소제목 없이 긴 문단(한 문단 ${sentenceCount}문장) 발견`);
+      break;
+    }
+
+    if (sentenceCount > 0) {
+      consecutiveParagraphsWithoutHeading += 1;
+      if (consecutiveParagraphsWithoutHeading >= 3) {
+        issues.push('가독성 저하: 소제목 없이 3개 이상 문단이 연속됨');
+        break;
+      }
+    }
+  }
+
+  return issues;
+}
+
+function validateGeneratedRestaurantMarkdown(markdown) {
+  const issues = [];
+  const { body } = splitMarkdownSections(markdown);
+  const bodyText = String(body || '');
+
+  const compactLength = bodyText.replace(/\s+/g, '').length;
+  if (compactLength < 500) {
+    issues.push(`최소 분량 미달(공백 제외 ${compactLength}자 / 기준 500자)`);
+  }
+
+  for (const rule of REQUIRED_SECTION_PATTERNS) {
+    if (!rule.pattern.test(bodyText)) {
+      issues.push(`필수 섹션/항목 누락: ${rule.label}`);
+    }
+  }
+
+  const bannedFound = BANNED_WORDS.filter((word) => bodyText.includes(word));
+  if (bannedFound.length > 0) {
+    issues.push(`금지어 포함: ${bannedFound.join(', ')}`);
+  }
+
+  const politeSkippedPrefixes = [
+    '#',
+    '-',
+    '*',
+    '상호명:',
+    '주소:',
+    '전화번호:',
+    '주차:',
+    '이럴 때 체크하면 좋아요:',
+    '식사 후 동선:',
+    '에디터 한 줄 평',
+    '"',
+    '{',
+    '}',
+    '[',
+    ']',
+  ];
+
+  const plainStyleSamples = [];
+  for (const rawLine of bodyText.split('\n')) {
+    const line = rawLine.trim();
+    if (!line || politeSkippedPrefixes.some((prefix) => line.startsWith(prefix))) continue;
+
+    const protectedLine = line.replace(/(\d)\.(\d)/g, '$1__DOT__$2');
+    const sentences = protectedLine
+      .split(/(?<=[.!?！？。])/)
+      .map((s) => s.replace(/__DOT__/g, '.').trim())
+      .filter(Boolean);
+    for (const sentence of sentences) {
+      if (!/[가-힣]/.test(sentence)) continue;
+      if (!isLikelyPoliteSentence(sentence)) {
+        plainStyleSamples.push(sentence.replace(/\s+/g, ' ').slice(0, 80));
+      }
+    }
+  }
+
+  if (plainStyleSamples.length > 0) {
+    issues.push(`평어체 의심 문장 발견: ${plainStyleSamples.slice(0, 3).join(' | ')}`);
+  }
+
+  const headingAndReadabilityIssues = validateSubheadingAndReadability(bodyText);
+  issues.push(...headingAndReadabilityIssues);
+
+  return issues;
+}
+
 async function getExistingRestaurantStats() {
   const ids = new Set();
   const bucketCounts = new Map(TARGET_BUCKETS.map((bucket) => [bucket, 0]));
@@ -418,7 +685,13 @@ parking_info: "확인 필요"${ratingFrontmatter}
   4) TRANSITION: 문단 전환은 부드러운 연결 문구 사용
 - TRANSITION 문구 예시: "이곳의 진짜 매력은 따로 있어요", "동선 안에서 답을 찾았네요".
 - 반드시 sourceQuery, scenarioHint, vibeHint, cuisineHint를 본문에 자연스럽게 녹여 쓸 것.
-- 소제목은 감성 문장형 3~4개, 숫자 번호(1. 2. 3.) 사용 금지.
+- 소제목은 감성 문장형으로 최소 3~4개를 반드시 작성.
+- 소제목 표기 형식은 반드시 아래 둘 중 하나를 사용:
+  1) ### 소제목 문장
+  2) **소제목 문장**
+- 소제목은 단어형(예: 분위기, 맛, 위치) 금지. 문장형으로 작성.
+- 소제목 예시: "동선 안에 답이 있었네요", "자극적이지 않아서 더 좋아요", "가기 전에 이것만은 꼭".
+- 레이아웃 예시: HOOK 이후에 위와 같은 문장형 소제목이 중간중간 끼어드는 블로그 구조를 그대로 따를 것.
 - 2~3문장마다 줄바꿈해 가독성을 유지.
 
 [스타일]
@@ -448,6 +721,8 @@ parking_info: "확인 필요"${ratingFrontmatter}
 
 [형식 규칙]
 - 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, "훅"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.
+- 본문 중간에 반드시 문장형 소제목을 배치해 레이아웃을 살려줘. 예: "### 동선 안에 답이 있었네요", "### 자극적이지 않아서 더 좋아요", "### 가기 전에 이것만은 꼭".
+- 출력 형식은 마크다운(frontmatter + 본문)만 허용. JSON/객체 포맷으로 출력하면 실패로 간주해.
 - 표는 필요할 때만 간단히 사용
 - 마지막 줄에는 반드시 FILENAME: ${fileStem} 형식으로 출력
 `;
@@ -473,39 +748,36 @@ parking_info: "확인 필요"${ratingFrontmatter}
     throw new Error(`Gemini 응답 불완전(finishReason=${lastFinishReason || 'N/A'})`);
   }
 
-  const lines = generatedText.split('\n');
-  let filename = `${fileStem}.md`;
-  const contentLines = [];
-  for (const line of lines) {
-    if (line.trim().startsWith('FILENAME:')) {
-      filename = `${line.replace('FILENAME:', '').trim().replace(/\.md$/i, '')}.md`;
-    } else {
-      contentLines.push(line);
+  let { filename, finalContent } = normalizeGeneratedMarkdown(generatedText, fileStem, candidate);
+  const firstValidationIssues = validateGeneratedRestaurantMarkdown(finalContent);
+
+  if (firstValidationIssues.length > 0) {
+    console.warn(`⚠️ 후처리 검증 실패(1차): ${firstValidationIssues.join(' / ')}`);
+    const validationFeedback = firstValidationIssues.map((issue) => `- ${issue}`).join('\n');
+    const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
+
+    try {
+      const retryGemini = await callGemini(retryPrompt);
+      const retryText = String(retryGemini.text || '').trim();
+
+      if (retryText) {
+        const normalizedRetry = normalizeGeneratedMarkdown(retryText, fileStem, candidate);
+        filename = normalizedRetry.filename;
+        finalContent = normalizedRetry.finalContent;
+
+        const secondValidationIssues = validateGeneratedRestaurantMarkdown(finalContent);
+        if (secondValidationIssues.length > 0) {
+          console.warn(`⚠️ 후처리 검증 실패(2차, 최종 결과로 저장): ${secondValidationIssues.join(' / ')}`);
+        } else {
+          console.log('✅ 후처리 검증 통과(2차 재생성)');
+        }
+      } else {
+        console.warn('⚠️ 2차 재생성 응답이 비어 있어 1차 결과를 유지합니다.');
+      }
+    } catch (error) {
+      console.warn(`⚠️ 2차 재생성 호출 실패: ${error?.message || error}`);
     }
   }
-
-  let finalContent = contentLines.join('\n').trim();
-  if (finalContent.startsWith('```markdown')) finalContent = finalContent.substring(11);
-  else if (finalContent.startsWith('```')) finalContent = finalContent.substring(3);
-  if (finalContent.endsWith('```')) finalContent = finalContent.slice(0, -3);
-  finalContent = finalContent.trim();
-
-  finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
-    if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {
-      return `${prefix}"${value.replace(/"/g, '\\"')}"`;
-    }
-    return match;
-  });
-
-  finalContent = finalContent.replace(/^(description:\s*)(.+)$/m, (match, prefix, value) => {
-    const clean = String(value || '').replace(/^"|"$/g, '').trim();
-    const shortened = clean.length > 160 ? `${clean.slice(0, 157).trimEnd()}...` : clean;
-    return `${prefix}"${shortened.replace(/"/g, '\\"')}"`;
-  });
-
-  finalContent = postProcessRestaurantMarkdown(finalContent, {
-    itemName: candidate.item.name,
-  });
 
   await fs.writeFile(path.join(postsDir, filename), finalContent, 'utf-8');
   console.log(`✅ 맛집 포스트 생성: ${filename} (${candidate.item.name})`);
