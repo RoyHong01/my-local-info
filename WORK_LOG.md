@@ -32,6 +32,19 @@
   - 보조 스크립트(`rewrite-single.js`, `rewrite-festival-posts.js`, `_test-gemini-blog.js`)와 런타임 요약(`src/lib/life-restaurants.ts`)도 env 기반 모델 참조로 교체
 - 검증
   - `npm run build` 성공 (정적 페이지 511개 생성)
+- 커밋: `5363963`, `a072be5`, `392bd51`, `e746944`
+
+### Gemini 모델 티어 정책 문서화 및 의도 명시
+
+- **배경**: 수집 단계와 생성 단계에서 Gemini 모델 fallback이 다른 것이 실수인지 의도적 구분인지 식별이 어려움
+- `scripts/collect-life-restaurants.mjs`
+  - `RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-1.5-flash'` 상수 위에 3줄 인라인 주석 추가
+  - 수집 단계(후보 검토·요약 전용, 글 생성 없음) → `1.5-flash`로 충분하고 의도적, 통일 수정 금지 명시
+  - CI에서는 `RESTAURANT_GEMINI_MODEL` env로 flash-lite가 주입되므로 fallback은 로컬 미설정 시에만 사용됨
+- `.github/copilot-instructions.md`
+  - `Gemini 안전장치 확장` 항목 바로 아래에 **Gemini 모델 티어 정책 (의도적 구분)** 섹션 추가
+  - 수집(필터링 전용) vs 생성(블로그 작성) 모델 티어 구분을 명시해 향후 실수 수정 방지
+- 커밋: `6eafc14`
 
 ### Cloudflare 캐시 자동 퍼지 설정 (deploy.yml + .env.local)
 
