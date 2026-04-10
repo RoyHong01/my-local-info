@@ -9,6 +9,10 @@ const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const BLOG_MAX_GENERATION_SECONDS = Number(process.env.BLOG_MAX_GENERATION_SECONDS || 900);
 const BLOG_MAX_CANDIDATES_PER_CATEGORY = Number(process.env.BLOG_MAX_CANDIDATES_PER_CATEGORY || 8);
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
+if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
+  throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. 필요하면 ALLOW_GEMINI_PRO=true를 명시하세요.`);
+}
 const BLOG_GEMINI_MIN_DELAY_MS = Number(process.env.BLOG_GEMINI_MIN_DELAY_MS || 5000);
 const BLOG_MAX_API_CALLS = Number(process.env.BLOG_MAX_API_CALLS || 12);
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS || 8192);

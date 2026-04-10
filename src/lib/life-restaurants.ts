@@ -311,7 +311,8 @@ async function summarizeWithGemini(regionLabel: string, items: RestaurantItem[])
     JSON.stringify(safeInput),
   ].join('\n');
 
-  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${encodeURIComponent(geminiKey)}`;
+  const geminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+  const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`;
 
   const response = await fetch(geminiUrl, {
     method: 'POST',
