@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-04-11 (Search Console 구조화 데이터)
+
+### Choice 제품 구조화 데이터 개편 — 판매자 목록/제품 스니펫 오류 동시 대응
+
+- **수정 파일**: `src/app/blog/[slug]/page.tsx`
+- **배경**: Choice 카테고리 글이 `Product` + `offers` 조합으로 출력되어 Search Console에서 판매자 목록(`price`, `shippingDetails`, `hasMerchantReturnPolicy`) 및 제품 스니펫(`review`, `aggregateRating`) 관련 오류가 감지됨
+- **핵심 변경**:
+  - Choice 글의 보조 JSON-LD를 `Product` 단독 스키마에서 `Review` 스키마로 교체
+  - 최상위 문서 타입은 `BlogPosting` 유지, Choice 분류의 `additionalType`은 `Product` → `Review`로 조정
+  - `itemReviewed` 안에만 `Product`를 두고 `offers`는 완전히 제거
+  - `reviewRating`, `author`, `publisher`, `reviewBody`, `mainEntityOfPage`를 포함해 "제품 리뷰 글" 문맥을 명시
+  - `review_count`가 있을 때만 `itemReviewed.aggregateRating` 추가
+- **검증**:
+  - `npm run build` 성공
+  - `out/blog/choice-*/index.html`에서 `"offers"` 미출력 확인
+  - 동일 산출물에서 `"@type":"Review"`, `"reviewRating"` 출력 확인
+
 ## 2026-04-11 (이전 2로그 연속)
 
 ### CLS(Cumulative Layout Shift) 수정 — commit `032b16b`

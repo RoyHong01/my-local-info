@@ -121,39 +121,77 @@ function buildRestaurantJsonLd(post: NonNullable<ReturnType<typeof getPostData>>
   return jsonLd;
 }
 
-function buildProductJsonLd(post: NonNullable<ReturnType<typeof getPostData>>) {
-  const jsonLd: Record<string, unknown> = {
-    '@context': 'https://schema.org',
+function parseSchemaNumber(value?: string) {
+  if (!value) return null;
+  const normalized = value.replace(/,/g, '').trim();
+  const numeric = Number(normalized);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+function extractChoiceProductName(post: NonNullable<ReturnType<typeof getPostData>>) {
+  const bannerAlt = String(post.coupangBannerAlt || '').trim();
+  if (bannerAlt) {
+    return bannerAlt.split(',')[0].trim() || bannerAlt;
+  }
+  return post.title;
+}
+
+function buildChoiceReviewJsonLd(post: NonNullable<ReturnType<typeof getPostData>>, description: string) {
+  const ratingValue = parseSchemaNumber(post.ratingValue);
+  if (!ratingValue) return null;
+
+  const reviewCount = parseSchemaNumber(post.reviewCount);
+  const pageUrl = `https://pick-n-joy.com/blog/${post.slug}/`;
+  const productJsonLd: Record<string, unknown> = {
     '@type': 'Product',
-    name: post.title,
+    name: extractChoiceProductName(post),
     description: post.description || post.summary,
     image: post.image ? [post.image] : post.coupangBannerImage ? [post.coupangBannerImage] : undefined,
     category: post.category || '픽앤조이 초이스',
-    brand: {
-      '@type': 'Brand',
-      name: '픽앤조이',
-    },
-    url: `https://pick-n-joy.com/blog/${post.slug}/`,
+    url: pageUrl,
   };
 
-  if (post.ratingValue && post.reviewCount) {
-    jsonLd.aggregateRating = {
+  if (reviewCount) {
+    productJsonLd.aggregateRating = {
       '@type': 'AggregateRating',
-      ratingValue: post.ratingValue,
-      reviewCount: post.reviewCount,
+      ratingValue,
+      reviewCount,
+      bestRating: 5,
+      worstRating: 1,
     };
   }
 
-  if (post.coupangLink) {
-    jsonLd.offers = {
-      '@type': 'Offer',
-      url: post.coupangLink,
-      priceCurrency: 'KRW',
-      availability: 'https://schema.org/InStock',
-    };
-  }
-
-  return jsonLd;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    name: `${post.title} 리뷰`,
+    headline: post.title,
+    reviewBody: description,
+    datePublished: post.date,
+    dateModified: post.date,
+    inLanguage: 'ko-KR',
+    author: {
+      '@type': 'Organization',
+      name: '픽앤조이',
+      url: 'https://pick-n-joy.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: '픽앤조이',
+      url: 'https://pick-n-joy.com',
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    itemReviewed: productJsonLd,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+    },
+  };
 }
 
 function classifyPostForSeo(post: { title: string; category?: string; tags?: string[] }) {
@@ -166,7 +204,7 @@ function classifyPostForSeo(post: { title: string; category?: string; tags?: str
         { '@type': 'Thing', name: '상품 리뷰' },
         { '@type': 'Thing', name: '쇼핑 정보' },
       ],
-      additionalType: 'https://schema.org/Product',
+      additionalType: 'https://schema.org/Review',
     };
   }
 
@@ -327,7 +365,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     : sanitizedContent;
   const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
-  const productJsonLd = isChoicePost ? buildProductJsonLd(post) : null;
+  const choiceReviewJsonLd = isChoicePost ? buildChoiceReviewJsonLd(post, description) : null;
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -341,10 +379,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantJsonLd) }}
         />
       )}
-      {productJsonLd && (
+      {choiceReviewJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(choiceReviewJsonLd) }}
         />
       )}
 

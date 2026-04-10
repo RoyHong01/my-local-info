@@ -127,6 +127,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-11 핵심 반영:
+  - **Choice 구조화 데이터 개편**: `src/app/blog/[slug]/page.tsx`에서 Choice 글의 보조 JSON-LD를 `Product` 단독 타입에서 `Review` 스키마로 전환하고 `itemReviewed` 안에만 `Product`를 유지
+  - **판매자 전용 필드 제거**: `offers` 제거로 Search Console 판매자 목록 오류(`price`, `shippingDetails`, `hasMerchantReturnPolicy`) 대응
+  - **리뷰 스키마 보강**: `reviewRating`, `author`, `publisher`, `reviewBody`, `aggregateRating` 포함으로 제품 리뷰 페이지 컨텍스트 강화
 - 2026-04-10 핵심 반영:
   - **HOOK/첫 소제목 레이아웃 정밀 고정**: `scripts/generate-life-restaurant-posts.mjs` 후처리에 HOOK 다음 공백 1줄, 브릿지 문단 2~3줄, 소제목 위·아래 2줄 여백 강제 로직 적용
   - **첫인상 구조 Validator 보강**: HOOK 직후 여백 누락/브릿지 문단 미달/첫 소제목 전 서론 과다(150자 초과)/`###` 여백 미충족 시 검증 실패 처리
