@@ -25,6 +25,10 @@
     - 3단계 `generate_restaurant_posts` step에 `GEMINI_MODEL: 'gemini-2.5-flash-lite'` env 추가
 - 원인 확인 메모
   - 후보 고갈 아님: 스냅샷 88건 중 unused 60건(인천 19/서울 22/경기 19)
+- Gemini 모델 안전장치 추가(하드코딩 재발 방지)
+  - 주요 생성 스크립트(`generate-blog-post.js`, `generate-choice-post.js`, `generate-life-restaurant-posts.mjs`)에 `ALLOW_GEMINI_PRO` 가드 추가
+  - 기본 모델은 모두 `GEMINI_MODEL`(기본 `gemini-2.5-flash-lite`) 참조로 통일
+  - 보조 스크립트(`rewrite-single.js`, `rewrite-festival-posts.js`, `_test-gemini-blog.js`)와 런타임 요약(`src/lib/life-restaurants.ts`)도 env 기반 모델 참조로 교체
 - 검증
   - `npm run build` 성공 (정적 페이지 511개 생성)
 

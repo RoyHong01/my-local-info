@@ -26,6 +26,7 @@
   - 만료 보조금 자동 감지 보강: `scripts/collect-subsidy.js`, `scripts/cleanup-expired.js`에서 `(YYYY.MM.DD.한)` 패턴을 파싱해 과거 기한 항목을 자동으로 `expired: true` 처리
   - 만료 항목 정리: `서비스ID 131200000013`(사회적기업 지방세 감면)을 `expired: true`로 수정, 연관 포스트 삭제
   - 맛집 생성 실패 방지: `scripts/generate-life-restaurant-posts.mjs`를 `GEMINI_MODEL` 환경변수 기반으로 전환(기본 `gemini-2.5-flash-lite`), GitHub Actions 3단계에도 `GEMINI_MODEL` env 추가
+  - 모델 하드코딩 재발 방지: 주요/보조 생성 스크립트에 `ALLOW_GEMINI_PRO` 가드 적용, 스크립트 전반의 Gemini 모델 참조를 env 기반으로 통일
 
 - 맛집 후보 재수집 정책 조정
   - 04:00 자동화에서 매일 무조건 `collect-life-restaurants.mjs`를 실행하지 않도록 변경

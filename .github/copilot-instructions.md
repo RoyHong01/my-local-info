@@ -132,6 +132,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **만료 항목 정리**: `서비스ID 131200000013`(사회적기업 지방세 감면) `expired: true` 처리 및 연관 포스트 삭제
   - **맛집 생성 모델 안정화**: `scripts/generate-life-restaurant-posts.mjs`의 Gemini 모델을 `GEMINI_MODEL` env 기반으로 전환(기본 `gemini-2.5-flash-lite`)
   - **배포 워크플로우 정합화**: `.github/workflows/deploy.yml` 3단계 맛집 생성 step에 `GEMINI_MODEL: 'gemini-2.5-flash-lite'` env 추가
+  - **Gemini 안전장치 확장**: 주요 생성 스크립트에 `ALLOW_GEMINI_PRO` 가드 추가(명시 허용 없이는 Pro 모델 차단), 보조 재작성/테스트 스크립트 및 런타임 요약도 env 기반 모델 참조로 정리
 - 2026-04-08 핵심 반영:
   - **맛집 재수집 정책 전환**: GitHub Actions에서 `collect-life-restaurants.mjs` 직접 호출 → `ensure-life-restaurant-candidates.mjs`(guard)로 교체
   - guard 로직: unused 후보 10건 이상이면 재수집 생략, 10건 미만일 때만 실제 수집 실행 (`MIN_UNUSED_RESTAURANT_CANDIDATES` env로 override 가능)
