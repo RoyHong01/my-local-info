@@ -86,12 +86,14 @@ body {
   line-height: 1.68;
 }
 
-/* 마크다운 본문 이미지 CLS 방지: 로드 전 공간 확보 */
+/* 마크다운 본문 이미지: 작은 이미지는 원본 크기 유지, 큰 이미지만 본문 폭에 맞춤 */
 .blog-prose img {
-  aspect-ratio: 16 / 9;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 블로그 테이블 항목(첫 번째) 컬럼 줄바꿈 방지 */
