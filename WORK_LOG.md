@@ -5,6 +5,38 @@
 
 ---
 
+## 2026-04-10
+
+### Cloudflare 캐시 자동 퍼지 설정 (deploy.yml + .env.local)
+
+**배경**: 기존 `CLOUDFLARE_API_TOKEN`의 권한을 `Zone > Cache Purge > Purge` + `Zone > Zone > Read`로 업데이트 완료. 이제 배포 후 캐시가 자동으로 전체 삭제되어 사용자가 항상 최신 콘텐츠를 볼 수 있음.
+
+- `.github/workflows/deploy.yml`:
+  - 5개 모든 배포 단계 이후에 `Cloudflare Cache Purge` step 추가
+    - `[1단계] Cloudflare Cache Purge` (schedule/full 조건)
+    - `[2단계] Cloudflare Cache Purge` (schedule/full 조건)
+    - `[3단계] Cloudflare Cache Purge` (schedule/full 조건)
+    - `[리포트] Cloudflare Cache Purge` (always() + schedule/full 조건)
+    - `[공통] Cloudflare Cache Purge (deploy_only / push)` (push/deploy_only 조건)
+  - 각 step은 `secrets.CLOUDFLARE_API_TOKEN` + `secrets.CLOUDFLARE_ZONE_ID` 사용
+  - `purge_everything: true` API 호출 후 `"success":true` 여부 확인 출력
+- `.env.local`:
+  - `CLOUDFLARE_ZONE_ID=b1674a4a2e034dc03f96d451cc95df7d` 추가 (로컬 수동 퍼지용)
+- GitHub Secrets: `CLOUDFLARE_ZONE_ID` 등록 완료 (사용자 직접 등록)
+- 커밋: `17f72a5` "ci: add Cloudflare Cache Purge step after each deployment"
+
+### robots.txt admin 경로 보안 강화
+
+- `public/robots.txt`: `Disallow: /admin` (trailing slash 제거 → `/admin*` 경로 전체 차단)
+- 커밋: `41e6133`
+
+### 블로그 상세 하단 여백 수정
+
+- `src/app/blog/[slug]/page.tsx`: 공식 원문 버튼 하단에 `mb-7` 추가, container `space-y-*` 제거
+- 커밋: `9009143`
+
+---
+
 ## 2026-04-08
 
 ### 맛집 후보 재수집 정책 전환 (매일 재수집 제거)
