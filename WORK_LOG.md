@@ -14,6 +14,7 @@
 - **핵심 변경**:
   - Choice 글의 보조 JSON-LD를 `Product` 단독 스키마에서 `Review` 스키마로 교체
   - 최상위 문서 타입은 `BlogPosting` 유지, Choice 분류의 `additionalType`은 `Product` → `Review`로 조정
+  - 작성자 표기는 개인 실명 대신 브랜드 에디토리얼 기준인 `Pick-n-Joy Editor`(`Person`)로 통일하고, `publisher`는 `픽앤조이`(`Organization`) 유지
   - `itemReviewed` 안에만 `Product`를 두고 `offers`는 완전히 제거
   - `reviewRating`, `author`, `publisher`, `reviewBody`, `mainEntityOfPage`를 포함해 "제품 리뷰 글" 문맥을 명시
   - `review_count`가 있을 때만 `itemReviewed.aggregateRating` 추가

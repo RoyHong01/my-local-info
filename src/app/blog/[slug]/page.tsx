@@ -136,12 +136,22 @@ function extractChoiceProductName(post: NonNullable<ReturnType<typeof getPostDat
   return post.title;
 }
 
+function buildEditorialAuthorJsonLd() {
+  return {
+    '@type': 'Person',
+    name: 'Pick-n-Joy Editor',
+    alternateName: '픽앤조이 에디터',
+    url: 'https://pick-n-joy.com/about/',
+  };
+}
+
 function buildChoiceReviewJsonLd(post: NonNullable<ReturnType<typeof getPostData>>, description: string) {
   const ratingValue = parseSchemaNumber(post.ratingValue);
   if (!ratingValue) return null;
 
   const reviewCount = parseSchemaNumber(post.reviewCount);
   const pageUrl = `https://pick-n-joy.com/blog/${post.slug}/`;
+  const editorialAuthorJsonLd = buildEditorialAuthorJsonLd();
   const productJsonLd: Record<string, unknown> = {
     '@type': 'Product',
     name: extractChoiceProductName(post),
@@ -170,11 +180,7 @@ function buildChoiceReviewJsonLd(post: NonNullable<ReturnType<typeof getPostData
     datePublished: post.date,
     dateModified: post.date,
     inLanguage: 'ko-KR',
-    author: {
-      '@type': 'Organization',
-      name: '픽앤조이',
-      url: 'https://pick-n-joy.com',
-    },
+    author: editorialAuthorJsonLd,
     publisher: {
       '@type': 'Organization',
       name: '픽앤조이',
@@ -328,6 +334,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const sanitizedContent = sanitizeMarkdown(post.content || '');
   const description = buildMetaDescription(sanitizedContent) || post.description || post.summary || sanitizedContent.substring(0, 160).replace(/\n/g, ' ');
   const seoClassification = classifyPostForSeo(post);
+  const editorialAuthorJsonLd = buildEditorialAuthorJsonLd();
 
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
@@ -341,10 +348,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     additionalType: seoClassification.additionalType,
     keywords: (post.tags && post.tags.length > 0) ? post.tags.join(', ') : undefined,
     inLanguage: 'ko-KR',
-    author: {
-      "@type": "Organization",
-      name: "픽앤조이",
-    },
+    author: editorialAuthorJsonLd,
     publisher: {
       "@type": "Organization",
       name: "픽앤조이",
