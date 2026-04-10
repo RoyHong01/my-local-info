@@ -127,6 +127,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-10 핵심 반영:
+  - **만료 보조금 자동 감지 보강**: `scripts/collect-subsidy.js` + `scripts/cleanup-expired.js`에서 `(YYYY.MM.DD.한)` 패턴을 파싱해 기한 경과 항목을 `expired: true`로 자동 보정
+  - **만료 항목 정리**: `서비스ID 131200000013`(사회적기업 지방세 감면) `expired: true` 처리 및 연관 포스트 삭제
+  - **맛집 생성 모델 안정화**: `scripts/generate-life-restaurant-posts.mjs`의 Gemini 모델을 `GEMINI_MODEL` env 기반으로 전환(기본 `gemini-2.5-flash-lite`)
+  - **배포 워크플로우 정합화**: `.github/workflows/deploy.yml` 3단계 맛집 생성 step에 `GEMINI_MODEL: 'gemini-2.5-flash-lite'` env 추가
 - 2026-04-08 핵심 반영:
   - **맛집 재수집 정책 전환**: GitHub Actions에서 `collect-life-restaurants.mjs` 직접 호출 → `ensure-life-restaurant-candidates.mjs`(guard)로 교체
   - guard 로직: unused 후보 10건 이상이면 재수집 생략, 10건 미만일 때만 실제 수집 실행 (`MIN_UNUSED_RESTAURANT_CANDIDATES` env로 override 가능)

@@ -7,6 +7,27 @@
 
 ## 2026-04-10
 
+### 만료 보조금/맛집 생성 실패 긴급 수정
+
+- 만료 보조금 노출/포스트 생성 이슈 조치
+  - `src/content/posts/2026-04-09-social-enterprise-tax-reduction.md` 삭제
+  - `public/data/subsidy.json`에서 `서비스ID: 131200000013`의 `expired`를 `true`로 수정
+  - `scripts/collect-subsidy.js`에 `(YYYY.MM.DD.한)` 패턴 자동 파싱 로직 추가
+    - 대상 필드: `지원내용`, `지원대상`, `선정기준`
+    - 오늘 날짜보다 과거면 자동으로 `expired: true` 처리
+  - `scripts/cleanup-expired.js`에 `subsidy.json` 보정 패스 추가
+    - 마크다운 frontmatter `endDate` 정리 외에도 보조금 JSON 만료 자동 보정 수행
+- 맛집 포스트 0건 실패 이슈 조치
+  - `scripts/generate-life-restaurant-posts.mjs`
+    - 모델 호출을 하드코딩 `gemini-2.5-pro`에서 환경변수 기반으로 전환
+    - `GEMINI_MODEL` 미설정 시 `gemini-2.5-flash-lite` 기본값 사용
+  - `.github/workflows/deploy.yml`
+    - 3단계 `generate_restaurant_posts` step에 `GEMINI_MODEL: 'gemini-2.5-flash-lite'` env 추가
+- 원인 확인 메모
+  - 후보 고갈 아님: 스냅샷 88건 중 unused 60건(인천 19/서울 22/경기 19)
+- 검증
+  - `npm run build` 성공 (정적 페이지 511개 생성)
+
 ### Cloudflare 캐시 자동 퍼지 설정 (deploy.yml + .env.local)
 
 **배경**: 기존 `CLOUDFLARE_API_TOKEN`의 권한을 `Zone > Cache Purge > Purge` + `Zone > Zone > Read`로 업데이트 완료. 이제 배포 후 캐시가 자동으로 전체 삭제되어 사용자가 항상 최신 콘텐츠를 볼 수 있음.

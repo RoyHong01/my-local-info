@@ -72,6 +72,35 @@ async function run() {
   }
 
   console.log(`cleanup-expired 완료: ${updated}건 만료 처리, ${skipped}건 유지`);
+
+  // subsidy.json 만료일 자동 감지 보정 패스
+  const subsidyPath = path.join(process.cwd(), 'public', 'data', 'subsidy.json');
+  try {
+    const subsidyRaw = await fs.readFile(subsidyPath, 'utf-8');
+    const subsidyData = JSON.parse(subsidyRaw);
+    const expiryPattern = /(\d{4})\.(\d{2})\.(\d{2})\.한/;
+    function parseExpiry(text) {
+      const m = expiryPattern.exec(String(text || ''));
+      return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+    }
+    let subsidyExpired = 0;
+    for (const item of subsidyData) {
+      if (item.expired) continue;
+      const expiryDate = parseExpiry(item['지원내용'])
+        || parseExpiry(item['지원대상'])
+        || parseExpiry(item['선정기준']);
+      if (expiryDate && expiryDate < today) {
+        item.expired = true;
+        subsidyExpired++;
+      }
+    }
+    if (subsidyExpired > 0) {
+      await fs.writeFile(subsidyPath, JSON.stringify(subsidyData, null, 2), 'utf-8');
+      console.log(`subsidy.json 만료 보정: ${subsidyExpired}건 expired 처리`);
+    }
+  } catch (err) {
+    console.error('subsidy.json 만료 보정 실패:', err.message);
+  }
 }
 
 run();

@@ -116,6 +116,28 @@ async function run() {
     }))
   ];
 
+  // 만료일 자동 감지: 지원내용 등에서 "(YYYY.MM.DD.한)" 패턴 파싱
+  const expiryPattern = /(\d{4})\.(\d{2})\.(\d{2})\.한/;
+  function parseExpiryDate(text) {
+    const m = expiryPattern.exec(String(text || ''));
+    return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+  }
+  const todayStr = new Date().toISOString().split('T')[0];
+  let autoExpiredCount = 0;
+  for (const item of merged) {
+    if (item.expired) continue;
+    const expiryDate = parseExpiryDate(item['지원내용'])
+      || parseExpiryDate(item['지원대상'])
+      || parseExpiryDate(item['선정기준']);
+    if (expiryDate && expiryDate < todayStr) {
+      item.expired = true;
+      autoExpiredCount++;
+    }
+  }
+  if (autoExpiredCount > 0) {
+    console.log(`만료일 자동 감지: ${autoExpiredCount}건 expired 처리`);
+  }
+
   let markdownGenerated = 0;
   let inputTokens = 0;
   let outputTokens = 0;
