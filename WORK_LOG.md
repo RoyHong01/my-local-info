@@ -23,6 +23,7 @@
     - `GEMINI_MODEL` 미설정 시 `gemini-2.5-flash-lite` 기본값 사용
   - `.github/workflows/deploy.yml`
     - 3단계 `generate_restaurant_posts` step에 `GEMINI_MODEL: 'gemini-2.5-flash-lite'` env 추가
+    - 3단계 `collect_restaurants` step에도 `GEMINI_MODEL/RESTAURANT_GEMINI_MODEL`을 `gemini-2.5-flash-lite`로 고정해 수집/글쓰기 단계 모델 일관성 확보
 - 원인 확인 메모
   - 후보 고갈 아님: 스냅샷 88건 중 unused 60건(인천 19/서울 22/경기 19)
 - Gemini 모델 안전장치 추가(하드코딩 재발 방지)
