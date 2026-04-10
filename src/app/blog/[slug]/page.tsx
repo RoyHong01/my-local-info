@@ -320,6 +320,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
+  const isIncheonOrSubsidyPost = /인천|보조금|복지/.test(post.category || '');
+  const useExpandedSourceSpacing = isIncheonOrSubsidyPost && !isChoicePost && !!sourceLink;
   const renderedContent = isChoicePost
     ? removeFirstDuplicateHeroImage(sanitizedContent, post.image)
     : sanitizedContent;
@@ -394,9 +396,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <div className="mt-4 pt-4 border-t border-stone-100 text-sm text-stone-500">
+          <div className={`mt-4 pt-4 border-t border-stone-100 text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
             {sourceLink && !isChoicePost && (
-              <p className="mt-1 mb-7">
+              <p
+                className={useExpandedSourceSpacing ? 'my-12 py-2' : 'mt-1 mb-7'}
+              >
                 <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
                   <span>공식 원문 바로가기</span>
                   <span>&rarr;</span>
