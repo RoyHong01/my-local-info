@@ -7,6 +7,9 @@ const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant',
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
+// 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
+// 생성 스크립트(generate-*.mjs/js)의 fallback 'gemini-2.5-flash-lite'와 의도적으로 다름. 통일 수정 금지.
+// CI에서는 RESTAURANT_GEMINI_MODEL env(flash-lite)가 주입되므로 이 값은 로컬 미설정 시에만 사용됨.
 const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-1.5-flash';
 
 function createSupabaseCacheClient() {
