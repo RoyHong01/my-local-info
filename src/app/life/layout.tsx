@@ -21,7 +21,7 @@ export default function LifeLayout({ children }: { children: React.ReactNode }) 
         <div className="flex gap-12 items-start">
           <div className="flex-1 min-w-0">{children}</div>
           <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
-            <Suspense fallback={null}>
+            <Suspense fallback={<div className="h-[730px]" />}>
               <LifeSidebarAds />
             </Suspense>
           </aside>

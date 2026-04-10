@@ -41,7 +41,7 @@ export default function BlogPage() {
               <p className="text-xs text-stone-400 mt-1">총 {posts.length}편</p>
             </div>
 
-            <Suspense fallback={null}>
+            <Suspense fallback={<div className="min-h-[600px]" />}>
               <BlogScrollRestorer />
               <BlogFilter posts={posts} />
             </Suspense>

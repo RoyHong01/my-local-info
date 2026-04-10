@@ -86,6 +86,14 @@ body {
   line-height: 1.68;
 }
 
+/* 마크다운 본문 이미지 CLS 방지: 로드 전 공간 확보 */
+.blog-prose img {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* 블로그 테이블 항목(첫 번째) 컬럼 줄바꿈 방지 */
 .blog-prose :where(table td:first-child, table th:first-child):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   white-space: nowrap;
