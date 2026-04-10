@@ -306,7 +306,78 @@ function postProcessRestaurantMarkdown(markdown, context) {
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
+  normalizedBody = enforceHookBridgeAndHeadingSpacing(normalizedBody, context);
+
   return `${frontmatter}\n\n${normalizedBody}`.trim();
+}
+
+function enforceHookBridgeAndHeadingSpacing(body, context) {
+  const lines = String(body || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  const nonEmptyIndices = lines.map((line, i) => ({ line: line.trim(), i })).filter((x) => x.line.length > 0).map((x) => x.i);
+  if (nonEmptyIndices.length === 0) return body;
+
+  const hookIndex = nonEmptyIndices[0];
+  if (!/^##\s+/.test(lines[hookIndex].trim())) {
+    return body;
+  }
+
+  const firstSubheadingIndex = lines.findIndex((line, i) => i > hookIndex && isSubheadingLine(line));
+
+  const result = [];
+  for (let i = 0; i <= hookIndex; i++) result.push(lines[i]);
+
+  // HOOK 다음은 반드시 한 줄 공백
+  if (result[result.length - 1] !== '') result.push('');
+
+  const bridgeSourceStart = hookIndex + 1;
+  const bridgeSourceEnd = firstSubheadingIndex === -1 ? lines.length : firstSubheadingIndex;
+  const bridgeLines = lines
+    .slice(bridgeSourceStart, bridgeSourceEnd)
+    .map((line) => line.trim())
+    .filter((line) => line && !isSubheadingLine(line));
+
+  const bridgeFallback = [
+    `${context.itemName}은(는) 첫인상에서부터 동선이 깔끔하게 잡히는 편이라, 약속 코스 고민이 줄어드는 느낌이 들어요.`,
+    `${context.scenarioHint || '약속 전후 흐름'} 기준으로도 부담이 적고, ${context.vibeHint || '공간의 결'}이 자연스럽게 이어져서 첫 방문 코스로 잡기 좋아요.`,
+  ];
+
+  const normalizedBridge = bridgeLines.slice(0, 3);
+  while (normalizedBridge.length < 2) {
+    normalizedBridge.push(bridgeFallback[normalizedBridge.length]);
+  }
+
+  for (const line of normalizedBridge) result.push(line);
+
+  // 브릿지 이후 첫 소제목 전 여백 2줄 보장
+  result.push('');
+  result.push('');
+
+  if (firstSubheadingIndex !== -1) {
+    for (let i = firstSubheadingIndex; i < lines.length; i++) {
+      result.push(lines[i]);
+    }
+  }
+
+  // ### 또는 ** 소제목 위/아래 2줄 여백 보장
+  const spaced = [];
+  const addBlankLine = () => {
+    if (spaced.length === 0 || spaced[spaced.length - 1] !== '') spaced.push('');
+  };
+
+  for (const rawLine of result) {
+    const line = rawLine.trimEnd();
+    if (isSubheadingLine(line)) {
+      addBlankLine();
+      addBlankLine();
+      spaced.push(line);
+      addBlankLine();
+      addBlankLine();
+      continue;
+    }
+    spaced.push(line);
+  }
+
+  return spaced.join('\n').replace(/\n{5,}/g, '\n\n\n\n').trim();
 }
 
 function tryConvertJsonResponseToMarkdown(text) {
@@ -460,11 +531,53 @@ function countSentenceLike(text) {
 function validateSubheadingAndReadability(bodyText) {
   const issues = [];
   const mainBody = String(bodyText || '').split('## 방문 정보 한눈에')[0] || '';
-  const lines = mainBody.split('\n').map((line) => line.trim());
+  const rawLines = mainBody.split('\n');
+  const lines = rawLines.map((line) => line.trim());
 
   const subheadingCount = lines.filter((line) => isSubheadingLine(line)).length;
   if (subheadingCount < 3) {
     issues.push(`소제목 부족(${subheadingCount}개 / 최소 3개)`);
+  }
+
+  const firstContentIndex = lines.findIndex((line) => line.length > 0);
+  if (firstContentIndex !== -1 && /^##\s+/.test(lines[firstContentIndex])) {
+    const hookNext = rawLines[firstContentIndex + 1] ?? '';
+    if (hookNext.trim().length > 0) {
+      issues.push('여백 체크 실패: HOOK 바로 다음 줄이 비어있지 않음');
+    }
+
+    const firstSubheadingRawIndex = rawLines.findIndex((line, i) => i > firstContentIndex && isSubheadingLine(line));
+    if (firstSubheadingRawIndex === -1) {
+      issues.push('구조 체크 실패: 첫 번째 소제목이 없음');
+    } else {
+      const bridgeLines = rawLines
+        .slice(firstContentIndex + 1, firstSubheadingRawIndex)
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+
+      if (bridgeLines.length < 2) {
+        issues.push(`여백 체크 실패: 브릿지 문단 부족(${bridgeLines.length}줄 / 최소 2줄)`);
+      }
+
+      const introText = rawLines.slice(firstContentIndex + 1, firstSubheadingRawIndex).join('\n').replace(/\s+/g, '');
+      if (introText.length > 150) {
+        issues.push(`구조 체크 실패: 첫 소제목 전 서론이 너무 김(${introText.length}자 / 최대 150자)`);
+      }
+
+      // ### 소제목은 위아래 2줄 이상 공백 확보
+      for (let i = 0; i < rawLines.length; i++) {
+        if (!/^###\s+\S+/.test(rawLines[i].trim())) continue;
+
+        const before1 = (rawLines[i - 1] ?? '').trim();
+        const before2 = (rawLines[i - 2] ?? '').trim();
+        const after1 = (rawLines[i + 1] ?? '').trim();
+        const after2 = (rawLines[i + 2] ?? '').trim();
+        if (before1.length > 0 || before2.length > 0 || after1.length > 0 || after2.length > 0) {
+          issues.push('여백 체크 실패: ### 소제목 위아래 2줄 공백 미충족');
+          break;
+        }
+      }
+    }
   }
 
   let consecutiveParagraphsWithoutHeading = 0;
@@ -485,13 +598,17 @@ function validateSubheadingAndReadability(bodyText) {
     if (/^\*\*[^*]+\*\*\s*:/.test(line)) continue;
 
     const sentenceCount = countSentenceLike(line);
-    if (sentenceCount >= 3) {
-      issues.push(`가독성 저하: 소제목 없이 긴 문단(한 문단 ${sentenceCount}문장) 발견`);
+    if (sentenceCount > 4) {
+      issues.push(`가독성 저하: 소제목 하위 문단이 과도하게 김(한 문단 ${sentenceCount}문장)`);
       break;
     }
 
     if (sentenceCount > 0) {
       consecutiveParagraphsWithoutHeading += 1;
+      if (sentenceCount >= 3 && consecutiveParagraphsWithoutHeading >= 2) {
+        issues.push(`가독성 저하: 소제목 없이 긴 줄글이 이어짐(문단 ${consecutiveParagraphsWithoutHeading}개째, ${sentenceCount}문장)`);
+        break;
+      }
       if (consecutiveParagraphsWithoutHeading >= 3) {
         issues.push('가독성 저하: 소제목 없이 3개 이상 문단이 연속됨');
         break;
@@ -679,6 +796,8 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 제목에는 반드시 음식 장르(한식/양식/일식/카페/브런치 등) 또는 대표 메뉴(파스타/오마카세/국밥 등)를 포함.
 - slug는 이미 정해져 있으니 절대 변경하지 마.
 - 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 고민(웨이팅/동선/메뉴 고민)을 찌르는 질문 또는 공감 문장으로 작성.
+- HOOK 바로 다음 줄은 반드시 빈 줄 1개를 넣어 시선을 분리할 것.
+- HOOK 다음에는 첫 소제목 전에 브릿지 문단 2~3줄을 반드시 작성해 장소의 전체 인상을 먼저 전달할 것.
 - 본문 전개는 아래 순서를 따를 것:
   1) HOOK: 지금 겪는 고민을 찌르는 시작
   2) SCENARIO: scenarioHint를 바탕으로 방문 상황을 구체적으로 묘사
@@ -693,6 +812,8 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 소제목은 단어형(예: 분위기, 맛, 위치) 금지. 문장형으로 작성.
 - 소제목 예시: "동선 안에 답이 있었네요", "자극적이지 않아서 더 좋아요", "가기 전에 이것만은 꼭".
 - 레이아웃 예시: HOOK 이후에 위와 같은 문장형 소제목이 중간중간 끼어드는 블로그 구조를 그대로 따를 것.
+- 모든 ### 소제목의 위/아래에는 빈 줄을 2개 이상 넣어 여백의 미를 살릴 것.
+- 각 소제목 아래 문단은 최대 3~4문장으로 끊고, 문단 사이에도 빈 줄을 넣어 가독성을 유지할 것.
 - 2~3문장마다 줄바꿈해 가독성을 유지.
 
 [스타일]
