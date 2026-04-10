@@ -11,6 +11,7 @@ if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
 }
 const TARGET_POSTS_PER_RUN = Number(process.env.LIFE_RESTAURANT_POSTS_PER_RUN || '3');
 const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUCKET || '1');
+const INTER_REQUEST_DELAY_MS = Number(process.env.INTER_REQUEST_DELAY_MS || '1000');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
@@ -867,14 +868,26 @@ async function run() {
     return;
   }
 
+  let successCount = 0;
+  let failedCount = 0;
+
   for (let i = 0; i < selectedCandidates.length; i++) {
     const candidate = selectedCandidates[i];
-    await generateRestaurantPost(candidate);
+    try {
+      await generateRestaurantPost(candidate);
+      successCount += 1;
+    } catch (error) {
+      failedCount += 1;
+      console.warn(`⚠️ 후보 처리 실패(다음 후보로 계속): ${candidate.item?.name || candidate.item?.id || 'unknown'} / ${error?.message || error}`);
+    }
+
     if (i < selectedCandidates.length - 1) {
-      console.log('  ⏳ 5초 대기 중...');
-      await sleep(5000);
+      console.log(`  ⏳ ${INTER_REQUEST_DELAY_MS}ms 대기 중...`);
+      await sleep(INTER_REQUEST_DELAY_MS);
     }
   }
+
+  console.log(`📌 생성 완료: 성공 ${successCount}건 / 실패 ${failedCount}건`);
 }
 
 run().catch((error) => {
