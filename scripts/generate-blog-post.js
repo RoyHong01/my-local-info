@@ -556,6 +556,47 @@ function normalizeInlineInfo(value) {
     .trim();
 }
 
+function inferFestivalTravelKind(candidate) {
+  const source = [
+    getCandidateText(candidate, ['서비스명', 'title', 'name']),
+    getCandidateText(candidate, ['overview', '지원내용']),
+    getCandidateText(candidate, ['tags']),
+  ].join(' ');
+
+  if (/축제/.test(source)) return 'festival';
+  if (/여행|관광|투어|트레킹|코스/.test(source)) return 'travel';
+  if (/행사|페스티벌|박람회|전시|공연/.test(source)) return 'event';
+  return 'event';
+}
+
+function getFestivalTravelLabels(candidate) {
+  const kind = inferFestivalTravelKind(candidate);
+  if (kind === 'festival') {
+    return {
+      heading: '### 📌 한눈에 보는 축제 정보',
+      name: '축제명',
+      period: '축제기간',
+      content: '축제정보',
+    };
+  }
+
+  if (kind === 'travel') {
+    return {
+      heading: '### 📌 한눈에 보는 여행 정보',
+      name: '여행명',
+      period: '여행기간',
+      content: '여행정보',
+    };
+  }
+
+  return {
+    heading: '### 📌 한눈에 보는 행사 정보',
+    name: '행사명',
+    period: '행사기간',
+    content: '행사정보',
+  };
+}
+
 function buildOneGlanceRows(candidate, category) {
   const rows = [];
   const pushRow = (label, value) => {
@@ -569,9 +610,10 @@ function buildOneGlanceRows(candidate, category) {
   const eventPeriod = startDate && endDate ? `${startDate} ~ ${endDate}` : '';
 
   if (category === '전국 축제·여행') {
-    pushRow('행사명', getCandidateText(candidate, ['서비스명', 'title', 'name']));
-    pushRow('행사기간', eventPeriod || endDate || startDate);
-    pushRow('행사내용', getCandidateText(candidate, ['지원내용', 'overview']));
+    const labels = getFestivalTravelLabels(candidate);
+    pushRow(labels.name, getCandidateText(candidate, ['서비스명', 'title', 'name']));
+    pushRow(labels.period, eventPeriod || endDate || startDate);
+    pushRow(labels.content, getCandidateText(candidate, ['지원내용', 'overview']));
     pushRow('문의전화', getCandidateText(candidate, ['전화문의', 'tel']));
     pushRow('주소', getCandidateText(candidate, ['addr1', 'addr2', 'location']));
     pushRow('상세정보', getCandidateText(candidate, ['상세조회URL', 'homepage', 'link']));
@@ -594,7 +636,7 @@ function buildOneGlanceRows(candidate, category) {
 }
 
 function getOneGlanceHeadingByCategory(category) {
-  if (category === '전국 축제·여행') return '### 📌 한눈에 보는 축제 정보';
+  if (category === '전국 축제·여행') return '### 📌 한눈에 보는 행사 정보';
   return '### 📌 한눈에 보는 신청 정보';
 }
 
@@ -602,8 +644,12 @@ function buildOneGlanceInfoSection(candidate, category) {
   const rows = buildOneGlanceRows(candidate, category);
   if (rows.length === 0) return '';
 
+  const heading = category === '전국 축제·여행'
+    ? getFestivalTravelLabels(candidate).heading
+    : getOneGlanceHeadingByCategory(category);
+
   const lines = [
-    getOneGlanceHeadingByCategory(category),
+    heading,
     '',
     '| 항목 | 내용 |',
     '|------|------|',
