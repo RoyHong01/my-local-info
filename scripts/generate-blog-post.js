@@ -568,10 +568,17 @@ function buildOneGlanceRows(candidate, category) {
   const endDate = getCandidateText(candidate, ['eventenddate', 'endDate']);
   const eventPeriod = startDate && endDate ? `${startDate} ~ ${endDate}` : '';
 
-  pushRow('서비스명', getCandidateText(candidate, ['서비스명', 'title', 'name']));
   if (category === '전국 축제·여행') {
+    pushRow('행사명', getCandidateText(candidate, ['서비스명', 'title', 'name']));
     pushRow('행사기간', eventPeriod || endDate || startDate);
+    pushRow('행사내용', getCandidateText(candidate, ['지원내용', 'overview']));
+    pushRow('문의전화', getCandidateText(candidate, ['전화문의', 'tel']));
+    pushRow('주소', getCandidateText(candidate, ['addr1', 'addr2', 'location']));
+    pushRow('상세정보', getCandidateText(candidate, ['상세조회URL', 'homepage', 'link']));
+    return rows;
   }
+
+  pushRow('서비스명', getCandidateText(candidate, ['서비스명', 'title', 'name']));
   pushRow('신청기한', getCandidateText(candidate, ['신청기한', 'endDate']));
   pushRow('지원내용', getCandidateText(candidate, ['지원내용', 'overview']));
   pushRow('지원대상', getCandidateText(candidate, ['지원대상', 'target']));
@@ -586,12 +593,17 @@ function buildOneGlanceRows(candidate, category) {
   return rows;
 }
 
+function getOneGlanceHeadingByCategory(category) {
+  if (category === '전국 축제·여행') return '### 📌 한눈에 보는 축제 정보';
+  return '### 📌 한눈에 보는 신청 정보';
+}
+
 function buildOneGlanceInfoSection(candidate, category) {
   const rows = buildOneGlanceRows(candidate, category);
   if (rows.length === 0) return '';
 
   const lines = [
-    '### 📌 한눈에 보는 신청 정보',
+    getOneGlanceHeadingByCategory(category),
     '',
     '| 항목 | 내용 |',
     '|------|------|',
@@ -608,7 +620,7 @@ function ensureOneGlanceInfoSection(body, candidate, category) {
   const normalized = (body || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
   if (!normalized) return section;
 
-  const headingRegex = /^###\s+.*한눈에 보는.*(?:신청 정보|정보 요약|핵심 정보).*$/m;
+  const headingRegex = /^###\s+.*한눈에 보는.*(?:신청 정보|축제 정보|행사 정보|여행 정보|정보 요약|핵심 정보).*$/m;
   const headingMatch = normalized.match(headingRegex);
 
   if (!headingMatch || headingMatch.index === undefined) {

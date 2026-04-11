@@ -954,8 +954,15 @@ async function run() {
   let candidates = buildFilteredCandidates(snapshot, existingIds);
 
   const emptyBuckets = findEmptyBuckets(candidates);
-  if (candidates.length < MIN_UNUSED_CANDIDATES && FORCE_RESTAURANT_SOURCE_IDS.size === 0) {
-    console.log(`\n🔄 unused 후보 ${candidates.length}건으로 기준 ${MIN_UNUSED_CANDIDATES}건 미만 — Kakao API 재수집 시작...`);
+  const needsRecollectByCount = candidates.length < MIN_UNUSED_CANDIDATES;
+  const needsRecollectByBucket = emptyBuckets.length > 0;
+  const shouldRecollect = FORCE_RESTAURANT_SOURCE_IDS.size === 0 && (needsRecollectByCount || needsRecollectByBucket);
+
+  if (shouldRecollect) {
+    const reason = needsRecollectByCount
+      ? `unused 후보 ${candidates.length}건으로 기준 ${MIN_UNUSED_CANDIDATES}건 미만`
+      : `필수 버킷 후보 부족 (${emptyBuckets.join(', ')})`;
+    console.log(`\n🔄 맛집 후보 재수집 시작 — ${reason}`);
     try {
       recollectRestaurants();
       snapshot = await readSnapshot();
@@ -969,8 +976,6 @@ async function run() {
     } catch (err) {
       console.warn(`⚠️ 맛집 데이터 재수집 실패: ${err.message || err}`);
     }
-  } else if (emptyBuckets.length > 0) {
-    console.log(`ℹ️ 일부 버킷이 비어 있어도 전체 unused 후보가 ${candidates.length}건으로 충분하므로 재수집 없이 기존 후보를 우선 사용합니다.`);
   }
 
   const selectedCandidates = selectCandidatesByBucket(candidates, existing.bucketCounts);

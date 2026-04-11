@@ -127,18 +127,22 @@ async function main() {
   const candidates = snapshot ? buildFilteredCandidates(snapshot, existingIds) : [];
   const emptyBuckets = findEmptyBuckets(candidates);
   const hasEnoughCandidates = candidates.length >= MIN_UNUSED_CANDIDATES;
-  const needsRecollect = !snapshot || !hasEnoughCandidates;
+  const hasAllTargetBuckets = emptyBuckets.length === 0;
+  const needsRecollect = !snapshot || !hasEnoughCandidates || !hasAllTargetBuckets;
 
   if (!needsRecollect) {
     console.log(`✅ 후보가 충분합니다. 수집을 건너뜁니다. (unused ${candidates.length}건, 기준 ${MIN_UNUSED_CANDIDATES}건)`);
-    if (emptyBuckets.length > 0) {
-      console.log(`ℹ️ 일부 버킷이 비어 있어도 전체 unused 후보가 충분하므로 이번 실행에서는 재수집하지 않습니다: ${emptyBuckets.join(', ')}`);
-    }
     emitMetrics(snapshot, false);
     return;
   }
 
-  console.log(`🔄 맛집 후보 재수집 필요: ${!snapshot ? '스냅샷 없음' : `unused 후보 ${candidates.length}건 (기준 ${MIN_UNUSED_CANDIDATES}건 미만)`}`);
+  const recollectReason = !snapshot
+    ? '스냅샷 없음'
+    : !hasEnoughCandidates
+      ? `unused 후보 ${candidates.length}건 (기준 ${MIN_UNUSED_CANDIDATES}건 미만)`
+      : `필수 버킷 후보 부족 (${emptyBuckets.join(', ')})`;
+
+  console.log(`🔄 맛집 후보 재수집 필요: ${recollectReason}`);
 
   const collectScript = path.join(process.cwd(), 'scripts', 'collect-life-restaurants.mjs');
   execFileSync(process.execPath, [collectScript], {
