@@ -363,6 +363,71 @@ function buildHookFromTitle(title, fallback) {
   return `## ${core}, 핵심부터 빠르게 볼까요?`;
 }
 
+const FESTIVAL_BANNED_LEAD_PATTERNS = [
+  /^\s*솔직히(?:\s|$)/i,
+  /^\s*진심으로\s*말씀드려요[.!?…\s]*/i,
+  /^\s*진실(?:을)?\s*말씀드릴게요[.!?…\s]*/i,
+];
+
+function stripHeadingPrefix(text) {
+  return String(text || '').replace(/^#{1,6}\s+/, '').trim();
+}
+
+function hasFestivalBannedLead(text) {
+  const normalized = String(text || '')
+    .replace(/^['"“”‘’]+|['"“”‘’]+$/g, '')
+    .trim();
+  return FESTIVAL_BANNED_LEAD_PATTERNS.some((pattern) => pattern.test(normalized));
+}
+
+function hasFestivalLeadRepetitionInGeneratedText(text) {
+  const raw = String(text || '');
+  if (!raw) return false;
+
+  const titleMatch = raw.match(/^title:\s*(.+)$/m);
+  if (titleMatch && hasFestivalBannedLead(titleMatch[1])) return true;
+
+  const firstHookMatch = raw.match(/^##\s+(.+)$/m);
+  if (firstHookMatch && hasFestivalBannedLead(firstHookMatch[1])) return true;
+
+  return false;
+}
+
+function normalizeFestivalTitleDiversity(title, itemName) {
+  if (!hasFestivalBannedLead(title)) return title;
+  const base = String(itemName || title || '이번 주말 여행').trim();
+  return `${base}, 이번 주말 포인트만 콕 볼까요? 🌸`;
+}
+
+function normalizeFestivalHookDiversity(body, seedTitle, itemName) {
+  const lines = String(body || '').split('\n');
+  const firstHookIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (firstHookIndex < 0) return String(body || '');
+
+  const hookText = stripHeadingPrefix(lines[firstHookIndex]);
+  if (!hasFestivalBannedLead(hookText)) return String(body || '');
+
+  lines[firstHookIndex] = buildHookFromTitle(seedTitle, itemName);
+  return lines.join('\n');
+}
+
+function enforceFestivalLeadDiversity(markdown, itemName) {
+  const { frontmatter, body } = splitMarkdownSections(markdown);
+  if (!frontmatter) return markdown;
+
+  const currentTitle = extractTitleFromFrontmatter(frontmatter);
+  const nextTitle = normalizeFestivalTitleDiversity(currentTitle, itemName);
+
+  let nextFrontmatter = frontmatter;
+  if (nextTitle && nextTitle !== currentTitle) {
+    const escapedTitle = nextTitle.replace(/"/g, '\\"');
+    nextFrontmatter = nextFrontmatter.replace(/^title:.*$/m, `title: "${escapedTitle}"`);
+  }
+
+  const nextBody = normalizeFestivalHookDiversity(body, nextTitle || currentTitle, itemName);
+  return `${nextFrontmatter}\n\n${nextBody}`.trim();
+}
+
 function normalizeNumberedInlineSections(content) {
   const lines = content.split('\n');
   const out = [];
@@ -778,6 +843,11 @@ async function generatePost(candidate, postsDir) {
 - 제목에 연도('2026', '2025' 등)를 넣지 마. 제목이 보고서처럼 무거워 보여.
 - '완전정복', '총정리', '핵심정리' 같은 딱딱한 단어도 금지.
 - 대신 그 축제의 핵심 즐길 거리 2~3개를 조합한 스토리텔링형 제목을 써줘.
+- 같은 어투/같은 문장 시작을 반복하지 마. 특히 아래 시작 문구는 제목/훅에서 절대 사용 금지:
+  - "솔직히 말할게요", "진심으로 말씀드려요"
+- 제목 스타일은 매번 다르게 선택해. 아래 유형 중 하나를 랜덤하게 선택:
+  - 질문형 / 정보요약형 / 감성형 / 숫자활용형
+- 제목에는 지역명 + 축제명(또는 행사명)을 자연스럽게 반드시 포함해.
   - 좋은 예: "딸기 향 가득한 봄날, 논산에서 인생샷 찍고 왔어요 🍓"
   - 좋은 예: "한강 + 벚꽃 + 치맥 = 여의도 봄꽃 축제, 핵심부터 빠르게 볼까요?"
   - 나쁜 예: "논산딸기축제 2026: 인생 딸기 맛보러 갈 사람 바로 여기 붙어!"
@@ -852,7 +922,7 @@ ${festivalStyleOverride}
   · 틀림 예: "고창은 전북에 위치한 도시다."
   · 맞음 예: "고창은 전북에 있는 작은 도시인데요, 진짜 한 번쯤은 가볼 만해요."
 - AI 금지어 (절대 사용 금지): 결론적으로 / 무엇보다도 / 다양한 / 인상적인 / 포착한 / 주목할 만한 / 대표적인 / 각광받는 / 눈길을 끄는 / ~의 대명사가 됐다 / ~를 선사한다 / 즐길 수 있다 / 만끽할 수 있다
-- 대신 쓸 표현: '진짜 대박인 건', '여긴 꼭 가봐야 해요', '솔직히 말하면', '생각보다 훨씬', '가보면 알아요'
+- 대신 쓸 표현: '진짜 대박인 건', '여긴 꼭 가봐야 해요', '생각보다 훨씬', '가보면 알아요', '핵심만 먼저 볼게요'
 - 정보 나열 전에 반드시 시각적 묘사나 현장 기분을 먼저 써줄 것
   예: "초록색 바다에 들어와 있는 것 같은 기분이었어요."
 - 숫자·통계는 딱딱하게 쓰지 말고 비유로 풀어줄 것
@@ -866,7 +936,8 @@ ${festivalStyleOverride}
 (본문 작성 규칙 - MZ 감성 스타일 적용)
 1) 본문 첫 줄은 반드시 훅(Hook) 소제목으로 시작: "## ..." 형식 (절대 "#" 사용 금지)
 2) 훅 첫 문장은 짧고 강렬하게, 1~2줄로 독자를 바로 끌어당길 것
-  - 예시: "솔직히 말할게요." / "D-5." / "지금 당장 짐 싸세요." / "이건 진짜예요."
+  - 예시: "이번 주말, 여기로 방향 정하면 고민이 줄어요." / "꽃비 내릴 때 딱 맞춰 움직여볼까요?" / "핵심 동선만 먼저 잡아볼게요."
+  - 금지: "솔직히 말할게요" / "진심으로 말씀드려요"로 시작하는 훅
 3) 문체는 경어체 필수. '~해요/~거든요/~입니다/~네요' 종결어미만 사용할 것.
   - '~이다/~한다/~됐다' 평어체 종결어미는 절대 금지
   - 'AI 금지어' (결론적으로/다양한/인상적인 등) 사용 금지
@@ -920,6 +991,14 @@ ${festivalStyleOverride}
 
     generatedText = gemini.text || '';
     lastFinishReason = gemini.finishReason || '';
+
+    if (isFestival && hasFestivalLeadRepetitionInGeneratedText(generatedText)) {
+      if (attempt < maxAttempts) {
+        console.warn(`  ⚠️ 금지 시작문구(솔직히 계열) 감지. 재시도 ${attempt + 1}/${maxAttempts}`);
+        await sleep(2000);
+        continue;
+      }
+    }
 
     const isIncomplete =
       lastFinishReason === 'MAX_TOKENS' ||
@@ -1009,6 +1088,9 @@ ${festivalStyleOverride}
     candidate,
   });
   finalContent = postProcessed.content;
+  if (candidate._category === '전국 축제·여행') {
+    finalContent = enforceFestivalLeadDiversity(finalContent, itemName);
+  }
   console.log(`  🔎 품질 점검: tone=${postProcessed.summary.toneScore}/100, hook=${postProcessed.summary.hasHook ? 'Y' : 'N'}, reasons=${postProcessed.summary.hasReasonStructure ? 'Y' : 'N'}, len=${postProcessed.summary.length}`);
   if (candidate._category === '전국 축제·여행') {
     const midStatus = postProcessed.summary.midImageStatus || 'unknown';
