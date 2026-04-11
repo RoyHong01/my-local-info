@@ -5,6 +5,57 @@
 
 ---
 
+## 2026-04-11 (자동화/가독성/UI 후속 안정화)
+
+### 블로그 본문 링크/이미지/코드블록 렌더링 후속 수정
+
+- **수정 파일**: `src/app/globals.css`, `src/lib/markdown-utils.ts`, `src/content/posts/2024-05-15-earned-income-child-benefit.md`
+- **핵심 변경**:
+  - 본문 중간 이미지의 강제 확대(`width: 100%`)를 제거해 작은 원본 이미지는 선명도 유지
+  - 이미지/캡션 정렬 불일치 해소: 본문 이미지 좌측 정렬 통일
+  - `숫자 목록 아래 4칸 들여쓰기 불릿`이 코드블록으로 깨지는 패턴 자동 보정 로직 추가
+  - `바로가기` 링크가 문장에 붙는 경우 본문에서 자동 줄바꿈되도록 전역 정규화 적용(테이블은 예외 처리)
+  - 근로·자녀장려금 포스트의 문제 구간을 텍스트 문단으로 보정
+
+### 맛집 3권역(서울/인천/경기) 생성 불균형 재발 방지
+
+- **수정 파일**: `scripts/generate-life-restaurant-posts.mjs`, `scripts/ensure-life-restaurant-candidates.mjs`
+- **원인**: 기존 로직이 `unused 총량` 기준만 통과하면 재수집을 생략해 특정 버킷(예: 경기)이 비어도 생성이 진행됨
+- **핵심 변경**:
+  - `unused 후보 수 부족`뿐 아니라 `필수 버킷 누락`도 재수집 트리거 조건으로 확장
+  - 가드 스크립트와 생성 스크립트 모두 동일 조건으로 정합화
+- **효과**: 내일부터 자동 생성 시 서울/인천/경기 버킷이 비면 먼저 재수집 후 생성 진행
+
+### 축제/행사/여행 글 정보 섹션 헤딩 자동 분기
+
+- **수정 파일**: `scripts/generate-blog-post.js`, `src/content/posts/2026-04-10-gangneung-gyeongpo-cherryblossom-festival.md`, `src/content/posts/2026-04-09-jangjahosu-cherryblossom.md`
+- **핵심 변경**:
+  - `전국 축제·여행` 카테고리의 정보 섹션을 고정 `신청 정보`에서 콘텐츠 기반 분기로 전환
+  - 키워드 분기:
+    - `축제` → `한눈에 보는 축제 정보`
+    - `여행/관광/투어/코스` → `한눈에 보는 여행 정보`
+    - 그 외 → `한눈에 보는 행사 정보`
+  - 표 라벨도 `축제명/축제기간/축제정보`, `여행명/여행기간/여행정보`, `행사명/행사기간/행사정보`로 동기화
+  - 이미 생성된 경포/장자호수 포스트는 직접 헤딩 보정
+
+### 벚꽃 배경 하이브리드 + 소제목 간격 가독성 개선
+
+- **수정 파일**: `src/app/globals.css`
+- **핵심 변경**:
+  - 벚꽃 배경 하이브리드 적용:
+    - 데스크톱(1024px 이상): `background-attachment: fixed`
+    - 모바일/태블릿(1024px 미만): `background-attachment: scroll`
+  - `h2/h3` 섹션 간 상단 여백 확대를 `blog-prose` + `prose` 전역에 적용
+  - 예외 규칙 정밀화:
+    - 첫 훅 `h2:first-of-type`만 예외
+    - `h3:first-of-type` 예외 제거(두 번째 소제목부터 간격 확대 정상 적용)
+
+### 검증 및 반영
+
+- `npm run build` 반복 검증 모두 성공
+- 당일 커밋/푸시 반영:
+  - `cfdea26`, `6cf5a20`, `0cc26ae`, `9fe4650`, `d603a81`, `789e8e1`, `1f96cb6`
+
 ## 2026-04-11 (Search Console 구조화 데이터)
 
 ### Choice 제품 구조화 데이터 개편 — 판매자 목록/제품 스니펫 오류 동시 대응
@@ -30,17 +81,20 @@
 **원인 분석**: Google Search Console에서 `/life/`, `/blog/` 등 Poor 등급 확인
 
 **핵심 원인: `<Suspense fallback={null}>`**
+
 - `blog/page.tsx`: `BlogFilter` (useSearchParams 사용 클라이언트 컴포넌트) 전체가 `fallback={null}`으로 감싸져 있어, 정적 HTML에 블로그 포스트 목록이 없음 → JS 로드 후 목록 출현 → footer 급락 (초대형 CLS)
 - `life/page.tsx`: `LifeFilterClient` 동일 패턴
 - `life/layout.tsx`: 사이드바 `LifeSidebarAds`도 `fallback={null}`로 높이 미확보 상태
 
 **수정 내용 (3개 파일)**:
+
 1. `src/app/blog/page.tsx`: `fallback={null}` → `fallback={<div className="min-h-[600px]" />}`
 2. `src/app/life/page.tsx`: 동일
 3. `src/app/life/layout.tsx`: 사이드바 → `fallback={<div className="h-[730px]" />}`
 4. `src/app/globals.css`: `.blog-prose img { aspect-ratio: 16/9; width: 100%; height: auto; }` — 마크다운 이미지 CLS 방지
 
 **결과**: 정적 HTML에 콘텐츠 영역 최소 높이 확보 → 레이아웃 안정
+
 ---
 
 ## 2026-04-10

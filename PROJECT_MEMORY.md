@@ -22,6 +22,13 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 2026-04-11 후속 안정화 반영
+  - 마크다운 렌더 보정: `바로가기` 링크가 문장에 붙는 경우 자동 줄바꿈, 숫자 목록 하위 불릿의 코드블록 오인식 보정 (`src/lib/markdown-utils.ts`)
+  - 맛집 자동화 균형 강화: `unused 후보 수`뿐 아니라 `서울/인천/경기 버킷 누락`도 재수집 조건으로 확장 (`scripts/generate-life-restaurant-posts.mjs`, `scripts/ensure-life-restaurant-candidates.mjs`)
+  - 축제/행사/여행 정보 헤딩 분기: 카테고리 내 콘텐츠 키워드에 따라 `한눈에 보는 축제 정보`/`행사 정보`/`여행 정보` 자동 선택 (`scripts/generate-blog-post.js`)
+  - 벚꽃 배경 하이브리드 적용: 데스크톱 `fixed`, 모바일/태블릿 `scroll` + 연핑크 fallback 배경색 (`src/app/globals.css`)
+  - 본문 가독성 개선: 블로그/일상의 즐거움 상세 공통(`.blog-prose`, `.prose`)에서 h2/h3 간 간격 확대, 첫 훅(h2)만 예외 처리
+
 - 2026-04-10 긴급 안정화 반영
   - 만료 보조금 자동 감지 보강: `scripts/collect-subsidy.js`, `scripts/cleanup-expired.js`에서 `(YYYY.MM.DD.한)` 패턴을 파싱해 과거 기한 항목을 자동으로 `expired: true` 처리
   - 만료 항목 정리: `서비스ID 131200000013`(사회적기업 지방세 감면)을 `expired: true`로 수정, 연관 포스트 삭제
