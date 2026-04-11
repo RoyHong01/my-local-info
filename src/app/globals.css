@@ -117,9 +117,11 @@ body {
   margin-bottom: 0.56rem;
 }
 
-.blog-prose > :where(h2, h3):first-child:not(:where([class~="not-prose"], [class~="not-prose"] *)),
-.prose > :where(h2, h3):first-child:not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 2.4rem;
+.blog-prose > h2:first-child,
+.blog-prose > h3:first-child,
+.prose > h2:first-child,
+.prose > h3:first-child {
+  margin-top: 2.8rem !important;
 }
 
 .blog-prose :where(ul, ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {

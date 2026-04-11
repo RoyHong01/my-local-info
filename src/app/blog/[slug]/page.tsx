@@ -420,7 +420,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
             ) : (
-              <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-10">
+              <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-14">
                 <Image
                   src={post.image}
                   alt={post.title}
