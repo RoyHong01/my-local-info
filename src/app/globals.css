@@ -105,14 +105,26 @@ body {
   line-height: 1.68;
 }
 
-.blog-prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  margin-top: 1.25em;
-  margin-bottom: 0.45em;
+.blog-prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 3.2rem;
+  margin-bottom: 0.7rem;
 }
 
-.blog-prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+.blog-prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h3):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 2.6rem;
+  margin-bottom: 0.56rem;
+}
+
+.blog-prose :where(h2:first-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h2:first-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  margin-top: 1.25em;
+}
+
+.blog-prose :where(h3:first-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *)),
+.prose :where(h3:first-of-type):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   margin-top: 1.05em;
-  margin-bottom: 0.38em;
 }
 
 .blog-prose :where(ul, ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -137,6 +149,12 @@ body {
   background-position: top center;
   background-attachment: fixed;
   background-repeat: no-repeat;
+}
+
+@media (max-width: 1023px) {
+  .bg-cherry-blossom {
+    background-attachment: scroll;
+  }
 }
 
 /* ── 콘텐츠 컨테이너 배경 (개나리 꽃 패턴) ── */
