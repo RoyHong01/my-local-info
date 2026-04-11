@@ -1,0 +1,140 @@
+{
+  "reportDateKst": "2026-04-12",
+  "generatedAtUtc": "2026-04-11T20:06:43.382Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24290417244",
+    "runNumber": 464,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24290417244",
+    "runStartedAtUtc": "2026-04-11T19:59:39Z",
+    "headSha": "112a6853c9a17531c110d70283e451e882e80b79"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0e166b2e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 0건, 업데이트 100건, 총 164건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://b354e303.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://be98ba51.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "9af8b7e1af986d7aa144ce05df5ef135fdc00145",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-11",
+      "authoredAt": "2026-04-11T20:06:42Z",
+      "files": [
+        "src/content/life/2026-04-11-pangyo-1001.md",
+        "src/content/life/2026-04-11-seongsu-restaurant-1263750578.md",
+        "src/content/life/2026-04-11-songdo-restaurant-172523332.md"
+      ]
+    },
+    {
+      "sha": "b9912d26c7219f6440da76fa2f539252134eaa63",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-11",
+      "authoredAt": "2026-04-11T20:05:12Z",
+      "files": [
+        "src/content/posts/2026-04-11-AnseongNamsadang.md",
+        "src/content/posts/2026-04-11-incheon-namdong-maternity-support.md",
+        "src/content/posts/2026-04-11-친환경-어선-장비-지원.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 6,
+    "dataChangedFiles": [],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-11-AnseongNamsadang.md",
+      "src/content/posts/2026-04-11-incheon-namdong-maternity-support.md",
+      "src/content/posts/2026-04-11-친환경-어선-장비-지원.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-11-pangyo-1001.md",
+      "src/content/life/2026-04-11-seongsu-restaurant-1263750578.md",
+      "src/content/life/2026-04-11-songdo-restaurant-172523332.md"
+    ],
+    "allChangedFiles": [
+      "src/content/life/2026-04-11-pangyo-1001.md",
+      "src/content/life/2026-04-11-seongsu-restaurant-1263750578.md",
+      "src/content/life/2026-04-11-songdo-restaurant-172523332.md",
+      "src/content/posts/2026-04-11-AnseongNamsadang.md",
+      "src/content/posts/2026-04-11-incheon-namdong-maternity-support.md",
+      "src/content/posts/2026-04-11-친환경-어선-장비-지원.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 19.04,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 100건, 총 164건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
