@@ -22,6 +22,13 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 2026-04-12 초이스 발행 반영
+  - 쿠팡 태그 기반 신규 포스트 생성: `2026-04-12-choice-lapomme-dual-coretex-airhole-pouch-6pack.md`
+  - 사용자 제공 이미지 2종을 `public/images/choice/dual-core-hero.png`, `public/images/choice/dual-core-detail.png`로 반영
+  - 생성 입력 파일 `scripts/choice-input.lapomme-dual-coretex.json` 추가
+  - 생성본의 CTA 링크 누락을 후처리로 수정하고, 중간 이미지 1장 + CTA 1회 규칙으로 보정
+  - `npm run build` 성공 및 커밋/푸시 완료 (원격 선행 커밋은 rebase 후 반영)
+
 - 2026-04-11 후속 안정화 반영
   - 마크다운 렌더 보정: `바로가기` 링크가 문장에 붙는 경우 자동 줄바꿈, 숫자 목록 하위 불릿의 코드블록 오인식 보정 (`src/lib/markdown-utils.ts`)
   - 맛집 자동화 균형 강화: `unused 후보 수`뿐 아니라 `서울/인천/경기 버킷 누락`도 재수집 조건으로 확장 (`scripts/generate-life-restaurant-posts.mjs`, `scripts/ensure-life-restaurant-candidates.mjs`)

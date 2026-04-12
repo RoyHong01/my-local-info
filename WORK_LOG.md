@@ -5,6 +5,29 @@
 
 ---
 
+## 2026-04-12 (픽앤조이 초이스 신규 발행)
+
+### 라뽐므 듀얼코어텍스 압축 파우치 초이스 포스트 생성/배포
+
+- **요청 작업**: 쿠팡 태그 기반으로 초이스 포스트 1건 생성 후 배포 반영
+- **이미지 반영**:
+  - `Downloads/Dual_core.png` -> `public/images/choice/dual-core-hero.png`
+  - `Downloads/Dual_core_1.png` -> `public/images/choice/dual-core-detail.png`
+- **생성 입력 파일 추가**: `scripts/choice-input.lapomme-dual-coretex.json`
+  - 쿠팡 링크: `https://link.coupang.com/a/endoIx`
+  - 배너 이미지/alt 및 대표 이미지 경로 지정
+- **생성 결과 파일**: `src/content/life/2026-04-12-choice-lapomme-dual-coretex-airhole-pouch-6pack.md`
+- **후처리 보정**:
+  - 생성본 CTA 문구에 링크 URL 누락되어 수동 수정
+  - 본문 중간 이미지 1장(`dual-core-detail.png`) 삽입
+  - 쿠팡 제휴 CTA 1회 정상 링크로 고정
+- **검증**:
+  - `npm run build` 성공 (정적 페이지/사이트맵/검색 인덱스 생성 완료)
+- **커밋/푸시**:
+  - 최초 push는 원격 선행 커밋으로 reject
+  - `git pull --rebase origin main` 후 재푸시 성공
+  - 최종 반영 커밋: `d1747f2`
+
 ## 2026-04-11 (자동화/가독성/UI 후속 안정화)
 
 ### 블로그 본문 링크/이미지/코드블록 렌더링 후속 수정
