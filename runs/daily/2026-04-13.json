@@ -1,0 +1,137 @@
+{
+  "reportDateKst": "2026-04-13",
+  "generatedAtUtc": "2026-04-12T20:09:40.373Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24315239712",
+    "runNumber": 467,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24315239712",
+    "runStartedAtUtc": "2026-04-12T20:03:48Z",
+    "headSha": "b81c4b811ded6b9e437739f95e02f5218015de52"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://530a7e69.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 103건",
+        "subsidy": "신규 0건, 총 103건",
+        "festival": "신규 0건, 업데이트 100건, 총 164건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://8f44a462.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://e0ed01c6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "04a8edf8d5e01b3910f1cc13440ed321fcf938eb",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-12",
+      "authoredAt": "2026-04-12T20:09:39Z",
+      "files": [
+        "src/content/life/2026-04-12-pangyo-restaurant-1698639393.md",
+        "src/content/life/2026-04-12-songdo-restaurant-1387337017.md"
+      ]
+    },
+    {
+      "sha": "c37c38359af827851683d37c0411b006e1ffcfee",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-12",
+      "authoredAt": "2026-04-12T20:08:04Z",
+      "files": [
+        "src/content/posts/2026-03-27-yeongam-wangin-festival.md",
+        "src/content/posts/2026-04-12-fishery-support.md",
+        "src/content/posts/2026-04-12-incheon-junggu-housing-support.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 5,
+    "dataChangedFiles": [],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-03-27-yeongam-wangin-festival.md",
+      "src/content/posts/2026-04-12-fishery-support.md",
+      "src/content/posts/2026-04-12-incheon-junggu-housing-support.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-12-pangyo-restaurant-1698639393.md",
+      "src/content/life/2026-04-12-songdo-restaurant-1387337017.md"
+    ],
+    "allChangedFiles": [
+      "src/content/life/2026-04-12-pangyo-restaurant-1698639393.md",
+      "src/content/life/2026-04-12-songdo-restaurant-1387337017.md",
+      "src/content/posts/2026-03-27-yeongam-wangin-festival.md",
+      "src/content/posts/2026-04-12-fishery-support.md",
+      "src/content/posts/2026-04-12-incheon-junggu-housing-support.md"
+    ]
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 8.47,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 103건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 100건, 총 164건",
+      "validation": "ok",
+      "anthropicUsage": "0/0"
+    }
+  }
+}
