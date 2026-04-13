@@ -5,6 +5,39 @@
 
 ---
 
+## 2026-04-13 (스크립트 자동화 개선 + 서울 맛집 포스트)
+
+### 주요 변경사항
+
+**1. `scripts/cleanup-expired.js` — festival.json 만료 자동화 추가**
+- 매일 실행 시 `festival.json`의 `eventenddate`(YYYYMMDD) 기준으로 오늘(KST) 이전 항목에 `expired: true` 자동 마킹
+- KST 보정: `new Date(Date.now() + 9 * 60 * 60 * 1000)` 패턴 사용 (UTC 오차 방지)
+- 실행 즉시 47건 만료 처리 (영암왕인문화축제 포함)
+
+**2. `scripts/generate-blog-post.js` — 리드타임 + KST 보정**
+- `getTodayKST()` 헬퍼 추가 (UTC 아닌 KST 기준 날짜)
+- `isEndDatePassed()` → 축제(eventenddate)는 오늘 기준 7일 이내 종료 시 제외
+- `BLOG_FESTIVAL_MIN_DAYS_BEFORE_END` env로 리드타임 override 가능 (기본값 7)
+
+**3. `scripts/generate-life-restaurant-posts.mjs` — 지역별 재시도 + STOP 오탐 수정**
+- 주 후보 실패 시 `backupsByBucket` Map으로 같은 버킷 대체 후보 순서 재시도
+- 에러 로그에 실제 에러 메시지 포함 (`error?.message`)
+- Gemini `finishReason=STOP` 응답을 불완전으로 오탐하던 버그 수정:
+  - STOP일 때는 길이(700자 이상)·FILENAME 포함 여부만 체크
+  - 기존 끝 문장 부호 체크는 STOP 이외에만 적용
+
+**4. 서울 맛집 포스트 수동 생성**
+- 브루잉세레모니 (성수, source_id: 804984272)
+- `src/content/life/2026-04-13-seongsu-restaurant-804984272.md`
+
+### 커밋 이력
+- `04ee4c8`: 서울 맛집 포스트 1건 추가
+- `be403f9`: 스크립트 4개 변경 (festival 만료 자동화, KST 리드타임, 지역별 재시도, STOP 오탐)
+- rebase pull (`12e0a64` origin main 선행커밋 병합) 후 push 성공
+- 최종 반영: `6c8e869`
+
+---
+
 ## 2026-04-12 (픽앤조이 초이스 신규 발행)
 
 ### 라뽐므 듀얼코어텍스 압축 파우치 초이스 포스트 생성/배포
