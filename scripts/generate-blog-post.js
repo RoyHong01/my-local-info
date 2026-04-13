@@ -22,6 +22,7 @@ const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTI
 const BLOG_ONLY_CATEGORY = process.env.BLOG_ONLY_CATEGORY || '';
 // 후보 텍스트(title/name/addr1/overview)에 키워드가 포함된 항목만 생성
 const BLOG_ONLY_KEYWORD = (process.env.BLOG_ONLY_KEYWORD || '').trim();
+const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -895,6 +896,7 @@ date: ${today}
 summary: (130~160자 한국어 요약. 핵심 키워드를 앞에 배치. Google 검색 결과에 표시되는 문장이므로 금액·날짜·장소 등 구체적 정보 포함)
 description: (summary와 동일한 내용)
 category: ${candidate._category}
+published_by: ${BLOG_PUBLISHED_BY}
 tags: [태그1, 태그2, 태그3, 태그4, 태그5]
 ---
 
@@ -1069,6 +1071,7 @@ ${festivalStyleOverride}
   finalContent = upsertFrontmatterField(finalContent, 'source_end_date', sourceEndDate);
   finalContent = upsertFrontmatterField(finalContent, 'source_addr1', sourceAddr1);
   finalContent = upsertFrontmatterField(finalContent, 'source_snapshot_key', sourceSnapshotKey);
+  finalContent = upsertFrontmatterField(finalContent, 'published_by', BLOG_PUBLISHED_BY);
 
   // YAML 파싱 안정성을 위해 문자열 frontmatter는 항상 따옴표로 정규화
   finalContent = ensureQuotedFrontmatterField(finalContent, 'title');
@@ -1076,6 +1079,7 @@ ${festivalStyleOverride}
   finalContent = ensureQuotedFrontmatterField(finalContent, 'description');
   finalContent = ensureQuotedFrontmatterField(finalContent, 'source_title');
   finalContent = ensureQuotedFrontmatterField(finalContent, 'source_addr1');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'published_by');
 
   if (!filename) {
     filename = `${today}-post-${Date.now()}`;

@@ -16,6 +16,11 @@ const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_
 const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
 const CHOICE_MIN_REVIEW_COUNT = Number(process.env.CHOICE_MIN_REVIEW_COUNT || 100);
 const CHOICE_DEDUP_SCOPE = String(process.env.CHOICE_DEDUP_SCOPE || 'global').trim().toLowerCase();
+const CHOICE_RELAXED_RATING_STEPS = String(process.env.CHOICE_RELAXED_RATING_STEPS || '4.3,4.0')
+  .split(',')
+  .map((value) => Number(value.trim()))
+  .filter((value) => Number.isFinite(value) && value < CHOICE_MIN_RATING)
+  .sort((a, b) => b - a);
 
 function getGeminiApiKey() {
   loadLocalEnvFiles();
@@ -237,9 +242,9 @@ function scoreProductRelevance(product, keywordSignals) {
   return score;
 }
 
-function isQualifiedChoiceProduct(product) {
+function isQualifiedChoiceProduct(product, minRating = CHOICE_MIN_RATING) {
   if (!product?.productId || !product?.productName || !product?.affiliateUrl) return false;
-  if (Number(product.rating || 0) < CHOICE_MIN_RATING) return false;
+  if (Number(product.rating || 0) < minRating) return false;
   if (Number(product.reviewCount || 0) < CHOICE_MIN_REVIEW_COUNT) return false;
   if (Boolean(product.outOfStock)) return false;
   return true;
@@ -648,8 +653,9 @@ async function resolveProductsForCandidate(candidate) {
       return 0;
     });
 
+  let appliedMinRating = CHOICE_MIN_RATING;
   let freshQualified = ranked.filter((product) => {
-    if (!isQualifiedChoiceProduct(product)) return false;
+    if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
     return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
   });
 
@@ -674,11 +680,36 @@ async function resolveProductsForCandidate(candidate) {
         });
 
       freshQualified = reranked.filter((product) => {
-        if (!isQualifiedChoiceProduct(product)) return false;
+        if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
         return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
       });
 
       if (freshQualified.length >= 3) break;
+    }
+  }
+
+  if (freshQualified.length < 3 && CHOICE_RELAXED_RATING_STEPS.length > 0) {
+    for (const minRating of CHOICE_RELAXED_RATING_STEPS) {
+      appliedMinRating = minRating;
+      freshQualified = collected
+        .map((product) => ({
+          ...product,
+          relevanceScore: scoreProductRelevance(product, keywordSignals),
+        }))
+        .sort((a, b) => {
+          if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
+          if (a.rank && b.rank) return a.rank - b.rank;
+          return 0;
+        })
+        .filter((product) => {
+          if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
+          return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
+        });
+
+      if (freshQualified.length >= 3) {
+        console.warn(`품질 기준 완화 적용: rating >= ${appliedMinRating}`);
+        break;
+      }
     }
   }
 
@@ -696,6 +727,7 @@ async function resolveProductsForCandidate(candidate) {
     keywords: [...primaryKeywords, ...fallbackKeywords],
     primaryKeywords,
     fallbackKeywords,
+    appliedMinRating,
     products: selected,
     error: selectionError || (selected.length > 0 ? null : lastError),
   };
@@ -750,6 +782,7 @@ slug: "choice-${candidate.englishName}"
 summary: "(110~150자, 검색 노출용. 과장 없이 제품명/용도/선택 이유를 설명)"
 description: "(summary와 동일)"
 category: "픽앤조이 초이스"
+published_by: "${getPublishedBy(candidate)}"
 tags: ["태그1", "태그2", "태그3", "태그4", "태그5", "쿠팡", "리뷰"]
 rating_value: "${candidate.rating || '4.8'}"
 review_count: "${candidate.reviewCount || '100'}"
@@ -1000,6 +1033,7 @@ function normalizeGeneratedContent(content, candidate) {
 
   value = upsertFrontmatterField(value, 'slug', slug);
   value = upsertFrontmatterField(value, 'category', '픽앤조이 초이스');
+  value = upsertFrontmatterField(value, 'published_by', getPublishedBy(candidate));
   value = upsertFrontmatterField(value, 'summary', candidate.summary || '');
   value = upsertFrontmatterField(value, 'description', candidate.summary || candidate.description || '');
   value = upsertFrontmatterField(value, 'rating_value', String(candidate.rating || '4.8'));

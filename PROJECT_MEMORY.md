@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 fallback 완화 + published_by 확장
+  - 초이스 자동 선정은 1차 fallback(대체 키워드 확장) 후에도 부족하면 2차 fallback으로 평점 기준을 `4.5 -> 4.3 -> 4.0` 순으로 완화해 재평가
+  - 다만 `reviewCount >= 100`, 품절 제외, 최근 14일 중복 제외는 유지해 품질 하한을 보존
+  - `published_by` frontmatter를 초이스/일반 블로그/맛집 자동 생성본에 공통 도입해 향후 통계 집계 기반 마련
+
 - 2026-04-13 초이스 무인 엔진 운영성 개선
   - 요일별 테마 설정을 `scripts/data/choice-daily-themes.json`로 외부화해 운영자가 키워드/대체 키워드를 직접 조정 가능하도록 변경
   - `scripts/data/recommended-products.json` 히스토리에 `publishedBy(auto/manual)` 필드 추가

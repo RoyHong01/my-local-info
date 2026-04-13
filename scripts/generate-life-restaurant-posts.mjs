@@ -14,6 +14,7 @@ const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUC
 const INTER_REQUEST_DELAY_MS = Number(process.env.INTER_REQUEST_DELAY_MS || '1000');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
+const LIFE_RESTAURANT_PUBLISHED_BY = String(process.env.LIFE_RESTAURANT_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
@@ -830,6 +831,7 @@ date: ${today}
 summary: (130~160자. 약속 전 메뉴/분위기 고민 + 이곳을 체크하게 되는 이유 + 기대 포인트를 자연스럽게 담기)
 description: (130~160자. '평점 4.2가 증명하는 찐맛집' 뉘앙스를 포함해 클릭을 유도하는 검색 문장)
 category: 픽앤조이 맛집 탐방
+published_by: "${LIFE_RESTAURANT_PUBLISHED_BY}" 
 tags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]
 image: "${defaultImage}"
 source_id: "${candidate.item.id}"

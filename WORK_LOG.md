@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 fallback 2단계 완화 + published_by 메타 확장)
+
+- **수정 파일**: `scripts/generate-choice-post.js`, `scripts/generate-blog-post.js`, `scripts/generate-life-restaurant-posts.mjs`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. 초이스 자동 선정 fallback을 2단계 구조로 확장: 1차는 대체 키워드 확장, 2차는 평점 기준을 `4.5 -> 4.3 -> 4.0` 순으로 완화해 재평가
+  2. 완화 시에도 `reviewCount >= 100`, 품절 제외, 최근 14일 중복 제외 기준은 유지
+  3. 초이스 포스트 frontmatter에 `published_by` 기록 추가
+  4. 일반 블로그 자동 생성본에도 `published_by` frontmatter 추가
+  5. 맛집 자동 생성본에도 `published_by` frontmatter 추가
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 무인 엔진 운영성 개선: 테마 외부화/발행 구분/fallback 확장)
 
 - **수정 파일**: `scripts/generate-choice-posts-auto.js`, `scripts/generate-choice-post.js`, `scripts/data/choice-daily-themes.json`, `scripts/data/recommended-products.json`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
