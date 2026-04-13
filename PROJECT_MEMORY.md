@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 텔레그램 리포트 확장
+  - `scripts/notify-telegram.mjs`에서 초이스를 맛집과 분리해 `초이스 포스트 n건`으로 표기
+  - 초이스 생성 파일이 있으면 제목 목록을 별도 블록으로 노출
+  - `choiceFallback` 지표(발동 횟수/적용 하한)를 텔레그램 본문에 추가
+  - 과거 리포트 JSON(초이스 필드 없음)도 fallback 0건/0회로 안전 처리
+
 - 2026-04-13 리포트 고도화 + 빌드 경고 해소
   - `src/lib/posts.ts` 스캔 경로를 고정형으로 정리해 Turbopack 광범위 패턴 경고 제거
   - `scripts/generate-choice-post.js`가 GitHub Actions output으로 fallback 관련 지표(`applied_min_rating`, `relaxed_fallback_applied_count`)를 배출

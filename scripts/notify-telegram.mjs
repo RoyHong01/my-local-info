@@ -84,9 +84,12 @@ async function buildMessage(report) {
 
   const hasFailed = report.stages?.some((s) => s.status === 'failure');
   const generatedBlogPosts = report.changes?.generatedBlogPosts || [];
+  const generatedChoicePosts = report.changes?.generatedChoicePosts || [];
+  const generatedRestaurantPosts = report.changes?.generatedRestaurantPosts || report.changes?.generatedLifePosts || [];
   const generatedLifePosts = report.changes?.generatedLifePosts || [];
   const blogCount = generatedBlogPosts.length;
-  const lifeCount = generatedLifePosts.length;
+  const choiceCount = generatedChoicePosts.length;
+  const lifeCount = generatedRestaurantPosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const budget = report.budget;
   const imagePolicy = report.imagePolicy || {};
@@ -97,6 +100,9 @@ async function buildMessage(report) {
   const cacheHit = Number(restaurantCache.cacheHit || 0);
   const cacheMiss = Number(restaurantCache.cacheMiss || 0);
   const googleCalled = Number(restaurantCache.googleCalled || 0);
+  const choiceFallback = report.choiceFallback || {};
+  const relaxedFallbackCount = Number(choiceFallback.relaxedAppliedCount || 0);
+  const appliedMinRating = Number(choiceFallback.appliedMinRating || 0);
 
   const statusIcon = hasFailed ? '⚠️' : '✅';
   const statusText = hasFailed ? '일부 단계 실패' : '전체 정상 완료';
@@ -108,7 +114,8 @@ async function buildMessage(report) {
   const collectSummary = stage1?.collectSummary || {};
 
   const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
-  const lifeTitles = await Promise.all(generatedLifePosts.map((file) => readPostTitle(file)));
+  const choiceTitles = await Promise.all(generatedChoicePosts.map((file) => readPostTitle(file)));
+  const lifeTitles = await Promise.all(generatedRestaurantPosts.map((file) => readPostTitle(file)));
 
   let budgetLine = '';
   if (budget?.enabled) {
@@ -154,11 +161,13 @@ async function buildMessage(report) {
     collectDetailLine,
     dataChangeLine,
     `📝 블로그 생성: ${blogCount}건`,
+    `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
     `♻️ 맛집 후보 재수집: ${recollectPerformed ? '실행' : '생략'}`,
     `🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`,
     `🗄️ 맛집 캐시: hit ${cacheHit} / miss ${cacheMiss} / google ${googleCalled}`,
+    `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
     budgetLine,
   ];
 
@@ -166,6 +175,12 @@ async function buildMessage(report) {
     lines.push('');
     lines.push('*생성된 블로그 제목:*');
     blogTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (choiceTitles.filter(Boolean).length > 0) {
+    lines.push('');
+    lines.push('*생성된 초이스 제목:*');
+    choiceTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
   }
 
   if (lifeTitles.filter(Boolean).length > 0) {

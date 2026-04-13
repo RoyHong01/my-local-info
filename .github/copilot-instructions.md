@@ -211,6 +211,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-13 핵심 반영(추가):
+  - **텔레그램 리포트 확장**: `scripts/notify-telegram.mjs`에서 초이스/맛집 건수를 분리 표기하고, 생성된 초이스 제목 목록을 별도 노출.
+  - **fallback 지표 텔레그램 노출**: 일일 리포트 JSON의 `choiceFallback` 데이터를 읽어 fallback 완화 발동 횟수와 적용 평점 하한을 메시지에 표시.
+  - 과거 리포트 JSON(초이스 필드 없음)도 0건/0회로 안전 처리.
+- 2026-04-13 핵심 반영(추가):
   - **posts.ts 빌드 경고 해소**: `src/lib/posts.ts`의 콘텐츠 스캔 경로를 고정형으로 정리해 Turbopack 광범위 파일 패턴 경고 제거.
   - **일일 리포트 통계 고도화**: `scripts/write-daily-report.mjs`에 `published_by(auto/manual/unknown)` 집계(전체/블로그/초이스/맛집) 추가.
   - **초이스 fallback 관측치 노출**: `scripts/generate-choice-post.js`가 `applied_min_rating`, `relaxed_fallback_applied_count`를 GitHub Actions output으로 배출하고, `.github/workflows/deploy.yml`에서 리포트 단계로 전달.

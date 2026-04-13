@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (텔레그램 리포트: 초이스/ fallback 노출 확장)
+
+- **수정 파일**: `scripts/notify-telegram.mjs`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`, `.github/copilot-instructions.md`
+- **핵심 반영**:
+  1. 텔레그램 리포트에 `🛍️ 초이스 포스트: n건` 라인 추가
+  2. 생성된 초이스 파일이 있으면 `생성된 초이스 제목` 목록을 별도로 노출
+  3. 텔레그램 리포트에 `초이스 fallback 완화` 발동 횟수/적용 하한을 함께 노출
+  4. 기존 일일 리포트 JSON에 `generatedChoicePosts`가 없던 과거 실행분도 0건으로 안전 처리
+- **검증**:
+  - `node --check scripts/notify-telegram.mjs`
+  - 더미 토큰으로 메시지 렌더링 확인(전송은 404 예상)
+
 ## 2026-04-13 (리포트 고도화: published_by 집계 + 초이스 fallback 발동 지표 + posts.ts 경고 해소)
 
 - **수정 파일**: `src/lib/posts.ts`, `scripts/generate-choice-post.js`, `scripts/write-daily-report.mjs`, `.github/workflows/deploy.yml`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
