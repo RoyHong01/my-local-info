@@ -22,6 +22,11 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 2026-04-13 지침 보강 반영
+  - `.github/copilot-instructions.md`에 전역 정보 효용성 규칙 강화(인천/축제/맛집 공통 7일 선행 원칙)
+  - 종료 임박/종료 데이터 원천 차단 및 예외 보고 의무 명시
+  - 맛집 포스트 톤앤매너 재발 방지 규칙 추가(금지어/금지 패턴/스타일 로테이션/자가검수 재생성)
+
 - 2026-04-12 초이스 발행 반영
   - 쿠팡 태그 기반 신규 포스트 생성: `2026-04-12-choice-lapomme-dual-coretex-airhole-pouch-6pack.md`
   - 사용자 제공 이미지 2종을 `public/images/choice/dual-core-hero.png`, `public/images/choice/dual-core-detail.png`로 반영
