@@ -28,6 +28,15 @@ function getCategoryLabel(category?: string) {
   return category ?? '기타';
 }
 
+function isChoicePost(post: PostData) {
+  return post.category === '픽앤조이 초이스'
+    || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([
+      post.title,
+      post.category || '',
+      ...(post.tags || []),
+    ].join(' '));
+}
+
 // 카테고리별 썸네일 컴포넌트
 const CATEGORY_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 지역 정보': '/images/incheon-thumbnail.jpg',
@@ -143,17 +152,22 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
               <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}
                 <div className="relative h-20 w-full flex-shrink-0">
-                  {post.image && !post.image.endsWith('.svg') ? (
+                  {(() => {
+                    const primary = post.image && !post.image.endsWith('.svg') ? post.image : '';
+                    const choiceFallback = isChoicePost(post) ? (post.coupangBannerImage || '') : '';
+                    const thumb = primary || choiceFallback;
+                    return thumb ? (
                     <Image
-                      src={post.image}
+                      src={thumb}
                       alt={post.title}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                  ) : (
-                    <CategoryThumbnail category={post.category} />
-                  )}
+                    ) : (
+                      <CategoryThumbnail category={post.category} />
+                    );
+                  })()}
                 </div>
 
                 {/* 텍스트 영역 */}

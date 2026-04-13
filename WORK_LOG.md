@@ -3,6 +3,17 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 목록 썸네일 fallback 보강)
+
+- **수정 파일**: `src/components/BlogFilter.tsx`
+- **원인**:
+  - 블로그 목록 카드가 썸네일을 `post.image`만 사용하고 있어, 멀티상품 초이스 글에서 히어로 비활성(`image: ""`) 시 카테고리 기본 썸네일로 fallback됨
+- **조치**:
+  - 초이스 포스트(`isChoicePost`)에 한해 카드 썸네일 fallback을 `post.coupangBannerImage`로 사용하도록 보강
+  - 우선순위: `post.image(유효)` -> `post.coupangBannerImage(초이스)` -> 카테고리 기본 썸네일
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 본문/사이드바 간격 미세조정)
 
 - **수정 파일**: `src/app/globals.css`, `src/app/blog/[slug]/page.tsx`

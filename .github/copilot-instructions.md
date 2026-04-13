@@ -195,6 +195,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-13 핵심 반영(추가):
+  - **초이스 목록 썸네일 회귀 보정**: `src/components/BlogFilter.tsx`에서 초이스 카드 썸네일 fallback을 `post.coupangBannerImage`까지 확장
+  - 멀티상품 포스트의 `image: ""`(히어로 미노출) 정책과 목록 썸네일 정책을 분리
+- 2026-04-13 핵심 반영(추가):
   - **초이스 본문 번호형 소제목 간격 조정**: `src/app/globals.css`에서 `choice-post-prose h3` 상/하 마진 축소
   - **태허 배너-상품 배너 간격 확대**: `src/app/blog/[slug]/page.tsx`에서 태허철학관 배너 하단 여백 추가로 간격 강화
 - 2026-04-13 핵심 반영(추가):

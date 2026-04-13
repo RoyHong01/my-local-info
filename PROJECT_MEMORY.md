@@ -20,6 +20,10 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 목록 썸네일 fallback 보강
+  - `src/components/BlogFilter.tsx`에서 초이스 포스트 썸네일 우선순위를 `post.image -> post.coupangBannerImage -> 카테고리 기본`으로 조정
+  - 히어로 비활성(`image: ""`)과 목록 썸네일 표시를 분리해 기본 썸네일 회귀 방지
+
 - 2026-04-13 초이스 본문/사이드바 간격 조정
   - `src/app/globals.css`: `choice-post-prose h3` 마진 축소로 번호형 소제목 간격 개선
   - `src/app/blog/[slug]/page.tsx`: 태허철학관 배너 래퍼에 하단 여백(`mb-4`) 추가로 첫 상품 배너와 간격 확대
