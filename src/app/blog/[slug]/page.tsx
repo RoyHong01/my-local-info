@@ -53,6 +53,43 @@ function removeFirstDuplicateHeroImage(markdown: string, heroImage?: string): st
   return markdown.replace(pattern, '');
 }
 
+type ChoiceSidebarProduct = {
+  href: string;
+  imageSrc: string;
+  alt: string;
+};
+
+function isCoupangAffiliateLink(url: string): boolean {
+  return /coupang\.com|link\.coupang\.com|partners\.coupang\.com/i.test(url);
+}
+
+function extractChoiceSidebarProducts(markdown: string, fallbackAlt: string): ChoiceSidebarProduct[] {
+  const text = String(markdown || '');
+  if (!text) return [];
+
+  const imageMatches = Array.from(text.matchAll(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g));
+  const linkMatches = Array.from(text.matchAll(/\[[^\]]+\]\((https?:\/\/[^)\s]+)\)/g))
+    .map((match) => match[1])
+    .filter((url) => isCoupangAffiliateLink(url));
+
+  const maxPairs = Math.min(imageMatches.length, linkMatches.length);
+  const products: ChoiceSidebarProduct[] = [];
+  const seen = new Set<string>();
+
+  for (let i = 0; i < maxPairs; i++) {
+    const alt = (imageMatches[i][1] || fallbackAlt || '추천 상품').trim();
+    const imageSrc = imageMatches[i][2];
+    const href = linkMatches[i];
+    const key = `${imageSrc}__${href}`;
+
+    if (seen.has(key)) continue;
+    seen.add(key);
+    products.push({ href, imageSrc, alt });
+  }
+
+  return products;
+}
+
 function extractRestaurantDetails(post: ReturnType<typeof getPostData>) {
   if (!post) return null;
 
@@ -367,7 +404,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const renderedContent = isChoicePost
     ? removeFirstDuplicateHeroImage(sanitizedContent, post.image)
     : sanitizedContent;
-  const hasChoiceSidebarBanner = isChoicePost && !!post.coupangLink && !!post.coupangBannerImage;
+  const extractedChoiceSidebarProducts = isChoicePost
+    ? extractChoiceSidebarProducts(renderedContent, post.coupangBannerAlt || post.title)
+    : [];
+  const choiceSidebarProducts = extractedChoiceSidebarProducts.length > 0
+    ? extractedChoiceSidebarProducts
+    : (isChoicePost && post.coupangLink && post.coupangBannerImage
+      ? [{
+          href: post.coupangLink,
+          imageSrc: post.coupangBannerImage,
+          alt: post.coupangBannerAlt || post.title,
+        }]
+      : []);
+  const hasChoiceSidebarBanner = choiceSidebarProducts.length > 0;
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const choiceReviewJsonLd = isChoicePost ? buildChoiceReviewJsonLd(post, description) : null;
 
@@ -480,12 +529,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               {hasChoiceSidebarBanner ? (
-                <ProductSidebarBanner
-                  href={post.coupangLink!}
-                  imageSrc={post.coupangBannerImage!}
-                  alt={post.coupangBannerAlt || post.title}
-                  title="픽앤조이 초이스 단독 배너"
-                />
+                choiceSidebarProducts.map((product, index) => (
+                  <ProductSidebarBanner
+                    key={`${product.href}-${index}`}
+                    href={product.href}
+                    imageSrc={product.imageSrc}
+                    alt={product.alt}
+                    title={`픽앤조이 초이스 추천 ${index + 1}`}
+                  />
+                ))
               ) : (
                 <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
               )}
