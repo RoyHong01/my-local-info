@@ -74,6 +74,18 @@ function normalizeSearchResponse(payload) {
   const productData = payload?.data?.productData || payload?.data || payload?.productData || [];
   if (!Array.isArray(productData)) return [];
 
+  const asNumber = (value) => {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const asBoolean = (value) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value !== 0;
+    const v = String(value || '').trim().toLowerCase();
+    return v === 'true' || v === '1' || v === 'y' || v === 'yes';
+  };
+
   return productData
     .map((item) => ({
       productId: String(item.productId || item.itemId || item.id || '').trim(),
@@ -83,10 +95,12 @@ function normalizeSearchResponse(payload) {
       affiliateUrl: String(item.productUrl || item.url || item.productLink || '').trim(),
       price: String(item.productPrice || item.salePrice || item.price || '').trim(),
       originalPrice: String(item.originalPrice || item.basePrice || '').trim(),
-      rating: String(item.productRating || item.rating || '').trim(),
-      reviewCount: String(item.reviewCount || item.ratingCount || '').trim(),
+      rating: asNumber(item.productRating || item.rating || item.star || 0),
+      reviewCount: asNumber(item.reviewCount || item.ratingCount || item.review || 0),
       rank: Number(item.rank || 0),
       isRocket: Boolean(item.isRocket || false),
+      outOfStock: asBoolean(item.outOfStock || item.isOutOfStock || item.soldOut || false),
+      brand: String(item.brand || item.brandName || item.manufacturer || item.vendorName || '').trim(),
       vendorName: String(item.vendorName || '').trim(),
     }))
     .filter((item) => item.productName && item.affiliateUrl);
@@ -101,11 +115,12 @@ async function searchProducts(keyword, options = {}) {
     throw new Error('COUPANG_ACCESS_KEY 또는 COUPANG_SECRET_KEY가 없습니다.');
   }
 
-  const limit = Math.max(1, Math.min(Number(options.limit || 3), 10));
+  const limit = Math.max(1, Math.min(Number(options.limit || 3), 20));
   const imageSize = options.imageSize || '640x640';
   const subId = options.subId || 'picknjoy-choice';
+  const sort = options.sort || 'bestAsc';
   const encodedKeyword = encodeURIComponent(safeKeyword);
-  const query = `keyword=${encodedKeyword}&limit=${limit}&imageSize=${encodeURIComponent(imageSize)}&subId=${encodeURIComponent(subId)}`;
+  const query = `keyword=${encodedKeyword}&limit=${limit}&imageSize=${encodeURIComponent(imageSize)}&subId=${encodeURIComponent(subId)}&sort=${encodeURIComponent(sort)}`;
 
   let lastError = null;
   for (const endpoint of SEARCH_ENDPOINTS) {

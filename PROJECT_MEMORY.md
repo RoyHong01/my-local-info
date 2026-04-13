@@ -20,6 +20,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 무인 엔진 고도화(중복 방지 강화)
+  - `scripts/generate-choice-posts-auto.js`를 KST 요일 기반 7대 테마 자동 선택 구조로 개편
+  - `scripts/lib/coupang-api.js` 검색 파라미터를 `sort=bestAsc` 지원 + 최대 20개 수집으로 확장
+  - `scripts/generate-choice-post.js`에 최근 14일 `productId` 중복 제외, 품질 필터(`rating>=4.5`, `reviewCount>=100`, `outOfStock=false`), 브랜드 다양성(최소 2브랜드) 로직 통합
+  - 발행 완료 시 사용 상품 3개의 `productId`/날짜/파일을 `scripts/data/recommended-products.json`에 기록
+  - `.github/copilot-instructions.md`에 초이스 무인 엔진 정책을 명시해 자동화 기준 고정
+
 - 2026-04-13 초이스 훅/소제목 다양성 규칙 통합
   - `scripts/generate-choice-post.js`에 4개 앵글 기반 다양화 전략을 반영하고, 실행마다 랜덤 1개를 선택해 서론/소제목 톤에 강제 적용
   - 앵글: 문제 해결형 / 트렌드 중심형 / 전문가 큐레이션 / 가성비·효율 강조

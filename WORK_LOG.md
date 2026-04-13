@@ -3,6 +3,25 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (픽앤조이 초이스 무인 엔진 고도화: 중복 방지 강화)
+
+- **수정 파일**: `scripts/generate-choice-posts-auto.js`, `scripts/generate-choice-post.js`, `scripts/lib/coupang-api.js`, `scripts/data/recommended-products.json`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. KST 요일 기반 7대 테마(월 건강/화 생활/수 주방/목 디지털/금 반려 생활/토 뷰티·패션/일 가전·가구) 자동 선택 로직 적용
+  2. 쿠팡 검색 API를 `sort=bestAsc` + 상위 20개 수집으로 확장
+  3. `scripts/data/recommended-products.json` 기반 최근 14일 `productId` 중복 제외 필터 적용
+  4. 품질 필터(`rating >= 4.5`, `reviewCount >= 100`, `outOfStock=false`) 적용
+  5. 브랜드 다양성(최종 3개에 최소 2개 브랜드) 강제 검증 추가
+  6. 생성 완료 시 사용된 3개 `productId` + 날짜 + 포스트 파일 정보를 히스토리 파일에 즉시 기록
+  7. 용어 통일 유지: 비교 섹션/CTA 문구는 `상품/아이템` 중심 유지(`장비` 금지)
+  8. 이미지 레이아웃 유지: Pick of the Day 1개만 상단 크게, 나머지 2개는 하단 비교 섹션에서만 노출
+- **요청 문구 반영**:
+  - "중복 필터링을 통해 선정된 신규 상품 3개 적용 완료"
+- **검증**:
+  - `node --check scripts/generate-choice-post.js`
+  - `node --check scripts/generate-choice-posts-auto.js`
+  - `node --check scripts/lib/coupang-api.js`
+
 ## 2026-04-13 (초이스 훅/소제목 다양성 규칙 통합 반영)
 
 - **수정 파일**: `scripts/generate-choice-post.js`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`

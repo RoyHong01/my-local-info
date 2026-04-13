@@ -11,6 +11,10 @@ if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
 }
 const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 8192);
+const RECOMMENDED_PRODUCTS_HISTORY_PATH = path.join(process.cwd(), 'scripts', 'data', 'recommended-products.json');
+const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_DAYS || 14);
+const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
+const CHOICE_MIN_REVIEW_COUNT = Number(process.env.CHOICE_MIN_REVIEW_COUNT || 100);
 
 function getGeminiApiKey() {
   loadLocalEnvFiles();
@@ -56,6 +60,52 @@ function todayIso() {
   const now = new Date();
   const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
   return kst.toISOString().slice(0, 10);
+}
+
+function parseIsoDateToUtc(dateText) {
+  const text = String(dateText || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return null;
+  const ms = Date.parse(`${text}T00:00:00Z`);
+  return Number.isFinite(ms) ? ms : null;
+}
+
+function daysBetweenIso(fromDate, toDate) {
+  const from = parseIsoDateToUtc(fromDate);
+  const to = parseIsoDateToUtc(toDate);
+  if (!Number.isFinite(from) || !Number.isFinite(to)) return Number.POSITIVE_INFINITY;
+  return Math.floor((to - from) / (24 * 60 * 60 * 1000));
+}
+
+async function loadRecommendedProductsHistory() {
+  try {
+    const raw = await fs.readFile(RECOMMENDED_PRODUCTS_HISTORY_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
+    return { version: 1, entries };
+  } catch {
+    return { version: 1, entries: [] };
+  }
+}
+
+async function saveRecommendedProductsHistory(history) {
+  await fs.mkdir(path.dirname(RECOMMENDED_PRODUCTS_HISTORY_PATH), { recursive: true });
+  const payload = {
+    version: 1,
+    updatedAtKst: `${todayIso()}T00:00:00+09:00`,
+    entries: Array.isArray(history?.entries) ? history.entries : [],
+  };
+  await fs.writeFile(RECOMMENDED_PRODUCTS_HISTORY_PATH, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
+}
+
+function isRecentlyPostedProduct(productId, historyEntries, today) {
+  const id = String(productId || '').trim();
+  if (!id || !Array.isArray(historyEntries)) return false;
+
+  return historyEntries.some((entry) => {
+    if (String(entry?.productId || '').trim() !== id) return false;
+    const diff = daysBetweenIso(entry?.date, today);
+    return diff >= 0 && diff < PRODUCT_HISTORY_LOOKBACK_DAYS;
+  });
 }
 
 function extractCoupangBannerImage(coupangHtml) {
@@ -164,8 +214,52 @@ function scoreProductRelevance(product, keywordSignals) {
 
   const numericInName = (product.productName.match(/\d+/g) || []).length;
   score += Math.min(1.5, numericInName * 0.2);
+  score += Math.min(1.2, Number(product.rating || 0) * 0.2);
+  score += Math.min(1.0, Number(product.reviewCount || 0) / 500);
 
   return score;
+}
+
+function isQualifiedChoiceProduct(product) {
+  if (!product?.productId || !product?.productName || !product?.affiliateUrl) return false;
+  if (Number(product.rating || 0) < CHOICE_MIN_RATING) return false;
+  if (Number(product.reviewCount || 0) < CHOICE_MIN_REVIEW_COUNT) return false;
+  if (Boolean(product.outOfStock)) return false;
+  return true;
+}
+
+function pickProductsWithBrandDiversity(candidates, maxCount = 3) {
+  const selected = [];
+  const brandSet = new Set();
+
+  for (const item of candidates) {
+    if (selected.length >= maxCount) break;
+    if (!item) continue;
+
+    const normalizedBrand = String(item.brand || item.vendorName || '').trim().toLowerCase();
+    if (!normalizedBrand && selected.length >= maxCount - 1) continue;
+
+    selected.push(item);
+    if (normalizedBrand) brandSet.add(normalizedBrand);
+  }
+
+  if (selected.length < maxCount) return selected;
+  if (brandSet.size >= 2) return selected;
+
+  // 브랜드가 1개로 고정된 경우, 다른 브랜드 후보와 교체 시도
+  for (const candidate of candidates) {
+    const normalizedBrand = String(candidate?.brand || candidate?.vendorName || '').trim().toLowerCase();
+    if (!normalizedBrand || brandSet.has(normalizedBrand)) continue;
+
+    for (let i = selected.length - 1; i >= 0; i--) {
+      const selectedBrand = String(selected[i]?.brand || selected[i]?.vendorName || '').trim().toLowerCase();
+      if (selectedBrand === normalizedBrand) continue;
+      selected[i] = candidate;
+      return selected;
+    }
+  }
+
+  return selected;
 }
 
 function selectPrimaryImage(candidate, products) {
@@ -500,13 +594,14 @@ function injectProductBlocks(content, candidate, products) {
 async function resolveProductsForCandidate(candidate) {
   const keywords = deriveKeywordCandidates(candidate);
   const keywordSignals = buildKeywordSignals(candidate);
+  const history = await loadRecommendedProductsHistory();
   const collected = [];
   const seen = new Set();
   let lastError = null;
 
   for (const keyword of keywords) {
     try {
-      const products = await searchProducts(keyword, { limit: 8 });
+      const products = await searchProducts(keyword, { limit: 20, sort: 'bestAsc' });
       for (const product of products) {
         const uniqueKey = product.productId || product.affiliateUrl;
         if (!uniqueKey || seen.has(uniqueKey)) continue;
@@ -529,10 +624,25 @@ async function resolveProductsForCandidate(candidate) {
       return 0;
     });
 
+  const freshQualified = ranked.filter((product) => {
+    if (!isQualifiedChoiceProduct(product)) return false;
+    return !isRecentlyPostedProduct(product.productId, history.entries, todayIso());
+  });
+
+  const selected = pickProductsWithBrandDiversity(freshQualified, 3);
+  const selectedBrands = new Set(selected.map((item) => String(item.brand || item.vendorName || '').trim().toLowerCase()).filter(Boolean));
+
+  let selectionError = null;
+  if (selected.length < 3) {
+    selectionError = new Error(`중복/품질 필터 후 선정 가능한 상품이 3개 미만입니다. (선정 ${selected.length}개)`);
+  } else if (selectedBrands.size < 2) {
+    selectionError = new Error('브랜드 다양성 기준(최소 2개 브랜드)에 맞는 3개 조합을 구성하지 못했습니다.');
+  }
+
   return {
     keywords,
-    products: ranked.slice(0, 3),
-    error: ranked.length > 0 ? null : lastError,
+    products: selected,
+    error: selectionError || (selected.length > 0 ? null : lastError),
   };
 }
 
@@ -875,6 +985,38 @@ async function loadCandidate(inputPath) {
   return parsed;
 }
 
+async function appendRecommendedProductsHistory(products, meta) {
+  const validProducts = Array.isArray(products)
+    ? products.filter((item) => item?.productId).slice(0, 3)
+    : [];
+
+  if (validProducts.length === 0) return;
+
+  const history = await loadRecommendedProductsHistory();
+  const nextEntries = [
+    ...history.entries,
+    ...validProducts.map((product) => ({
+      date: meta.date,
+      productId: String(product.productId),
+      productName: String(product.productName || '').trim(),
+      brand: String(product.brand || product.vendorName || '').trim(),
+      postFile: meta.postFile,
+      sourceId: meta.sourceId,
+      themeKey: meta.themeKey || '',
+      themeName: meta.themeName || '',
+    })),
+  ];
+
+  // 최신 120일 데이터만 유지
+  const trimmed = nextEntries.filter((entry) => {
+    const diff = daysBetweenIso(entry?.date, meta.date);
+    return Number.isFinite(diff) && diff >= 0 && diff <= 120;
+  });
+
+  history.entries = trimmed;
+  await saveRecommendedProductsHistory(history);
+}
+
 async function run() {
   const args = parseArgs(process.argv);
   if (args.help) {
@@ -888,9 +1030,14 @@ async function run() {
   const candidate = await loadCandidate(inputPath);
   const today = todayIso();
   const productResolution = await resolveProductsForCandidate(candidate);
+  const hasKeywordInput = splitKeywordHints(candidate.keywordHint).length > 0;
 
   if (productResolution.error) {
     console.warn(`쿠팡 상품 검색 fallback 사용: ${productResolution.error.message}`);
+  }
+
+  if (hasKeywordInput && productResolution.products.length < 3) {
+    throw new Error(`자동 선정 규칙을 만족한 상품이 3개 미만입니다. (${productResolution.products.length}개)`);
   }
 
   if (productResolution.products[0]?.affiliateUrl) {
@@ -953,6 +1100,14 @@ async function run() {
   await fs.mkdir(outDir, { recursive: true });
   const outputPath = path.join(outDir, finalFileName);
   await fs.writeFile(outputPath, finalContent.trim() + '\n', 'utf-8');
+
+  await appendRecommendedProductsHistory(candidate.products || [], {
+    date: today,
+    postFile: path.relative(process.cwd(), outputPath).replace(/\\/g, '/'),
+    sourceId: `manual-choice-${toSlug(candidate.englishName || candidate.fileName || 'item')}`,
+    themeKey: candidate.themeKey,
+    themeName: candidate.themeName,
+  });
 
   console.log(`✅ 초이스 포스트 생성 완료: ${outputPath}`);
 }
