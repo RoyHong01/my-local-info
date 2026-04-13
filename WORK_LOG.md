@@ -3,6 +3,21 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (사이드배너 1개 회귀 버그 긴급 수정)
+
+### 링크 파서 캡처 인덱스 오류 복구
+
+- **수정 파일**: `src/app/blog/[slug]/page.tsx`
+- **원인**:
+  - 사이드배너 링크 추출 로직에서 마크다운 캡처 그룹 인덱스를 `match[1]`(링크 텍스트)로 읽어 URL 대신 텍스트를 필터링함
+  - 그 결과 `link.coupang.com/re/` 매칭이 실패해 본문 기반 다중 배너 대신 fallback 단일 배너로 회귀
+- **조치**:
+  - `match[1] -> match[2]`로 수정하여 URL 캡처값 기준 필터링 복구
+- **검증**:
+  - `2026-04-13-choice-probiotics-api-curation.md` 추출 결과: `images 3 / links 3 / pairs 3`
+  - `2026-04-13-choice-kitchen-food-sealer.md` 추출 결과: `images 3 / links 3 / pairs 3`
+  - `npm run build` 성공
+
 ## 2026-04-13 (프로바이오틱스 사이드배너 3개 노출 보정)
 
 ### escaped 링크 텍스트 파싱 오류 수정 + 배너 제목 가독성 개선
