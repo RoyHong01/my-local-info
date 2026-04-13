@@ -20,6 +20,10 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 본문/사이드바 간격 조정
+  - `src/app/globals.css`: `choice-post-prose h3` 마진 축소로 번호형 소제목 간격 개선
+  - `src/app/blog/[slug]/page.tsx`: 태허철학관 배너 래퍼에 하단 여백(`mb-4`) 추가로 첫 상품 배너와 간격 확대
+
 - 2026-04-13 사이드배너 1개 회귀 버그 수정
   - `src/app/blog/[slug]/page.tsx` 링크 추출 캡처 인덱스 오류(`match[1]`)를 URL 인덱스(`match[2]`)로 수정
   - 프로바이오틱스/푸드실러 포스트 모두 `images 3 / links 3 / pairs 3` 확인
