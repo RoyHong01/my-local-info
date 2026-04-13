@@ -175,68 +175,86 @@ function selectPrimaryImage(candidate, products) {
   return defaultChoiceImage(candidate);
 }
 
-function buildProductMarkdown(product, ctaLabel) {
-  function buildPickOfDayBlock(product) {
-    if (!product?.productName || !product?.affiliateUrl) return '';
-    const safeProductName = sanitizeMarkdownText(product.productName);
-    const lines = [];
-    lines.push('### ✨ 오늘의 픽 (Pick of the Day)');
+function pickOneBySeed(options, seedText) {
+  if (!Array.isArray(options) || options.length === 0) return '';
+  const seed = String(seedText || 'picknjoy');
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+  }
+  const idx = Math.abs(hash) % options.length;
+  return options[idx];
+}
+
+function buildPickOfDayBlock(product) {
+  if (!product?.productName || !product?.affiliateUrl) return '';
+  const safeProductName = sanitizeMarkdownText(product.productName);
+  const lines = [];
+  lines.push('### 오늘의 추천 상품');
+  lines.push('');
+  if (product.productImage) {
+    lines.push(`![${safeProductName}](${product.productImage})`);
     lines.push('');
-    if (product.productImage) {
-      lines.push(`![${safeProductName}](${product.productImage})`);
+  }
+  lines.push(`**👉 [${safeProductName} 최저가 확인하기](${product.affiliateUrl})**`);
+  return lines.join('\n').trim();
+}
+
+function buildComparisonBlock(products) {
+  if (!products || products.length === 0) return '';
+  const validProducts = products.filter((p) => p?.productName && p?.affiliateUrl);
+  if (validProducts.length === 0) return '';
+
+  const lines = [];
+  const comparisonHeading = pickOneBySeed([
+    '### 함께 비교하면 좋은 추천 상품',
+    '### 놓치면 아쉬운 또 다른 아이템',
+    '### 픽앤조이가 엄선한 추가 리스트',
+    '### 취향에 따라 고르는 또 다른 베스트',
+  ], validProducts.map((p) => p.productId || p.productName).join('|'));
+  lines.push(comparisonHeading);
+  lines.push('');
+  lines.push('메인 추천 제품 외에도, 평점과 가성비 면에서 우수한 대안들을 더 살펴보았습니다. 메인 상품이 주인공이라면 아래 아이템은 취향과 사용 환경에 따라 충분히 더 좋은 선택이 될 수 있어요.');
+  lines.push('');
+
+  if (validProducts.length >= 2) {
+    const p2 = validProducts[0];
+    const p3 = validProducts[1];
+    const name2 = sanitizeMarkdownText(p2.productName);
+    const name3 = sanitizeMarkdownText(p3.productName);
+    const label2 = name2.length > 25 ? name2.slice(0, 25) + '…' : name2;
+    const label3 = name3.length > 25 ? name3.slice(0, 25) + '…' : name3;
+    lines.push(`| ${label2} | ${label3} |`);
+    lines.push('| :---: | :---: |');
+    const img2 = p2.productImage ? `![${name2}](${p2.productImage})` : '&nbsp;';
+    const img3 = p3.productImage ? `![${name3}](${p3.productImage})` : '&nbsp;';
+    lines.push(`| ${img2} | ${img3} |`);
+    lines.push(`| [👉 실시간 가격 보기](${p2.affiliateUrl}) | [👉 실시간 가격 보기](${p3.affiliateUrl}) |`);
+  } else {
+    const p = validProducts[0];
+    const name = sanitizeMarkdownText(p.productName);
+    if (p.productImage) {
+      lines.push(`![${name}](${p.productImage})`);
       lines.push('');
     }
-    lines.push(`**👉 [${safeProductName} 최저가 확인하기](${product.affiliateUrl})**`);
-    return lines.join('\n').trim();
+    lines.push(`**👉 [${name} 실시간 가격 보기](${p.affiliateUrl})**`);
   }
 
-  function buildComparisonBlock(products) {
-    if (!products || products.length === 0) return '';
-    const validProducts = products.filter((p) => p?.productName && p?.affiliateUrl);
-    if (validProducts.length === 0) return '';
+  return lines.join('\n').trim();
+}
 
-    const lines = [];
-    lines.push('### 함께 비교하면 좋은 대안 🔍');
-    lines.push('');
-
-    if (validProducts.length >= 2) {
-      const p2 = validProducts[0];
-      const p3 = validProducts[1];
-      const name2 = sanitizeMarkdownText(p2.productName);
-      const name3 = sanitizeMarkdownText(p3.productName);
-      const label2 = name2.length > 25 ? name2.slice(0, 25) + '…' : name2;
-      const label3 = name3.length > 25 ? name3.slice(0, 25) + '…' : name3;
-      lines.push(`| ${label2} | ${label3} |`);
-      lines.push('|:---:|:---:|');
-      const img2 = p2.productImage ? `![${name2}](${p2.productImage})` : '&nbsp;';
-      const img3 = p3.productImage ? `![${name3}](${p3.productImage})` : '&nbsp;';
-      lines.push(`| ${img2} | ${img3} |`);
-      lines.push(`| [👉 실시간 가격 보기](${p2.affiliateUrl}) | [👉 실시간 가격 보기](${p3.affiliateUrl}) |`);
-    } else {
-      const p = validProducts[0];
-      const name = sanitizeMarkdownText(p.productName);
-      if (p.productImage) {
-        lines.push(`![${name}](${p.productImage})`);
-        lines.push('');
-      }
-      lines.push(`**👉 [${name} 실시간 가격 보기](${p.affiliateUrl})**`);
-    }
-
-    return lines.join('\n').trim();
+function insertBeforeFirstHeading(content, block) {
+  if (!block) return content;
+  const lines = content.split('\n');
+  const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (firstHeadingIndex < 0) {
+    return `${content.trim()}\n\n${block}`.trim();
   }
+  lines.splice(firstHeadingIndex, 0, block, '');
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
 
-  function insertBeforeFirstHeading(content, block) {
-    if (!block) return content;
-    const lines = content.split('\n');
-    const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
-    if (firstHeadingIndex < 0) {
-      return `${content.trim()}\n\n${block}`.trim();
-    }
-    lines.splice(firstHeadingIndex, 0, block, '');
-    return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
-  }
-
-  function buildProductMarkdown(product, ctaLabel) {
+function buildProductMarkdown(product, ctaLabel) {
   if (!product?.productName || !product?.affiliateUrl) return '';
   const safeProductName = sanitizeMarkdownText(product.productName);
   const safeLabel = sanitizeMarkdownText(ctaLabel || `${product.productName} 최저가 확인하기`);
@@ -312,7 +330,7 @@ function splitFrontmatterAndBody(content) {
 }
 
 function ensureDisclosure(content) {
-  const disclosure = '쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.';
+  // 상세 페이지 하단 고지문을 사용하므로 본문 끝 고지문은 제거만 수행
   const { frontmatter, body } = splitFrontmatterAndBody(content);
 
   let normalizedBody = String(body || '')
@@ -321,7 +339,7 @@ function ensureDisclosure(content) {
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
-  const finalBody = `${normalizedBody}\n\n---\n\n${disclosure}`.trim();
+  const finalBody = normalizedBody;
   if (!frontmatter) return finalBody;
 
   return `${frontmatter}\n\n${finalBody}`;
@@ -356,10 +374,6 @@ function findChoiceValidationErrors(content) {
 
   if (ctaLinesWithoutUrl.length > 0) {
     errors.push('URL 없는 CTA 문장이 남아 있습니다.');
-  }
-
-  if (!content.includes('쿠팡 파트너스 활동의 일환으로')) {
-    errors.push('쿠팡 고지문이 없습니다.');
   }
 
   return errors;

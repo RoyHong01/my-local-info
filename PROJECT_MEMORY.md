@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 상세/생성기 후속 수정
+  - `src/app/blog/[slug]/page.tsx`: choice 멀티상품 글 히어로 숨김, 본문 첫 이미지 유지, 하단 중복 고지문 삭제
+  - `scripts/generate-choice-post.js`: 본문 말미 고지문 자동 추가 제거, 용어 통일(오늘의 추천 상품), 비교 섹션 제목 4종 랜덤/연결 문구 반영
+  - `src/content/life/2026-04-13-choice-kitchen-food-sealer.md`: 하단 2개 상품을 GFM 2열 비교 테이블로 변경, 중복 고지문 제거
+  - 생성기 문법 오류(`Unexpected end of input`) 복구 및 실행/빌드 검증 완료
+
 - 2026-04-13 초이스 상세 사이드바 다중 배너 반영
   - `src/app/blog/[slug]/page.tsx`에서 본문 마크다운의 제품 이미지 + 쿠팡 링크를 추출해 사이드바에 순차 노출
   - 단일 배너 frontmatter 기반 렌더링은 fallback으로 유지

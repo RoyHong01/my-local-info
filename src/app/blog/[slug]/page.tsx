@@ -53,6 +53,13 @@ function removeFirstDuplicateHeroImage(markdown: string, heroImage?: string): st
   return markdown.replace(pattern, '');
 }
 
+function stripTrailingChoiceDisclosure(markdown: string): string {
+  return String(markdown || '')
+    .replace(/\n\s*---\s*\n\s*쿠팡\s*파트너스\s*활동의\s*일환으로[^\n]*\s*$/i, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 type ChoiceSidebarProduct = {
   href: string;
   imageSrc: string;
@@ -401,8 +408,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isIncheonOrSubsidyPost = /인천|보조금|복지/.test(post.category || '');
   const useExpandedSourceSpacing = isIncheonOrSubsidyPost && !isChoicePost && !!sourceLink;
+  const choiceContentBase = isChoicePost ? stripTrailingChoiceDisclosure(sanitizedContent) : sanitizedContent;
+  const extractedFromBase = isChoicePost
+    ? extractChoiceSidebarProducts(choiceContentBase, post.coupangBannerAlt || post.title)
+    : [];
+  const shouldHideChoiceHero = isChoicePost && extractedFromBase.length >= 2;
   const renderedContent = isChoicePost
-    ? removeFirstDuplicateHeroImage(sanitizedContent, post.image)
+    ? (shouldHideChoiceHero ? choiceContentBase : removeFirstDuplicateHeroImage(choiceContentBase, post.image))
     : sanitizedContent;
   const extractedChoiceSidebarProducts = isChoicePost
     ? extractChoiceSidebarProducts(renderedContent, post.coupangBannerAlt || post.title)
@@ -454,7 +466,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
             </div>
           </header>
-          {post.image && !post.image.endsWith('.svg') && (
+          {post.image && !post.image.endsWith('.svg') && (!isChoicePost || !shouldHideChoiceHero) && (
             isChoicePost ? (
               <div className="mb-14 flex justify-center">
                 <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
@@ -487,7 +499,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </ReactMarkdown>
           </div>
           <AdBanner />
-          <div className={`mt-4 pt-4 border-t border-stone-100 text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
+          <div className={`mt-4 pt-4 ${isChoicePost ? '' : 'border-t border-stone-100'} text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
             {sourceLink && !isChoicePost && (
               <p
                 className={useExpandedSourceSpacing ? 'my-12 py-2' : 'mt-1 mb-7'}
@@ -520,9 +532,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="mt-8">
             <CoupangBottomBanner bannerId="coupang-bottom-blog" />
           </div>
-          <p className="mt-3 text-center text-xs text-stone-400">
-            이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-          </p>
         </article>
           </div>
           <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">

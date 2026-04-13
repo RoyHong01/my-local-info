@@ -3,6 +3,23 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 상세/생성기 후속 수정)
+
+### 사용자 피드백 6개 항목 반영
+
+- **수정 파일**: `src/app/blog/[slug]/page.tsx`, `scripts/generate-choice-post.js`, `src/content/life/2026-04-13-choice-kitchen-food-sealer.md`
+- **핵심 반영**:
+  1. 본문 말미 중복 고지문/구분선 제거: 생성기 `ensureDisclosure`를 제거 전용으로 전환(추가 삽입 중단), 상세 렌더에서 choice 하단 중복 한 줄 고지문 삭제
+  2. 히어로 이미지 조건 보정: choice 본문에서 상품 블록(2개 이상) 감지 시 히어로 미노출
+  3. 대표 CTA 위 이미지 누락 보정: 히어로를 숨기는 경우 첫 이미지 제거 로직 비활성화로 본문 이미지 유지
+  4. 용어 통일: "오늘의 추천 장비" → "오늘의 추천 상품" 및 생성기 비교 섹션 제목 랜덤 4종 적용
+  5. 사이드배너 수량 보정: 태허철학관 + 제품 수만큼(본문 파싱 결과) 모두 노출 유지
+  6. 2/3번 상품 가로 비교: 생성기 및 해당 포스트에 GFM 2열 비교 테이블 적용
+  7. 안정성 보강: `scripts/generate-choice-post.js`의 함수 중첩으로 발생한 문법 오류(Unexpected end of input) 복구
+- **검증**:
+  - `node scripts/generate-choice-post.js --help` 정상 출력
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 상세 사이드바 다중 배너 적용)
 
 ### 본문 기반 제품 배너 순차 노출
