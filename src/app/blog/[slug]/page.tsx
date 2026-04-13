@@ -76,7 +76,7 @@ function extractChoiceSidebarProducts(markdown: string, fallbackAlt: string): Ch
 
   // escaped bracket(\], \[)가 포함된 alt 텍스트도 파싱 가능하도록 처리
   const imageMatches = Array.from(text.matchAll(/!\[((?:\\.|[^\]])*)\]\((https?:\/\/[^)\s]+)\)/g));
-  const linkMatches = Array.from(text.matchAll(/\[[^\]]+\]\((https?:\/\/[^)\s]+)\)/g))
+  const linkMatches = Array.from(text.matchAll(/\[((?:\\.|[^\]])*)\]\((https?:\/\/[^)\s]+)\)/g))
     .map((match) => match[1])
     .filter((url) => /link\.coupang\.com\/re\//i.test(url));
 
@@ -85,7 +85,9 @@ function extractChoiceSidebarProducts(markdown: string, fallbackAlt: string): Ch
   const seen = new Set<string>();
 
   for (let i = 0; i < maxPairs; i++) {
-    const alt = (imageMatches[i][1] || fallbackAlt || '추천 상품').trim();
+    const alt = (imageMatches[i][1] || fallbackAlt || '추천 상품')
+      .replace(/\\([\[\]\(\)])/g, '$1')
+      .trim();
     const imageSrc = imageMatches[i][2];
     const href = linkMatches[i];
     const key = `${imageSrc}__${href}`;
@@ -545,7 +547,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     href={product.href}
                     imageSrc={product.imageSrc}
                     alt={product.alt}
-                    title={`픽앤조이 초이스 추천 ${index + 1}`}
+                    title={product.alt}
                   />
                 ))
               ) : (

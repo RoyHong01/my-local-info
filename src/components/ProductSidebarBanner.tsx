@@ -13,7 +13,7 @@ export default function ProductSidebarBanner({
 }: ProductSidebarBannerProps) {
   return (
     <div>
-      <div className="mb-1.5 text-center text-[10px] text-gray-400">
+      <div className="mb-1.5 text-center text-sm font-bold leading-5 text-stone-700">
         🛒 {title}
       </div>
       <a href={href} target="_blank" rel="noopener noreferrer" referrerPolicy="unsafe-url">
