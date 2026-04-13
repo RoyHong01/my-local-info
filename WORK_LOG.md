@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (일상의 즐거움 목록 썸네일 누락 수정)
+
+- **수정 파일**: `src/lib/life-choice.ts`, `src/app/life/page.tsx`
+- **원인**:
+  - 실제 화면은 `blog` 목록이 아니라 `life` 목록(`src/app/life/page.tsx`)인데, 이전 수정이 `BlogFilter`에만 적용되어 반영되지 않음
+  - `life` 목록의 초이스 카드 매핑이 `image`만 사용하고 있어 `image: ""`인 포스트는 기본 썸네일로 회귀
+- **조치**:
+  - `ChoiceArticle`에 `coupangBannerImage` 필드 추가
+  - `life` 목록 카드 이미지 매핑을 `c.image || c.coupangBannerImage`로 보강
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 목록 썸네일 fallback 보강)
 
 - **수정 파일**: `src/components/BlogFilter.tsx`

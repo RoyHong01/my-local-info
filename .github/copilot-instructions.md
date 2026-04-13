@@ -195,6 +195,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-13 핵심 반영(추가):
+  - **life 목록 썸네일 누락 수정**: `src/app/life/page.tsx`에서 초이스 카드 이미지를 `c.image || c.coupangBannerImage`로 보강
+  - `src/lib/life-choice.ts`에 `coupangBannerImage` 매핑 필드를 추가해 목록 fallback 정합성 확보
+- 2026-04-13 핵심 반영(추가):
   - **초이스 목록 썸네일 회귀 보정**: `src/components/BlogFilter.tsx`에서 초이스 카드 썸네일 fallback을 `post.coupangBannerImage`까지 확장
   - 멀티상품 포스트의 `image: ""`(히어로 미노출) 정책과 목록 썸네일 정책을 분리
 - 2026-04-13 핵심 반영(추가):

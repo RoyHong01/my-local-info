@@ -7,6 +7,7 @@ export interface ChoiceArticle {
   summary: string;
   content: string;
   image?: string;
+  coupangBannerImage?: string;
   source: 'post' | 'curated';
 }
 
@@ -31,6 +32,7 @@ function mapPostToChoice(post: PostData): ChoiceArticle {
     summary: post.summary,
     content: post.content,
     image: post.image,
+    coupangBannerImage: post.coupangBannerImage,
     source: 'post',
   };
 }

@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 일상의 즐거움(life) 목록 썸네일 수정
+  - `src/app/life/page.tsx`의 초이스 카드 이미지 매핑을 `c.image || c.coupangBannerImage`로 조정
+  - `src/lib/life-choice.ts`의 `ChoiceArticle`에 `coupangBannerImage` 추가
+  - blog 목록과 life 목록의 썸네일 fallback 정책을 동일하게 맞춤
+
 - 2026-04-13 초이스 목록 썸네일 fallback 보강
   - `src/components/BlogFilter.tsx`에서 초이스 포스트 썸네일 우선순위를 `post.image -> post.coupangBannerImage -> 카테고리 기본`으로 조정
   - 히어로 비활성(`image: ""`)과 목록 썸네일 표시를 분리해 기본 썸네일 회귀 방지

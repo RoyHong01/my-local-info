@@ -82,7 +82,7 @@ export default async function LifePage() {
     title: c.title,
     description: c.summary,
     date: c.date,
-    image: c.image,
+    image: c.image || c.coupangBannerImage,
     href: c.source === 'post' ? `/blog/${c.slug}` : '/life/choice',
     badge: '픽앤조이 초이스',
     badgeClass: 'bg-orange-50 text-orange-600',
