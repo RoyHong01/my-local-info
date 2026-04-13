@@ -1108,6 +1108,19 @@ async function appendRecommendedProductsHistory(products, meta) {
   await saveRecommendedProductsHistory(history);
 }
 
+async function emitGithubOutputs(outputs) {
+  const outputPath = String(process.env.GITHUB_OUTPUT || '').trim();
+  if (!outputPath || !outputs || typeof outputs !== 'object') return;
+
+  const lines = Object.entries(outputs)
+    .filter(([key]) => key)
+    .map(([key, value]) => `${key}=${String(value ?? '')}`)
+    .join('\n');
+
+  if (!lines) return;
+  await fs.appendFile(outputPath, `${lines}\n`, 'utf-8');
+}
+
 async function run() {
   const args = parseArgs(process.argv);
   if (args.help) {
@@ -1200,6 +1213,20 @@ async function run() {
     themeKey: candidate.themeKey,
     themeName: candidate.themeName,
   });
+
+  const appliedMinRating = Number(productResolution.appliedMinRating || CHOICE_MIN_RATING);
+  const relaxedFallbackAppliedCount = appliedMinRating < CHOICE_MIN_RATING ? 1 : 0;
+
+  await emitGithubOutputs({
+    applied_min_rating: Number.isFinite(appliedMinRating) ? appliedMinRating : CHOICE_MIN_RATING,
+    relaxed_fallback_applied_count: relaxedFallbackAppliedCount,
+    selected_product_count: Array.isArray(candidate.products) ? candidate.products.length : 0,
+    choice_published_by: candidate.publishedBy || 'auto',
+  });
+
+  if (relaxedFallbackAppliedCount > 0) {
+    console.log(`CHOICE_RELAXED_FALLBACK_APPLIED_COUNT=${relaxedFallbackAppliedCount}`);
+  }
 
   console.log(`✅ 초이스 포스트 생성 완료: ${outputPath}`);
 }

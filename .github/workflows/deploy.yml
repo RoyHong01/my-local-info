@@ -329,6 +329,9 @@ jobs:
           DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
           GENERATE_BLOG_OUTCOME: ${{ steps.generate_blog.outcome }}
           GENERATE_CHOICE_OUTCOME: ${{ steps.generate_choice.outcome }}
+          CHOICE_RELAXED_FALLBACK_APPLIED_COUNT: ${{ steps.generate_choice.outputs.relaxed_fallback_applied_count }}
+          CHOICE_APPLIED_MIN_RATING: ${{ steps.generate_choice.outputs.applied_min_rating }}
+          CHOICE_MIN_RATING: '4.5'
           BLOG_BUDGET_ENABLED: ${{ steps.generate_blog.outputs.budget_enabled }}
           BLOG_BUDGET_LIMIT_KRW: ${{ steps.generate_blog.outputs.budget_limit_krw }}
           BLOG_ESTIMATED_COST_KRW: ${{ steps.generate_blog.outputs.estimated_cost_krw }}

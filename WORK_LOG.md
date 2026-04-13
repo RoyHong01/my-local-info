@@ -3,6 +3,20 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (리포트 고도화: published_by 집계 + 초이스 fallback 발동 지표 + posts.ts 경고 해소)
+
+- **수정 파일**: `src/lib/posts.ts`, `scripts/generate-choice-post.js`, `scripts/write-daily-report.mjs`, `.github/workflows/deploy.yml`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. `src/lib/posts.ts`의 디렉터리 스캔 경로를 고정형으로 정리해 Turbopack의 광범위 파일 패턴 경고 해소
+  2. `scripts/generate-choice-post.js`에서 GitHub Actions output(`applied_min_rating`, `relaxed_fallback_applied_count`, `selected_product_count`, `choice_published_by`) 배출
+  3. `scripts/write-daily-report.mjs`에 `published_by(auto/manual/unknown)` 집계 추가 (전체/블로그/초이스/맛집)
+  4. 일일 리포트에 초이스 fallback 완화 발동 횟수 및 적용 평점 하한 노출
+  5. `.github/workflows/deploy.yml`에서 초이스 스텝 output을 리포트 단계 env로 전달
+- **검증**:
+  - `node --check scripts/generate-choice-post.js`
+  - `node --check scripts/write-daily-report.mjs`
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 fallback 2단계 완화 + published_by 메타 확장)
 
 - **수정 파일**: `scripts/generate-choice-post.js`, `scripts/generate-blog-post.js`, `scripts/generate-life-restaurant-posts.mjs`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`

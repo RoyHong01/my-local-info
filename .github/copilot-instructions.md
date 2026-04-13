@@ -211,6 +211,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-13 핵심 반영(추가):
+  - **posts.ts 빌드 경고 해소**: `src/lib/posts.ts`의 콘텐츠 스캔 경로를 고정형으로 정리해 Turbopack 광범위 파일 패턴 경고 제거.
+  - **일일 리포트 통계 고도화**: `scripts/write-daily-report.mjs`에 `published_by(auto/manual/unknown)` 집계(전체/블로그/초이스/맛집) 추가.
+  - **초이스 fallback 관측치 노출**: `scripts/generate-choice-post.js`가 `applied_min_rating`, `relaxed_fallback_applied_count`를 GitHub Actions output으로 배출하고, `.github/workflows/deploy.yml`에서 리포트 단계로 전달.
+- 2026-04-13 핵심 반영(추가):
   - **life 목록 썸네일 누락 수정**: `src/app/life/page.tsx`에서 초이스 카드 이미지를 `c.image || c.coupangBannerImage`로 보강
   - `src/lib/life-choice.ts`에 `coupangBannerImage` 매핑 필드를 추가해 목록 fallback 정합성 확보
 - 2026-04-13 핵심 반영(추가):

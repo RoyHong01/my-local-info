@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 리포트 고도화 + 빌드 경고 해소
+  - `src/lib/posts.ts` 스캔 경로를 고정형으로 정리해 Turbopack 광범위 패턴 경고 제거
+  - `scripts/generate-choice-post.js`가 GitHub Actions output으로 fallback 관련 지표(`applied_min_rating`, `relaxed_fallback_applied_count`)를 배출
+  - `scripts/write-daily-report.mjs`에서 `published_by(auto/manual/unknown)`를 전체/카테고리별(블로그/초이스/맛집)로 집계해 Markdown/JSON 리포트에 표시
+  - `.github/workflows/deploy.yml`에서 초이스 step output을 리포트 단계 env로 전달해 fallback 발동 빈도 추적 가능
+
 - 2026-04-13 초이스 fallback 완화 + published_by 확장
   - 초이스 자동 선정은 1차 fallback(대체 키워드 확장) 후에도 부족하면 2차 fallback으로 평점 기준을 `4.5 -> 4.3 -> 4.0` 순으로 완화해 재평가
   - 다만 `reviewCount >= 100`, 품절 제외, 최근 14일 중복 제외는 유지해 품질 하한을 보존

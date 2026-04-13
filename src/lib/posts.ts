@@ -2,10 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const postsDirectories = [
-  path.resolve('src/content/posts'),
-  path.resolve('src/content/life'),
-];
+const POSTS_DIR = path.resolve('src/content/posts');
+const LIFE_DIR = path.resolve('src/content/life');
 
 export interface PostData {
   slug: string;
@@ -175,16 +173,16 @@ function normalizeBlogContent(content: string, title: string): string {
 export function getSortedPostsData(): PostData[] {
   const allPostsData: PostData[] = [];
 
-  for (const dir of postsDirectories) {
+  const collectFromPostsDir = () => {
     try {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-        continue;
+      if (!fs.existsSync(POSTS_DIR)) {
+        fs.mkdirSync(POSTS_DIR, { recursive: true });
+        return;
       }
-      const fileNames = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
+      const fileNames = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith('.md'));
       for (const fileName of fileNames) {
         try {
-          const fullPath = path.join(dir, fileName);
+          const fullPath = path.join(POSTS_DIR, fileName);
           const fileContents = fs.readFileSync(fullPath, 'utf8');
           const matterResult = matter(fileContents);
 
@@ -232,7 +230,69 @@ export function getSortedPostsData(): PostData[] {
     } catch {
       // skip inaccessible directories
     }
-  }
+  };
+
+  const collectFromLifeDir = () => {
+    try {
+      if (!fs.existsSync(LIFE_DIR)) {
+        fs.mkdirSync(LIFE_DIR, { recursive: true });
+        return;
+      }
+      const fileNames = fs.readdirSync(LIFE_DIR).filter((f) => f.endsWith('.md'));
+      for (const fileName of fileNames) {
+        try {
+          const fullPath = path.join(LIFE_DIR, fileName);
+          const fileContents = fs.readFileSync(fullPath, 'utf8');
+          const matterResult = matter(fileContents);
+
+          let dateStr = matterResult.data.date || '';
+          if (dateStr instanceof Date) {
+            const year = dateStr.getFullYear();
+            const month = String(dateStr.getMonth() + 1).padStart(2, '0');
+            const day = String(dateStr.getDate()).padStart(2, '0');
+            dateStr = `${year}-${month}-${day}`;
+          } else if (typeof dateStr === 'string' && dateStr) {
+            dateStr = dateStr.split('T')[0];
+          }
+
+          const slug = fileName.replace(/\.md$/, '');
+          allPostsData.push({
+            slug: matterResult.data.slug || slug,
+            title: matterResult.data.title || slug,
+            date: dateStr,
+            summary: matterResult.data.summary || '',
+            description: matterResult.data.description || matterResult.data.summary || '',
+            category: matterResult.data.category,
+            tags: matterResult.data.tags,
+            image: matterResult.data.image,
+            sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
+            coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
+            coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',
+            coupangBannerAlt: matterResult.data.coupang_banner_alt || matterResult.data.coupangBannerAlt || '',
+            placeName: matterResult.data.place_name || matterResult.data.placeName || '',
+            placeAddress: matterResult.data.place_address || matterResult.data.placeAddress || '',
+            placeLocality: matterResult.data.place_locality || matterResult.data.placeLocality || '',
+            placeRegion: matterResult.data.place_region || matterResult.data.placeRegion || '',
+            placePhone: matterResult.data.place_phone || matterResult.data.placePhone || '',
+            placeUrl: matterResult.data.place_url || matterResult.data.placeUrl || '',
+            parkingInfo: matterResult.data.parking_info || matterResult.data.parkingInfo || '',
+            ratingValue: matterResult.data.rating_value || matterResult.data.ratingValue || '',
+            reviewCount: matterResult.data.review_count || matterResult.data.reviewCount || '',
+            priceRange: matterResult.data.price_range || matterResult.data.priceRange || '',
+            openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
+            content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
+          });
+        } catch {
+          // skip individual broken files
+        }
+      }
+    } catch {
+      // skip inaccessible directories
+    }
+  };
+
+  collectFromPostsDir();
+  collectFromLifeDir();
 
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
@@ -250,22 +310,26 @@ export function getPostData(slug: string): PostData | null {
 
   const requestedSlug = normalizeSlug(slug);
 
-  const directPaths = postsDirectories.map((dir) => path.join(dir, `${requestedSlug}.md`));
-  let existingPath = directPaths.find((candidatePath) => fs.existsSync(candidatePath));
+  const directPostPath = path.join(POSTS_DIR, `${requestedSlug}.md`);
+  const directLifePath = path.join(LIFE_DIR, `${requestedSlug}.md`);
+  let existingPath = fs.existsSync(directPostPath)
+    ? directPostPath
+    : fs.existsSync(directLifePath)
+      ? directLifePath
+      : undefined;
 
   // 파일명과 frontmatter slug가 다를 수 있으므로 fallback 스캔 수행
   if (!existingPath) {
-    for (const dir of postsDirectories) {
-      if (!fs.existsSync(dir)) continue;
-      const fileNames = fs.readdirSync(dir).filter((fileName) => fileName.endsWith('.md'));
+    const scanPosts = () => {
+      if (!fs.existsSync(POSTS_DIR)) return undefined;
+      const fileNames = fs.readdirSync(POSTS_DIR).filter((fileName) => fileName.endsWith('.md'));
 
       for (const fileName of fileNames) {
         const fileSlug = normalizeSlug(fileName.replace(/\.md$/, ''));
-        const fullPath = path.join(dir, fileName);
+        const fullPath = path.join(POSTS_DIR, fileName);
 
         if (fileSlug === requestedSlug) {
-          existingPath = fullPath;
-          break;
+          return fullPath;
         }
 
         try {
@@ -273,16 +337,44 @@ export function getPostData(slug: string): PostData | null {
           const parsed = matter(fileContents);
           const frontmatterSlug = normalizeSlug(String(parsed.data.slug || ''));
           if (frontmatterSlug && frontmatterSlug === requestedSlug) {
-            existingPath = fullPath;
-            break;
+            return fullPath;
           }
         } catch {
           // ignore broken markdown and continue
         }
       }
 
-      if (existingPath) break;
-    }
+      return undefined;
+    };
+
+    const scanLife = () => {
+      if (!fs.existsSync(LIFE_DIR)) return undefined;
+      const fileNames = fs.readdirSync(LIFE_DIR).filter((fileName) => fileName.endsWith('.md'));
+
+      for (const fileName of fileNames) {
+        const fileSlug = normalizeSlug(fileName.replace(/\.md$/, ''));
+        const fullPath = path.join(LIFE_DIR, fileName);
+
+        if (fileSlug === requestedSlug) {
+          return fullPath;
+        }
+
+        try {
+          const fileContents = fs.readFileSync(fullPath, 'utf8');
+          const parsed = matter(fileContents);
+          const frontmatterSlug = normalizeSlug(String(parsed.data.slug || ''));
+          if (frontmatterSlug && frontmatterSlug === requestedSlug) {
+            return fullPath;
+          }
+        } catch {
+          // ignore broken markdown and continue
+        }
+      }
+
+      return undefined;
+    };
+
+    existingPath = scanPosts() || scanLife();
   }
 
   if (!existingPath) return null;

@@ -130,6 +130,63 @@ function summarizeChanges(commits) {
   };
 }
 
+function normalizePublishedBy(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'auto' || normalized === 'manual') return normalized;
+  return 'unknown';
+}
+
+function parsePublishedByFromMarkdown(markdownText) {
+  const text = String(markdownText || '');
+  const frontmatterMatch = text.match(/^---\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) return 'unknown';
+
+  const fieldMatch = frontmatterMatch[1].match(/^published_by:\s*"?([^"\n]+)"?\s*$/m);
+  if (!fieldMatch) return 'unknown';
+
+  return normalizePublishedBy(fieldMatch[1]);
+}
+
+function emptyPublishedByCounter() {
+  return { auto: 0, manual: 0, unknown: 0, total: 0 };
+}
+
+async function collectPublishedByStats(changes) {
+  const groups = {
+    blog: changes.generatedBlogPosts || [],
+    choice: changes.generatedChoicePosts || [],
+    restaurant: changes.generatedRestaurantPosts || [],
+  };
+
+  const byType = {
+    blog: emptyPublishedByCounter(),
+    choice: emptyPublishedByCounter(),
+    restaurant: emptyPublishedByCounter(),
+  };
+  const totals = emptyPublishedByCounter();
+
+  for (const [type, files] of Object.entries(groups)) {
+    for (const relPath of files) {
+      const absolutePath = path.join(process.cwd(), relPath);
+      let publishedBy = 'unknown';
+
+      try {
+        const raw = await fs.readFile(absolutePath, 'utf8');
+        publishedBy = parsePublishedByFromMarkdown(raw);
+      } catch {
+        publishedBy = 'unknown';
+      }
+
+      byType[type][publishedBy] += 1;
+      byType[type].total += 1;
+      totals[publishedBy] += 1;
+      totals.total += 1;
+    }
+  }
+
+  return { totals, byType };
+}
+
 function buildStagesFromEnv(env) {
   const stages = [
     {
@@ -244,6 +301,8 @@ function toMarkdown(report) {
   lines.push(`| 생성된 블로그 글 | ${report.changes.generatedBlogPosts.length}건 |`);
   lines.push(`| 생성된 초이스 글 | ${report.changes.generatedChoicePosts.length}건 |`);
   lines.push(`| 생성된 맛집 글 | ${report.changes.generatedRestaurantPosts.length}건 |`);
+  lines.push(`| 발행 구분(auto/manual/unknown) | ${report.publicationStats?.totals?.auto || 0} / ${report.publicationStats?.totals?.manual || 0} / ${report.publicationStats?.totals?.unknown || 0} |`);
+  lines.push(`| 초이스 fallback 완화 발동 | ${Number(report.choiceFallback?.relaxedAppliedCount || 0)}회 |`);
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
   lines.push(`| 맛집 후보 재수집 | ${report.restaurantCache?.recollectPerformed ? '실행' : '생략'} |`);
   lines.push(`| 맛집 캐시(hit/miss/called) | ${Number(report.restaurantCache?.cacheHit || 0)} / ${Number(report.restaurantCache?.cacheMiss || 0)} / ${Number(report.restaurantCache?.googleCalled || 0)} |`);
@@ -271,6 +330,19 @@ function toMarkdown(report) {
     lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
     lines.push(`| 블로그 비용(추정) | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
   }
+  lines.push('');
+
+  lines.push('## 🧮 발행/Fallback 통계');
+  lines.push('');
+  lines.push('| 항목 | auto | manual | unknown | 합계 |');
+  lines.push('|---|---:|---:|---:|---:|');
+  lines.push(`| 전체 발행 | ${report.publicationStats?.totals?.auto || 0} | ${report.publicationStats?.totals?.manual || 0} | ${report.publicationStats?.totals?.unknown || 0} | ${report.publicationStats?.totals?.total || 0} |`);
+  lines.push(`| 일반 블로그 | ${report.publicationStats?.byType?.blog?.auto || 0} | ${report.publicationStats?.byType?.blog?.manual || 0} | ${report.publicationStats?.byType?.blog?.unknown || 0} | ${report.publicationStats?.byType?.blog?.total || 0} |`);
+  lines.push(`| 초이스 | ${report.publicationStats?.byType?.choice?.auto || 0} | ${report.publicationStats?.byType?.choice?.manual || 0} | ${report.publicationStats?.byType?.choice?.unknown || 0} | ${report.publicationStats?.byType?.choice?.total || 0} |`);
+  lines.push(`| 맛집 | ${report.publicationStats?.byType?.restaurant?.auto || 0} | ${report.publicationStats?.byType?.restaurant?.manual || 0} | ${report.publicationStats?.byType?.restaurant?.unknown || 0} | ${report.publicationStats?.byType?.restaurant?.total || 0} |`);
+  lines.push('');
+  lines.push(`- 초이스 fallback 완화 발동 횟수: ${Number(report.choiceFallback?.relaxedAppliedCount || 0)}회`);
+  lines.push(`- 초이스 적용 평점 하한: ${report.choiceFallback?.appliedMinRating || '-'} (기본 ${report.choiceFallback?.defaultMinRating || '-'})`);
   lines.push('');
 
   if (report.budget?.enabled) {
@@ -400,6 +472,11 @@ async function updateIndex(indexPath, report) {
     generatedLifeCount: report.changes.generatedLifePosts.length,
     generatedChoiceCount: report.changes.generatedChoicePosts.length,
     generatedRestaurantCount: report.changes.generatedRestaurantPosts.length,
+    publishedByAutoCount: Number(report.publicationStats?.totals?.auto || 0),
+    publishedByManualCount: Number(report.publicationStats?.totals?.manual || 0),
+    publishedByUnknownCount: Number(report.publicationStats?.totals?.unknown || 0),
+    choiceRelaxedFallbackAppliedCount: Number(report.choiceFallback?.relaxedAppliedCount || 0),
+    choiceAppliedMinRating: Number(report.choiceFallback?.appliedMinRating || 0),
     restaurantRecollectPerformed: !!report.restaurantCache?.recollectPerformed,
     restaurantCacheHit: Number(report.restaurantCache?.cacheHit || 0),
     restaurantCacheMiss: Number(report.restaurantCache?.cacheMiss || 0),
@@ -435,6 +512,7 @@ async function main() {
 
   const commits = getGitLogSince(runStartedAtUtc);
   const changes = summarizeChanges(commits);
+  const publicationStats = await collectPublishedByStats(changes);
   const stages = buildStagesFromEnv(process.env);
 
   const runId = String(process.env.GITHUB_RUN_ID || '');
@@ -461,6 +539,12 @@ async function main() {
     stages,
     commits,
     changes,
+    publicationStats,
+    choiceFallback: {
+      defaultMinRating: Number(process.env.CHOICE_MIN_RATING || 4.5),
+      appliedMinRating: Number(process.env.CHOICE_APPLIED_MIN_RATING || process.env.CHOICE_MIN_RATING || 4.5),
+      relaxedAppliedCount: Number(process.env.CHOICE_RELAXED_FALLBACK_APPLIED_COUNT || 0),
+    },
     budget: {
       enabled: normalizeBoolean(process.env.BLOG_BUDGET_ENABLED),
       limitKrw: Number(process.env.BLOG_BUDGET_LIMIT_KRW || 0),
