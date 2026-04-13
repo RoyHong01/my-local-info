@@ -223,6 +223,19 @@ jobs:
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
 
+      - name: '[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/content/life scripts/data/recommended-products.json
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "자동 업데이트(2.5단계): 초이스 1건 생성 $(date +'%Y-%m-%d')"
+            git push
+          else
+            echo "변경사항 없음"
+          fi
+
       - name: '[3단계] 일상의 즐거움 맛집 후보 점검/필요 시 재수집'
         id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')

@@ -3,6 +3,16 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 산출물 보존 강화: 2.5단계 전용 커밋 추가)
+
+- **수정 파일**: `.github/workflows/deploy.yml`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. `[2.5단계] 픽앤조이 초이스 자동 생성` 직후 전용 commit/push step 추가
+  2. 초이스 생성본과 `scripts/data/recommended-products.json` 히스토리를 3단계(맛집)보다 먼저 보존
+  3. 이후 단계 실패 시에도 초이스 글/히스토리와 git log 기반 리포트 근거가 남도록 워크플로우 순서 강화
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (텔레그램 리포트: 초이스/ fallback 노출 확장)
 
 - **수정 파일**: `scripts/notify-telegram.mjs`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`, `.github/copilot-instructions.md`

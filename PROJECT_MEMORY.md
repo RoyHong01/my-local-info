@@ -20,6 +20,10 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 산출물 보존 강화
+  - `.github/workflows/deploy.yml`에 초이스 생성 직후 전용 커밋 단계를 추가해 `src/content/life`, `scripts/data/recommended-products.json`을 즉시 보존
+  - 이후 3단계 실패 시에도 초이스 글/히스토리와 git log 기반 리포트 데이터가 유지되도록 워크플로우 순서를 강화
+
 - 2026-04-13 텔레그램 리포트 확장
   - `scripts/notify-telegram.mjs`에서 초이스를 맛집과 분리해 `초이스 포스트 n건`으로 표기
   - 초이스 생성 파일이 있으면 제목 목록을 별도 블록으로 노출

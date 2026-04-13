@@ -211,6 +211,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-13 핵심 반영(추가):
+  - **초이스 산출물 보존 강화**: `.github/workflows/deploy.yml`에 `[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)`를 추가해 초이스 생성 직후 `src/content/life`와 `scripts/data/recommended-products.json`을 먼저 커밋.
+  - 이후 3단계(맛집) 실패가 발생해도 초이스 글/히스토리와 git log 기반 리포트 근거가 보존되도록 정리.
+- 2026-04-13 핵심 반영(추가):
   - **텔레그램 리포트 확장**: `scripts/notify-telegram.mjs`에서 초이스/맛집 건수를 분리 표기하고, 생성된 초이스 제목 목록을 별도 노출.
   - **fallback 지표 텔레그램 노출**: 일일 리포트 JSON의 `choiceFallback` 데이터를 읽어 fallback 완화 발동 횟수와 적용 평점 하한을 메시지에 표시.
   - 과거 리포트 JSON(초이스 필드 없음)도 0건/0회로 안전 처리.
