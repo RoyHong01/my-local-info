@@ -3,6 +3,21 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 훅/소제목 다양성 규칙 통합 반영)
+
+- **수정 파일**: `scripts/generate-choice-post.js`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **요청 배경**:
+  - 픽앤조이 초이스 자동/반자동 생성에서 훅/소제목 패턴이 반복되어 AI 작성 느낌이 강화되는 이슈
+  - 기존 지침 대비 신규 규칙(4개 앵글 랜덤, 질문형/감탄형 소제목 혼합)을 실제 생성 경로에 통합 필요
+- **조치**:
+  1. `scripts/generate-choice-post.js`에 `WRITING_ANGLES`(문제 해결형/트렌드 중심형/전문가 큐레이션/가성비·효율 강조) 추가
+  2. 실행마다 랜덤 앵글 1개 선택(`pickWritingAngle`) 후 프롬프트에 주입하도록 반영
+  3. 자동/반자동 공통 경로(`generate-choice-post.js`)에 동일 규칙 적용되도록 통합
+  4. 소제목 규칙 강화: `1. 장점`, `2. 특징` 같은 번호형 라벨 금지 + 질문형/감탄형 혼합 사용 지시 추가
+  5. `.github/copilot-instructions.md`에 12번 규칙으로 초이스 훅/소제목 다양성 정책을 문서화
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 생성기 정합성 점검 및 지침/시간대 동기화)
 
 - **수정 파일**: `.github/copilot-instructions.md`, `scripts/generate-choice-post.js`, `scripts/lib/coupang-api.js`

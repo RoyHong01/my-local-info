@@ -188,6 +188,40 @@ function pickOneBySeed(options, seedText) {
   return options[idx];
 }
 
+const WRITING_ANGLES = [
+  {
+    key: 'problem-solving',
+    title: '문제 해결형',
+    guide: '독자가 겪는 불편함을 먼저 언급하고, 그 불편함을 줄이는 선택 기준으로 서론과 소제목을 전개합니다.',
+  },
+  {
+    key: 'trend-driven',
+    title: '트렌드 중심형',
+    guide: '최근 유행 맥락이나 소비 흐름을 짚되, 과장된 단정 대신 관찰 가능한 분위기와 체감 포인트 중심으로 전개합니다.',
+  },
+  {
+    key: 'curation-expert',
+    title: '전문가 큐레이션',
+    guide: '픽앤조이의 선별 기준과 안목을 앞세워, 왜 이 상품군을 추렸는지 판단 근거를 서론과 소제목에서 드러냅니다.',
+  },
+  {
+    key: 'value-efficiency',
+    title: '가성비/효율 강조',
+    guide: '시간과 비용 관점에서 실패 확률을 줄이는 실용 포인트를 중심으로 서론과 소제목을 구성합니다.',
+  },
+];
+
+function pickWritingAngle() {
+  const manual = String(process.env.CHOICE_WRITING_ANGLE || '').trim().toLowerCase();
+  if (manual) {
+    const matched = WRITING_ANGLES.find((angle) => angle.key === manual || angle.title === manual);
+    if (matched) return matched;
+  }
+
+  const index = Math.floor(Math.random() * WRITING_ANGLES.length);
+  return WRITING_ANGLES[index];
+}
+
 function buildPickOfDayBlock(product) {
   if (!product?.productName || !product?.affiliateUrl) return '';
   const safeProductName = sanitizeMarkdownText(product.productName);
@@ -502,7 +536,7 @@ async function resolveProductsForCandidate(candidate) {
   };
 }
 
-function buildChoicePrompt(candidate, today, context = {}) {
+function buildChoicePrompt(candidate, today, context = {}, angle = WRITING_ANGLES[0]) {
   const outputFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName || 'choice-item'}.md`;
   const productContext = Array.isArray(context.products) && context.products.length > 0
     ? context.products.map((product, index) => `${index + 1}. ${product.productName} | 이미지: ${product.productImage || '없음'} | 링크: ${product.affiliateUrl}`).join('\n')
@@ -532,6 +566,17 @@ function buildChoicePrompt(candidate, today, context = {}) {
   - "가장 확실한 방법", "정착기", "완벽한", "무조건", "끝판왕" 같은 과장형 제목 문구
   - 입력 데이터에 없는 통계, 임상 수치, 비교 실험 결과, 사용자 후기 비율
 
+  [문체 및 구조 다양성 규칙]
+  - 이번 실행의 글쓰기 앵글: ${angle.title}
+  - 앵글 설명: ${angle.guide}
+  - 앵글은 서론 첫 문단과 첫 2개 소제목에 반드시 반영할 것
+  - 다른 앵글 문장을 섞어 평균적인 톤으로 희석하지 말고, 선택한 앵글을 명확히 유지할 것
+  - 참고용 앵글 풀(매 실행 랜덤 1개 적용):
+    1) 문제 해결형: 독자의 불편함을 먼저 언급
+    2) 트렌드 중심형: 최근 유행/소비 흐름을 먼저 제시
+    3) 전문가 큐레이션: 픽앤조이의 선별 기준 강조
+    4) 가성비/효율 강조: 시간·비용 절약 관점 강조
+
 [Frontmatter 스키마 - 키 이름 정확히]
 ---
 title: "(자연스러운 한국어 제목. 번역투 금지. 문제 제기 + 제품명 + 선택 이유 구조 권장)"
@@ -555,6 +600,7 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 - 소제목은 총 4~6개, 전부 자연어 제목 (번호/단계 라벨 금지)
 - 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
 - **서론 상품 개수 언급 지침 (필수)**: "추천 상품은 3개입니다", "총 3가지를 준비했습니다", "3개를 추천드립니다" 같은 기계적 나열 표현 절대 금지. 대신 맥락에 자연스럽게 녹일 것 — 예) "이번에 엄선한 3가지만 알면 쇼핑이 훨씬 수월해져요", "최종 후보 3선만 간추렸어요", "핵심 3종의 차이를 직접 살펴봤어요"
+- 소제목 스타일 규칙: "1. 장점", "2. 특징" 같은 딱딱한 번호형 라벨 금지. 질문형("왜 다들 이 모델만 찾을까요?")과 감탄/강조형("생각보다 훨씬 똑똑한 선택!")을 최소 1개씩 섞어 사용할 것
 - 아래 흐름을 반드시 포함:
   1) 공감 훅: 일상 장면 + 불편 포인트
   2) 검증 근거: 리뷰/스펙/비교 관점의 근거 2~3개
@@ -862,9 +908,11 @@ async function run() {
 
   candidate.products = productResolution.products;
 
-  const prompt = buildChoicePrompt(candidate, today, productResolution);
+  const writingAngle = pickWritingAngle();
+  const prompt = buildChoicePrompt(candidate, today, productResolution, writingAngle);
 
   console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
+  console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
   console.log(`입력 파일: ${inputPath}`);
   console.log(`자동 키워드: ${(productResolution.keywords || []).join(', ') || '없음'}`);
   console.log(`자동 상품 수: ${productResolution.products.length}`);
