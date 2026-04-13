@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 무인 엔진 운영성 개선: 테마 외부화/발행 구분/fallback 확장)
+
+- **수정 파일**: `scripts/generate-choice-posts-auto.js`, `scripts/generate-choice-post.js`, `scripts/data/choice-daily-themes.json`, `scripts/data/recommended-products.json`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. 요일별 초이스 테마를 코드 상수에서 `scripts/data/choice-daily-themes.json`로 분리해 운영자가 키워드/대체 키워드를 코드 수정 없이 튜닝 가능하도록 변경
+  2. `recommended-products.json` 히스토리에 `publishedBy(auto/manual)` 필드를 추가해 자동/수동 발행 이력 구분 가능하도록 확장
+  3. 중복 정책은 기본 `global` 유지하되, `CHOICE_DEDUP_SCOPE=same-publisher`로 자동/수동 분리 운영이 가능하도록 지원
+  4. 1차 키워드에서 필터 통과 상품이 3개 미만이면 fallback 키워드까지 자동 확장 검색하도록 보강
+  5. 기존 미사용 파일 `scripts/choice-auto-topics.json` 제거로 설정 경로 단일화
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (픽앤조이 초이스 무인 엔진 고도화: 중복 방지 강화)
 
 - **수정 파일**: `scripts/generate-choice-posts-auto.js`, `scripts/generate-choice-post.js`, `scripts/lib/coupang-api.js`, `scripts/data/recommended-products.json`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`

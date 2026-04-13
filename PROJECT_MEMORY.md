@@ -20,6 +20,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 무인 엔진 운영성 개선
+  - 요일별 테마 설정을 `scripts/data/choice-daily-themes.json`로 외부화해 운영자가 키워드/대체 키워드를 직접 조정 가능하도록 변경
+  - `scripts/data/recommended-products.json` 히스토리에 `publishedBy(auto/manual)` 필드 추가
+  - 중복 정책은 기본 global 유지, `CHOICE_DEDUP_SCOPE=same-publisher`로 자동/수동 이력 분리 운영 지원
+  - 1차 키워드로 3개를 못 채우면 fallback 키워드까지 자동 확장 검색하도록 `scripts/generate-choice-post.js` 보강
+  - 기존 `scripts/choice-auto-topics.json` 제거로 설정 경로를 단일화
+
 - 2026-04-13 초이스 무인 엔진 고도화(중복 방지 강화)
   - `scripts/generate-choice-posts-auto.js`를 KST 요일 기반 7대 테마 자동 선택 구조로 개편
   - `scripts/lib/coupang-api.js` 검색 파라미터를 `sort=bestAsc` 지원 + 최대 20개 수집으로 확장

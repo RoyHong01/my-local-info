@@ -15,6 +15,7 @@ const RECOMMENDED_PRODUCTS_HISTORY_PATH = path.join(process.cwd(), 'scripts', 'd
 const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_DAYS || 14);
 const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
 const CHOICE_MIN_REVIEW_COUNT = Number(process.env.CHOICE_MIN_REVIEW_COUNT || 100);
+const CHOICE_DEDUP_SCOPE = String(process.env.CHOICE_DEDUP_SCOPE || 'global').trim().toLowerCase();
 
 function getGeminiApiKey() {
   loadLocalEnvFiles();
@@ -97,12 +98,16 @@ async function saveRecommendedProductsHistory(history) {
   await fs.writeFile(RECOMMENDED_PRODUCTS_HISTORY_PATH, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
 }
 
-function isRecentlyPostedProduct(productId, historyEntries, today) {
+function isRecentlyPostedProduct(productId, historyEntries, today, publishedBy) {
   const id = String(productId || '').trim();
   if (!id || !Array.isArray(historyEntries)) return false;
 
   return historyEntries.some((entry) => {
     if (String(entry?.productId || '').trim() !== id) return false;
+    if (CHOICE_DEDUP_SCOPE === 'same-publisher') {
+      const historyPublisher = String(entry?.publishedBy || '').trim().toLowerCase();
+      if (historyPublisher && historyPublisher !== publishedBy) return false;
+    }
     const diff = daysBetweenIso(entry?.date, today);
     return diff >= 0 && diff < PRODUCT_HISTORY_LOOKBACK_DAYS;
   });
@@ -149,6 +154,11 @@ function splitKeywordHints(keywordHint) {
     .filter(Boolean);
 }
 
+function getPublishedBy(candidate) {
+  const value = String(candidate?.publishedBy || '').trim().toLowerCase();
+  return value === 'auto' ? 'auto' : 'manual';
+}
+
 function tokenizeText(text) {
   return String(text || '')
     .toLowerCase()
@@ -181,7 +191,7 @@ function buildKeywordSignals(candidate) {
 
 function deriveKeywordCandidates(candidate) {
   const manualHints = splitKeywordHints(candidate.keywordHint);
-  if (manualHints.length > 0) return Array.from(new Set(manualHints)).slice(0, 2);
+  if (manualHints.length > 0) return Array.from(new Set(manualHints));
 
   const stopwords = new Set(['쿠팡', '리뷰', '추천', '픽앤조이초이스', '픽앤조이', 'choice', 'best', '상품']);
   const fromTags = (candidate.tags || [])
@@ -195,7 +205,14 @@ function deriveKeywordCandidates(candidate) {
 
   const fromBrand = candidate.brand ? [String(candidate.brand).trim()] : [];
   const fromSummary = tokenizeText(candidate.summary).slice(0, 4);
-  return Array.from(new Set([...fromTags, ...fromBrand, ...fromTitle, ...fromSummary])).slice(0, 2);
+  return Array.from(new Set([...fromTags, ...fromBrand, ...fromTitle, ...fromSummary])).slice(0, 6);
+}
+
+function deriveFallbackKeywordCandidates(candidate) {
+  const explicitFallbacks = splitKeywordHints(candidate.fallbackKeywordHint);
+  const primaryHints = splitKeywordHints(candidate.keywordHint);
+  const derived = deriveKeywordCandidates(candidate);
+  return Array.from(new Set([...explicitFallbacks, ...derived, ...primaryHints])).slice(0, 8);
 }
 
 function scoreProductRelevance(product, keywordSignals) {
@@ -260,6 +277,15 @@ function pickProductsWithBrandDiversity(candidates, maxCount = 3) {
   }
 
   return selected;
+}
+
+function collectUniqueProducts(target, products, seen) {
+  for (const product of products) {
+    const uniqueKey = product.productId || product.affiliateUrl;
+    if (!uniqueKey || seen.has(uniqueKey)) continue;
+    seen.add(uniqueKey);
+    target.push(product);
+  }
 }
 
 function selectPrimaryImage(candidate, products) {
@@ -592,22 +618,20 @@ function injectProductBlocks(content, candidate, products) {
 }
 
 async function resolveProductsForCandidate(candidate) {
-  const keywords = deriveKeywordCandidates(candidate);
+  const primaryKeywords = deriveKeywordCandidates(candidate);
+  const fallbackKeywords = deriveFallbackKeywordCandidates(candidate).filter((keyword) => !primaryKeywords.includes(keyword));
   const keywordSignals = buildKeywordSignals(candidate);
   const history = await loadRecommendedProductsHistory();
   const collected = [];
   const seen = new Set();
   let lastError = null;
+  const today = todayIso();
+  const publishedBy = getPublishedBy(candidate);
 
-  for (const keyword of keywords) {
+  for (const keyword of primaryKeywords) {
     try {
       const products = await searchProducts(keyword, { limit: 20, sort: 'bestAsc' });
-      for (const product of products) {
-        const uniqueKey = product.productId || product.affiliateUrl;
-        if (!uniqueKey || seen.has(uniqueKey)) continue;
-        seen.add(uniqueKey);
-        collected.push(product);
-      }
+      collectUniqueProducts(collected, products, seen);
     } catch (error) {
       lastError = error;
     }
@@ -624,10 +648,39 @@ async function resolveProductsForCandidate(candidate) {
       return 0;
     });
 
-  const freshQualified = ranked.filter((product) => {
+  let freshQualified = ranked.filter((product) => {
     if (!isQualifiedChoiceProduct(product)) return false;
-    return !isRecentlyPostedProduct(product.productId, history.entries, todayIso());
+    return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
   });
+
+  if (freshQualified.length < 3 && fallbackKeywords.length > 0) {
+    for (const keyword of fallbackKeywords) {
+      try {
+        const products = await searchProducts(keyword, { limit: 20, sort: 'bestAsc' });
+        collectUniqueProducts(collected, products, seen);
+      } catch (error) {
+        lastError = error;
+      }
+
+      const reranked = collected
+        .map((product) => ({
+          ...product,
+          relevanceScore: scoreProductRelevance(product, keywordSignals),
+        }))
+        .sort((a, b) => {
+          if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
+          if (a.rank && b.rank) return a.rank - b.rank;
+          return 0;
+        });
+
+      freshQualified = reranked.filter((product) => {
+        if (!isQualifiedChoiceProduct(product)) return false;
+        return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
+      });
+
+      if (freshQualified.length >= 3) break;
+    }
+  }
 
   const selected = pickProductsWithBrandDiversity(freshQualified, 3);
   const selectedBrands = new Set(selected.map((item) => String(item.brand || item.vendorName || '').trim().toLowerCase()).filter(Boolean));
@@ -640,7 +693,9 @@ async function resolveProductsForCandidate(candidate) {
   }
 
   return {
-    keywords,
+    keywords: [...primaryKeywords, ...fallbackKeywords],
+    primaryKeywords,
+    fallbackKeywords,
     products: selected,
     error: selectionError || (selected.length > 0 ? null : lastError),
   };
@@ -978,6 +1033,7 @@ async function loadCandidate(inputPath) {
   }
 
   parsed.tags = normalizeTags(parsed.tags);
+  parsed.publishedBy = getPublishedBy(parsed);
   parsed.outputFileName = String(parsed.outputFileName || '').trim();
   parsed.fileName = toSlug(parsed.fileName || parsed.englishName || parsed.title);
   parsed.englishName = toSlug(parsed.englishName || parsed.fileName || parsed.title);
@@ -1000,6 +1056,7 @@ async function appendRecommendedProductsHistory(products, meta) {
       productId: String(product.productId),
       productName: String(product.productName || '').trim(),
       brand: String(product.brand || product.vendorName || '').trim(),
+      publishedBy: meta.publishedBy,
       postFile: meta.postFile,
       sourceId: meta.sourceId,
       themeKey: meta.themeKey || '',
@@ -1103,6 +1160,7 @@ async function run() {
 
   await appendRecommendedProductsHistory(candidate.products || [], {
     date: today,
+    publishedBy: candidate.publishedBy,
     postFile: path.relative(process.cwd(), outputPath).replace(/\\/g, '/'),
     sourceId: `manual-choice-${toSlug(candidate.englishName || candidate.fileName || 'item')}`,
     themeKey: candidate.themeKey,

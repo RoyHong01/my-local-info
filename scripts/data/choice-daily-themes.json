@@ -1,0 +1,58 @@
+[
+  {
+    "weekday": 1,
+    "key": "health",
+    "name": "건강",
+    "keywordHint": ["프로바이오틱스", "오메가3"],
+    "fallbackKeywordHint": ["멀티비타민", "루테인", "마그네슘", "유산균"],
+    "tags": ["건강", "루틴관리", "자기관리템", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 2,
+    "key": "living",
+    "name": "생활",
+    "keywordHint": ["수납 정리함", "청소용품"],
+    "fallbackKeywordHint": ["생활필수품", "욕실 정리", "빨래건조대", "리빙박스"],
+    "tags": ["생활용품", "정리템", "실용템", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 3,
+    "key": "kitchen",
+    "name": "주방",
+    "keywordHint": ["진공포장기", "밀폐용기"],
+    "fallbackKeywordHint": ["프라이팬", "에어프라이어 용품", "주방 정리", "도마"],
+    "tags": ["주방용품", "식재료보관", "홈쿡", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 4,
+    "key": "digital",
+    "name": "디지털",
+    "keywordHint": ["무선이어폰", "보조배터리"],
+    "fallbackKeywordHint": ["무선마우스", "블루투스 키보드", "휴대용 충전기", "태블릿 거치대"],
+    "tags": ["디지털", "데스크셋업", "생산성", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 5,
+    "key": "pet-life",
+    "name": "반려 생활",
+    "keywordHint": ["고양이 사료", "강아지 간식"],
+    "fallbackKeywordHint": ["반려동물 배변패드", "펫 케어", "캣타워", "강아지 영양제"],
+    "tags": ["반려생활", "펫케어", "반려템", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 6,
+    "key": "beauty-fashion",
+    "name": "뷰티/패션",
+    "keywordHint": ["헤어 케어", "선크림"],
+    "fallbackKeywordHint": ["이너웨어", "패션 소품", "쿠션 팩트", "트리트먼트"],
+    "tags": ["뷰티", "패션", "데일리템", "픽앤조이초이스"]
+  },
+  {
+    "weekday": 0,
+    "key": "home-appliance-furniture",
+    "name": "가전/가구",
+    "keywordHint": ["스탠드 조명", "소형 가전"],
+    "fallbackKeywordHint": ["의자", "수납 가구", "테이블", "무드등"],
+    "tags": ["가전", "가구", "홈리빙", "픽앤조이초이스"]
+  }
+]

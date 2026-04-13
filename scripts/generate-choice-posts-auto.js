@@ -6,51 +6,7 @@ const { execFile } = require('child_process');
 const { promisify } = require('util');
 
 const runFile = promisify(execFile);
-
-const DAILY_THEMES = {
-  1: {
-    key: 'health',
-    name: '건강',
-    keywordHint: ['프로바이오틱스', '오메가3', '멀티비타민', '루테인'],
-    tags: ['건강', '루틴관리', '자기관리템', '픽앤조이초이스'],
-  },
-  2: {
-    key: 'living',
-    name: '생활',
-    keywordHint: ['수납 정리함', '청소용품', '생활필수품', '욕실 정리'],
-    tags: ['생활용품', '정리템', '실용템', '픽앤조이초이스'],
-  },
-  3: {
-    key: 'kitchen',
-    name: '주방',
-    keywordHint: ['진공포장기', '프라이팬', '밀폐용기', '에어프라이어 용품'],
-    tags: ['주방용품', '식재료보관', '홈쿡', '픽앤조이초이스'],
-  },
-  4: {
-    key: 'digital',
-    name: '디지털',
-    keywordHint: ['무선이어폰', '보조배터리', '무선마우스', '블루투스 키보드'],
-    tags: ['디지털', '데스크셋업', '생산성', '픽앤조이초이스'],
-  },
-  5: {
-    key: 'pet-life',
-    name: '반려 생활',
-    keywordHint: ['고양이 사료', '강아지 간식', '반려동물 배변패드', '펫 케어'],
-    tags: ['반려생활', '펫케어', '반려템', '픽앤조이초이스'],
-  },
-  6: {
-    key: 'beauty-fashion',
-    name: '뷰티/패션',
-    keywordHint: ['헤어 케어', '선크림', '이너웨어', '패션 소품'],
-    tags: ['뷰티', '패션', '데일리템', '픽앤조이초이스'],
-  },
-  0: {
-    key: 'home-appliance-furniture',
-    name: '가전/가구',
-    keywordHint: ['스탠드 조명', '의자', '소형 가전', '수납 가구'],
-    tags: ['가전', '가구', '홈리빙', '픽앤조이초이스'],
-  },
-};
+const DAILY_THEMES_PATH = path.join(process.cwd(), 'scripts', 'data', 'choice-daily-themes.json');
 
 function getTodayKstDate() {
   const now = new Date();
@@ -73,13 +29,22 @@ function getKstWeekdayNumber() {
   return kst.getUTCDay();
 }
 
-function getDailyTheme() {
+async function loadDailyThemes() {
+  const raw = await fs.readFile(DAILY_THEMES_PATH, 'utf-8');
+  const parsed = JSON.parse(raw);
+  if (!Array.isArray(parsed) || parsed.length === 0) {
+    throw new Error('choice-daily-themes.json에 유효한 요일별 테마가 없습니다.');
+  }
+  return parsed;
+}
+
+function getDailyTheme(themes) {
   const explicit = Number(process.env.CHOICE_AUTO_THEME_DAY || Number.NaN);
   const weekday = Number.isInteger(explicit) && explicit >= 0 && explicit <= 6
     ? explicit
     : getKstWeekdayNumber();
 
-  const theme = DAILY_THEMES[weekday];
+  const theme = themes.find((item) => Number(item?.weekday) === weekday);
   if (!theme) {
     throw new Error(`요일(${weekday})에 매핑된 초이스 테마가 없습니다.`);
   }
@@ -100,9 +65,11 @@ async function buildTempInput(themeInfo, dateKst) {
     rating: '4.7',
     reviewCount: '100',
     keywordHint: theme.keywordHint || [],
+    fallbackKeywordHint: theme.fallbackKeywordHint || [],
     tags: Array.isArray(theme.tags) ? [...theme.tags, '쿠팡', '리뷰'] : ['쿠팡', '리뷰', '픽앤조이초이스'],
     themeKey: theme.key,
     themeName: theme.name,
+    publishedBy: 'auto',
     outputFileName: `${dateKst}-choice-${englishName}.md`,
   };
 
@@ -119,7 +86,8 @@ async function run() {
   }
 
   const dateKst = getTodayKstDate();
-  const themeInfo = getDailyTheme();
+  const themes = await loadDailyThemes();
+  const themeInfo = getDailyTheme(themes);
   const { tempPath, payload } = await buildTempInput(themeInfo, dateKst);
 
   try {

@@ -151,10 +151,13 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 동일 배치에서 훅 첫 문장 패턴이 반복되지 않도록 점검한다.
 13. **초이스 무인 엔진(자동화) 규칙**: GitHub Actions의 자동 초이스 생성은 KST 요일별 테마와 중복 방지 필터를 반드시 적용한다.
   - 요일별 테마: 월 건강 / 화 생활 / 수 주방 / 목 디지털 / 금 반려 생활 / 토 뷰티·패션 / 일 가전·가구
+  - 테마 설정 파일: `scripts/data/choice-daily-themes.json`에서 운영자가 키워드/대체 키워드를 조정한다.
   - 상품 수집: 쿠팡 검색 API `sort=bestAsc` 기준 상위권(10~20개) 후보를 먼저 수집
   - 중복 방지: `scripts/data/recommended-products.json` 기준 최근 14일 내 사용 `productId` 제외
+  - 기록 분리: 히스토리에는 `publishedBy(auto/manual)`를 함께 저장해 자동/수동 발행 이력을 구분한다.
   - 품질 필터: `rating >= 4.5`, `reviewCount >= 100`, `outOfStock=false`
   - 브랜드 다양성: 최종 3개는 최소 2개 이상 브랜드가 섞이도록 구성
+  - fallback: 1차 키워드에서 3개를 못 채우면 테마 파일의 대체 키워드까지 자동 확장해 재수집한다.
   - 기록: 발행 완료 시 사용된 3개 `productId`와 날짜를 히스토리 파일에 즉시 기록
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
