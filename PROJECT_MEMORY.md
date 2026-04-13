@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 초이스 포스트 레이아웃 개선
+  - `scripts/generate-choice-post.js`: 멀티상품 포스트에서 히어로 중복 제거(`image=''`), Pick of the Day 블록(1번 상품), 비교 테이블(2·3번 상품) 삽입 로직으로 재구성
+  - `src/app/globals.css`: `.choice-post-prose` 기반 본문 이미지 `max-width:220px`, 테이블 이미지 `max-width:160px` 적용
+  - `src/app/blog/[slug]/page.tsx`: OG 이미지 fallback을 `post.image || post.coupangBannerImage`로 보강, choice 본문에 `choice-post-prose` 조건부 클래스 적용
+  - `src/components/life/ChoiceArticleCard.tsx`: choice 본문에 `choice-post-prose` 클래스 적용
+
 ### 2026-04-08 기준 핵심 요약
 
 - 2026-04-13 쿠팡 API 초이스 자동화 반영

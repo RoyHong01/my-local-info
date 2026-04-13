@@ -3,7 +3,20 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
----
+## 2026-04-14 (초이스 포스트 레이아웃 개선)
+
+### 초이스 포스트 이미지·구조 4대 개선
+
+- **수정 파일**: `scripts/generate-choice-post.js`, `src/app/globals.css`, `src/app/blog/[slug]/page.tsx`, `src/components/life/ChoiceArticleCard.tsx`
+- **커밋**: `2e142b5`
+- **핵심 반영**:
+  1. **히어로 이미지 중복 제거**: 멀티프로덕트 포스트에서 `selectPrimaryImage()` 반환값을 `''`로 고정 → `frontmatter.image` 비워 히어로 섹션 미노출
+  2. **Pick of the Day 블록 신설**: `buildPickOfDayBlock()` — 서론 직후, 첫 `##` 앞에 1번 상품 이미지 + 최저가 CTA 삽입
+  3. **비교 테이블 (GFM)**: `buildComparisonBlock()` — 2·3번 상품을 GFM 테이블로 나란히 배치 (PC 가로, 모바일 세로)
+  4. **이미지 크기 1/3 축소**: `.choice-post-prose img { max-width: 220px }`, 테이블 이미지 `max-width: 160px` CSS 적용
+  5. **자연스러운 서론**: `buildChoicePrompt()` 지침에 "추천 상품은 n개입니다" 금지 + 자연 문맥 예시 추가
+  6. **OG 이미지 fallback**: `generateMetadata`에서 `post.image || post.coupangBannerImage` 적용 → 히어로 없는 포스트도 OG 이미지 유지
+  7. **`choice-post-prose` CSS 클래스**: `blog/[slug]/page.tsx` 및 `ChoiceArticleCard.tsx` prose div에 조건부 적용
 
 ## 2026-04-13 (쿠팡 API 기반 초이스 자동화 1차 구현)
 

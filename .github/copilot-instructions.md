@@ -194,6 +194,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-14 핵심 반영:
+  - **초이스 포스트 레이아웃 개선**: `scripts/generate-choice-post.js`에서 멀티상품 히어로 이미지 제거, Pick of the Day(1번 상품) 블록, 2·3번 비교 테이블(GFM) 삽입 로직 적용
+  - **자연 서론 규칙 추가**: "추천 상품은 n개입니다" 같은 기계적 수량 나열 문구를 프롬프트 금지 규칙으로 추가
+  - **본문 이미지 크기 최적화**: `src/app/globals.css`의 `.choice-post-prose` 규칙으로 본문 이미지(220px) 및 비교 테이블 이미지(160px) 제한
+  - **SEO fallback 보강**: `src/app/blog/[slug]/page.tsx` 메타데이터에서 `post.image || post.coupangBannerImage`를 OG 이미지로 사용
 - 2026-04-11 핵심 반영:
   - **Choice 구조화 데이터 개편**: `src/app/blog/[slug]/page.tsx`에서 Choice 글의 보조 JSON-LD를 `Product` 단독 타입에서 `Review` 스키마로 전환하고 `itemReviewed` 안에만 `Product`를 유지
   - **판매자 전용 필드 제거**: `offers` 제거로 Search Console 판매자 목록 오류(`price`, `shippingDetails`, `hasMerchantReturnPolicy`) 대응
