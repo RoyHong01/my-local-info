@@ -101,6 +101,33 @@ async function run() {
   } catch (err) {
     console.error('subsidy.json 만료 보정 실패:', err.message);
   }
+
+  // festival.json 만료 처리 패스
+  const festivalPath = path.join(process.cwd(), 'public', 'data', 'festival.json');
+  try {
+    const festivalRaw = await fs.readFile(festivalPath, 'utf-8');
+    const festivalData = JSON.parse(festivalRaw);
+    // KST 기준 오늘 날짜 (YYYYMMDD) — 04:00 KST 실행 시 UTC 오차 보정
+    const todayKST = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
+    let festivalExpired = 0;
+    for (const item of festivalData) {
+      if (item.expired) continue;
+      const eventEnd = (item.eventenddate || '').trim();
+      if (eventEnd && /^\d{8}$/.test(eventEnd) && eventEnd < todayKST) {
+        item.expired = true;
+        festivalExpired++;
+        console.log(`festival 만료: ${item.title || item.contenttitle || item.contentid} (종료일: ${eventEnd})`);
+      }
+    }
+    if (festivalExpired > 0) {
+      await fs.writeFile(festivalPath, JSON.stringify(festivalData, null, 2), 'utf-8');
+      console.log(`festival.json 만료 보정: ${festivalExpired}건 expired 처리`);
+    } else {
+      console.log('festival.json: 새로 만료된 항목 없음');
+    }
+  } catch (err) {
+    console.error('festival.json 만료 보정 실패:', err.message);
+  }
 }
 
 run();

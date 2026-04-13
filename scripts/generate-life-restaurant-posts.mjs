@@ -866,7 +866,14 @@ parking_info: "확인 필요"${ratingFrontmatter}
     if (attempt < 3) await sleep(2000);
   }
 
-  if (!generatedText || looksIncompleteGeminiOutput(generatedText)) {
+  // STOP = 정상 완료 신호. FILENAME 있고 700자 이상이면 끝 문장 부호 무시
+  const strictlyEmpty = !generatedText || generatedText.trim().length < 100;
+  const missingFilename = !/FILENAME:\s*\S+/m.test(generatedText || '');
+  const tooShort = (generatedText || '').trim().length < 700;
+  const incompleteByContent = lastFinishReason !== 'STOP'
+    ? looksIncompleteGeminiOutput(generatedText)
+    : (strictlyEmpty || missingFilename || tooShort);
+  if (strictlyEmpty || missingFilename || incompleteByContent) {
     throw new Error(`Gemini 응답 불완전(finishReason=${lastFinishReason || 'N/A'})`);
   }
 
@@ -994,17 +1001,54 @@ async function run() {
     return;
   }
 
+  // 버킷별 백업 후보 목록 구성 (selectedCandidates에서 제외된 같은 버킷 나머지)
+  const selectedSourceIds = new Set(selectedCandidates.map(c => c.item?.source_id || c.item?.id));
+  const backupsByBucket = new Map();
+  for (const bucket of TARGET_BUCKETS) {
+    const allForBucket = candidates
+      .filter(c => classifyRegionBucket(c.item) === bucket && !selectedSourceIds.has(c.item?.source_id || c.item?.id))
+      .map(c => ({ ...c, regionBucket: bucket, areaTag: toAreaTag(bucket) }));
+    backupsByBucket.set(bucket, allForBucket);
+  }
+
   let successCount = 0;
   let failedCount = 0;
+  const failedBuckets = new Set();
 
   for (let i = 0; i < selectedCandidates.length; i++) {
     const candidate = selectedCandidates[i];
+    const bucket = candidate.regionBucket;
+    let succeeded = false;
+
     try {
       await generateRestaurantPost(candidate);
       successCount += 1;
+      succeeded = true;
     } catch (error) {
-      failedCount += 1;
-      console.warn(`⚠️ 후보 처리 실패(다음 후보로 계속): ${candidate.item?.name || candidate.item?.id || 'unknown'} / ${error?.message || error}`);
+      console.warn(`⚠️ [${bucket}] 후보 실패: ${candidate.item?.name || 'unknown'} — ${error?.message || error}`);
+      console.warn(`  → 같은 버킷 대체 후보 시도`);
+
+      // 같은 버킷 백업 후보 순서대로 재시도
+      const backups = backupsByBucket.get(bucket) || [];
+      while (backups.length > 0 && !succeeded) {
+        const backup = backups.shift();
+        console.log(`  ⏳ ${INTER_REQUEST_DELAY_MS}ms 대기 중...`);
+        await sleep(INTER_REQUEST_DELAY_MS);
+        try {
+          await generateRestaurantPost(backup);
+          successCount += 1;
+          succeeded = true;
+          console.log(`✅ [${bucket}] 대체 후보 생성 성공: ${backup.item?.name}`);
+        } catch (retryErr) {
+          console.warn(`⚠️ [${bucket}] 대체 후보 실패: ${backup.item?.name} / ${retryErr?.message || retryErr}`);
+        }
+      }
+
+      if (!succeeded) {
+        failedCount += 1;
+        failedBuckets.add(bucket);
+        console.warn(`❌ [${bucket}] 모든 후보 실패 — 이 버킷 포스트 미생성`);
+      }
     }
 
     if (i < selectedCandidates.length - 1) {
@@ -1014,6 +1058,9 @@ async function run() {
   }
 
   console.log(`📌 생성 완료: 성공 ${successCount}건 / 실패 ${failedCount}건`);
+  if (failedBuckets.size > 0) {
+    console.warn(`⚠️ 포스트 미생성 버킷: ${[...failedBuckets].join(', ')}`);
+  }
 }
 
 run().catch((error) => {

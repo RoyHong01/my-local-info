@@ -310,21 +310,32 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// 종료일이 이미 지난 항목인지 판별 (날짜 기반)
-// festival: eventenddate (YYYYMMDD), incheon/subsidy: endDate (YYYY-MM-DD)
+// KST 기준 오늘 날짜 반환 (YYYYMMDD) — GitHub Actions 04:00 KST = UTC 19:00 전일 오차 보정
+function getTodayKST() {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0].replace(/-/g, '');
+}
+
+// 종료일이 이미 지났거나 리드타임 이내인 항목 판별 (날짜 기반)
+// festival: eventenddate (YYYYMMDD) — 종료 N일 이내 또는 이미 종료 시 제외
+// incheon/subsidy: endDate (YYYY-MM-DD) — 오늘 이전 종료 시만 제외
 function isEndDatePassed(item) {
-  const todayStr = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
+  const todayKST = getTodayKST();
+  const minDaysBeforeEnd = Number(process.env.BLOG_FESTIVAL_MIN_DAYS_BEFORE_END || '7');
 
   // 축제: eventenddate (YYYYMMDD)
   const eventEnd = (item.eventenddate || '').trim();
   if (eventEnd && /^\d{8}$/.test(eventEnd)) {
-    return eventEnd < todayStr;
+    // 오늘 기준 N일 후 날짜 계산 (KST)
+    const threshold = new Date(Date.now() + 9 * 60 * 60 * 1000);
+    threshold.setDate(threshold.getDate() + minDaysBeforeEnd);
+    const thresholdStr = threshold.toISOString().split('T')[0].replace(/-/g, '');
+    return eventEnd <= thresholdStr; // 7일 이내 종료 또는 이미 종료 → 제외
   }
 
   // 인천/보조금: endDate (YYYY-MM-DD)
   const endDate = (item.endDate || '').trim();
   if (endDate && /^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
-    return endDate.replace(/-/g, '') < todayStr;
+    return endDate.replace(/-/g, '') < todayKST;
   }
 
   // 종료일 없으면 (상시 등) 만료 아님
