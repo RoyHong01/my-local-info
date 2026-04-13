@@ -8,6 +8,7 @@
     "postbuild": "node scripts/generate-sitemap.js && node scripts/generate-search-index.js",
     "generate:blog": "node scripts/generate-blog-post.js",
     "generate:choice": "node scripts/generate-choice-post.js",
+    "generate:choice:auto": "node scripts/generate-choice-posts-auto.js",
     "collect:life-restaurants": "node scripts/collect-life-restaurants.mjs",
     "generate:life-restaurant-posts": "node scripts/generate-life-restaurant-posts.mjs",
     "start": "next start",

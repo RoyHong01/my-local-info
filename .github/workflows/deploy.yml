@@ -209,6 +209,20 @@ jobs:
             echo "변경사항 없음"
           fi
 
+      - name: '[2.5단계] 픽앤조이 초이스 자동 생성'
+        id: generate_choice
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: node scripts/generate-choice-posts-auto.js
+        timeout-minutes: 20
+        env:
+          CHOICE_AUTO_ENABLED: 'true'
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CHOICE_GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          CHOICE_GEMINI_TIMEOUT_MS: '120000'
+          CHOICE_GEMINI_MAX_OUTPUT_TOKENS: '8192'
+          COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
+          COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
+
       - name: '[3단계] 일상의 즐거움 맛집 후보 점검/필요 시 재수집'
         id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
@@ -314,6 +328,7 @@ jobs:
           DEPLOY_STAGE1_OUTCOME: ${{ steps.deploy_stage1.outcome }}
           DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
           GENERATE_BLOG_OUTCOME: ${{ steps.generate_blog.outcome }}
+          GENERATE_CHOICE_OUTCOME: ${{ steps.generate_choice.outcome }}
           BLOG_BUDGET_ENABLED: ${{ steps.generate_blog.outputs.budget_enabled }}
           BLOG_BUDGET_LIMIT_KRW: ${{ steps.generate_blog.outputs.budget_limit_krw }}
           BLOG_ESTIMATED_COST_KRW: ${{ steps.generate_blog.outputs.estimated_cost_krw }}

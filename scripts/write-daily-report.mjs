@@ -116,12 +116,16 @@ function summarizeChanges(commits) {
 
   const blogFiles = allFiles.filter((file) => file.startsWith('src/content/posts/') && file.endsWith('.md'));
   const lifeFiles = allFiles.filter((file) => file.startsWith('src/content/life/') && file.endsWith('.md'));
+  const generatedChoicePosts = lifeFiles.filter((file) => /\/\d{4}-\d{2}-\d{2}-choice-/.test(file));
+  const generatedRestaurantPosts = lifeFiles.filter((file) => !generatedChoicePosts.includes(file));
 
   return {
     totalChangedFiles: allFiles.length,
     dataChangedFiles: dataFiles,
     generatedBlogPosts: blogFiles,
     generatedLifePosts: lifeFiles,
+    generatedChoicePosts,
+    generatedRestaurantPosts,
     allChangedFiles: allFiles,
   };
 }
@@ -153,6 +157,7 @@ function buildStagesFromEnv(env) {
       deployUrl: env.DEPLOY_STAGE2_URL || '',
       steps: {
         generateBlog: normalizeOutcome(env.GENERATE_BLOG_OUTCOME),
+        generateChoice: normalizeOutcome(env.GENERATE_CHOICE_OUTCOME),
         build: normalizeOutcome(env.BUILD_STAGE2_OUTCOME),
         e2e: normalizeOutcome(env.E2E_STAGE2_OUTCOME),
         deploy: normalizeOutcome(env.DEPLOY_STAGE2_OUTCOME),
@@ -191,6 +196,7 @@ function toMarkdown(report) {
     },
     stage2: {
       generateBlog: 'AI 블로그 생성',
+      generateChoice: '픽앤조이 초이스 자동 생성',
       build: '빌드',
       e2e: 'E2E 테스트',
       deploy: '배포',
@@ -236,7 +242,8 @@ function toMarkdown(report) {
   lines.push('|---|---|');
   lines.push(`| 단계 성공 수 | ${report.stages.filter((stage) => stage.status === 'success').length} / ${report.stages.length} |`);
   lines.push(`| 생성된 블로그 글 | ${report.changes.generatedBlogPosts.length}건 |`);
-  lines.push(`| 생성된 맛집 글 | ${report.changes.generatedLifePosts.length}건 |`);
+  lines.push(`| 생성된 초이스 글 | ${report.changes.generatedChoicePosts.length}건 |`);
+  lines.push(`| 생성된 맛집 글 | ${report.changes.generatedRestaurantPosts.length}건 |`);
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
   lines.push(`| 맛집 후보 재수집 | ${report.restaurantCache?.recollectPerformed ? '실행' : '생략'} |`);
   lines.push(`| 맛집 캐시(hit/miss/called) | ${Number(report.restaurantCache?.cacheHit || 0)} / ${Number(report.restaurantCache?.cacheMiss || 0)} / ${Number(report.restaurantCache?.googleCalled || 0)} |`);
@@ -344,7 +351,8 @@ function toMarkdown(report) {
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles} |`);
   lines.push(`| 데이터 파일 | ${report.changes.dataChangedFiles.length} |`);
   lines.push(`| 블로그 생성 파일 | ${report.changes.generatedBlogPosts.length} |`);
-  lines.push(`| 맛집 생성 파일 | ${report.changes.generatedLifePosts.length} |`);
+  lines.push(`| 초이스 생성 파일 | ${report.changes.generatedChoicePosts.length} |`);
+  lines.push(`| 맛집 생성 파일 | ${report.changes.generatedRestaurantPosts.length} |`);
   lines.push('');
 
   if (report.changes.generatedBlogPosts.length > 0) {
@@ -354,10 +362,17 @@ function toMarkdown(report) {
     lines.push('');
   }
 
-  if (report.changes.generatedLifePosts.length > 0) {
+  if (report.changes.generatedChoicePosts.length > 0) {
+    lines.push('### 생성된 초이스 파일');
+    lines.push('');
+    report.changes.generatedChoicePosts.forEach((file) => lines.push(`- ${file}`));
+    lines.push('');
+  }
+
+  if (report.changes.generatedRestaurantPosts.length > 0) {
     lines.push('### 생성된 맛집 파일');
     lines.push('');
-    report.changes.generatedLifePosts.forEach((file) => lines.push(`- ${file}`));
+    report.changes.generatedRestaurantPosts.forEach((file) => lines.push(`- ${file}`));
     lines.push('');
   }
 
@@ -383,6 +398,8 @@ async function updateIndex(indexPath, report) {
     stageStatuses: report.stages.map((stage) => ({ key: stage.key, status: stage.status })),
     generatedBlogCount: report.changes.generatedBlogPosts.length,
     generatedLifeCount: report.changes.generatedLifePosts.length,
+    generatedChoiceCount: report.changes.generatedChoicePosts.length,
+    generatedRestaurantCount: report.changes.generatedRestaurantPosts.length,
     restaurantRecollectPerformed: !!report.restaurantCache?.recollectPerformed,
     restaurantCacheHit: Number(report.restaurantCache?.cacheHit || 0),
     restaurantCacheMiss: Number(report.restaurantCache?.cacheMiss || 0),

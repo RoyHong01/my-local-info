@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-04-13 (쿠팡 API 기반 초이스 자동화 1차 구현)
+
+### 픽앤조이 초이스 생성기 고도화
+
+- **수정 파일**: `scripts/lib/coupang-api.js`, `scripts/generate-choice-post.js`, `scripts/choice-input.example.json`
+- **핵심 반영**:
+  - 쿠팡 파트너스 Search API용 HMAC 서명 클라이언트 신규 구현
+  - `keywordHint` 기반 상품 키워드 검색 → 상위 3개 상품 자동 수집 로직 추가
+  - 초이스 생성기에서 수동 `coupangUrl/coupangHtml` 입력 없이도 자동 생성 가능하도록 입력 스키마 확장
+  - 본문 서론 직후 대표 상품 1개, 두 번째 섹션 이후 추가 상품 2개를 이미지+CTA로 자동 삽입
+  - API 실패 시 기존 수동 제휴 링크/배너 로직으로 fallback 유지
+  - 링크 없는 CTA 문장, 금지 표현(`다양한` 등), 고지문 누락을 검증하는 품질 게이트 추가 후 재시도 동작 구현
+  - 금지 표현 자동 치환 레이어 추가로 AI 출력 흔들림(`다양한` 등)에도 자동 생성이 중단되지 않도록 보강
+  - 키워드/상품 관련도 랭킹 고도화: title/tags/summary/keywordHint 신호 가중치 기반으로 후보 상품 점수화 후 상위 3개 선택
+
+### GitHub Actions 워크플로우 통합
+
+- **수정 파일**: `.github/workflows/deploy.yml`, `scripts/generate-choice-posts-auto.js`, `scripts/choice-auto-topics.json`, `package.json`, `scripts/write-daily-report.mjs`
+- **핵심 반영**:
+  - `generate:choice:auto` 스크립트 추가 및 자동 주제 로테이션(`choice-auto-topics.json`) 기반 초이스 생성기 구현
+  - 배포 워크플로우 `full` 모드에 `[2.5단계] 픽앤조이 초이스 자동 생성` 단계 추가
+  - 일일 리포트에 `generate_choice` 단계 결과와 초이스/맛집 생성 파일 분리 집계 반영
+
+### 자동 생성 검증 및 샘플 포스트 발행
+
+- **추가 파일**: `scripts/choice-input.probiotics-api.json`
+- **생성 결과**: `src/content/life/2026-04-13-choice-probiotics-api-curation.md`
+- **추가 자동 생성 결과**: `src/content/life/2026-04-13-choice-kitchen-food-sealer.md`
+- **검증**:
+  - 쿠팡 Search API 테스트 성공 (`프로바이오틱스` 키워드 기준 상위 3개 상품 응답 확인)
+  - `node scripts/generate-choice-post.js --input scripts/choice-input.probiotics-api.json` 성공
+  - `node scripts/generate-choice-posts-auto.js` 성공
+  - `npm run build` 성공
+
 ## 2026-04-13 (스크립트 자동화 개선 + 서울 맛집 포스트)
 
 ### 문서 가드레일 보강 (맛집 톤앤매너 재발 방지)
@@ -32,28 +66,33 @@
 
 ### 주요 변경사항
 
-**1. `scripts/cleanup-expired.js` — festival.json 만료 자동화 추가**
+#### 1. `scripts/cleanup-expired.js` — festival.json 만료 자동화 추가
+
 - 매일 실행 시 `festival.json`의 `eventenddate`(YYYYMMDD) 기준으로 오늘(KST) 이전 항목에 `expired: true` 자동 마킹
 - KST 보정: `new Date(Date.now() + 9 * 60 * 60 * 1000)` 패턴 사용 (UTC 오차 방지)
 - 실행 즉시 47건 만료 처리 (영암왕인문화축제 포함)
 
-**2. `scripts/generate-blog-post.js` — 리드타임 + KST 보정**
+#### 2. `scripts/generate-blog-post.js` — 리드타임 + KST 보정
+
 - `getTodayKST()` 헬퍼 추가 (UTC 아닌 KST 기준 날짜)
 - `isEndDatePassed()` → 축제(eventenddate)는 오늘 기준 7일 이내 종료 시 제외
 - `BLOG_FESTIVAL_MIN_DAYS_BEFORE_END` env로 리드타임 override 가능 (기본값 7)
 
-**3. `scripts/generate-life-restaurant-posts.mjs` — 지역별 재시도 + STOP 오탐 수정**
+#### 3. `scripts/generate-life-restaurant-posts.mjs` — 지역별 재시도 + STOP 오탐 수정
+
 - 주 후보 실패 시 `backupsByBucket` Map으로 같은 버킷 대체 후보 순서 재시도
 - 에러 로그에 실제 에러 메시지 포함 (`error?.message`)
 - Gemini `finishReason=STOP` 응답을 불완전으로 오탐하던 버그 수정:
   - STOP일 때는 길이(700자 이상)·FILENAME 포함 여부만 체크
   - 기존 끝 문장 부호 체크는 STOP 이외에만 적용
 
-**4. 서울 맛집 포스트 수동 생성**
+#### 4. 서울 맛집 포스트 수동 생성
+
 - 브루잉세레모니 (성수, source_id: 804984272)
 - `src/content/life/2026-04-13-seongsu-restaurant-804984272.md`
 
 ### 커밋 이력
+
 - `04ee4c8`: 서울 맛집 포스트 1건 추가
 - `be403f9`: 스크립트 4개 변경 (festival 만료 자동화, KST 리드타임, 지역별 재시도, STOP 오탐)
 - rebase pull (`12e0a64` origin main 선행커밋 병합) 후 push 성공

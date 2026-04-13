@@ -22,6 +22,17 @@
 
 ### 2026-04-08 기준 핵심 요약
 
+- 2026-04-13 쿠팡 API 초이스 자동화 반영
+  - `scripts/lib/coupang-api.js` 신규 추가: 쿠팡 파트너스 Search API HMAC 서명 + 상품 검색 정규화 구현
+  - `scripts/generate-choice-post.js`에 `keywordHint` 기반 자동 상품 검색, 본문 상품 이미지/CTA 자동 주입, API 실패 fallback, 품질 검증/재시도 로직 추가
+  - 금지 표현 자동 치환 + 키워드/상품 관련도 랭킹(신호 가중치 기반) 보강으로 자동 생성 안정성 향상
+  - `scripts/generate-choice-posts-auto.js` + `scripts/choice-auto-topics.json` 추가로 일일 자동 발행 주제 로테이션 구성
+  - `.github/workflows/deploy.yml` full 모드에 `[2.5단계] 픽앤조이 초이스 자동 생성` 통합
+  - `scripts/write-daily-report.mjs`에 초이스 단계 결과 및 초이스/맛집 생성 분리 집계 반영
+  - API 전용 샘플 입력 `scripts/choice-input.probiotics-api.json` 추가
+  - 자동 생성 샘플 포스트 `src/content/life/2026-04-13-choice-probiotics-api-curation.md` 발행 및 build 검증 완료
+  - 자동 생성 샘플 포스트 `src/content/life/2026-04-13-choice-kitchen-food-sealer.md` 추가 검증 완료
+
 - 2026-04-13 지침 보강 반영
   - `.github/copilot-instructions.md`에 전역 정보 효용성 규칙 강화(인천/축제/맛집 공통 7일 선행 원칙)
   - 종료 임박/종료 데이터 원천 차단 및 예외 보고 의무 명시
@@ -211,8 +222,12 @@
 
 ## 4. 쿠팡 자동화 메모 (압축)
 
-- 현재 상태: `src/lib/coupang-partners-config.ts`에 정책/검증 유틸 정리 완료(Phase 1)
+- 현재 상태:
+  - `src/lib/coupang-partners-config.ts`에 정책/검증 유틸 정리 완료
+  - `scripts/lib/coupang-api.js`와 `scripts/generate-choice-post.js`를 통해 키워드 기반 초이스 자동 생성 1차 구현 완료
 - 다음 단계:
-  - [ ] 쿠팡 API 발급 후 실제 엔드포인트/인증값으로 설정 확정
-  - [ ] 수집/생성 스크립트(`collect-coupang-products.mjs`, `generate-coupang-posts.mjs`) 구현
-  - [ ] 워크플로우 통합 및 링크 무결성(파트너 ID 포함) 자동 검증
+  - [x] 쿠팡 API 발급 후 실제 엔드포인트/인증값으로 설정 확정
+  - [x] 초이스 생성 스크립트에 API 검색/본문 주입 통합
+  - [ ] GitHub Actions 워크플로우에 초이스 자동 생성 단계 통합
+  - [ ] 링크 무결성(파트너 ID/subId/URL 형식) 자동 검증 추가
+  - [ ] 카테고리별 키워드 도출 정밀화 및 상품 관련도 랭킹 개선

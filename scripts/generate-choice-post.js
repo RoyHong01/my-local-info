@@ -2,6 +2,7 @@
 const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');
+const { loadLocalEnvFiles, searchProducts } = require('./lib/coupang-api');
 
 const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
@@ -10,38 +11,6 @@ if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
 }
 const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);
 const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 8192);
-
-function loadLocalEnvFiles() {
-  const envFiles = [
-    { file: '.env', override: false },
-    { file: '.env.local', override: true },
-  ];
-
-  for (const envFile of envFiles) {
-    const envPath = path.join(process.cwd(), envFile.file);
-    if (!fsSync.existsSync(envPath)) continue;
-
-    const raw = fsSync.readFileSync(envPath, 'utf-8');
-    for (const line of raw.split(/\r?\n/)) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-
-      const eqIndex = trimmed.indexOf('=');
-      if (eqIndex < 0) continue;
-
-      const key = trimmed.slice(0, eqIndex).trim();
-      let value = trimmed.slice(eqIndex + 1).trim();
-      if (!key) continue;
-      if (process.env[key] && !envFile.override) continue;
-
-      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1);
-      }
-
-      process.env[key] = value;
-    }
-  }
-}
 
 function getGeminiApiKey() {
   loadLocalEnvFiles();
@@ -78,10 +47,9 @@ function printHelp() {
   console.log('- title');
   console.log('- englishName  (example: cj-biocore-probiotics)');
   console.log('- summary');
-  console.log('- coupangUrl');
-  console.log('- coupangHtml');
+  console.log('- Either keywordHint or manual coupangUrl + coupangHtml');
   console.log('');
-  console.log('Optional fields: sourceUrl, rating, reviewCount, tags, image, fileName, outputFileName, brand');
+  console.log('Optional fields: keywordHint, sourceUrl, rating, reviewCount, tags, image, fileName, outputFileName, brand');
 }
 
 function todayIso() {
@@ -114,8 +82,311 @@ function normalizeTags(tags) {
   return ['쿠팡', '리뷰', '라이프스타일', '자기관리', '픽앤조이초이스'];
 }
 
-function buildChoicePrompt(candidate, today) {
+function sanitizeMarkdownText(value) {
+  return String(value || '').replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+}
+
+function splitKeywordHints(keywordHint) {
+  if (Array.isArray(keywordHint)) {
+    return keywordHint.map((item) => String(item || '').trim()).filter(Boolean);
+  }
+
+  return String(keywordHint || '')
+    .split(/[,/|]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function tokenizeText(text) {
+  return String(text || '')
+    .toLowerCase()
+    .replace(/[^\p{Script=Hangul}a-z0-9\s]/gu, ' ')
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 2);
+}
+
+function buildKeywordSignals(candidate) {
+  const titleTokens = tokenizeText(candidate.title);
+  const summaryTokens = tokenizeText(candidate.summary);
+  const tagTokens = (candidate.tags || []).flatMap((tag) => tokenizeText(tag));
+  const hintTokens = splitKeywordHints(candidate.keywordHint).flatMap((hint) => tokenizeText(hint));
+
+  const signalWeights = new Map();
+  const bump = (tokens, weight) => {
+    for (const token of tokens) {
+      signalWeights.set(token, (signalWeights.get(token) || 0) + weight);
+    }
+  };
+
+  bump(titleTokens, 5);
+  bump(tagTokens, 4);
+  bump(hintTokens, 6);
+  bump(summaryTokens, 2);
+
+  return signalWeights;
+}
+
+function deriveKeywordCandidates(candidate) {
+  const manualHints = splitKeywordHints(candidate.keywordHint);
+  if (manualHints.length > 0) return Array.from(new Set(manualHints)).slice(0, 2);
+
+  const stopwords = new Set(['쿠팡', '리뷰', '추천', '픽앤조이초이스', '픽앤조이', 'choice', 'best', '상품']);
+  const fromTags = (candidate.tags || [])
+    .map((item) => String(item || '').trim())
+    .filter((item) => item.length >= 2 && !stopwords.has(item.toLowerCase()));
+
+  const fromTitle = String(candidate.title || '')
+    .split(/[|,·/()\-]/)
+    .map((item) => item.trim())
+    .filter((item) => item.length >= 2 && !stopwords.has(item.toLowerCase()));
+
+  const fromBrand = candidate.brand ? [String(candidate.brand).trim()] : [];
+  const fromSummary = tokenizeText(candidate.summary).slice(0, 4);
+  return Array.from(new Set([...fromTags, ...fromBrand, ...fromTitle, ...fromSummary])).slice(0, 2);
+}
+
+function scoreProductRelevance(product, keywordSignals) {
+  const titleTokens = tokenizeText(product.productName);
+  const uniqueTokens = new Set(titleTokens);
+  let score = 0;
+
+  for (const token of uniqueTokens) {
+    score += keywordSignals.get(token) || 0;
+  }
+
+  if (product.isRocket) score += 1.2;
+  if (product.rank > 0) {
+    score += Math.max(0, 2 - product.rank * 0.2);
+  }
+
+  const numericInName = (product.productName.match(/\d+/g) || []).length;
+  score += Math.min(1.5, numericInName * 0.2);
+
+  return score;
+}
+
+function selectPrimaryImage(candidate, products) {
+  if (candidate.image) return String(candidate.image).trim();
+  if (Array.isArray(products) && products[0]?.productImage) return products[0].productImage;
+  return defaultChoiceImage(candidate);
+}
+
+function buildProductMarkdown(product, ctaLabel) {
+  if (!product?.productName || !product?.affiliateUrl) return '';
+  const safeProductName = sanitizeMarkdownText(product.productName);
+  const safeLabel = sanitizeMarkdownText(ctaLabel || `${product.productName} 최저가 확인하기`);
+
+  const lines = [];
+  if (product.productImage) {
+    lines.push(`![${safeProductName}](${product.productImage})`);
+    lines.push('');
+  }
+  lines.push(`**👉 [${safeLabel}](${product.affiliateUrl})**`);
+  return lines.join('\n').trim();
+}
+
+function insertTopProductBlock(content, block) {
+  if (!block) return content;
+
+  const lines = content.split('\n');
+  let headingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (headingIndex < 0) return `${block}\n\n${content}`.trim();
+
+  let insertIndex = lines.length;
+  for (let i = headingIndex + 1; i < lines.length; i++) {
+    if (/^#{2,3}\s+/.test(lines[i].trim())) {
+      insertIndex = i;
+      break;
+    }
+  }
+
+  lines.splice(insertIndex, 0, '', block, '');
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function insertMidProductBlock(content, block) {
+  if (!block) return content;
+
+  const lines = content.split('\n');
+  const headingIndices = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^#{2,3}\s+/.test(lines[i].trim())) headingIndices.push(i);
+  }
+
+  if (headingIndices.length < 2) {
+    return `${content.trim()}\n\n${block}`.trim();
+  }
+
+  const secondHeadingIndex = headingIndices[1];
+  let insertIndex = lines.length;
+  for (let i = secondHeadingIndex + 1; i < lines.length; i++) {
+    if (/^#{2,3}\s+/.test(lines[i].trim())) {
+      insertIndex = i;
+      break;
+    }
+  }
+
+  lines.splice(insertIndex, 0, '', block, '');
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function splitFrontmatterAndBody(content) {
+  const text = String(content || '');
+  if (!text.startsWith('---\n')) {
+    return { frontmatter: '', body: text.trim() };
+  }
+
+  const endIndex = text.indexOf('\n---\n', 4);
+  if (endIndex < 0) {
+    return { frontmatter: '', body: text.trim() };
+  }
+
+  const frontmatter = text.slice(0, endIndex + 5).trim();
+  const body = text.slice(endIndex + 5).trim();
+  return { frontmatter, body };
+}
+
+function ensureDisclosure(content) {
+  const disclosure = '쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.';
+  const { frontmatter, body } = splitFrontmatterAndBody(content);
+
+  let normalizedBody = String(body || '')
+    .replace(/^.*쿠팡\s*파트너스\s*활동의\s*일환.*$/gim, '')
+    .replace(/^\s*---\s*$/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  const finalBody = `${normalizedBody}\n\n---\n\n${disclosure}`.trim();
+  if (!frontmatter) return finalBody;
+
+  return `${frontmatter}\n\n${finalBody}`;
+}
+
+function ensureFallbackAffiliate(content, coupangUrl, title) {
+  const url = String(coupangUrl || '').trim();
+  if (!url) return content;
+  if (content.includes(url)) return content;
+  const label = sanitizeMarkdownText(title ? `${title} 최저가 확인 및 상세정보 보기` : '오늘의 추천 상품 최저가 확인하기');
+  return `${content.trim()}\n\n**👉 [${label}](${url})**`;
+}
+
+function findChoiceValidationErrors(content) {
+  const errors = [];
+  const bannedWords = ['결론적으로', '무엇보다도', '다양한', '인상적인', '포착한', '주목할 만한', '대표적인', '각광받는', '눈길을 끄는', '대명사', '선사한다', '즐길 수 있다', '만끽할 수 있다'];
+
+  for (const word of bannedWords) {
+    if (content.includes(word)) {
+      errors.push(`금지 표현 포함: ${word}`);
+    }
+  }
+
+  if ((content.match(/^##\s+/gm) || []).length < 1) {
+    errors.push('필수 ## 소제목이 없습니다.');
+  }
+
+  const ctaLinesWithoutUrl = String(content || '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => /[👉🛒]/.test(line) && !/https?:\/\//.test(line));
+
+  if (ctaLinesWithoutUrl.length > 0) {
+    errors.push('URL 없는 CTA 문장이 남아 있습니다.');
+  }
+
+  if (!content.includes('쿠팡 파트너스 활동의 일환으로')) {
+    errors.push('쿠팡 고지문이 없습니다.');
+  }
+
+  return errors;
+}
+
+function sanitizeBannedExpressions(content) {
+  const replacements = [
+    ['결론적으로', '정리하면'],
+    ['무엇보다도', '특히'],
+    ['다양한', '여러'],
+    ['인상적인', '눈에 띄는'],
+    ['포착한', '짚어낸'],
+    ['주목할 만한', '눈여겨볼'],
+    ['대표적인', '주요'],
+    ['각광받는', '많이 선택되는'],
+    ['눈길을 끄는', '눈에 들어오는'],
+    ['대명사', '상징처럼 여겨지는 표현'],
+    ['선사한다', '전해줍니다'],
+    ['즐길 수 있다', '누릴 수 있어요'],
+    ['만끽할 수 있다', '충분히 누릴 수 있어요'],
+  ];
+
+  let next = String(content || '');
+  for (const [from, to] of replacements) {
+    next = next.replace(new RegExp(from, 'g'), to);
+  }
+  return next;
+}
+
+function injectProductBlocks(content, candidate, products) {
+  if (!Array.isArray(products) || products.length === 0) {
+    return ensureDisclosure(ensureFallbackAffiliate(content, candidate.coupangUrl, candidate.title));
+  }
+
+  const primary = buildProductMarkdown(products[0], `${products[0].productName} 최저가 확인하기`);
+  const secondaryProducts = products.slice(1, 3);
+  const secondaryBlock = secondaryProducts.length > 0
+    ? ['### 오늘의 추천 장비', '', ...secondaryProducts.map((product) => buildProductMarkdown(product, `${product.productName} 실시간 가격 보기`)).join('\n\n').split('\n')].join('\n').trim()
+    : '';
+
+  let next = insertTopProductBlock(content, primary);
+  next = insertMidProductBlock(next, secondaryBlock);
+  return ensureDisclosure(next);
+}
+
+async function resolveProductsForCandidate(candidate) {
+  const keywords = deriveKeywordCandidates(candidate);
+  const keywordSignals = buildKeywordSignals(candidate);
+  const collected = [];
+  const seen = new Set();
+  let lastError = null;
+
+  for (const keyword of keywords) {
+    try {
+      const products = await searchProducts(keyword, { limit: 8 });
+      for (const product of products) {
+        const uniqueKey = product.productId || product.affiliateUrl;
+        if (!uniqueKey || seen.has(uniqueKey)) continue;
+        seen.add(uniqueKey);
+        collected.push(product);
+      }
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  const ranked = collected
+    .map((product) => ({
+      ...product,
+      relevanceScore: scoreProductRelevance(product, keywordSignals),
+    }))
+    .sort((a, b) => {
+      if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
+      if (a.rank && b.rank) return a.rank - b.rank;
+      return 0;
+    });
+
+  return {
+    keywords,
+    products: ranked.slice(0, 3),
+    error: ranked.length > 0 ? null : lastError,
+  };
+}
+
+function buildChoicePrompt(candidate, today, context = {}) {
   const outputFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName || 'choice-item'}.md`;
+  const productContext = Array.isArray(context.products) && context.products.length > 0
+    ? context.products.map((product, index) => `${index + 1}. ${product.productName} | 이미지: ${product.productImage || '없음'} | 링크: ${product.affiliateUrl}`).join('\n')
+    : '검색 실패 또는 결과 없음. 본문에는 수동 제휴 링크/배너 기준 fallback 문구만 사용하세요.';
+  const keywordContext = Array.isArray(context.keywords) && context.keywords.length > 0 ? context.keywords.join(', ') : '없음';
+
   return `당신은 픽앤조이(Pick-n-Joy)의 30대 초반 라이프스타일 에디터입니다.
 아래 [입력 데이터]만 근거로, 호기심을 유발하지만 과장하지 않는 제품 큐레이션 포스트를 작성하세요.
 
@@ -124,6 +395,8 @@ function buildChoicePrompt(candidate, today) {
 제품정보: ${JSON.stringify(candidate, null, 2)}
 쿠팡태그원문: ${candidate.coupangHtml}
 참고링크: ${candidate.sourceUrl || '없음'}
+검색 키워드: ${keywordContext}
+자동 추출 상품: ${productContext}
 작성일: ${today}
 
 [출력 계약 - 반드시 준수]
@@ -133,7 +406,7 @@ function buildChoicePrompt(candidate, today) {
 4) 아래 금지 항목 포함 시 실패:
    - 1단계, 2단계, The Hook, The Choice, Curation 같은 구조 라벨
    - 본문 내 JSON-LD 코드
-   - 본문 내 쿠팡 파트너스 고지문(하단 공통영역에서 자동 처리됨)
+  - 본문 내 쿠팡 파트너스 고지문(후처리에서 자동 삽입됨)
   - "가장 확실한 방법", "정착기", "완벽한", "무조건", "끝판왕" 같은 과장형 제목 문구
   - 입력 데이터에 없는 통계, 임상 수치, 비교 실험 결과, 사용자 후기 비율
 
@@ -158,6 +431,7 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 [본문 구조]
 - 첫 소제목은 반드시 ## 로 시작하고, 한 문장 훅으로 독자 문제를 찌르기
 - 소제목은 총 4~6개, 전부 자연어 제목 (번호/단계 라벨 금지)
+- 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
 - 아래 흐름을 반드시 포함:
   1) 공감 훅: 일상 장면 + 불편 포인트
   2) 검증 근거: 리뷰/스펙/비교 관점의 근거 2~3개
@@ -184,8 +458,7 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 [쿠팡파트너스 제휴 링크 규칙]
 - 이 포스트는 Web/Mobile 모두 본문에 쿠팡 파트너스 제휴 링크를 반드시 포함해야 합니다.
 - 쿠팡 배너나 위젯 형태의 본문 삽입은 여전히 금지됩니다. 텍스트 기반 CTA 링크만 본문에 넣으세요.
-- 링크는 본문 중간에 **정확히 1회만** 삽입하세요.
-- 제품 이미지가 있어도 상단(첫 소제목 직후)에는 링크를 넣지 말고, 본문 중간 전환 지점에 배치하세요.
+- 링크는 본문에서 직접 작성하지 말고, 후처리로 자동 주입되는 상품 이미지/CTA와 자연스럽게 이어질 문맥만 남기세요.
 - 링크는 별도 줄에 작성하고, 모바일에서 클릭하기 쉬운 문구로 만드세요.
 - 예시: **👉 [제품명] 최저가 확인 및 상세정보 보기** / **🛒 오늘의 추천 상품, 실시간 할인 가격 확인하기**
 - 기존 글 업데이트 시에도 원문 맥락을 유지하며 자연스럽게 제휴 링크를 후방 삽입하세요.
@@ -337,6 +610,27 @@ function upsertFrontmatterField(content, key, rawValue) {
   return content;
 }
 
+function ensureFrontmatter(content, candidate) {
+  const text = String(content || '').trim();
+  if (text.startsWith('---\n') && text.indexOf('\n---\n', 4) > -1) {
+    return text;
+  }
+
+  const safeTitle = String(candidate.title || '픽앤조이 초이스').replace(/"/g, '\\"');
+  const fallbackSlug = toSlug(candidate.fileName || candidate.englishName || candidate.title || 'choice-item');
+  const today = todayIso();
+  return [
+    '---',
+    `title: "${safeTitle}"`,
+    `date: "${today}"`,
+    `slug: "choice-${fallbackSlug}"`,
+    'category: "픽앤조이 초이스"',
+    '---',
+    '',
+    text,
+  ].join('\n').trim();
+}
+
 function normalizeGeneratedContent(content, candidate) {
   let value = String(content || '').trim();
 
@@ -351,8 +645,21 @@ function normalizeGeneratedContent(content, candidate) {
     .replace(/이\s*아래의\s*JSON-LD[\s\S]*$/i, '')
     .replace(/^.*쿠팡\s*파트너스\s*활동의\s*일환.*$/gim, '')
     .replace(/^.*본\s*콘텐츠는\s*AI\s*기술을\s*활용.*$/gim, '')
+    .replace(/^\*\*[👉🛒]\s+\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gim, '')
+    .replace(/^[👉🛒]\s+\*\*\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gim, '')
+    .replace(/^\*\*[👉🛒](?!.*https?:\/\/).*$/gim, '')
+    .replace(/^[👉🛒]\s+\*\*(?!.*https?:\/\/).*$/gim, '')
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      if (!/[👉🛒]/.test(trimmed)) return true;
+      return /https?:\/\//.test(trimmed);
+    })
+    .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+
+  value = ensureFrontmatter(value, candidate);
 
   const slug = `choice-${toSlug(candidate.englishName || candidate.fileName || candidate.title || 'item')}`;
   const bannerImage = candidate.coupangBannerImage || extractCoupangBannerImage(candidate.coupangHtml);
@@ -363,12 +670,13 @@ function normalizeGeneratedContent(content, candidate) {
   value = upsertFrontmatterField(value, 'description', candidate.summary || candidate.description || '');
   value = upsertFrontmatterField(value, 'rating_value', String(candidate.rating || '4.8'));
   value = upsertFrontmatterField(value, 'review_count', String(candidate.reviewCount || '100'));
-  value = upsertFrontmatterField(value, 'image', defaultChoiceImage(candidate));
+  value = upsertFrontmatterField(value, 'image', selectPrimaryImage(candidate, candidate.products));
   value = upsertFrontmatterField(value, 'source_id', `manual-choice-${toSlug(candidate.englishName || candidate.fileName || 'item')}`);
   value = upsertFrontmatterField(value, 'coupang_link', String(candidate.coupangUrl || '').trim());
   if (bannerImage) value = upsertFrontmatterField(value, 'coupang_banner_image', bannerImage);
   value = upsertFrontmatterField(value, 'coupang_banner_alt', String(candidate.title || '').trim());
   value = dedupeAffiliateLinks(value, candidate.coupangUrl);
+  value = injectProductBlocks(value, candidate, candidate.products || []);
 
   return value;
 }
@@ -377,11 +685,17 @@ async function loadCandidate(inputPath) {
   const raw = await fs.readFile(inputPath, 'utf-8');
   const parsed = JSON.parse(raw);
 
-  const required = ['title', 'englishName', 'summary', 'coupangUrl', 'coupangHtml'];
+  const required = ['title', 'englishName', 'summary'];
   for (const key of required) {
     if (!parsed[key]) {
       throw new Error(`입력 JSON 필수값 누락: ${key}`);
     }
+  }
+
+  const hasKeyword = splitKeywordHints(parsed.keywordHint).length > 0;
+  const hasManualAffiliate = parsed.coupangUrl && parsed.coupangHtml;
+  if (!hasKeyword && !hasManualAffiliate) {
+    throw new Error('입력 JSON에는 keywordHint 또는 coupangUrl + coupangHtml 중 하나가 필요합니다.');
   }
 
   parsed.tags = normalizeTags(parsed.tags);
@@ -404,35 +718,70 @@ async function run() {
 
   const candidate = await loadCandidate(inputPath);
   const today = todayIso();
-  const prompt = buildChoicePrompt(candidate, today);
+  const productResolution = await resolveProductsForCandidate(candidate);
+
+  if (productResolution.error) {
+    console.warn(`쿠팡 상품 검색 fallback 사용: ${productResolution.error.message}`);
+  }
+
+  if (productResolution.products[0]?.affiliateUrl) {
+    candidate.coupangUrl = candidate.coupangUrl || productResolution.products[0].affiliateUrl;
+  }
+  if (productResolution.products[0]?.productImage) {
+    candidate.coupangBannerImage = candidate.coupangBannerImage || productResolution.products[0].productImage;
+  }
+  if (!candidate.coupangHtml && candidate.coupangUrl) {
+    const bannerSource = candidate.coupangBannerImage || candidate.image || '';
+    candidate.coupangHtml = bannerSource
+      ? `<a href="${candidate.coupangUrl}" target="_blank" referrerpolicy="unsafe-url"><img src="${bannerSource}" alt="${candidate.title}" width="640" height="640"></a>`
+      : `<a href="${candidate.coupangUrl}" target="_blank" referrerpolicy="unsafe-url">${candidate.title}</a>`;
+  }
+
+  candidate.products = productResolution.products;
+
+  const prompt = buildChoicePrompt(candidate, today, productResolution);
 
   console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
   console.log(`입력 파일: ${inputPath}`);
+  console.log(`자동 키워드: ${(productResolution.keywords || []).join(', ') || '없음'}`);
+  console.log(`자동 상품 수: ${productResolution.products.length}`);
 
-  let generated = '';
+  let finalContent = '';
+  let finalFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName}.md`;
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      generated = await callGemini(prompt);
-      if (generated && generated.trim()) break;
+      const generated = await callGemini(prompt);
+      if (!generated || !generated.trim()) {
+        throw new Error('Gemini 응답이 비어 있습니다.');
+      }
+
+      const stripped = removeCodeFence(generated);
+      const fallbackName = candidate.outputFileName || `${today}-choice-${candidate.englishName}.md`;
+      const withFilename = splitFilenameLine(stripped, fallbackName);
+      const normalized = sanitizeBannedExpressions(normalizeGeneratedContent(withFilename.content, candidate));
+      const validationErrors = findChoiceValidationErrors(normalized);
+
+      if (validationErrors.length > 0) {
+        throw new Error(`품질 검증 실패: ${validationErrors.join(', ')}`);
+      }
+
+      finalContent = normalized;
+      finalFileName = withFilename.filename;
+      break;
     } catch (err) {
       if (attempt === maxAttempts) throw err;
       console.warn(`Gemini 호출 재시도 ${attempt + 1}/${maxAttempts}: ${err.message}`);
     }
   }
 
-  if (!generated || !generated.trim()) {
+  if (!finalContent || !finalContent.trim()) {
     throw new Error('Gemini 응답이 비어 있습니다.');
   }
 
-  const stripped = removeCodeFence(generated);
-  const fallbackName = candidate.outputFileName || `${today}-choice-${candidate.englishName}.md`;
-  const withFilename = splitFilenameLine(stripped, fallbackName);
-  const normalized = normalizeGeneratedContent(withFilename.content, candidate);
-
   await fs.mkdir(outDir, { recursive: true });
-  const outputPath = path.join(outDir, withFilename.filename);
-  await fs.writeFile(outputPath, normalized.trim() + '\n', 'utf-8');
+  const outputPath = path.join(outDir, finalFileName);
+  await fs.writeFile(outputPath, finalContent.trim() + '\n', 'utf-8');
 
   console.log(`✅ 초이스 포스트 생성 완료: ${outputPath}`);
 }
