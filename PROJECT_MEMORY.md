@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 상세 사이드바 다중 배너 반영
+  - `src/app/blog/[slug]/page.tsx`에서 본문 마크다운의 제품 이미지 + 쿠팡 링크를 추출해 사이드바에 순차 노출
+  - 단일 배너 frontmatter 기반 렌더링은 fallback으로 유지
+  - 자동 3상품 생성 포스트의 사이드바 형평성 개선(모든 제품 노출)
+
 - 2026-04-14 초이스 포스트 레이아웃 개선
   - `scripts/generate-choice-post.js`: 멀티상품 포스트에서 히어로 중복 제거(`image=''`), Pick of the Day 블록(1번 상품), 비교 테이블(2·3번 상품) 삽입 로직으로 재구성
   - `src/app/globals.css`: `.choice-post-prose` 기반 본문 이미지 `max-width:220px`, 테이블 이미지 `max-width:160px` 적용
