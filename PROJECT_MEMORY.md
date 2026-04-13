@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 프로바이오틱스 초이스 후속 보정
+  - `src/content/life/2026-04-13-choice-probiotics-api-curation.md`: 하단 2개 상품을 GFM 가로 비교 테이블로 교체, `오늘의 추천 장비` 문구 제거, 히어로 비노출(`image: ""`) 처리
+  - `src/app/blog/[slug]/page.tsx`: 사이드바 제품 추출 정규식 보강(escaped alt 대응), CTA 링크를 `link.coupang.com/re/`로 제한해 제품 누락/오매칭 방지
+  - `scripts/generate-choice-post.js`: legacy 세로 상품 블록을 제거 후 표준 Pick+비교 섹션 주입하도록 정규화 단계 추가
+
 - 2026-04-13 초이스 상세/생성기 후속 수정
   - `src/app/blog/[slug]/page.tsx`: choice 멀티상품 글 히어로 숨김, 본문 첫 이미지 유지, 하단 중복 고지문 삭제
   - `scripts/generate-choice-post.js`: 본문 말미 고지문 자동 추가 제거, 용어 통일(오늘의 추천 상품), 비교 섹션 제목 4종 랜덤/연결 문구 반영

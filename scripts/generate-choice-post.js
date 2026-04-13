@@ -329,6 +329,20 @@ function splitFrontmatterAndBody(content) {
   return { frontmatter, body };
 }
 
+function normalizeLegacyChoiceProductBlocks(content) {
+  const { frontmatter, body } = splitFrontmatterAndBody(content);
+
+  let normalizedBody = String(body || '')
+    .replace(/^###\s*오늘의\s*추천\s*(장비|상품).*$/gim, '')
+    .replace(/^!\[[\s\S]*?\]\(https:\/\/ads-partners\.coupang\.com\/[^)\s]+\)\s*$/gim, '')
+    .replace(/^\*\*👉\s*\[[^\]]+\]\(https:\/\/link\.coupang\.com\/[^)\s]+\)\*\*\s*$/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  if (!frontmatter) return normalizedBody;
+  return `${frontmatter}\n\n${normalizedBody}`.trim();
+}
+
 function ensureDisclosure(content) {
   // 상세 페이지 하단 고지문을 사용하므로 본문 끝 고지문은 제거만 수행
   const { frontmatter, body } = splitFrontmatterAndBody(content);
@@ -404,8 +418,10 @@ function sanitizeBannedExpressions(content) {
 }
 
 function injectProductBlocks(content, candidate, products) {
+  const normalizedContent = normalizeLegacyChoiceProductBlocks(content);
+
   if (!Array.isArray(products) || products.length === 0) {
-    return ensureDisclosure(ensureFallbackAffiliate(content, candidate.coupangUrl, candidate.title));
+    return ensureDisclosure(ensureFallbackAffiliate(normalizedContent, candidate.coupangUrl, candidate.title));
   }
 
   // 사용된 이미지 URL 추적 (중복 제거)
@@ -426,7 +442,7 @@ function injectProductBlocks(content, candidate, products) {
   const comparisonBlock = buildComparisonBlock(secondaryProducts);
 
   // 본문 내 Product #1 이미지 중복 제거 (생성 모델이 삽입한 경우 대비)
-  let next = content;
+  let next = normalizedContent;
   if (primary?.productImage) {
     const escapedImg = primary.productImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const imgPattern = new RegExp(`!\\[[^\\]]*\\]\\(${escapedImg}\\)\\n?`, 'gi');

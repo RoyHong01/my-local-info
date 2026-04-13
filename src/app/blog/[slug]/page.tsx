@@ -74,10 +74,11 @@ function extractChoiceSidebarProducts(markdown: string, fallbackAlt: string): Ch
   const text = String(markdown || '');
   if (!text) return [];
 
-  const imageMatches = Array.from(text.matchAll(/!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g));
+  // escaped bracket(\], \[)가 포함된 alt 텍스트도 파싱 가능하도록 처리
+  const imageMatches = Array.from(text.matchAll(/!\[((?:\\.|[^\]])*)\]\((https?:\/\/[^)\s]+)\)/g));
   const linkMatches = Array.from(text.matchAll(/\[[^\]]+\]\((https?:\/\/[^)\s]+)\)/g))
     .map((match) => match[1])
-    .filter((url) => isCoupangAffiliateLink(url));
+    .filter((url) => /link\.coupang\.com\/re\//i.test(url));
 
   const maxPairs = Math.min(imageMatches.length, linkMatches.length);
   const products: ChoiceSidebarProduct[] = [];

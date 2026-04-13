@@ -3,6 +3,22 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (프로바이오틱스 초이스 후속 보정)
+
+### 2개 미수정 이슈 및 자동화 재발 방지 반영
+
+- **수정 파일**: `src/content/life/2026-04-13-choice-probiotics-api-curation.md`, `src/app/blog/[slug]/page.tsx`, `scripts/generate-choice-post.js`
+- **핵심 반영**:
+  1. 프로바이오틱스 포스트 본문 하단 2개 상품을 GFM 가로 비교 테이블로 교체(상하 배치 제거)
+  2. `오늘의 추천 장비` 문구 제거 및 하단 비교 섹션 제목 정책 적용
+  3. 프로바이오틱스 포스트 frontmatter `image`를 비워 히어로 미노출 보장
+  4. 사이드바 제품 파서 보강: escaped alt(`\\[...\\]`)를 포함한 이미지도 정상 인식하도록 정규식 개선
+  5. 사이드바 링크 파싱 보강: `link.coupang.com/re/` 링크만 CTA로 매칭하여 제품 수 누락/오매칭 방지
+  6. 자동 생성기 보강: legacy `오늘의 추천 장비`/세로 블록 제거 후 표준 Pick+비교 섹션을 주입하도록 정규화 단계 추가
+- **검증**:
+  - `npm run build` 성공
+  - `node scripts/generate-choice-post.js --help` 성공
+
 ## 2026-04-13 (초이스 상세/생성기 후속 수정)
 
 ### 사용자 피드백 6개 항목 반영
