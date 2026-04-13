@@ -310,7 +310,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'article',
       publishedTime: post.date,
       siteName: '픽앤조이',
-      ...(post.image ? { images: [{ url: post.image, width: 1200, height: 630, alt: post.title }] } : {}),
+      ...((post.image || post.coupangBannerImage) ? { images: [{ url: post.image || post.coupangBannerImage!, width: 1200, height: 630, alt: post.title }] } : {}),
     },
   };
 }
@@ -432,7 +432,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
             )
           )}
-          <div className="blog-prose prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold">
+          <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {renderedContent}
             </ReactMarkdown>

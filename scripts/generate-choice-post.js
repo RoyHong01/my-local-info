@@ -168,11 +168,75 @@ function scoreProductRelevance(product, keywordSignals) {
 
 function selectPrimaryImage(candidate, products) {
   if (candidate.image) return String(candidate.image).trim();
+  // 멀티프로덕트(API 자동) 포스트: 히어로 이미지 표시 안 함 (본문 Pick of the Day 블록에서 노출)
+  if (Array.isArray(products) && products.length >= 2) return '';
+  // 단일 제품이면 해당 이미지 사용
   if (Array.isArray(products) && products[0]?.productImage) return products[0].productImage;
   return defaultChoiceImage(candidate);
 }
 
 function buildProductMarkdown(product, ctaLabel) {
+  function buildPickOfDayBlock(product) {
+    if (!product?.productName || !product?.affiliateUrl) return '';
+    const safeProductName = sanitizeMarkdownText(product.productName);
+    const lines = [];
+    lines.push('### ✨ 오늘의 픽 (Pick of the Day)');
+    lines.push('');
+    if (product.productImage) {
+      lines.push(`![${safeProductName}](${product.productImage})`);
+      lines.push('');
+    }
+    lines.push(`**👉 [${safeProductName} 최저가 확인하기](${product.affiliateUrl})**`);
+    return lines.join('\n').trim();
+  }
+
+  function buildComparisonBlock(products) {
+    if (!products || products.length === 0) return '';
+    const validProducts = products.filter((p) => p?.productName && p?.affiliateUrl);
+    if (validProducts.length === 0) return '';
+
+    const lines = [];
+    lines.push('### 함께 비교하면 좋은 대안 🔍');
+    lines.push('');
+
+    if (validProducts.length >= 2) {
+      const p2 = validProducts[0];
+      const p3 = validProducts[1];
+      const name2 = sanitizeMarkdownText(p2.productName);
+      const name3 = sanitizeMarkdownText(p3.productName);
+      const label2 = name2.length > 25 ? name2.slice(0, 25) + '…' : name2;
+      const label3 = name3.length > 25 ? name3.slice(0, 25) + '…' : name3;
+      lines.push(`| ${label2} | ${label3} |`);
+      lines.push('|:---:|:---:|');
+      const img2 = p2.productImage ? `![${name2}](${p2.productImage})` : '&nbsp;';
+      const img3 = p3.productImage ? `![${name3}](${p3.productImage})` : '&nbsp;';
+      lines.push(`| ${img2} | ${img3} |`);
+      lines.push(`| [👉 실시간 가격 보기](${p2.affiliateUrl}) | [👉 실시간 가격 보기](${p3.affiliateUrl}) |`);
+    } else {
+      const p = validProducts[0];
+      const name = sanitizeMarkdownText(p.productName);
+      if (p.productImage) {
+        lines.push(`![${name}](${p.productImage})`);
+        lines.push('');
+      }
+      lines.push(`**👉 [${name} 실시간 가격 보기](${p.affiliateUrl})**`);
+    }
+
+    return lines.join('\n').trim();
+  }
+
+  function insertBeforeFirstHeading(content, block) {
+    if (!block) return content;
+    const lines = content.split('\n');
+    const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+    if (firstHeadingIndex < 0) {
+      return `${content.trim()}\n\n${block}`.trim();
+    }
+    lines.splice(firstHeadingIndex, 0, block, '');
+    return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function buildProductMarkdown(product, ctaLabel) {
   if (!product?.productName || !product?.affiliateUrl) return '';
   const safeProductName = sanitizeMarkdownText(product.productName);
   const safeLabel = sanitizeMarkdownText(ctaLabel || `${product.productName} 최저가 확인하기`);
@@ -330,14 +394,40 @@ function injectProductBlocks(content, candidate, products) {
     return ensureDisclosure(ensureFallbackAffiliate(content, candidate.coupangUrl, candidate.title));
   }
 
-  const primary = buildProductMarkdown(products[0], `${products[0].productName} 최저가 확인하기`);
-  const secondaryProducts = products.slice(1, 3);
-  const secondaryBlock = secondaryProducts.length > 0
-    ? ['### 오늘의 추천 장비', '', ...secondaryProducts.map((product) => buildProductMarkdown(product, `${product.productName} 실시간 가격 보기`)).join('\n\n').split('\n')].join('\n').trim()
-    : '';
+  // 사용된 이미지 URL 추적 (중복 제거)
+  const usedImages = new Set();
+  const primary = products[0];
+  if (primary?.productImage) usedImages.add(primary.productImage);
 
-  let next = insertTopProductBlock(content, primary);
-  next = insertMidProductBlock(next, secondaryBlock);
+  // Product #1: 서론 직후 "오늘의 픽" 블록
+  const pickOfDayBlock = buildPickOfDayBlock(primary);
+
+  // Products 2&3: 이미 사용된 이미지 제외 후 비교 섹션
+  const secondaryProducts = products.slice(1, 3).filter((p) => {
+    if (!p?.productImage) return true;
+    if (usedImages.has(p.productImage)) return false;
+    usedImages.add(p.productImage);
+    return true;
+  });
+  const comparisonBlock = buildComparisonBlock(secondaryProducts);
+
+  // 본문 내 Product #1 이미지 중복 제거 (생성 모델이 삽입한 경우 대비)
+  let next = content;
+  if (primary?.productImage) {
+    const escapedImg = primary.productImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const imgPattern = new RegExp(`!\\[[^\\]]*\\]\\(${escapedImg}\\)\\n?`, 'gi');
+    next = next.replace(imgPattern, '');
+    next = next.replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  // "오늘의 픽" 블록: 첫 ## 소제목 바로 앞 (서론 직후)
+  next = insertBeforeFirstHeading(next, pickOfDayBlock);
+
+  // 비교 섹션: 두 번째 ## 이후 중반 위치
+  if (comparisonBlock) {
+    next = insertMidProductBlock(next, comparisonBlock);
+  }
+
   return ensureDisclosure(next);
 }
 
@@ -432,6 +522,8 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 - 첫 소제목은 반드시 ## 로 시작하고, 한 문장 훅으로 독자 문제를 찌르기
 - 소제목은 총 4~6개, 전부 자연어 제목 (번호/단계 라벨 금지)
 - 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
+- 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
+- **서론 상품 개수 언급 지침 (필수)**: "추천 상품은 3개입니다", "총 3가지를 준비했습니다", "3개를 추천드립니다" 같은 기계적 나열 표현 절대 금지. 대신 맥락에 자연스럽게 녹일 것 — 예) "이번에 엄선한 3가지만 알면 쇼핑이 훨씬 수월해져요", "최종 후보 3선만 간추렸어요", "핵심 3종의 차이를 직접 살펴봤어요"
 - 아래 흐름을 반드시 포함:
   1) 공감 훅: 일상 장면 + 불편 포인트
   2) 검증 근거: 리뷰/스펙/비교 관점의 근거 2~3개

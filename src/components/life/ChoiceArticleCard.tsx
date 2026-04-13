@@ -27,7 +27,7 @@ export default function ChoiceArticleCard({ article }: { article: ChoiceArticle 
         </div>
       )}
 
-      <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:leading-8 prose-h2:text-2xl prose-h3:text-xl prose-h2:font-bold mb-2">
+      <div className="choice-post-prose prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:leading-8 prose-h2:text-2xl prose-h3:text-xl prose-h2:font-bold mb-2">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
       </div>
     </article>
