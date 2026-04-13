@@ -10,7 +10,6 @@ const SEARCH_ENDPOINTS = [
 
 function loadLocalEnvFiles() {
   const envFiles = [
-    { file: '.env', override: false },
     { file: '.env.local', override: true },
   ];
 

@@ -20,6 +20,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-13 초이스 지침/시간대/환경변수 정합화
+  - `.github/copilot-instructions.md` 10번 문구를 "본문 배너/위젯 금지 + 텍스트 CTA 링크 허용"으로 수정해 11번 정책과 충돌 제거
+  - `scripts/generate-choice-post.js`의 날짜 함수(`todayIso`)를 KST(UTC+9) 기준으로 통일
+  - `scripts/generate-choice-post.js` 프롬프트 본문 구조 지시문의 중복 1줄 제거
+  - `scripts/lib/coupang-api.js`에서 `.env` 로딩을 제거하고 `.env.local`만 사용하도록 정리
+  - 환경 점검: `.env` 파일 없음, `.env.local` 파일 존재, `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY` 등록 확인
+
 - 2026-04-13 일상의 즐거움(life) 목록 썸네일 수정
   - `src/app/life/page.tsx`의 초이스 카드 이미지 매핑을 `c.image || c.coupangBannerImage`로 조정
   - `src/lib/life-choice.ts`의 `ChoiceArticle`에 `coupangBannerImage` 추가

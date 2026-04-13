@@ -53,7 +53,9 @@ function printHelp() {
 }
 
 function todayIso() {
-  return new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  return kst.toISOString().slice(0, 10);
 }
 
 function extractCoupangBannerImage(coupangHtml) {
@@ -551,7 +553,6 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 [본문 구조]
 - 첫 소제목은 반드시 ## 로 시작하고, 한 문장 훅으로 독자 문제를 찌르기
 - 소제목은 총 4~6개, 전부 자연어 제목 (번호/단계 라벨 금지)
-- 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
 - 서론 직후와 두 번째 섹션 뒤에는 후처리로 상품 이미지/CTA가 자동 삽입되므로, 해당 위치에 배너/상품 표를 직접 작성하지 말 것
 - **서론 상품 개수 언급 지침 (필수)**: "추천 상품은 3개입니다", "총 3가지를 준비했습니다", "3개를 추천드립니다" 같은 기계적 나열 표현 절대 금지. 대신 맥락에 자연스럽게 녹일 것 — 예) "이번에 엄선한 3가지만 알면 쇼핑이 훨씬 수월해져요", "최종 후보 3선만 간추렸어요", "핵심 3종의 차이를 직접 살펴봤어요"
 - 아래 흐름을 반드시 포함:

@@ -3,6 +3,23 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-13 (초이스 생성기 정합성 점검 및 지침/시간대 동기화)
+
+- **수정 파일**: `.github/copilot-instructions.md`, `scripts/generate-choice-post.js`, `scripts/lib/coupang-api.js`
+- **요청 배경**:
+  - 초이스 본문은 실제로 `이미지 + 텍스트 CTA 링크` 패턴으로 운영 중인데, 지침 10번의 "링크 금지" 문구가 현행 11번 정책과 상충
+  - 초이스 생성기 날짜 함수가 UTC 기준이라 KST 운영 원칙과 불일치 가능
+  - 프롬프트 본문 구조 지시문이 동일 문장으로 2회 연속 반복
+  - 환경변수 파일 사용 정책(.env.local only)과 실제 환경 상태 확인 필요
+- **조치**:
+  1. `.github/copilot-instructions.md` 10번 문구를 "배너/위젯 금지, 텍스트 CTA 링크 허용"으로 정정
+  2. `scripts/generate-choice-post.js`의 `todayIso()`를 KST(UTC+9) 기준 계산으로 변경
+  3. `scripts/generate-choice-post.js` 프롬프트의 중복 지시문 1줄 제거
+  4. `scripts/lib/coupang-api.js`에서 `.env` 로드를 제거하고 `.env.local`만 읽도록 정리
+  5. 환경 확인 결과: `.env` 없음, `.env.local` 존재, `COUPANG_ACCESS_KEY`/`COUPANG_SECRET_KEY` 등록 확인(값은 미노출)
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-13 (일상의 즐거움 목록 썸네일 누락 수정)
 
 - **수정 파일**: `src/lib/life-choice.ts`, `src/app/life/page.tsx`
