@@ -26,6 +26,10 @@
   - `src/content/life/2026-04-13-choice-kitchen-food-sealer.md`: 하단 2개 상품을 GFM 2열 비교 테이블로 변경, 중복 고지문 제거
   - 생성기 문법 오류(`Unexpected end of input`) 복구 및 실행/빌드 검증 완료
 
+- 2026-04-13 초이스 섹션 제목 정책 보정
+  - `scripts/generate-choice-post.js`에서 메인 1번 상품 제목은 `오늘의 픽 (Pick of the Day)`로 유지
+  - 하단 2개 상품 섹션에만 4개 제목 랜덤 정책을 적용
+
 - 2026-04-13 초이스 상세 사이드바 다중 배너 반영
   - `src/app/blog/[slug]/page.tsx`에서 본문 마크다운의 제품 이미지 + 쿠팡 링크를 추출해 사이드바에 순차 노출
   - 단일 배너 frontmatter 기반 렌더링은 fallback으로 유지

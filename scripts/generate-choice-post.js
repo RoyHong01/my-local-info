@@ -190,7 +190,7 @@ function buildPickOfDayBlock(product) {
   if (!product?.productName || !product?.affiliateUrl) return '';
   const safeProductName = sanitizeMarkdownText(product.productName);
   const lines = [];
-  lines.push('### 오늘의 추천 상품');
+  lines.push('### 오늘의 픽 (Pick of the Day)');
   lines.push('');
   if (product.productImage) {
     lines.push(`![${safeProductName}](${product.productImage})`);
