@@ -28,6 +28,28 @@ const existingPostDirs = [
   path.join(process.cwd(), 'src', 'content', 'life'),
 ];
 const BANNED_WORDS = ['최고', '대박', '무조건'];
+const HOOK_SUBHEADING_BANNED_WORDS = [
+  '동선',
+  '고민',
+  '막막',
+  '답',
+  '어디로 갈지',
+  '솔직히',
+  '진심으로',
+  '정답',
+  '해결',
+  '문제를 풀다',
+  '끝내는 곳',
+  '여기서 답을',
+];
+const HOOK_SUBHEADING_BANNED_PATTERNS = [
+  /고민이시죠/,
+  /어디로\s*갈지/,
+  /문제\s*제시/,
+  /즉시\s*해결/,
+  /답을\s*찾/,
+];
+const RESTAURANT_STYLES = ['Sensory', 'Discovery', 'Curation', 'Aesthetic'];
 const REQUIRED_SECTION_PATTERNS = [
   { label: '방문 정보 한눈에', pattern: /##\s*방문 정보 한눈에/ },
   { label: '상호명:', pattern: /(?:\*\*\s*)?상호명(?:\s*\*\*)?\s*:/ },
@@ -204,6 +226,20 @@ function selectCandidatesByBucket(candidates, existingBucketCounts) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getTodayKST() {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0];
+}
+
+function pickStyleBySourceId(sourceId) {
+  const text = String(sourceId || '');
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  }
+  const idx = Math.abs(hash) % RESTAURANT_STYLES.length;
+  return RESTAURANT_STYLES[idx];
 }
 
 async function callGemini(prompt) {
@@ -623,6 +659,7 @@ function validateGeneratedRestaurantMarkdown(markdown) {
   const issues = [];
   const { body } = splitMarkdownSections(markdown);
   const bodyText = String(body || '');
+  const lines = bodyText.split('\n').map((line) => line.trim());
 
   const compactLength = bodyText.replace(/\s+/g, '').length;
   if (compactLength < 500) {
@@ -638,6 +675,17 @@ function validateGeneratedRestaurantMarkdown(markdown) {
   const bannedFound = BANNED_WORDS.filter((word) => bodyText.includes(word));
   if (bannedFound.length > 0) {
     issues.push(`금지어 포함: ${bannedFound.join(', ')}`);
+  }
+
+  const hookAndSubheadingLines = lines.filter((line) => /^##\s+/.test(line) || /^###\s+/.test(line));
+  const hookSubheadingText = hookAndSubheadingLines.join('\n');
+  const hookSubheadingBannedFound = HOOK_SUBHEADING_BANNED_WORDS.filter((word) => hookSubheadingText.includes(word));
+  if (hookSubheadingBannedFound.length > 0) {
+    issues.push(`훅/소제목 금지어 포함: ${hookSubheadingBannedFound.join(', ')}`);
+  }
+  const bannedPatternHit = HOOK_SUBHEADING_BANNED_PATTERNS.find((pattern) => pattern.test(hookSubheadingText));
+  if (bannedPatternHit) {
+    issues.push(`훅/소제목 금지 패턴 포함: ${bannedPatternHit}`);
   }
 
   const politeSkippedPrefixes = [
@@ -684,6 +732,13 @@ function validateGeneratedRestaurantMarkdown(markdown) {
   issues.push(...headingAndReadabilityIssues);
 
   return issues;
+}
+
+function hasCriticalValidationIssues(issues) {
+  return issues.some((issue) =>
+    issue.startsWith('훅/소제목 금지어 포함:') ||
+    issue.startsWith('훅/소제목 금지 패턴 포함:')
+  );
 }
 
 async function getExistingRestaurantStats() {
@@ -752,11 +807,12 @@ function buildRoundRobinCandidates(regions) {
 }
 
 async function generateRestaurantPost(candidate) {
-  const today = new Date().toISOString().split('T')[0];
+  const today = getTodayKST();
   const locality = inferLocality(candidate.item.address, candidate.regionLabel);
   const slugBase = buildRestaurantSlug(candidate, locality);
   const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-restaurant.svg';
+  const selectedStyle = pickStyleBySourceId(candidate.item.id);
 
   const ratingFrontmatter = candidate.item.googleRating != null
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
@@ -795,26 +851,29 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 제목 규칙: [지역명] + [대표 메뉴/장르] + [호기심 유발 키워드] 조합으로 작성.
 - 제목에는 반드시 음식 장르(한식/양식/일식/카페/브런치 등) 또는 대표 메뉴(파스타/오마카세/국밥 등)를 포함.
 - slug는 이미 정해져 있으니 절대 변경하지 마.
-- 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 고민(웨이팅/동선/메뉴 고민)을 찌르는 질문 또는 공감 문장으로 작성.
+- 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 결핍/불안을 전제로 하지 말고 감각, 발견, 취향 제안, 미학 중심으로 작성.
 - HOOK 바로 다음 줄은 반드시 빈 줄 1개를 넣어 시선을 분리할 것.
 - HOOK 다음에는 첫 소제목 전에 브릿지 문단 2~3줄을 반드시 작성해 장소의 전체 인상을 먼저 전달할 것.
 - 본문 전개는 아래 순서를 따를 것:
-  1) HOOK: 지금 겪는 고민을 찌르는 시작
+  1) HOOK: 감각 또는 취향 제안으로 시작
   2) SCENARIO: scenarioHint를 바탕으로 방문 상황을 구체적으로 묘사
   3) SENSORY: 식감(쫄깃/바삭), 향(불향/고소함), 온도감 중심의 맛 표현
   4) TRANSITION: 문단 전환은 부드러운 연결 문구 사용
-- TRANSITION 문구 예시: "이곳의 진짜 매력은 따로 있어요", "동선 안에서 답을 찾았네요".
+- TRANSITION 문구 예시: "이곳의 진짜 매력은 따로 있어요", "이 장면에서 분위기가 완성돼요".
 - 반드시 sourceQuery, scenarioHint, vibeHint, cuisineHint를 본문에 자연스럽게 녹여 쓸 것.
 - 소제목은 감성 문장형으로 최소 3~4개를 반드시 작성.
 - 소제목 표기 형식은 반드시 아래 둘 중 하나를 사용:
   1) ### 소제목 문장
   2) **소제목 문장**
 - 소제목은 단어형(예: 분위기, 맛, 위치) 금지. 문장형으로 작성.
-- 소제목 예시: "동선 안에 답이 있었네요", "자극적이지 않아서 더 좋아요", "가기 전에 이것만은 꼭".
+- 소제목 예시: "오감을 깨우는 첫 한 점", "취향이 머무는 테이블", "여운이 남는 마무리 한 접시".
 - 레이아웃 예시: HOOK 이후에 위와 같은 문장형 소제목이 중간중간 끼어드는 블로그 구조를 그대로 따를 것.
 - 모든 ### 소제목의 위/아래에는 빈 줄을 2개 이상 넣어 여백의 미를 살릴 것.
 - 각 소제목 아래 문단은 최대 3~4문장으로 끊고, 문단 사이에도 빈 줄을 넣어 가독성을 유지할 것.
 - 2~3문장마다 줄바꿈해 가독성을 유지.
+- 훅/소제목에 다음 단어를 사용하지 말 것: 동선, 고민, 막막, 답, 어디로 갈지, 솔직히, 진심으로, 정답, 해결.
+- 문제 제시 후 즉시 해결하는 문장 패턴("~고민이시죠", "여기서 답을")을 사용하지 말 것.
+- 이번 글의 주 스타일은 ${selectedStyle} 이다. 해당 스타일을 중심으로 문체를 구성하되 과장하지 말 것.
 
 [스타일]
 - 경어체(~해요, ~예요, ~더라고요)만 사용하고 평어체(~이다/~한다)는 금지.
@@ -843,7 +902,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
 
 [형식 규칙]
 - 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, "훅"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.
-- 본문 중간에 반드시 문장형 소제목을 배치해 레이아웃을 살려줘. 예: "### 동선 안에 답이 있었네요", "### 자극적이지 않아서 더 좋아요", "### 가기 전에 이것만은 꼭".
+- 본문 중간에 반드시 문장형 소제목을 배치해 레이아웃을 살려줘. 예: "### 미각의 변주가 시작되는 곳", "### 오감을 깨우는 선명한 맛의 기록", "### 취향이 머무는 가장 완벽한 한 점".
 - 출력 형식은 마크다운(frontmatter + 본문)만 허용. JSON/객체 포맷으로 출력하면 실패로 간주해.
 - 표는 필요할 때만 간단히 사용
 - 마지막 줄에는 반드시 FILENAME: ${fileStem} 형식으로 출력
@@ -878,33 +937,44 @@ parking_info: "확인 필요"${ratingFrontmatter}
   }
 
   let { filename, finalContent } = normalizeGeneratedMarkdown(generatedText, fileStem, candidate);
-  const firstValidationIssues = validateGeneratedRestaurantMarkdown(finalContent);
+  let validationIssues = validateGeneratedRestaurantMarkdown(finalContent);
 
-  if (firstValidationIssues.length > 0) {
-    console.warn(`⚠️ 후처리 검증 실패(1차): ${firstValidationIssues.join(' / ')}`);
-    const validationFeedback = firstValidationIssues.map((issue) => `- ${issue}`).join('\n');
-    const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
+  if (validationIssues.length > 0) {
+    console.warn(`⚠️ 후처리 검증 실패(1차): ${validationIssues.join(' / ')}`);
 
-    try {
-      const retryGemini = await callGemini(retryPrompt);
-      const retryText = String(retryGemini.text || '').trim();
+    for (let retryAttempt = 1; retryAttempt <= 2; retryAttempt += 1) {
+      const validationFeedback = validationIssues.map((issue) => `- ${issue}`).join('\n');
+      const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
 
-      if (retryText) {
+      try {
+        const retryGemini = await callGemini(retryPrompt);
+        const retryText = String(retryGemini.text || '').trim();
+        if (!retryText) {
+          console.warn(`⚠️ 재생성 응답 비어있음(${retryAttempt}차)`);
+          continue;
+        }
+
         const normalizedRetry = normalizeGeneratedMarkdown(retryText, fileStem, candidate);
         filename = normalizedRetry.filename;
         finalContent = normalizedRetry.finalContent;
+        validationIssues = validateGeneratedRestaurantMarkdown(finalContent);
 
-        const secondValidationIssues = validateGeneratedRestaurantMarkdown(finalContent);
-        if (secondValidationIssues.length > 0) {
-          console.warn(`⚠️ 후처리 검증 실패(2차, 최종 결과로 저장): ${secondValidationIssues.join(' / ')}`);
-        } else {
-          console.log('✅ 후처리 검증 통과(2차 재생성)');
+        if (validationIssues.length === 0) {
+          console.log(`✅ 후처리 검증 통과(${retryAttempt + 1}차)`);
+          break;
         }
-      } else {
-        console.warn('⚠️ 2차 재생성 응답이 비어 있어 1차 결과를 유지합니다.');
+
+        console.warn(`⚠️ 후처리 검증 실패(${retryAttempt + 1}차): ${validationIssues.join(' / ')}`);
+      } catch (error) {
+        console.warn(`⚠️ 재생성 호출 실패(${retryAttempt}차): ${error?.message || error}`);
       }
-    } catch (error) {
-      console.warn(`⚠️ 2차 재생성 호출 실패: ${error?.message || error}`);
+    }
+
+    if (validationIssues.length > 0 && hasCriticalValidationIssues(validationIssues)) {
+      throw new Error(`후처리 치명 오류: ${validationIssues.join(' / ')}`);
+    }
+    if (validationIssues.length > 0) {
+      console.warn(`⚠️ 비치명 검증 이슈가 남은 채 저장: ${validationIssues.join(' / ')}`);
     }
   }
 

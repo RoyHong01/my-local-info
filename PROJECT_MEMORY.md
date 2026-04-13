@@ -27,6 +27,12 @@
   - 종료 임박/종료 데이터 원천 차단 및 예외 보고 의무 명시
   - 맛집 포스트 톤앤매너 재발 방지 규칙 추가(금지어/금지 패턴/스타일 로테이션/자가검수 재생성)
 
+- 2026-04-13 자동화 스크립트 실반영
+  - `scripts/generate-life-restaurant-posts.mjs` 프롬프트에서 동선/답/고민 유도 문구 및 예시 제거
+  - 훅/소제목 전용 금지어/금지패턴 검증 추가, 위반 시 재생성 후 치명 이슈는 저장 차단
+  - source_id 기반 스타일 키(Sensory/Discovery/Curation/Aesthetic) 주입으로 훅 톤 반복 완화
+  - 생성 날짜를 KST 기준으로 통일(`getTodayKST`)
+
 - 2026-04-12 초이스 발행 반영
   - 쿠팡 태그 기반 신규 포스트 생성: `2026-04-12-choice-lapomme-dual-coretex-airhole-pouch-6pack.md`
   - 사용자 제공 이미지 2종을 `public/images/choice/dual-core-hero.png`, `public/images/choice/dual-core-detail.png`로 반영
