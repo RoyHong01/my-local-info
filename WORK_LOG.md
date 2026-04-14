@@ -3,6 +3,19 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (사이드바 미노출 재보정: sticky 구간 높이 동기화)
+
+- **문제 현상**: 스크롤 시 사이드바가 우측에서 사라져 내려오지 않는 현상 지속.
+- **수정 파일**:
+  - `src/components/StickySidebar.tsx`
+  - `src/app/globals.css`
+- **핵심 반영**:
+  1. `StickySidebar`에 `ResizeObserver` 기반 래퍼 높이 동기화 추가.
+  2. 래퍼 `minHeight`를 부모 높이와 콘텐츠 높이 중 큰 값으로 유지해 sticky 이동 구간 확보.
+  3. CSS에서 `sticky-sidebar-shell`에 `align-self: stretch`, `min-height: 100%`를 보강.
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-15 (Safari 사이드바 재재수정: JS 도킹 제거, 순수 sticky 복원)
 
 - **문제 현상**: 이전 수정 후 사이드바가 중간 스크롤 구간에서 사라지고 하단에서만 보이는 회귀 발생.

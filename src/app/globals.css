@@ -200,6 +200,8 @@ body {
 .sticky-sidebar-shell {
   position: relative;
   overflow: visible;
+  align-self: stretch;
+  min-height: 100%;
 }
 
 .sticky-sidebar-content {

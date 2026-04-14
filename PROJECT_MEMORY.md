@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-15 사이드바 미노출 재보정
+  - 문제: 순수 sticky 복원 후에도 일부 환경에서 사이드바가 스크롤 중 우측에서 사라지는 현상이 잔존.
+  - 조치: `src/components/StickySidebar.tsx`에 `ResizeObserver`를 추가해 래퍼 높이를 부모 높이에 동기화하고, sticky 이동 범위를 확보.
+  - CSS: `src/app/globals.css`의 `.sticky-sidebar-shell`에 `align-self: stretch`, `min-height: 100%`를 보강.
+
 - 2026-04-15 사이드바 최종 안정화(순수 sticky)
   - 회귀: JS 기반 footer 도킹 전환으로 사이드바가 중간 구간에서 화면 밖으로 빠지는 현상 확인.
   - 최종 조치: `src/components/StickySidebar.tsx`의 위치 계산 로직을 제거하고 순수 CSS sticky 구조로 복원.
