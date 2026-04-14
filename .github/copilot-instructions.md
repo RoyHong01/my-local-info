@@ -219,9 +219,32 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - ✅ favicon (ico + svg)
 - ✅ og:image 자동화 (TourAPI firstimage + 카테고리별 기본 SVG)
 
+## ⚠️ 사이드바 Sticky 금지령 (2026-04-15 확정)
+
+**금지령**: `html`, `body`, `PageContentShell` 등 최상위 컨테이너에 `overflow: hidden`이나 `auto`를 함부로 걸지 말 것. (Sticky 무력화 방지)
+
+**대안**: 가로 스크롤 방지가 꼭 필요하다면 `overflow-x: clip`만 사용할 것.
+
+**구조 고정**: 사이드바는 반드시 `self-stretch` 부모와 `sticky` 자식이라는 **2중 구조(Wrapper 패턴)**를 유지할 것.
+
+```tsx
+// ✅ 올바른 패턴
+<div className="... self-stretch">        {/* Wrapper: 부모 높이만큼 레일 확보 */}
+  <aside className="sticky top-24">       {/* 실제 sticky 요소 */}
+    ...
+  </aside>
+</div>
+```
+
+**Safari 특이사항**: `overflow-x: hidden`도 스크롤 컨텍스트를 생성해 sticky를 무력화함. 반드시 `clip` 사용.
+
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-15 핵심 반영:
+  - **사이드바 Sticky 최종 해결**: `overflow-x: hidden` → `overflow-x: clip` 변경(11차 시도 성공).
+  - **금지령 문서화**: 최상위 컨테이너 overflow 금지 규칙을 본 문서 및 메모리에 박제.
+  - **JSX 정리**: `blog/[slug]/page.tsx` 들여쓰기 정리 + sticky 조건 주석 보강.
 - 2026-04-14 핵심 반영:
   - **스케줄 실패 RCA 정리**: 2026-04-14 실행은 `generate_choice` 후보 0개 실패가 1차 원인이며, 이후 3단계(맛집) `skipped`는 실패 전파 구조 영향으로 확인.
   - **실패 격리 적용**: `.github/workflows/deploy.yml`의 `[2.5단계] 픽앤조이 초이스 자동 생성` step에 `continue-on-error: true`를 적용해 초이스 실패가 맛집 단계를 막지 않도록 수정.

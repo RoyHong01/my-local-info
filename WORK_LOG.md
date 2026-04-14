@@ -3,6 +3,19 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (사이드바 Sticky 최종 해결: overflow-x: clip)
+
+- **문제 현상**: Safari에서 사이드바가 스크롤을 따라가지 않고 네비게이션 안으로 들어가는 현상(11차 시도 끝 해결).
+- **근본 원인**: Safari 스크롤 보정으로 추가한 `overflow` 속성들이 sticky를 무력화. `overflow-x: hidden`도 스크롤 컨텍스트를 생성해 sticky 동작을 깨뜨림.
+- **수정 파일**:
+  - `src/components/PageContentShell.tsx`: `overflow-x-hidden` → `overflow-x-clip` 변경
+  - `src/app/blog/[slug]/page.tsx`: JSX 들여쓰기 정리 + sticky 필수 조건 주석 보강
+- **핵심 반영**:
+  1. `overflow-x: clip`은 가로 스크롤을 막으면서 스크롤 컨텍스트를 생성하지 않아 sticky 유지.
+  2. 사이드바 구조: `self-stretch` Wrapper + `sticky` 자식 2중 구조 패턴 확정.
+- **금지령 박제**: 메모리 파일 + copilot-instructions.md에 sticky 금지령 영구 기록.
+- **검증**: Safari/Chrome 모두 정상 동작, `npm run build` 성공.
+
 ## 2026-04-15 (사이드바 폭 회귀 수정: width 100% 제거)
 
 - **문제 현상**: 블로그 목록 레이아웃 붕괴(본문 폭 급축소/카드 hidden 판정), 사이드바가 상단 전체폭으로 보이는 회귀 발생.
