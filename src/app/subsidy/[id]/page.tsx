@@ -201,12 +201,14 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             </article>
           </div>
           {/* 사이드바 */}
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
-            <div className="flex flex-col gap-4">
-              <TaeheoAdBanner />
-              <CoupangBanner bannerId="coupang-sidebar-subsidy-detail" />
-            </div>
-          </aside>
+          <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
+            <aside className="sticky top-24 sticky-sidebar">
+              <div className="flex flex-col gap-4">
+                <TaeheoAdBanner />
+                <CoupangBanner bannerId="coupang-sidebar-subsidy-detail" />
+              </div>
+            </aside>
+          </div>
         </div>
       </main>
     </div>

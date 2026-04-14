@@ -543,7 +543,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </article>
           </div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
+          <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
+          <aside className="sticky top-24 sticky-sidebar">
             <div className="flex flex-col gap-4">
               <div className="mb-4">
                 <TaeheoAdBanner />
@@ -563,6 +564,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               )}
             </div>
           </aside>
+        </div>
         </div>
       </main>
     </div>

@@ -20,11 +20,13 @@ export default function LifeLayout({ children }: { children: React.ReactNode }) 
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start overflow-visible">
           <div className="flex-1 min-w-0">{children}</div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
-            <Suspense fallback={<div className="h-[730px]" />}>
-              <LifeSidebarAds />
-            </Suspense>
-          </aside>
+          <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
+            <aside className="sticky top-24 sticky-sidebar">
+              <Suspense fallback={<div className="h-[730px]" />}>
+                <LifeSidebarAds />
+              </Suspense>
+            </aside>
+          </div>
         </div>
       </main>
     </div>
