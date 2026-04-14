@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-14T00:00:00+09:00",
+  "updatedAtKst": "2026-04-15T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -232,6 +232,39 @@
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-04-15",
+      "productId": "194428415",
+      "productName": "위즈웰 스마트 진공포장기 WH6010W + 진공포장비닐 10p, WH6010W",
+      "brand": "위즈웰",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
+      "sourceId": "manual-choice-kitchen-2026-04-15",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-04-15",
+      "productId": "8209638512",
+      "productName": "FONOW 무선 진공포장기 가정용 건습 겸용 신선도 유지 원터치 스마트 진공 포장기, 화이트",
+      "brand": "FONOW",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
+      "sourceId": "manual-choice-kitchen-2026-04-15",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-04-15",
+      "productId": "9312361734",
+      "productName": "키친베어크 미니 진공포장기",
+      "brand": "키친베어크",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
+      "sourceId": "manual-choice-kitchen-2026-04-15",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
