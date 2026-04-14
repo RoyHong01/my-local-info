@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-15 사이드바 구조 단순화(단일 aside sticky)
+  - 배경: 이중 래퍼 + 보정 로직에서 회귀가 반복되어 사이드바 미노출이 모든 페이지에서 재현.
+  - 조치: `src/components/StickySidebar.tsx`를 단일 `aside` sticky 구조로 변경하고 JS 보정 로직 제거.
+  - CSS: `src/app/globals.css`를 `.sticky-sidebar` 단일 클래스 기반으로 정리.
+  - 효과: sticky 동작 경로를 최소화해 브라우저별 차이와 회귀 표면을 축소.
+
 - 2026-04-15 사이드바 미노출 재보정
   - 문제: 순수 sticky 복원 후에도 일부 환경에서 사이드바가 스크롤 중 우측에서 사라지는 현상이 잔존.
   - 조치: `src/components/StickySidebar.tsx`에 `ResizeObserver`를 추가해 래퍼 높이를 부모 높이에 동기화하고, sticky 이동 범위를 확보.

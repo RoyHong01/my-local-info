@@ -197,19 +197,13 @@ body {
 }
 
 /* ── Sticky 사이드바 GPU 가속 + Safari footer 충돌 완화 ── */
-.sticky-sidebar-shell {
-  position: relative;
-  overflow: visible;
-  align-self: stretch;
-  min-height: 100%;
-}
-
-.sticky-sidebar-content {
+.sticky-sidebar {
   position: -webkit-sticky;
   position: sticky;
   top: 6rem;
   align-self: flex-start;
   width: 100%;
+  height: max-content;
   overflow: visible;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;

@@ -3,6 +3,19 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (사이드바 단순화: aside 자체 sticky 단일 구조)
+
+- **문제 현상**: 기존 보정 이후에도 모든 페이지에서 스크롤 시 사이드바가 사라지는 현상 지속.
+- **수정 파일**:
+  - `src/components/StickySidebar.tsx`
+  - `src/app/globals.css`
+- **핵심 반영**:
+  1. 래퍼/내부 이중 구조를 제거하고 `aside` 자체를 sticky로 전환.
+  2. JS 기반 높이 동기화(`ResizeObserver`) 제거.
+  3. CSS를 `.sticky-sidebar` 단일 클래스 중심으로 정리(`-webkit-sticky`, `sticky`, `top`, `align-self:flex-start`, `height:max-content`).
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-15 (사이드바 미노출 재보정: sticky 구간 높이 동기화)
 
 - **문제 현상**: 스크롤 시 사이드바가 우측에서 사라져 내려오지 않는 현상 지속.
