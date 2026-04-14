@@ -457,114 +457,118 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <main className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex gap-12 items-start overflow-visible">
+          {/* 본문 영역 */}
           <div className="flex-1 min-w-0">
-        <Suspense fallback={<span className="text-orange-600 mb-8 inline-block">&larr; 목록으로 돌아가기</span>}>
-          <BlogBackButton fallbackHref="/blog" />
-        </Suspense>
-        <article className="bg-content-floral p-8 rounded-3xl shadow-sm border border-stone-100">
-          <header className="mb-8 border-b border-stone-100 pb-8">
-            <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="text-stone-500">작성일: {post.date}</span>
-              <span className="text-stone-300">|</span>
-              <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
-            </div>
-          </header>
-          {post.image && !post.image.endsWith('.svg') && (!isChoicePost || !shouldHideChoiceHero) && (
-            isChoicePost ? (
-              <div className="mb-14 flex justify-center">
-                <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 640px) 75vw, 480px"
-                    priority
-                  />
+            <Suspense fallback={<span className="text-orange-600 mb-8 inline-block">&larr; 목록으로 돌아가기</span>}>
+              <BlogBackButton fallbackHref="/blog" />
+            </Suspense>
+            <article className="bg-content-floral p-8 rounded-3xl shadow-sm border border-stone-100">
+              <header className="mb-8 border-b border-stone-100 pb-8">
+                <h1 className="text-4xl font-extrabold mb-4">{post.title}</h1>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="text-stone-500">작성일: {post.date}</span>
+                  <span className="text-stone-300">|</span>
+                  <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
                 </div>
-              </div>
-            ) : (
-              <div className="mb-14">
-                <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 1200px"
-                    priority
-                  />
-                </div>
-                {heroImageSourceNote && (
-                  <p className="mt-2 text-xs text-stone-500">{heroImageSourceNote}</p>
-                )}
-              </div>
-            )
-          )}
-          <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {renderedContent}
-            </ReactMarkdown>
-          </div>
-          <AdBanner />
-          <div className={`mt-4 pt-4 ${isChoicePost ? '' : 'border-t border-stone-100'} text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
-            {sourceLink && !isChoicePost && (
-              <p
-                className={useExpandedSourceSpacing ? 'my-12 py-2' : 'mt-1 mb-7'}
-              >
-                <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
-                  <span>공식 원문 바로가기</span>
-                  <span>&rarr;</span>
-                </a>
-              </p>
-            )}
-            <p className={isChoicePost ? 'text-base font-normal text-stone-700 leading-7' : 'text-sm text-stone-500 leading-6'}>
-              {isRestaurantPost ? (
-                <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
-              ) : isChoicePost ? (
-                <>
-                  <span className="block">본 콘텐츠는 AI 기술을 활용하여 제품 사양 및 실제 사용자 리뷰 데이터를 정밀 분석하고, 픽앤조이(Pick-n-Joy) 에디터의 엄격한 큐레이션을 거쳐 제작되었습니다.</span>
-                  <span className="block">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 단, 구매 가격에는 영향을 미치지 않으며 에디터의 주관적인 의견이 반영된 정보임을 밝힙니다.</span>
-                </>
-              ) : (
-                <>
-                  이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.{' '}
-                  {sourceLink
-                    ? '정확한 내용은 원문 링크를 통해 확인해주세요.'
-                    : '최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.'}
-                </>
+              </header>
+              {post.image && !post.image.endsWith('.svg') && (!isChoicePost || !shouldHideChoiceHero) && (
+                isChoicePost ? (
+                  <div className="mb-14 flex justify-center">
+                    <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 640px) 75vw, 480px"
+                        priority
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-14">
+                    <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 1200px"
+                        priority
+                      />
+                    </div>
+                    {heroImageSourceNote && (
+                      <p className="mt-2 text-xs text-stone-500">{heroImageSourceNote}</p>
+                    )}
+                  </div>
+                )
               )}
-            </p>
+              <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {renderedContent}
+                </ReactMarkdown>
+              </div>
+              <AdBanner />
+              <div className={`mt-4 pt-4 ${isChoicePost ? '' : 'border-t border-stone-100'} text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
+                {sourceLink && !isChoicePost && (
+                  <p className={useExpandedSourceSpacing ? 'my-12 py-2' : 'mt-1 mb-7'}>
+                    <a href={sourceLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 transition-colors bg-white px-4 py-2 rounded-lg border border-stone-200 hover:border-orange-300 shadow-sm">
+                      <span>공식 원문 바로가기</span>
+                      <span>&rarr;</span>
+                    </a>
+                  </p>
+                )}
+                <p className={isChoicePost ? 'text-base font-normal text-stone-700 leading-7' : 'text-sm text-stone-500 leading-6'}>
+                  {isRestaurantPost ? (
+                    <>이 글은 카카오 API 정보를 바탕으로 AI가 작성하였습니다. 정확한 음식점 정보는 카카오맵을 통해 확인해주세요.</>
+                  ) : isChoicePost ? (
+                    <>
+                      <span className="block">본 콘텐츠는 AI 기술을 활용하여 제품 사양 및 실제 사용자 리뷰 데이터를 정밀 분석하고, 픽앤조이(Pick-n-Joy) 에디터의 엄격한 큐레이션을 거쳐 제작되었습니다.</span>
+                      <span className="block">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 단, 구매 가격에는 영향을 미치지 않으며 에디터의 주관적인 의견이 반영된 정보임을 밝힙니다.</span>
+                    </>
+                  ) : (
+                    <>
+                      이 글은 공공데이터포털(<a href="https://data.go.kr" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">data.go.kr</a>)의 정보를 바탕으로 AI가 작성하였습니다.{' '}
+                      {sourceLink
+                        ? '정확한 내용은 원문 링크를 통해 확인해주세요.'
+                        : '최신 정보와 세부 조건은 공공데이터포털 또는 해당 기관 공지를 통해 확인해주세요.'}
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="mt-8">
+                <CoupangBottomBanner bannerId="coupang-bottom-blog" />
+              </div>
+            </article>
           </div>
 
-          <div className="mt-8">
-            <CoupangBottomBanner bannerId="coupang-bottom-blog" />
-          </div>
-        </article>
-          </div>
+          {/* 사이드바 영역 - sticky 작동 필수 조건:
+              1. 부모(flex 컨테이너)에 overflow: visible 유지
+              2. self-stretch로 부모 높이만큼 레일 확보
+              3. 조상 요소에 overflow: hidden 금지 (clip은 허용)
+              4. 조상에 h-screen/h-full 금지 */}
           <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
-          <aside className="sticky top-24 sticky-sidebar">
-            <div className="flex flex-col gap-4">
-              <div className="mb-4">
-                <TaeheoAdBanner />
+            <aside className="sticky top-24 sticky-sidebar">
+              <div className="flex flex-col gap-4">
+                <div className="mb-4">
+                  <TaeheoAdBanner />
+                </div>
+                {hasChoiceSidebarBanner ? (
+                  choiceSidebarProducts.map((product, index) => (
+                    <ProductSidebarBanner
+                      key={`${product.href}-${index}`}
+                      href={product.href}
+                      imageSrc={product.imageSrc}
+                      alt={product.alt}
+                      title={product.alt}
+                    />
+                  ))
+                ) : (
+                  <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
+                )}
               </div>
-              {hasChoiceSidebarBanner ? (
-                choiceSidebarProducts.map((product, index) => (
-                  <ProductSidebarBanner
-                    key={`${product.href}-${index}`}
-                    href={product.href}
-                    imageSrc={product.imageSrc}
-                    alt={product.alt}
-                    title={product.alt}
-                  />
-                ))
-              ) : (
-                <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
-              )}
-            </div>
-          </aside>
-        </div>
+            </aside>
+          </div>
         </div>
       </main>
     </div>
