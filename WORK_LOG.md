@@ -3,6 +3,21 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (초이스 시나리오 라벨 정책 수정: Before/After 레이블 금지)
+
+- **요청 반영**: 초이스 포스트의 시나리오 섹션에서 `Before:`/`After:`(및 `전:`/`후:`) 라벨형 소제목 사용을 금지하고 자연어 전환 제목으로 통일.
+- **수정 파일**:
+  - `scripts/generate-choice-post.js`
+  - `src/content/life/2026-04-14-choice-shafran-romantic-cotton.md`
+  - `src/content/life/2026-04-14-choice-2080-doctor-clinic-whitening.md`
+  - `.github/copilot-instructions.md`
+- **핵심 반영**:
+  1. 생성 프롬프트의 `Before/After` 명시 라벨 강제 문구 제거.
+  2. 불편 상황/변화 상황을 자연어 소제목으로 작성하도록 규칙 전환.
+  3. 당일 수동 생성한 2개 포스트의 라벨형 소제목을 자연어 제목으로 즉시 보정.
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-14 (픽앤조이 초이스 수동 발행: 2080 닥터크리닉 미백 치약)
 
 - **요청 반영**: 쿠팡 제휴 태그 기반으로 픽앤조이 초이스 포스트 1건 수동 생성.

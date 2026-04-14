@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 초이스 시나리오 소제목 라벨 정책 수정
+  - 배경: 수동 생성본에 `Before:`/`After:` 라벨형 소제목이 노출되어 톤 일관성이 깨지는 문제 확인.
+  - 조치: `scripts/generate-choice-post.js`의 시나리오 섹션 프롬프트를 자연어 전환 규칙으로 변경하고, 라벨형 표기를 금지.
+  - 적용: 당일 생성된 초이스 2건(`...shafran...`, `...2080-doctor-clinic...`)의 소제목을 자연어 제목으로 즉시 보정.
+  - 검증: `npm run build` 성공.
+
 - 2026-04-14 픽앤조이 초이스 수동 포스트 추가 (2080 닥터크리닉 미백 치약)
   - 파일: `src/content/life/2026-04-14-choice-2080-doctor-clinic-whitening.md`
   - 이미지: `public/images/choice/clinic-hero.png`, `public/images/choice/clinic-middle.png`
