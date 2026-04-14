@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (blog latest 완전일치 다중 후보 타이브레이커 고정)
+
+- **요청 반영**: `keyword` 완전일치 후보가 2개 이상일 때 우선순위를 `최신 일정 > 이미지 보유 > 조회수`로 고정.
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `.github/copilot-instructions.md`
+- **핵심 반영**:
+  1. 완전일치 후보 집합 정렬 함수 추가.
+  2. 정렬 우선순위: 일정 최신값(`eventstartdate/startDate/eventenddate/endDate`) -> 이미지 보유(`firstimage/firstimage2/image/thumbnail`) -> 조회수(`조회수/viewCount/readCount/hit`).
+  3. `exact-first`/`exact-only` 모두 타이브레이커 적용 순서로 후보를 사용.
+  4. 완전일치 다중 후보 시 로그에 타이브레이커 적용 사실과 1순위 후보명을 출력.
+
 ## 2026-04-15 (blog latest 완전일치 우선 강화 + 카테고리별 자동 분기)
 
 - **요청 반영**: blog-input.latest.json 처리 시 `keyword`와 제목(`서비스명/title/name`)의 100% 일치 데이터를 최우선으로 선정하고, 완전일치가 있으면 다른 후보를 무시하도록 강화.

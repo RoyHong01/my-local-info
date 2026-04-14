@@ -195,6 +195,52 @@ function getKeywordHaystack(item) {
     .join(' ');
 }
 
+function toDateRankValue(raw) {
+  const text = String(raw || '').trim();
+  if (!text) return 0;
+  if (/^\d{8}$/.test(text)) return Number(text);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return Number(text.replace(/-/g, ''));
+  if (/^\d{4}\.\d{2}\.\d{2}$/.test(text)) return Number(text.replace(/\./g, ''));
+  return 0;
+}
+
+function getScheduleRank(item) {
+  return Math.max(
+    toDateRankValue(item?.eventstartdate),
+    toDateRankValue(item?.startDate),
+    toDateRankValue(item?.eventenddate),
+    toDateRankValue(item?.endDate)
+  );
+}
+
+function getImageRank(item) {
+  return item?.firstimage || item?.firstimage2 || item?.image || item?.thumbnail ? 1 : 0;
+}
+
+function getViewRank(item) {
+  const raw = item?.['조회수'] ?? item?.viewCount ?? item?.readCount ?? item?.hit ?? 0;
+  const n = Number(String(raw).replace(/,/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function sortExactMatchesWithTieBreaker(items) {
+  return [...items].sort((a, b) => {
+    // 1) 최신 일정 우선
+    const dateDiff = getScheduleRank(b) - getScheduleRank(a);
+    if (dateDiff !== 0) return dateDiff;
+
+    // 2) 이미지 보유 우선
+    const imageDiff = getImageRank(b) - getImageRank(a);
+    if (imageDiff !== 0) return imageDiff;
+
+    // 3) 조회수 우선
+    const viewDiff = getViewRank(b) - getViewRank(a);
+    if (viewDiff !== 0) return viewDiff;
+
+    return 0;
+  });
+}
+
 function filterItemsByKeyword(items, keyword, matchMode) {
   const mode = normalizeKeywordMatchMode(matchMode);
   const normalizedKeyword = normalizeMatchText(keyword);
@@ -203,14 +249,15 @@ function filterItemsByKeyword(items, keyword, matchMode) {
   const exactMatches = items.filter((item) =>
     getKeywordNameFields(item).some((field) => isExactKeywordMatch(field, keyword))
   );
+  const exactMatchesSorted = sortExactMatchesWithTieBreaker(exactMatches);
 
   if (mode === 'exact-only') {
-    return { mode, selectedMode: 'exact-only', items: exactMatches };
+    return { mode, selectedMode: 'exact-only', items: exactMatchesSorted };
   }
 
   if (mode === 'exact-first' && exactMatches.length > 0) {
     // 완전일치가 있으면 비완전일치 후보는 즉시 배제
-    return { mode, selectedMode: 'exact-only-when-found', items: exactMatches };
+    return { mode, selectedMode: 'exact-only-when-found', items: exactMatchesSorted };
   }
 
   const containsMatches = items.filter((item) => normalizeMatchText(getKeywordHaystack(item)).includes(normalizedKeyword));
@@ -1251,6 +1298,10 @@ async function run() {
       console.log(`  키워드 매칭 결과: ${keywordFiltered.items.length}개 (${keywordFiltered.selectedMode})`);
       if (keywordFiltered.selectedMode === 'exact-only-when-found') {
         console.log('  ✅ 완전일치 후보 발견: 부분일치 후보는 무시하고 즉시 생성 대상을 확정합니다.');
+        if (keywordFiltered.items.length >= 2) {
+          const topName = keywordFiltered.items[0]?.['서비스명'] || keywordFiltered.items[0]?.['title'] || keywordFiltered.items[0]?.['name'] || 'unknown';
+          console.log(`  ✅ 타이브레이커 적용(최신 일정 > 이미지 > 조회수): 1순위 후보 "${topName}"`);
+        }
       }
     }
 
