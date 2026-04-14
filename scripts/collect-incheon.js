@@ -313,9 +313,20 @@ async function run() {
   let photoMatched = 0;
   let photoFallback = 0;
   let photoSkipped = 0;
+  let photoHealthcheck = 'skipped';
   if (!INCHEON_PHOTO_TOKEN) {
     console.log('INCHEON_PHOTO_TOKEN 없음: 인천 관광 사진 자동 매칭 건너뜀');
   } else {
+    // 토큰 만료(7일 무호출) 방지를 위해 수집 실행 시 최소 1회 헬스체크 호출
+    const health = await fetchIncheonPhotoList({ keyword: '송도', pageNo: 1 });
+    if (health.ok) {
+      photoHealthcheck = 'ok';
+      console.log(`인천 관광사진 API 헬스체크 성공: expireDt=${health.expireDt || '-'}, 샘플=${(health.dataList || []).length}건`);
+    } else {
+      photoHealthcheck = `failed:${health.error}`;
+      console.warn(`인천 관광사진 API 헬스체크 실패: ${health.error}`);
+    }
+
     const photoCache = new Map();
     const fallbackPool = [];
     for (const item of merged) {
@@ -402,6 +413,7 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_matched=${photoMatched}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_fallback=${photoFallback}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_healthcheck=${photoHealthcheck}\n`);
   }
 }
 

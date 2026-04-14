@@ -276,6 +276,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **인천 관광사진 API003 연동**: `scripts/collect-incheon.js`에서 행사/축제 항목을 대상으로 `https://api.incheoneasy.com/api/tour/touristPhotoInfo`를 호출해 키워드 기반 대표 이미지를 자동 매칭.
   - **랜덤 랜드마크 fallback**: 행사 키워드 매칭 실패 시 송도/월미도/차이나타운 등 랜드마크 사진을 랜덤으로 보강.
   - **출처 표기 자동화**: 수집 데이터에 `image_source`, `image_source_note(출처: 인천관광공사)`를 저장하고 블로그 상단 이미지 하단에 노출.
+  - **토큰 유지 호출**: `collect-incheon.js` 실행 시 `송도` 키워드로 사진 API 헬스체크 1회를 선행 호출해 7일 무요청 토큰 만료를 예방.
   - **CI 시크릿 연동**: `.github/workflows/deploy.yml` 1단계 수집에 `INCHEON_PHOTO_TOKEN` env 주입.
   - **인천 만료 체크 누락 보정**: `scripts/cleanup-expired.js`가 기존 `posts/subsidy/festival`만 처리하던 범위를 `public/data/incheon.json`까지 확장.
   - **판정 기준 통일**: 인천 항목의 `endDate` 또는 `신청기한`에서 `YYYY-MM-DD`/`YYYY.MM.DD`를 정규화해 KST 기준으로 `expired: true` 자동 마킹.

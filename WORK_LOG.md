@@ -19,6 +19,7 @@
   3. 매칭 실패 시 송도/월미도/개항장 등 랜드마크 사진 랜덤 fallback.
   4. `image_source`, `image_source_note`를 frontmatter까지 전달하고 상단 히어로 이미지 하단에 출처 노출.
   5. GitHub Actions 1단계 수집 env에 `INCHEON_PHOTO_TOKEN` 시크릿 추가.
+  6. 토큰 7일 무호출 만료 예방을 위해 `collect-incheon.js` 시작 시 사진 API 헬스체크 1회(`송도`) 선행 호출.
 - **검증**:
   - `node scripts/test-incheon-photo-api.js 송도` 결과 `returnCode=200` 확인.
   - `node scripts/collect-incheon.js` 실행 시 `인천 관광사진 매칭: 총 5건` 로그 확인.
