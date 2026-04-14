@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 스케줄 실패 RCA + 재발 방지
+  - 원인: `generate_choice`에서 품질/중복 필터 통과 후보 0개로 실패했고, 기존 워크플로우 구조상 이후 3단계가 연쇄 `skipped`
+  - 조치1: `.github/workflows/deploy.yml`의 `generate_choice`를 `continue-on-error: true`로 설정해 초이스 실패와 맛집 단계를 분리
+  - 조치2: `scripts/generate-choice-posts-auto.js`에 테마별 백업 키워드 병합 재시도(1회) 로직 추가
+
 - 2026-04-13 초이스 산출물 보존 강화
   - `.github/workflows/deploy.yml`에 초이스 생성 직후 전용 커밋 단계를 추가해 `src/content/life`, `scripts/data/recommended-products.json`을 즉시 보존
   - 이후 3단계 실패 시에도 초이스 글/히스토리와 git log 기반 리포트 데이터가 유지되도록 워크플로우 순서를 강화

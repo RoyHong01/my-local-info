@@ -212,6 +212,7 @@ jobs:
       - name: '[2.5단계] 픽앤조이 초이스 자동 생성'
         id: generate_choice
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        continue-on-error: true
         run: node scripts/generate-choice-posts-auto.js
         timeout-minutes: 20
         env:

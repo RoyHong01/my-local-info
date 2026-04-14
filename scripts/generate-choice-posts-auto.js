@@ -7,6 +7,15 @@ const { promisify } = require('util');
 
 const runFile = promisify(execFile);
 const DAILY_THEMES_PATH = path.join(process.cwd(), 'scripts', 'data', 'choice-daily-themes.json');
+const BACKUP_THEME_KEYWORDS = {
+  health: ['건강기능식품', '영양제', '유산균', '오메가3'],
+  living: ['생활용품', '욕실청소', '정리수납', '밀대걸레'],
+  kitchen: ['주방용품', '밀폐용기', '후라이팬', '칼세트'],
+  digital: ['디지털 액세서리', '멀티충전기', '키보드 마우스', '보조배터리'],
+  pet: ['반려동물 용품', '고양이 모래', '강아지 간식', '펫 케어'],
+  beauty: ['뷰티', '스킨케어', '헤어케어', '선케어'],
+  appliance: ['소형가전', '생활가전', '청소가전', '수납가구'],
+};
 
 function getTodayKstDate() {
   const now = new Date();
@@ -78,22 +87,18 @@ async function buildTempInput(themeInfo, dateKst) {
   return { tempPath, payload };
 }
 
-async function run() {
-  const enabled = (process.env.CHOICE_AUTO_ENABLED || 'true').toLowerCase() === 'true';
-  if (!enabled) {
-    console.log('CHOICE_AUTO_ENABLED=false 이므로 자동 초이스 생성을 건너뜁니다.');
-    return;
-  }
+function mergeKeywordHints(baseHints, extraHints) {
+  const merged = [...(baseHints || []), ...(extraHints || [])]
+    .map((item) => String(item || '').trim())
+    .filter(Boolean);
+  return Array.from(new Set(merged));
+}
 
-  const dateKst = getTodayKstDate();
-  const themes = await loadDailyThemes();
-  const themeInfo = getDailyTheme(themes);
-  const { tempPath, payload } = await buildTempInput(themeInfo, dateKst);
+async function runChoiceGenerator(payload, contextLabel = 'primary') {
+  const tempPath = path.join(os.tmpdir(), `picknjoy-choice-auto-${contextLabel}-${Date.now()}.json`);
+  await fs.writeFile(tempPath, JSON.stringify(payload, null, 2), 'utf-8');
 
   try {
-    console.log(`자동 초이스 요일 테마: ${themeInfo.theme.name} (${themeInfo.theme.key})`);
-    console.log(`자동 키워드: ${(payload.keywordHint || []).join(', ') || '없음'}`);
-
     const scriptPath = path.join(process.cwd(), 'scripts', 'generate-choice-post.js');
     const { stdout, stderr } = await runFile(process.execPath, [scriptPath, '--input', tempPath], {
       cwd: process.cwd(),
@@ -105,6 +110,45 @@ async function run() {
     if (stderr) process.stderr.write(stderr);
   } finally {
     await fs.unlink(tempPath).catch(() => undefined);
+  }
+}
+
+async function run() {
+  const enabled = (process.env.CHOICE_AUTO_ENABLED || 'true').toLowerCase() === 'true';
+  if (!enabled) {
+    console.log('CHOICE_AUTO_ENABLED=false 이므로 자동 초이스 생성을 건너뜁니다.');
+    return;
+  }
+
+  const dateKst = getTodayKstDate();
+  const themes = await loadDailyThemes();
+  const themeInfo = getDailyTheme(themes);
+  const { payload } = await buildTempInput(themeInfo, dateKst);
+
+  console.log(`자동 초이스 요일 테마: ${themeInfo.theme.name} (${themeInfo.theme.key})`);
+  console.log(`자동 키워드: ${(payload.keywordHint || []).join(', ') || '없음'}`);
+
+  try {
+    await runChoiceGenerator(payload, 'primary');
+    return;
+  } catch (primaryError) {
+    const themeKey = String(themeInfo.theme?.key || '').trim();
+    const backupKeywords = BACKUP_THEME_KEYWORDS[themeKey] || [];
+    const mergedFallbacks = mergeKeywordHints(payload.fallbackKeywordHint, backupKeywords);
+
+    if (mergedFallbacks.length === 0) {
+      throw primaryError;
+    }
+
+    console.warn(`1차 자동 초이스 생성 실패: ${primaryError.message}`);
+    console.warn(`백업 키워드 재시도: ${mergedFallbacks.join(', ')}`);
+
+    const retryPayload = {
+      ...payload,
+      fallbackKeywordHint: mergedFallbacks,
+    };
+
+    await runChoiceGenerator(retryPayload, 'retry');
   }
 }
 

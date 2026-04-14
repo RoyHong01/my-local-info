@@ -210,6 +210,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-14 핵심 반영:
+  - **스케줄 실패 RCA 정리**: 2026-04-14 실행은 `generate_choice` 후보 0개 실패가 1차 원인이며, 이후 3단계(맛집) `skipped`는 실패 전파 구조 영향으로 확인.
+  - **실패 격리 적용**: `.github/workflows/deploy.yml`의 `[2.5단계] 픽앤조이 초이스 자동 생성` step에 `continue-on-error: true`를 적용해 초이스 실패가 맛집 단계를 막지 않도록 수정.
+  - **초이스 성공률 보강**: `scripts/generate-choice-posts-auto.js`에 테마별 백업 키워드 병합 재시도(1회) 로직 추가.
 - 2026-04-13 핵심 반영(추가):
   - **초이스 산출물 보존 강화**: `.github/workflows/deploy.yml`에 `[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)`를 추가해 초이스 생성 직후 `src/content/life`와 `scripts/data/recommended-products.json`을 먼저 커밋.
   - 이후 3단계(맛집) 실패가 발생해도 초이스 글/히스토리와 git log 기반 리포트 근거가 보존되도록 정리.

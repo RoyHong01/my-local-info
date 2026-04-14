@@ -3,6 +3,23 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (스케줄 실패 RCA 및 재발 방지: 초이스 실패 격리 + 백업 키워드 재시도)
+
+- **대상 실행**: `Daily Update & Deploy` #495 (`24368082234`, 2026-04-14 KST 리포트)
+- **근본 원인(RCA)**:
+  1. `[2.5단계] generate_choice`에서 쿠팡 후보가 품질/중복 필터를 통과하지 못해 `선정 0개`로 실패
+  2. 기존 워크플로우는 `generate_choice` 실패 시 이후 단계가 중단되는 구조여서 3단계(맛집)가 연쇄적으로 `skipped`
+  3. 즉, 2.5단계 커밋 전략 자체가 맛집 실패 원인이 아니라, **초이스 step failure가 전체 job 흐름을 막은 구조**가 직접 원인
+- **수정 파일**: `.github/workflows/deploy.yml`, `scripts/generate-choice-posts-auto.js`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **재발 방지 조치**:
+  1. `generate_choice` step에 `continue-on-error: true` 적용 → 초이스 실패가 발생해도 3단계 맛집 파이프라인은 계속 실행
+  2. `generate-choice-posts-auto.js`에 백업 키워드 재시도 로직 추가
+     - 1차 실패 시 테마별 백업 키워드를 `fallbackKeywordHint`에 병합해 1회 재시도
+     - 생활 테마 기준 예: `생활용품`, `욕실청소`, `정리수납`, `밀대걸레`
+- **검증**:
+  - `node --check scripts/generate-choice-posts-auto.js`
+  - `npm run build` 성공
+
 ## 2026-04-13 (초이스 산출물 보존 강화: 2.5단계 전용 커밋 추가)
 
 - **수정 파일**: `.github/workflows/deploy.yml`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
