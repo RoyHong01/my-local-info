@@ -14,6 +14,7 @@ import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import ProductSidebarBanner from '@/components/ProductSidebarBanner';
+import StickySidebar from '@/components/StickySidebar';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 
 function extractFirstSentenceFromMarkdown(markdown: string): string {
@@ -455,7 +456,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       )}
 
       <main className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex gap-12 items-start">
+        <div className="flex gap-12 items-start overflow-visible">
           <div className="flex-1 min-w-0">
         <Suspense fallback={<span className="text-orange-600 mb-8 inline-block">&larr; 목록으로 돌아가기</span>}>
           <BlogBackButton fallbackHref="/blog" />
@@ -537,7 +538,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </article>
           </div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
+          <StickySidebar>
             <div className="flex flex-col gap-4">
               <div className="mb-4">
                 <TaeheoAdBanner />
@@ -556,7 +557,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
               )}
             </div>
-          </aside>
+          </StickySidebar>
         </div>
       </main>
     </div>

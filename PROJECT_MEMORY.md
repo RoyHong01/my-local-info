@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 Safari 우측 사이드바 겹침 수정
+  - 재현: 맥북 Safari 스크롤 시 우측 광고/상품 사이드바가 메인 콘텐츠 및 footer와 겹치는 현상.
+  - 조치: `src/components/StickySidebar.tsx`를 도입해 scroll/resize 시 footer 위치를 계산하고 `sticky -> absolute` 전환.
+  - 연결 조건: `src/components/SiteFooter.tsx`의 `id="site-footer"`, 각 페이지 부모 `overflow-visible`, `src/app/globals.css`의 `-webkit-sticky` 보강.
+  - 향후 우측 사이드바 수정은 공용 컴포넌트 기준으로 진행해야 Safari 회귀를 막을 수 있음.
+
 - 2026-04-14 맛집 스크립트 로컬 env 로더 추가
   - 배경: 수동 복구 실행에서 터미널 세션 미주입 시 `Missing GEMINI_API_KEY` 오류 발생 가능.
   - 조치: `scripts/generate-life-restaurant-posts.mjs`에 `.env.local` 자동 로더를 추가해 local/manual 실행 안정성 강화.

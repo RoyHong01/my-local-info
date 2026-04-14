@@ -196,8 +196,16 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ── Sticky 사이드바 GPU 가속 (macOS 관성 스크롤 떨림 방지) ── */
-.sticky-sidebar {
+/* ── Sticky 사이드바 GPU 가속 + Safari footer 충돌 완화 ── */
+.sticky-sidebar-shell {
+  position: relative;
+  overflow: visible;
+}
+
+.sticky-sidebar-content {
+  position: -webkit-sticky;
+  position: sticky;
+  overflow: visible;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
@@ -206,6 +214,10 @@ body {
   contain: layout style;
   transition: none;
   top: 5.95rem; /* 서브픽셀 렌더링으로 미세 떨림 방지 */
+}
+
+.sticky-sidebar-content[data-mode='absolute'] {
+  position: absolute;
 }
 
 /* ── Hero animations ── */

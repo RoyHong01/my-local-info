@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import StickySidebar from '@/components/StickySidebar';
 
 interface DataItem {
   [key: string]: unknown;
@@ -156,7 +157,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
     <div className="bg-cherry-blossom font-sans text-stone-800">
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex gap-12 items-start">
+        <div className="flex gap-12 items-start overflow-visible">
           {/* 메인 콘텐츠 */}
           <div className="flex-1 min-w-0">
             <Link href="/subsidy" className="text-sm text-amber-600 hover:underline mb-6 inline-block">
@@ -201,12 +202,12 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
             </article>
           </div>
           {/* 사이드바 */}
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
+          <StickySidebar>
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-subsidy-detail" />
             </div>
-          </aside>
+          </StickySidebar>
         </div>
       </main>
     </div>

@@ -3,6 +3,31 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (Safari 사이드바 겹침 긴급 수정: sticky/absolute 하이브리드)
+
+- **문제 배경**: 맥북 Safari에서 스크롤 시 우측 사이드바가 메인 콘텐츠 및 footer와 겹쳐 보이는 현상 확인.
+- **재현 자료**: `C:\Users\Roy Hong\Downloads\KakaoTalk_20260414_110625391.mp4`
+- **핵심 반영**:
+  1. 반복 `aside.sticky-sidebar` 구조를 공용 `src/components/StickySidebar.tsx`로 통합.
+  2. 기본은 `position: sticky`, footer 접근 시에는 scroll/resize 계산으로 `position: absolute` 전환.
+  3. `src/components/SiteFooter.tsx`에 `id="site-footer"`를 추가해 footer 위치 계산 기준점으로 사용.
+  4. `src/app/globals.css`에서 `position: -webkit-sticky`, `overflow: visible`을 보강.
+  5. 사이드바를 사용하는 list/detail 페이지 컨테이너에 `overflow-visible`을 명시.
+- **수정 파일**:
+  - `src/components/StickySidebar.tsx`
+  - `src/components/SiteFooter.tsx`
+  - `src/app/globals.css`
+  - `src/app/life/layout.tsx`
+  - `src/app/blog/page.tsx`
+  - `src/app/blog/[slug]/page.tsx`
+  - `src/app/festival/page.tsx`
+  - `src/app/festival/[id]/page.tsx`
+  - `src/app/incheon/page.tsx`
+  - `src/app/incheon/[id]/page.tsx`
+  - `src/app/subsidy/page.tsx`
+  - `src/app/subsidy/[id]/page.tsx`
+- **검증**: `npm run build` 성공.
+
 ## 2026-04-14 (초이스 썸네일 누락 원인 수정: 로컬 이미지 부재 시 배너 fallback)
 
 - **문제 현상**: `2026-04-14-choice-living-2026-04-14.md` 카드 썸네일이 깨진 이미지로 노출.

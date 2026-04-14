@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import LifeSidebarAds from '@/components/LifeSidebarAds';
+import StickySidebar from '@/components/StickySidebar';
 
 export const metadata: Metadata = {
   title: '일상의 즐거움 | 픽앤조이',
@@ -18,13 +19,13 @@ export default function LifeLayout({ children }: { children: React.ReactNode }) 
     <div className="bg-cherry-blossom font-sans text-stone-800">
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex gap-12 items-start">
+        <div className="flex gap-12 items-start overflow-visible">
           <div className="flex-1 min-w-0">{children}</div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
+          <StickySidebar>
             <Suspense fallback={<div className="h-[730px]" />}>
               <LifeSidebarAds />
             </Suspense>
-          </aside>
+          </StickySidebar>
         </div>
       </main>
     </div>

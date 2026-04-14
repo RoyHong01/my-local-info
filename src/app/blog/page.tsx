@@ -5,6 +5,7 @@ import BlogFilter from '@/components/BlogFilter';
 import BlogScrollRestorer from '@/components/BlogScrollRestorer';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import StickySidebar from '@/components/StickySidebar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default function BlogPage() {
     <div className="bg-cherry-blossom font-sans text-stone-800">
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <div className="flex gap-12 items-start">
+        <div className="flex gap-12 items-start overflow-visible">
           <div className="flex-1 min-w-0">
             <div className="mb-8">
               <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
@@ -46,12 +47,12 @@ export default function BlogPage() {
               <BlogFilter posts={posts} />
             </Suspense>
           </div>
-          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
+          <StickySidebar>
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-blog-list" />
             </div>
-          </aside>
+          </StickySidebar>
         </div>
       </main>
     </div>
