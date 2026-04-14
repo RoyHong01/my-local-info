@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 초이스 포스트 라이팅 고도화
+  - 배경: 자동 생성 글이 스펙/포인트 나열형으로 고정되는 경향을 줄이고, 사용자 체감 중심 시나리오 몰입도를 강화.
+  - 조치: `scripts/generate-choice-post.js` 프롬프트를 Context 우선 + Before/After 대비 구조로 재작성.
+  - 추가 규칙: 감각 묘사 언어 강화, 데이터 기반 신뢰 문장(입력 데이터 있을 때만) 삽입, `큐레이션 포인트 3가지` 번호형 섹션 금지.
+  - 운영 동기화: `.github/copilot-instructions.md`의 초이스 규칙 섹션에도 동일 정책 반영.
+
 - 2026-04-14 Safari 우측 사이드바 겹침 수정
   - 재현: 맥북 Safari 스크롤 시 우측 광고/상품 사이드바가 메인 콘텐츠 및 footer와 겹치는 현상.
   - 조치: `src/components/StickySidebar.tsx`를 도입해 scroll/resize 시 footer 위치를 계산하고 `sticky -> absolute` 전환.
