@@ -55,6 +55,7 @@ jobs:
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          INCHEON_PHOTO_TOKEN: ${{ secrets.INCHEON_PHOTO_TOKEN }}
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
 
       - name: '[1단계] 전국 보조금 정책 수집'

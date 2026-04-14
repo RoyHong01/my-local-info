@@ -435,6 +435,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const hasChoiceSidebarBanner = choiceSidebarProducts.length > 0;
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const choiceReviewJsonLd = isChoicePost ? buildChoiceReviewJsonLd(post, description) : null;
+  const heroImageSourceNote = String(post.imageSourceNote || (post.imageSource ? `출처: ${post.imageSource}` : '')).trim();
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -485,15 +486,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
             ) : (
-              <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden mb-14">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 1200px"
-                  priority
-                />
+              <div className="mb-14">
+                <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 1200px"
+                    priority
+                  />
+                </div>
+                {heroImageSourceNote && (
+                  <p className="mt-2 text-xs text-stone-500">{heroImageSourceNote}</p>
+                )}
               </div>
             )
           )}

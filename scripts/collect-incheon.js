@@ -5,6 +5,203 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null;
+const INCHEON_PHOTO_TOKEN = process.env.INCHEON_PHOTO_TOKEN || '';
+const INCHEON_PHOTO_API_URL = process.env.INCHEON_PHOTO_API_URL || 'https://api.incheoneasy.com/api/tour/touristPhotoInfo';
+const INCHEON_PHOTO_MAX_PAGES = Number.parseInt(process.env.INCHEON_PHOTO_MAX_PAGES || '2', 10);
+
+const INCHEON_LANDMARK_KEYWORDS = [
+  '송도',
+  '월미도',
+  '차이나타운',
+  '개항장',
+  '영종도',
+  '강화도',
+  '센트럴파크',
+  '인천대교',
+  '을왕리',
+];
+
+function decodeHtmlEntities(text) {
+  return String(text || '')
+    .replace(/&#034;|&quot;/g, '"')
+    .replace(/&#039;|&apos;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .trim();
+}
+
+function parsePhotoApiJson(rawText) {
+  const decoded = decodeHtmlEntities(rawText);
+  try {
+    return JSON.parse(decoded);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeSpace(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function isIncheonEventItem(item) {
+  const name = normalizeSpace(item['서비스명'] || item.name || item.title || '');
+  const category = normalizeSpace(item.category || item['서비스분야'] || '');
+  return /(축제|행사|페스티벌|문화)/.test(`${name} ${category}`);
+}
+
+function buildIncheonPhotoKeywords(item) {
+  const name = normalizeSpace(item['서비스명'] || item.name || item.title || '');
+  const location = normalizeSpace(item.location || item['소관기관명'] || item['접수기관명'] || '');
+
+  const cleanedName = name
+    .replace(/[()\[\]{}]/g, ' ')
+    .replace(/(지원|행사|축제|페스티벌|프로그램|모집|접수|사업)/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const tokens = [
+    cleanedName,
+    ...cleanedName.split(/\s+/).filter((t) => t.length >= 2),
+    ...location.split(/\s+/).filter((t) => t.length >= 2),
+  ];
+
+  return [...new Set(tokens.filter(Boolean))].slice(0, 6);
+}
+
+function scorePhotoCandidate(photo, item, keyword) {
+  const title = normalizeSpace(photo.trrsrtNm);
+  const addr = normalizeSpace(photo.trrsrtAddr);
+  const name = normalizeSpace(item['서비스명'] || item.name || item.title || '');
+  const location = normalizeSpace(item.location || item['소관기관명'] || item['접수기관명'] || '');
+
+  let score = 0;
+  if (title.includes(keyword)) score += 40;
+  if (name.includes(title) || title.includes(name)) score += 30;
+  if (location && (addr.includes(location) || location.includes(addr))) score += 20;
+
+  const reviewCount = Number(photo.trrsrtRvGcnt || 0);
+  if (Number.isFinite(reviewCount)) {
+    score += Math.min(15, reviewCount);
+  }
+
+  return score;
+}
+
+async function fetchIncheonPhotoList({ keyword, pageNo = 1 }) {
+  if (!INCHEON_PHOTO_TOKEN) return { ok: false, error: 'missing_token', dataList: [] };
+
+  const params = new URLSearchParams({
+    accessToken: INCHEON_PHOTO_TOKEN,
+    pageNo: String(pageNo),
+    trrsrtNm: keyword,
+  });
+
+  const url = `${INCHEON_PHOTO_API_URL}?${params.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    const raw = await response.text();
+    const parsed = parsePhotoApiJson(raw);
+
+    if (!response.ok || !parsed) {
+      return { ok: false, error: `http_${response.status}`, dataList: [] };
+    }
+
+    const returnCode = String(parsed.returnCode || '');
+    if (returnCode !== '200') {
+      return { ok: false, error: `api_${returnCode}:${parsed.returnMsg || ''}`, dataList: [] };
+    }
+
+    return {
+      ok: true,
+      error: '',
+      dataList: Array.isArray(parsed.dataList) ? parsed.dataList : [],
+      returnMsg: parsed.returnMsg || '',
+      expireDt: parsed.expireDt || '',
+    };
+  } catch (err) {
+    return { ok: false, error: err?.message || 'network_error', dataList: [] };
+  }
+}
+
+async function resolvePhotoForIncheonEvent(item, photoCache, fallbackPool) {
+  if (!isIncheonEventItem(item) || !INCHEON_PHOTO_TOKEN) return null;
+
+  const keywords = buildIncheonPhotoKeywords(item);
+  let best = null;
+  let bestScore = -1;
+
+  for (const keyword of keywords) {
+    if (!keyword) continue;
+
+    if (!photoCache.has(keyword)) {
+      const merged = [];
+      for (let pageNo = 1; pageNo <= INCHEON_PHOTO_MAX_PAGES; pageNo++) {
+        const result = await fetchIncheonPhotoList({ keyword, pageNo });
+        if (!result.ok) {
+          if (pageNo === 1) {
+            console.warn(`관광사진 API 조회 실패(keyword=${keyword}): ${result.error}`);
+          }
+          break;
+        }
+
+        const list = result.dataList || [];
+        merged.push(...list);
+        if (list.length === 0) break;
+      }
+      photoCache.set(keyword, merged);
+    }
+
+    const list = photoCache.get(keyword) || [];
+    for (const photo of list) {
+      const imageUrl = normalizeSpace(photo.photoFileCours);
+      if (!imageUrl) continue;
+      const score = scorePhotoCandidate(photo, item, keyword);
+      if (score > bestScore) {
+        best = { photo, keyword, imageUrl, score };
+        bestScore = score;
+      }
+      fallbackPool.push({ imageUrl, keyword, photo });
+    }
+  }
+
+  if (best) {
+    return {
+      imageUrl: best.imageUrl,
+      keyword: best.keyword,
+      matchedName: normalizeSpace(best.photo.trrsrtNm),
+      matchedAddr: normalizeSpace(best.photo.trrsrtAddr),
+      fallbackApplied: false,
+    };
+  }
+
+  // 특정 행사 키워드로 찾지 못하면 인천 랜드마크 사진을 랜덤 fallback
+  for (const fallbackKeyword of INCHEON_LANDMARK_KEYWORDS) {
+    if (!photoCache.has(fallbackKeyword)) {
+      const result = await fetchIncheonPhotoList({ keyword: fallbackKeyword, pageNo: 1 });
+      photoCache.set(fallbackKeyword, result.ok ? (result.dataList || []) : []);
+    }
+
+    const list = photoCache.get(fallbackKeyword) || [];
+    for (const photo of list) {
+      const imageUrl = normalizeSpace(photo.photoFileCours);
+      if (!imageUrl) continue;
+      fallbackPool.push({ imageUrl, keyword: fallbackKeyword, photo });
+    }
+  }
+
+  if (fallbackPool.length === 0) return null;
+
+  const randomPick = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+  return {
+    imageUrl: randomPick.imageUrl,
+    keyword: randomPick.keyword,
+    matchedName: normalizeSpace(randomPick.photo.trrsrtNm),
+    matchedAddr: normalizeSpace(randomPick.photo.trrsrtAddr),
+    fallbackApplied: true,
+  };
+}
 
 function sourceHash(item) {
   return [
@@ -112,6 +309,48 @@ async function run() {
     }))
   ];
 
+  // 인천 행사/축제 항목에 관광사진 API 매칭
+  let photoMatched = 0;
+  let photoFallback = 0;
+  let photoSkipped = 0;
+  if (!INCHEON_PHOTO_TOKEN) {
+    console.log('INCHEON_PHOTO_TOKEN 없음: 인천 관광 사진 자동 매칭 건너뜀');
+  } else {
+    const photoCache = new Map();
+    const fallbackPool = [];
+    for (const item of merged) {
+      if (!isIncheonEventItem(item)) {
+        photoSkipped++;
+        continue;
+      }
+
+      // 기존 이미지가 있으면 유지
+      if (normalizeSpace(item.firstimage)) {
+        photoSkipped++;
+        continue;
+      }
+
+      const matched = await resolvePhotoForIncheonEvent(item, photoCache, fallbackPool);
+      if (!matched || !matched.imageUrl) {
+        photoSkipped++;
+        continue;
+      }
+
+      item.firstimage = matched.imageUrl;
+      item.image_source = '인천관광공사';
+      item.image_source_note = '출처: 인천관광공사';
+      item.image_source_api = 'API003';
+      item.image_keyword = matched.keyword;
+      item.image_matched_name = matched.matchedName;
+      item.image_matched_addr = matched.matchedAddr;
+
+      photoMatched++;
+      if (matched.fallbackApplied) photoFallback++;
+    }
+
+    console.log(`인천 관광사진 매칭: 총 ${photoMatched}건 (fallback ${photoFallback}건, 스킵 ${photoSkipped}건)`);
+  }
+
   let markdownGenerated = 0;
   let inputTokens = 0;
   let outputTokens = 0;
@@ -161,6 +400,8 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_matched=${photoMatched}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_fallback=${photoFallback}\n`);
   }
 }
 

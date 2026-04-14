@@ -3,6 +3,27 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (인천관광공사 관광사진 API003 연동)
+
+- **요청 배경**: 인천 행사/축제 글의 시각 품질 강화를 위해 인천관광공사 관광사진 API를 수집 파이프라인에 연동.
+- **적용 파일**:
+  - `scripts/collect-incheon.js`
+  - `scripts/generate-blog-post.js`
+  - `src/lib/posts.ts`
+  - `src/app/blog/[slug]/page.tsx`
+  - `.github/workflows/deploy.yml`
+  - `scripts/test-incheon-photo-api.js`
+- **핵심 구현**:
+  1. API003 스펙 반영: `https://api.incheoneasy.com/api/tour/touristPhotoInfo` + `accessToken`, `trrsrtNm`.
+  2. 행사/축제 항목 키워드 자동 추출 후 사진 검색 및 최고 점수 이미지 매칭.
+  3. 매칭 실패 시 송도/월미도/개항장 등 랜드마크 사진 랜덤 fallback.
+  4. `image_source`, `image_source_note`를 frontmatter까지 전달하고 상단 히어로 이미지 하단에 출처 노출.
+  5. GitHub Actions 1단계 수집 env에 `INCHEON_PHOTO_TOKEN` 시크릿 추가.
+- **검증**:
+  - `node scripts/test-incheon-photo-api.js 송도` 결과 `returnCode=200` 확인.
+  - `node scripts/collect-incheon.js` 실행 시 `인천 관광사진 매칭: 총 5건` 로그 확인.
+  - `npm run build` 성공.
+
 ## 2026-04-14 (인천 카드 만료 누락 수정)
 
 - **증상**: 인천 목록에 종료된 `2026 인천 봄꽃 축제` 카드가 계속 노출됨.

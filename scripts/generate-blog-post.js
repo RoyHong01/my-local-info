@@ -1072,6 +1072,8 @@ ${festivalStyleOverride}
   finalContent = upsertFrontmatterField(finalContent, 'source_addr1', sourceAddr1);
   finalContent = upsertFrontmatterField(finalContent, 'source_snapshot_key', sourceSnapshotKey);
   finalContent = upsertFrontmatterField(finalContent, 'published_by', BLOG_PUBLISHED_BY);
+  finalContent = upsertFrontmatterField(finalContent, 'image_source', candidate.image_source || '');
+  finalContent = upsertFrontmatterField(finalContent, 'image_source_note', candidate.image_source_note || '');
 
   // YAML 파싱 안정성을 위해 문자열 frontmatter는 항상 따옴표로 정규화
   finalContent = ensureQuotedFrontmatterField(finalContent, 'title');
@@ -1080,6 +1082,8 @@ ${festivalStyleOverride}
   finalContent = ensureQuotedFrontmatterField(finalContent, 'source_title');
   finalContent = ensureQuotedFrontmatterField(finalContent, 'source_addr1');
   finalContent = ensureQuotedFrontmatterField(finalContent, 'published_by');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'image_source');
+  finalContent = ensureQuotedFrontmatterField(finalContent, 'image_source_note');
 
   if (!filename) {
     filename = `${today}-post-${Date.now()}`;
