@@ -20,6 +20,16 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 수동 복구 배포 (초이스 1 + 맛집 3)
+  - 배경: 당일 schedule run(#495)에서 초이스 실패 및 맛집 단계 skip으로 발행 누락 발생
+  - 조치: `generate-choice-posts-auto.js`(화요일 생활 테마) 1건 + `generate-life-restaurant-posts.mjs` 3건을 수동 실행해 누락분 복구
+  - 결과 파일:
+    - `src/content/life/2026-04-14-choice-living-2026-04-14.md`
+    - `src/content/life/2026-04-14-seongsu-restaurant-23279805.md`
+    - `src/content/life/2026-04-14-songdo-restaurant-1045132880.md`
+    - `src/content/life/2026-04-14-pangyo-restaurant-1370916394.md`
+  - 검증: `npm run build` 성공(547 pages / sitemap 542 / search-index 482)
+
 - 2026-04-14 스케줄 실패 RCA + 재발 방지
   - 원인: `generate_choice`에서 품질/중복 필터 통과 후보 0개로 실패했고, 기존 워크플로우 구조상 이후 3단계가 연쇄 `skipped`
   - 조치1: `.github/workflows/deploy.yml`의 `generate_choice`를 `continue-on-error: true`로 설정해 초이스 실패와 맛집 단계를 분리

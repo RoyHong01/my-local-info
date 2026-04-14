@@ -3,6 +3,23 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (수동 복구 배포: 초이스 1건 + 맛집 3건 재생성)
+
+- **요청 배경**: 2026-04-14 스케줄에서 `generate_choice` 실패 및 3단계 맛집 `skipped` 발생으로, 당일 누락분을 수동 복구 생성 후 즉시 배포.
+- **실행 내역**:
+  1. `scripts/generate-choice-posts-auto.js`를 `CHOICE_FORCE_DATE=2026-04-14`, `CHOICE_AUTO_THEME_DAY=2`로 실행해 생활 테마 초이스 1건 생성
+  2. `scripts/generate-life-restaurant-posts.mjs`를 `LIFE_RESTAURANT_POSTS_PER_RUN=3`, `LIFE_RESTAURANT_POSTS_PER_BUCKET=1`로 실행해 맛집 3건 생성
+  3. 생성 직후 `npm run build` 성공 확인 후 커밋/푸시로 배포 트리거
+- **생성 파일**:
+  - `src/content/life/2026-04-14-choice-living-2026-04-14.md`
+  - `src/content/life/2026-04-14-seongsu-restaurant-23279805.md`
+  - `src/content/life/2026-04-14-songdo-restaurant-1045132880.md`
+  - `src/content/life/2026-04-14-pangyo-restaurant-1370916394.md`
+- **연동 파일 변경**:
+  - `scripts/data/recommended-products.json` (초이스 상품 이력 반영)
+- **검증**:
+  - `npm run build` 성공 (정적 페이지 547, sitemap 542 URL, search-index 482건)
+
 ## 2026-04-14 (초이스 자동화 고도화: delay 조절 + 조기 종료 로직 + 다른 요일 테마 검증)
 
 - **수정 파일**: `scripts/lib/coupang-api.js`, `scripts/generate-choice-post.js`, `scripts/data/recommended-products.json`

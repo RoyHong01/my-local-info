@@ -166,6 +166,72 @@
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9198734318",
+      "productName": "킹사이즈 이불 침구 수납함 앞면오픈형 2개 세트",
+      "brand": "킹사이즈",
+      "publishedBy": "auto",
+      "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9277887743",
+      "productName": "퓨어넥스 특대용량 의류 이불 보관 리빙박스 2개입",
+      "brand": "퓨어넥스",
+      "publishedBy": "auto",
+      "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9326866137",
+      "productName": "투명 아크릴 화장품 장신구 정리함  산화 방지 다층 대용량 3단",
+      "brand": "투명",
+      "publishedBy": "auto",
+      "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9135013938",
+      "productName": "골드릭 화장실 욕실 청소솔 스쿼지 바닥 청소 도구 브러쉬 용품, 1개, GM 화이트",
+      "brand": "골드릭",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9334374955",
+      "productName": "이고다 먼지왕 업그레이드형 양면흡착 정전기 먼지털이  롱핸들 1P+리필20P",
+      "brand": "이고다",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-14",
+      "productId": "9428589909",
+      "productName": "로멀리 욕실 물기제거 미니 스퀴지",
+      "brand": "로멀리",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
+      "sourceId": "manual-choice-living-2026-04-14",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
