@@ -7,7 +7,6 @@ import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import StickySidebar from '@/components/StickySidebar';
 
 interface DataItem {
   [key: string]: unknown;
@@ -181,12 +180,12 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
             </article>
           </div>
           {/* 사이드바 */}
-          <StickySidebar>
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-festival-detail" />
             </div>
-          </StickySidebar>
+          </aside>
         </div>
       </main>
     </div>

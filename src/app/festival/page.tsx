@@ -6,7 +6,6 @@ import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import StickySidebar from '@/components/StickySidebar';
 
 export const metadata: Metadata = {
   title: '전국 축제·여행 정보 | 픽앤조이',
@@ -65,12 +64,12 @@ export default async function FestivalPage() {
               <FestivalCardList items={items} />
             )}
           </div>
-          <StickySidebar>
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-festival-list" />
             </div>
-          </StickySidebar>
+          </aside>
         </div>
       </main>
     </div>

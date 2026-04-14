@@ -6,7 +6,6 @@ import ScrollRestorer from '@/components/ScrollRestorer';
 import IncheonCardList from '@/components/IncheonCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import StickySidebar from '@/components/StickySidebar';
 
 export const metadata: Metadata = {
   title: '인천 지역 정보 | 픽앤조이',
@@ -69,12 +68,12 @@ export default async function IncheonPage() {
               <IncheonCardList items={items} />
             )}
           </div>
-          <StickySidebar>
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-incheon-list" />
             </div>
-          </StickySidebar>
+          </aside>
         </div>
       </main>
     </div>

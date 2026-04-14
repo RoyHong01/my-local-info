@@ -14,7 +14,6 @@ import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import ProductSidebarBanner from '@/components/ProductSidebarBanner';
-import StickySidebar from '@/components/StickySidebar';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 
 function extractFirstSentenceFromMarkdown(markdown: string): string {
@@ -544,7 +543,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </article>
           </div>
-          <StickySidebar>
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <div className="mb-4">
                 <TaeheoAdBanner />
@@ -563,7 +562,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <CoupangBanner bannerId="coupang-sidebar-blog-detail" />
               )}
             </div>
-          </StickySidebar>
+          </aside>
         </div>
       </main>
     </div>

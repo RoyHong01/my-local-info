@@ -196,20 +196,16 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ── Sticky 사이드바 GPU 가속 + Safari footer 충돌 완화 ── */
+/* ── Sticky 사이드바 GPU 가속(macOS 관련 스크롤 방지) ── */
 .sticky-sidebar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 6rem;
-  align-self: flex-start;
-  width: 15rem;
-  flex: 0 0 15rem;
-  height: max-content;
-  overflow: visible;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  will-change: top;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, top;
+  perspective: 1000px;
+  contain: layout style;
   transition: none;
+  top: 5.95rem; /* 셀프힐링 헤더막으로 미세 조정 방지 */
 }
 
 /* ── Hero animations ── */

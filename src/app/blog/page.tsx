@@ -5,7 +5,6 @@ import BlogFilter from '@/components/BlogFilter';
 import BlogScrollRestorer from '@/components/BlogScrollRestorer';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
-import StickySidebar from '@/components/StickySidebar';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -47,12 +46,12 @@ export default function BlogPage() {
               <BlogFilter posts={posts} />
             </Suspense>
           </div>
-          <StickySidebar>
+          <aside className="hidden lg:block w-60 flex-shrink-0 sticky top-24 self-start sticky-sidebar">
             <div className="flex flex-col gap-4">
               <TaeheoAdBanner />
               <CoupangBanner bannerId="coupang-sidebar-blog-list" />
             </div>
-          </StickySidebar>
+          </aside>
         </div>
       </main>
     </div>
