@@ -8,7 +8,7 @@ export default function CoupangBanner({ bannerId }: { bannerId?: string }) {
     <div>
       <div style={{
         fontSize: '10px',
-        color: '#9ca3af',
+        color: '#4b5563',
         textAlign: 'center',
         marginBottom: '6px',
       }}>

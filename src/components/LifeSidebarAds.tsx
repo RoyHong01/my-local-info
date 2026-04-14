@@ -19,7 +19,7 @@ export default function LifeSidebarAds() {
   const isChoiceContext = pathname === '/life/choice' || (pathname === '/life' && tab === 'choice');
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <TaeheoAdBanner />
       {isChoiceContext ? (
         <ProductSidebarBanner
