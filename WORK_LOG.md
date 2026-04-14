@@ -3,6 +3,23 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (blog latest 완전일치 우선 강화 + 카테고리별 자동 분기)
+
+- **요청 반영**: blog-input.latest.json 처리 시 `keyword`와 제목(`서비스명/title/name`)의 100% 일치 데이터를 최우선으로 선정하고, 완전일치가 있으면 다른 후보를 무시하도록 강화.
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `scripts/run-blog-latest.js`
+  - `scripts/blog-input.latest.json`
+  - `README.md`
+- **핵심 반영**:
+  1. 완전일치 판정 함수 추가: 원문 완전일치 우선, 필요 시 정규화(공백/특수문자 제거) 완전일치 허용.
+  2. `exact-first`에서 완전일치 후보가 발견되면 비완전일치 후보를 즉시 배제(`exact-only-when-found`).
+  3. `run-blog-latest.js` 자동 분기 추가: 행사 카테고리(`전국 축제·여행`)는 기본 `exact-first`, 나머지 카테고리는 기본 `contains`.
+  4. 입력 템플릿의 `keywordMatchMode`를 비워도 자동 분기가 작동하도록 정리.
+- **검증**:
+  - `node scripts/run-blog-latest.js` 실행 시 `BLOG_ONLY_KEYWORD_MATCH=exact-first` 및 매칭 결과 로그 확인.
+  - `npm run build` 성공.
+
 ## 2026-04-15 (blog latest 키워드 정밀화: 완전일치 우선 exact-first)
 
 - **요청 반영**: 특정 행사 수동 생성 정확도를 높이기 위해 blog latest 키워드 매칭을 완전일치 우선으로 정밀화.

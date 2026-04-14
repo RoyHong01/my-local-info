@@ -13,6 +13,19 @@ function asNumber(value, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
+function resolveKeywordMatchMode(category, rawMode) {
+  const explicit = asString(rawMode).toLowerCase();
+  if (explicit === 'exact-first' || explicit === 'exact-only' || explicit === 'contains') {
+    return explicit;
+  }
+
+  // 자동 분기: 축제 카테고리는 완전일치 우선, 나머지는 포함매칭 기본
+  if (category === '전국 축제·여행') {
+    return 'exact-first';
+  }
+  return 'contains';
+}
+
 if (!fs.existsSync(inputPath)) {
   console.error(`입력 파일이 없습니다: ${inputPath}`);
   process.exit(1);
@@ -28,7 +41,7 @@ try {
 
 const category = asString(input.category);
 const keyword = asString(input.keyword);
-const keywordMatchMode = asString(input.keywordMatchMode || 'exact-first').toLowerCase();
+const keywordMatchMode = resolveKeywordMatchMode(category, input.keywordMatchMode);
 const publishedBy = asString(input.publishedBy || 'manual').toLowerCase() === 'manual' ? 'manual' : 'auto';
 
 if (!category) {

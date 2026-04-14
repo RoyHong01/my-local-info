@@ -37,6 +37,7 @@ npm run generate:choice:latest
 
 - Input file: `scripts/blog-input.latest.json`
 - `keywordMatchMode`: `exact-first`(기본), `exact-only`, `contains`
+- 비워두면 자동 분기: `전국 축제·여행 -> exact-first`, 그 외 카테고리 -> `contains`
 - Run:
 
 ```bash

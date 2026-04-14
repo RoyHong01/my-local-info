@@ -172,6 +172,16 @@ function getKeywordNameFields(item) {
   return [item?.['서비스명'], item?.['title'], item?.['name']].filter((value) => typeof value === 'string' && value.trim());
 }
 
+function isExactKeywordMatch(field, keyword) {
+  const a = String(field || '').trim();
+  const b = String(keyword || '').trim();
+  if (!a || !b) return false;
+  // 1순위: 원문 기준 완전일치
+  if (a === b) return true;
+  // 2순위: 공백/특수문자 정규화 후 완전일치
+  return normalizeMatchText(a) === normalizeMatchText(b);
+}
+
 function getKeywordHaystack(item) {
   return [
     item?.['서비스명'],
@@ -191,7 +201,7 @@ function filterItemsByKeyword(items, keyword, matchMode) {
   if (!normalizedKeyword) return { mode, selectedMode: 'none', items };
 
   const exactMatches = items.filter((item) =>
-    getKeywordNameFields(item).some((field) => normalizeMatchText(field) === normalizedKeyword)
+    getKeywordNameFields(item).some((field) => isExactKeywordMatch(field, keyword))
   );
 
   if (mode === 'exact-only') {
@@ -199,7 +209,8 @@ function filterItemsByKeyword(items, keyword, matchMode) {
   }
 
   if (mode === 'exact-first' && exactMatches.length > 0) {
-    return { mode, selectedMode: 'exact', items: exactMatches };
+    // 완전일치가 있으면 비완전일치 후보는 즉시 배제
+    return { mode, selectedMode: 'exact-only-when-found', items: exactMatches };
   }
 
   const containsMatches = items.filter((item) => normalizeMatchText(getKeywordHaystack(item)).includes(normalizedKeyword));
@@ -1238,6 +1249,9 @@ async function run() {
 
     if (BLOG_ONLY_KEYWORD) {
       console.log(`  키워드 매칭 결과: ${keywordFiltered.items.length}개 (${keywordFiltered.selectedMode})`);
+      if (keywordFiltered.selectedMode === 'exact-only-when-found') {
+        console.log('  ✅ 완전일치 후보 발견: 부분일치 후보는 무시하고 즉시 생성 대상을 확정합니다.');
+      }
     }
 
     const validItems = sortByPriority(keywordFiltered.items, category);

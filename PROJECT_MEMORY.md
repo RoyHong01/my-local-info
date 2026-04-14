@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-15 blog latest 키워드 완전일치 우선 강화
+  - 요청사항: `keyword`와 제목(`서비스명/title/name`)이 100% 일치하는 API 결과가 있으면 해당 데이터 우선 사용.
+  - 반영: `scripts/generate-blog-post.js`의 `exact-first`에서 완전일치 발견 시 비완전일치 후보를 무시하고 즉시 해당 집합만 생성 대상으로 확정.
+  - 자동 분기: `scripts/run-blog-latest.js`는 `keywordMatchMode` 미지정 시 행사 카테고리는 `exact-first`, 나머지는 `contains`를 기본 적용.
+
 - 2026-04-15 blog latest 키워드 정밀화(exact-first)
   - 목적: 특정 행사명 수동 생성 시 불필요한 유사 항목 매칭을 줄이고 정확도를 높이기 위함.
   - 반영: `scripts/generate-blog-post.js`에 키워드 매칭 모드(`exact-first`, `exact-only`, `contains`) 추가.

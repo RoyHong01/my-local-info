@@ -1,7 +1,7 @@
 {
   "category": "전국 축제·여행",
   "keyword": "행사명 전체 또는 고유 키워드",
-  "keywordMatchMode": "exact-first",
+  "keywordMatchMode": "",
   "publishedBy": "manual",
   "maxCandidatesPerCategory": 8,
   "maxGenerationSeconds": 900,
