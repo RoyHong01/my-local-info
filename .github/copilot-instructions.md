@@ -152,7 +152,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 13. **초이스 무인 엔진(자동화) 규칙**: GitHub Actions의 자동 초이스 생성은 KST 요일별 테마와 중복 방지 필터를 반드시 적용한다.
   - 요일별 테마: 월 건강 / 화 생활 / 수 주방 / 목 디지털 / 금 반려 생활 / 토 뷰티·패션 / 일 가전·가구
   - 테마 설정 파일: `scripts/data/choice-daily-themes.json`에서 운영자가 키워드/대체 키워드를 조정한다.
-  - 상품 수집: 쿠팡 검색 API `sort=bestAsc` 기준 상위권(10~20개) 후보를 먼저 수집
+  - 상품 수집: 쿠팡 검색 API는 요청당 최대 10개만 허용하므로, `sort=bestAsc` 기준 상위 10개를 여러 영어 키워드로 나눠 수집해 약 50개 규모 후보풀을 만든다.
+  - 검색어 운영: 표시용 `keywordHint`와 실제 검색용 `searchKeywordHint`를 분리하고, 실제 쿠팡 호출은 영어 검색어를 우선 사용한다.
+  - 품질 메타데이터 예외: `rating/reviewCount`가 비어 있어도 데이터 기반 후보가 3개 미만이면 `rank <= 10` bestseller를 보충 후보로 허용한다.
   - 중복 방지: `scripts/data/recommended-products.json` 기준 최근 14일 내 사용 `productId` 제외
   - 기록 분리: 히스토리에는 `publishedBy(auto/manual)`를 함께 저장해 자동/수동 발행 이력을 구분한다.
   - 품질 필터: `rating >= 4.5`, `reviewCount >= 100`, `outOfStock=false`
@@ -214,6 +216,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **스케줄 실패 RCA 정리**: 2026-04-14 실행은 `generate_choice` 후보 0개 실패가 1차 원인이며, 이후 3단계(맛집) `skipped`는 실패 전파 구조 영향으로 확인.
   - **실패 격리 적용**: `.github/workflows/deploy.yml`의 `[2.5단계] 픽앤조이 초이스 자동 생성` step에 `continue-on-error: true`를 적용해 초이스 실패가 맛집 단계를 막지 않도록 수정.
   - **초이스 성공률 보강**: `scripts/generate-choice-posts-auto.js`에 테마별 백업 키워드 병합 재시도(1회) 로직 추가.
+- 2026-04-14 핵심 반영(추가):
+  - **쿠팡 limit 범위 오류 복구**: Search API는 `limit > 10`을 허용하지 않아 단일 Top 50 호출이 실패 원인이었고, `scripts/lib/coupang-api.js` 상한을 10으로 교정.
+  - **후보풀 수집 방식 전환**: `scripts/generate-choice-post.js`에서 다중 영어 키워드로 상위 10개씩 모아 약 50개 규모 후보풀을 구성하도록 변경.
+  - **Top10 bestseller fallback 도입**: 품질 메타데이터가 부족할 때 `rank <= 10` 후보를 보충 허용해 생활 테마 로컬 자동 생성 성공을 확인.
 - 2026-04-13 핵심 반영(추가):
   - **초이스 산출물 보존 강화**: `.github/workflows/deploy.yml`에 `[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)`를 추가해 초이스 생성 직후 `src/content/life`와 `scripts/data/recommended-products.json`을 먼저 커밋.
   - 이후 3단계(맛집) 실패가 발생해도 초이스 글/히스토리와 git log 기반 리포트 근거가 보존되도록 정리.

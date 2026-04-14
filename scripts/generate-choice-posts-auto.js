@@ -8,13 +8,13 @@ const { promisify } = require('util');
 const runFile = promisify(execFile);
 const DAILY_THEMES_PATH = path.join(process.cwd(), 'scripts', 'data', 'choice-daily-themes.json');
 const BACKUP_THEME_KEYWORDS = {
-  health: ['건강기능식품', '영양제', '유산균', '오메가3'],
-  living: ['생활용품', '욕실청소', '정리수납', '밀대걸레'],
-  kitchen: ['주방용품', '밀폐용기', '후라이팬', '칼세트'],
-  digital: ['디지털 액세서리', '멀티충전기', '키보드 마우스', '보조배터리'],
-  pet: ['반려동물 용품', '고양이 모래', '강아지 간식', '펫 케어'],
-  beauty: ['뷰티', '스킨케어', '헤어케어', '선케어'],
-  appliance: ['소형가전', '생활가전', '청소가전', '수납가구'],
+  health: ['health supplement', 'daily vitamin', 'probiotic supplement', 'omega 3 supplement'],
+  living: ['household item', 'cleaning tool', 'storage organizer', 'bathroom supplies'],
+  kitchen: ['kitchenware', 'food storage', 'cooking utensil', 'meal prep container'],
+  digital: ['digital accessories', 'portable charger', 'desk accessory', 'mobile accessories'],
+  'pet-life': ['pet supplies', 'cat supplies', 'dog supplies', 'pet grooming'],
+  'beauty-fashion': ['beauty', 'skin care', 'hair care', 'fashion accessories'],
+  'home-appliance-furniture': ['home appliance', 'furniture', 'interior lighting', 'home living'],
 };
 
 function getTodayKstDate() {
@@ -73,11 +73,12 @@ async function buildTempInput(themeInfo, dateKst) {
     brand: '픽앤조이 초이스',
     rating: '4.7',
     reviewCount: '100',
-    keywordHint: theme.keywordHint || [],
+    keywordHint: theme.searchKeywordHint || theme.keywordHint || [],
     fallbackKeywordHint: theme.fallbackKeywordHint || [],
     tags: Array.isArray(theme.tags) ? [...theme.tags, '쿠팡', '리뷰'] : ['쿠팡', '리뷰', '픽앤조이초이스'],
     themeKey: theme.key,
     themeName: theme.name,
+    backupKeywordHint: theme.backupKeywordHint || [],
     publishedBy: 'auto',
     outputFileName: `${dateKst}-choice-${englishName}.md`,
   };
@@ -133,7 +134,7 @@ async function run() {
     return;
   } catch (primaryError) {
     const themeKey = String(themeInfo.theme?.key || '').trim();
-    const backupKeywords = BACKUP_THEME_KEYWORDS[themeKey] || [];
+    const backupKeywords = mergeKeywordHints(payload.backupKeywordHint, BACKUP_THEME_KEYWORDS[themeKey] || []);
     const mergedFallbacks = mergeKeywordHints(payload.fallbackKeywordHint, backupKeywords);
 
     if (mergedFallbacks.length === 0) {

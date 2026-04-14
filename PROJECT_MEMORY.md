@@ -25,6 +25,11 @@
   - 조치1: `.github/workflows/deploy.yml`의 `generate_choice`를 `continue-on-error: true`로 설정해 초이스 실패와 맛집 단계를 분리
   - 조치2: `scripts/generate-choice-posts-auto.js`에 테마별 백업 키워드 병합 재시도(1회) 로직 추가
 
+- 2026-04-14 초이스 자동화 복구
+  - 쿠팡 Search API는 `limit > 10`에서 `rCode: 400`, `limit is out of range`를 반환하므로 단일 호출 Top 50 수집은 사용할 수 없음
+  - `scripts/lib/coupang-api.js` limit 상한을 10으로 고정하고, `scripts/generate-choice-post.js`에서 다중 영어 키워드로 최대 50개 안팎 후보풀을 모으도록 변경
+  - 품질 메타데이터가 충분한 상품을 우선 사용하되, 부족할 때는 `rank <= 10` bestseller를 보충 후보로 허용해 생활 테마 로컬 생성 성공 확인
+
 - 2026-04-13 초이스 산출물 보존 강화
   - `.github/workflows/deploy.yml`에 초이스 생성 직후 전용 커밋 단계를 추가해 `src/content/life`, `scripts/data/recommended-products.json`을 즉시 보존
   - 이후 3단계 실패 시에도 초이스 글/히스토리와 git log 기반 리포트 데이터가 유지되도록 워크플로우 순서를 강화

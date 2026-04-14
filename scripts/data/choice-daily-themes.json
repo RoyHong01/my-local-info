@@ -4,7 +4,9 @@
     "key": "health",
     "name": "건강",
     "keywordHint": ["프로바이오틱스", "오메가3"],
-    "fallbackKeywordHint": ["멀티비타민", "루테인", "마그네슘", "유산균"],
+    "searchKeywordHint": ["probiotics", "omega 3"],
+    "fallbackKeywordHint": ["multivitamin", "lutein", "magnesium", "vitamin c", "gut health", "coenzyme q10"],
+    "backupKeywordHint": ["health supplement", "diet supplement", "immune vitamin", "daily vitamin"],
     "tags": ["건강", "루틴관리", "자기관리템", "픽앤조이초이스"]
   },
   {
@@ -12,7 +14,9 @@
     "key": "living",
     "name": "생활",
     "keywordHint": ["수납 정리함", "청소용품"],
-    "fallbackKeywordHint": ["생활필수품", "욕실 정리", "빨래건조대", "리빙박스"],
+    "searchKeywordHint": ["storage box", "cleaning supplies"],
+    "fallbackKeywordHint": ["bathroom organizer", "drying rack", "living box", "mop", "storage organizer", "laundry basket", "cleaning tool", "household item"],
+    "backupKeywordHint": ["home organization", "bathroom supplies", "daily household goods", "cleaning kit"],
     "tags": ["생활용품", "정리템", "실용템", "픽앤조이초이스"]
   },
   {
@@ -20,7 +24,9 @@
     "key": "kitchen",
     "name": "주방",
     "keywordHint": ["진공포장기", "밀폐용기"],
-    "fallbackKeywordHint": ["프라이팬", "에어프라이어 용품", "주방 정리", "도마"],
+    "searchKeywordHint": ["vacuum sealer", "food container"],
+    "fallbackKeywordHint": ["frying pan", "air fryer accessories", "kitchen organizer", "cutting board", "kitchenware", "knife set", "pot set", "food storage"],
+    "backupKeywordHint": ["cooking utensil", "home cooking", "kitchen storage", "meal prep container"],
     "tags": ["주방용품", "식재료보관", "홈쿡", "픽앤조이초이스"]
   },
   {
@@ -28,7 +34,9 @@
     "key": "digital",
     "name": "디지털",
     "keywordHint": ["무선이어폰", "보조배터리"],
-    "fallbackKeywordHint": ["무선마우스", "블루투스 키보드", "휴대용 충전기", "태블릿 거치대"],
+    "searchKeywordHint": ["wireless earbuds", "power bank"],
+    "fallbackKeywordHint": ["wireless mouse", "bluetooth keyboard", "portable charger", "tablet stand", "multi charger", "laptop stand", "usb hub", "desk setup"],
+    "backupKeywordHint": ["digital accessories", "mobile accessories", "charging accessories", "desk accessory"],
     "tags": ["디지털", "데스크셋업", "생산성", "픽앤조이초이스"]
   },
   {
@@ -36,7 +44,9 @@
     "key": "pet-life",
     "name": "반려 생활",
     "keywordHint": ["고양이 사료", "강아지 간식"],
-    "fallbackKeywordHint": ["반려동물 배변패드", "펫 케어", "캣타워", "강아지 영양제"],
+    "searchKeywordHint": ["cat food", "dog treats"],
+    "fallbackKeywordHint": ["pet pad", "pet care", "cat tower", "dog supplement", "cat litter", "dog toy", "pet supplies", "pet shampoo"],
+    "backupKeywordHint": ["cat supplies", "dog supplies", "pet grooming", "pet snack"],
     "tags": ["반려생활", "펫케어", "반려템", "픽앤조이초이스"]
   },
   {
@@ -44,7 +54,9 @@
     "key": "beauty-fashion",
     "name": "뷰티/패션",
     "keywordHint": ["헤어 케어", "선크림"],
-    "fallbackKeywordHint": ["이너웨어", "패션 소품", "쿠션 팩트", "트리트먼트"],
+    "searchKeywordHint": ["hair care", "sunscreen"],
+    "fallbackKeywordHint": ["innerwear", "fashion accessories", "cushion foundation", "treatment", "skin care", "cleansing", "sun care", "hair essence"],
+    "backupKeywordHint": ["beauty", "daily cosmetics", "hair styling", "fashion item"],
     "tags": ["뷰티", "패션", "데일리템", "픽앤조이초이스"]
   },
   {
@@ -52,7 +64,9 @@
     "key": "home-appliance-furniture",
     "name": "가전/가구",
     "keywordHint": ["스탠드 조명", "소형 가전"],
-    "fallbackKeywordHint": ["의자", "수납 가구", "테이블", "무드등"],
+    "searchKeywordHint": ["floor lamp", "small appliance"],
+    "fallbackKeywordHint": ["chair", "storage furniture", "table", "mood light", "home appliance", "cleaning appliance", "shelf", "organizer rack"],
+    "backupKeywordHint": ["home living", "interior lighting", "appliance", "furniture"],
     "tags": ["가전", "가구", "홈리빙", "픽앤조이초이스"]
   }
 ]

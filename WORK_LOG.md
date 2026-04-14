@@ -3,6 +3,25 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (초이스 자동화 복구: 쿠팡 limit 범위 오류 수정 + 다중 키워드 후보풀/Top10 fallback 적용)
+
+- **근본 원인 추가 확인**:
+  1. 쿠팡 Search API는 `limit > 10` 요청 시 HTTP 200이어도 본문에서 `rCode: "400", rMessage: "limit is out of range"`를 반환
+  2. 최근 Top 50 확장 시도가 실제로는 빈 후보 배열을 만들었고, 이것이 `선정 0개`의 직접 원인으로 작동
+  3. 동일 프로세스 비교 결과 `limit=10`에서는 정상 응답/정규화가 가능했고, 문제는 정규화가 아니라 잘못된 검색 윈도우 설정이었음
+- **수정 파일**: `scripts/lib/coupang-api.js`, `scripts/generate-choice-post.js`, `scripts/generate-choice-posts-auto.js`, `scripts/data/choice-daily-themes.json`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. `scripts/lib/coupang-api.js` 검색 limit 상한을 실제 API 허용치인 `10`으로 고정
+  2. `scripts/generate-choice-post.js`에서 단일 호출 50개 수집 대신 `다중 영어 키워드 × 10개` 방식으로 약 50개 규모 후보풀을 모으도록 조정
+  3. 상품 선정 우선순위를 `품질 메타데이터 보유 상품 우선 -> 부족 시 quality meta가 없는 상위 rank 10위 이내 bestseller 보충` 구조로 변경
+  4. `scripts/generate-choice-posts-auto.js`, `scripts/data/choice-daily-themes.json`의 백업 키워드 풀을 영어 검색어 기준으로 정리해 `keyword is invalid` 가능성을 낮춤
+- **로컬 검증**:
+  - `node --check scripts/lib/coupang-api.js`
+  - `node --check scripts/generate-choice-post.js`
+  - `node --check scripts/generate-choice-posts-auto.js`
+  - `CHOICE_FORCE_DATE=2026-04-14 node scripts/generate-choice-posts-auto.js living` 성공
+  - 테스트 산출물과 히스토리 엔트리는 검증 후 정리
+
 ## 2026-04-14 (스케줄 실패 RCA 및 재발 방지: 초이스 실패 격리 + 백업 키워드 재시도)
 
 - **대상 실행**: `Daily Update & Deploy` #495 (`24368082234`, 2026-04-14 KST 리포트)

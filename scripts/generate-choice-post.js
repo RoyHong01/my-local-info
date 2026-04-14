@@ -15,6 +15,10 @@ const RECOMMENDED_PRODUCTS_HISTORY_PATH = path.join(process.cwd(), 'scripts', 'd
 const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_DAYS || 14);
 const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
 const CHOICE_MIN_REVIEW_COUNT = Number(process.env.CHOICE_MIN_REVIEW_COUNT || 100);
+const CHOICE_SEARCH_LIMIT = Number(process.env.CHOICE_SEARCH_LIMIT || 10);
+const CHOICE_TARGET_POOL_SIZE = Number(process.env.CHOICE_TARGET_POOL_SIZE || 50);
+const CHOICE_ALLOW_MISSING_QUALITY_METADATA = String(process.env.CHOICE_ALLOW_MISSING_QUALITY_METADATA || 'true').trim().toLowerCase() !== 'false';
+const CHOICE_TOP_RANK_FALLBACK_LIMIT = Number(process.env.CHOICE_TOP_RANK_FALLBACK_LIMIT || 10);
 const CHOICE_DEDUP_SCOPE = String(process.env.CHOICE_DEDUP_SCOPE || 'global').trim().toLowerCase();
 const CHOICE_RELAXED_RATING_STEPS = String(process.env.CHOICE_RELAXED_RATING_STEPS || '4.3,4.0')
   .split(',')
@@ -244,10 +248,67 @@ function scoreProductRelevance(product, keywordSignals) {
 
 function isQualifiedChoiceProduct(product, minRating = CHOICE_MIN_RATING) {
   if (!product?.productId || !product?.productName || !product?.affiliateUrl) return false;
+  if (Boolean(product.outOfStock)) return false;
+
+  const hasQualityMeta = Boolean(product.hasQualityMeta) || Number(product.rating || 0) > 0 || Number(product.reviewCount || 0) > 0;
+  if (!hasQualityMeta) {
+    return CHOICE_ALLOW_MISSING_QUALITY_METADATA;
+  }
+
   if (Number(product.rating || 0) < minRating) return false;
   if (Number(product.reviewCount || 0) < CHOICE_MIN_REVIEW_COUNT) return false;
-  if (Boolean(product.outOfStock)) return false;
   return true;
+}
+
+function isTopRankFallbackCandidate(product) {
+  if (!product?.productId || !product?.productName || !product?.affiliateUrl) return false;
+  if (Boolean(product.outOfStock)) return false;
+  return Number(product.rank || 0) > 0 && Number(product.rank || 0) <= CHOICE_TOP_RANK_FALLBACK_LIMIT;
+}
+
+function rankAndFilterProducts(products, keywordSignals, historyEntries, today, publishedBy, minRating) {
+  const ranked = products
+    .map((product) => ({
+      ...product,
+      relevanceScore: scoreProductRelevance(product, keywordSignals),
+    }))
+    .sort((a, b) => {
+      if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
+      if (a.rank && b.rank) return a.rank - b.rank;
+      return 0;
+    });
+
+  const freshRanked = ranked.filter((product) => !isRecentlyPostedProduct(product.productId, historyEntries, today, publishedBy));
+  const strictQualified = freshRanked.filter((product) => isQualifiedChoiceProduct(product, minRating));
+
+  if (strictQualified.length >= 3 || !CHOICE_ALLOW_MISSING_QUALITY_METADATA) {
+    return { ranked: freshRanked, strictQualified, selectedPool: strictQualified, usedTopRankFallback: false };
+  }
+
+  const selectedPool = [];
+  const seen = new Set();
+  for (const product of strictQualified) {
+    const key = product.productId || product.affiliateUrl;
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    selectedPool.push(product);
+  }
+
+  for (const product of freshRanked) {
+    if (selectedPool.length >= 3) break;
+    const key = product.productId || product.affiliateUrl;
+    if (!key || seen.has(key)) continue;
+    if (!isTopRankFallbackCandidate(product)) continue;
+    seen.add(key);
+    selectedPool.push(product);
+  }
+
+  return {
+    ranked: freshRanked,
+    strictQualified,
+    selectedPool,
+    usedTopRankFallback: selectedPool.length > strictQualified.length,
+  };
 }
 
 function pickProductsWithBrandDiversity(candidates, maxCount = 3) {
@@ -635,76 +696,46 @@ async function resolveProductsForCandidate(candidate) {
 
   for (const keyword of primaryKeywords) {
     try {
-      const products = await searchProducts(keyword, { limit: 20, sort: 'bestAsc' });
+      const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
       collectUniqueProducts(collected, products, seen);
+      if (collected.length >= CHOICE_TARGET_POOL_SIZE) break;
     } catch (error) {
       lastError = error;
     }
   }
 
-  const ranked = collected
-    .map((product) => ({
-      ...product,
-      relevanceScore: scoreProductRelevance(product, keywordSignals),
-    }))
-    .sort((a, b) => {
-      if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
-      if (a.rank && b.rank) return a.rank - b.rank;
-      return 0;
-    });
-
   let appliedMinRating = CHOICE_MIN_RATING;
-  let freshQualified = ranked.filter((product) => {
-    if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
-    return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
-  });
+  let filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+  let freshQualified = filtered.selectedPool;
+  let usedTopRankFallback = filtered.usedTopRankFallback;
 
   if (freshQualified.length < 3 && fallbackKeywords.length > 0) {
     for (const keyword of fallbackKeywords) {
       try {
-        const products = await searchProducts(keyword, { limit: 20, sort: 'bestAsc' });
+        const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
         collectUniqueProducts(collected, products, seen);
+        if (collected.length >= CHOICE_TARGET_POOL_SIZE) {
+          // stop early once candidate pool is large enough
+        }
       } catch (error) {
         lastError = error;
       }
 
-      const reranked = collected
-        .map((product) => ({
-          ...product,
-          relevanceScore: scoreProductRelevance(product, keywordSignals),
-        }))
-        .sort((a, b) => {
-          if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
-          if (a.rank && b.rank) return a.rank - b.rank;
-          return 0;
-        });
-
-      freshQualified = reranked.filter((product) => {
-        if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
-        return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
-      });
+      filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+      freshQualified = filtered.selectedPool;
+      usedTopRankFallback = filtered.usedTopRankFallback;
 
       if (freshQualified.length >= 3) break;
+      if (collected.length >= CHOICE_TARGET_POOL_SIZE) break;
     }
   }
 
   if (freshQualified.length < 3 && CHOICE_RELAXED_RATING_STEPS.length > 0) {
     for (const minRating of CHOICE_RELAXED_RATING_STEPS) {
       appliedMinRating = minRating;
-      freshQualified = collected
-        .map((product) => ({
-          ...product,
-          relevanceScore: scoreProductRelevance(product, keywordSignals),
-        }))
-        .sort((a, b) => {
-          if (b.relevanceScore !== a.relevanceScore) return b.relevanceScore - a.relevanceScore;
-          if (a.rank && b.rank) return a.rank - b.rank;
-          return 0;
-        })
-        .filter((product) => {
-          if (!isQualifiedChoiceProduct(product, appliedMinRating)) return false;
-          return !isRecentlyPostedProduct(product.productId, history.entries, today, publishedBy);
-        });
+      filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+      freshQualified = filtered.selectedPool;
+      usedTopRankFallback = filtered.usedTopRankFallback;
 
       if (freshQualified.length >= 3) {
         console.warn(`품질 기준 완화 적용: rating >= ${appliedMinRating}`);
@@ -728,6 +759,8 @@ async function resolveProductsForCandidate(candidate) {
     primaryKeywords,
     fallbackKeywords,
     appliedMinRating,
+    usedTopRankFallback,
+    collectedCandidateCount: collected.length,
     products: selected,
     error: selectionError || (selected.length > 0 ? null : lastError),
   };

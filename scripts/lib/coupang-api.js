@@ -70,6 +70,15 @@ function sanitizeKeyword(keyword) {
     .trim();
 }
 
+function deriveFallbackBrand(productName) {
+  const title = String(productName || '').trim();
+  if (!title) return '';
+
+  const cleaned = title.replace(/^\[[^\]]+\]\s*/, '').trim();
+  const firstToken = cleaned.split(/\s+/)[0] || '';
+  return firstToken.replace(/[^\p{Script=Hangul}a-zA-Z0-9]/gu, '').trim();
+}
+
 function normalizeSearchResponse(payload) {
   const productData = payload?.data?.productData || payload?.data || payload?.productData || [];
   if (!Array.isArray(productData)) return [];
@@ -87,22 +96,31 @@ function normalizeSearchResponse(payload) {
   };
 
   return productData
-    .map((item) => ({
-      productId: String(item.productId || item.itemId || item.id || '').trim(),
-      productName: String(item.productName || item.title || '').trim(),
-      productImage: String(item.productImage || item.image || item.productImageUrl || '').trim(),
-      productUrl: String(item.productUrl || item.url || item.productLink || '').trim(),
-      affiliateUrl: String(item.productUrl || item.url || item.productLink || '').trim(),
-      price: String(item.productPrice || item.salePrice || item.price || '').trim(),
-      originalPrice: String(item.originalPrice || item.basePrice || '').trim(),
-      rating: asNumber(item.productRating || item.rating || item.star || 0),
-      reviewCount: asNumber(item.reviewCount || item.ratingCount || item.review || 0),
-      rank: Number(item.rank || 0),
-      isRocket: Boolean(item.isRocket || false),
-      outOfStock: asBoolean(item.outOfStock || item.isOutOfStock || item.soldOut || false),
-      brand: String(item.brand || item.brandName || item.manufacturer || item.vendorName || '').trim(),
-      vendorName: String(item.vendorName || '').trim(),
-    }))
+    .map((item) => {
+      const productName = String(item.productName || item.title || '').trim();
+      const brand = String(item.brand || item.brandName || item.manufacturer || item.vendorName || '').trim();
+      const vendorName = String(item.vendorName || '').trim();
+      const rating = asNumber(item.productRating || item.rating || item.star || 0);
+      const reviewCount = asNumber(item.reviewCount || item.ratingCount || item.review || 0);
+
+      return {
+        productId: String(item.productId || item.itemId || item.id || '').trim(),
+        productName,
+        productImage: String(item.productImage || item.image || item.productImageUrl || '').trim(),
+        productUrl: String(item.productUrl || item.url || item.productLink || '').trim(),
+        affiliateUrl: String(item.productUrl || item.url || item.productLink || '').trim(),
+        price: String(item.productPrice || item.salePrice || item.price || '').trim(),
+        originalPrice: String(item.originalPrice || item.basePrice || '').trim(),
+        rating,
+        reviewCount,
+        hasQualityMeta: rating > 0 || reviewCount > 0,
+        rank: Number(item.rank || 0),
+        isRocket: Boolean(item.isRocket || false),
+        outOfStock: asBoolean(item.outOfStock || item.isOutOfStock || item.soldOut || false),
+        brand: brand || deriveFallbackBrand(productName),
+        vendorName,
+      };
+    })
     .filter((item) => item.productName && item.affiliateUrl);
 }
 
@@ -115,7 +133,7 @@ async function searchProducts(keyword, options = {}) {
     throw new Error('COUPANG_ACCESS_KEY 또는 COUPANG_SECRET_KEY가 없습니다.');
   }
 
-  const limit = Math.max(1, Math.min(Number(options.limit || 3), 20));
+  const limit = Math.max(1, Math.min(Number(options.limit || 3), 10));
   const imageSize = options.imageSize || '640x640';
   const subId = options.subId || 'picknjoy-choice';
   const sort = options.sort || 'bestAsc';
