@@ -3,7 +3,38 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
-## 2026-04-14 (초이스 자동화 복구: 쿠팡 limit 범위 오류 수정 + 다중 키워드 후보풀/Top10 fallback 적용)
+## 2026-04-14 (초이스 자동화 고도화: delay 조절 + 조기 종료 로직 + 다른 요일 테마 검증)
+
+- **수정 파일**: `scripts/lib/coupang-api.js`, `scripts/generate-choice-post.js`, `scripts/data/recommended-products.json`
+- **핵심 반영**:
+  1. **호출 간 delay 추가** (`CHOICE_API_CALL_DELAY_MS`, 기본 150ms):
+     - 쿠팡 API 과부하 회피 (rate limit control)
+     - 각 searchProducts 호출 후 자동으로 delay 적용
+     - `scripts/lib/coupang-api.js`에 `sleep()` 유틸 함수 export
+  2. **조기 종료 로직 추가** (`CHOICE_QUALITY_TARGET_COUNT`, 기본 3):
+     - 주 키워드 수집 중 품질 필터 통과 상품 3개 달성 시 루프 break
+     - 50개 pool size를 다 채우지 않아도 조기 종료로 API 사용량 감축 & 속도 향상
+     - fallback 키워드 단계에서도 동일 로직 적용
+  3. **코드 수정 상세**:
+     - `scripts/generate-choice-post.js`의 `resolveProductsForCandidate()`:
+       - 주 키워드 루프: `await sleep()` + 품질 필터 임시 평가로 조기 finish 판정
+       - fallback 키워드 루프: 동일 delay + 조기 break 구조
+     - 상수 추가: `CHOICE_API_CALL_DELAY_MS=150`, `CHOICE_QUALITY_TARGET_COUNT=3`
+- **다른 요일 테마 검증**:
+  - health (월-건강): `probiotics, omega 3` → 3개 상품 선정 ✅
+  - kitchen (수-주방): `vacuum sealer, food container` → 3개 상품 선정 ✅
+  - digital (목-디지털): `wireless earbuds, power bank` → 3개 상품 선정 ✅
+  - 모든 요일 테마의 백업 키워드 풀이 안정적으로 작동 확인
+- **빌드 검증**: `npm run build` 성공 (543 pages, 20.7s, sitemap 538 URLs)
+- **커밋 해시**:
+  - `59e46d2`: fix(choice) - coupang api limit/multi-keyword/rank-fallback
+  - `71435f1`: feat(choice) - inter-request delay + early termination logic
+- **효과 예상**:
+  - API 호출 모니터링: 요청 간격 150ms 보장으로 rate limit 문제 완화
+  - 비용 절감: 품질 상품 3개 달성 시 조기 종료로 불필요한 호출 제거 (최대 30% 호출 량 감축 예상)
+  - 응답 시간: delay와 조기 종료의 균형으로 전체 파이프라인 시간 단축
+
+## 2026-04-14 (초이스 근본 원인 규명 & 다중 키워드/Top10 fallback 적용: 쿠팡 limit 범위 오류 수정)
 
 - **근본 원인 추가 확인**:
   1. 쿠팡 Search API는 `limit > 10` 요청 시 HTTP 200이어도 본문에서 `rCode: "400", rMessage: "limit is out of range"`를 반환
@@ -21,6 +52,33 @@
   - `node --check scripts/generate-choice-posts-auto.js`
   - `CHOICE_FORCE_DATE=2026-04-14 node scripts/generate-choice-posts-auto.js living` 성공
   - 테스트 산출물과 히스토리 엔트리는 검증 후 정리
+
+## 2026-04-14 (스케줄 실패 RCA 및 재발 방지: 초이스 실패 격리 + 백업 키워드 재시도)
+
+- **대상 실행**: `Daily Update & Deploy` #495 (`24368082234`, 2026-04-14 KST 리포트)
+- **근본 원인(RCA)**:
+  1. `[2.5단계] generate_choice`에서 쿠팡 후보가 품질/중복 필터를 통과하지 못해 `선정 0개`로 실패
+  2. 기존 워크플로우는 `generate_choice` 실패 시 이후 단계가 중단되는 구조여서 3단계(맛집)가 연쇄적으로 `skipped`
+  3. 즉, 2.5단계 커밋 전략 자체가 맛집 실패 원인이 아니라, **초이스 step failure가 전체 job 흐름을 막은 구조**가 직접 원인
+- **수정 파일**: `.github/workflows/deploy.yml`, `scripts/generate-choice-posts-auto.js`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **재발 방지 조치**:
+  1. `generate_choice` step에 `continue-on-error: true` 적용 → 초이스 실패가 발생해도 3단계 맛집 파이프라인은 계속 실행
+  2. `generate-choice-posts-auto.js`에 백업 키워드 재시도 로직 추가
+     - 1차 실패 시 테마별 백업 키워드를 `fallbackKeywordHint`에 병합해 1회 재시도
+     - 생활 테마 기준 예: `생활용품`, `욕실청소`, `정리수납`, `밀대걸레`
+- **검증**:
+  - `node --check scripts/generate-choice-posts-auto.js`
+  - `npm run build` 성공
+
+## 2026-04-13 (초이스 산출물 보존 강화: 2.5단계 전용 커밋 추가)
+
+- **수정 파일**: `.github/workflows/deploy.yml`, `.github/copilot-instructions.md`, `WORK_LOG.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`
+- **핵심 반영**:
+  1. `[2.5단계] 픽앤조이 초이스 자동 생성` 직후 전용 commit/push step 추가
+  2. 초이스 생성본과 `scripts/data/recommended-products.json` 히스토리를 3단계(맛집)보다 먼저 보존
+  3. 이후 단계 실패 시에도 초이스 글/히스토리와 git log 기반 리포트 근거가 남도록 워크플로우 순서 강화
+- **검증**:
+  - `npm run build` 성공
 
 ## 2026-04-14 (스케줄 실패 RCA 및 재발 방지: 초이스 실패 격리 + 백업 키워드 재시도)
 
