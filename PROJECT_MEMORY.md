@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 픽앤조이 초이스 수동 포스트 추가 (샤프란 실내건조)
+  - 파일: `src/content/life/2026-04-14-choice-shafran-romantic-cotton.md`
+  - 이미지: `public/images/choice/shafran-hero.png`, `public/images/choice/shafran-middle.png`
+  - 규칙 반영: 쿠팡 제휴 링크/배너 메타데이터, 시나리오형 라이팅 구조, 본문 CTA 연결.
+
 - 2026-04-14 인천관광공사 관광사진 API003 연동
   - 이벤트성 인천 데이터(행사/축제)에 대해 키워드 기반 사진 자동 매칭을 수집 단계에 추가.
   - 매칭 실패 시 인천 랜드마크 사진 랜덤 fallback 적용.

@@ -3,6 +3,21 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (픽앤조이 초이스 수동 발행: 샤프란 실내건조)
+
+- **요청 반영**: 쿠팡 제휴 태그 기반으로 픽앤조이 초이스 포스트 1건 수동 생성.
+- **생성 파일**:
+  - `src/content/life/2026-04-14-choice-shafran-romantic-cotton.md`
+  - `public/images/choice/shafran-hero.png`
+  - `public/images/choice/shafran-middle.png`
+- **적용 사항**:
+  1. 히어로 이미지: `/images/choice/shafran-hero.png` 적용.
+  2. 본문 중간 이미지: `/images/choice/shafran-middle.png` 적용.
+  3. 쿠팡 태그/링크/배너 이미지/배너 alt를 frontmatter에 반영.
+  4. 초이스 자동화 지침 톤(상황 중심, Before/After, 체감형 문장)으로 본문 작성.
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-14 (인천관광공사 관광사진 API003 연동)
 
 - **요청 배경**: 인천 행사/축제 글의 시각 품질 강화를 위해 인천관광공사 관광사진 API를 수집 파이프라인에 연동.
