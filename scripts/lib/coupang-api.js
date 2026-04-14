@@ -167,9 +167,14 @@ async function searchProducts(keyword, options = {}) {
   throw lastError || new Error('쿠팡 검색 API 호출에 실패했습니다.');
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 module.exports = {
   formatSignedDate,
   loadLocalEnvFiles,
   getCoupangCredentials,
   searchProducts,
+  sleep,
 };

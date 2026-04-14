@@ -2,7 +2,7 @@
 const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');
-const { loadLocalEnvFiles, searchProducts } = require('./lib/coupang-api');
+const { loadLocalEnvFiles, searchProducts, sleep } = require('./lib/coupang-api');
 
 const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
 const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
@@ -19,6 +19,8 @@ const CHOICE_SEARCH_LIMIT = Number(process.env.CHOICE_SEARCH_LIMIT || 10);
 const CHOICE_TARGET_POOL_SIZE = Number(process.env.CHOICE_TARGET_POOL_SIZE || 50);
 const CHOICE_ALLOW_MISSING_QUALITY_METADATA = String(process.env.CHOICE_ALLOW_MISSING_QUALITY_METADATA || 'true').trim().toLowerCase() !== 'false';
 const CHOICE_TOP_RANK_FALLBACK_LIMIT = Number(process.env.CHOICE_TOP_RANK_FALLBACK_LIMIT || 10);
+const CHOICE_API_CALL_DELAY_MS = Number(process.env.CHOICE_API_CALL_DELAY_MS || 150);
+const CHOICE_QUALITY_TARGET_COUNT = Number(process.env.CHOICE_QUALITY_TARGET_COUNT || 3);
 const CHOICE_DEDUP_SCOPE = String(process.env.CHOICE_DEDUP_SCOPE || 'global').trim().toLowerCase();
 const CHOICE_RELAXED_RATING_STEPS = String(process.env.CHOICE_RELAXED_RATING_STEPS || '4.3,4.0')
   .split(',')
@@ -694,11 +696,19 @@ async function resolveProductsForCandidate(candidate) {
   const today = todayIso();
   const publishedBy = getPublishedBy(candidate);
 
+  // 1단계: 주 키워드로 수집 (delay 포함)
   for (const keyword of primaryKeywords) {
     try {
       const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
       collectUniqueProducts(collected, products, seen);
-      if (collected.length >= CHOICE_TARGET_POOL_SIZE) break;
+      
+      // 현재 수집분 필터링해서 품질 상품 수 체크
+      const tempFiltered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, CHOICE_MIN_RATING);
+      if (tempFiltered.selectedPool.length >= CHOICE_QUALITY_TARGET_COUNT || collected.length >= CHOICE_TARGET_POOL_SIZE) {
+        break; // 품질 상품 충분하거나 pool 가득 → 조기 종료
+      }
+      
+      await sleep(CHOICE_API_CALL_DELAY_MS); // 다음 호출 전 delay
     } catch (error) {
       lastError = error;
     }
@@ -709,27 +719,29 @@ async function resolveProductsForCandidate(candidate) {
   let freshQualified = filtered.selectedPool;
   let usedTopRankFallback = filtered.usedTopRankFallback;
 
+  // 2단계: fallback 키워드로 부족분 보충 (delay 포함)
   if (freshQualified.length < 3 && fallbackKeywords.length > 0) {
     for (const keyword of fallbackKeywords) {
       try {
         const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
         collectUniqueProducts(collected, products, seen);
-        if (collected.length >= CHOICE_TARGET_POOL_SIZE) {
-          // stop early once candidate pool is large enough
+        
+        filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+        freshQualified = filtered.selectedPool;
+        usedTopRankFallback = filtered.usedTopRankFallback;
+
+        if (freshQualified.length >= 3 || collected.length >= CHOICE_TARGET_POOL_SIZE) {
+          break; // 품질 상품 3개 달성 또는 pool 가득
         }
+        
+        await sleep(CHOICE_API_CALL_DELAY_MS); // 다음 호출 전 delay
       } catch (error) {
         lastError = error;
       }
-
-      filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
-      freshQualified = filtered.selectedPool;
-      usedTopRankFallback = filtered.usedTopRankFallback;
-
-      if (freshQualified.length >= 3) break;
-      if (collected.length >= CHOICE_TARGET_POOL_SIZE) break;
     }
   }
 
+  // 3단계: rating 기준 완화 (delay 필요 없음)
   if (freshQualified.length < 3 && CHOICE_RELAXED_RATING_STEPS.length > 0) {
     for (const minRating of CHOICE_RELAXED_RATING_STEPS) {
       appliedMinRating = minRating;
