@@ -11,5 +11,6 @@ export default function PageContentShell({ children }: PageContentShellProps) {
   const pathname = usePathname();
   const isHome = pathname === '/';
 
-  return <div className={`flex-1 overflow-x-hidden ${isHome ? '' : 'bg-cherry-blossom pt-8 md:pt-10'}`}>{children}</div>;
+  // overflow-x: clip - hidden처럼 가로 넘침을 숨기지만 스크롤 컨텍스트를 만들지 않음 (sticky 정상 작동)
+  return <div className={`flex-1 overflow-x-clip ${isHome ? '' : 'bg-cherry-blossom pt-8 md:pt-10'}`}>{children}</div>;
 }
