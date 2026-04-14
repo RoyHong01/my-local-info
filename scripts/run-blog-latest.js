@@ -28,6 +28,7 @@ try {
 
 const category = asString(input.category);
 const keyword = asString(input.keyword);
+const keywordMatchMode = asString(input.keywordMatchMode || 'exact-first').toLowerCase();
 const publishedBy = asString(input.publishedBy || 'manual').toLowerCase() === 'manual' ? 'manual' : 'auto';
 
 if (!category) {
@@ -43,6 +44,7 @@ const env = {
   ...process.env,
   BLOG_ONLY_CATEGORY: category,
   BLOG_ONLY_KEYWORD: keyword,
+  BLOG_ONLY_KEYWORD_MATCH: keywordMatchMode,
   BLOG_PUBLISHED_BY: publishedBy,
   BLOG_MAX_CANDIDATES_PER_CATEGORY: String(asNumber(input.maxCandidatesPerCategory, 8)),
   BLOG_MAX_GENERATION_SECONDS: String(asNumber(input.maxGenerationSeconds, 900)),
@@ -52,6 +54,7 @@ const env = {
 
 console.log(`BLOG_ONLY_CATEGORY=${env.BLOG_ONLY_CATEGORY}`);
 console.log(`BLOG_ONLY_KEYWORD=${env.BLOG_ONLY_KEYWORD}`);
+console.log(`BLOG_ONLY_KEYWORD_MATCH=${env.BLOG_ONLY_KEYWORD_MATCH}`);
 console.log(`BLOG_PUBLISHED_BY=${env.BLOG_PUBLISHED_BY}`);
 
 const result = spawnSync('node', ['scripts/generate-blog-post.js'], {

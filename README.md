@@ -36,6 +36,7 @@ npm run generate:choice:latest
 ### 2) Blog post (festival / incheon / subsidy)
 
 - Input file: `scripts/blog-input.latest.json`
+- `keywordMatchMode`: `exact-first`(기본), `exact-only`, `contains`
 - Run:
 
 ```bash

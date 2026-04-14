@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-15 blog latest 키워드 정밀화(exact-first)
+  - 목적: 특정 행사명 수동 생성 시 불필요한 유사 항목 매칭을 줄이고 정확도를 높이기 위함.
+  - 반영: `scripts/generate-blog-post.js`에 키워드 매칭 모드(`exact-first`, `exact-only`, `contains`) 추가.
+  - 기본값: `scripts/run-blog-latest.js` + `scripts/blog-input.latest.json`에서 `keywordMatchMode=exact-first` 사용.
+  - 동작: 완전일치 후보가 있으면 해당 후보만 사용, 없으면 포함 매칭으로 자동 fallback.
+
 - 2026-04-14 고정입력 수동 생성 체계 도입
   - 목적: Choice/Blog 수동 생성 시 입력 파일명/명령어 변형으로 인한 반복 실수를 줄이고 생성 속도를 높이기 위함.
   - 추가 파일: `scripts/choice-input.latest.json`, `scripts/blog-input.latest.json`, `scripts/run-choice-latest.js`, `scripts/run-blog-latest.js`

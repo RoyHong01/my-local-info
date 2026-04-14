@@ -3,6 +3,22 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (blog latest 키워드 정밀화: 완전일치 우선 exact-first)
+
+- **요청 반영**: 특정 행사 수동 생성 정확도를 높이기 위해 blog latest 키워드 매칭을 완전일치 우선으로 정밀화.
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `scripts/run-blog-latest.js`
+  - `scripts/blog-input.latest.json`
+  - `README.md`
+- **핵심 반영**:
+  1. `BLOG_ONLY_KEYWORD_MATCH` 모드 추가: `exact-first`, `exact-only`, `contains`.
+  2. `exact-first`는 행사명/제목의 완전일치 후보를 먼저 사용하고, 없을 때만 포함 매칭으로 fallback.
+  3. `run-blog-latest.js` 기본 모드를 `exact-first`로 주입.
+  4. 입력 템플릿에 `keywordMatchMode` 필드 추가.
+- **검증**:
+  - `node scripts/run-blog-latest.js` 실행 시 `BLOG_ONLY_KEYWORD_MATCH=exact-first` 및 `키워드 매칭 결과 ... (contains-fallback)` 로그 확인.
+
 ## 2026-04-14 (고정입력 워크플로우 추가: choice + blog/festival 수동 생성 공통)
 
 - **요청 반영**: 반복 수동 생성 속도를 높이기 위해 고정입력 파일 + 고정 실행 명령 체계를 도입.

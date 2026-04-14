@@ -22,6 +22,7 @@ const GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS = Number(process.env.GEMINI_ESTI
 const BLOG_ONLY_CATEGORY = process.env.BLOG_ONLY_CATEGORY || '';
 // 후보 텍스트(title/name/addr1/overview)에 키워드가 포함된 항목만 생성
 const BLOG_ONLY_KEYWORD = (process.env.BLOG_ONLY_KEYWORD || '').trim();
+const BLOG_ONLY_KEYWORD_MATCH = String(process.env.BLOG_ONLY_KEYWORD_MATCH || 'contains').trim().toLowerCase();
 const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 
 let geminiApiCallCount = 0;
@@ -159,6 +160,51 @@ function normalizeMatchText(value) {
     .normalize('NFC')
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]/gu, '');
+}
+
+function normalizeKeywordMatchMode(mode) {
+  const value = String(mode || '').trim().toLowerCase();
+  if (value === 'exact-first' || value === 'exact-only' || value === 'contains') return value;
+  return 'contains';
+}
+
+function getKeywordNameFields(item) {
+  return [item?.['서비스명'], item?.['title'], item?.['name']].filter((value) => typeof value === 'string' && value.trim());
+}
+
+function getKeywordHaystack(item) {
+  return [
+    item?.['서비스명'],
+    item?.['title'],
+    item?.['name'],
+    item?.['addr1'],
+    item?.['location'],
+    item?.['overview'],
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
+function filterItemsByKeyword(items, keyword, matchMode) {
+  const mode = normalizeKeywordMatchMode(matchMode);
+  const normalizedKeyword = normalizeMatchText(keyword);
+  if (!normalizedKeyword) return { mode, selectedMode: 'none', items };
+
+  const exactMatches = items.filter((item) =>
+    getKeywordNameFields(item).some((field) => normalizeMatchText(field) === normalizedKeyword)
+  );
+
+  if (mode === 'exact-only') {
+    return { mode, selectedMode: 'exact-only', items: exactMatches };
+  }
+
+  if (mode === 'exact-first' && exactMatches.length > 0) {
+    return { mode, selectedMode: 'exact', items: exactMatches };
+  }
+
+  const containsMatches = items.filter((item) => normalizeMatchText(getKeywordHaystack(item)).includes(normalizedKeyword));
+  const selectedMode = mode === 'exact-first' ? 'contains-fallback' : 'contains';
+  return { mode, selectedMode, items: containsMatches };
 }
 
 function extractFrontmatterValue(content, key) {
@@ -1155,6 +1201,7 @@ async function run() {
   }
   if (BLOG_ONLY_KEYWORD) {
     console.log(`🎯 BLOG_ONLY_KEYWORD="${BLOG_ONLY_KEYWORD}" — 키워드 포함 항목만 생성합니다.`);
+    console.log(`🎯 BLOG_ONLY_KEYWORD_MATCH="${normalizeKeywordMatchMode(BLOG_ONLY_KEYWORD_MATCH)}"`);
   }
 
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
@@ -1183,27 +1230,17 @@ async function run() {
       continue;
     }
 
-    // 만료 제외 + 종료일 지난 항목 제외 + 우선순위 정렬
-    const validItems = sortByPriority(
-      items
-        .filter(item => !item.expired)
-        .filter(item => !isEndDatePassed(item))
-        .filter((item) => {
-          if (!BLOG_ONLY_KEYWORD) return true;
-          const haystack = [
-            item['서비스명'],
-            item['title'],
-            item['name'],
-            item['addr1'],
-            item['location'],
-            item['overview'],
-          ]
-            .filter(Boolean)
-            .join(' ');
-          return haystack.includes(BLOG_ONLY_KEYWORD);
-        }),
-      category
-    );
+    // 만료 제외 + 종료일 지난 항목 제외 + 키워드 필터 + 우선순위 정렬
+    const baseItems = items.filter(item => !item.expired).filter(item => !isEndDatePassed(item));
+    const keywordFiltered = BLOG_ONLY_KEYWORD
+      ? filterItemsByKeyword(baseItems, BLOG_ONLY_KEYWORD, BLOG_ONLY_KEYWORD_MATCH)
+      : { mode: 'none', selectedMode: 'none', items: baseItems };
+
+    if (BLOG_ONLY_KEYWORD) {
+      console.log(`  키워드 매칭 결과: ${keywordFiltered.items.length}개 (${keywordFiltered.selectedMode})`);
+    }
+
+    const validItems = sortByPriority(keywordFiltered.items, category);
 
     // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
     const candidates = validItems.filter(item => {
