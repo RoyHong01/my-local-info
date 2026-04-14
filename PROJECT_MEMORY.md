@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 픽앤조이 초이스 수동 포스트 추가 (2080 닥터크리닉 미백 치약)
+  - 파일: `src/content/life/2026-04-14-choice-2080-doctor-clinic-whitening.md`
+  - 이미지: `public/images/choice/clinic-hero.png`, `public/images/choice/clinic-middle.png`
+  - 규칙 반영: 쿠팡 제휴 링크/배너 메타데이터, 시나리오형 라이팅 구조, 본문 CTA 연결.
+
 - 2026-04-14 픽앤조이 초이스 수동 포스트 추가 (샤프란 실내건조)
   - 파일: `src/content/life/2026-04-14-choice-shafran-romantic-cotton.md`
   - 이미지: `public/images/choice/shafran-hero.png`, `public/images/choice/shafran-middle.png`
