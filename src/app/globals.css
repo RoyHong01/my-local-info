@@ -202,7 +202,8 @@ body {
   position: sticky;
   top: 6rem;
   align-self: flex-start;
-  width: 100%;
+  width: 15rem;
+  flex: 0 0 15rem;
   height: max-content;
   overflow: visible;
   -webkit-backface-visibility: hidden;

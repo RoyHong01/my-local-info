@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-15 사이드바 폭 회귀 수정
+  - 원인: `src/app/globals.css`의 `.sticky-sidebar { width: 100% }`가 2컬럼 레이아웃을 깨뜨려 본문 카드가 hidden 판정.
+  - 조치: `.sticky-sidebar` 폭을 `15rem` 고정(`flex: 0 0 15rem`)으로 복구.
+  - 검증: `npm run test:e2e` 통과, `npm run build` 성공.
+
 - 2026-04-15 사이드바 구조 단순화(단일 aside sticky)
   - 배경: 이중 래퍼 + 보정 로직에서 회귀가 반복되어 사이드바 미노출이 모든 페이지에서 재현.
   - 조치: `src/components/StickySidebar.tsx`를 단일 `aside` sticky 구조로 변경하고 JS 보정 로직 제거.

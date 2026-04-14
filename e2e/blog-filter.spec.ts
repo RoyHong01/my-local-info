@@ -6,7 +6,7 @@ test('블로그 카테고리 필터 유지 확인', async ({ page }) => {
   await page.getByTestId('blog-filter-전국 축제·여행').click();
   await expect(page).toHaveURL(/\/blog\/?\?category=%EC%B6%95%EC%A0%9C$/);
 
-  const firstCard = page.locator('[data-testid^="blog-card-"]').first();
+  const firstCard = page.locator('[data-testid^="blog-card-"]:visible').first();
   await expect(firstCard).toBeVisible();
   await firstCard.click();
 
