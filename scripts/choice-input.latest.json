@@ -1,0 +1,23 @@
+{
+  "title": "제품 핵심 문제를 먼저 말하고, 제품명으로 마무리하는 제목",
+  "englishName": "brand-product-keyword",
+  "summary": "110~150자 요약. 제품명, 사용 맥락, 선택 이유를 과장 없이 작성",
+  "keywordHint": "영어 검색어 1, 영어 검색어 2",
+  "searchKeywordHint": "영어 검색어 1, 영어 검색어 2",
+  "sourceUrl": "https://example.com/product",
+  "rating": "4.7",
+  "reviewCount": "100",
+  "brand": "브랜드명",
+  "tags": [
+    "태그1",
+    "태그2",
+    "태그3",
+    "태그4",
+    "태그5",
+    "쿠팡",
+    "리뷰"
+  ],
+  "image": "/images/choice/sample-hero.png",
+  "fileName": "sample-hero",
+  "outputFileName": ""
+}

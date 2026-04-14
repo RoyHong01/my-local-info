@@ -3,6 +3,26 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (고정입력 워크플로우 추가: choice + blog/festival 수동 생성 공통)
+
+- **요청 반영**: 반복 수동 생성 속도를 높이기 위해 고정입력 파일 + 고정 실행 명령 체계를 도입.
+- **추가 파일**:
+  - `scripts/choice-input.latest.json`
+  - `scripts/blog-input.latest.json`
+  - `scripts/run-choice-latest.js`
+  - `scripts/run-blog-latest.js`
+- **수정 파일**:
+  - `package.json`
+  - `README.md`
+- **핵심 반영**:
+  1. Choice 수동 생성 고정 명령 추가: `npm run generate:choice:latest`
+  2. Blog(축제/인천/보조금) 수동 생성 고정 명령 추가: `npm run generate:blog:latest`
+  3. blog 고정 입력에서 `category/keyword`를 읽어 `BLOG_ONLY_CATEGORY`, `BLOG_ONLY_KEYWORD`로 본 생성기를 호출하는 래퍼 적용.
+  4. README에 고정입력 사용법과 실행 전 체크리스트를 추가.
+- **검증**:
+  - `node scripts/run-choice-latest.js --help` 정상 출력 확인.
+  - `node scripts/run-blog-latest.js` 실행 시 입력값 로드 및 대상 카테고리 필터 정상 동작 확인(생성 0건, API 호출 0회).
+
 ## 2026-04-14 (초이스 시나리오 라벨 정책 수정: Before/After 레이블 금지)
 
 - **요청 반영**: 초이스 포스트의 시나리오 섹션에서 `Before:`/`After:`(및 `전:`/`후:`) 라벨형 소제목 사용을 금지하고 자연어 전환 제목으로 통일.

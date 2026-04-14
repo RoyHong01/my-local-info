@@ -20,6 +20,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 고정입력 수동 생성 체계 도입
+  - 목적: Choice/Blog 수동 생성 시 입력 파일명/명령어 변형으로 인한 반복 실수를 줄이고 생성 속도를 높이기 위함.
+  - 추가 파일: `scripts/choice-input.latest.json`, `scripts/blog-input.latest.json`, `scripts/run-choice-latest.js`, `scripts/run-blog-latest.js`
+  - 명령 추가: `npm run generate:choice:latest`, `npm run generate:blog:latest`
+  - blog 래퍼는 입력 JSON의 `category`, `keyword`를 환경변수(`BLOG_ONLY_CATEGORY`, `BLOG_ONLY_KEYWORD`)로 주입해 기존 `generate-blog-post.js` 본체를 재사용.
+  - 결과: Choice와 Blog 모두 "입력값 수정 -> 고정 명령 실행"의 동일 UX로 운영 가능.
+
 - 2026-04-14 초이스 시나리오 소제목 라벨 정책 수정
   - 배경: 수동 생성본에 `Before:`/`After:` 라벨형 소제목이 노출되어 톤 일관성이 깨지는 문제 확인.
   - 조치: `scripts/generate-choice-post.js`의 시나리오 섹션 프롬프트를 자연어 전환 규칙으로 변경하고, 라벨형 표기를 금지.

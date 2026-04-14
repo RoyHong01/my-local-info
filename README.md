@@ -20,6 +20,35 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Fixed Input Workflow (Manual Fast Path)
+
+Use one fixed input file per workflow and one fixed command.
+
+### 1) Choice post (life)
+
+- Input file: `scripts/choice-input.latest.json`
+- Run:
+
+```bash
+npm run generate:choice:latest
+```
+
+### 2) Blog post (festival / incheon / subsidy)
+
+- Input file: `scripts/blog-input.latest.json`
+- Run:
+
+```bash
+npm run generate:blog:latest
+```
+
+### Quick pre-run checklist
+
+- `choice-input.latest.json`: `englishName`, `summary`, `keywordHint` 확인
+- `blog-input.latest.json`: `category`, `keyword` 확인
+- 중복 방지: 같은 slug/행사명 재사용 여부 확인
+- 실행 후 검증: `npm run build`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
