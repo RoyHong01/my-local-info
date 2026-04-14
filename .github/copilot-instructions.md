@@ -273,6 +273,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **본문 이미지 크기 최적화**: `src/app/globals.css`의 `.choice-post-prose` 규칙으로 본문 이미지(220px) 및 비교 테이블 이미지(160px) 제한
   - **SEO fallback 보강**: `src/app/blog/[slug]/page.tsx` 메타데이터에서 `post.image || post.coupangBannerImage`를 OG 이미지로 사용
 - 2026-04-11 핵심 반영:
+  - **인천 만료 체크 누락 보정**: `scripts/cleanup-expired.js`가 기존 `posts/subsidy/festival`만 처리하던 범위를 `public/data/incheon.json`까지 확장.
+  - **판정 기준 통일**: 인천 항목의 `endDate` 또는 `신청기한`에서 `YYYY-MM-DD`/`YYYY.MM.DD`를 정규화해 KST 기준으로 `expired: true` 자동 마킹.
+  - **즉시 조치**: `2026 인천 봄꽃 축제` 항목을 만료 처리해 인천 목록 카드에서 제외.
   - **Choice 구조화 데이터 개편**: `src/app/blog/[slug]/page.tsx`에서 Choice 글의 보조 JSON-LD를 `Product` 단독 타입에서 `Review` 스키마로 전환하고 `itemReviewed` 안에만 `Product`를 유지
   - **판매자 전용 필드 제거**: `offers` 제거로 Search Console 판매자 목록 오류(`price`, `shippingDetails`, `hasMerchantReturnPolicy`) 대응
   - **작성자/발행자 역할 분리**: 구조화 데이터의 `author`는 `Pick-n-Joy Editor`(`Person`), `publisher`는 `픽앤조이`(`Organization`)로 구분

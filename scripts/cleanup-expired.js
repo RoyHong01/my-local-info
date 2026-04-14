@@ -128,6 +128,47 @@ async function run() {
   } catch (err) {
     console.error('festival.json 만료 보정 실패:', err.message);
   }
+
+  // incheon.json 만료 처리 패스
+  const incheonPath = path.join(process.cwd(), 'public', 'data', 'incheon.json');
+  try {
+    const incheonRaw = await fs.readFile(incheonPath, 'utf-8');
+    const incheonData = JSON.parse(incheonRaw);
+    // KST 기준 오늘 날짜 (YYYY-MM-DD)
+    const todayKSTDate = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const normalizeDate = (value) => {
+      const str = String(value || '').trim();
+      if (!str) return null;
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+      if (/^\d{4}\.\d{2}\.\d{2}$/.test(str)) return str.replace(/\./g, '-');
+
+      const m = str.match(/(\d{4})[.-](\d{2})[.-](\d{2})/);
+      if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+      return null;
+    };
+
+    let incheonExpired = 0;
+    for (const item of incheonData) {
+      if (item.expired) continue;
+
+      const endDate = normalizeDate(item.endDate || item['신청기한']);
+      if (endDate && endDate < todayKSTDate) {
+        item.expired = true;
+        incheonExpired++;
+        console.log(`incheon 만료: ${item.name || item['서비스명'] || item.id || 'unknown'} (종료일: ${endDate})`);
+      }
+    }
+
+    if (incheonExpired > 0) {
+      await fs.writeFile(incheonPath, JSON.stringify(incheonData, null, 2), 'utf-8');
+      console.log(`incheon.json 만료 보정: ${incheonExpired}건 expired 처리`);
+    } else {
+      console.log('incheon.json: 새로 만료된 항목 없음');
+    }
+  } catch (err) {
+    console.error('incheon.json 만료 보정 실패:', err.message);
+  }
 }
 
 run();

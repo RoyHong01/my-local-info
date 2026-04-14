@@ -3,6 +3,18 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (인천 카드 만료 누락 수정)
+
+- **증상**: 인천 목록에 종료된 `2026 인천 봄꽃 축제` 카드가 계속 노출됨.
+- **원인**: `scripts/cleanup-expired.js`가 `posts/subsidy/festival`만 만료 처리하고 `public/data/incheon.json`은 검사하지 않음.
+- **조치**:
+  1. `scripts/cleanup-expired.js`에 `incheon.json` 만료 처리 패스 추가.
+  2. `endDate`/`신청기한`에서 `YYYY-MM-DD`, `YYYY.MM.DD` 포맷 정규화 후 KST 기준 비교.
+  3. `public/data/incheon.json`의 `2026 인천 봄꽃 축제`를 `expired: true`로 보정.
+- **검증**:
+  - `node scripts/cleanup-expired.js` 실행 정상.
+  - `npm run build` 성공.
+
 ## 2026-04-14 (초이스 라이팅 고도화: Context/Before-After/감각 묘사/신뢰 문장)
 
 - **요청 반영**: 픽앤조이 초이스 자동 생성 글을 스펙 나열형에서 시나리오 중심 라이팅으로 고도화.

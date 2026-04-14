@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 인천 목록 만료 카드 제거 및 자동화 보강
+  - 현상: 종료된 `2026 인천 봄꽃 축제` 카드가 인천 목록에 잔존.
+  - 원인: `cleanup-expired`가 `incheon.json`을 처리하지 않아 `expired` 상태가 갱신되지 않음.
+  - 조치: `scripts/cleanup-expired.js`에 인천 데이터 만료 처리 패스 추가 (`endDate`/`신청기한` 기반, KST 비교).
+  - 즉시 반영: `public/data/incheon.json`의 해당 항목 `expired: true` 처리.
+
 - 2026-04-14 초이스 포스트 라이팅 고도화
   - 배경: 자동 생성 글이 스펙/포인트 나열형으로 고정되는 경향을 줄이고, 사용자 체감 중심 시나리오 몰입도를 강화.
   - 조치: `scripts/generate-choice-post.js` 프롬프트를 Context 우선 + Before/After 대비 구조로 재작성.
