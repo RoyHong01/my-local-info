@@ -1075,6 +1075,9 @@ function normalizeGeneratedContent(content, candidate) {
 
   const slug = `choice-${toSlug(candidate.englishName || candidate.fileName || candidate.title || 'item')}`;
   const bannerImage = candidate.coupangBannerImage || extractCoupangBannerImage(candidate.coupangHtml);
+  const selectedPrimaryImage = selectPrimaryImage(candidate, candidate.products);
+  // 멀티상품 글에서 로컬 기본 이미지 경로가 남아 카드 썸네일이 깨지는 경우를 방지합니다.
+  const finalPrimaryImage = selectedPrimaryImage || bannerImage;
 
   value = upsertFrontmatterField(value, 'slug', slug);
   value = upsertFrontmatterField(value, 'category', '픽앤조이 초이스');
@@ -1083,7 +1086,7 @@ function normalizeGeneratedContent(content, candidate) {
   value = upsertFrontmatterField(value, 'description', candidate.summary || candidate.description || '');
   value = upsertFrontmatterField(value, 'rating_value', String(candidate.rating || '4.8'));
   value = upsertFrontmatterField(value, 'review_count', String(candidate.reviewCount || '100'));
-  value = upsertFrontmatterField(value, 'image', selectPrimaryImage(candidate, candidate.products));
+  value = upsertFrontmatterField(value, 'image', finalPrimaryImage);
   value = upsertFrontmatterField(value, 'source_id', `manual-choice-${toSlug(candidate.englishName || candidate.fileName || 'item')}`);
   value = upsertFrontmatterField(value, 'coupang_link', String(candidate.coupangUrl || '').trim());
   if (bannerImage) value = upsertFrontmatterField(value, 'coupang_banner_image', bannerImage);

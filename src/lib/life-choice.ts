@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { getSortedPostsData, type PostData } from '@/lib/posts';
 
 export interface ChoiceArticle {
@@ -24,6 +26,23 @@ function isChoiceCandidate(post: PostData): boolean {
   return false;
 }
 
+function resolveChoiceCardImage(image?: string, fallback?: string): string | undefined {
+  const primary = String(image || '').trim();
+  const fallbackImage = String(fallback || '').trim();
+
+  if (!primary) return fallbackImage || undefined;
+
+  // `/images/...` 형태는 실제 public 파일 존재 여부를 확인하고, 없으면 배너 이미지로 대체
+  if (primary.startsWith('/')) {
+    const diskPath = path.join(process.cwd(), 'public', primary.replace(/^\//, ''));
+    if (!fs.existsSync(diskPath)) {
+      return fallbackImage || undefined;
+    }
+  }
+
+  return primary;
+}
+
 function mapPostToChoice(post: PostData): ChoiceArticle {
   return {
     slug: post.slug,
@@ -31,7 +50,7 @@ function mapPostToChoice(post: PostData): ChoiceArticle {
     date: post.date,
     summary: post.summary,
     content: post.content,
-    image: post.image,
+    image: resolveChoiceCardImage(post.image, post.coupangBannerImage),
     coupangBannerImage: post.coupangBannerImage,
     source: 'post',
   };

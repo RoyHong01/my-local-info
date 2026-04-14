@@ -20,6 +20,12 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 초이스 썸네일 누락 복구
+  - 원인: 생성된 초이스 포스트 frontmatter `image`가 `/images/choice/living-2026-04-14.jpg`를 가리켰으나 실제 파일이 없어서 카드 썸네일 깨짐.
+  - 조치: `src/lib/life-choice.ts`에서 로컬 이미지 존재 여부 체크 후 없으면 `coupangBannerImage`로 자동 대체.
+  - 생성기 보강: `scripts/generate-choice-post.js`에서 `image` 계산 시 배너 이미지 fallback을 추가해 동일 이슈 재발 방지.
+  - 즉시 보정: `src/content/life/2026-04-14-choice-living-2026-04-14.md` frontmatter `image`를 유효한 배너 이미지 URL로 수정.
+
 - 2026-04-14 수동 복구 배포 (초이스 1 + 맛집 3)
   - 배경: 당일 schedule run(#495)에서 초이스 실패 및 맛집 단계 skip으로 발행 누락 발생
   - 조치: `generate-choice-posts-auto.js`(화요일 생활 테마) 1건 + `generate-life-restaurant-posts.mjs` 3건을 수동 실행해 누락분 복구

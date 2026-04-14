@@ -3,6 +3,20 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-14 (초이스 썸네일 누락 원인 수정: 로컬 이미지 부재 시 배너 fallback)
+
+- **문제 현상**: `2026-04-14-choice-living-2026-04-14.md` 카드 썸네일이 깨진 이미지로 노출.
+- **원인**: frontmatter `image`가 `/images/choice/living-2026-04-14.jpg`를 가리켰지만 실제 파일이 `public/images/choice`에 없음.
+- **수정 파일**:
+  - `src/lib/life-choice.ts`
+  - `scripts/generate-choice-post.js`
+  - `src/content/life/2026-04-14-choice-living-2026-04-14.md`
+- **핵심 반영**:
+  1. `src/lib/life-choice.ts`: 카드용 이미지 매핑 시 `/images/...` 로컬 파일 존재 여부를 확인하고, 없으면 `coupangBannerImage`로 자동 대체.
+  2. `scripts/generate-choice-post.js`: 생성 후 frontmatter `image`를 결정할 때, 선택 이미지가 비어 있으면 `coupang_banner_image`를 우선 채워 썸네일 누락 재발 방지.
+  3. 기존 생성본(`2026-04-14-choice-living-2026-04-14.md`)의 `image`를 배너 이미지 URL로 즉시 보정.
+- **검증**: `npm run build` 성공.
+
 ## 2026-04-14 (수동 복구 배포: 초이스 1건 + 맛집 3건 재생성)
 
 - **요청 배경**: 2026-04-14 스케줄에서 `generate_choice` 실패 및 3단계 맛집 `skipped` 발생으로, 당일 누락분을 수동 복구 생성 후 즉시 배포.
