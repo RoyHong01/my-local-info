@@ -196,16 +196,9 @@ body {
   background-repeat: no-repeat;
 }
 
-/* ── Sticky 사이드바 GPU 가속(macOS 관련 스크롤 방지) ── */
+/* ── Sticky 사이드바 ── */
 .sticky-sidebar {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translate3d(0, 0, 0);
-  will-change: transform, top;
-  perspective: 1000px;
-  contain: layout style;
-  transition: none;
-  top: 5.95rem; /* 셀프힐링 헤더막으로 미세 조정 방지 */
+  /* 범용 브라우저 sticky 동작 - GPU 가속 속성 제거 */
 }
 
 /* ── Hero animations ── */
