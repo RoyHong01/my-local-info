@@ -17,6 +17,17 @@
   3. 기존 생성본(`2026-04-14-choice-living-2026-04-14.md`)의 `image`를 배너 이미지 URL로 즉시 보정.
 - **검증**: `npm run build` 성공.
 
+## 2026-04-14 (맛집 생성 로컬 실행 안정화: .env.local 자동 로드)
+
+- **문제 배경**: 수동 실행 터미널에서 환경변수 미주입 시 `Missing GEMINI_API_KEY`로 맛집 생성이 즉시 실패할 수 있음.
+- **수정 파일**: `scripts/generate-life-restaurant-posts.mjs`
+- **핵심 반영**:
+  1. 스크립트 시작 시 `.env.local`을 직접 읽어 process env를 보강하는 로더 추가.
+  2. 이미 주입된 환경변수는 덮어쓰지 않아 GitHub Actions/수동 주입 값과 충돌하지 않음.
+- **검증**:
+  - `node --check scripts/generate-life-restaurant-posts.mjs`
+  - `npm run build` 성공.
+
 ## 2026-04-14 (수동 복구 배포: 초이스 1건 + 맛집 3건 재생성)
 
 - **요청 배경**: 2026-04-14 스케줄에서 `generate_choice` 실패 및 3단계 맛집 `skipped` 발생으로, 당일 누락분을 수동 복구 생성 후 즉시 배포.

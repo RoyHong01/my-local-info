@@ -20,6 +20,11 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-14 맛집 스크립트 로컬 env 로더 추가
+  - 배경: 수동 복구 실행에서 터미널 세션 미주입 시 `Missing GEMINI_API_KEY` 오류 발생 가능.
+  - 조치: `scripts/generate-life-restaurant-posts.mjs`에 `.env.local` 자동 로더를 추가해 local/manual 실행 안정성 강화.
+  - 주의: 이미 주입된 환경변수는 유지(override 없음)하도록 구현해 CI 환경과 충돌 방지.
+
 - 2026-04-14 초이스 썸네일 누락 복구
   - 원인: 생성된 초이스 포스트 frontmatter `image`가 `/images/choice/living-2026-04-14.jpg`를 가리켰으나 실제 파일이 없어서 카드 썸네일 깨짐.
   - 조치: `src/lib/life-choice.ts`에서 로컬 이미지 존재 여부 체크 후 없으면 `coupangBannerImage`로 자동 대체.
