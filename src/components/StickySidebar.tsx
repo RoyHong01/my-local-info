@@ -31,6 +31,7 @@ export default function StickySidebar({
       content.style.top = 'auto';
       content.style.bottom = 'auto';
       content.style.width = '100%';
+      shell.style.minHeight = 'auto';
     };
 
     const applySticky = () => {
@@ -39,6 +40,7 @@ export default function StickySidebar({
       content.style.position = 'sticky';
       content.style.top = `${topOffset}px`;
       content.style.bottom = 'auto';
+      content.style.left = 'auto';
       content.style.width = '100%';
     };
 
@@ -49,7 +51,17 @@ export default function StickySidebar({
       content.style.position = 'absolute';
       content.style.top = nextTop;
       content.style.bottom = 'auto';
+      content.style.left = '0';
       content.style.width = '100%';
+    };
+
+    const syncShellHeight = () => {
+      const parent = shell.parentElement;
+      if (!parent) return;
+      const parentHeight = parent.getBoundingClientRect().height;
+      const contentHeight = content.getBoundingClientRect().height;
+      const nextMinHeight = Math.max(parentHeight, contentHeight);
+      shell.style.minHeight = `${Math.ceil(nextMinHeight)}px`;
     };
 
     const updatePosition = () => {
@@ -60,6 +72,8 @@ export default function StickySidebar({
         return;
       }
 
+      syncShellHeight();
+
       const footer = document.querySelector<HTMLElement>(footerSelector);
       if (!footer) {
         applySticky();
@@ -67,12 +81,13 @@ export default function StickySidebar({
       }
 
       const shellRect = shell.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
       const footerRect = footer.getBoundingClientRect();
       const shellTop = window.scrollY + shellRect.top;
       const footerTop = window.scrollY + footerRect.top;
-      const contentHeight = content.offsetHeight;
+      const contentHeight = contentRect.height;
       const footerGap = 24;
-      const stickyBottom = window.scrollY + topOffset + contentHeight;
+      const stickyBottom = contentRect.bottom;
       const shouldDockToFooter = stickyBottom >= footerTop - footerGap;
 
       if (!shouldDockToFooter) {
@@ -92,16 +107,18 @@ export default function StickySidebar({
     updatePosition();
     window.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', requestUpdate);
+    window.addEventListener('load', requestUpdate);
 
     return () => {
       if (frameId) window.cancelAnimationFrame(frameId);
       window.removeEventListener('scroll', requestUpdate);
       window.removeEventListener('resize', requestUpdate);
+      window.removeEventListener('load', requestUpdate);
     };
   }, [footerSelector, topOffset]);
 
   return (
-    <aside ref={shellRef} className={`sticky-sidebar-shell hidden lg:block w-60 flex-shrink-0 self-start ${className}`.trim()}>
+    <aside ref={shellRef} className={`sticky-sidebar-shell hidden lg:block w-60 flex-shrink-0 self-stretch ${className}`.trim()}>
       <div ref={contentRef} className="sticky-sidebar-content">
         {children}
       </div>

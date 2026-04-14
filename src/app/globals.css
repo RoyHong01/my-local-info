@@ -200,24 +200,25 @@ body {
 .sticky-sidebar-shell {
   position: relative;
   overflow: visible;
+  align-self: stretch;
 }
 
 .sticky-sidebar-content {
   position: -webkit-sticky;
   position: sticky;
+  top: 6rem;
+  align-self: flex-start;
+  width: 100%;
   overflow: visible;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform: translate3d(0, 0, 0);
-  will-change: transform, top;
-  perspective: 1000px;
-  contain: layout style;
+  will-change: top;
   transition: none;
-  top: 5.95rem; /* 서브픽셀 렌더링으로 미세 떨림 방지 */
 }
 
 .sticky-sidebar-content[data-mode='absolute'] {
   position: absolute;
+  left: 0;
 }
 
 /* ── Hero animations ── */

@@ -3,6 +3,21 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (Safari 사이드바 중간 구간 미추종/끝점 점프 재수정)
+
+- **문제 현상**: 스크롤 중간에서는 사이드바가 따라오지 않다가, 하단 푸터 영역에서만 갑자기 제자리를 찾는 점프 현상 발생.
+- **수정 파일**:
+  - `src/components/StickySidebar.tsx`
+  - `src/app/globals.css`
+- **핵심 반영**:
+  1. 사이드바 래퍼 높이를 부모 컨테이너 높이에 동기화(`minHeight`)해 sticky 이동 구간을 확보.
+  2. 도킹 판정을 단순화: `contentRect.bottom`과 `footerRect.top` 비교로 푸터 직전에서만 absolute 전환.
+  3. 다시 여유 공간이 생기면 즉시 sticky 복귀하도록 scroll/resize/load 기반 업데이트 유지.
+  4. Safari 안정성을 위해 `translate3d`, `contain`, `perspective` 등 과한 렌더링 속성을 제거하고 sticky 기본 속성을 단순화.
+  5. 래퍼 `self-stretch` 적용으로 메인 콘텐츠 높이와 정렬되게 조정.
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-15 (blog latest 완전일치 다중 후보 타이브레이커 고정)
 
 - **요청 반영**: `keyword` 완전일치 후보가 2개 이상일 때 우선순위를 `최신 일정 > 이미지 보유 > 조회수`로 고정.
