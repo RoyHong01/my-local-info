@@ -200,7 +200,6 @@ body {
 .sticky-sidebar-shell {
   position: relative;
   overflow: visible;
-  align-self: stretch;
 }
 
 .sticky-sidebar-content {
@@ -214,11 +213,6 @@ body {
   backface-visibility: hidden;
   will-change: top;
   transition: none;
-}
-
-.sticky-sidebar-content[data-mode='absolute'] {
-  position: absolute;
-  left: 0;
 }
 
 /* ── Hero animations ── */

@@ -3,6 +3,20 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-04-15 (Safari 사이드바 재재수정: JS 도킹 제거, 순수 sticky 복원)
+
+- **문제 현상**: 이전 수정 후 사이드바가 중간 스크롤 구간에서 사라지고 하단에서만 보이는 회귀 발생.
+- **원인 분석**: JS 기반 `absolute` 도킹 전환이 사이드바를 부모 하단 좌표로 밀어 중간 구간에서 뷰포트 밖으로 이탈.
+- **수정 파일**:
+  - `src/components/StickySidebar.tsx`
+  - `src/app/globals.css`
+- **핵심 반영**:
+  1. `StickySidebar`의 scroll/resize 기반 위치 계산 로직을 제거하고 순수 CSS sticky 방식으로 단순화.
+  2. `position: -webkit-sticky` + `position: sticky` + `top` 조합으로 Safari/Chrome 공통 동작 복원.
+  3. `data-mode='absolute'` 규칙 및 관련 JS 상태 전환을 제거해 중간 구간 점프/이탈 방지.
+- **검증**:
+  - `npm run build` 성공.
+
 ## 2026-04-15 (Safari 사이드바 중간 구간 미추종/끝점 점프 재수정)
 
 - **문제 현상**: 스크롤 중간에서는 사이드바가 따라오지 않다가, 하단 푸터 영역에서만 갑자기 제자리를 찾는 점프 현상 발생.
