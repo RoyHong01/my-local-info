@@ -15,7 +15,7 @@
 
 html {
   overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-y 제거: sticky 작동을 위해 스크롤 컨텍스트를 viewport로 유지 */
 }
 
 body {
