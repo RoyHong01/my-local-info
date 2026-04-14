@@ -24,6 +24,9 @@
   - `node scripts/test-incheon-photo-api.js 송도` 결과 `returnCode=200` 확인.
   - `node scripts/collect-incheon.js` 실행 시 `인천 관광사진 매칭: 총 5건` 로그 확인.
   - `npm run build` 성공.
+- **후속 보강 (CI 안정성)**:
+  - 헬스체크 실패 시 사진 API 매칭을 즉시 비활성화하고, 수집 파이프라인은 계속 진행하도록 안전장치 추가.
+  - `api_432`(UNREGISTERED_IP), `api_431`(만료), `api_430`(키 미등록) 원인을 구분 로그로 명확히 출력.
 
 ## 2026-04-14 (인천 카드 만료 누락 수정)
 

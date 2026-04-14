@@ -314,9 +314,12 @@ async function run() {
   let photoFallback = 0;
   let photoSkipped = 0;
   let photoHealthcheck = 'skipped';
+  let photoMode = 'disabled';
+  let photoFailureReason = '';
   if (!INCHEON_PHOTO_TOKEN) {
     console.log('INCHEON_PHOTO_TOKEN 없음: 인천 관광 사진 자동 매칭 건너뜀');
   } else {
+    photoMode = 'enabled';
     // 토큰 만료(7일 무호출) 방지를 위해 수집 실행 시 최소 1회 헬스체크 호출
     const health = await fetchIncheonPhotoList({ keyword: '송도', pageNo: 1 });
     if (health.ok) {
@@ -324,42 +327,59 @@ async function run() {
       console.log(`인천 관광사진 API 헬스체크 성공: expireDt=${health.expireDt || '-'}, 샘플=${(health.dataList || []).length}건`);
     } else {
       photoHealthcheck = `failed:${health.error}`;
-      console.warn(`인천 관광사진 API 헬스체크 실패: ${health.error}`);
+      photoFailureReason = String(health.error || 'unknown_error');
+
+      if (/api_432/.test(photoFailureReason)) {
+        console.warn('인천 관광사진 API 비활성화: UNREGISTERED_IP_ERROR(432) - 등록된 호출서버 IP와 현재 실행 환경 IP가 다릅니다.');
+      } else if (/api_431/.test(photoFailureReason)) {
+        console.warn('인천 관광사진 API 비활성화: DEADLINE_HAS_EXPIRED_ERROR(431) - 토큰 사용기한이 만료되었습니다.');
+      } else if (/api_430/.test(photoFailureReason)) {
+        console.warn('인천 관광사진 API 비활성화: SERVICE_KEY_IS_NOT_REGISTERED_ERROR(430) - 토큰값이 잘못되었거나 미등록 상태입니다.');
+      } else {
+        console.warn(`인천 관광사진 API 비활성화: 헬스체크 실패 (${photoFailureReason})`);
+      }
+
+      // 헬스체크가 실패하면 이번 실행에서 사진 API 호출을 중단하고 기본 수집만 계속 진행
+      photoMode = 'disabled';
     }
 
-    const photoCache = new Map();
-    const fallbackPool = [];
-    for (const item of merged) {
-      if (!isIncheonEventItem(item)) {
-        photoSkipped++;
-        continue;
+    if (photoMode === 'enabled') {
+      const photoCache = new Map();
+      const fallbackPool = [];
+      for (const item of merged) {
+        if (!isIncheonEventItem(item)) {
+          photoSkipped++;
+          continue;
+        }
+
+        // 기존 이미지가 있으면 유지
+        if (normalizeSpace(item.firstimage)) {
+          photoSkipped++;
+          continue;
+        }
+
+        const matched = await resolvePhotoForIncheonEvent(item, photoCache, fallbackPool);
+        if (!matched || !matched.imageUrl) {
+          photoSkipped++;
+          continue;
+        }
+
+        item.firstimage = matched.imageUrl;
+        item.image_source = '인천관광공사';
+        item.image_source_note = '출처: 인천관광공사';
+        item.image_source_api = 'API003';
+        item.image_keyword = matched.keyword;
+        item.image_matched_name = matched.matchedName;
+        item.image_matched_addr = matched.matchedAddr;
+
+        photoMatched++;
+        if (matched.fallbackApplied) photoFallback++;
       }
 
-      // 기존 이미지가 있으면 유지
-      if (normalizeSpace(item.firstimage)) {
-        photoSkipped++;
-        continue;
-      }
-
-      const matched = await resolvePhotoForIncheonEvent(item, photoCache, fallbackPool);
-      if (!matched || !matched.imageUrl) {
-        photoSkipped++;
-        continue;
-      }
-
-      item.firstimage = matched.imageUrl;
-      item.image_source = '인천관광공사';
-      item.image_source_note = '출처: 인천관광공사';
-      item.image_source_api = 'API003';
-      item.image_keyword = matched.keyword;
-      item.image_matched_name = matched.matchedName;
-      item.image_matched_addr = matched.matchedAddr;
-
-      photoMatched++;
-      if (matched.fallbackApplied) photoFallback++;
+      console.log(`인천 관광사진 매칭: 총 ${photoMatched}건 (fallback ${photoFallback}건, 스킵 ${photoSkipped}건)`);
+    } else {
+      console.log('인천 관광사진 매칭: 헬스체크 실패로 이번 실행에서는 건너뜀 (기본 데이터 수집은 계속 진행)');
     }
-
-    console.log(`인천 관광사진 매칭: 총 ${photoMatched}건 (fallback ${photoFallback}건, 스킵 ${photoSkipped}건)`);
   }
 
   let markdownGenerated = 0;
@@ -414,6 +434,8 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_matched=${photoMatched}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_fallback=${photoFallback}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_healthcheck=${photoHealthcheck}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_mode=${photoMode}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_failure_reason=${photoFailureReason}\n`);
   }
 }
 
