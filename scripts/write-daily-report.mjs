@@ -325,6 +325,15 @@ function toMarkdown(report) {
     if (usageSegments.length > 0) {
       lines.push(`| Anthropic 사용량 | ${usageSegments.join(' | ')} |`);
     }
+
+    const incheonPhotoApi = report.dataValidation.incheon?.photoApi || {};
+    const photoHealthcheck = String(incheonPhotoApi.healthcheck || '').trim();
+    if (photoHealthcheck) {
+      lines.push(`| 인천 사진 API 상태 | mode=${incheonPhotoApi.mode || '-'} / healthcheck=${photoHealthcheck} |`);
+    }
+    if (incheonPhotoApi.failureReason) {
+      lines.push(`| 인천 사진 API 실패원인 | ${incheonPhotoApi.failureReason} |`);
+    }
   }
   if (report.budget?.enabled) {
     lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
@@ -567,6 +576,11 @@ async function main() {
         summary: process.env.COLLECT_INCHEON_SUMMARY || '',
         validation: process.env.COLLECT_INCHEON_VALIDATION || '',
         anthropicUsage: process.env.COLLECT_INCHEON_ANTHROPIC_USAGE || '',
+        photoApi: {
+          healthcheck: process.env.COLLECT_INCHEON_PHOTO_HEALTHCHECK || '',
+          mode: process.env.COLLECT_INCHEON_PHOTO_MODE || '',
+          failureReason: process.env.COLLECT_INCHEON_PHOTO_FAILURE_REASON || '',
+        },
       },
       subsidy: {
         summary: process.env.COLLECT_SUBSIDY_SUMMARY || '',

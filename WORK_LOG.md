@@ -27,6 +27,7 @@
 - **후속 보강 (CI 안정성)**:
   - 헬스체크 실패 시 사진 API 매칭을 즉시 비활성화하고, 수집 파이프라인은 계속 진행하도록 안전장치 추가.
   - `api_432`(UNREGISTERED_IP), `api_431`(만료), `api_430`(키 미등록) 원인을 구분 로그로 명확히 출력.
+  - 리포트/알림 확장: `incheon_photo_healthcheck/mode/failure_reason`를 `write-daily-report` JSON/MD 및 `notify-telegram` 메시지에 노출.
 
 ## 2026-04-14 (인천 카드 만료 누락 수정)
 

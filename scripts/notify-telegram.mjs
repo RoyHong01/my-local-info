@@ -112,6 +112,7 @@ async function buildMessage(report) {
   const stage1 = report.stages?.find((s) => s.key === 'stage1-data');
   const stage1Steps = stage1?.steps || {};
   const collectSummary = stage1?.collectSummary || {};
+  const incheonPhotoApi = report.dataValidation?.incheon?.photoApi || {};
 
   const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
   const choiceTitles = await Promise.all(generatedChoicePosts.map((file) => readPostTitle(file)));
@@ -151,6 +152,15 @@ async function buildMessage(report) {
   const dataChangeLine = dataChangedFiles.length > 0
     ? `📂 데이터 변경: ${dataChangedFiles.map((f) => f.split('/').pop()).join(', ')}`
     : '';
+  const incheonPhotoMode = String(incheonPhotoApi.mode || '').trim();
+  const incheonPhotoHealthcheck = String(incheonPhotoApi.healthcheck || '').trim();
+  const incheonPhotoFailureReason = String(incheonPhotoApi.failureReason || '').trim();
+  const incheonPhotoLine = incheonPhotoHealthcheck
+    ? `📸 인천 사진 API: mode=${incheonPhotoMode || '-'} / health=${incheonPhotoHealthcheck}`
+    : '';
+  const incheonPhotoFailureLine = incheonPhotoFailureReason
+    ? `⚠️ 인천 사진 API 원인: ${incheonPhotoFailureReason}`
+    : '';
 
   const lines = [
     `📊 *픽앤조이 자동화 리포트* (${REPORT_DATE})`,
@@ -160,6 +170,8 @@ async function buildMessage(report) {
     dataCollectionLine,
     collectDetailLine,
     dataChangeLine,
+    incheonPhotoLine,
+    incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,
     `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,

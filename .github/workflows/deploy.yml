@@ -329,6 +329,9 @@ jobs:
           COLLECT_INCHEON_SUMMARY: ${{ steps.collect_incheon.outputs.collect_summary }}
           COLLECT_INCHEON_VALIDATION: ${{ steps.collect_incheon.outputs.collect_validation }}
           COLLECT_INCHEON_ANTHROPIC_USAGE: ${{ steps.collect_incheon.outputs.anthropic_usage }}
+          COLLECT_INCHEON_PHOTO_HEALTHCHECK: ${{ steps.collect_incheon.outputs.incheon_photo_healthcheck }}
+          COLLECT_INCHEON_PHOTO_MODE: ${{ steps.collect_incheon.outputs.incheon_photo_mode }}
+          COLLECT_INCHEON_PHOTO_FAILURE_REASON: ${{ steps.collect_incheon.outputs.incheon_photo_failure_reason }}
           COLLECT_SUBSIDY_OUTCOME: ${{ steps.collect_subsidy.outcome }}
           COLLECT_SUBSIDY_SUMMARY: ${{ steps.collect_subsidy.outputs.collect_summary }}
           COLLECT_SUBSIDY_VALIDATION: ${{ steps.collect_subsidy.outputs.collect_validation }}
