@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-15T00:00:00+09:00",
+  "updatedAtKst": "2026-04-16T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -265,6 +265,39 @@
       "sourceId": "manual-choice-kitchen-2026-04-15",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-04-16",
+      "productId": "6577822503",
+      "productName": "블라우풍트 ENC 노이즈 캔슬링 블루투스 이어폰, BLP-BE331W, 화이트, 5시간, BLP-BE331W, 화이트",
+      "brand": "블라우풍트",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
+      "sourceId": "manual-choice-digital-2026-04-16",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-16",
+      "productId": "7839854778",
+      "productName": "엑토 고음질 미니 무선 터치 이어버드 블루투스 이어폰, TWS-20, 화이트",
+      "brand": "엑토",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
+      "sourceId": "manual-choice-digital-2026-04-16",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-16",
+      "productId": "9403138458",
+      "productName": "필립스 인이어 블루투스 이어폰, 네오 블랙, TAT1300",
+      "brand": "필립스",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
+      "sourceId": "manual-choice-digital-2026-04-16",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
