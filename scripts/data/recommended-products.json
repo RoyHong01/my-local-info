@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-16T00:00:00+09:00",
+  "updatedAtKst": "2026-04-17T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -298,6 +298,39 @@
       "sourceId": "manual-choice-digital-2026-04-16",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-17",
+      "productId": "9375664440",
+      "productName": "ANF 베터플러스 캣 사료 샘플 4종 x 40g 세트",
+      "brand": "ANF",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
+      "sourceId": "manual-choice-pet-life-2026-04-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-04-17",
+      "productId": "7417386432",
+      "productName": "우성사료 전연령 넥스탑 패밀리캣 건식사료, 닭, 5kg, 1개",
+      "brand": "우성사료",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
+      "sourceId": "manual-choice-pet-life-2026-04-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-04-17",
+      "productId": "6568104819",
+      "productName": "로얄 어드밴스 캔 콤보 고양이 캔 간식 통조림, 콤보, 85g, 24개",
+      "brand": "로얄",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
+      "sourceId": "manual-choice-pet-life-2026-04-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
