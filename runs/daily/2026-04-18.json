@@ -1,0 +1,216 @@
+{
+  "reportDateKst": "2026-04-18",
+  "generatedAtUtc": "2026-04-17T20:03:21.479Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24583928678",
+    "runNumber": 571,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24583928678",
+    "runStartedAtUtc": "2026-04-17T19:53:31Z",
+    "headSha": "3acf18d1c0c8549178418c24e0684b29d927cae6"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://2350d858.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 2건, 총 340건",
+        "subsidy": "신규 0건, 총 7495건",
+        "festival": "신규 7건, 업데이트 185건, 총 192건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://fa526483.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://7c5e24fe.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "154d7ac23d86803fb5f730e84c3eb7750303e94e",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-17",
+      "authoredAt": "2026-04-17T20:03:20Z",
+      "files": [
+        "src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md",
+        "src/content/life/2026-04-18-seongsu-restaurant-142054376.md",
+        "src/content/life/2026-04-18-songdo-restaurant-519516168.md"
+      ]
+    },
+    {
+      "sha": "345461d0ee268c0f1b2788215cccd9f36192454e",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-04-17",
+      "authoredAt": "2026-04-17T19:59:58Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md"
+      ]
+    },
+    {
+      "sha": "2d6980004dcbcb07caf5e2cebf7dae0b5dcfe075",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-17",
+      "authoredAt": "2026-04-17T19:59:51Z",
+      "files": [
+        "src/content/posts/2026-04-17-future-ground-xr-sports.md",
+        "src/content/posts/2026-04-17-incheon-child-science-museum-discount.md",
+        "src/content/posts/2026-04-17-국민내일배움카드-직업훈련비-지원.md"
+      ]
+    },
+    {
+      "sha": "c54d6f7081fe8cb5c9d6536b121fe7875732df26",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-17",
+      "authoredAt": "2026-04-17T19:54:49Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 11,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-17-future-ground-xr-sports.md",
+      "src/content/posts/2026-04-17-incheon-child-science-museum-discount.md",
+      "src/content/posts/2026-04-17-국민내일배움카드-직업훈련비-지원.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
+      "src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md",
+      "src/content/life/2026-04-18-seongsu-restaurant-142054376.md",
+      "src/content/life/2026-04-18-songdo-restaurant-519516168.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md",
+      "src/content/life/2026-04-18-seongsu-restaurant-142054376.md",
+      "src/content/life/2026-04-18-songdo-restaurant-519516168.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
+      "src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md",
+      "src/content/life/2026-04-18-seongsu-restaurant-142054376.md",
+      "src/content/life/2026-04-18-songdo-restaurant-519516168.md",
+      "src/content/posts/2026-04-17-future-ground-xr-sports.md",
+      "src/content/posts/2026-04-17-incheon-child-science-museum-discount.md",
+      "src/content/posts/2026-04-17-국민내일배움카드-직업훈련비-지원.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 7.89,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 2건, 총 340건",
+      "validation": "ok",
+      "anthropicUsage": "2649/1136",
+      "photoApi": {
+        "healthcheck": "failed:api_432:UNREGISTERED_IP_ERROR(등록되지 않은 IP)",
+        "mode": "disabled",
+        "failureReason": "api_432:UNREGISTERED_IP_ERROR(등록되지 않은 IP)"
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 7495건",
+      "validation": "ok",
+      "anthropicUsage": "2953/1871"
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 185건, 총 192건",
+      "validation": "ok",
+      "anthropicUsage": "1688/1086"
+    }
+  }
+}
