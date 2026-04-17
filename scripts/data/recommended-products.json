@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-17T00:00:00+09:00",
+  "updatedAtKst": "2026-04-18T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -331,6 +331,39 @@
       "sourceId": "manual-choice-pet-life-2026-04-17",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-04-18",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-04-18",
+      "productId": "9440486020",
+      "productName": "아토세이프 세라제닉 365플러스 스칼프 쿨링 샴푸",
+      "brand": "아토세이프",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-04-18",
+      "productId": "7099273244",
+      "productName": "라입 R3 아르간 헤어 오일 오리지널, 100ml, 2개",
+      "brand": "라입",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
