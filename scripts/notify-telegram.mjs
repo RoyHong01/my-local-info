@@ -41,14 +41,35 @@ function stripQuotes(value) {
   return String(value || '').trim().replace(/^['"]|['"]$/g, '');
 }
 
-async function readPostTitle(filePath) {
+function normalizeBlogCategory(categoryRaw, filePath) {
+  const category = String(categoryRaw || '').trim();
+  const lowerCategory = category.toLowerCase();
+  const lowerPath = String(filePath || '').toLowerCase();
+
+  if (category.includes('인천') || lowerCategory.includes('incheon') || lowerPath.includes('incheon')) {
+    return 'incheon';
+  }
+  if (category.includes('보조금') || category.includes('복지') || lowerCategory.includes('subsidy') || lowerPath.includes('subsidy')) {
+    return 'subsidy';
+  }
+  if (category.includes('축제') || category.includes('여행') || lowerCategory.includes('festival') || lowerPath.includes('festival')) {
+    return 'festival';
+  }
+  return 'other';
+}
+
+async function readPostMeta(filePath) {
   try {
     const raw = await readFile(join(process.cwd(), filePath), 'utf8');
-    const m = raw.match(/^title:\s*(.+)$/m);
-    if (!m) return '';
-    return stripQuotes(m[1]);
+    const titleMatch = raw.match(/^title:\s*(.+)$/m);
+    const categoryMatch = raw.match(/^category:\s*(.+)$/m);
+
+    const title = titleMatch ? stripQuotes(titleMatch[1]) : '';
+    const categoryKey = normalizeBlogCategory(categoryMatch ? stripQuotes(categoryMatch[1]) : '', filePath);
+
+    return { title, categoryKey };
   } catch {
-    return '';
+    return { title: '', categoryKey: 'other' };
   }
 }
 
@@ -114,9 +135,15 @@ async function buildMessage(report) {
   const collectSummary = stage1?.collectSummary || {};
   const incheonPhotoApi = report.dataValidation?.incheon?.photoApi || {};
 
-  const blogTitles = await Promise.all(generatedBlogPosts.map((file) => readPostTitle(file)));
-  const choiceTitles = await Promise.all(generatedChoicePosts.map((file) => readPostTitle(file)));
-  const lifeTitles = await Promise.all(generatedRestaurantPosts.map((file) => readPostTitle(file)));
+  const blogMetas = await Promise.all(generatedBlogPosts.map((file) => readPostMeta(file)));
+  const blogTitles = blogMetas.map((meta) => meta.title);
+  const choiceTitles = await Promise.all(generatedChoicePosts.map((file) => readPostMeta(file).then((meta) => meta.title)));
+  const lifeTitles = await Promise.all(generatedRestaurantPosts.map((file) => readPostMeta(file).then((meta) => meta.title)));
+
+  const incheonBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'incheon').map((meta) => meta.title).filter(Boolean);
+  const subsidyBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'subsidy').map((meta) => meta.title).filter(Boolean);
+  const festivalBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'festival').map((meta) => meta.title).filter(Boolean);
+  const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
   let budgetLine = '';
   if (budget?.enabled) {
@@ -173,6 +200,7 @@ async function buildMessage(report) {
     incheonPhotoLine,
     incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,
+    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
     `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
@@ -187,6 +215,24 @@ async function buildMessage(report) {
     lines.push('');
     lines.push('*생성된 블로그 제목:*');
     blogTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (incheonBlogTitles.length > 0) {
+    lines.push('');
+    lines.push('*인천 블로그:*');
+    incheonBlogTitles.forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (subsidyBlogTitles.length > 0) {
+    lines.push('');
+    lines.push('*전국보조금 블로그:*');
+    subsidyBlogTitles.forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (festivalBlogTitles.length > 0) {
+    lines.push('');
+    lines.push('*전국축제 블로그:*');
+    festivalBlogTitles.forEach((title) => lines.push(`  • ${title}`));
   }
 
   if (choiceTitles.filter(Boolean).length > 0) {
