@@ -38,11 +38,26 @@ function getField(item: DataItem, keys: string[]): string {
   return '';
 }
 
+function getCardText(value: string, maxLength = 90): string {
+  const normalized = value
+    .replace(/\r\n/g, ' ')
+    .replace(/\r/g, ' ')
+    .replace(/\n/g, ' ')
+    .replace(/[•·▪◦]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!normalized) return '';
+  if (normalized.length <= maxLength) return normalized;
+
+  return `${normalized.slice(0, maxLength).trimEnd()}...`;
+}
+
 /* ── Category card components ── */
 
 function IncheonCard({ item }: { item: DataItem }) {
   const name = getField(item, ['서비스명', 'name', 'title']);
-  const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
+  const summary = getCardText(getField(item, ['서비스목적요약', 'summary', 'description']));
   const org = getField(item, ['소관기관명', 'location', 'addr1']);
   const id = getField(item, ['서비스ID', 'id']);
   return (
@@ -66,8 +81,13 @@ function IncheonCard({ item }: { item: DataItem }) {
 
 function SubsidyCard({ item }: { item: DataItem }) {
   const name = getField(item, ['서비스명', 'name', 'title']);
-  const summary = getField(item, ['서비스목적요약', 'summary', 'description']);
-  const target = getField(item, ['지원대상', 'target']);
+  const summary = getCardText(
+    getField(item, ['서비스목적요약', 'summary', 'description', '지원내용'])
+  );
+  const meta = getCardText(
+    getField(item, ['소관기관명', '접수기관명', '신청기한', '지원유형']),
+    42
+  );
   const id = getField(item, ['서비스ID', 'id']);
   return (
     <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block group">
@@ -78,9 +98,9 @@ function SubsidyCard({ item }: { item: DataItem }) {
         </div>
         <h4 className="text-sm font-bold text-gray-900 mb-1.5 group-hover:text-orange-600 transition-colors line-clamp-2">{name}</h4>
         <p className="text-[13px] sm:text-sm text-gray-700 leading-relaxed mb-2 line-clamp-2 flex-1">{summary}</p>
-        {target && (
+        {meta && (
           <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mt-auto">
-            <span>🎯</span><span>{target}</span>
+            <span>🏛</span><span>{meta}</span>
           </div>
         )}
       </div>
@@ -90,7 +110,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
 
 function FestivalCard({ item }: { item: DataItem }) {
   const name = getField(item, ['title', 'name', '서비스명']);
-  const summary = getField(item, ['summary', 'overview', 'description', '서비스목적요약']);
+  const summary = getCardText(getField(item, ['summary', 'overview', 'description', '서비스목적요약']));
   const location = getField(item, ['addr1', 'location', '소관기관명']);
   const id = getField(item, ['contentid', 'id']);
   return (
