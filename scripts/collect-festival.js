@@ -68,6 +68,37 @@ function validateFetchedData(sourceName, existingCount, fetchedCount) {
   return 'ok';
 }
 
+async function fetchFestivalPage({ apiKey, startDate, endDate, pageNo, numOfRows }) {
+  const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchFestival2?serviceKey=${apiKey}&numOfRows=${numOfRows}&pageNo=${pageNo}&MobileOS=ETC&MobileApp=PicknJoy&_type=json&eventStartDate=${startDate}&eventEndDate=${endDate}`;
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`searchFestival2 failed: ${response.status}`);
+  }
+  const data = await response.json();
+  const body = data?.response?.body || {};
+  let pageItems = body?.items?.item || [];
+  if (!Array.isArray(pageItems)) pageItems = pageItems ? [pageItems] : [];
+  return {
+    totalCount: Number(body.totalCount || 0),
+    pageItems,
+  };
+}
+
+async function fetchAllFestivalItems({ apiKey, startDate, endDate, numOfRows = 100 }) {
+  const first = await fetchFestivalPage({ apiKey, startDate, endDate, pageNo: 1, numOfRows });
+  const totalCount = first.totalCount;
+  const pages = Math.max(1, Math.ceil(totalCount / numOfRows));
+  const all = [...first.pageItems];
+
+  for (let pageNo = 2; pageNo <= pages; pageNo++) {
+    const next = await fetchFestivalPage({ apiKey, startDate, endDate, pageNo, numOfRows });
+    all.push(...next.pageItems);
+    await delay(80);
+  }
+
+  return { items: all, totalCount, pages };
+}
+
 async function generateFestivalMarkdown(item) {
   if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
 
@@ -104,6 +135,7 @@ ${JSON.stringify(item, null, 2)}`;
 async function run() {
   const TOUR_API_KEY = process.env.TOUR_API_KEY;
   const DESCRIPTION_MARKDOWN_BATCH_LIMIT = Number.parseInt(process.env.DESCRIPTION_MARKDOWN_BATCH_LIMIT || '10', 10);
+  const OVERVIEW_FETCH_LIMIT = Number.parseInt(process.env.FESTIVAL_OVERVIEW_FETCH_LIMIT || '120', 10);
   if (!TOUR_API_KEY) {
     console.error("Missing TOUR_API_KEY in process.env");
     return;
@@ -114,37 +146,20 @@ async function run() {
   const fmt = (d) => d.toISOString().split('T')[0].replace(/-/g, '');
   const startDate = fmt(today);
   const endDate = fmt(new Date(today.getFullYear(), today.getMonth() + 6, today.getDate()));
-  const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchFestival2?serviceKey=${TOUR_API_KEY}&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&eventStartDate=${startDate}&eventEndDate=${endDate}`;
 
   let items = [];
   try {
-    const response = await fetch(endpoint);
-    if (!response.ok) {
-      console.error("Failed to fetch festival data:", await response.text());
-      return;
-    }
-    const data = await response.json();
-    items = data?.response?.body?.items?.item || [];
-    if (!Array.isArray(items)) items = [items];
+    const fetched = await fetchAllFestivalItems({
+      apiKey: TOUR_API_KEY,
+      startDate,
+      endDate,
+      numOfRows: 100,
+    });
+    items = fetched.items;
+    console.log(`searchFestival2 수집 완료: totalCount=${fetched.totalCount}, pages=${fetched.pages}, collected=${items.length}`);
   } catch (err) {
     console.error("Error fetching festival data:", err);
     return;
-  }
-
-  // 각 축제의 상세 설명(overview) 가져오기
-  console.log(`${items.length}개 축제 상세 정보 수집 시작...`);
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    if (item.contentid) {
-      const raw = await fetchOverview(item.contentid, TOUR_API_KEY);
-      item.overview = cleanOverview(raw);
-      if (item.overview) {
-        console.log(`  [${i + 1}/${items.length}] ${item.title} - 설명 수집 완료`);
-      } else {
-        console.log(`  [${i + 1}/${items.length}] ${item.title} - 설명 없음`);
-      }
-      await delay(100); // rate limit 방지
-    }
   }
 
   const dataPath = path.join(process.cwd(), 'public', 'data', 'festival.json');
@@ -155,6 +170,35 @@ async function run() {
     const fileContent = await fs.readFile(dataPath, 'utf-8');
     existing = JSON.parse(fileContent);
   } catch (_) {}
+
+  // 각 축제의 상세 설명(overview) 가져오기 - 누락 항목에 한해 제한적으로 호출
+  const existingById = new Map(existing.map((ex) => [String(ex.contentid || ex.id), ex]));
+  const overviewTargets = items
+    .filter((it) => {
+      const key = String(it.contentid || it.id || '');
+      if (!key) return false;
+      const ex = existingById.get(key);
+      return !(ex && ex.overview);
+    })
+    .slice(0, Math.max(0, OVERVIEW_FETCH_LIMIT));
+
+  console.log(`${overviewTargets.length}개 축제 상세 설명(overview) 보강 시작...`);
+  for (let i = 0; i < overviewTargets.length; i++) {
+    const target = overviewTargets[i];
+    const itemIndex = items.findIndex((it) => it.contentid === target.contentid);
+    if (itemIndex < 0) continue;
+    const item = items[itemIndex];
+    if (item.contentid) {
+      const raw = await fetchOverview(item.contentid, TOUR_API_KEY);
+      item.overview = cleanOverview(raw);
+      if (item.overview) {
+        console.log(`  [${i + 1}/${overviewTargets.length}] ${item.title} - 설명 수집 완료`);
+      } else {
+        console.log(`  [${i + 1}/${overviewTargets.length}] ${item.title} - 설명 없음`);
+      }
+      await delay(100); // rate limit 방지
+    }
+  }
 
   const validationStatus = validateFetchedData('전국 축제·여행 정보', existing.length, items.length);
 
@@ -201,51 +245,28 @@ async function run() {
   existing = existing.filter(ex => !(ex?.id && !ex?.contentid && String(ex.id).startsWith('festival-')));
   const removedLegacyCount = beforeLegacyCleanup - existing.length;
 
-  // 기존 데이터 overview 보강 (신규 조회 결과 우선 사용)
+  // 오늘~6개월 범위의 API 응답을 기준으로 active set 재구성 (지난 데이터는 제거)
+  const merged = [];
   let updatedCount = 0;
-  for (const ex of existing) {
-    if (ex.contentid) {
-      const fromFetched = items.find(it => it.contentid === ex.contentid)?.overview;
-
-      if (fromFetched) {
-        ex.overview = fromFetched;
-        updatedCount++;
-        continue;
-      }
-
-      if (!ex.overview || ex.overview.endsWith('...')) {
-        const raw = await fetchOverview(ex.contentid, TOUR_API_KEY);
-        ex.overview = cleanOverview(raw);
-        if (ex.overview) {
-          console.log(`  기존 항목 보강: ${ex.title} - 설명 수집 완료`);
-          updatedCount++;
-        }
-        await delay(100);
-      }
-    }
-  }
-
-  // 중복 제거 후 신규 항목 추가
-  const existingIds = new Set(existing.map(e => e.contentid));
-  const newItems = items.filter(item => !existingIds.has(item.contentid));
-
-  const mergedRaw = [
-    ...existing,
-    ...newItems.map(item => ({
-      ...item,
-      expired: false,
-      collectedAt: new Date().toISOString().split('T')[0]
-    }))
-  ];
-
-  // contentid(또는 id) 기준 중복 제거
-  const dedupMap = new Map();
-  for (const item of mergedRaw) {
-    const key = item.contentid || item.id;
+  let newItemsCount = 0;
+  for (const item of items) {
+    const key = String(item.contentid || item.id || '');
     if (!key) continue;
-    dedupMap.set(String(key), item);
+    const prev = existingById.get(key);
+    const mergedItem = {
+      ...(prev || {}),
+      ...item,
+      overview: item.overview || prev?.overview || '',
+      expired: false,
+      collectedAt: new Date().toISOString().split('T')[0],
+    };
+    if (prev) {
+      updatedCount++;
+    } else {
+      newItemsCount++;
+    }
+    merged.push(mergedItem);
   }
-  const merged = Array.from(dedupMap.values());
 
   // description_markdown 생성 (신규/변경 항목만)
   let markdownGenerated = 0;
@@ -284,7 +305,7 @@ async function run() {
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItems.length}건 추가, 기존 ${updatedCount}건 보강, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
+  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItemsCount}건 추가, 기존 ${updatedCount}건 갱신, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
   if (markdownGenerated > 0) {
     console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
@@ -295,7 +316,7 @@ async function run() {
   // GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
-    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 업데이트 ${updatedCount}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 업데이트 ${updatedCount}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
   }

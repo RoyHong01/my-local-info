@@ -41,6 +41,7 @@ const INTER_REQUEST_DELAY_MS = Number(process.env.INTER_REQUEST_DELAY_MS || '100
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
 const LIFE_RESTAURANT_PUBLISHED_BY = String(process.env.LIFE_RESTAURANT_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
+const ALLOW_EXISTING_POST_DELETION = process.env.ALLOW_EXISTING_POST_DELETION === 'true';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
@@ -48,6 +49,9 @@ const FORCE_RESTAURANT_SOURCE_IDS = new Set(
     .map((value) => value.trim())
     .filter(Boolean)
 );
+if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && !ALLOW_EXISTING_POST_DELETION) {
+  console.warn('안전장치: FORCE_RESTAURANT_SOURCE_IDS가 설정되었지만 ALLOW_EXISTING_POST_DELETION=true가 아니므로 기존 글 삭제 없이 진행합니다.');
+}
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const postsDir = path.join(process.cwd(), 'src', 'content', 'life');
 const existingPostDirs = [
@@ -796,7 +800,7 @@ async function getExistingRestaurantStats() {
       const bucket = classifyBucketFromPostFrontmatter(parsed.data);
       bucketCounts.set(bucket, (bucketCounts.get(bucket) || 0) + 1);
 
-      if (sourceId && FORCE_RESTAURANT_SOURCE_IDS.has(sourceId)) {
+      if (sourceId && FORCE_RESTAURANT_SOURCE_IDS.has(sourceId) && ALLOW_EXISTING_POST_DELETION) {
         await fs.unlink(fullPath);
         ids.delete(sourceId);
         bucketCounts.set(bucket, Math.max(0, (bucketCounts.get(bucket) || 1) - 1));
@@ -1016,7 +1020,7 @@ function buildFilteredCandidates(snapshot, existingIds) {
     .filter(({ item }) => item?.id && item?.name)
     .filter(({ item }) => {
       const sourceId = String(item.id);
-      if (FORCE_RESTAURANT_SOURCE_IDS.size > 0) {
+      if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && ALLOW_EXISTING_POST_DELETION) {
         return FORCE_RESTAURANT_SOURCE_IDS.has(sourceId);
       }
       return !existingIds.has(sourceId);

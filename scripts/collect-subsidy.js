@@ -27,6 +27,63 @@ function validateFetchedData(sourceName, existingCount, fetchedCount) {
   return 'ok';
 }
 
+function parseDateCandidates(text) {
+  const src = String(text || '');
+  const matches = [...src.matchAll(/(\d{4})[.-](\d{2})[.-](\d{2})/g)];
+  if (matches.length === 0) return [];
+  return matches
+    .map((m) => `${m[1]}-${m[2]}-${m[3]}`)
+    .filter((v) => /^\d{4}-\d{2}-\d{2}$/.test(v));
+}
+
+function extractEndDateFromSubsidyItem(item) {
+  const fields = [
+    item['신청기한'],
+    item['신청기간'],
+    item['접수기간'],
+    item['지원내용'],
+    item['지원대상'],
+    item['선정기준'],
+  ];
+  const dates = fields.flatMap(parseDateCandidates).sort();
+  if (dates.length === 0) return null;
+  return dates[dates.length - 1];
+}
+
+async function fetchSubsidyPages(apiKey, { perPage = 100, maxPages = 80 } = {}) {
+  const all = [];
+  let totalCount = 0;
+
+  for (let page = 1; page <= maxPages; page++) {
+    const params = new URLSearchParams({
+      page: String(page),
+      perPage: String(perPage),
+      returnType: 'JSON',
+    });
+
+    const endpoint = `https://api.odcloud.kr/api/gov24/v3/serviceList?${params.toString()}`;
+    const response = await fetch(endpoint, {
+      headers: { Authorization: `Infuser ${apiKey}` },
+    });
+
+    if (!response.ok) {
+      throw new Error(`subsidy page ${page} fetch failed: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const pageItems = data.data || data.items || [];
+    const list = Array.isArray(pageItems) ? pageItems : [];
+    all.push(...list);
+
+    totalCount = Number(data.totalCount || totalCount || 0);
+    const currentCount = Number(data.currentCount || list.length);
+    if (currentCount === 0) break;
+    if (totalCount > 0 && all.length >= totalCount) break;
+  }
+
+  return { items: all, totalCount };
+}
+
 async function generateSubsidyMarkdown(item) {
   if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
   const prompt = `아래 보조금/복지 정책 정보를 블로그처럼 읽기 쉬운 한국어 Markdown으로 재작성해줘.
@@ -63,33 +120,37 @@ ${JSON.stringify(item, null, 2)}`;
 async function run() {
   const PUBLIC_DATA_API_KEY = process.env.PUBLIC_DATA_API_KEY;
   const DESCRIPTION_MARKDOWN_BATCH_LIMIT = Number.parseInt(process.env.DESCRIPTION_MARKDOWN_BATCH_LIMIT || '10', 10);
+  const SUBSIDY_WINDOW_MONTHS = Math.max(6, Number.parseInt(process.env.SUBSIDY_WINDOW_MONTHS || '12', 10));
   if (!PUBLIC_DATA_API_KEY) {
     console.error("Missing PUBLIC_DATA_API_KEY in process.env");
     return;
   }
 
-  const endpoint = `https://api.odcloud.kr/api/gov24/v3/serviceList?page=1&perPage=100&returnType=JSON`;
-
   let items = [];
   try {
-    const response = await fetch(endpoint, {
-      headers: { 'Authorization': `Infuser ${PUBLIC_DATA_API_KEY}` }
-    });
-    if (!response.ok) {
-      console.error("Failed to fetch subsidy data:", await response.text());
-      return;
-    }
-    const data = await response.json();
-    items = data.data || data.items || [];
+    const fetched = await fetchSubsidyPages(PUBLIC_DATA_API_KEY, { perPage: 100, maxPages: 80 });
+    items = fetched.items;
+    console.log(`보조금 원천 데이터 수집: totalCount=${fetched.totalCount || '-'}, collected=${items.length}`);
   } catch (err) {
     console.error("Error fetching subsidy data:", err);
     return;
   }
 
   // 인천 소관기관 제외
-  const filtered = items.filter(item => {
+  const onlyNational = items.filter(item => {
     const org = item['소관기관명'] || '';
     return !org.includes('인천');
+  });
+
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  const windowEnd = new Date(today.getFullYear(), today.getMonth() + SUBSIDY_WINDOW_MONTHS, today.getDate());
+  const windowEndStr = windowEnd.toISOString().split('T')[0];
+
+  const filtered = onlyNational.filter((item) => {
+    const endDate = extractEndDateFromSubsidyItem(item);
+    if (!endDate) return true;
+    return endDate >= todayStr && endDate <= windowEndStr;
   });
 
   const dataPath = path.join(process.cwd(), 'public', 'data', 'subsidy.json');
@@ -103,39 +164,29 @@ async function run() {
 
   const validationStatus = validateFetchedData('전국 보조금·복지 정책', existing.length, filtered.length);
 
-  // 중복 제거 후 신규 항목 추가
-  const existingNames = new Set(existing.map(e => e['서비스명'] || e.name));
-  const newItems = filtered.filter(item => !existingNames.has(item['서비스명'] || item.name));
+  // active window 기준으로 재구성 (지난 데이터는 파일에서 제거)
+  const existingByKey = new Map(
+    existing.map((item) => [
+      String(item['서비스ID'] || item.id || item['서비스명'] || item.name),
+      item,
+    ])
+  );
 
-  const merged = [
-    ...existing,
-    ...newItems.map(item => ({
+  const merged = [];
+  let newItemsCount = 0;
+  for (const item of filtered) {
+    const key = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
+    if (!key) continue;
+    const prev = existingByKey.get(key);
+    if (!prev) newItemsCount++;
+
+    merged.push({
+      ...(prev || {}),
       ...item,
+      endDate: extractEndDateFromSubsidyItem(item) || prev?.endDate || null,
       expired: false,
-      collectedAt: new Date().toISOString().split('T')[0]
-    }))
-  ];
-
-  // 만료일 자동 감지: 지원내용 등에서 "(YYYY.MM.DD.한)" 패턴 파싱
-  const expiryPattern = /(\d{4})\.(\d{2})\.(\d{2})\.한/;
-  function parseExpiryDate(text) {
-    const m = expiryPattern.exec(String(text || ''));
-    return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
-  }
-  const todayStr = new Date().toISOString().split('T')[0];
-  let autoExpiredCount = 0;
-  for (const item of merged) {
-    if (item.expired) continue;
-    const expiryDate = parseExpiryDate(item['지원내용'])
-      || parseExpiryDate(item['지원대상'])
-      || parseExpiryDate(item['선정기준']);
-    if (expiryDate && expiryDate < todayStr) {
-      item.expired = true;
-      autoExpiredCount++;
-    }
-  }
-  if (autoExpiredCount > 0) {
-    console.log(`만료일 자동 감지: ${autoExpiredCount}건 expired 처리`);
+      collectedAt: todayStr,
+    });
   }
 
   let markdownGenerated = 0;
@@ -173,7 +224,7 @@ async function run() {
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItems.length}건 추가, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
+  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItemsCount}건 추가, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건, 윈도우 ${SUBSIDY_WINDOW_MONTHS}개월)`);
   if (markdownGenerated > 0) {
     console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
@@ -184,7 +235,7 @@ async function run() {
   // GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
-    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItems.length}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
   }

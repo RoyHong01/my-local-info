@@ -24,6 +24,7 @@ const BLOG_ONLY_CATEGORY = process.env.BLOG_ONLY_CATEGORY || '';
 const BLOG_ONLY_KEYWORD = (process.env.BLOG_ONLY_KEYWORD || '').trim();
 const BLOG_ONLY_KEYWORD_MATCH = String(process.env.BLOG_ONLY_KEYWORD_MATCH || 'contains').trim().toLowerCase();
 const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
+const ALLOW_EXISTING_BLOG_POST_OVERWRITE = process.env.ALLOW_EXISTING_BLOG_POST_OVERWRITE === 'true';
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -1255,7 +1256,21 @@ ${festivalStyleOverride}
     console.log(`  🖼️ 중간 이미지 상태: ${midStatus}`);
   }
 
-  await fs.writeFile(path.join(postsDir, filename), finalContent, 'utf-8');
+  const outputPath = path.join(postsDir, filename);
+  let outputExists = false;
+  try {
+    await fs.access(outputPath);
+    outputExists = true;
+  } catch {
+    outputExists = false;
+  }
+
+  if (outputExists && !ALLOW_EXISTING_BLOG_POST_OVERWRITE) {
+    console.warn(`안전장치: 기존 블로그 글이 이미 존재하여 덮어쓰지 않습니다. (${filename})`);
+    return false;
+  }
+
+  await fs.writeFile(outputPath, finalContent, 'utf-8');
   console.log(`✅ 생성 완료: ${filename} (${itemName})`);
   return true;
 }

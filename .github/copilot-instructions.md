@@ -248,6 +248,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-17 핵심 반영(추가):
+  - **공공데이터 페이지네이션 복구**: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 반복 페이지 수집 로직을 추가해 `page=1` 고정으로 신규 데이터가 누락되던 문제를 해소.
+  - **윈도우 동기화 기준 명확화**: 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위의 활성 데이터만 유지하도록 정리.
+  - **만료 정책 복원**: `scripts/cleanup-expired.js`는 데이터 JSON을 삭제하지 않고 `expired: true` 마킹 중심으로 유지.
+  - **콘텐츠 보존 안전장치**: `scripts/generate-life-restaurant-posts.mjs`는 `ALLOW_EXISTING_POST_DELETION=true`가 없으면 기존 글 삭제 금지, `scripts/generate-blog-post.js`는 `ALLOW_EXISTING_BLOG_POST_OVERWRITE=true`가 없으면 기존 글 덮어쓰기 금지.
 - 2026-04-17 핵심 반영:
   - **인천 가정의달 포스트 간격 조정**: `src/content/posts/2026-04-17-incheon-family-month-free-gift.md`에서 `신청 방법` 헤딩 레벨을 `## -> ###`로 조정해 제목-숫자리스트 간격을 축소.
   - **재발 방지 규칙 추가**: 파일 복구 시 셸 리다이렉트 덮어쓰기 금지, `git checkout`/`git restore --source`만 허용하도록 규칙 고정.

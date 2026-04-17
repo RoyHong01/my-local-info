@@ -29,6 +29,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-17 공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화
+  - `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 페이지네이션을 도입해 `page=1` 고정 상태에서 벗어나 전체 active window 데이터를 반복 수집하도록 수정.
+  - 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위로 동기화 대상을 재구성.
+  - `scripts/cleanup-expired.js`는 공공 데이터 JSON을 삭제하지 않고 `expired: true` 마킹으로 유지하는 정책으로 복원.
+  - `scripts/generate-life-restaurant-posts.mjs`는 `ALLOW_EXISTING_POST_DELETION=true`가 없는 한 기존 맛집 글 삭제를 차단.
+  - `scripts/generate-blog-post.js`는 `ALLOW_EXISTING_BLOG_POST_OVERWRITE=true`가 없는 한 기존 블로그 글 덮어쓰기를 차단.
+
 - 2026-04-17 인천 가정의달 포스트 간격 조정 + 복구 안전 규칙 고정
   - 대상 파일: `src/content/posts/2026-04-17-incheon-family-month-free-gift.md`
   - 조치: `신청 방법` 헤딩을 `##`에서 `###`으로 조정해 제목과 숫자 리스트(1~5)의 시각적 간격을 축소.

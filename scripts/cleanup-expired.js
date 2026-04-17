@@ -73,7 +73,7 @@ async function run() {
 
   console.log(`cleanup-expired 완료: ${updated}건 만료 처리, ${skipped}건 유지`);
 
-  // subsidy.json 만료일 자동 감지 보정 패스
+  // subsidy.json 만료일 자동 감지 보정 패스 (삭제하지 않고 expired 마킹)
   const subsidyPath = path.join(process.cwd(), 'public', 'data', 'subsidy.json');
   try {
     const subsidyRaw = await fs.readFile(subsidyPath, 'utf-8');
@@ -97,12 +97,14 @@ async function run() {
     if (subsidyExpired > 0) {
       await fs.writeFile(subsidyPath, JSON.stringify(subsidyData, null, 2), 'utf-8');
       console.log(`subsidy.json 만료 보정: ${subsidyExpired}건 expired 처리`);
+    } else {
+      console.log('subsidy.json: 새로 만료된 항목 없음');
     }
   } catch (err) {
     console.error('subsidy.json 만료 보정 실패:', err.message);
   }
 
-  // festival.json 만료 처리 패스
+  // festival.json 만료 처리 패스 (삭제하지 않고 expired 마킹)
   const festivalPath = path.join(process.cwd(), 'public', 'data', 'festival.json');
   try {
     const festivalRaw = await fs.readFile(festivalPath, 'utf-8');
@@ -129,7 +131,7 @@ async function run() {
     console.error('festival.json 만료 보정 실패:', err.message);
   }
 
-  // incheon.json 만료 처리 패스
+  // incheon.json 만료 처리 패스 (삭제하지 않고 expired 마킹)
   const incheonPath = path.join(process.cwd(), 'public', 'data', 'incheon.json');
   try {
     const incheonRaw = await fs.readFile(incheonPath, 'utf-8');

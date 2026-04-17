@@ -12,6 +12,29 @@
 
 ---
 
+## 2026-04-17 (공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화)
+
+- **요청 작업**:
+  - 인천/전국 보조금·복지/전국 축제·여행 수집 스크립트의 페이지네이션 부재 점검 및 수정
+  - 데이터 JSON의 만료 처리 방식을 삭제 대신 `expired` 마킹 중심으로 복원
+  - 블로그/일상의 즐거움 글은 자동화에서 기존 글 삭제 또는 덮어쓰기가 일어나지 않도록 안전장치 추가
+- **수정 파일**:
+  - `scripts/collect-incheon.js`
+  - `scripts/collect-subsidy.js`
+  - `scripts/collect-festival.js`
+  - `scripts/cleanup-expired.js`
+  - `scripts/generate-blog-post.js`
+  - `scripts/generate-life-restaurant-posts.mjs`
+- **핵심 반영**:
+  1. `collect-incheon.js`, `collect-subsidy.js`, `collect-festival.js`에 페이지네이션 루프를 추가해 `page=1` 고정 문제를 해소.
+  2. 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위 기준으로 active window를 재구성.
+  3. `cleanup-expired.js`는 공공 데이터 JSON에서 만료 항목을 삭제하지 않고 `expired: true`로 마킹하도록 복원.
+  4. `generate-life-restaurant-posts.mjs`는 `ALLOW_EXISTING_POST_DELETION=true`가 없으면 강제 재생성용 source id가 있어도 기존 글 삭제를 차단.
+  5. `generate-blog-post.js`는 `ALLOW_EXISTING_BLOG_POST_OVERWRITE=true`가 없으면 기존 블로그 파일 덮어쓰기를 차단.
+- **검증**:
+  - ✅ 수정 파일 `get_errors` 통과
+  - ✅ `npm run build` 성공
+
 ## 2026-04-17 (인천 가정의달 포스트 신청방법 섹션 간격 축소 - 재작업)
 
 - **요청 작업**: `인천시 가정의 달 맞이 무료선물 사전신청 행사` 글의 `### 📋 신청 방법` 제목과 아래 숫자 리스트(1~5) 사이의 위아래 간격(margin) 축소. 이전 시도에서 실패했으므로 확실하게 수정 요청.
