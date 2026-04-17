@@ -12,6 +12,32 @@
 
 ---
 
+## 2026-04-17 (인천 데이터 오염 2건 제거 + 텔레그램/리포트 운영 반영)
+
+- **요청 작업**:
+  - 인천 목록 하단에 섞여 노출되던 천안시 항목 2건 삭제
+  - 텔레그램 리포트에서 인천/전국보조금/전국축제 생성 내역이 구분되어 보이도록 개선
+  - 최근 완료한 fallback 템플릿 작업까지 운영 문서 동기화
+- **수정 파일**:
+  - `public/data/incheon.json`
+  - `scripts/notify-telegram.mjs`
+  - `WORK_LOG.md`
+  - `PROJECT_MEMORY.md`
+  - `COPILOT_MEMORY.md`
+  - `.github/copilot-instructions.md`
+- **핵심 반영**:
+  1. `public/data/incheon.json`에서 타지역 오염 데이터 2건 삭제.
+     - `O00112400002` `실현기술개발 지원`
+     - `O00112400003` `천안기업 기술사업화 바우처 지원`
+  2. `scripts/notify-telegram.mjs`에 블로그 frontmatter `category` 기반 분류 로직을 추가해 텔레그램에 `인천 n건 | 보조금 n건 | 축제 n건` 요약과 카테고리별 제목 목록을 노출.
+  3. 인천 데이터 재검색 기준으로 `천안`, `천안과학산업진흥원`, 해당 서비스 ID 2건이 더 이상 남아있지 않음을 확인.
+  4. fallback 시스템은 `description_markdown || generatedMarkdown` 우선순위 구조라 기존 AI 본문은 유지되고, 미작성 항목에만 템플릿이 적용되는 운영 상태를 확인.
+- **검증**:
+  - ✅ `npm run build` 성공
+  - ✅ 인천 정적 페이지 수 `340 -> 338` 반영 확인
+  - ✅ 텔레그램 카테고리 분해 스크립트 에러 없음
+  - ✅ `git add/commit/push` 예정 단계까지 문서 동기화 완료
+
 ## 2026-04-17 (Node 검증 스크립트 추가 + 정적 빌드/노출 검증)
 
 - **요청 작업**:

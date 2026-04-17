@@ -29,6 +29,13 @@
 
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
+- 2026-04-17 fallback/리포트/데이터 정리 반영
+  - `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`를 통해 상세 fallback 템플릿을 분리하고 각 상세 페이지에 연결.
+  - fallback 우선순위는 `description_markdown || generatedMarkdown` 구조를 유지해 기존 AI 본문은 그대로 사용하고, 미작성 항목만 템플릿을 사용.
+  - `scripts/notify-telegram.mjs`는 블로그 생성 결과를 인천/전국보조금/전국축제로 분해해 텔레그램에 요약/제목 목록을 노출.
+  - `public/data/incheon.json`에서 천안 오염 데이터 2건(`O00112400002`, `O00112400003`)을 제거해 인천 목록/상세 정합성을 복구.
+  - 빌드 검증 결과 인천 정적 페이지 수는 338건으로 감소했고 전체 빌드는 정상 통과.
+
 - 2026-04-17 공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화
   - PowerShell JSON 확인 혼선을 줄이기 위해 Node 기반 검증 스크립트 `scripts/verify-data-json.js`를 추가하고 `package.json`에 `verify:data` 명령을 등록.
   - 검증 기준을 `total`, `description_markdown`, `missing_description`, `expired` 4개 지표로 통일하고, 파일 없음/파싱 실패/배열 아님은 non-zero exit로 처리.

@@ -249,6 +249,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-17 핵심 반영(추가):
+  - **fallback 템플릿 모듈화**: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`를 추가하고 인천/보조금/축제 상세 페이지에서 공통 fallback 생성 함수를 사용하도록 정리.
+  - **fallback 우선순위 유지**: 상세 본문은 `description_markdown || generatedMarkdown` 순서를 유지해 기존 AI 생성 글은 보존하고, 미작성 항목에만 fallback 템플릿을 적용.
+  - **텔레그램 카테고리 분해**: `scripts/notify-telegram.mjs`에서 블로그 생성 결과를 인천/전국보조금/전국축제로 분리 표기하고 카테고리별 제목 목록을 노출.
+  - **인천 데이터 정합성 복구**: `public/data/incheon.json`에서 천안 오염 항목 2건(`O00112400002`, `O00112400003`)을 삭제해 인천 목록/상세에 타지역 데이터가 섞이지 않도록 보정.
+- 2026-04-17 핵심 반영(추가):
   - **공공데이터 페이지네이션 복구**: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 반복 페이지 수집 로직을 추가해 `page=1` 고정으로 신규 데이터가 누락되던 문제를 해소.
   - **윈도우 동기화 기준 명확화**: 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위의 활성 데이터만 유지하도록 정리.
   - **만료 정책 복원**: `scripts/cleanup-expired.js`는 데이터 JSON을 삭제하지 않고 `expired: true` 마킹 중심으로 유지.
