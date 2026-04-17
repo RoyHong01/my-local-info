@@ -1,12 +1,13 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import { getTopFestival } from '@/lib/priority-calculator';
 
 interface DataItem {
   [key: string]: unknown;
@@ -100,7 +101,8 @@ const fmtDate = (d: string) => d.length === 8
 
 export async function generateStaticParams() {
   const all = await readJson('festival.json');
-  return all.map(item => ({
+  const topItems = getTopFestival(all, 300);
+  return topItems.map(item => ({
     id: encodeURIComponent(getField(item, ['contentid', 'id']))
   })).filter(p => p.id);
 }
@@ -108,6 +110,7 @@ export async function generateStaticParams() {
 export default async function FestivalDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const all = await readJson('festival.json');
+  
   const item = all.find(i =>
     encodeURIComponent(getField(i, ['contentid', 'id'])) === id
   );

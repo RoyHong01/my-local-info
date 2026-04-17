@@ -1,12 +1,13 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import { getTopIncheon } from '@/lib/priority-calculator';
 
 interface DataItem {
   [key: string]: unknown;
@@ -106,7 +107,8 @@ function buildIncheonMarkdown(params: {
 
 export async function generateStaticParams() {
   const all = await readJson('incheon.json');
-  return all.map(item => ({
+  const topItems = getTopIncheon(all, 500);
+  return topItems.map(item => ({
     id: encodeURIComponent(getField(item, ['서비스ID', 'id']))
   })).filter(p => p.id);
 }
@@ -114,6 +116,7 @@ export async function generateStaticParams() {
 export default async function IncheonDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const all = await readJson('incheon.json');
+  
   const item = all.find(i =>
     encodeURIComponent(getField(i, ['서비스ID', 'id'])) === id
   );
