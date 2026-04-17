@@ -316,77 +316,55 @@ export function getPostData(slug: string): PostData | null {
 
   const requestedSlug = normalizeSlug(slug);
 
-  const directPostPath = path.join(POSTS_DIR, `${requestedSlug}.md`);
-  const directLifePath = path.join(LIFE_DIR, `${requestedSlug}.md`);
-  let existingPath = fs.existsSync(directPostPath)
-    ? directPostPath
-    : fs.existsSync(directLifePath)
-      ? directLifePath
-      : undefined;
+  // 디렉토리별 명시적 읽기로 Turbopack 파일 패턴을 좁힘
+  const readFromDir = (dir: string, fileName: string): string | null => {
+    try {
+      return fs.readFileSync(path.join(dir, fileName), 'utf8');
+    } catch {
+      return null;
+    }
+  };
 
-  // 파일명과 frontmatter slug가 다를 수 있으므로 fallback 스캔 수행
-  if (!existingPath) {
-    const scanPosts = () => {
-      if (!fs.existsSync(POSTS_DIR)) return undefined;
-      const fileNames = fs.readdirSync(POSTS_DIR).filter((fileName) => fileName.endsWith('.md'));
+  let fileContents: string | null = null;
+
+  // 1) 직접 경로 매칭
+  const directFileName = `${requestedSlug}.md`;
+  fileContents = readFromDir(POSTS_DIR, directFileName) ?? readFromDir(LIFE_DIR, directFileName);
+
+  // 2) 파일명과 frontmatter slug가 다를 수 있으므로 fallback 스캔 수행
+  if (fileContents === null) {
+    const scanDir = (dir: string): string | null => {
+      if (!fs.existsSync(dir)) return null;
+      const fileNames = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
 
       for (const fileName of fileNames) {
         const fileSlug = normalizeSlug(fileName.replace(/\.md$/, ''));
-        const fullPath = path.join(POSTS_DIR, fileName);
-
         if (fileSlug === requestedSlug) {
-          return fullPath;
+          return readFromDir(dir, fileName);
         }
 
         try {
-          const fileContents = fs.readFileSync(fullPath, 'utf8');
-          const parsed = matter(fileContents);
+          const contents = readFromDir(dir, fileName);
+          if (!contents) continue;
+          const parsed = matter(contents);
           const frontmatterSlug = normalizeSlug(String(parsed.data.slug || ''));
           if (frontmatterSlug && frontmatterSlug === requestedSlug) {
-            return fullPath;
+            return contents;
           }
         } catch {
           // ignore broken markdown and continue
         }
       }
 
-      return undefined;
+      return null;
     };
 
-    const scanLife = () => {
-      if (!fs.existsSync(LIFE_DIR)) return undefined;
-      const fileNames = fs.readdirSync(LIFE_DIR).filter((fileName) => fileName.endsWith('.md'));
-
-      for (const fileName of fileNames) {
-        const fileSlug = normalizeSlug(fileName.replace(/\.md$/, ''));
-        const fullPath = path.join(LIFE_DIR, fileName);
-
-        if (fileSlug === requestedSlug) {
-          return fullPath;
-        }
-
-        try {
-          const fileContents = fs.readFileSync(fullPath, 'utf8');
-          const parsed = matter(fileContents);
-          const frontmatterSlug = normalizeSlug(String(parsed.data.slug || ''));
-          if (frontmatterSlug && frontmatterSlug === requestedSlug) {
-            return fullPath;
-          }
-        } catch {
-          // ignore broken markdown and continue
-        }
-      }
-
-      return undefined;
-    };
-
-    existingPath = scanPosts() || scanLife();
+    fileContents = scanDir(POSTS_DIR) ?? scanDir(LIFE_DIR);
   }
 
-  if (!existingPath) return null;
+  if (!fileContents) return null;
 
   try {
-    const fileContents = fs.readFileSync(existingPath, 'utf8');
     const matterResult = matter(fileContents);
     
     let dateStr = matterResult.data.date || '';
