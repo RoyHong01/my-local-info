@@ -12,6 +12,23 @@
 
 ---
 
+## 2026-04-17 (Turbopack 12634-file pattern 경고 해소 — 빌드 exit code 1 근본 수정)
+
+- **문제 현상**: `npm run build` 실행 시 빌드는 성공하지만 exit code 1이 반환 (PowerShell에서 Turbopack stderr 경고를 NativeCommandError로 처리)
+- **근본 원인**: `src/lib/posts.ts:389`의 `fs.readFileSync(existingPath, 'utf8')`에서 `existingPath`가 동적 변수여서 Turbopack이 프로젝트 전체 12,634개 파일을 매칭하는 광범위 패턴으로 추적 → "Turbopack build encountered 1 warnings" 경고를 stderr에 출력
+- **수정 내용**: `getPostData()` 함수 리팩터링
+  - 동적 `existingPath` → `fs.readFileSync` 패턴을 디렉토리별 명시적 `readFromDir(dir, fileName)`으로 분리
+  - scan 함수에서 이미 읽은 파일 내용을 재사용해 중복 읽기 제거
+  - Turbopack이 파일 패턴을 `src/content/posts/<file>`, `src/content/life/<file>`로 좁히도록 구조 변경
+- **수정 파일**: `src/lib/posts.ts` (1개)
+- **검증**:
+  - ✅ `npm run build` 경고 0건 ("Turbopack build encountered" 메시지 제거)
+  - ✅ exit code 0 확인
+  - ✅ sitemap 8235 URLs, search-index 8223건 정상
+  - ✅ `git push` 완료 (커밋 `f534d47`)
+
+---
+
 ## 2026-04-17 (GFM 테이블 렌더링 수정 — 인천/보조금/축제 fallback 마크다운)
 
 - **문제 현상**: 인천/보조금/축제 상세 페이지에서 테이블이 HTML `<table>`로 렌더링되지 않고 파이프(`|`) 문자 그대로 노출
