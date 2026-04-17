@@ -37,6 +37,20 @@
   - 추가 파일 수정 필요 시 사유/영향 파일을 먼저 보고 후 진행.
   - 복구 시 셸 리다이렉트 덮어쓰기 금지, git 내장 복구만 사용.
 
+## 2026-04-17 (pre-push 훅 복구 + 작업 범위 자동 가드 도입)
+
+- **문제 현상**:
+  - `git push` 시 `.git/hooks/pre-push`가 0바이트라 `cannot spawn .git/hooks/pre-push` 오류가 발생.
+- **원인**:
+  - 훅 파일 손상(빈 파일)으로 실행 가능한 스크립트가 없어 push 단계가 실패.
+- **조치**:
+  1. 훅 상태 점검 스크립트 추가: `scripts/check-worktree-safety.ps1`
+  2. 훅 설치 스크립트 추가: `scripts/install-git-hooks.ps1`
+  3. npm 명령 추가: `check:worktree`, `check:worktree:strict`, `check:worktree:repair-hooks`, `hooks:install`
+  4. pre-push 훅 자동 복구 및 재설치로 실행 가능 상태 복원.
+- **효과**:
+  - push 전 `check:worktree:strict` 자동 실행으로 0바이트 파일/범위 이탈 변경을 조기에 차단.
+
 ## 2026-04-15 (사이드바 폭 회귀 수정: width 100% 제거)
 
 - **문제 현상**: 블로그 목록 레이아웃 붕괴(본문 폭 급축소/카드 hidden 판정), 사이드바가 상단 전체폭으로 보이는 회귀 발생.
