@@ -1307,6 +1307,21 @@ async function run() {
 
     const validItems = sortByPriority(keywordFiltered.items, category);
 
+    // [보조금 한정] 기존 포스트 source_id → 전화문의 매칭용 Set
+    // 동일 기관/전화번호 서비스 중복 방지 (범죄피해 구조금 vs 범죄피해자 경제적 지원 케이스)
+    const usedPhones = new Set();
+    if (category === '전국 보조금·복지 정책') {
+      for (const existId of serviceIds) {
+        const match = items.find(x => String(x['서비스ID'] || '') === existId);
+        if (match && match['전화문의']) {
+          usedPhones.add(String(match['전화문의']).trim());
+        }
+      }
+      if (usedPhones.size > 0) {
+        console.log(`  전화문의 중복 체크: 기존 ${usedPhones.size}개 번호 제외`);
+      }
+    }
+
     // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
     const candidates = validItems.filter(item => {
       const name = item['서비스명'] || item['title'] || item['name'] || '';
@@ -1323,6 +1338,12 @@ async function run() {
 
       // 1.5순위: 제목+일정+주소 스냅샷 키 매칭
       if (snapshotKey && sourceSnapshotKeys.has(snapshotKey)) return false;
+
+      // 1.7순위: [보조금 한정] 전화문의 중복 — 동일 기관 유사 서비스 제외
+      if (category === '전국 보조금·복지 정책' && item['전화문의']) {
+        const phone = String(item['전화문의']).trim();
+        if (phone && usedPhones.has(phone)) return false;
+      }
 
       // 2순위: source_id 없는 기존 파일의 파일명 키워드 부분 매칭
       if (filenameKeywords.some(kw => name.includes(kw) || kw.includes(name.slice(0, 6)))) return false;
