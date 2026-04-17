@@ -1307,19 +1307,39 @@ async function run() {
 
     const validItems = sortByPriority(keywordFiltered.items, category);
 
-    // [보조금 한정] 기존 포스트 source_id → 전화문의 매칭용 Set
-    // 동일 기관/전화번호 서비스 중복 방지 (범죄피해 구조금 vs 범죄피해자 경제적 지원 케이스)
-    const usedPhones = new Set();
+    // [보조금 한정] 기존 포스트 source_id → 전화문의+서비스명 매칭용 Map
+    // 동일 기관의 "유사 서비스"만 중복 방지 (범죄피해 구조금 vs 범죄피해자 경제적 지원 케이스)
+    // 같은 기관이라도 다른 정책(예: 장애인차량 vs 다자녀자동차)은 허용
+    const usedPhoneServices = new Map(); // phone → [{ name, normalizedPrefix }]
     if (category === '전국 보조금·복지 정책') {
       for (const existId of serviceIds) {
         const match = items.find(x => String(x['서비스ID'] || '') === existId);
-        if (match && match['전화문의']) {
-          usedPhones.add(String(match['전화문의']).trim());
+        if (match && match['전화문의'] && match['서비스명']) {
+          const phone = String(match['전화문의']).trim();
+          const name = match['서비스명'];
+          // 핵심 키워드 추출: 정규화 후 앞 6글자 (한글 기준 핵심 명사 위치)
+          const normalizedPrefix = normalizeMatchText(name).slice(0, 6);
+          if (!usedPhoneServices.has(phone)) {
+            usedPhoneServices.set(phone, []);
+          }
+          usedPhoneServices.get(phone).push({ name, normalizedPrefix });
         }
       }
-      if (usedPhones.size > 0) {
-        console.log(`  전화문의 중복 체크: 기존 ${usedPhones.size}개 번호 제외`);
+      if (usedPhoneServices.size > 0) {
+        const totalServices = [...usedPhoneServices.values()].reduce((sum, arr) => sum + arr.length, 0);
+        console.log(`  전화문의+유사도 체크: 기존 ${usedPhoneServices.size}개 번호(${totalServices}건 서비스) 등록`);
       }
+    }
+    
+    // 서비스명 유사도 판정 함수: 앞 6글자 정규화 후 4글자 이상 겹치면 유사 서비스
+    function isSimilarService(newName, existingServices) {
+      const newPrefix = normalizeMatchText(newName).slice(0, 6);
+      if (newPrefix.length < 4) return false;
+      return existingServices.some(({ normalizedPrefix }) => {
+        if (normalizedPrefix.length < 4) return false;
+        // 앞 4글자가 동일하면 유사 서비스로 판정
+        return newPrefix.slice(0, 4) === normalizedPrefix.slice(0, 4);
+      });
     }
 
     // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
@@ -1339,10 +1359,14 @@ async function run() {
       // 1.5순위: 제목+일정+주소 스냅샷 키 매칭
       if (snapshotKey && sourceSnapshotKeys.has(snapshotKey)) return false;
 
-      // 1.7순위: [보조금 한정] 전화문의 중복 — 동일 기관 유사 서비스 제외
+      // 1.7순위: [보조금 한정] 전화문의+유사도 — 동일 기관의 유사 서비스만 제외
+      // 같은 전화번호라도 서비스명이 다르면(예: 장애인차량 vs 다자녀자동차) 허용
       if (category === '전국 보조금·복지 정책' && item['전화문의']) {
         const phone = String(item['전화문의']).trim();
-        if (phone && usedPhones.has(phone)) return false;
+        const existingServices = usedPhoneServices.get(phone);
+        if (existingServices && isSimilarService(name, existingServices)) {
+          return false;
+        }
       }
 
       // 2순위: source_id 없는 기존 파일의 파일명 키워드 부분 매칭
