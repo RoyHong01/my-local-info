@@ -821,6 +821,37 @@ function getOneGlanceHeadingByCategory(category) {
   return '### 📌 한눈에 보는 신청 정보';
 }
 
+function hasStructuredApplicationInfo(candidate, category) {
+  if (category === '전국 축제·여행') return false;
+
+  const keys = [
+    ['신청기한', 'endDate'],
+    ['지원내용', 'overview'],
+    ['지원대상', 'target'],
+    ['신청방법'],
+    ['접수기관', '접수기관명', 'location'],
+    ['전화문의', 'tel'],
+    ['소관기관명'],
+    ['상세조회URL', 'homepage', 'link'],
+  ];
+
+  return keys.some((group) => getCandidateText(candidate, group));
+}
+
+function buildApplicationInfoPrompt(candidate, category) {
+  if (!hasStructuredApplicationInfo(candidate, category)) return '';
+
+  return `
+[신청 정보 표 규칙 - 반드시 적용]
+- 이 글에 신청/접수 정보가 있으면 본문에 반드시 \`### 📌 한눈에 보는 신청 정보\` 섹션을 넣고, 바로 아래에 마크다운 표를 작성할 것
+- 표 헤더는 반드시 \`| 항목 | 내용 |\` 형식으로 작성할 것
+- JSON에 존재하는 신청기한, 지원내용, 지원대상, 신청방법, 접수기관, 문의전화, 소관기관, 상세정보를 표에 우선 정리할 것
+- \`신청 방법\`을 별도 번호 리스트(1. 2. 3.) 섹션으로 다시 풀어쓰지 말 것
+- \`**신청 방법**\` 같은 굵은 문단 제목도 사용하지 말 것
+- 추가 설명이 필요하면 표 아래에 짧은 문단 1개 또는 주의사항 인용문(>)으로만 보완할 것
+`.trim();
+}
+
 function buildOneGlanceInfoSection(candidate, category) {
   const rows = buildOneGlanceRows(candidate, category);
   if (rows.length === 0) return '';
@@ -1028,6 +1059,8 @@ eventstartdate/eventenddate/startDate/endDate: 일정/기간
 addr1/addr2: 주소
 overview: 상세 설명 전체
 ※ 위 항목 중 JSON에 있는 것은 하나도 빠뜨리지 말 것. 정보 누락 = 잘못된 글.
+
+${buildApplicationInfoPrompt(candidate, candidate._category)}
 
 (본문: 1500자 이상, 아래 스타일 가이드 반드시 적용)
 ${festivalStyleOverride}
