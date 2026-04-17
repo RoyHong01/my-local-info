@@ -153,7 +153,11 @@ ${JSON.stringify(item, null, 2)}`;
 
 async function run() {
   const PUBLIC_DATA_API_KEY = process.env.PUBLIC_DATA_API_KEY;
-  const DESCRIPTION_MARKDOWN_BATCH_LIMIT = Number.parseInt(process.env.DESCRIPTION_MARKDOWN_BATCH_LIMIT || '10', 10);
+  const DESCRIPTION_MARKDOWN_BATCH_LIMIT = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_BATCH_LIMIT || '10', 10));
+  const DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT = Math.max(1, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT || '5', 10));
+  const DESCRIPTION_MARKDOWN_ADAPTIVE_ENABLED = String(process.env.DESCRIPTION_MARKDOWN_ADAPTIVE_ENABLED || 'true').toLowerCase() !== 'false';
+  const DESCRIPTION_MARKDOWN_FAIL_THRESHOLD_PCT = Math.min(100, Math.max(1, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_FAIL_THRESHOLD_PCT || '40', 10)));
+  const DESCRIPTION_MARKDOWN_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_DELAY_MS || '80', 10));
   const SUBSIDY_WINDOW_MONTHS = Math.max(6, Number.parseInt(process.env.SUBSIDY_WINDOW_MONTHS || '12', 10));
   if (!PUBLIC_DATA_API_KEY) {
     console.error("Missing PUBLIC_DATA_API_KEY in process.env");
@@ -224,6 +228,9 @@ async function run() {
   }
 
   let markdownGenerated = 0;
+  let markdownAttempted = 0;
+  let markdownFailed = 0;
+  let markdownPending = 0;
   let inputTokens = 0;
   let outputTokens = 0;
   if (!GEMINI_API_KEY) {
@@ -233,11 +240,14 @@ async function run() {
       const hash = sourceHash(item);
       return !(item.description_markdown && item.description_markdown_source_hash === hash);
     });
-    const batchTargets = markdownTargets.slice(0, Math.max(0, DESCRIPTION_MARKDOWN_BATCH_LIMIT));
-    console.log(`description_markdown 배치 처리: ${batchTargets.length}건 / 대기 ${Math.max(0, markdownTargets.length - batchTargets.length)}건`);
+    const requestedLimit = DESCRIPTION_MARKDOWN_BATCH_LIMIT;
+    const minLimit = Math.min(DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT, requestedLimit || DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT);
+    let effectiveLimit = Math.min(markdownTargets.length, requestedLimit);
+    console.log(`description_markdown 배치 처리: 최대 ${effectiveLimit}건 (최소 ${minLimit}건, adaptive=${DESCRIPTION_MARKDOWN_ADAPTIVE_ENABLED ? 'on' : 'off'}) / 전체 대기 ${markdownTargets.length}건`);
 
-    for (const item of batchTargets) {
+    for (const item of markdownTargets.slice(0, effectiveLimit)) {
       const hash = sourceHash(item);
+      markdownAttempted++;
 
       try {
         const { markdown, usage } = await generateSubsidyMarkdown(item);
@@ -251,9 +261,35 @@ async function run() {
           outputTokens += usage.output_tokens;
         }
       } catch {
+        markdownFailed++;
         console.error(`description_markdown 생성 실패: ${item['서비스명'] || item.name || item.title || item['서비스ID'] || item.id}`);
       }
+
+      if (DESCRIPTION_MARKDOWN_DELAY_MS > 0) {
+        await new Promise((resolve) => setTimeout(resolve, DESCRIPTION_MARKDOWN_DELAY_MS));
+      }
+
+      // 실패율이 높으면 한 번 실행에서 처리 건수를 10 -> 5 수준으로 자동 하향
+      if (
+        DESCRIPTION_MARKDOWN_ADAPTIVE_ENABLED &&
+        requestedLimit > minLimit &&
+        markdownAttempted >= minLimit &&
+        markdownAttempted < requestedLimit
+      ) {
+        const failRate = (markdownFailed / markdownAttempted) * 100;
+        if (failRate >= DESCRIPTION_MARKDOWN_FAIL_THRESHOLD_PCT) {
+          effectiveLimit = minLimit;
+          console.warn(`description_markdown adaptive 하향: 실패율 ${failRate.toFixed(1)}% (기준 ${DESCRIPTION_MARKDOWN_FAIL_THRESHOLD_PCT}%) -> 이번 실행 처리 상한 ${effectiveLimit}건`);
+        }
+      }
+
+      if (markdownAttempted >= effectiveLimit) {
+        break;
+      }
     }
+
+    markdownPending = Math.max(0, markdownTargets.length - markdownAttempted);
+    console.log(`description_markdown 결과: 시도 ${markdownAttempted}건, 성공 ${markdownGenerated}건, 실패 ${markdownFailed}건, 잔여 ${markdownPending}건`);
   }
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
@@ -272,6 +308,9 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_attempted=${markdownAttempted}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_failed=${markdownFailed}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_pending=${markdownPending}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
   }
 }
