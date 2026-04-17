@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "verify:data": "node scripts/verify-data-json.js",
     "postbuild": "node scripts/generate-sitemap.js && node scripts/generate-search-index.js",
     "generate:blog": "node scripts/generate-blog-post.js",
     "generate:blog:latest": "node scripts/run-blog-latest.js",

@@ -30,6 +30,13 @@
 - 상세 이력은 `WORK_LOG.md`를 기준으로 관리하고, 본 문서는 현재 상태 중심으로 유지한다.
 
 - 2026-04-17 공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화
+  - PowerShell JSON 확인 혼선을 줄이기 위해 Node 기반 검증 스크립트 `scripts/verify-data-json.js`를 추가하고 `package.json`에 `verify:data` 명령을 등록.
+  - 검증 기준을 `total`, `description_markdown`, `missing_description`, `expired` 4개 지표로 통일하고, 파일 없음/파싱 실패/배열 아님은 non-zero exit로 처리.
+  - 검증 결과: `npm run verify:data` 기준 `incheon 340`, `subsidy 7495`, `festival 206` 확인.
+  - 정적 산출물 검증: `npm run build` 성공(8242/8242) 후 `out/index.html`, `out/incheon/index.html`, `out/subsidy/index.html`, `out/festival/index.html`, `out/blog/index.html` 존재 및 `<title>` 확인.
+  - 운영 판단: 터미널 한글 깨짐은 콘솔 인코딩 차이로 분류하고, 데이터 무결성은 Node UTF-8 파싱 결과를 기준으로 판정.
+
+- 2026-04-17 공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화
   - `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 페이지네이션을 도입해 `page=1` 고정 상태에서 벗어나 전체 active window 데이터를 반복 수집하도록 수정.
   - 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위로 동기화 대상을 재구성.
   - `scripts/cleanup-expired.js`는 공공 데이터 JSON을 삭제하지 않고 `expired: true` 마킹으로 유지하는 정책으로 복원.

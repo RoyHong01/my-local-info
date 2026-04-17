@@ -12,6 +12,30 @@
 
 ---
 
+## 2026-04-17 (Node 검증 스크립트 추가 + 정적 빌드/노출 검증)
+
+- **요청 작업**:
+  - PowerShell 기반 JSON 확인 혼선을 줄이기 위해 Node 기준 데이터 검증 스크립트 추가
+  - 반영된 데이터 JSON 기준으로 재빌드 후 실제 페이지 노출(정적 산출물) 확인
+- **수정 파일**:
+  - `scripts/verify-data-json.js`
+  - `package.json`
+  - `WORK_LOG.md`
+- **핵심 반영**:
+  1. `scripts/verify-data-json.js` 추가: 기본 대상(`public/data/incheon.json`, `public/data/subsidy.json`, `public/data/festival.json`)을 UTF-8로 읽고 `JSON.parse`로 검증.
+  2. 파일별 출력 지표를 표준화: `total`, `description_markdown`, `missing_description`, `expired`.
+  3. 검증 실패(파일 없음/파싱 실패/배열 아님) 시 non-zero exit 처리.
+  4. `package.json`에 `verify:data` 스크립트 추가(`node scripts/verify-data-json.js`).
+  5. 빌드 잠금(`.next/lock`) 충돌 시 잔여 `next build` 프로세스를 정리한 뒤 재실행하여 정적 생성 완료.
+- **검증**:
+  - ✅ `npm run verify:data` 성공
+    - `incheon.json`: total 340
+    - `subsidy.json`: total 7495
+    - `festival.json`: total 206
+  - ✅ `npm run build` 성공 (`Generating static pages ... 8242/8242`)
+  - ✅ 정적 산출물 노출 확인: `out/index.html`, `out/incheon/index.html`, `out/subsidy/index.html`, `out/festival/index.html`, `out/blog/index.html` 존재 및 `<title>` 확인
+  - ℹ️ PowerShell에서 한글 제목이 깨져 보인 현상은 파일 손상 이슈가 아닌 콘솔 인코딩 표시 차이로 판단
+
 ## 2026-04-17 (공공데이터 동기화 확장 + 콘텐츠 삭제 안전장치 강화)
 
 - **요청 작업**:
