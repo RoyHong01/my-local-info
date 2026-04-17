@@ -1,11 +1,14 @@
 const fs = require('fs/promises');
 const path = require('path');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
-const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
-if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
-  throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. 필요하면 ALLOW_GEMINI_PRO=true를 명시하세요.`);
+const requestedGeminiModel = process.env.GEMINI_MODEL || '';
+if (/\bpro\b/i.test(requestedGeminiModel)) {
+  throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다. gemini-2.5-flash-lite만 허용됩니다.');
+}
+if (requestedGeminiModel && requestedGeminiModel !== GEMINI_MODEL) {
+  console.warn(`GEMINI_MODEL 오버라이드(${requestedGeminiModel}) 무시: ${GEMINI_MODEL} 고정 사용`);
 }
 
 // detailCommon2로 축제 상세 설명(overview) 가져오기
