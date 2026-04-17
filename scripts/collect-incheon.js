@@ -1,10 +1,13 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const Anthropic = require('@anthropic-ai/sdk');
-
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const anthropic = ANTHROPIC_API_KEY ? new Anthropic({ apiKey: ANTHROPIC_API_KEY }) : null;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
+const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
+if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
+  throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. 필요하면 ALLOW_GEMINI_PRO=true를 명시하세요.`);
+}
 const INCHEON_PHOTO_TOKEN = process.env.INCHEON_PHOTO_TOKEN || '';
 const INCHEON_PHOTO_API_URL = process.env.INCHEON_PHOTO_API_URL || 'https://api.incheoneasy.com/api/tour/touristPhotoInfo';
 const INCHEON_PHOTO_MAX_PAGES = Number.parseInt(process.env.INCHEON_PHOTO_MAX_PAGES || '2', 10);
@@ -283,7 +286,7 @@ async function fetchIncheonPages(apiKey, { perPage = 100, maxPages = 30 } = {}) 
 }
 
 async function generateIncheonMarkdown(item) {
-  if (!anthropic) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
+  if (!GEMINI_API_KEY) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
   const prompt = `아래 인천 지역 공공서비스 정보를 블로그처럼 읽기 쉬운 한국어 Markdown으로 재작성해줘.
 
 [요구사항]
@@ -300,17 +303,44 @@ async function generateIncheonMarkdown(item) {
 [데이터]
 ${JSON.stringify(item, null, 2)}`;
 
-  const msg = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 1200,
-    messages: [{ role: 'user', content: prompt }],
-  });
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_API_KEY}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.3,
+          topP: 0.9,
+          maxOutputTokens: 1200,
+        },
+      }),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini API 오류: ${res.status} ${errText}`);
+  }
+
+  const data = await res.json();
+  const candidate = data?.candidates?.[0] || {};
+  const markdown = (candidate?.content?.parts?.[0]?.text || '').trim();
+  const usageMeta = data?.usageMetadata || {};
 
   return {
-    markdown: (msg.content?.[0]?.text || '').trim(),
+    markdown,
     usage: {
-      input_tokens: msg.usage?.input_tokens || 0,
-      output_tokens: msg.usage?.output_tokens || 0,
+      input_tokens: Number(usageMeta.promptTokenCount || usageMeta.inputTokenCount || 0),
+      output_tokens: Number(usageMeta.candidatesTokenCount || usageMeta.outputTokenCount || 0),
     },
   };
 }
@@ -457,8 +487,8 @@ async function run() {
   let markdownGenerated = 0;
   let inputTokens = 0;
   let outputTokens = 0;
-  if (!anthropic) {
-    console.log('ANTHROPIC_API_KEY 없음: description_markdown 생성 건너뜀');
+  if (!GEMINI_API_KEY) {
+    console.log('GEMINI_API_KEY 없음: description_markdown 생성 건너뜀');
   } else {
     const markdownTargets = merged.filter((item) => {
       const hash = sourceHash(item);
@@ -475,7 +505,7 @@ async function run() {
         if (markdown) {
           item.description_markdown = markdown;
           item.description_markdown_source_hash = hash;
-          item.description_markdown_model = 'claude-haiku-4-5-20251001';
+          item.description_markdown_model = GEMINI_MODEL;
           item.description_markdown_updated_at = new Date().toISOString().split('T')[0];
           markdownGenerated++;
           inputTokens += usage.input_tokens;
@@ -491,7 +521,7 @@ async function run() {
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
   console.log(`인천 지역 정보 수집 완료: 신규 ${newItemsCount}건 추가, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건, 윈도우 ${INCHEON_WINDOW_MONTHS}개월)`);
   if (markdownGenerated > 0) {
-    console.log(`  Anthropic usage - input: ${inputTokens}, output: ${outputTokens}`);
+    console.log(`  Gemini usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
   if (validationStatus !== 'ok') {
     console.warn(`  데이터 검증 경고: ${validationStatus}`);
@@ -501,6 +531,7 @@ async function run() {
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_matched=${photoMatched}\n`);
