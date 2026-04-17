@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
+import { buildSubsidyMarkdown } from '@/lib/subsidy-markdown';
 
 interface DataItem {
   [key: string]: unknown;
@@ -30,70 +31,7 @@ function formatText(text: string): string {
     .join('\n');
 }
 
-function markdownEscape(value: string): string {
-  return value
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .replace(/\u00a0/g, ' ')
-    .trim();
-}
 
-function buildSubsidyMarkdown(params: {
-  name: string;
-  summary: string;
-  content: string;
-  target: string;
-  method: string;
-  deadline: string;
-  supportType: string;
-  userType: string;
-  criteria: string;
-  office: string;
-  dept: string;
-  phone: string;
-  org: string;
-}): string {
-  const parts: string[] = [];
-
-  parts.push(`## ${params.name} 꼭 알아야 할 핵심`);
-
-  if (params.summary) {
-    parts.push(markdownEscape(params.summary));
-  }
-
-  if (params.content) {
-    parts.push('### 💡 어떤 혜택인가요?');
-    parts.push(markdownEscape(params.content));
-  }
-
-  if (params.target) {
-    parts.push('### 👥 지원 대상');
-    parts.push(markdownEscape(params.target));
-  }
-
-  if (params.method) {
-    parts.push('### 📝 신청 방법');
-    parts.push(markdownEscape(params.method));
-  }
-
-  const infos = [
-    ['신청기한', params.deadline],
-    ['지원유형', params.supportType],
-    ['신청 대상 구분', params.userType],
-    ['선정 기준', params.criteria],
-    ['접수 기관', params.office],
-    ['담당 부서', params.dept],
-    ['전화 문의', params.phone],
-    ['소관 기관', params.org],
-  ].filter(([, v]) => !!v);
-
-  if (infos.length > 0) {
-    parts.push('### 📌 한눈에 보는 신청 정보');
-    infos.forEach(([k, v]) => parts.push(`- **${k}**: ${markdownEscape(v as string)}`));
-  }
-
-  return parts.join('\n\n').trim();
-}
 
 function SubsidyViewContent() {
   const searchParams = useSearchParams();
@@ -196,6 +134,7 @@ function SubsidyViewContent() {
     phone,
     org,
   });
+  const hasAiContent = !!getField(item, ['description_markdown']);
   const detailMarkdown = sanitizeMarkdown(getField(item, ['description_markdown']) || generatedMarkdown);
 
   return (
@@ -215,11 +154,20 @@ function SubsidyViewContent() {
                   </span>
                 )}
                 <h1 className="text-2xl font-extrabold text-stone-900 mb-2">{name}</h1>
-                {deadline && (
-                  <p className="text-sm text-orange-500 flex items-center gap-1">
-                    <span>📅</span> 신청기한: {deadline}
-                  </p>
-                )}
+                <div className="flex flex-wrap items-center gap-2 mt-1">
+                  {deadline && (
+                    <p className="text-sm text-orange-500 flex items-center gap-1">
+                      <span>📅</span> 신청기한: {deadline}
+                    </p>
+                  )}
+                  <span className={`inline-block px-2 py-0.5 text-[11px] font-medium rounded-full ${
+                    hasAiContent
+                      ? 'bg-indigo-50 text-indigo-600'
+                      : 'bg-stone-100 text-stone-500'
+                  }`}>
+                    {hasAiContent ? '✨ AI 작성 본문' : '📋 원본 데이터 기반 요약'}
+                  </span>
+                </div>
               </header>
 
               <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">

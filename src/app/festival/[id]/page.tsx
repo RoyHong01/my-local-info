@@ -8,6 +8,7 @@ import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
 import { getTopFestival } from '@/lib/priority-calculator';
+import { buildFestivalMarkdown } from '@/lib/festival-markdown';
 
 interface DataItem {
   [key: string]: unknown;
@@ -41,60 +42,6 @@ function formatText(text: string): string {
     .trim();
 }
 
-function splitParagraphs(text: string): string[] {
-  if (!text) return [];
-
-  const normalized = formatText(text);
-  const byBlankLine = normalized
-    .split(/\n{2,}/)
-    .map(p => p.trim())
-    .filter(Boolean);
-
-  if (byBlankLine.length > 1) return byBlankLine;
-
-  const sentenceSplit = normalized
-    .split(/(?<=[.!?다])\s+(?=[가-힣A-Za-z0-9"“‘])/)
-    .map(s => s.trim())
-    .filter(Boolean);
-
-  if (sentenceSplit.length <= 2) return [normalized];
-
-  const chunks: string[] = [];
-  for (let i = 0; i < sentenceSplit.length; i += 2) {
-    chunks.push(sentenceSplit.slice(i, i + 2).join(' '));
-  }
-  return chunks;
-}
-
-function buildFestivalMarkdown(params: {
-  name: string;
-  dateStr: string;
-  overviewParagraphs: string[];
-  addr: string;
-  tel: string;
-  homepage: string;
-}): string {
-  const parts: string[] = [];
-
-  parts.push(`## ${params.name} 이렇게 즐겨보세요`);
-
-  if (params.dateStr) {
-    parts.push(`- **일정**: ${params.dateStr}`);
-  }
-
-  if (params.overviewParagraphs.length > 0) {
-    parts.push('### ✨ 축제 소개');
-    params.overviewParagraphs.forEach((p) => parts.push(p.trim()));
-  }
-
-  parts.push('### 📌 방문 정보');
-  if (params.addr) parts.push(`- **주소**: ${params.addr}`);
-  if (params.tel) parts.push(`- **전화**: ${params.tel}`);
-  if (params.homepage) parts.push(`- **공식 홈페이지**: ${params.homepage}`);
-
-  return parts.join('\n\n').trim();
-}
-
 const fmtDate = (d: string) => d.length === 8
   ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
   : d;
@@ -124,15 +71,17 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
     ? rawEnd ? `${fmtDate(rawStart)} ~ ${fmtDate(rawEnd)}` : fmtDate(rawStart)
     : '';
   const overview = formatText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
-  const overviewParagraphs = splitParagraphs(overview);
   const addr = getField(item, ['addr1', 'location']);
+  const addr2 = getField(item, ['addr2']);
   const tel = getField(item, ['tel']);
   const homepage = getField(item, ['homepage']);
   const generatedMarkdown = buildFestivalMarkdown({
     name,
-    dateStr,
-    overviewParagraphs,
-    addr,
+    overview,
+    startDate: rawStart,
+    endDate: rawEnd,
+    addr1: addr,
+    addr2,
     tel,
     homepage,
   });

@@ -240,6 +240,28 @@ async function run() {
       const hash = sourceHash(item);
       return !(item.description_markdown && item.description_markdown_source_hash === hash);
     });
+
+    // 우선순위 정렬: 마감 임박 > 조회수 상위 > 최근 수정
+    const todayISO = new Date().toISOString().split('T')[0];
+    markdownTargets.sort((a, b) => {
+      const aEnd = a.endDate || '';
+      const bEnd = b.endDate || '';
+      const aHasDeadline = aEnd >= todayISO ? 1 : 0;
+      const bHasDeadline = bEnd >= todayISO ? 1 : 0;
+      // 마감일이 있는 항목 우선, 가까운 마감일 먼저
+      if (aHasDeadline !== bHasDeadline) return bHasDeadline - aHasDeadline;
+      if (aHasDeadline && bHasDeadline && aEnd !== bEnd) return aEnd < bEnd ? -1 : 1;
+      // 조회수 높은 순
+      const aViews = Number(a['조회수'] || 0);
+      const bViews = Number(b['조회수'] || 0);
+      if (aViews !== bViews) return bViews - aViews;
+      // 최근 수정 순
+      const aMod = a['수정일시'] || '';
+      const bMod = b['수정일시'] || '';
+      return bMod.localeCompare(aMod);
+    });
+    console.log(`description_markdown 우선순위 정렬 완료: 마감임박 ${markdownTargets.filter(i => (i.endDate || '') >= todayISO).length}건, 전체 대기 ${markdownTargets.length}건`);
+
     const requestedLimit = DESCRIPTION_MARKDOWN_BATCH_LIMIT;
     const minLimit = Math.min(DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT, requestedLimit || DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT);
     let effectiveLimit = Math.min(markdownTargets.length, requestedLimit);

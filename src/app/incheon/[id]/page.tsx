@@ -8,6 +8,7 @@ import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
 import { getTopIncheon } from '@/lib/priority-calculator';
+import { buildIncheonMarkdown } from '@/lib/incheon-markdown';
 
 interface DataItem {
   [key: string]: unknown;
@@ -38,71 +39,6 @@ function formatText(text: string): string {
     .map(line => line.trim())
     .filter(line => line.length > 0)
     .join('\n');
-}
-
-function markdownEscape(value: string): string {
-  return value
-    .replace(/\r\n/g, '\n')
-    .replace(/\r/g, '\n')
-    .replace(/\u00a0/g, ' ')
-    .trim();
-}
-
-function buildIncheonMarkdown(params: {
-  name: string;
-  summary: string;
-  content: string;
-  target: string;
-  method: string;
-  deadline: string;
-  supportType: string;
-  userType: string;
-  criteria: string;
-  office: string;
-  dept: string;
-  phone: string;
-  org: string;
-}): string {
-  const parts: string[] = [];
-
-  parts.push(`## ${params.name} 핵심 안내`);
-
-  if (params.summary) {
-    parts.push(markdownEscape(params.summary));
-  }
-
-  if (params.content) {
-    parts.push('### ✨ 어떤 지원인가요?');
-    parts.push(markdownEscape(params.content));
-  }
-
-  if (params.target) {
-    parts.push('### 👥 지원 대상');
-    parts.push(markdownEscape(params.target));
-  }
-
-  if (params.method) {
-    parts.push('### 📝 신청 방법');
-    parts.push(markdownEscape(params.method));
-  }
-
-  const infos = [
-    ['신청기한', params.deadline],
-    ['지원유형', params.supportType],
-    ['신청 대상 구분', params.userType],
-    ['선정 기준', params.criteria],
-    ['접수 기관', params.office],
-    ['담당 부서', params.dept],
-    ['전화 문의', params.phone],
-    ['소관 기관', params.org],
-  ].filter(([, v]) => !!v);
-
-  if (infos.length > 0) {
-    parts.push('### 📌 한눈에 보는 정보');
-    infos.forEach(([k, v]) => parts.push(`- **${k}**: ${markdownEscape(v as string)}`));
-  }
-
-  return parts.join('\n\n').trim();
 }
 
 export async function generateStaticParams() {
@@ -148,6 +84,7 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
     supportType,
     userType,
     criteria,
+    field,
     office,
     dept,
     phone,

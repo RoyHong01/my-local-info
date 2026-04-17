@@ -57,7 +57,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
           INCHEON_PHOTO_TOKEN: ${{ secrets.INCHEON_PHOTO_TOKEN }}
-          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '2'
 
       - name: '[1단계] 전국 보조금 정책 수집'
         id: collect_subsidy
@@ -67,7 +67,7 @@ jobs:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
-          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '3'
 
       - name: '[1단계] 전국 축제·여행 정보 수집'
         id: collect_festival
@@ -77,7 +77,7 @@ jobs:
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
-          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '10'
+          DESCRIPTION_MARKDOWN_BATCH_LIMIT: '2'
 
       - name: '[1단계] 만료 콘텐츠 처리'
         id: cleanup_expired
