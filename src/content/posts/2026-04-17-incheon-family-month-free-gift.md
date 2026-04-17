@@ -6,10 +6,7 @@ summary: "5월 가정의 달을 앞두고 인천시에서 무료선물 사전신
 description: "5월 가정의 달을 앞두고 인천시에서 무료선물 사전신청 행사를 진행 중이에요. 4월 신청자 한정 선착순이니, 조건 확인 후 빠르게 신청하세요."
 category: "인천 지역 정보"
 tags: [인천행사, 가정의달, 무료선물, 인천이벤트, 5월행사]
-image: "/images/incheon-family-month-hero.jpg"
 ---
-
-![인천시 가정의 달 맞이 무료선물 사전신청 행사](/images/incheon-family-month-hero.jpg)
 
 5월 가정의 달이 코앞이에요.
 
@@ -20,6 +17,8 @@ image: "/images/incheon-family-month-hero.jpg"
 ## 🎁 어떤 행사인가요?
 
 인천시에서 진행하는 **가정의 달 기념 무료선물 사전신청 행사**로, 4월 신청자에 한해 무료혜택이 제공됩니다.
+
+![인천시 가정의 달 무료선물 행사](/images/incheon-family-month-photo-1.png)
 
 ![행사 상세 안내](/images/incheon-family-month-body.png)
 
