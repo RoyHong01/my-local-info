@@ -173,6 +173,15 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 14. **blog latest 키워드 매칭 규칙**: 특정 행사 수동 생성 시 `keyword`와 제목(`서비스명/title/name`) 완전일치 후보를 우선 사용한다.
   - 완전일치 후보가 2개 이상이면 타이브레이커를 `최신 일정 > 이미지 보유 > 조회수` 순으로 고정한다.
   - `keywordMatchMode`를 비우면 자동 분기: `전국 축제·여행 -> exact-first`, 그 외 카테고리 -> `contains`.
+15. **파일 복구 안전 규칙(재발 방지)**:
+  - 파일 복구/되돌리기 시 `cmd /c git show <commit>:<path> > <path>` 같은 셸 리다이렉트 덮어쓰기를 금지한다.
+  - 이유: Windows 셸/인코딩/리다이렉션 조합에서 한글 마크다운이 깨지거나 파일이 0바이트로 유실될 위험이 있다.
+  - 복구는 반드시 git 내장 방식으로 수행한다: `git checkout <commit> -- <path>` 또는 `git restore --source=<commit> <path>`.
+  - 복구 직후 `git diff -- <path>`와 파일 바이트 크기를 확인하고, 즉시 `npm run build`로 검증한다.
+16. **소규모 수정 범위 격리 규칙(재발 방지)**:
+  - 사용자가 단일 UI/문구/간격 수정을 요청한 경우, 기본 수정 범위는 대상 파일 1개로 제한한다.
+  - 대상 파일 외 변경이 필요해질 경우, 변경 이유와 영향 파일 목록을 먼저 보고하고 사용자 승인 후 진행한다.
+  - 작업 중 0바이트 파일/인코딩 깨짐/대량 파일 변경(예: 10개 이상)이 감지되면 즉시 중단하고, 복구 후 재개한다.
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
 
@@ -219,32 +228,13 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - ✅ favicon (ico + svg)
 - ✅ og:image 자동화 (TourAPI firstimage + 카테고리별 기본 SVG)
 
-## ⚠️ 사이드바 Sticky 금지령 (2026-04-15 확정)
-
-**금지령**: `html`, `body`, `PageContentShell` 등 최상위 컨테이너에 `overflow: hidden`이나 `auto`를 함부로 걸지 말 것. (Sticky 무력화 방지)
-
-**대안**: 가로 스크롤 방지가 꼭 필요하다면 `overflow-x: clip`만 사용할 것.
-
-**구조 고정**: 사이드바는 반드시 `self-stretch` 부모와 `sticky` 자식이라는 **2중 구조(Wrapper 패턴)**를 유지할 것.
-
-```tsx
-// ✅ 올바른 패턴
-<div className="... self-stretch">        {/* Wrapper: 부모 높이만큼 레일 확보 */}
-  <aside className="sticky top-24">       {/* 실제 sticky 요소 */}
-    ...
-  </aside>
-</div>
-```
-
-**Safari 특이사항**: `overflow-x: hidden`도 스크롤 컨텍스트를 생성해 sticky를 무력화함. 반드시 `clip` 사용.
-
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
-- 2026-04-15 핵심 반영:
-  - **사이드바 Sticky 최종 해결**: `overflow-x: hidden` → `overflow-x: clip` 변경(11차 시도 성공).
-  - **금지령 문서화**: 최상위 컨테이너 overflow 금지 규칙을 본 문서 및 메모리에 박제.
-  - **JSX 정리**: `blog/[slug]/page.tsx` 들여쓰기 정리 + sticky 조건 주석 보강.
+- 2026-04-17 핵심 반영:
+  - **인천 가정의달 포스트 간격 조정**: `src/content/posts/2026-04-17-incheon-family-month-free-gift.md`에서 `신청 방법` 헤딩 레벨을 `## -> ###`로 조정해 제목-숫자리스트 간격을 축소.
+  - **재발 방지 규칙 추가**: 파일 복구 시 셸 리다이렉트 덮어쓰기 금지, `git checkout`/`git restore --source`만 허용하도록 규칙 고정.
+  - **복구 검증 완료**: 0바이트 손상 파일을 git 내장 복구 방식으로 복원하고 `npm run build` 성공까지 확인.
 - 2026-04-14 핵심 반영:
   - **스케줄 실패 RCA 정리**: 2026-04-14 실행은 `generate_choice` 후보 0개 실패가 1차 원인이며, 이후 3단계(맛집) `skipped`는 실패 전파 구조 영향으로 확인.
   - **실패 격리 적용**: `.github/workflows/deploy.yml`의 `[2.5단계] 픽앤조이 초이스 자동 생성` step에 `continue-on-error: true`를 적용해 초이스 실패가 맛집 단계를 막지 않도록 수정.
