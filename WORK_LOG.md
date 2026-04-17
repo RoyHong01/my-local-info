@@ -12,6 +12,28 @@
 
 ---
 
+## 2026-04-17 (GFM 테이블 렌더링 수정 — 인천/보조금/축제 fallback 마크다운)
+
+- **문제 현상**: 인천/보조금/축제 상세 페이지에서 테이블이 HTML `<table>`로 렌더링되지 않고 파이프(`|`) 문자 그대로 노출
+- **근본 원인**: `incheon-markdown.ts`, `subsidy-markdown.ts`, `festival-markdown.ts` 3개 fallback 생성기에서 테이블 헤더/구분선/데이터행을 각각 `parts[]`에 push한 뒤 `parts.join('\n\n')`으로 결합 → 행 사이에 빈 줄이 삽입되어 GFM 테이블 파싱이 깨짐
+- **수정 내용**: 3개 파일 모두 테이블 행을 `tableLines[]` 배열로 모아 `tableLines.join('\n')`으로 단일 블록을 만든 뒤 `parts.push()` 1회만 호출하도록 변경
+- **수정 파일**:
+  - `src/lib/incheon-markdown.ts`
+  - `src/lib/subsidy-markdown.ts`
+  - `src/lib/festival-markdown.ts`
+- **영향 범위**:
+  - 인천: 238건 (description_markdown 없는 fallback 항목)
+  - 보조금: 7,388건
+  - 축제: 143건
+- **검증**:
+  - ✅ `npm run build` 성공 (sitemap 8235 URLs)
+  - ✅ 인천 `O00091900001` HTML → `<table><thead>...<tbody>...` 정상
+  - ✅ 축제 `3486730` HTML → `<table>` 정상
+  - ✅ 보조금 `134200000045`, `135200005002`, `138300000021` → `<table>` 정상, 파이프 텍스트 없음
+  - ✅ `git push` 완료 (커밋 `7beb7c1`)
+
+---
+
 ## 2026-04-17 (인천 데이터 오염 2건 제거 + 텔레그램/리포트 운영 반영)
 
 - **요청 작업**:

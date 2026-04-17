@@ -249,6 +249,9 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-17 핵심 반영(추가):
+  - **GFM 테이블 렌더링 수정**: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`의 fallback 생성기에서 테이블 행을 개별 push하던 패턴을 `tableLines[]` 단일 블록으로 변경해 `parts.join('\n\n')` 시 행 사이 빈 줄로 GFM 테이블이 깨지던 문제를 해소.
+  - **영향**: 인천 238건, 보조금 7,388건, 축제 143건의 fallback 항목에서 파이프 문자 노출 → `<table>` HTML 정상 렌더링으로 복구.
+- 2026-04-17 핵심 반영(추가):
   - **fallback 템플릿 모듈화**: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`를 추가하고 인천/보조금/축제 상세 페이지에서 공통 fallback 생성 함수를 사용하도록 정리.
   - **fallback 우선순위 유지**: 상세 본문은 `description_markdown || generatedMarkdown` 순서를 유지해 기존 AI 생성 글은 보존하고, 미작성 항목에만 fallback 템플릿을 적용.
   - **텔레그램 카테고리 분해**: `scripts/notify-telegram.mjs`에서 블로그 생성 결과를 인천/전국보조금/전국축제로 분리 표기하고 카테고리별 제목 목록을 노출.
