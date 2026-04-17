@@ -183,9 +183,9 @@ export function buildSubsidyMarkdown(params: SubsidyMarkdownParams): string {
 
   if (contactRows.length > 0) {
     parts.push('### 📞 문의 및 접수 안내');
-    parts.push('| 항목 | 내용 |');
-    parts.push('|------|------|');
-    contactRows.forEach(([k, v]) => parts.push(`| ${k} | ${v} |`));
+    const tableLines = ['| 항목 | 내용 |', '|------|------|'];
+    contactRows.forEach(([k, v]) => tableLines.push(`| ${k} | ${v} |`));
+    parts.push(tableLines.join('\n'));
   }
 
   // ── 경고 문구 ──

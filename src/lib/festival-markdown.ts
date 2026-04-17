@@ -166,9 +166,9 @@ export function buildFestivalMarkdown(params: FestivalMarkdownParams): string {
 
   if (visitRows.length > 0) {
     parts.push('### 📌 방문 정보');
-    parts.push('| 항목 | 내용 |');
-    parts.push('|------|------|');
-    visitRows.forEach(([k, v]) => parts.push(`| ${k} | ${v} |`));
+    const tableLines = ['| 항목 | 내용 |', '|------|------|'];
+    visitRows.forEach(([k, v]) => tableLines.push(`| ${k} | ${v} |`));
+    parts.push(tableLines.join('\n'));
   }
 
   return parts.join('\n\n').trim();
