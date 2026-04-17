@@ -51,6 +51,23 @@
 - **효과**:
   - push 전 `check:worktree:strict` 자동 실행으로 0바이트 파일/범위 이탈 변경을 조기에 차단.
 
+## 2026-04-17 (추천 운영방식 적용: pre-commit 경량 + pre-push 엄격)
+
+- **요청 반영**:
+  - commit 단계 자동 점검과 push 단계 엄격 점검을 분리 적용.
+- **수정 파일**:
+  - `scripts/install-git-hooks.ps1`
+  - `package.json`
+  - `.github/copilot-instructions.md`
+  - `COPILOT_MEMORY.md`
+  - `PROJECT_MEMORY.md`
+  - `WORK_LOG.md`
+- **핵심 반영**:
+  1. pre-commit 훅: `npm run check:worktree:commit` 실행(경량)
+  2. pre-push 훅: `npm run check:worktree:strict` 실행(엄격)
+  3. 훅 설치 스크립트를 pre-commit + pre-push 동시 설치 방식으로 확장
+  4. 운영 문서/메모리 규칙을 2단계 훅 기준으로 동기화
+
 ## 2026-04-15 (사이드바 폭 회귀 수정: width 100% 제거)
 
 - **문제 현상**: 블로그 목록 레이아웃 붕괴(본문 폭 급축소/카드 hidden 판정), 사이드바가 상단 전체폭으로 보이는 회귀 발생.

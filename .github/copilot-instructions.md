@@ -185,6 +185,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 17. **로컬 점검/훅 표준 절차(재발 방지)**:
   - 작업 시작 전 `npm run check:worktree`를 실행해 0바이트 파일/훅 상태를 점검한다.
   - 커밋 직전 `git diff --name-only`로 변경 파일 수와 범위를 확인한다.
+  - 커밋 전 자동 검증은 pre-commit 훅에서 `npm run check:worktree:commit`으로 실행한다.
   - pre-push 훅이 비어 있거나 없으면 `npm run hooks:install`로 복구한다.
   - push 전 자동 검증은 pre-push 훅에서 `npm run check:worktree:strict`로 강제한다.
 
@@ -241,6 +242,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **재발 방지 규칙 추가**: 파일 복구 시 셸 리다이렉트 덮어쓰기 금지, `git checkout`/`git restore --source`만 허용하도록 규칙 고정.
   - **복구 검증 완료**: 0바이트 손상 파일을 git 내장 복구 방식으로 복원하고 `npm run build` 성공까지 확인.
   - **훅/프리플라이트 표준화**: `scripts/check-worktree-safety.ps1`, `scripts/install-git-hooks.ps1`, `npm run hooks:install`을 추가해 pre-push 점검을 자동화.
+  - **훅 2단계 운영 적용**: pre-commit(`check:worktree:commit`) + pre-push(`check:worktree:strict`) 이중 가드로 운영.
 - 2026-04-14 핵심 반영:
   - **스케줄 실패 RCA 정리**: 2026-04-14 실행은 `generate_choice` 후보 0개 실패가 1차 원인이며, 이후 3단계(맛집) `skipped`는 실패 전파 구조 영향으로 확인.
   - **실패 격리 적용**: `.github/workflows/deploy.yml`의 `[2.5단계] 픽앤조이 초이스 자동 생성` step에 `continue-on-error: true`를 적용해 초이스 실패가 맛집 단계를 막지 않도록 수정.

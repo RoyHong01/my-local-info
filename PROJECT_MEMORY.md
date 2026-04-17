@@ -29,6 +29,7 @@
   - 사고 후속: 실제 0바이트 손상 파일들을 git 내장 복구 방식으로 되살린 뒤 빌드 성공을 재확인.
   - 운영 강화: 단일 수정 요청은 대상 파일 1개 원칙으로 처리하고, 추가 파일 수정이 필요할 경우 사유/영향 파일을 먼저 보고 후 진행.
   - 자동 가드 도입: `scripts/check-worktree-safety.ps1`와 `scripts/install-git-hooks.ps1`를 추가해 pre-push 단계에서 `check:worktree:strict` 검증을 강제.
+  - 훅 2단계 적용: pre-commit은 `check:worktree:commit`(경량), pre-push는 `check:worktree:strict`(엄격)로 분리 운영.
 
 - 2026-04-15 사이드바 폭 회귀 수정
   - 원인: `src/app/globals.css`의 `.sticky-sidebar { width: 100% }`가 2컬럼 레이아웃을 깨뜨려 본문 카드가 hidden 판정.
