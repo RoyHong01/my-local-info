@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-18T00:00:00+09:00",
+  "updatedAtKst": "2026-04-19T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -364,6 +364,39 @@
       "sourceId": "manual-choice-beauty-fashion-2026-04-18",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-04-19",
+      "productId": "9213114731",
+      "productName": "BYOU 프렌치 빈티지 장스탠드 높이 조절 3색 변광침실 침대 협탁 일체형 램프, 3색 변광",
+      "brand": "BYOU",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-04-19",
+      "productId": "8953059322",
+      "productName": "사는잼 LED 거실 장 스탠드 오로라 인테리어 장스탠드 플로어램프 무드등",
+      "brand": "사는잼",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-04-19",
+      "productId": "8492281910",
+      "productName": "레나에너지 슬림 플로어 장스탠드, 화이트 + 전구색",
+      "brand": "레나에너지",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
