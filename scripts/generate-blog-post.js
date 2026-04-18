@@ -25,6 +25,7 @@ const BLOG_ONLY_KEYWORD = (process.env.BLOG_ONLY_KEYWORD || '').trim();
 const BLOG_ONLY_KEYWORD_MATCH = String(process.env.BLOG_ONLY_KEYWORD_MATCH || 'contains').trim().toLowerCase();
 const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const ALLOW_EXISTING_BLOG_POST_OVERWRITE = process.env.ALLOW_EXISTING_BLOG_POST_OVERWRITE === 'true';
+const SHORT_MODE = process.env.SHORT_MODE === 'true';
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -842,6 +843,10 @@ function hasStructuredApplicationInfo(candidate, category) {
 function buildApplicationInfoPrompt(candidate, category) {
   if (!hasStructuredApplicationInfo(candidate, category)) return '';
 
+  const proseRule = SHORT_MODE
+    ? '- SHORT_MODE=true일 때만 표 전후 설명을 간결하게 작성하되, 맥락이 끊기지 않도록 표 위/아래 각각 최소 1문장 이상 유지할 것'
+    : '- 표 전후로 본문 내용을 충분히 배치하여 정보의 맥락을 완성할 것 (최소 2~3문단 권장)';
+
   return `
 [신청 정보 표 규칙 - 반드시 적용]
 - 이 글에 신청/접수 정보가 있으면 본문에 반드시 \`### 📌 한눈에 보는 신청 정보\` 섹션을 넣고, 바로 아래에 마크다운 표를 작성할 것
@@ -849,7 +854,8 @@ function buildApplicationInfoPrompt(candidate, category) {
 - JSON에 존재하는 신청기한, 지원내용, 지원대상, 신청방법, 접수기관, 문의전화, 소관기관, 상세정보를 표에 우선 정리할 것
 - \`신청 방법\`을 별도 번호 리스트(1. 2. 3.) 섹션으로 다시 풀어쓰지 말 것
 - \`**신청 방법**\` 같은 굵은 문단 제목도 사용하지 말 것
-- 추가 설명이 필요하면 표 아래에 짧은 문단 1개 또는 주의사항 인용문(>)으로만 보완할 것
+- 표 바로 위에는 신청 요점/대상 맥락을 연결하고, 표 바로 아래에는 주의사항·실행 팁·다음 행동을 자연스러운 문단으로 이어서 설명할 것
+${proseRule}
 `.trim();
 }
 
@@ -872,9 +878,43 @@ function buildOneGlanceInfoSection(candidate, category) {
   return lines.join('\n').trim();
 }
 
+function buildOneGlanceInfoTable(candidate, category) {
+  const rows = buildOneGlanceRows(candidate, category);
+  if (rows.length === 0) return '';
+
+  const lines = [
+    '| 항목 | 내용 |',
+    '|------|------|',
+    ...rows.map(([label, value]) => `| ${label} | ${value} |`),
+  ];
+
+  return lines.join('\n').trim();
+}
+
+function upsertMarkdownTable(sectionBody, tableMarkdown) {
+  if (!tableMarkdown) return sectionBody;
+
+  const body = (sectionBody || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  if (!body) return tableMarkdown;
+
+  const tableRegex = /(?:^|\n)(\|[^\n]*\|\s*\n\|[-:| ]+\|\s*(?:\n\|[^\n]*\|\s*)*)/m;
+  const match = body.match(tableRegex);
+  if (!match || match.index === undefined) {
+    return `${body}\n\n${tableMarkdown}`.trim();
+  }
+
+  const tableStart = match.index + (match[0].startsWith('\n') ? 1 : 0);
+  const tableEnd = tableStart + match[1].length;
+
+  const before = body.slice(0, tableStart).trimEnd();
+  const after = body.slice(tableEnd).trimStart();
+  return [before, tableMarkdown, after].filter(Boolean).join('\n\n').trim();
+}
+
 function ensureOneGlanceInfoSection(body, candidate, category) {
   const section = buildOneGlanceInfoSection(candidate, category);
-  if (!section) return body;
+  const tableMarkdown = buildOneGlanceInfoTable(candidate, category);
+  if (!section || !tableMarkdown) return body;
 
   const normalized = (body || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
   if (!normalized) return section;
@@ -888,13 +928,20 @@ function ensureOneGlanceInfoSection(body, candidate, category) {
 
   const start = headingMatch.index;
   const lineEnd = normalized.indexOf('\n', start);
+  const headingLine = lineEnd >= 0 ? normalized.slice(start, lineEnd).trim() : headingMatch[0].trim();
   const afterHeading = lineEnd >= 0 ? normalized.slice(lineEnd + 1) : '';
   const nextHeadingIdx = afterHeading.search(/^###\s+/m);
 
   const before = normalized.slice(0, start).trimEnd();
+  const sectionBody = nextHeadingIdx >= 0 ? afterHeading.slice(0, nextHeadingIdx).trim() : afterHeading.trim();
+  const normalizedSectionBody = upsertMarkdownTable(sectionBody, tableMarkdown);
   const tail = nextHeadingIdx >= 0 ? afterHeading.slice(nextHeadingIdx).trimStart() : '';
 
-  return [before, section, tail].filter(Boolean).join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+  return [before, headingLine, normalizedSectionBody, tail]
+    .filter(Boolean)
+    .join('\n\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function postProcessGeneratedMarkdown(markdown, context) {
@@ -927,7 +974,7 @@ function postProcessGeneratedMarkdown(markdown, context) {
     midImageStatus = midImageResult.status;
   }
 
-  // 표 헤더만 남는 케이스/핵심 항목 누락 케이스를 방지하기 위해 source 데이터를 기준으로 섹션을 고정 보정
+  // 표 헤더만 남는 케이스/핵심 항목 누락 케이스를 방지하기 위해 source 데이터를 기준으로 표 서식만 보정
   normalizedBody = ensureOneGlanceInfoSection(normalizedBody, context.candidate || {}, context.category);
 
   // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)

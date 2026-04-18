@@ -37,6 +37,27 @@ function isChoicePost(post: PostData) {
     ].join(' '));
 }
 
+function getCardThumbnail(post: PostData) {
+  const primary = post.image && !post.image.endsWith('.svg') ? post.image : '';
+
+  // 초이스는 대표 이미지(또는 쿠팡 배너 이미지) 우선 유지
+  if (isChoicePost(post)) {
+    return primary || post.coupangBannerImage || '';
+  }
+
+  // 인천/보조금은 카테고리 기본 썸네일만 사용
+  if (post.category === '인천 지역 정보' || post.category === '전국 보조금·복지 정책') {
+    return '';
+  }
+
+  // 축제는 히어로 이미지(포스트 image) 사용
+  if (post.category === '전국 축제·여행') {
+    return primary;
+  }
+
+  return primary;
+}
+
 // 카테고리별 썸네일 컴포넌트
 const CATEGORY_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 지역 정보': '/images/incheon-thumbnail.jpg',
@@ -153,9 +174,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                 {/* 썸네일 영역 */}
                 <div className="relative h-20 w-full flex-shrink-0">
                   {(() => {
-                    const primary = post.image && !post.image.endsWith('.svg') ? post.image : '';
-                    const choiceFallback = isChoicePost(post) ? (post.coupangBannerImage || '') : '';
-                    const thumb = primary || choiceFallback;
+                    const thumb = getCardThumbnail(post);
                     return thumb ? (
                     <Image
                       src={thumb}
