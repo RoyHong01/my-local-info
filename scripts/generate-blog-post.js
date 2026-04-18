@@ -911,6 +911,47 @@ function upsertMarkdownTable(sectionBody, tableMarkdown) {
   return [before, tableMarkdown, after].filter(Boolean).join('\n\n').trim();
 }
 
+function stripExtraPipeBlocksAfterCanonicalTable(sectionBody) {
+  const body = (sectionBody || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  if (!body) return body;
+
+  const lines = body.split('\n');
+  const out = [];
+  let inCanonicalTable = false;
+  let canonicalTableEnded = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const isPipeLine = /^\|.*\|\s*$/.test(trimmed);
+
+    if (!inCanonicalTable && !canonicalTableEnded && /^\|\s*항목\s*\|\s*내용\s*\|\s*$/u.test(trimmed)) {
+      inCanonicalTable = true;
+      out.push(line);
+      continue;
+    }
+
+    if (inCanonicalTable) {
+      if (isPipeLine) {
+        out.push(line);
+      } else {
+        inCanonicalTable = false;
+        canonicalTableEnded = true;
+        out.push(line);
+      }
+      continue;
+    }
+
+    // canonical table 이후에 나오는 추가 pipe 블록은 중복 원데이터로 간주해 제거
+    if (canonicalTableEnded && isPipeLine) {
+      continue;
+    }
+
+    out.push(line);
+  }
+
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
 function ensureOneGlanceInfoSection(body, candidate, category) {
   const section = buildOneGlanceInfoSection(candidate, category);
   const tableMarkdown = buildOneGlanceInfoTable(candidate, category);
@@ -934,7 +975,9 @@ function ensureOneGlanceInfoSection(body, candidate, category) {
 
   const before = normalized.slice(0, start).trimEnd();
   const sectionBody = nextHeadingIdx >= 0 ? afterHeading.slice(0, nextHeadingIdx).trim() : afterHeading.trim();
-  const normalizedSectionBody = upsertMarkdownTable(sectionBody, tableMarkdown);
+  const normalizedSectionBody = stripExtraPipeBlocksAfterCanonicalTable(
+    upsertMarkdownTable(sectionBody, tableMarkdown)
+  );
   const tail = nextHeadingIdx >= 0 ? afterHeading.slice(nextHeadingIdx).trimStart() : '';
 
   return [before, headingLine, normalizedSectionBody, tail]
