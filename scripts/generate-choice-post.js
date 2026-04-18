@@ -414,7 +414,7 @@ function buildPickOfDayBlock(product) {
   if (!product?.productName || !product?.affiliateUrl) return '';
   const safeProductName = sanitizeMarkdownText(product.productName);
   const lines = [];
-  lines.push('### 오늘의 픽 (Pick of the Day)');
+  lines.push('## 오늘의 픽');
   lines.push('');
   if (product.productImage) {
     lines.push(`![${safeProductName}](${product.productImage})`);
@@ -864,6 +864,8 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 - 건강기능식품/영양제는 치료를 암시하는 표현 금지
 - 리드 문단은 독자의 생활 장면을 먼저 보여주고, 바로 제품 자랑으로 뛰어들지 말 것
 - 본문에 "The Choice" 또는 영어 구조 라벨을 그대로 쓰지 마세요
+- "오늘의 픽 (Pick of the Day)"처럼 한글 제목 뒤 영어 부제를 붙이지 말고, 소제목은 한국어 중심으로 작성할 것
+- 전문 용어/브랜드/고유 명사를 제외한 불필요한 영어 표현(영어 부제, 영어 슬로건, 영어 구조 라벨) 사용을 금지하고 한글 에디터 톤을 유지할 것
 
 [호기심 유발 장치 - 최소 3개 반영]
 - 반전 문장: "좋다는 말보다 먼저 봐야 할 건..."

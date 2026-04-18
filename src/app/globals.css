@@ -118,6 +118,69 @@ body {
   padding: 0.75rem 0.5rem !important;
 }
 
+/* 초이스 비교 테이블: 모바일에서는 2열을 1열(상하)로 재배치 */
+@media (max-width: 767px) {
+  .choice-post-prose :where(table):not(:where([class~="not-prose"] *)) {
+    display: block;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .choice-post-prose :where(table thead):not(:where([class~="not-prose"] *)) {
+    display: none;
+  }
+
+  .choice-post-prose :where(table tbody):not(:where([class~="not-prose"] *)) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .choice-post-prose :where(table tbody tr):not(:where([class~="not-prose"] *)) {
+    display: contents;
+  }
+
+  .choice-post-prose :where(table tbody td):not(:where([class~="not-prose"] *)) {
+    display: block;
+    width: 100%;
+    border: 0 !important;
+    padding: 0.45rem 0 !important;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(1) td:nth-of-type(1)):not(:where([class~="not-prose"] *)) {
+    order: 1;
+    font-weight: 700;
+    padding-top: 0.2rem !important;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(2) td:nth-of-type(1)):not(:where([class~="not-prose"] *)) {
+    order: 2;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(3) td:nth-of-type(1)):not(:where([class~="not-prose"] *)) {
+    order: 3;
+    border-bottom: 1px solid rgba(120, 113, 108, 0.2) !important;
+    padding-bottom: 0.9rem !important;
+    margin-bottom: 0.35rem;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(1) td:nth-of-type(2)):not(:where([class~="not-prose"] *)) {
+    order: 4;
+    font-weight: 700;
+    padding-top: 0.9rem !important;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(2) td:nth-of-type(2)):not(:where([class~="not-prose"] *)) {
+    order: 5;
+  }
+
+  .choice-post-prose :where(table tbody tr:nth-of-type(3) td:nth-of-type(2)):not(:where([class~="not-prose"] *)) {
+    order: 6;
+    padding-bottom: 0.25rem !important;
+  }
+}
+
 /* 초이스 포스트의 번호형 소제목(1. 2. 3.) 간격 축소 */
 .choice-post-prose :where(h3):not(:where([class~="not-prose"] *)) {
   margin-top: 1.45rem !important;
