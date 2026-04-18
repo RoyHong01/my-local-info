@@ -1,0 +1,216 @@
+{
+  "reportDateKst": "2026-04-19",
+  "generatedAtUtc": "2026-04-18T19:44:41.178Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24612305153",
+    "runNumber": 576,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24612305153",
+    "runStartedAtUtc": "2026-04-18T19:36:15Z",
+    "headSha": "ee25c3acfd654a2fb69ddb5d34233f7762e03c82"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://3c847dd7.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 340건",
+        "subsidy": "신규 0건, 총 7491건",
+        "festival": "신규 0건, 업데이트 192건, 총 192건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://7bc7b971.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://fd4a1cea.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "977fca0fa2c3359160210b7f8805b816facafcff",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-18",
+      "authoredAt": "2026-04-18T19:44:40Z",
+      "files": [
+        "src/content/life/2026-04-19-gyeonggi-restaurant-2059167771.md",
+        "src/content/life/2026-04-19-seongsu-restaurant-780776735.md",
+        "src/content/life/2026-04-19-songdo-restaurant-1045198476.md"
+      ]
+    },
+    {
+      "sha": "00496827d34f12bd4f5fa7ff7221dd0fbfbd0da3",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-04-18",
+      "authoredAt": "2026-04-18T19:41:44Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md"
+      ]
+    },
+    {
+      "sha": "13f181ba6b31d804f66004f2de5e298cbc960941",
+      "subject": "자동 업데이트(2단계): 블로그 3건 생성 2026-04-18",
+      "authoredAt": "2026-04-18T19:41:37Z",
+      "files": [
+        "src/content/posts/2026-04-18-2026-sungnyemun-pasu-uisik.md",
+        "src/content/posts/2026-04-18-incheon-performance-discount.md",
+        "src/content/posts/2026-04-18-전세보증금반환보증-보증료-지원.md"
+      ]
+    },
+    {
+      "sha": "63b002572add1296fd936b7c68d578a84e090eb0",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-18",
+      "authoredAt": "2026-04-18T19:37:24Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 11,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-18-2026-sungnyemun-pasu-uisik.md",
+      "src/content/posts/2026-04-18-incheon-performance-discount.md",
+      "src/content/posts/2026-04-18-전세보증금반환보증-보증료-지원.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
+      "src/content/life/2026-04-19-gyeonggi-restaurant-2059167771.md",
+      "src/content/life/2026-04-19-seongsu-restaurant-780776735.md",
+      "src/content/life/2026-04-19-songdo-restaurant-1045198476.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-19-gyeonggi-restaurant-2059167771.md",
+      "src/content/life/2026-04-19-seongsu-restaurant-780776735.md",
+      "src/content/life/2026-04-19-songdo-restaurant-1045198476.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
+      "src/content/life/2026-04-19-gyeonggi-restaurant-2059167771.md",
+      "src/content/life/2026-04-19-seongsu-restaurant-780776735.md",
+      "src/content/life/2026-04-19-songdo-restaurant-1045198476.md",
+      "src/content/posts/2026-04-18-2026-sungnyemun-pasu-uisik.md",
+      "src/content/posts/2026-04-18-incheon-performance-discount.md",
+      "src/content/posts/2026-04-18-전세보증금반환보증-보증료-지원.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 8.34,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 340건",
+      "validation": "ok",
+      "anthropicUsage": "2034/1110",
+      "photoApi": {
+        "healthcheck": "failed:api_432:UNREGISTERED_IP_ERROR(등록되지 않은 IP)",
+        "mode": "disabled",
+        "failureReason": "api_432:UNREGISTERED_IP_ERROR(등록되지 않은 IP)"
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 7491건",
+      "validation": "ok",
+      "anthropicUsage": "2727/1954"
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 192건, 총 192건",
+      "validation": "ok",
+      "anthropicUsage": "1518/1056"
+    }
+  }
+}
