@@ -3,6 +3,8 @@
 // 블로그 글 하단 전용 (680x300)
 
 export default function CoupangBottomBanner({ bannerId }: { bannerId?: string }) {
+  void bannerId;
+
   return (
     <div style={{
       margin: '40px auto',

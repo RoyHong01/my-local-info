@@ -29,6 +29,8 @@ export default function BlogScrollRestorer() {
         setTimeout(() => window.scrollTo(0, y), 50);
       }
     }
+    // Intentionally run once on mount to restore category/scroll state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

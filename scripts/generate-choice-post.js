@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');

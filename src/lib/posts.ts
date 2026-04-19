@@ -403,7 +403,7 @@ export function getPostData(slug: string): PostData | null {
       openingHours: matterResult.data.opening_hours || matterResult.data.openingHours || '',
       content: normalizeBlogContent(matterResult.content, matterResult.data.title || slug),
     };
-  } catch (e) {
+  } catch {
     return null;
   }
 }

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 type ProductSidebarBannerProps = {
   href: string;
   imageSrc: string;
@@ -16,8 +18,8 @@ export default function ProductSidebarBanner({
       <div className="mb-1.5 text-center text-sm font-bold leading-5 text-stone-500">
         🛒 {title}
       </div>
-      <a href={href} target="_blank" rel="noopener noreferrer" referrerPolicy="unsafe-url">
-        <img
+      <a href={href} target="_blank" rel="noopener noreferrer" referrerPolicy="unsafe-url" title={alt}>
+        <Image
           src={imageSrc}
           alt={alt}
           width={240}

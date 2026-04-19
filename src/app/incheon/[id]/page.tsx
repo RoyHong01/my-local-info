@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';

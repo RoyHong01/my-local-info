@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import Link from 'next/link';
 import { getSortedPostsData } from '@/lib/posts';
 import BlogFilter from '@/components/BlogFilter';
 import BlogScrollRestorer from '@/components/BlogScrollRestorer';

@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import path from 'path';
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';

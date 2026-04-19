@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
 import path from 'path';
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import ScrollRestorer from '@/components/ScrollRestorer';
 import IncheonCardList from '@/components/IncheonCardList';
@@ -32,16 +31,6 @@ async function readJson(filename: string): Promise<DataItem[]> {
     return [];
   }
 }
-
-function getField(item: DataItem, keys: string[]): string {
-  for (const key of keys) {
-    if (item[key] && typeof item[key] === 'string') return item[key] as string;
-  }
-  return '';
-}
-
-const cleanText = (text: string) =>
-  text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
 
 export default async function IncheonPage() {
   const all = await readJson('incheon.json');

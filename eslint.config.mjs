@@ -10,6 +10,8 @@ const eslintConfig = defineConfig([
     rules: {
       // Existing automation scripts intentionally use CommonJS in many places.
       "@typescript-eslint/no-require-imports": "off",
+      // Scripts often keep placeholder args/vars for operational logging and retries.
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
   // Override default ignores of eslint-config-next.

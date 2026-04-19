@@ -34,7 +34,6 @@ export default function ReadingProgressBar() {
       className="fixed top-16 md:top-20 left-0 right-0 z-30 h-[3px] bg-stone-200/60"
       aria-hidden="true"
     >
-      {/* eslint-disable-next-line react/forbid-dom-props */}
       <div
         className="h-full bg-orange-500 transition-[width] duration-100 ease-linear"
         style={{ width: `${progress}%` }}

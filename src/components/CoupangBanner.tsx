@@ -4,6 +4,8 @@
 'use client';
 
 export default function CoupangBanner({ bannerId }: { bannerId?: string }) {
+  void bannerId;
+
   return (
     <div>
       <div style={{

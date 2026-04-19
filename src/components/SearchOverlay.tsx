@@ -89,7 +89,7 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
       const raw = fuseRef.current.search(value, { limit: 15 });
       setResults(raw.map((r) => r.item));
     },
-    [ready],
+    [],
   );
 
   if (!isOpen) return null;

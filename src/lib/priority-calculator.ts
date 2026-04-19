@@ -10,23 +10,6 @@ interface DataItem {
 }
 
 /**
- * 두 날짜 문자열 비교 (YYYYMMDD 또는 YYYYMMDDHHMMSS 형식)
- */
-function compareDates(dateStr1: string, dateStr2: string): number {
-  const normalize = (str: string | null | undefined): string => {
-    if (!str || typeof str !== 'string') return '0';
-    return str.substring(0, 8); // YYYYMMDD만 추출
-  };
-  
-  const d1 = normalize(dateStr1);
-  const d2 = normalize(dateStr2);
-  
-  if (d1 < d2) return -1;
-  if (d1 > d2) return 1;
-  return 0;
-}
-
-/**
  * Incheon (인천 정보) - Top N 추출
  * 기준: 최신순 + 조회수 상위
  */
@@ -121,7 +104,6 @@ export function getTopFestival(items: DataItem[] = [], limit: number = 300): Dat
   if (!Array.isArray(items)) return [];
   
   const today = new Date();
-  const sixMonthsLater = new Date(today.getTime() + 6 * 30 * 24 * 60 * 60 * 1000);
   
   const todayStr = today.toISOString().slice(0, 10).replace(/-/g, '');
   
@@ -129,7 +111,6 @@ export function getTopFestival(items: DataItem[] = [], limit: number = 300): Dat
   const active = items.filter(item => {
     if (item.expired) return false;
     
-    const eventStart = item.eventstartdate ? String(item.eventstartdate).substring(0, 8) : '';
     const eventEnd = item.eventenddate ? String(item.eventenddate).substring(0, 8) : '';
     
     // 축제가 아직 진행 중이거나 미래인 경우

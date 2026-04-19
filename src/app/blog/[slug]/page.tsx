@@ -1,5 +1,4 @@
 import { getPostData, getSortedPostsData } from '@/lib/posts';
-import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -67,10 +66,6 @@ type ChoiceSidebarProduct = {
   imageSrc: string;
   alt: string;
 };
-
-function isCoupangAffiliateLink(url: string): boolean {
-  return /coupang\.com|link\.coupang\.com|partners\.coupang\.com/i.test(url);
-}
 
 function extractChoiceSidebarProducts(markdown: string, fallbackAlt: string): ChoiceSidebarProduct[] {
   const text = String(markdown || '');

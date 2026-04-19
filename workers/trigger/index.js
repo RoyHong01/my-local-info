@@ -7,7 +7,7 @@
  *   GITHUB_TOKEN  — GitHub PAT (workflow 스코프 필요)
  */
 
-export default {
+const worker = {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
     const allowedOrigins = [
@@ -90,6 +90,8 @@ export default {
     }
   },
 };
+
+export default worker;
 
 function json(data, status, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
