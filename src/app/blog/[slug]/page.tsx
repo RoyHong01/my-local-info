@@ -14,6 +14,8 @@ import CoupangBottomBanner from '@/components/CoupangBottomBanner';
 import BlogBackButton from '@/components/BlogBackButton';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import ProductSidebarBanner from '@/components/ProductSidebarBanner';
+import ReadingProgressBar from '@/components/ReadingProgressBar';
+import StickyChoiceCTA from '@/components/StickyChoiceCTA';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 
 function extractFirstSentenceFromMarkdown(markdown: string): string {
@@ -438,6 +440,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
+      <ReadingProgressBar />
+      {isChoicePost && post.coupangLink && (
+        <StickyChoiceCTA href={post.coupangLink} />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}

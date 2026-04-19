@@ -8,6 +8,7 @@ import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import { buildSubsidyMarkdown } from '@/lib/subsidy-markdown';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { getTopSubsidy } from '@/lib/priority-calculator';
 
 interface DataItem {
@@ -96,7 +97,7 @@ export default async function SubsidyDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
-
+      <ReadingProgressBar />
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start overflow-visible">
           {/* 메인 콘텐츠 */}

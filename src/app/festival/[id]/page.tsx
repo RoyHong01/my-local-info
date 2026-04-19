@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { sanitizeMarkdown } from '@/lib/markdown-utils';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import ReadingProgressBar from '@/components/ReadingProgressBar';
 import { getTopFestival } from '@/lib/priority-calculator';
 import { buildFestivalMarkdown } from '@/lib/festival-markdown';
 
@@ -89,7 +90,7 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
-
+      <ReadingProgressBar />
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="flex gap-12 items-start overflow-visible">
           {/* 메인 콘텐츠 */}
