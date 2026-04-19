@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const TOUR_PHOTO_GALLERY_BASE = 'https://apis.data.go.kr/B551011/PhotoGalleryService1';
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const requestedGeminiModel = process.env.GEMINI_MODEL || '';
@@ -39,6 +40,31 @@ async function fetchByKeyword(keyword, apiKey) {
     return Array.isArray(item) ? item : [item];
   } catch {
     return [];
+  }
+}
+
+async function fetchPhotoGalleryImageByKeyword(keyword, apiKey) {
+  if (!apiKey || !keyword) return '';
+
+  const url =
+    `${TOUR_PHOTO_GALLERY_BASE}/gallerySearchList1` +
+    `?serviceKey=${apiKey}` +
+    `&MobileOS=ETC&MobileApp=pick-n-joy` +
+    `&_type=json` +
+    `&arrange=C` +
+    `&numOfRows=5&pageNo=1` +
+    `&keyword=${encodeURIComponent(keyword)}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return '';
+    const data = await res.json();
+    const items = data?.response?.body?.items?.item || [];
+    const list = Array.isArray(items) ? items : (items ? [items] : []);
+    const imageItem = list.find((entry) => entry?.galWebImageUrl);
+    return imageItem?.galWebImageUrl || '';
+  } catch {
+    return '';
   }
 }
 
@@ -253,6 +279,32 @@ async function run() {
     }
   }
 
+  // 이미지 보강: 기존 firstimage/firstimage2 유지, 없을 때만 PhotoGallery fallback 조회
+  const imageCache = new Map();
+  let photoGalleryFallbackCount = 0;
+  for (const item of items) {
+    const hasBaseImage = Boolean(item.firstimage || item.firstimage2);
+    if (hasBaseImage) continue;
+
+    const keyword = String(item.title || item.name || '').trim();
+    if (!keyword) continue;
+
+    if (!imageCache.has(keyword)) {
+      imageCache.set(keyword, await fetchPhotoGalleryImageByKeyword(keyword, TOUR_API_KEY));
+      await delay(80);
+    }
+
+    const fallbackImage = imageCache.get(keyword) || '';
+    if (!fallbackImage) continue;
+
+    item.firstimage = fallbackImage;
+    item.image_source = '한국관광공사(PhotoGalleryService1)';
+    item.image_source_note = '출처: 한국관광공사(PhotoGalleryService1)';
+    item.image_source_api = 'PhotoGalleryService1/gallerySearchList1';
+    item.image_keyword = keyword;
+    photoGalleryFallbackCount++;
+  }
+
   const validationStatus = validateFetchedData('전국 축제·여행 정보', existing.length, items.length);
 
   // 오래된 샘플 3건(id 기반)을 TourAPI 원본 항목으로 교체
@@ -402,6 +454,7 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_failed=${markdownFailed}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_pending=${markdownPending}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `festival_photo_fallback=${photoGalleryFallbackCount}\n`);
   }
 }
 
