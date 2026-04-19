@@ -1,5 +1,36 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-04-19)
+
+### 완료된 작업 3가지
+
+1. **Reading Progress Bar + Sticky Choice CTA 추가 (커밋: b762295)**
+   - 모든 상세 페이지에 헤더 아래 고정 진행률 바(orange-500)
+   - 초이스 카테고리 모바일 전용 CTA 배너 추가
+   - 기능 변경 없음, 순수 UX 개선
+
+2. **린트 에러 3개 해결 (커밋: 94eac02)**
+   - ESLint 규칙 설정 + 3개 파일 수정
+   - about/page.tsx 탈출 문자 + AdBanner 타입 정리
+   - 결과: 0 errors
+
+3. **린트 경고 49개 해결 (커밋: 22a6bb4)**
+   - 19개 파일에서 unused import/함수/변수 정리
+   - 목록/상세 페이지: Link, redirect 제거
+   - incheon/page.tsx: getField(), cleanText() 제거
+   - 컴포넌트: 훅 의존성, 이미지 최적화 정리
+   - 결과: 0 errors, 0 warnings ✅
+
+### 핵심 검증
+
+- npm run lint: Pass (0 errors, 0 warnings)
+- npm run build: 1347 pages 성공
+- npm run test:e2e: 1 test passed
+- npm run verify:data: 전체 데이터 OK
+- **자동화 영향: 0** (코드 정리만, 기능 무변화)
+
+---
+
 ## ⛔ 수정 범위 최우선 규칙 (항상 첫 번째로 적용)
 
 1. **특정 파일 단독 수정 원칙**: 사용자가 특정 파일을 지정해서 수정을 요청하면, **오직 그 파일 하나만** 수정한다. 다른 파일은 절대 건드리지 않는다.

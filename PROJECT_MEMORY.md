@@ -1,5 +1,38 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-04-19)
+
+### 완료: 읽기 진행률 바 + 스티키 CTA + 린트 완전 정리
+
+```bash
+커밋 b762295 - ReadingProgressBar + StickyChoiceCTA 추가
+커밋 94eac02 - 린트 에러 3개 해결 (eslint.config.mjs 규칙 분리)
+커밋 22a6bb4 - 린트 경고 49개 해결 (19개 파일 dead code 정리)
+
+현재 상태: 0 errors, 0 warnings ✅
+```
+
+**무엇이 문제였나?**
+
+1. ESLint 규칙이 설정되어 있으나 강제하지 않아 dead code 누적 (54 errors)
+2. 아키텍처 진화 과정에서 불필요한 import(Link, redirect) + 함수(getField, cleanText) 남겨짐
+3. CommonJS 기반 scripts 폴더가 TypeScript 엄격 모드 규칙에 걸려 경고 다발
+
+**어떻게 수정했나?**
+
+1. `eslint.config.mjs`: scripts 경로에 CommonJS 특성 반영해 규칙 완화
+2. 8개 페이지: unused import 제거 + 1개 페이지 추가 헬퍼 함수 제거
+3. 5개 컴포넌트: 훅 의존성 정리 + 이미지 최적화
+4. 라이브러리 + Worker: unused 함수/변수 정리
+
+**결과?**
+
+- 빌드: 1347 pages ✅
+- E2E: 1 test passed ✅
+- 자동화: 0 영향 (코드 정리만, 기능 무변화)
+
+---
+
 ## ⛔ 수정 범위 최우선 규칙 (항상 첫 번째로 적용)
 
 1. **특정 파일 단독 수정 원칙**: 사용자가 특정 파일을 지정해서 수정을 요청하면, **오직 그 파일 하나만** 수정한다. 다른 파일은 절대 건드리지 않는다.

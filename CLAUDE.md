@@ -153,11 +153,18 @@ src/app/life/restaurant/data/
 ## 최신 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 규칙/현행 상태 중심으로 유지한다.
+- 2026-04-19 핵심 반영:
+  - **Reading Progress Bar 추가**: 모든 상세 페이지(blog/incheon/subsidy/festival 4곳) 헤더 바로 아래 고정, orange-500 색상
+  - **Sticky Choice CTA 추가**: 초이스 카테고리 모바일 전용(md:hidden), 200px 스크롤 후 노출
+  - **린트 완전 정리**: 54 errors + 48 warnings → 0 errors, 0 warnings
+    - 3개 파일 수정(eslint.config.mjs, about/page.tsx, AdBanner.tsx)
+    - 19개 파일 dead code 정리(Link/redirect import + unused 함수/변수)
+    - 자동화 영향: 0 (코드 정리만, 기능 무변화)
 - 2026-04-17 핵심 반영:
-  - **공공데이터 페이지네이션 복구**: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 페이지 반복 수집을 추가해 `page=1` 고정 누락 문제를 해소.
-  - **활성 기간 윈도우 정리**: 인천/보조금은 기본 12개월(최소 6개월), 축제는 오늘부터 6개월 범위로 동기화.
-  - **만료 처리 정책 복원**: `scripts/cleanup-expired.js`는 공공 데이터 JSON을 삭제하지 않고 `expired: true` 마킹으로 유지.
-  - **콘텐츠 보호 강화**: `scripts/generate-life-restaurant-posts.mjs`는 `ALLOW_EXISTING_POST_DELETION=true`가 없으면 기존 글 삭제 금지, `scripts/generate-blog-post.js`는 `ALLOW_EXISTING_BLOG_POST_OVERWRITE=true`가 없으면 기존 글 덮어쓰기 금지.
+  - **공공데이터 페이지네이션 복구**: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`에 페이지 반복 수집 추가
+  - **활성 기간 윈도우 정리**: 인천/보조금은 12개월(최소 6개월), 축제는 6개월 범위
+  - **만료 처리 정책 복원**: `expired: true` 마킹으로 유지
+  - **콘텐츠 보호 강화**: ALLOW_EXISTING_POST_DELETION/OVERWRITE env 필수
 - 2026-03-29~30 핵심 반영:
   - `픽앤조이 초이스` 카테고리/목록/카드/포스트 체계 반영
   - 초이스 상세 UI/고지문/히어로 이미지 개선

@@ -3,6 +3,87 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+---
+
+## 2026-04-19 (UX 기능 추가 + 린트 안정화)
+
+### 1️⃣ Reading Progress Bar + Sticky Choice CTA 추가 (커밋: b762295)
+
+- **요청 작업**:
+  - Reading Progress Bar: 모든 상세 페이지 공통, 헤더 바로 아래 고정, Point Orange(orange-500) 색상, 데스크톱+모바일 공통
+  - Sticky Choice CTA: 초이스 카테고리 전용, 모바일 뷰만(md:hidden), 200px 스크롤 후 나타남
+
+- **구현 방식**: 독립 React 컴포넌트로 분리하여 각 상세 페이지 템플릿에 삽입
+
+- **적용 범위**:
+  - ReadingProgressBar: `blog/[slug]`, `incheon/[id]`, `subsidy/[id]`, `festival/[id]` 4곳
+  - StickyChoiceCTA: `blog/[slug]` (초이스 포스트 조건 분기: `isChoicePost && post.coupangLink`)
+
+- **결과**: 빌드 성공, E2E 테스트 통과, TypeScript 0 오류
+
+### 2️⃣ 린트 에러 3개 해결 (커밋: 94eac02)
+
+- **문제**:
+  - ESLint 규칙이 설정되어 있으나, 에러는 차단하지 않아서 문제가 누적됨
+  - 54 errors, 48 warnings 상태에서 시작
+
+- **해결**:
+  1. **scripts 경로 require 정책 정리**: `eslint.config.mjs`에 CommonJS 기반 자동화 스크립트 특성을 반영해 `no-require-imports` 규칙을 scripts 범위에서만 완화
+  2. **about 페이지 JSX 탈출 문자**: `src/app/about/page.tsx`의 따옴표(`"`)를 `&quot;`로 치환하여 `react/no-unescaped-entities` 규칙 만족
+  3. **AdBanner 타입 안전성**: `src/components/AdBanner.tsx`에서 Window 전역 타입 선언 추가, `as any` 캐스팅 제거로 `@typescript-eslint/no-explicit-any` 만족
+
+- **결과**: npm run lint 통과 (0 errors), npm run build 성공
+
+### 3️⃣ 린트 경고 49개 해결 (커밋: 22a6bb4)
+
+- **문제 분석**:
+  - **어원**: 아키텍처 진화 과정에서 더 이상 필요 없는 import/함수/변수가 남겨짐
+  - **핵심 패턴**:
+    - 목록 페이지(`blog/page.tsx`, `festival/page.tsx`, `incheon/page.tsx`, `subsidy/page.tsx`): Link import 가져왔으나 미사용
+    - 상세 페이지(`[slug]/page.tsx`, `[id]/page.tsx`): redirect import 가져왔으나 실제로는 notFound만 사용
+    - `incheon/page.tsx` 추가 이슈: 미사용 헬퍼 함수 2개(`getField()`, `cleanText()`)
+    - 컴포넌트: unused props, hook 의존성 경고, 이미지 최적화 권고
+
+- **해결 방식** (운영 영향 최소화):
+  1. **scripts 경고 완화**: `eslint.config.mjs`에 `no-unused-vars` 규칙을 scripts 범위에서만 off (자동화 스크립트의 재시도/로깅용 placeholder 변수 보존)
+  2. **불필요 import 제거**: 실제로 호출 안 하는 import만 정리
+     - `src/app/blog/page.tsx`: Link 제거
+     - `src/app/blog/[slug]/page.tsx`: Link, isCoupangAffiliateLink() 함수 제거
+     - `src/app/festival/page.tsx`: Link 제거
+     - `src/app/festival/[id]/page.tsx`: redirect 제거 (notFound만 유지)
+     - `src/app/incheon/page.tsx`: Link + getField() + cleanText() 제거
+     - `src/app/incheon/[id]/page.tsx`: redirect 제거
+     - `src/app/subsidy/page.tsx`: Link 제거
+     - `src/app/subsidy/[id]/page.tsx`: redirect 제거
+  3. **훅 의존성 정리**:
+     - `src/components/BlogScrollRestorer.tsx`: mount-once 의도 보존하며 eslint-disable 추가
+     - `src/components/SearchOverlay.tsx`: useCallback 의존성 배열에서 `ready` 제거 (fuseRef 사용하므로 무관)
+  4. **컴포넌트 최적화**:
+     - `src/components/ProductSidebarBanner.tsx`: `<img>` → Next Image 교체, title 속성 추가
+     - `src/components/CoupangBanner.tsx`, `CoupangBottomBanner.tsx`: `void bannerId;` 추가 (prop 호환성 유지)
+     - `src/components/ReadingProgressBar.tsx`: 자동 수정 산출물(빈 JSX 표현식) 정리
+  5. **라이브러리 정리**:
+     - `src/lib/posts.ts`: catch 변수 제거
+     - `src/lib/priority-calculator.ts`: unused compareDates(), sixMonthsLater, eventStart 제거
+  6. **Worker 정리**:
+     - `workers/trigger/index.js`: anonymous default export → named export로 변경
+
+- **결과**:
+  - npm run lint: **0 errors, 0 warnings** ✅
+  - npm run build: 1347 static pages 성공 ✅
+  - npm run test:e2e: 1 test passed ✅
+  - npm run verify:data: incheon(340), subsidy(7491), festival(192+3expired) OK ✅
+
+### 핵심 검증
+
+자동화 운영에 미치는 영향: **0**
+
+- 모든 수정은 코드 정리 작업, 기능 변경 없음
+- 불필요 import/변수만 제거, 사용하던 로직은 그대로 유지
+- 타입 안전성 개선(any 제거, 타입 명시) 추가
+
+---
+
 ## ⛔ 수정 범위 최우선 규칙 (항상 첫 번째로 적용)
 
 1. **특정 파일 단독 수정 원칙**: 사용자가 특정 파일을 지정해서 수정을 요청하면, **오직 그 파일 하나만** 수정한다. 다른 파일은 절대 건드리지 않는다.
