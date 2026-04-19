@@ -3,6 +3,7 @@ const path = require('path');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TOUR_API_KEY = process.env.TOUR_API_KEY || '';
+const TOUR_PHOTO_GALLERY_BASE = 'https://apis.data.go.kr/B551011/PhotoGalleryService1';
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const requestedGeminiModel = process.env.GEMINI_MODEL || '';
@@ -316,6 +317,31 @@ async function fetchTourFirstImageByKeyword(keyword, apiKey) {
   }
 }
 
+async function fetchPhotoGalleryImageByKeyword(keyword, apiKey) {
+  if (!apiKey || !keyword) return '';
+
+  const endpoint =
+    `${TOUR_PHOTO_GALLERY_BASE}/gallerySearchList1` +
+    `?serviceKey=${apiKey}` +
+    `&MobileOS=ETC&MobileApp=pick-n-joy` +
+    `&_type=json` +
+    `&arrange=C` +
+    `&numOfRows=5&pageNo=1` +
+    `&keyword=${encodeURIComponent(keyword)}`;
+
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) return '';
+    const data = await response.json();
+    const items = data?.response?.body?.items?.item || [];
+    const list = Array.isArray(items) ? items : (items ? [items] : []);
+    const imageItem = list.find((entry) => entry?.galWebImageUrl);
+    return imageItem?.galWebImageUrl || '';
+  } catch {
+    return '';
+  }
+}
+
 async function generateIncheonMarkdown(item) {
   if (!GEMINI_API_KEY) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
   const prompt = `아래 인천 지역 공공서비스 정보를 블로그처럼 읽기 쉬운 한국어 Markdown으로 재작성해줘.
@@ -442,7 +468,8 @@ async function run() {
     });
   }
 
-  // 인천관광공사 API는 정책상 비활성화하고, 인천 행사/축제 항목은 TourAPI 키워드 매칭 이미지를 사용
+  // 인천관광공사 API는 정책상 비활성화.
+  // 인천 행사/축제 항목은 TourAPI(searchKeyword2) 우선, 실패 시 PhotoGalleryService1로 fallback.
   let photoMatched = 0;
   let photoFallback = 0;
   let photoSkipped = 0;
@@ -454,6 +481,7 @@ async function run() {
     console.log('TOUR_API_KEY 없음: 인천 TourAPI 이미지 매칭 건너뜀');
   } else {
     const imageCache = new Map();
+    const imageSourceCache = new Map();
     for (const item of merged) {
       if (!isIncheonEventItem(item)) {
         photoSkipped++;
@@ -473,7 +501,15 @@ async function run() {
       }
 
       if (!imageCache.has(keyword)) {
-        imageCache.set(keyword, await fetchTourFirstImageByKeyword(keyword, TOUR_API_KEY));
+        const primary = await fetchTourFirstImageByKeyword(keyword, TOUR_API_KEY);
+        if (primary) {
+          imageCache.set(keyword, primary);
+          imageSourceCache.set(keyword, 'tourapi');
+        } else {
+          const fallback = await fetchPhotoGalleryImageByKeyword(keyword, TOUR_API_KEY);
+          imageCache.set(keyword, fallback || '');
+          imageSourceCache.set(keyword, fallback ? 'photo-gallery' : '');
+        }
       }
 
       const imageUrl = imageCache.get(keyword) || '';
@@ -481,11 +517,19 @@ async function run() {
         photoSkipped++;
         continue;
       }
+      const resolvedSource = imageSourceCache.get(keyword) || 'tourapi';
 
       item.firstimage = imageUrl;
-      item.image_source = '한국관광공사(TourAPI)';
-      item.image_source_note = '출처: 한국관광공사(TourAPI)';
-      item.image_source_api = 'KorService2/searchKeyword2';
+      if (resolvedSource === 'photo-gallery') {
+        item.image_source = '한국관광공사(PhotoGalleryService1)';
+        item.image_source_note = '출처: 한국관광공사(PhotoGalleryService1)';
+        item.image_source_api = 'PhotoGalleryService1/gallerySearchList1';
+        photoFallback++;
+      } else {
+        item.image_source = '한국관광공사(TourAPI)';
+        item.image_source_note = '출처: 한국관광공사(TourAPI)';
+        item.image_source_api = 'KorService2/searchKeyword2';
+      }
       item.image_keyword = keyword;
       item.image_matched_name = '';
       item.image_matched_addr = '';
@@ -493,7 +537,7 @@ async function run() {
       photoMatched++;
     }
 
-    console.log(`인천 TourAPI 이미지 매칭: 총 ${photoMatched}건 (스킵 ${photoSkipped}건)`);
+    console.log(`인천 이미지 매칭: 총 ${photoMatched}건 (gallery fallback ${photoFallback}건, 스킵 ${photoSkipped}건)`);
   }
 
   let markdownGenerated = 0;
