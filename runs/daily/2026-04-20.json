@@ -1,0 +1,218 @@
+{
+  "reportDateKst": "2026-04-20",
+  "generatedAtUtc": "2026-04-19T19:48:14.704Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24637398269",
+    "runNumber": 589,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24637398269",
+    "runStartedAtUtc": "2026-04-19T19:36:39Z",
+    "headSha": "19072286a61d3338f118c9bd422926ca1e730ccb"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://4187574a.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 340건",
+        "subsidy": "신규 0건, 총 7491건",
+        "festival": "신규 0건, 업데이트 189건, 총 189건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d614c54d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://e718b3d5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "a5f109c3fbf5816d1bd5bbea66c9c5c7ef929ae8",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-19",
+      "authoredAt": "2026-04-19T19:48:13Z",
+      "files": [
+        "src/content/life/2026-04-20-seongsu-restaurant-1759130915.md",
+        "src/content/life/2026-04-20-songdo-restaurant-915450433.md",
+        "src/content/life/2026-04-20-suwon-restaurant-1323337092.md"
+      ]
+    },
+    {
+      "sha": "ad6ae177e07f5f53dfaa6e90fb4336cde0461aac",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-19",
+      "authoredAt": "2026-04-19T19:44:56Z",
+      "files": [
+        "src/content/posts/2026-04-19-changwon-newcomer-support-fund.md",
+        "src/content/posts/2026-04-19-cheongsando-slow-walking-festival.md",
+        "src/content/posts/2026-04-19-post-1776627702790.md",
+        "src/content/posts/2026-04-19-post-1776627772113.md"
+      ]
+    },
+    {
+      "sha": "f538909345a57c6da1d7fdd1c9dd3368cbc3d56b",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-19",
+      "authoredAt": "2026-04-19T19:38:28Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-19-changwon-newcomer-support-fund.md",
+      "src/content/posts/2026-04-19-cheongsando-slow-walking-festival.md",
+      "src/content/posts/2026-04-19-post-1776627702790.md",
+      "src/content/posts/2026-04-19-post-1776627772113.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-20-seongsu-restaurant-1759130915.md",
+      "src/content/life/2026-04-20-songdo-restaurant-915450433.md",
+      "src/content/life/2026-04-20-suwon-restaurant-1323337092.md"
+    ],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-20-seongsu-restaurant-1759130915.md",
+      "src/content/life/2026-04-20-songdo-restaurant-915450433.md",
+      "src/content/life/2026-04-20-suwon-restaurant-1323337092.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/life/2026-04-20-seongsu-restaurant-1759130915.md",
+      "src/content/life/2026-04-20-songdo-restaurant-915450433.md",
+      "src/content/life/2026-04-20-suwon-restaurant-1323337092.md",
+      "src/content/posts/2026-04-19-changwon-newcomer-support-fund.md",
+      "src/content/posts/2026-04-19-cheongsando-slow-walking-festival.md",
+      "src/content/posts/2026-04-19-post-1776627702790.md",
+      "src/content/posts/2026-04-19-post-1776627772113.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 22.98,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 340건",
+      "validation": "ok",
+      "anthropicUsage": "1913/1095",
+      "markdown": {
+        "generated": 2,
+        "pending": 237
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 7491건",
+      "validation": "ok",
+      "anthropicUsage": "5390/3727",
+      "markdown": {
+        "generated": 5,
+        "pending": 7376
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 189건, 총 189건",
+      "validation": "ok",
+      "anthropicUsage": "1652/1075",
+      "markdown": {
+        "generated": 2,
+        "pending": 133
+      },
+      "photoFallback": 0
+    }
+  }
+}
