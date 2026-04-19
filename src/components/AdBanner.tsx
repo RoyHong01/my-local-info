@@ -2,14 +2,21 @@
 
 import { useEffect } from 'react';
 
+declare global {
+  interface Window {
+    adsbygoogle?: Array<Record<string, unknown>>;
+  }
+}
+
 export default function AdBanner() {
   const adsenseId = process.env.NEXT_PUBLIC_ADSENSE_ID;
 
   useEffect(() => {
     if (adsenseId && adsenseId !== '나중에_입력') {
       try {
-        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-      } catch (e) {
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+      } catch {
         // ignore
       }
     }

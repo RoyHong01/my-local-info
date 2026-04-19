@@ -45,7 +45,7 @@ export default function AboutPage() {
             <p className="text-stone-600 leading-relaxed">
               픽앤조이는 시민이 실제로 체감할 수 있는 정보를 가장 빠르게 전달하는 생활정보 플랫폼입니다.
               인천 생활정보와 전국 복지·보조금, 축제·여행 정보를 한 흐름에서 볼 수 있도록 묶어,
-              "몰라서 놓치는 혜택"과 "찾기 어려운 생활정보"를 줄이는 데 집중합니다.
+              &quot;몰라서 놓치는 혜택&quot;과 &quot;찾기 어려운 생활정보&quot;를 줄이는 데 집중합니다.
             </p>
           </section>
 
@@ -65,7 +65,7 @@ export default function AboutPage() {
             <p className="text-stone-600 leading-relaxed">
               단순 정보 나열을 넘어, AI 분석을 통해 사용자별 맞춤 혜택과 주의사항을 큐레이션합니다.
               복지·보조금은 신청 자격과 놓치기 쉬운 조건을 부각하고, 축제·여행과 맛집·초이스 콘텐츠는
-              상황 기반 추천 로직으로 선별해 검색 시간을 줄이는 "프리미엄 생활 큐레이션" 경험을 제공합니다.
+              상황 기반 추천 로직으로 선별해 검색 시간을 줄이는 &quot;프리미엄 생활 큐레이션&quot; 경험을 제공합니다.
             </p>
           </section>
 
