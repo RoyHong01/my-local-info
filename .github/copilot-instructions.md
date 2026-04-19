@@ -79,7 +79,7 @@
   - `description_markdown` 있으면 우선 사용
   - 없으면 카테고리별 fallback 템플릿(`src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`) 사용
 - `description_markdown` 생성 방식(수집 시 배치 생성):
-  - `scripts/collect-incheon.js`: 배치 2(워크플로우 env), 우선순위 정렬 후 생성/대기 집계 output 제공
+  - `scripts/collect-incheon.js`: 배치 2(워크플로우 env), 우선순위 정렬 후 생성/대기 집계 output 제공 + 인천 행사성 항목은 TourAPI 키워드 매칭(`searchKeyword2`) 성공 시에만 이미지 채움(실패 시 기본 이미지)
   - `scripts/collect-subsidy.js`: 배치 5(워크플로우 env), 우선순위 정렬 + adaptive 하향(실패율 기반), 생성/실패/대기 output 제공
   - `scripts/collect-festival.js`: 배치 2(워크플로우 env), 우선순위 정렬 + 최근수정 tie-break(`modifiedtime -> 수정일시 -> updatedAt`), 생성/대기 output 제공
 
@@ -95,6 +95,8 @@
 - 중복 정책:
   - 전체 블로그 제목 블록은 제거
   - 카테고리별 제목 블록만 노출
+- 인천 이미지 API 경고 정책:
+  - 인천관광공사 API 경고 라인은 운영 정책 전환 후 기본적으로 노출하지 않는다.
 
 ### D) 무단 변경 금지 규칙 (필수)
 - 위 A/B/C 로직은 운영 고정값으로 취급한다.
@@ -304,6 +306,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-19 핵심 반영(추가):
+  - **인천관광공사 API 정책 비활성화**: GitHub Actions 동적 IP 환경과 인천 API 등록 IP 정책 충돌로 인해 `scripts/collect-incheon.js`의 인천관광공사(API003) 호출을 운영 정책상 중단.
+  - **인천 이미지 소스 전환**: 인천 행사성 항목 이미지는 TourAPI `searchKeyword2` 키워드 매칭 성공 시에만 `firstimage`를 반영하고, 실패 시 기본 SVG를 사용.
+  - **워크플로우 env 정리**: `.github/workflows/deploy.yml`의 인천 수집 step에서 `INCHEON_PHOTO_TOKEN` 주입을 제거하고 `TOUR_API_KEY` 기준으로 운용.
 - 2026-04-17 핵심 반영(추가):
   - **GFM 테이블 렌더링 수정**: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`의 fallback 생성기에서 테이블 행을 개별 push하던 패턴을 `tableLines[]` 단일 블록으로 변경해 `parts.join('\n\n')` 시 행 사이 빈 줄로 GFM 테이블이 깨지던 문제를 해소.
   - **영향**: 인천 238건, 보조금 7,388건, 축제 143건의 fallback 항목에서 파이프 문자 노출 → `<table>` HTML 정상 렌더링으로 복구.

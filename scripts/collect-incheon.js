@@ -2,6 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const TOUR_API_KEY = process.env.TOUR_API_KEY || '';
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const requestedGeminiModel = process.env.GEMINI_MODEL || '';
@@ -298,6 +299,23 @@ async function fetchIncheonPages(apiKey, { perPage = 100, maxPages = 30 } = {}) 
   return { items: all, totalCount };
 }
 
+async function fetchTourFirstImageByKeyword(keyword, apiKey) {
+  if (!apiKey || !keyword) return '';
+  const encodedKeyword = encodeURIComponent(keyword);
+  const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchKeyword2?serviceKey=${apiKey}&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&keyword=${encodedKeyword}&numOfRows=10&pageNo=1`;
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) return '';
+    const data = await response.json();
+    const items = data?.response?.body?.items?.item || [];
+    const list = Array.isArray(items) ? items : (items ? [items] : []);
+    const withImage = list.find((entry) => entry?.firstimage) || list.find((entry) => entry?.firstimage2);
+    return withImage?.firstimage || withImage?.firstimage2 || '';
+  } catch {
+    return '';
+  }
+}
+
 async function generateIncheonMarkdown(item) {
   if (!GEMINI_API_KEY) return { markdown: '', usage: { input_tokens: 0, output_tokens: 0 } };
   const prompt = `아래 인천 지역 공공서비스 정보를 블로그처럼 읽기 쉬운 한국어 Markdown으로 재작성해줘.
@@ -424,77 +442,58 @@ async function run() {
     });
   }
 
-  // 인천 행사/축제 항목에 관광사진 API 매칭
+  // 인천관광공사 API는 정책상 비활성화하고, 인천 행사/축제 항목은 TourAPI 키워드 매칭 이미지를 사용
   let photoMatched = 0;
   let photoFallback = 0;
   let photoSkipped = 0;
-  let photoHealthcheck = 'skipped';
-  let photoMode = 'disabled';
+  let photoHealthcheck = '';
+  let photoMode = '';
   let photoFailureReason = '';
-  if (!INCHEON_PHOTO_TOKEN) {
-    console.log('INCHEON_PHOTO_TOKEN 없음: 인천 관광 사진 자동 매칭 건너뜀');
+
+  if (!TOUR_API_KEY) {
+    console.log('TOUR_API_KEY 없음: 인천 TourAPI 이미지 매칭 건너뜀');
   } else {
-    photoMode = 'enabled';
-    // 토큰 만료(7일 무호출) 방지를 위해 수집 실행 시 최소 1회 헬스체크 호출
-    const health = await fetchIncheonPhotoList({ keyword: '송도', pageNo: 1 });
-    if (health.ok) {
-      photoHealthcheck = 'ok';
-      console.log(`인천 관광사진 API 헬스체크 성공: expireDt=${health.expireDt || '-'}, 샘플=${(health.dataList || []).length}건`);
-    } else {
-      photoHealthcheck = `failed:${health.error}`;
-      photoFailureReason = String(health.error || 'unknown_error');
-
-      if (/api_432/.test(photoFailureReason)) {
-        console.warn('인천 관광사진 API 비활성화: UNREGISTERED_IP_ERROR(432) - 등록된 호출서버 IP와 현재 실행 환경 IP가 다릅니다.');
-      } else if (/api_431/.test(photoFailureReason)) {
-        console.warn('인천 관광사진 API 비활성화: DEADLINE_HAS_EXPIRED_ERROR(431) - 토큰 사용기한이 만료되었습니다.');
-      } else if (/api_430/.test(photoFailureReason)) {
-        console.warn('인천 관광사진 API 비활성화: SERVICE_KEY_IS_NOT_REGISTERED_ERROR(430) - 토큰값이 잘못되었거나 미등록 상태입니다.');
-      } else {
-        console.warn(`인천 관광사진 API 비활성화: 헬스체크 실패 (${photoFailureReason})`);
+    const imageCache = new Map();
+    for (const item of merged) {
+      if (!isIncheonEventItem(item)) {
+        photoSkipped++;
+        continue;
       }
 
-      // 헬스체크가 실패하면 이번 실행에서 사진 API 호출을 중단하고 기본 수집만 계속 진행
-      photoMode = 'disabled';
-    }
-
-    if (photoMode === 'enabled') {
-      const photoCache = new Map();
-      const fallbackPool = [];
-      for (const item of merged) {
-        if (!isIncheonEventItem(item)) {
-          photoSkipped++;
-          continue;
-        }
-
-        // 기존 이미지가 있으면 유지
-        if (normalizeSpace(item.firstimage)) {
-          photoSkipped++;
-          continue;
-        }
-
-        const matched = await resolvePhotoForIncheonEvent(item, photoCache, fallbackPool);
-        if (!matched || !matched.imageUrl) {
-          photoSkipped++;
-          continue;
-        }
-
-        item.firstimage = matched.imageUrl;
-        item.image_source = '인천관광공사';
-        item.image_source_note = '출처: 인천관광공사';
-        item.image_source_api = 'API003';
-        item.image_keyword = matched.keyword;
-        item.image_matched_name = matched.matchedName;
-        item.image_matched_addr = matched.matchedAddr;
-
-        photoMatched++;
-        if (matched.fallbackApplied) photoFallback++;
+      if (normalizeSpace(item.firstimage)) {
+        photoSkipped++;
+        continue;
       }
 
-      console.log(`인천 관광사진 매칭: 총 ${photoMatched}건 (fallback ${photoFallback}건, 스킵 ${photoSkipped}건)`);
-    } else {
-      console.log('인천 관광사진 매칭: 헬스체크 실패로 이번 실행에서는 건너뜀 (기본 데이터 수집은 계속 진행)');
+      const itemName = normalizeSpace(item['서비스명'] || item.name || item.title || '');
+      const keyword = itemName.split(' ')[0] || itemName;
+      if (!keyword) {
+        photoSkipped++;
+        continue;
+      }
+
+      if (!imageCache.has(keyword)) {
+        imageCache.set(keyword, await fetchTourFirstImageByKeyword(keyword, TOUR_API_KEY));
+      }
+
+      const imageUrl = imageCache.get(keyword) || '';
+      if (!imageUrl) {
+        photoSkipped++;
+        continue;
+      }
+
+      item.firstimage = imageUrl;
+      item.image_source = '한국관광공사(TourAPI)';
+      item.image_source_note = '출처: 한국관광공사(TourAPI)';
+      item.image_source_api = 'KorService2/searchKeyword2';
+      item.image_keyword = keyword;
+      item.image_matched_name = '';
+      item.image_matched_addr = '';
+
+      photoMatched++;
     }
+
+    console.log(`인천 TourAPI 이미지 매칭: 총 ${photoMatched}건 (스킵 ${photoSkipped}건)`);
   }
 
   let markdownGenerated = 0;

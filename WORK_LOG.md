@@ -38,6 +38,28 @@
 
 ---
 
+## 2026-04-19 (인천 이미지 정책 전환: 인천관광공사 API 중단 + TourAPI 사용)
+
+- **요청 작업**:
+  - GitHub Actions 동적 IP와 인천관광공사 등록 IP 정책 충돌로 발생하는 경고를 해소
+  - 인천 블로그 이미지 정책을 TourAPI 기반으로 전환
+  - 축제 블로그는 현행 유지, 보조금 블로그의 지역 이미지 자동 삽입은 보류
+- **수정 파일**:
+  - `scripts/collect-incheon.js`
+  - `.github/workflows/deploy.yml`
+  - `.github/copilot-instructions.md`
+  - `PROJECT_MEMORY.md`
+  - `COPILOT_MEMORY.md`
+  - `WORK_LOG.md`
+- **핵심 반영**:
+  1. `scripts/collect-incheon.js`에서 인천관광공사(API003) 호출 경로를 정책상 비활성화.
+  2. 인천 행사성 항목 이미지 채움은 TourAPI `searchKeyword2` 키워드 매칭 성공 시에만 `firstimage` 반영.
+  3. 매칭 실패 시 강제 외부 이미지 삽입 없이 기본 이미지 fallback 유지.
+  4. `.github/workflows/deploy.yml` 인천 수집 step에서 `INCHEON_PHOTO_TOKEN` 제거, `TOUR_API_KEY` 주입으로 단일화.
+  5. 운영 문서/메모리 동기화: 인천관광공사 API 경고 라인은 정책 전환 후 기본 비노출 기준으로 정리.
+
+---
+
 ## 2026-04-17 (Turbopack 12634-file pattern 경고 해소 — 빌드 exit code 1 근본 수정)
 
 - **문제 현상**: `npm run build` 실행 시 빌드는 성공하지만 exit code 1이 반환 (PowerShell에서 Turbopack stderr 경고를 NativeCommandError로 처리)

@@ -54,9 +54,9 @@ jobs:
         run: node scripts/collect-incheon.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
+          TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
-          INCHEON_PHOTO_TOKEN: ${{ secrets.INCHEON_PHOTO_TOKEN }}
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '2'
 
       - name: '[1단계] 전국 보조금 정책 수집'
