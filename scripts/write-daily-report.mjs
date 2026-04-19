@@ -611,6 +611,7 @@ async function main() {
           generated: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_GENERATED || 0),
           pending: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_PENDING || 0),
         },
+        photoFallback: Number(process.env.COLLECT_FESTIVAL_PHOTO_FALLBACK || 0),
       },
     },
   };

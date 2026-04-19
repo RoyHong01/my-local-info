@@ -190,6 +190,7 @@ async function buildMessage(report) {
     : '';
   const markdownStats = report.dataValidation || {};
   const markdownLine = `🧩 상세 markdown(생성/대기): 인천 ${Number(markdownStats.incheon?.markdown?.generated || 0)}/${Number(markdownStats.incheon?.markdown?.pending || 0)} | 보조금 ${Number(markdownStats.subsidy?.markdown?.generated || 0)}/${Number(markdownStats.subsidy?.markdown?.pending || 0)} | 축제 ${Number(markdownStats.festival?.markdown?.generated || 0)}/${Number(markdownStats.festival?.markdown?.pending || 0)}`;
+  const festivalPhotoFallbackLine = `🖼️ 축제 PhotoGallery fallback: ${Number(markdownStats.festival?.photoFallback || 0)}건`;
 
   const lines = [
     `📊 *픽앤조이 자동화 리포트* (${REPORT_DATE})`,
@@ -200,6 +201,7 @@ async function buildMessage(report) {
     collectDetailLine,
     dataChangeLine,
     markdownLine,
+    festivalPhotoFallbackLine,
     incheonPhotoLine,
     incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,

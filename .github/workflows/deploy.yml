@@ -373,6 +373,7 @@ jobs:
           COLLECT_FESTIVAL_ANTHROPIC_USAGE: ${{ steps.collect_festival.outputs.anthropic_usage }}
           COLLECT_FESTIVAL_MARKDOWN_GENERATED: ${{ steps.collect_festival.outputs.markdown_generated }}
           COLLECT_FESTIVAL_MARKDOWN_PENDING: ${{ steps.collect_festival.outputs.markdown_pending }}
+          COLLECT_FESTIVAL_PHOTO_FALLBACK: ${{ steps.collect_festival.outputs.festival_photo_fallback }}
           CLEANUP_EXPIRED_OUTCOME: ${{ steps.cleanup_expired.outcome }}
           BUILD_STAGE1_OUTCOME: ${{ steps.build_stage1.outcome }}
           E2E_STAGE1_OUTCOME: ${{ steps.e2e_stage1.outcome }}
