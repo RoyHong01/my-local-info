@@ -188,6 +188,8 @@ async function buildMessage(report) {
   const incheonPhotoFailureLine = incheonPhotoFailureReason
     ? `⚠️ 인천 사진 API 원인: ${incheonPhotoFailureReason}`
     : '';
+  const markdownStats = report.dataValidation || {};
+  const markdownLine = `🧩 상세 markdown(생성/대기): 인천 ${Number(markdownStats.incheon?.markdown?.generated || 0)}/${Number(markdownStats.incheon?.markdown?.pending || 0)} | 보조금 ${Number(markdownStats.subsidy?.markdown?.generated || 0)}/${Number(markdownStats.subsidy?.markdown?.pending || 0)} | 축제 ${Number(markdownStats.festival?.markdown?.generated || 0)}/${Number(markdownStats.festival?.markdown?.pending || 0)}`;
 
   const lines = [
     `📊 *픽앤조이 자동화 리포트* (${REPORT_DATE})`,
@@ -197,6 +199,7 @@ async function buildMessage(report) {
     dataCollectionLine,
     collectDetailLine,
     dataChangeLine,
+    markdownLine,
     incheonPhotoLine,
     incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,
@@ -210,12 +213,6 @@ async function buildMessage(report) {
     `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
     budgetLine,
   ];
-
-  if (blogTitles.filter(Boolean).length > 0) {
-    lines.push('');
-    lines.push('*생성된 블로그 제목:*');
-    blogTitles.filter(Boolean).forEach((title) => lines.push(`  • ${title}`));
-  }
 
   if (incheonBlogTitles.length > 0) {
     lines.push('');

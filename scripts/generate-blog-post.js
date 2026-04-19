@@ -334,30 +334,60 @@ function upsertFrontmatterField(content, key, rawValue) {
 
 // 카테고리별 우선순위 정렬 함수
 function sortByPriority(items, category) {
-  if (category === '인천 지역 정보') {
-    return items.sort((a, b) => {
-      const aIsEvent = ['행사', '축제', '문화'].some(k =>
-        (a['서비스명'] || a['name'] || '').includes(k));
-      const bIsEvent = ['행사', '축제', '문화'].some(k =>
-        (b['서비스명'] || b['name'] || '').includes(k));
-      if (aIsEvent && !bIsEvent) return -1;
-      if (!aIsEvent && bIsEvent) return 1;
-      return (b['조회수'] || 0) - (a['조회수'] || 0);
-    });
-  }
-  if (category === '전국 보조금·복지 정책') {
-    return items.sort((a, b) => (b['조회수'] || 0) - (a['조회수'] || 0));
-  }
-  if (category === '전국 축제·여행') {
-    return items.sort((a, b) => {
-      const aHasImg = !!(a.firstimage || a.firstimage2);
-      const bHasImg = !!(b.firstimage || b.firstimage2);
-      if (aHasImg && !bHasImg) return -1;
-      if (!aHasImg && bHasImg) return 1;
-      return (a.eventstartdate || '').localeCompare(b.eventstartdate || '');
-    });
-  }
-  return items;
+  const todayISO = new Date().toISOString().split('T')[0];
+  const toNum = (value) => {
+    const parsed = Number(String(value ?? '').replace(/,/g, ''));
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+  const normalizeDate = (value) => {
+    const text = String(value || '').trim();
+    if (!text) return '';
+    if (/^\d{8}$/.test(text)) {
+      return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
+    if (/^\d{4}\.\d{2}\.\d{2}$/.test(text)) return text.replace(/\./g, '-');
+    return '';
+  };
+  const getDeadline = (item) =>
+    normalizeDate(item.endDate || item.eventenddate || item['신청기한'] || item['신청기간'] || item['접수기간']);
+  const getViews = (item) => toNum(item['조회수'] ?? item.viewCount ?? item.readCount ?? item.hit ?? 0);
+  const getModified = (item) =>
+    String(item.modifiedtime || item['수정일시'] || item.updatedAt || item.modifiedAt || item.collectedAt || '').trim();
+
+  return [...items].sort((a, b) => {
+    const aDeadline = getDeadline(a);
+    const bDeadline = getDeadline(b);
+    const aHasDeadline = aDeadline >= todayISO ? 1 : 0;
+    const bHasDeadline = bDeadline >= todayISO ? 1 : 0;
+
+    if (aHasDeadline !== bHasDeadline) return bHasDeadline - aHasDeadline;
+    if (aHasDeadline && bHasDeadline && aDeadline !== bDeadline) return aDeadline < bDeadline ? -1 : 1;
+
+    const aViews = getViews(a);
+    const bViews = getViews(b);
+    if (aViews !== bViews) return bViews - aViews;
+
+    return getModified(b).localeCompare(getModified(a));
+  });
+}
+
+function getCategoryTargetCount(category) {
+  const defaults = {
+    '인천 지역 정보': 1,
+    '전국 축제·여행': 1,
+    '전국 보조금·복지 정책': 2,
+  };
+
+  const envByCategory = {
+    '인천 지역 정보': process.env.BLOG_POSTS_INCHEON,
+    '전국 축제·여행': process.env.BLOG_POSTS_FESTIVAL,
+    '전국 보조금·복지 정책': process.env.BLOG_POSTS_SUBSIDY,
+  };
+
+  const raw = Number.parseInt(String(envByCategory[category] ?? ''), 10);
+  if (Number.isFinite(raw) && raw > 0) return raw;
+  return defaults[category] || 1;
 }
 
 // 이미 작성된 블로그 글의 source_id 및 파일명 목록 가져오기
@@ -1520,7 +1550,10 @@ async function run() {
 
     console.log(`  미작성 항목: ${candidates.length}개`);
 
-    // 카테고리당 1편 생성 (배치 사이즈 축소, 토큰 압박 완화)
+    const categoryTargetCount = getCategoryTargetCount(category);
+    console.log(`  카테고리 목표 발행량: ${categoryTargetCount}건`);
+
+    // 카테고리별 목표 건수만큼 생성
     let generated = 0;
     let triedCandidates = 0;
     for (const candidate of candidates) {
@@ -1545,7 +1578,7 @@ async function run() {
         break;
       }
 
-      if (generated >= 1) break;
+      if (generated >= categoryTargetCount) break;
       triedCandidates++;
       try {
         const ok = await generatePost({ ...candidate, _category: category }, postsDir);

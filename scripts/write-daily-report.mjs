@@ -318,6 +318,14 @@ function toMarkdown(report) {
     if (validationSegments.length > 0) {
       lines.push(`| 데이터 검증 | ${validationSegments.join(' | ')} |`);
     }
+
+    const markdownSegments = [];
+    if (report.dataValidation.incheon?.markdown) markdownSegments.push(`인천 ${report.dataValidation.incheon.markdown.generated}/${report.dataValidation.incheon.markdown.pending}`);
+    if (report.dataValidation.subsidy?.markdown) markdownSegments.push(`보조금 ${report.dataValidation.subsidy.markdown.generated}/${report.dataValidation.subsidy.markdown.pending}`);
+    if (report.dataValidation.festival?.markdown) markdownSegments.push(`축제 ${report.dataValidation.festival.markdown.generated}/${report.dataValidation.festival.markdown.pending}`);
+    if (markdownSegments.length > 0) {
+      lines.push(`| 상세 markdown(생성/대기) | ${markdownSegments.join(' | ')} |`);
+    }
     const usageSegments = [];
     if (report.dataValidation.incheon?.anthropicUsage) usageSegments.push(`인천 ${report.dataValidation.incheon.anthropicUsage}`);
     if (report.dataValidation.subsidy?.anthropicUsage) usageSegments.push(`보조금 ${report.dataValidation.subsidy.anthropicUsage}`);
@@ -576,6 +584,10 @@ async function main() {
         summary: process.env.COLLECT_INCHEON_SUMMARY || '',
         validation: process.env.COLLECT_INCHEON_VALIDATION || '',
         anthropicUsage: process.env.COLLECT_INCHEON_ANTHROPIC_USAGE || '',
+        markdown: {
+          generated: Number(process.env.COLLECT_INCHEON_MARKDOWN_GENERATED || 0),
+          pending: Number(process.env.COLLECT_INCHEON_MARKDOWN_PENDING || 0),
+        },
         photoApi: {
           healthcheck: process.env.COLLECT_INCHEON_PHOTO_HEALTHCHECK || '',
           mode: process.env.COLLECT_INCHEON_PHOTO_MODE || '',
@@ -586,11 +598,19 @@ async function main() {
         summary: process.env.COLLECT_SUBSIDY_SUMMARY || '',
         validation: process.env.COLLECT_SUBSIDY_VALIDATION || '',
         anthropicUsage: process.env.COLLECT_SUBSIDY_ANTHROPIC_USAGE || '',
+        markdown: {
+          generated: Number(process.env.COLLECT_SUBSIDY_MARKDOWN_GENERATED || 0),
+          pending: Number(process.env.COLLECT_SUBSIDY_MARKDOWN_PENDING || 0),
+        },
       },
       festival: {
         summary: process.env.COLLECT_FESTIVAL_SUMMARY || '',
         validation: process.env.COLLECT_FESTIVAL_VALIDATION || '',
         anthropicUsage: process.env.COLLECT_FESTIVAL_ANTHROPIC_USAGE || '',
+        markdown: {
+          generated: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_GENERATED || 0),
+          pending: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_PENDING || 0),
+        },
       },
     },
   };

@@ -253,6 +253,16 @@ function extractEndDateFromIncheonItem(item) {
   return dates[dates.length - 1];
 }
 
+function getIncheonViewRank(item) {
+  const raw = item?.['조회수'] ?? item?.viewCount ?? item?.readCount ?? item?.hit ?? 0;
+  const parsed = Number(String(raw).replace(/,/g, ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function getIncheonModifiedRank(item) {
+  return String(item?.['수정일시'] || item?.modifiedtime || item?.updatedAt || item?.modifiedAt || item?.collectedAt || '').trim();
+}
+
 async function fetchIncheonPages(apiKey, { perPage = 100, maxPages = 30 } = {}) {
   const all = [];
   let totalCount = 0;
@@ -488,6 +498,9 @@ async function run() {
   }
 
   let markdownGenerated = 0;
+  let markdownAttempted = 0;
+  let markdownFailed = 0;
+  let markdownPending = 0;
   let inputTokens = 0;
   let outputTokens = 0;
   if (!GEMINI_API_KEY) {
@@ -497,10 +510,26 @@ async function run() {
       const hash = sourceHash(item);
       return !(item.description_markdown && item.description_markdown_source_hash === hash);
     });
+    const todayISO = new Date().toISOString().split('T')[0];
+    markdownTargets.sort((a, b) => {
+      const aEnd = a.endDate || '';
+      const bEnd = b.endDate || '';
+      const aHasDeadline = aEnd >= todayISO ? 1 : 0;
+      const bHasDeadline = bEnd >= todayISO ? 1 : 0;
+      if (aHasDeadline !== bHasDeadline) return bHasDeadline - aHasDeadline;
+      if (aHasDeadline && bHasDeadline && aEnd !== bEnd) return aEnd < bEnd ? -1 : 1;
+
+      const viewDiff = getIncheonViewRank(b) - getIncheonViewRank(a);
+      if (viewDiff !== 0) return viewDiff;
+
+      return getIncheonModifiedRank(b).localeCompare(getIncheonModifiedRank(a));
+    });
+
     const batchTargets = markdownTargets.slice(0, Math.max(0, DESCRIPTION_MARKDOWN_BATCH_LIMIT));
     console.log(`description_markdown 배치 처리: ${batchTargets.length}건 / 대기 ${Math.max(0, markdownTargets.length - batchTargets.length)}건`);
 
     for (const item of batchTargets) {
+      markdownAttempted++;
       const hash = sourceHash(item);
 
       try {
@@ -513,11 +542,17 @@ async function run() {
           markdownGenerated++;
           inputTokens += usage.input_tokens;
           outputTokens += usage.output_tokens;
+        } else {
+          markdownFailed++;
         }
       } catch {
+        markdownFailed++;
         console.error(`description_markdown 생성 실패: ${item['서비스명'] || item.name || item.title || item['서비스ID'] || item.id}`);
       }
     }
+
+    markdownPending = Math.max(0, markdownTargets.length - markdownAttempted);
+    console.log(`description_markdown 결과: 시도 ${markdownAttempted}건, 성공 ${markdownGenerated}건, 실패 ${markdownFailed}건, 잔여 ${markdownPending}건`);
   }
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
@@ -536,6 +571,10 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_generated=${markdownGenerated}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_attempted=${markdownAttempted}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_failed=${markdownFailed}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_pending=${markdownPending}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_validation=${validationStatus}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_matched=${photoMatched}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `incheon_photo_fallback=${photoFallback}\n`);

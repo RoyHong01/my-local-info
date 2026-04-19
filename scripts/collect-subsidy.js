@@ -330,6 +330,7 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_generated=${markdownGenerated}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_attempted=${markdownAttempted}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_failed=${markdownFailed}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_pending=${markdownPending}\n`);

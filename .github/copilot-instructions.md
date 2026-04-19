@@ -49,6 +49,62 @@
 - **모호성 해결**:
   - 수정 대상 파일이 명확하지 않을 경우, 임의로 문서를 고치지 말고 반드시 사용자에게 "실행 스크립트를 고칠까요, 가이드 문서를 고칠까요?"라고 질문하여 대상을 확정한 뒤 작업을 시작한다.
 
+## 콘텐츠 생성 로직 고정 스냅샷 (2026-04-19 기준)
+
+### A) 블로그 메뉴 글 생성 로직 (`scripts/generate-blog-post.js`)
+- 데이터 소스: `public/data/incheon.json`, `public/data/subsidy.json`, `public/data/festival.json`
+- 기본 필터:
+  - `expired=true` 제외
+  - 종료 기준 제외: 축제는 종료 7일 이내/종료 항목 제외, 인천/보조금은 종료일 경과 항목 제외
+- 후보 우선순위(공통 통일 규칙):
+  1. 마감 임박(유효 종료일 보유 + 더 가까운 마감일 우선)
+  2. 조회수 높은 항목 우선
+  3. 최근 수정 항목 우선(`modifiedtime`/`수정일시`/`updatedAt` 계열)
+- 카테고리별 일일 발행 목표(기본값): 인천 1 / 축제 1 / 보조금 2
+  - env override: `BLOG_POSTS_INCHEON`, `BLOG_POSTS_FESTIVAL`, `BLOG_POSTS_SUBSIDY`
+- 중복 방지:
+  - `source_id` 정확 매칭
+  - `source_snapshot_key`(제목+일정+주소) 매칭
+  - 파일명/기존 제목 유사도 매칭
+  - 보조금은 `전화문의 + 서비스명 유사도` 보조 중복 차단
+- 덮어쓰기 안전장치:
+  - `ALLOW_EXISTING_BLOG_POST_OVERWRITE=true` 없으면 기존 포스트 덮어쓰기 금지
+
+### B) 네비 3개 상세(인천/보조금/축제) 본문 생성 로직
+- 대상 범위: 블로그 메뉴가 아니라 네비 메뉴의 상세 페이지 본문
+  - 인천시 정보 상세
+  - 전국 보조금·복지 정책 상세
+  - 전국 축제·여행 정보 상세
+- 상세 페이지 렌더 우선순위: `description_markdown || generatedMarkdown`
+  - `description_markdown` 있으면 우선 사용
+  - 없으면 카테고리별 fallback 템플릿(`src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`) 사용
+- `description_markdown` 생성 방식(수집 시 배치 생성):
+  - `scripts/collect-incheon.js`: 배치 2(워크플로우 env), 우선순위 정렬 후 생성/대기 집계 output 제공
+  - `scripts/collect-subsidy.js`: 배치 5(워크플로우 env), 우선순위 정렬 + adaptive 하향(실패율 기반), 생성/실패/대기 output 제공
+  - `scripts/collect-festival.js`: 배치 2(워크플로우 env), 우선순위 정렬 + 최근수정 tie-break(`modifiedtime -> 수정일시 -> updatedAt`), 생성/대기 output 제공
+
+### C) 텔레그램 알림 로직 (`scripts/notify-telegram.mjs`)
+- 발송 시점: 일일 리포트 생성 후 GitHub Actions 마지막 리포트 단계
+- 메시지 핵심 구성:
+  - 단계 성공/실패 상태
+  - 데이터 수집 요약
+  - 상세 markdown 생성/대기: 인천/보조금/축제 각각 `생성/대기`
+  - 블로그/초이스/맛집 생성 건수
+  - 카테고리별 블로그 제목 목록(인천/보조금/축제)
+  - 초이스 fallback/예산/캐시 지표
+- 중복 정책:
+  - 전체 블로그 제목 블록은 제거
+  - 카테고리별 제목 블록만 노출
+
+### D) 무단 변경 금지 규칙 (필수)
+- 위 A/B/C 로직은 운영 고정값으로 취급한다.
+- 사용자의 명시적 승인 없이 로직/배치량/우선순위/알림 포맷을 임의 변경하지 않는다.
+- 변경 필요 시 반드시 아래 순서를 따른다:
+  1. 현재 구현 상태(무엇이 어떻게 동작하는지) 먼저 요약
+  2. 변경안(무엇을 왜 바꾸는지) 제시
+  3. 영향 파일 목록 제시
+  4. 사용자 승인 후에만 패치 적용
+
 ## 프로젝트 기본 정보
 - 사이트명: 픽앤조이 (pick-n-joy.com)
 - 슬로건: "당신의 일상을 Pick, 당신의 주말을 Enjoy!"

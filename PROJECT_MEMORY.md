@@ -18,6 +18,49 @@
 - 작업 이력은 항상 `CLAUDE.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, `PROJECT_MEMORY.md` 4개 문서에 동기화한다.
 - 위 3개 항목(build/commit/문서동기화)이 모두 완료되어야 작업 완료로 간주한다.
 
+## 고정 운영 스냅샷 (2026-04-19)
+
+- 목적: 추후 점검 시 "현재 실제 구현"을 즉시 확인하기 위한 기준 스냅샷
+- 변경 통제: 아래 항목은 사용자 승인 없이 임의 수정 금지
+
+### 1) 블로그 메뉴 글 생성
+
+- 파일: `scripts/generate-blog-post.js`
+- 데이터: `public/data/incheon.json`, `public/data/subsidy.json`, `public/data/festival.json`
+- 공통 후보 우선순위: 마감 임박 > 조회수 > 최근 수정
+- 일일 발행 기본값: 인천 1 / 축제 1 / 보조금 2
+- 중복 제거: source_id + source_snapshot_key + 제목/파일명 유사도 (보조금은 전화문의+서비스명 유사도 보강)
+
+### 2) 네비 3개 상세 본문 (인천/보조금/축제)
+
+- 상세 렌더 우선순위: `description_markdown || generatedMarkdown`
+- fallback 템플릿: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`
+- 수집 시 markdown 배치 생성:
+  - 인천: 2
+  - 축제: 2
+  - 보조금: 5
+- 축제 최근수정 tie-break: `modifiedtime -> 수정일시 -> updatedAt`
+
+### 3) 텔레그램 일일 알림
+
+- 파일: `scripts/notify-telegram.mjs`
+- 노출 지표:
+  - 단계 성공/실패
+  - 데이터 수집 요약
+  - 상세 markdown 생성/대기(인천/보조금/축제)
+  - 블로그/초이스/맛집 생성 건수
+  - 카테고리별 블로그 제목 목록
+  - 초이스 fallback/예산/캐시 지표
+- 중복 제거: 전체 블로그 제목 블록 제거, 카테고리별 목록만 노출
+
+### 4) 변경 승인 절차(필수)
+
+- 로직/배치량/우선순위/알림 포맷 변경 시 반드시:
+  1. 현재 구현 설명
+  2. 변경안 설명
+  3. 영향 파일 목록
+  4. 사용자 승인 획득
+
 ## 1. 현재 프로젝트 상태 (Current Status)
 
 - **기술 스택**: Next.js 16 App Router, Tailwind CSS v4, TypeScript

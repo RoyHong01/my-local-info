@@ -12,6 +12,32 @@
 
 ---
 
+## 2026-04-19 (운영 로직 문서 고정 + 텔레그램 포맷 기준 고정)
+
+- **요청 작업**:
+  - 블로그/인천/보조금/축제의 현재 생성 방식(fallback, API 본문 생성, 우선순위, 배치량)을 추후 즉시 확인 가능하도록 문서에 명확히 고정
+  - 사용자 승인 없는 임의 수정 금지 절차를 문서화
+  - 내일부터 도착할 텔레그램 메시지 구성 방식 확인 가능하도록 기준 동기화
+- **수정 파일**:
+  - `.github/copilot-instructions.md`
+  - `PROJECT_MEMORY.md`
+  - `COPILOT_MEMORY.md`
+  - `WORK_LOG.md`
+- **핵심 반영**:
+  1. `.github/copilot-instructions.md`에 `콘텐츠 생성 로직 고정 스냅샷 (2026-04-19 기준)` 추가
+     - 블로그 메뉴 생성 로직(필터/우선순위/발행량/중복 방지/덮어쓰기 안전장치)
+     - 네비 3개 상세 본문 로직(`description_markdown || generatedMarkdown`, 카테고리별 fallback 템플릿, 배치량)
+     - 텔레그램 로직(markdown 생성/대기 노출, 카테고리별 제목 노출, 중복 제목 제거)
+  2. `PROJECT_MEMORY.md`/`COPILOT_MEMORY.md`에 동일 운영 기준과 승인 절차를 축약 버전으로 동기화
+  3. 변경 통제 규칙 고정: 로직/배치량/우선순위/알림 포맷 변경 시 `현황 설명 -> 변경안 -> 영향 파일 -> 사용자 승인` 절차를 필수화
+- **운영 기준(현시점)**:
+  - 블로그 발행 목표: 인천 1 / 축제 1 / 보조금 2
+  - 상세 markdown 배치: 인천 2 / 축제 2 / 보조금 5
+  - 축제 최근수정 tie-break: `modifiedtime -> 수정일시 -> updatedAt`
+  - 텔레그램: 상세 markdown 생성/대기 + 카테고리별 블로그 제목(중복 전체 제목 블록 없음)
+
+---
+
 ## 2026-04-17 (Turbopack 12634-file pattern 경고 해소 — 빌드 exit code 1 근본 수정)
 
 - **문제 현상**: `npm run build` 실행 시 빌드는 성공하지만 exit code 1이 반환 (PowerShell에서 Turbopack stderr 경고를 NativeCommandError로 처리)

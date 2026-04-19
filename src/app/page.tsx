@@ -90,7 +90,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
   );
   const id = getField(item, ['서비스ID', 'id']);
   return (
-    <Link href={`/subsidy/${encodeURIComponent(id)}`} className="block group">
+    <Link href={`/subsidy/view?id=${encodeURIComponent(id)}`} className="block group">
       <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-600">보조금</span>
