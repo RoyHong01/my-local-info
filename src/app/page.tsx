@@ -144,6 +144,8 @@ export default async function Home() {
   const incheon = incheonAll.filter(i => !i.expired).slice(0, 3);
   const subsidy = subsidyAll.filter(i => !i.expired).slice(0, 3);
   const festival = festivalAll.filter(i => !i.expired).slice(0, 3);
+  const subsidyCount = subsidyAll.filter(i => !i.expired).length;
+  const festivalCount = festivalAll.filter(i => !i.expired).length;
 
   const categories = [
     {
@@ -242,7 +244,7 @@ export default async function Home() {
             >
               <span className="flex items-center justify-center gap-2 sm:gap-3 text-center leading-snug">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center">👉</span>
-                <span className="block">내가 받을 수 있는 보조금</span>
+                <span className="block">나의 보조금 찾기</span>
               </span>
             </Link>
             <Link
@@ -268,11 +270,11 @@ export default async function Home() {
           {/* Stats */}
           <div className="mt-14 grid w-full max-w-4xl grid-cols-3 items-start gap-6 sm:gap-8 md:gap-12 mx-auto px-4 animate-fade-in-up">
             <div className="text-center justify-self-center">
-              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyAll.filter(i => !i.expired).length}+</div>
-              <div className="text-sm text-gray-500 mt-1">보조금 정보</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{subsidyCount.toLocaleString('ko-KR')}+</div>
+              <div className="text-sm text-gray-500 mt-1">전국 보조금 정보</div>
             </div>
             <div className="text-center justify-self-center">
-              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{festivalAll.filter(i => !i.expired).length}+</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-orange-600">{festivalCount.toLocaleString('ko-KR')}+</div>
               <div className="text-sm text-gray-500 mt-1">축제·행사</div>
             </div>
             <div className="text-center justify-self-center">
