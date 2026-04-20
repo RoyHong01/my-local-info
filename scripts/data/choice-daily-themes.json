@@ -3,70 +3,127 @@
     "weekday": 1,
     "key": "health",
     "name": "건강",
-    "keywordHint": ["프로바이오틱스", "오메가3"],
-    "searchKeywordHint": ["probiotics", "omega 3"],
-    "fallbackKeywordHint": ["multivitamin", "lutein", "magnesium", "vitamin c", "gut health", "coenzyme q10"],
-    "backupKeywordHint": ["health supplement", "diet supplement", "immune vitamin", "daily vitamin"],
+    "keywordHint": ["프로바이오틱스", "오메가3", "멀티비타민"],
+    "searchKeywordHint": ["probiotics", "omega 3", "multivitamin"],
+    "fallbackKeywordHint": [
+      "multivitamin", "lutein", "magnesium", "vitamin c", "gut health", "coenzyme q10",
+      "collagen supplement", "joint supplement", "zinc supplement", "iron supplement",
+      "vitamin d supplement", "eye supplement", "protein powder", "hair supplement",
+      "sleep aid supplement", "immune booster", "bone health supplement",
+      "antioxidant supplement", "liver health supplement", "blood sugar supplement"
+    ],
+    "backupKeywordHint": [
+      "health supplement", "diet supplement", "immune vitamin", "daily vitamin",
+      "women health supplement", "men health supplement", "senior supplement", "kids vitamin"
+    ],
     "tags": ["건강", "루틴관리", "자기관리템", "픽앤조이초이스"]
   },
   {
     "weekday": 2,
     "key": "living",
     "name": "생활",
-    "keywordHint": ["수납 정리함", "청소용품"],
-    "searchKeywordHint": ["storage box", "cleaning supplies"],
-    "fallbackKeywordHint": ["bathroom organizer", "drying rack", "living box", "mop", "storage organizer", "laundry basket", "cleaning tool", "household item"],
-    "backupKeywordHint": ["home organization", "bathroom supplies", "daily household goods", "cleaning kit"],
+    "keywordHint": ["수납 정리함", "청소용품", "세탁용품"],
+    "searchKeywordHint": ["storage box", "cleaning supplies", "laundry detergent"],
+    "fallbackKeywordHint": [
+      "bathroom organizer", "drying rack", "living box", "mop", "storage organizer",
+      "laundry basket", "cleaning tool", "household item", "microfiber cloth",
+      "toilet cleaner", "drain cleaner", "dust bag", "vacuum filter",
+      "shoe rack", "umbrella stand", "door mat", "air freshener"
+    ],
+    "backupKeywordHint": [
+      "home organization", "bathroom supplies", "daily household goods", "cleaning kit",
+      "fabric softener", "dishwashing soap", "all purpose cleaner", "odor eliminator"
+    ],
     "tags": ["생활용품", "정리템", "실용템", "픽앤조이초이스"]
   },
   {
     "weekday": 3,
     "key": "kitchen",
     "name": "주방",
-    "keywordHint": ["진공포장기", "밀폐용기"],
-    "searchKeywordHint": ["vacuum sealer", "food container"],
-    "fallbackKeywordHint": ["frying pan", "air fryer accessories", "kitchen organizer", "cutting board", "kitchenware", "knife set", "pot set", "food storage"],
-    "backupKeywordHint": ["cooking utensil", "home cooking", "kitchen storage", "meal prep container"],
+    "keywordHint": ["진공포장기", "밀폐용기", "에어프라이어"],
+    "searchKeywordHint": ["vacuum sealer", "food container", "air fryer"],
+    "fallbackKeywordHint": [
+      "frying pan", "air fryer accessories", "kitchen organizer", "cutting board",
+      "kitchenware", "knife set", "pot set", "food storage",
+      "kitchen scale", "measuring cup", "silicone spatula", "peeler",
+      "bowl set", "oven mitt", "bento box", "lunch box"
+    ],
+    "backupKeywordHint": [
+      "cooking utensil", "home cooking", "kitchen storage", "meal prep container",
+      "non stick pan", "stainless pot", "glass container", "bamboo cutting board"
+    ],
     "tags": ["주방용품", "식재료보관", "홈쿡", "픽앤조이초이스"]
   },
   {
     "weekday": 4,
     "key": "digital",
     "name": "디지털",
-    "keywordHint": ["무선이어폰", "보조배터리"],
-    "searchKeywordHint": ["wireless earbuds", "power bank"],
-    "fallbackKeywordHint": ["wireless mouse", "bluetooth keyboard", "portable charger", "tablet stand", "multi charger", "laptop stand", "usb hub", "desk setup"],
-    "backupKeywordHint": ["digital accessories", "mobile accessories", "charging accessories", "desk accessory"],
+    "keywordHint": ["무선이어폰", "보조배터리", "스마트폰 거치대"],
+    "searchKeywordHint": ["wireless earbuds", "power bank", "phone stand"],
+    "fallbackKeywordHint": [
+      "wireless mouse", "bluetooth keyboard", "portable charger", "tablet stand",
+      "multi charger", "laptop stand", "usb hub", "desk setup",
+      "charging cable", "cable organizer", "webcam", "ring light",
+      "mechanical keyboard", "monitor arm", "screen protector", "phone case"
+    ],
+    "backupKeywordHint": [
+      "digital accessories", "mobile accessories", "charging accessories", "desk accessory",
+      "gaming accessories", "study accessories", "home office", "remote work gear"
+    ],
     "tags": ["디지털", "데스크셋업", "생산성", "픽앤조이초이스"]
   },
   {
     "weekday": 5,
     "key": "pet-life",
     "name": "반려 생활",
-    "keywordHint": ["고양이 사료", "강아지 간식"],
-    "searchKeywordHint": ["cat food", "dog treats"],
-    "fallbackKeywordHint": ["pet pad", "pet care", "cat tower", "dog supplement", "cat litter", "dog toy", "pet supplies", "pet shampoo"],
-    "backupKeywordHint": ["cat supplies", "dog supplies", "pet grooming", "pet snack"],
+    "keywordHint": ["고양이 사료", "강아지 간식", "펫 케어"],
+    "searchKeywordHint": ["cat food", "dog treats", "pet care"],
+    "fallbackKeywordHint": [
+      "pet pad", "pet care", "cat tower", "dog supplement", "cat litter",
+      "dog toy", "pet supplies", "pet shampoo", "cat snack", "dog food",
+      "pet carrier", "pet brush", "dog leash", "cat bed",
+      "pet water fountain", "pet bowl", "flea treatment", "pet dental care"
+    ],
+    "backupKeywordHint": [
+      "cat supplies", "dog supplies", "pet grooming", "pet snack",
+      "puppy supplies", "kitten supplies", "senior pet care", "pet health"
+    ],
     "tags": ["반려생활", "펫케어", "반려템", "픽앤조이초이스"]
   },
   {
     "weekday": 6,
     "key": "beauty-fashion",
     "name": "뷰티/패션",
-    "keywordHint": ["헤어 케어", "선크림"],
-    "searchKeywordHint": ["hair care", "sunscreen"],
-    "fallbackKeywordHint": ["innerwear", "fashion accessories", "cushion foundation", "treatment", "skin care", "cleansing", "sun care", "hair essence"],
-    "backupKeywordHint": ["beauty", "daily cosmetics", "hair styling", "fashion item"],
+    "keywordHint": ["헤어 케어", "선크림", "스킨케어"],
+    "searchKeywordHint": ["hair care", "sunscreen", "skin care"],
+    "fallbackKeywordHint": [
+      "innerwear", "fashion accessories", "cushion foundation", "treatment",
+      "skin care", "cleansing", "sun care", "hair essence",
+      "toner", "serum", "moisturizer", "eye cream",
+      "lip balm", "bb cream", "eyeliner", "mascara"
+    ],
+    "backupKeywordHint": [
+      "beauty", "daily cosmetics", "hair styling", "fashion item",
+      "face wash", "exfoliator", "hair mask", "nail care"
+    ],
     "tags": ["뷰티", "패션", "데일리템", "픽앤조이초이스"]
   },
   {
     "weekday": 0,
     "key": "home-appliance-furniture",
     "name": "가전/가구",
-    "keywordHint": ["스탠드 조명", "소형 가전"],
-    "searchKeywordHint": ["floor lamp", "small appliance"],
-    "fallbackKeywordHint": ["chair", "storage furniture", "table", "mood light", "home appliance", "cleaning appliance", "shelf", "organizer rack"],
-    "backupKeywordHint": ["home living", "interior lighting", "appliance", "furniture"],
+    "keywordHint": ["스탠드 조명", "소형 가전", "정수기"],
+    "searchKeywordHint": ["floor lamp", "small appliance", "water purifier"],
+    "fallbackKeywordHint": [
+      "chair", "storage furniture", "table", "mood light", "home appliance",
+      "cleaning appliance", "shelf", "organizer rack", "electric kettle",
+      "rice cooker", "blender", "toaster", "fan", "humidifier",
+      "air purifier", "desk lamp", "led strip light"
+    ],
+    "backupKeywordHint": [
+      "home living", "interior lighting", "appliance", "furniture",
+      "kitchen appliance", "bedroom furniture", "living room item", "bathroom accessory"
+    ],
     "tags": ["가전", "가구", "홈리빙", "픽앤조이초이스"]
   }
 ]

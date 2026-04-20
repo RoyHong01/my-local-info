@@ -228,6 +228,7 @@ async function run() {
   }
 
   let markdownGenerated = 0;
+  let markdownGeneratedTitles = [];
   let markdownAttempted = 0;
   let markdownFailed = 0;
   let markdownPending = 0;
@@ -279,6 +280,7 @@ async function run() {
           item.description_markdown_model = GEMINI_MODEL;
           item.description_markdown_updated_at = new Date().toISOString().split('T')[0];
           markdownGenerated++;
+          markdownGeneratedTitles.push(item['서비스명'] || item.name || item.title || '');
           inputTokens += usage.input_tokens;
           outputTokens += usage.output_tokens;
         }
@@ -331,6 +333,7 @@ async function run() {
     appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_generated=${markdownGenerated}\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `markdown_generated_titles=${markdownGeneratedTitles.slice(0, 5).join('|')}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_attempted=${markdownAttempted}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_failed=${markdownFailed}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_pending=${markdownPending}\n`);

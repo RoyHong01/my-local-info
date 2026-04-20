@@ -238,6 +238,8 @@ jobs:
         timeout-minutes: 20
         env:
           CHOICE_AUTO_ENABLED: 'true'
+          CHOICE_MIN_REVIEW_COUNT: '50'
+          CHOICE_PRODUCT_HISTORY_DAYS: '7'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CHOICE_GEMINI_MODEL: 'gemini-2.5-flash-lite'
           CHOICE_GEMINI_TIMEOUT_MS: '120000'
@@ -358,6 +360,8 @@ jobs:
           COLLECT_INCHEON_ANTHROPIC_USAGE: ${{ steps.collect_incheon.outputs.anthropic_usage }}
           COLLECT_INCHEON_MARKDOWN_GENERATED: ${{ steps.collect_incheon.outputs.markdown_generated }}
           COLLECT_INCHEON_MARKDOWN_PENDING: ${{ steps.collect_incheon.outputs.markdown_pending }}
+          COLLECT_INCHEON_MARKDOWN_TITLES: ${{ steps.collect_incheon.outputs.markdown_generated_titles }}
+          COLLECT_INCHEON_MARKDOWN_TITLES: ${{ steps.collect_incheon.outputs.markdown_generated_titles }}
           COLLECT_INCHEON_PHOTO_HEALTHCHECK: ${{ steps.collect_incheon.outputs.incheon_photo_healthcheck }}
           COLLECT_INCHEON_PHOTO_MODE: ${{ steps.collect_incheon.outputs.incheon_photo_mode }}
           COLLECT_INCHEON_PHOTO_FAILURE_REASON: ${{ steps.collect_incheon.outputs.incheon_photo_failure_reason }}
@@ -367,12 +371,16 @@ jobs:
           COLLECT_SUBSIDY_ANTHROPIC_USAGE: ${{ steps.collect_subsidy.outputs.anthropic_usage }}
           COLLECT_SUBSIDY_MARKDOWN_GENERATED: ${{ steps.collect_subsidy.outputs.markdown_generated }}
           COLLECT_SUBSIDY_MARKDOWN_PENDING: ${{ steps.collect_subsidy.outputs.markdown_pending }}
+          COLLECT_SUBSIDY_MARKDOWN_TITLES: ${{ steps.collect_subsidy.outputs.markdown_generated_titles }}
+          COLLECT_SUBSIDY_MARKDOWN_TITLES: ${{ steps.collect_subsidy.outputs.markdown_generated_titles }}
           COLLECT_FESTIVAL_OUTCOME: ${{ steps.collect_festival.outcome }}
           COLLECT_FESTIVAL_SUMMARY: ${{ steps.collect_festival.outputs.collect_summary }}
           COLLECT_FESTIVAL_VALIDATION: ${{ steps.collect_festival.outputs.collect_validation }}
           COLLECT_FESTIVAL_ANTHROPIC_USAGE: ${{ steps.collect_festival.outputs.anthropic_usage }}
           COLLECT_FESTIVAL_MARKDOWN_GENERATED: ${{ steps.collect_festival.outputs.markdown_generated }}
           COLLECT_FESTIVAL_MARKDOWN_PENDING: ${{ steps.collect_festival.outputs.markdown_pending }}
+          COLLECT_FESTIVAL_MARKDOWN_TITLES: ${{ steps.collect_festival.outputs.markdown_generated_titles }}
+          COLLECT_FESTIVAL_MARKDOWN_TITLES: ${{ steps.collect_festival.outputs.markdown_generated_titles }}
           COLLECT_FESTIVAL_PHOTO_FALLBACK: ${{ steps.collect_festival.outputs.festival_photo_fallback }}
           CLEANUP_EXPIRED_OUTCOME: ${{ steps.cleanup_expired.outcome }}
           BUILD_STAGE1_OUTCOME: ${{ steps.build_stage1.outcome }}

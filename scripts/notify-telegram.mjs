@@ -190,6 +190,9 @@ async function buildMessage(report) {
     : '';
   const markdownStats = report.dataValidation || {};
   const markdownLine = `🧩 상세 markdown(생성/대기): 인천 ${Number(markdownStats.incheon?.markdown?.generated || 0)}/${Number(markdownStats.incheon?.markdown?.pending || 0)} | 보조금 ${Number(markdownStats.subsidy?.markdown?.generated || 0)}/${Number(markdownStats.subsidy?.markdown?.pending || 0)} | 축제 ${Number(markdownStats.festival?.markdown?.generated || 0)}/${Number(markdownStats.festival?.markdown?.pending || 0)}`;
+  const mdIncheonTitles = (markdownStats.incheon?.markdown?.titles || []).filter(Boolean);
+  const mdSubsidyTitles = (markdownStats.subsidy?.markdown?.titles || []).filter(Boolean);
+  const mdFestivalTitles = (markdownStats.festival?.markdown?.titles || []).filter(Boolean);
   const festivalPhotoFallbackLine = `🖼️ 축제 PhotoGallery fallback: ${Number(markdownStats.festival?.photoFallback || 0)}건`;
 
   const lines = [
@@ -201,6 +204,9 @@ async function buildMessage(report) {
     collectDetailLine,
     dataChangeLine,
     markdownLine,
+    ...(mdIncheonTitles.length > 0 ? [`  └ 인천: ${mdIncheonTitles.map(t => `• ${t}`).join(' / ')}`] : []),
+    ...(mdSubsidyTitles.length > 0 ? [`  └ 보조금: ${mdSubsidyTitles.map(t => `• ${t}`).join(' / ')}`] : []),
+    ...(mdFestivalTitles.length > 0 ? [`  └ 축제: ${mdFestivalTitles.map(t => `• ${t}`).join(' / ')}`] : []),
     festivalPhotoFallbackLine,
     incheonPhotoLine,
     incheonPhotoFailureLine,

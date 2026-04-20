@@ -587,6 +587,7 @@ async function main() {
         markdown: {
           generated: Number(process.env.COLLECT_INCHEON_MARKDOWN_GENERATED || 0),
           pending: Number(process.env.COLLECT_INCHEON_MARKDOWN_PENDING || 0),
+          titles: (process.env.COLLECT_INCHEON_MARKDOWN_TITLES || '').split('|').filter(Boolean),
         },
         photoApi: {
           healthcheck: process.env.COLLECT_INCHEON_PHOTO_HEALTHCHECK || '',
@@ -601,6 +602,7 @@ async function main() {
         markdown: {
           generated: Number(process.env.COLLECT_SUBSIDY_MARKDOWN_GENERATED || 0),
           pending: Number(process.env.COLLECT_SUBSIDY_MARKDOWN_PENDING || 0),
+          titles: (process.env.COLLECT_SUBSIDY_MARKDOWN_TITLES || '').split('|').filter(Boolean),
         },
       },
       festival: {
@@ -610,6 +612,7 @@ async function main() {
         markdown: {
           generated: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_GENERATED || 0),
           pending: Number(process.env.COLLECT_FESTIVAL_MARKDOWN_PENDING || 0),
+          titles: (process.env.COLLECT_FESTIVAL_MARKDOWN_TITLES || '').split('|').filter(Boolean),
         },
         photoFallback: Number(process.env.COLLECT_FESTIVAL_PHOTO_FALLBACK || 0),
       },
