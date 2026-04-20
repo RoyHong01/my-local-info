@@ -1,0 +1,233 @@
+{
+  "reportDateKst": "2026-04-21",
+  "generatedAtUtc": "2026-04-20T20:13:05.896Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24687480781",
+    "runNumber": 592,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24687480781",
+    "runStartedAtUtc": "2026-04-20T20:01:01Z",
+    "headSha": "3a1412cf34a708dd681a942dcdd799283600892b"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://7354d417.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 340건",
+        "subsidy": "신규 5건, 총 7490건",
+        "festival": "신규 11건, 업데이트 177건, 총 188건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://c53f39f5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://f0440472.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "da1e51d228a9c5e9ae8723a5bbaef6dd89eeac0f",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-20",
+      "authoredAt": "2026-04-20T20:13:04Z",
+      "files": [
+        "src/content/life/2026-04-21-seongsu-restaurant-465733251.md",
+        "src/content/life/2026-04-21-songdo-restaurant-1295006802.md",
+        "src/content/life/2026-04-21-suwon-restaurant-1773829778.md"
+      ]
+    },
+    {
+      "sha": "edf5b0f04af4a9f11f0b53f30427c0cf35bb905a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-20",
+      "authoredAt": "2026-04-20T20:09:41Z",
+      "files": [
+        "src/content/posts/2026-04-20-hongseong-saejogae-festival.md",
+        "src/content/posts/2026-04-20-incheon-senior-driver-support.md",
+        "src/content/posts/2026-04-20-post-1776715586534.md",
+        "src/content/posts/2026-04-20-post-1776715653257.md"
+      ]
+    },
+    {
+      "sha": "c90b2688cd49575535450c7216ecda2a3a90423c",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-20",
+      "authoredAt": "2026-04-20T20:02:38Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-20-hongseong-saejogae-festival.md",
+      "src/content/posts/2026-04-20-incheon-senior-driver-support.md",
+      "src/content/posts/2026-04-20-post-1776715586534.md",
+      "src/content/posts/2026-04-20-post-1776715653257.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-21-seongsu-restaurant-465733251.md",
+      "src/content/life/2026-04-21-songdo-restaurant-1295006802.md",
+      "src/content/life/2026-04-21-suwon-restaurant-1773829778.md"
+    ],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-21-seongsu-restaurant-465733251.md",
+      "src/content/life/2026-04-21-songdo-restaurant-1295006802.md",
+      "src/content/life/2026-04-21-suwon-restaurant-1773829778.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/life/2026-04-21-seongsu-restaurant-465733251.md",
+      "src/content/life/2026-04-21-songdo-restaurant-1295006802.md",
+      "src/content/life/2026-04-21-suwon-restaurant-1773829778.md",
+      "src/content/posts/2026-04-20-hongseong-saejogae-festival.md",
+      "src/content/posts/2026-04-20-incheon-senior-driver-support.md",
+      "src/content/posts/2026-04-20-post-1776715586534.md",
+      "src/content/posts/2026-04-20-post-1776715653257.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 15.73,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 340건",
+      "validation": "ok",
+      "anthropicUsage": "2431/1467",
+      "markdown": {
+        "generated": 2,
+        "pending": 235,
+        "titles": [
+          "군복무 인천청년 상해보험 지원",
+          "아이 꿈 수당 지급"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 5건, 총 7490건",
+      "validation": "ok",
+      "anthropicUsage": "4194/3065",
+      "markdown": {
+        "generated": 5,
+        "pending": 7370,
+        "titles": [
+          "군산시 장애인 평생교육이용권 지원",
+          "오산시 초등학교 입학축하금 지원",
+          "전입 청년 교통비 지원",
+          "청년 문화예술패스",
+          "세종특별자치시 다자녀 가정 입학지원금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 11건, 업데이트 177건, 총 188건",
+      "validation": "ok",
+      "anthropicUsage": "1807/1240",
+      "markdown": {
+        "generated": 2,
+        "pending": 137,
+        "titles": [
+          "우도 소라축제",
+          "이순신 축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
