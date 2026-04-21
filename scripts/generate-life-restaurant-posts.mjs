@@ -398,22 +398,34 @@ function enforceHookBridgeAndHeadingSpacing(body, context) {
 
   const bridgeSourceStart = hookIndex + 1;
   const bridgeSourceEnd = firstSubheadingIndex === -1 ? lines.length : firstSubheadingIndex;
-  const bridgeLines = lines
-    .slice(bridgeSourceStart, bridgeSourceEnd)
-    .map((line) => line.trim())
-    .filter((line) => line && !isSubheadingLine(line));
+  const bridgeRaw = lines.slice(bridgeSourceStart, bridgeSourceEnd).join('\n');
+  const bridgeParagraphs = bridgeRaw
+    .split(/\n\s*\n+/)
+    .map((paragraph) => paragraph
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line && !isSubheadingLine(line))
+      .join(' ')
+      .trim())
+    .filter(Boolean);
 
   const bridgeFallback = [
     `${context.itemName}은(는) 첫인상에서부터 동선이 깔끔하게 잡히는 편이라, 약속 코스 고민이 줄어드는 느낌이 들어요.`,
     `${context.scenarioHint || '약속 전후 흐름'} 기준으로도 부담이 적고, ${context.vibeHint || '공간의 결'}이 자연스럽게 이어져서 첫 방문 코스로 잡기 좋아요.`,
+    `${context.cuisineHint || '한 끼 포인트'}를 중심으로 분위기를 천천히 올리기 좋은 편이라, 서둘러 결정하기보다 여유 있게 시작하기 좋아요.`,
   ];
 
-  let normalizedBridge = bridgeLines.slice(0, 3);
+  let normalizedBridge = bridgeParagraphs.slice(0, 3);
   while (normalizedBridge.length < 2) {
     normalizedBridge.push(bridgeFallback[normalizedBridge.length]);
   }
 
-  for (const line of normalizedBridge) result.push(line);
+  for (let i = 0; i < normalizedBridge.length; i += 1) {
+    result.push(normalizedBridge[i]);
+    if (i < normalizedBridge.length - 1) {
+      result.push('');
+    }
+  }
 
   // 브릿지 이후 첫 소제목 전 여백 2줄 보장
   result.push('');
@@ -634,13 +646,24 @@ function validateSubheadingAndReadability(bodyText) {
     if (firstSubheadingRawIndex === -1) {
       issues.push('구조 체크 실패: 첫 번째 소제목이 없음');
     } else {
-      const bridgeLines = rawLines
+      const bridgeParagraphs = rawLines
         .slice(firstContentIndex + 1, firstSubheadingRawIndex)
-        .map((line) => line.trim())
-        .filter((line) => line.length > 0);
+        .join('\n')
+        .split(/\n\s*\n+/)
+        .map((paragraph) => paragraph
+          .split('\n')
+          .map((line) => line.trim())
+          .filter((line) => line.length > 0 && !isSubheadingLine(line))
+          .join(' ')
+          .trim())
+        .filter(Boolean);
 
-      if (bridgeLines.length < 2) {
-        issues.push(`여백 체크 실패: 브릿지 문단 부족(${bridgeLines.length}줄 / 최소 2줄)`);
+      if (bridgeParagraphs.length < 2) {
+        issues.push(`여백 체크 실패: 브릿지 문단 부족(${bridgeParagraphs.length}개 / 최소 2개)`);
+      }
+
+      if (bridgeParagraphs.length > 3) {
+        issues.push(`여백 체크 실패: 브릿지 문단 과다(${bridgeParagraphs.length}개 / 최대 3개)`);
       }
 
       // ### 소제목은 위아래 2줄 이상 공백 확보
@@ -898,7 +921,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - slug는 이미 정해져 있으니 절대 변경하지 마.
 - 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 결핍/불안을 전제로 하지 말고 감각, 발견, 취향 제안, 미학 중심으로 작성.
 - HOOK 바로 다음 줄은 반드시 빈 줄 1개를 넣어 시선을 분리할 것.
-- HOOK 다음에는 첫 소제목 전에 브릿지 문단 2~3줄을 반드시 작성해 장소의 전체 인상을 먼저 전달할 것.
+- HOOK 다음에는 첫 소제목 전에 브릿지 서론을 2~3개 문단으로 반드시 작성해 장소의 전체 인상을 먼저 전달할 것.
 - 본문 전개는 아래 순서를 따를 것:
   1) HOOK: 감각 또는 취향 제안으로 시작
   2) SCENARIO: scenarioHint를 바탕으로 방문 상황을 구체적으로 묘사
@@ -989,7 +1012,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
 
     for (let retryAttempt = 1; retryAttempt <= 3; retryAttempt += 1) {
       const validationFeedback = buildValidationFeedback(validationIssues);
-      const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n\n[재작성 체크리스트]\n- 훅(##) 다음 줄은 반드시 1줄 공백\n- 첫 소제목(###) 전 브릿지 문단은 2~3줄의 자연스러운 서론으로 작성\n- 모든 ### 소제목 위/아래는 각각 2줄 공백\n- 평어체 금지, 문장 종결은 경어체 유지\n- 금지어(${BANNED_WORDS.join(', ')}) 및 훅/소제목 금지어 미사용\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
+      const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n\n[재작성 체크리스트]\n- 훅(##) 다음 줄은 반드시 1줄 공백\n- 첫 소제목(###) 전 브릿지 서론은 2~3개 문단으로 자연스럽게 작성\n- 모든 ### 소제목 위/아래는 각각 2줄 공백\n- 평어체 금지, 문장 종결은 경어체 유지\n- 금지어(${BANNED_WORDS.join(', ')}) 및 훅/소제목 금지어 미사용\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
 
       try {
         const retryGemini = await callGemini(retryPrompt);
