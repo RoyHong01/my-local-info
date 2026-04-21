@@ -306,6 +306,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-21 핵심 반영(추가):
+  - **Supabase 로그 노이즈 축소**: `scripts/collect-life-restaurants.mjs`에서 동일 유형 경고를 실행당 1회만 출력하도록 변경하고, 캐시 실패 시 Google API 폴백 동작은 유지.
+  - **맛집 후처리 검증 로그 개선**: `scripts/generate-life-restaurant-posts.mjs`에서 검증 이슈를 요약형으로 출력해 원인 파악 가독성을 강화.
+  - **서론 규칙 고정 재정렬**: 첫 소제목 전 `150자 제한`은 완전 제거하고, 브릿지 서론을 `2~3개 문단`으로 고정(2개 미만/3개 초과는 검증 실패).
 - 2026-04-19 핵심 반영(추가):
   - **인천관광공사 API 정책 비활성화**: GitHub Actions 동적 IP 환경과 인천 API 등록 IP 정책 충돌로 인해 `scripts/collect-incheon.js`의 인천관광공사(API003) 호출을 운영 정책상 중단.
   - **인천 이미지 소스 전환**: 인천 행사성 항목 이미지는 TourAPI `searchKeyword2` 키워드 매칭 성공 시에만 `firstimage`를 반영하고, 실패 시 기본 SVG를 사용.

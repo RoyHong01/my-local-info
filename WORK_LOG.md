@@ -5,6 +5,62 @@
 
 ---
 
+## 2026-04-21 (맛집 자동생성 안정화 + Supabase 로그 노이즈 개선)
+
+### 1️⃣ Supabase 경고 로그 노이즈 축소 (커밋: 8592c46)
+
+- **배경**:
+  - Supabase는 Google Places 필터링 결과 캐시 저장소이며, 요금 폭탄 방지를 위한 운영 핵심 경로.
+  - 연결 불안정 시 동일 경고가 반복 출력되어 실제 실패 원인 파악이 어려웠음.
+
+- **조치**:
+  - `scripts/collect-life-restaurants.mjs`에 경고 상태 카운터를 추가.
+  - 동일 유형 경고(`조회 실패/조회 예외/upsert 실패/upsert 예외`)는 실행당 1회만 출력하도록 변경.
+
+- **운영 영향**:
+  - 캐시 조회/저장 기능 자체는 변경 없음.
+  - Supabase 실패 시 Google API 폴백 동작 유지.
+
+### 2️⃣ 맛집 후처리 검증 가독성/재시도 개선 (커밋: 8592c46)
+
+- **배경**:
+  - 후처리 검증 실패 메시지가 길게 누적되어 원인 확인이 어려움.
+
+- **조치**:
+  - 검증 이슈 로그를 요약형으로 출력하도록 포맷터 추가.
+  - 재시도 프롬프트에 체크리스트를 반영해 재생성 일관성 강화.
+  - 재시도 횟수를 3회로 확장해 단발 실패 흡수력 보강.
+
+### 3️⃣ 서론 규칙 재정렬: 150자 제한 완전 제거 + 2~3문단 고정 (커밋: 3b93b53, 74340ff)
+
+- **배경**:
+  - 사용자 운영 기준은 "자연스러운 서론"이며, 문자수 상한은 의도와 충돌.
+  - 기존 규칙이 줄(line) 중심이라 서론이 짧아지는 회귀 발생.
+
+- **조치**:
+  1. `scripts/generate-life-restaurant-posts.mjs`에서 첫 소제목 전 150자 상한 검증 로직 제거.
+  2. 재시도 프롬프트의 150자 제한 문구 제거.
+  3. 서론 기준을 줄이 아닌 문단으로 전환:
+     - 첫 소제목 전 브릿지 서론은 **2~3개 문단**
+     - 2개 미만 또는 3개 초과 시 검증 실패 처리
+     - 후처리 보정도 동일하게 문단 단위로 맞춤
+
+- **추가 확인**:
+  - 성수 포스트 단건 재생성에서 서론 문단 구조 반영 확인.
+
+### 4️⃣ 상세 히어로 이미지 타입 오류 수정 + 빌드 검증
+
+- `src/app/blog/[slug]/page.tsx`에서 hero image src를 문자열로 안전 고정해 TypeScript 빌드 오류 해결.
+- `npm run build` 성공 확인.
+
+### 5️⃣ 배포/반영 상태
+
+- 반영 커밋:
+  - `8592c46` fix: reduce supabase noise and stabilize restaurant post validation
+  - `3b93b53` fix: remove hard 150-char intro limit for restaurant posts
+  - `74340ff` fix: enforce 2-3 intro paragraphs before first subheading
+- `main` 브랜치 push 완료.
+
 ## 2026-04-19 (UX 기능 추가 + 린트 안정화)
 
 ### 1️⃣ Reading Progress Bar + Sticky Choice CTA 추가 (커밋: b762295)
