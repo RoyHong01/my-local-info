@@ -432,6 +432,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const restaurantJsonLd = isRestaurantPost ? buildRestaurantJsonLd(post) : null;
   const choiceReviewJsonLd = isChoicePost ? buildChoiceReviewJsonLd(post, description) : null;
   const heroImageSourceNote = String(post.imageSourceNote || (post.imageSource ? `출처: ${post.imageSource}` : '')).trim();
+  const shouldShowHero = !!post.image && (!isChoicePost || !shouldHideChoiceHero);
+  const isSvgHero = !!post.image && post.image.endsWith('.svg');
+  const heroImageSrc = post.image || '/images/default-lifestyle.svg';
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -472,12 +475,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   <span className="text-stone-500 font-medium">최종 업데이트: {post.date}</span>
                 </div>
               </header>
-              {post.image && !post.image.endsWith('.svg') && (!isChoicePost || !shouldHideChoiceHero) && (
+              {shouldShowHero && (
                 isChoicePost ? (
                   <div className="mb-14 flex justify-center">
                     <div className="relative w-full max-w-[480px] aspect-[4/5] overflow-hidden rounded-xl border border-stone-100 shadow-sm bg-white">
                       <Image
-                        src={post.image}
+                        src={heroImageSrc}
                         alt={post.title}
                         fill
                         className="object-contain"
@@ -488,12 +491,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   </div>
                 ) : (
                   <div className="mb-14">
-                    <div className="relative w-full h-72 md:h-96 rounded-2xl overflow-hidden">
+                    <div className={`relative w-full h-72 md:h-96 rounded-2xl overflow-hidden ${isSvgHero ? 'bg-white border border-stone-100' : ''}`}>
                       <Image
-                        src={post.image}
+                        src={heroImageSrc}
                         alt={post.title}
                         fill
-                        className="object-cover"
+                        className={isSvgHero ? 'object-contain p-6' : 'object-cover'}
                         sizes="(max-width: 768px) 100vw, 1200px"
                         priority
                       />

@@ -7,10 +7,26 @@ const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant',
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
+const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
 // 생성 스크립트(generate-*.mjs/js)의 fallback 'gemini-2.5-flash-lite'와 의도적으로 다름. 통일 수정 금지.
 // CI에서는 RESTAURANT_GEMINI_MODEL env(flash-lite)가 주입되므로 이 값은 로컬 미설정 시에만 사용됨.
 const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-1.5-flash';
+
+const supabaseWarnState = {
+  cacheReadFailure: 0,
+  cacheReadException: 0,
+  cacheUpsertFailure: 0,
+  cacheUpsertException: 0,
+};
+
+function warnSupabaseOnce(kind, message, detail) {
+  supabaseWarnState[kind] = Number(supabaseWarnState[kind] || 0) + 1;
+  if (supabaseWarnState[kind] !== 1) return;
+
+  console.warn(message, detail);
+  console.warn('[Supabase] 동일 유형 경고는 이번 실행에서 1회만 출력됩니다.');
+}
 
 function createSupabaseCacheClient() {
   const supabaseUrl = process.env.PICKNJOY_SUPABASE_URL;
@@ -38,7 +54,11 @@ async function getCachedRestaurantRating(supabase, kakaoId) {
       .maybeSingle();
 
     if (error) {
-      console.warn(`[Supabase] 캐시 조회 실패(${kakaoId}):`, error.message || error);
+      warnSupabaseOnce(
+        'cacheReadFailure',
+        `[Supabase] 캐시 조회 실패(${kakaoId}):`,
+        error.message || error,
+      );
       return null;
     }
 
@@ -56,7 +76,11 @@ async function getCachedRestaurantRating(supabase, kakaoId) {
       ratingCount: Number.isNaN(ratingCount) ? null : ratingCount,
     };
   } catch (error) {
-    console.warn(`[Supabase] 캐시 조회 예외(${kakaoId}):`, error?.message || error);
+    warnSupabaseOnce(
+      'cacheReadException',
+      `[Supabase] 캐시 조회 예외(${kakaoId}):`,
+      error?.message || error,
+    );
     return null;
   }
 }
@@ -77,10 +101,18 @@ async function upsertRestaurantRatingCache(supabase, item, googleResult) {
       }, { onConflict: 'kakao_id' });
 
     if (error) {
-      console.warn(`[Supabase] 캐시 upsert 실패(${item.id}):`, error.message || error);
+      warnSupabaseOnce(
+        'cacheUpsertFailure',
+        `[Supabase] 캐시 upsert 실패(${item.id}):`,
+        error.message || error,
+      );
     }
   } catch (error) {
-    console.warn(`[Supabase] 캐시 upsert 예외(${item.id}):`, error?.message || error);
+    warnSupabaseOnce(
+      'cacheUpsertException',
+      `[Supabase] 캐시 upsert 예외(${item.id}):`,
+      error?.message || error,
+    );
   }
 }
 
@@ -100,6 +132,15 @@ function appendGithubOutput(name, value) {
     fsSync.appendFileSync(outputPath, `${name}=${value}\n`, 'utf-8');
   } catch (error) {
     console.warn(`[GitHub Output] ${name} 기록 실패:`, error?.message || error);
+  }
+}
+
+async function readExistingRestaurantsPayload() {
+  try {
+    const raw = await fs.readFile(OUTPUT_PATH, 'utf-8');
+    return JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`기존 restaurants.json 로드 실패: ${error?.message || error}`);
   }
 }
 
@@ -404,6 +445,83 @@ async function fetchGooglePlacePhotoById(placeId, apiKey) {
   }
 }
 
+async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCacheClient) {
+  const regions = payload?.regions && typeof payload.regions === 'object' ? payload.regions : {};
+  const metrics = {
+    cacheHit: 0,
+    cacheMiss: 0,
+    googleCalled: 0,
+  };
+  let updatedCount = 0;
+
+  for (const [regionKey, items] of Object.entries(regions)) {
+    if (!Array.isArray(items)) continue;
+
+    for (const item of items) {
+      const existingPhotoUrl = String(item?.googlePhotoUrl || '').trim();
+      if (existingPhotoUrl) continue;
+
+      let placeId = String(item?.googlePlaceId || '').trim();
+      let rating = item?.googleRating ?? null;
+      let ratingCount = item?.googleRatingCount ?? null;
+      let photoUrl = null;
+
+      if (!placeId) {
+        const cached = await getCachedRestaurantRating(supabaseCacheClient, item?.id);
+        if (cached?.placeId) {
+          metrics.cacheHit += 1;
+          placeId = cached.placeId;
+          if (rating == null) rating = cached.rating;
+          if (ratingCount == null) ratingCount = cached.ratingCount;
+        } else {
+          metrics.cacheMiss += 1;
+        }
+      }
+
+      try {
+        if (placeId) {
+          photoUrl = await fetchGooglePlacePhotoById(placeId, googleApiKey);
+        }
+
+        if (!photoUrl) {
+          metrics.googleCalled += 1;
+          const googleResult = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
+          if (googleResult?.placeId) {
+            placeId = googleResult.placeId;
+            if (rating == null) rating = googleResult.rating ?? null;
+            if (ratingCount == null) ratingCount = googleResult.userRatingCount ?? null;
+            photoUrl = googleResult.photoUrl || null;
+            await upsertRestaurantRatingCache(supabaseCacheClient, item, googleResult);
+          }
+        }
+      } catch (error) {
+        console.warn(`  [Google Places] 기존 사진 보강 실패: ${item?.name || '이름 미상'} - ${error?.message || error}`);
+      }
+
+      if (placeId) {
+        item.googlePlaceId = placeId;
+      }
+      if (rating != null && item.googleRating == null) {
+        item.googleRating = rating;
+      }
+      if (ratingCount != null && item.googleRatingCount == null) {
+        item.googleRatingCount = ratingCount;
+      }
+      if (photoUrl) {
+        item.googlePhotoUrl = photoUrl;
+        updatedCount += 1;
+        console.log(`  ✅ 사진 보강: [${REGION_LABEL[regionKey] || regionKey}] ${item.name}`);
+      } else {
+        console.log(`  - 사진 없음: [${REGION_LABEL[regionKey] || regionKey}] ${item.name}`);
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+  }
+
+  return { payload, metrics, updatedCount };
+}
+
 async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
   const metrics = {
     cacheHit: 0,
@@ -674,6 +792,36 @@ async function run() {
 
   if (!googleKey) {
     console.warn('⚠️  GOOGLE_PLACES_API_KEY 없음 — 구글 평점 필터 건너뜀');
+  }
+
+  if (BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY) {
+    if (!googleKey) {
+      console.error('GOOGLE_PLACES_API_KEY가 없습니다. 기존 사진 보강을 중단합니다.');
+      process.exit(1);
+    }
+
+    console.log('🖼️  기존 restaurants.json 대상 Google 사진 보강 시작');
+    console.log(`🗄️  Supabase 캐시 사용: ${supabaseCacheClient ? 'ON' : 'OFF'}`);
+
+    const payload = await readExistingRestaurantsPayload();
+    const { payload: enrichedPayload, metrics, updatedCount } = await enrichExistingRestaurantPhotos(payload, googleKey, supabaseCacheClient);
+
+    enrichedPayload.updatedAt = new Date().toISOString();
+    enrichedPayload.source = String(enrichedPayload.source || 'kakao+google+gemini');
+    enrichedPayload.metrics = {
+      ...(enrichedPayload.metrics || {}),
+      cache_hit: Number(enrichedPayload?.metrics?.cache_hit || 0) + metrics.cacheHit,
+      cache_miss: Number(enrichedPayload?.metrics?.cache_miss || 0) + metrics.cacheMiss,
+      google_called: Number(enrichedPayload?.metrics?.google_called || 0) + metrics.googleCalled,
+    };
+
+    await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
+    await fs.writeFile(OUTPUT_PATH, JSON.stringify(enrichedPayload, null, 2), 'utf-8');
+
+    console.log(`✅ 기존 사진 보강 완료: ${OUTPUT_PATH}`);
+    console.log(`   - 사진 보강 건수: ${updatedCount}`);
+    console.log(`   - cache_hit=${metrics.cacheHit}, cache_miss=${metrics.cacheMiss}, google_called=${metrics.googleCalled}`);
+    return;
   }
 
   if (!kakaoKey) {
