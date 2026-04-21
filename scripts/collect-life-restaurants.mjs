@@ -352,6 +352,7 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
           'places.id',
           'places.rating',
           'places.userRatingCount',
+          'places.photos',
         ].join(','),
       },
       body: JSON.stringify({
@@ -372,11 +373,35 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
   }
   const place = data?.places?.[0];
   if (!place) return null;
+  const photoName = place.photos?.[0]?.name;
+  const photoUrl = photoName
+    ? `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`
+    : null;
   return {
     placeId: place.id || '',
     rating: typeof place.rating === 'number' ? place.rating : null,
     userRatingCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : null,
+    photoUrl,
   };
+}
+
+async function fetchGooglePlacePhotoById(placeId, apiKey) {
+  if (!placeId || !apiKey) return null;
+  try {
+    const res = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+      headers: {
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'photos',
+      },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const photoName = data?.photos?.[0]?.name;
+    if (!photoName) return null;
+    return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`;
+  } catch {
+    return null;
+  }
 }
 
 async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
@@ -422,6 +447,7 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
     }
 
     let googleResult = null;
+    let photoUrl = null;
     try {
       if (!usedCache) {
         metrics.googleCalled += 1;
@@ -429,6 +455,11 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
         placeId = googleResult?.placeId || '';
         rating = googleResult?.rating ?? null;
         ratingCount = googleResult?.userRatingCount ?? null;
+        photoUrl = googleResult?.photoUrl || null;
+      } else if (placeId) {
+        // 캐시 hit: photo만 별도 취득
+        photoUrl = await fetchGooglePlacePhotoById(placeId, googleApiKey);
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
@@ -446,12 +477,13 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
     if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
     } else {
-      console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰${usedCache ? ', cache' : ''})`);
+      console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰${usedCache ? ', cache' : ''}${photoUrl ? ', 📷사진' : ''})`);
       filtered.push({
         ...item,
         googlePlaceId: placeId,
         googleRating: rating,
         googleRatingCount: ratingCount,
+        googlePhotoUrl: photoUrl,
         googlePriceLevel: '',
         googleBusinessStatus: '',
         googlePrimaryType: '',

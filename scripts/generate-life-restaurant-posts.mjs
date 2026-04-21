@@ -843,6 +843,7 @@ async function generateRestaurantPost(candidate) {
   const slugBase = buildRestaurantSlug(candidate, locality);
   const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-restaurant.svg';
+  const heroImage = candidate.item.googlePhotoUrl || defaultImage;
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
 
   const ratingFrontmatter = candidate.item.googleRating != null
@@ -863,7 +864,7 @@ description: (130~160자. '평점 4.2가 증명하는 찐맛집' 뉘앙스를 �
 category: 픽앤조이 맛집 탐방
 published_by: "${LIFE_RESTAURANT_PUBLISHED_BY}" 
 tags: [맛집탐방, ${candidate.regionLabel}, ${candidate.areaTag}, ${candidate.item.cuisineHint || '핫플'}, ${candidate.item.vibeHint || '분위기맛집'}, 카카오맵]
-image: "${defaultImage}"
+image: "${heroImage}"
 source_id: "${candidate.item.id}"
 slug: "${slugBase}"
 place_name: "${candidate.item.name.replace(/"/g, '\\"')}"
