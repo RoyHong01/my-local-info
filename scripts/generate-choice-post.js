@@ -153,6 +153,11 @@ function sanitizeMarkdownText(value) {
   return String(value || '').replace(/\[/g, '\\[').replace(/\]/g, '\\]');
 }
 
+function hasCtaMarker(text) {
+  const value = String(text || '');
+  return value.includes('👉') || value.includes('🛒');
+}
+
 function splitKeywordHints(keywordHint) {
   if (Array.isArray(keywordHint)) {
     return keywordHint.map((item) => String(item || '').trim()).filter(Boolean);
@@ -604,13 +609,24 @@ function findChoiceValidationErrors(content) {
     errors.push('필수 ## 소제목이 없습니다.');
   }
 
-  const ctaLinesWithoutUrl = String(content || '')
+  // CTA 검증은 본문만 대상으로 수행합니다.
+  // frontmatter title에 포함된 이모지(예: 🛒)를 CTA로 오인하는 것을 방지합니다.
+  const { body } = splitFrontmatterAndBody(String(content || ''));
+  const ctaLinesWithoutUrl = String(body || '')
     .split('\n')
     .map((line) => line.trim())
-    .filter((line) => /[👉🛒]/.test(line) && !/https?:\/\//.test(line));
+    .filter(Boolean)
+    .filter((line) => {
+      if (!hasCtaMarker(line)) return false;
+
+      const hasHttpUrl = /https?:\/\//i.test(line);
+      const hasMarkdownLink = /\[[^\]]+\]\(([^)]+)\)/.test(line);
+      return !hasHttpUrl && !hasMarkdownLink;
+    });
 
   if (ctaLinesWithoutUrl.length > 0) {
-    errors.push('URL 없는 CTA 문장이 남아 있습니다.');
+    const preview = ctaLinesWithoutUrl.slice(0, 2).join(' | ');
+    errors.push(`URL 없는 CTA 문장이 남아 있습니다. (${preview})`);
   }
 
   return errors;
@@ -1070,14 +1086,14 @@ function normalizeGeneratedContent(content, candidate) {
     .replace(/이\s*아래의\s*JSON-LD[\s\S]*$/i, '')
     .replace(/^.*쿠팡\s*파트너스\s*활동의\s*일환.*$/gim, '')
     .replace(/^.*본\s*콘텐츠는\s*AI\s*기술을\s*활용.*$/gim, '')
-    .replace(/^\*\*[👉🛒]\s+\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gim, '')
-    .replace(/^[👉🛒]\s+\*\*\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gim, '')
-    .replace(/^\*\*[👉🛒](?!.*https?:\/\/).*$/gim, '')
-    .replace(/^[👉🛒]\s+\*\*(?!.*https?:\/\/).*$/gim, '')
+    .replace(/^\*\*(?:👉|🛒)\s+\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gimu, '')
+    .replace(/^(?:👉|🛒)\s+\*\*\[[^\]]+\](?!\()([^\n]*)\*\*\s*$/gimu, '')
+    .replace(/^\*\*(?:👉|🛒)(?!.*https?:\/\/).*$/gimu, '')
+    .replace(/^(?:👉|🛒)\s+\*\*(?!.*https?:\/\/).*$/gimu, '')
     .split('\n')
     .filter((line) => {
       const trimmed = line.trim();
-      if (!/[👉🛒]/.test(trimmed)) return true;
+      if (!hasCtaMarker(trimmed)) return true;
       return /https?:\/\//.test(trimmed);
     })
     .join('\n')
