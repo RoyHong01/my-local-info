@@ -1,0 +1,247 @@
+{
+  "reportDateKst": "2026-04-22",
+  "generatedAtUtc": "2026-04-21T20:15:41.135Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24743723682",
+    "runNumber": 602,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24743723682",
+    "runStartedAtUtc": "2026-04-21T20:04:59Z",
+    "headSha": "63e334c03dcb589293529773e993d5609d689012"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://76c0d9dd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 2건, 총 342건",
+        "subsidy": "신규 2건, 총 7490건",
+        "festival": "신규 12건, 업데이트 185건, 총 197건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://2c0ebbbc.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://0bb945d4.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "03b622abf7b4912236a3a17a7c4ca159b42c2cfc",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-21",
+      "authoredAt": "2026-04-21T20:15:40Z",
+      "files": [
+        "src/content/life/2026-04-22-incheon-restaurant-16075359.md",
+        "src/content/life/2026-04-22-seongsu-restaurant-1349429702.md",
+        "src/content/life/2026-04-22-suwon-restaurant-1847035906.md"
+      ]
+    },
+    {
+      "sha": "c49648fa438bde80ee99bb45cb1942058e60c2aa",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-04-21",
+      "authoredAt": "2026-04-21T20:12:04Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md"
+      ]
+    },
+    {
+      "sha": "50c269bcc0ce5d0b25663ff56b21fa6690612359",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-21",
+      "authoredAt": "2026-04-21T20:11:56Z",
+      "files": [
+        "src/content/posts/2026-04-21-bulrocho-wonjeongdae-sancheong.md",
+        "src/content/posts/2026-04-21-incheon-yeonsu-disability-birth-support.md",
+        "src/content/posts/2026-04-21-post-1776802187600.md",
+        "src/content/posts/2026-04-21-군포시-무료-독감-예방접종.md"
+      ]
+    },
+    {
+      "sha": "2930461eedc21d14b1e41bb2b7925615d2bb7b2c",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-21",
+      "authoredAt": "2026-04-21T20:06:39Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-21-bulrocho-wonjeongdae-sancheong.md",
+      "src/content/posts/2026-04-21-incheon-yeonsu-disability-birth-support.md",
+      "src/content/posts/2026-04-21-post-1776802187600.md",
+      "src/content/posts/2026-04-21-군포시-무료-독감-예방접종.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
+      "src/content/life/2026-04-22-incheon-restaurant-16075359.md",
+      "src/content/life/2026-04-22-seongsu-restaurant-1349429702.md",
+      "src/content/life/2026-04-22-suwon-restaurant-1847035906.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-22-incheon-restaurant-16075359.md",
+      "src/content/life/2026-04-22-seongsu-restaurant-1349429702.md",
+      "src/content/life/2026-04-22-suwon-restaurant-1847035906.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
+      "src/content/life/2026-04-22-incheon-restaurant-16075359.md",
+      "src/content/life/2026-04-22-seongsu-restaurant-1349429702.md",
+      "src/content/life/2026-04-22-suwon-restaurant-1847035906.md",
+      "src/content/posts/2026-04-21-bulrocho-wonjeongdae-sancheong.md",
+      "src/content/posts/2026-04-21-incheon-yeonsu-disability-birth-support.md",
+      "src/content/posts/2026-04-21-post-1776802187600.md",
+      "src/content/posts/2026-04-21-군포시-무료-독감-예방접종.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 8,
+      "manual": 0,
+      "unknown": 0,
+      "total": 8
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.56,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 2건, 총 342건",
+      "validation": "ok",
+      "anthropicUsage": "3108/1582",
+      "markdown": {
+        "generated": 2,
+        "pending": 236,
+        "titles": [
+          "고령운전자 운전면허 자진반납 지원",
+          "인천광역시 임산부 교통비 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 2건, 총 7490건",
+      "validation": "ok",
+      "anthropicUsage": "3571/3057",
+      "markdown": {
+        "generated": 5,
+        "pending": 7371,
+        "titles": [
+          "청년창업농 융자금 이자 지원",
+          "취약계층 온라인 수강권 지원「수영구 溫(온)라인 스쿨」",
+          "(전주시)장애인 평생교육이용권 지원",
+          "무더위 안전숙소 운영",
+          "안산시 초등학교 입학준비금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 12건, 업데이트 185건, 총 197건",
+      "validation": "ok",
+      "anthropicUsage": "1592/1253",
+      "markdown": {
+        "generated": 2,
+        "pending": 145,
+        "titles": [
+          "2026 스프링워크서울",
+          "밀양국가유산야행"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
