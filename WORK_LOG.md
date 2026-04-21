@@ -61,6 +61,27 @@
   - `74340ff` fix: enforce 2-3 intro paragraphs before first subheading
 - `main` 브랜치 push 완료.
 
+### 6️⃣ 픽앤조이 초이스 단독 제품 포스트 생성 (펩시 제로 라임향 24입)
+
+- **요청 조건 반영**:
+  - 제품명: `펩시 제로 슈거 라임향, 500ml, 24개`
+  - 단독 제품 포스트 1건 생성
+  - 히어로 이미지: 다운로드 폴더 `Pepsi-hero.png` 사용
+  - 본문 중간 이미지: 미사용
+  - 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+
+- **수정 파일**:
+  - `public/images/choice/pepsi-hero.png`
+  - `src/content/life/2026-04-21-choice-pepsi-zero-lime-24pack.md`
+
+- **쿠팡 연동**:
+  - `coupang_link`: `https://link.coupang.com/a/etG44h`
+  - `coupang_banner_image`: `https://image8.coupangcdn.com/image/affiliate/banner/57313b47f9f29b4d792119d35fb93129@2x.jpg`
+  - `coupang_banner_alt`: `펩시 제로 슈거 라임향, 500ml, 24개`
+
+- **검증**:
+  - `npm run build` 성공
+
 ## 2026-04-19 (UX 기능 추가 + 린트 안정화)
 
 ### 1️⃣ Reading Progress Bar + Sticky Choice CTA 추가 (커밋: b762295)
