@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-19T00:00:00+09:00",
+  "updatedAtKst": "2026-04-21T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -397,6 +397,39 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-04-21",
+      "productId": "8955360542",
+      "productName": "다나몰 옷정리 다용도 수납함 보관함 이불 겨울옷 여름옷 1+1, 12개, 하운드투스",
+      "brand": "다나몰",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
+      "sourceId": "manual-choice-living-2026-04-21",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-21",
+      "productId": "9435932896",
+      "productName": "매터앤미터 이불 정리함 특대형 패브릭 리빙박스 옷 정리 수납함 세트",
+      "brand": "매터앤미터",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
+      "sourceId": "manual-choice-living-2026-04-21",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-04-21",
+      "productId": "9422927391",
+      "productName": "이불정리수납함 옷보관박스 접이식 반투명 정리파우치",
+      "brand": "이불정리수납함",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
+      "sourceId": "manual-choice-living-2026-04-21",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
