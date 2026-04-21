@@ -408,27 +408,9 @@ function enforceHookBridgeAndHeadingSpacing(body, context) {
     `${context.scenarioHint || '약속 전후 흐름'} 기준으로도 부담이 적고, ${context.vibeHint || '공간의 결'}이 자연스럽게 이어져서 첫 방문 코스로 잡기 좋아요.`,
   ];
 
-  const trimBridgeLine = (line, maxLen) => {
-    const value = String(line || '').trim();
-    if (value.length <= maxLen) return value;
-    return `${value.slice(0, maxLen).replace(/[\s,.!?]+$/g, '')}...`;
-  };
-
   let normalizedBridge = bridgeLines.slice(0, 3);
   while (normalizedBridge.length < 2) {
     normalizedBridge.push(bridgeFallback[normalizedBridge.length]);
-  }
-
-  // 첫 소제목 전 서론 길이(공백 제외 150자) 검증 실패를 줄이기 위한 길이 보정.
-  normalizedBridge = normalizedBridge.map((line) => trimBridgeLine(line, 72));
-  let compactIntroLen = normalizedBridge.join('').replace(/\s+/g, '').length;
-  if (compactIntroLen > 150) {
-    normalizedBridge = normalizedBridge.map((line) => trimBridgeLine(line, 52));
-    compactIntroLen = normalizedBridge.join('').replace(/\s+/g, '').length;
-  }
-
-  if (compactIntroLen > 150) {
-    normalizedBridge = normalizedBridge.slice(0, 2);
   }
 
   for (const line of normalizedBridge) result.push(line);
@@ -659,11 +641,6 @@ function validateSubheadingAndReadability(bodyText) {
 
       if (bridgeLines.length < 2) {
         issues.push(`여백 체크 실패: 브릿지 문단 부족(${bridgeLines.length}줄 / 최소 2줄)`);
-      }
-
-      const introText = rawLines.slice(firstContentIndex + 1, firstSubheadingRawIndex).join('\n').replace(/\s+/g, '');
-      if (introText.length > 150) {
-        issues.push(`구조 체크 실패: 첫 소제목 전 서론이 너무 김(${introText.length}자 / 최대 150자)`);
       }
 
       // ### 소제목은 위아래 2줄 이상 공백 확보
@@ -1012,7 +989,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
 
     for (let retryAttempt = 1; retryAttempt <= 3; retryAttempt += 1) {
       const validationFeedback = buildValidationFeedback(validationIssues);
-      const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n\n[재작성 체크리스트]\n- 훅(##) 다음 줄은 반드시 1줄 공백\n- 첫 소제목(###) 전 브릿지 문단은 2~3줄, 공백 제외 150자 이내\n- 모든 ### 소제목 위/아래는 각각 2줄 공백\n- 평어체 금지, 문장 종결은 경어체 유지\n- 금지어(${BANNED_WORDS.join(', ')}) 및 훅/소제목 금지어 미사용\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
+      const retryPrompt = `${prompt}\n\n[검증 피드백]\n방금 작성한 글에서 아래 문제가 발견되었습니다.\n${validationFeedback}\n\n[재작성 체크리스트]\n- 훅(##) 다음 줄은 반드시 1줄 공백\n- 첫 소제목(###) 전 브릿지 문단은 2~3줄의 자연스러운 서론으로 작성\n- 모든 ### 소제목 위/아래는 각각 2줄 공백\n- 평어체 금지, 문장 종결은 경어체 유지\n- 금지어(${BANNED_WORDS.join(', ')}) 및 훅/소제목 금지어 미사용\n지침을 엄수하여 처음부터 다시 작성해 주세요.`;
 
       try {
         const retryGemini = await callGemini(retryPrompt);
