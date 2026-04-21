@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAtKst": "2026-04-21T00:00:00+09:00",
+  "updatedAtKst": "2026-04-22T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -430,6 +430,39 @@
       "sourceId": "manual-choice-living-2026-04-21",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-04-22",
+      "productId": "8614865465",
+      "productName": "메이든 스마트 가정용 진공포장기 VS8001롤팩 20cm*3m + 28cm*3m세트,진공호스 1개, 전원 케이블 1개, VS8001",
+      "brand": "메이든",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
+      "sourceId": "manual-choice-kitchen-2026-04-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-04-22",
+      "productId": "8614905320",
+      "productName": "메이든 스마트 가정용 진공포장기 VS6611PX 롤팩 20cm*2m, 15cm*20cm 포장용 봉지 5매, 진공호스 1개, 전원 케이블 1개, VS6611PX",
+      "brand": "메이든",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
+      "sourceId": "manual-choice-kitchen-2026-04-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-04-22",
+      "productId": "8209638512",
+      "productName": "FONOW 무선 진공포장기 가정용 건습 겸용 신선도 유지 원터치 스마트 진공 포장기, 화이트",
+      "brand": "FONOW",
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
+      "sourceId": "manual-choice-kitchen-2026-04-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
