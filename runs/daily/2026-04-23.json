@@ -1,0 +1,247 @@
+{
+  "reportDateKst": "2026-04-23",
+  "generatedAtUtc": "2026-04-22T20:20:43.318Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24800019253",
+    "runNumber": 610,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24800019253",
+    "runStartedAtUtc": "2026-04-22T20:07:08Z",
+    "headSha": "2e1ec42ddaec3569971a684fb5101c97bc04dfca"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://236ae5ea.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 1건, 총 7490건",
+        "festival": "신규 4건, 업데이트 197건, 총 201건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://a7de28d9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://93abff18.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "9e50a9336bfc8daff2e05d313923b9044e9efb3a",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-22",
+      "authoredAt": "2026-04-22T20:20:42Z",
+      "files": [
+        "src/content/life/2026-04-23-incheon-restaurant-8914792.md",
+        "src/content/life/2026-04-23-seongsu-restaurant-1057053940.md",
+        "src/content/life/2026-04-23-suwon-restaurant-1000889516.md"
+      ]
+    },
+    {
+      "sha": "53be07f7fff388a8d10862c43ebcc7c6081ba893",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-04-22",
+      "authoredAt": "2026-04-22T20:16:37Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-04-23-choice-digital-2026-04-23.md"
+      ]
+    },
+    {
+      "sha": "ea2584741432d62515af8ad9093eb8881888ec12",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-22",
+      "authoredAt": "2026-04-22T20:16:27Z",
+      "files": [
+        "src/content/posts/2026-04-22-imseil-n-petstar.md",
+        "src/content/posts/2026-04-22-post-1776888735584.md",
+        "src/content/posts/2026-04-22-post-1776888801183.md",
+        "src/content/posts/2026-04-22-smart-mobility-startup-camp.md"
+      ]
+    },
+    {
+      "sha": "9d1947ec620c24ea53af00b189ff1a7270b25c19",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-22",
+      "authoredAt": "2026-04-22T20:08:27Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-22-imseil-n-petstar.md",
+      "src/content/posts/2026-04-22-post-1776888735584.md",
+      "src/content/posts/2026-04-22-post-1776888801183.md",
+      "src/content/posts/2026-04-22-smart-mobility-startup-camp.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-23-choice-digital-2026-04-23.md",
+      "src/content/life/2026-04-23-incheon-restaurant-8914792.md",
+      "src/content/life/2026-04-23-seongsu-restaurant-1057053940.md",
+      "src/content/life/2026-04-23-suwon-restaurant-1000889516.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-04-23-choice-digital-2026-04-23.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-23-incheon-restaurant-8914792.md",
+      "src/content/life/2026-04-23-seongsu-restaurant-1057053940.md",
+      "src/content/life/2026-04-23-suwon-restaurant-1000889516.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-04-23-choice-digital-2026-04-23.md",
+      "src/content/life/2026-04-23-incheon-restaurant-8914792.md",
+      "src/content/life/2026-04-23-seongsu-restaurant-1057053940.md",
+      "src/content/life/2026-04-23-suwon-restaurant-1000889516.md",
+      "src/content/posts/2026-04-22-imseil-n-petstar.md",
+      "src/content/posts/2026-04-22-post-1776888735584.md",
+      "src/content/posts/2026-04-22-post-1776888801183.md",
+      "src/content/posts/2026-04-22-smart-mobility-startup-camp.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 8,
+      "manual": 0,
+      "unknown": 0,
+      "total": 8
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 21.19,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "2307/1809",
+      "markdown": {
+        "generated": 2,
+        "pending": 233,
+        "titles": [
+          "지역사랑상품권(인천사랑상품권)",
+          "맘편한 산후조리비 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 7490건",
+      "validation": "ok",
+      "anthropicUsage": "5866/3254",
+      "markdown": {
+        "generated": 5,
+        "pending": 7367,
+        "titles": [
+          "가정용 음식물처리기(소형감량기) 구매 지원",
+          "청소년 월경통 한방치료비 지원 사업",
+          "효행장려금 지급",
+          "강서구 임신부 가사돌봄서비스",
+          "취약계층 구강주치의 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 197건, 총 201건",
+      "validation": "ok",
+      "anthropicUsage": "1540/1034",
+      "markdown": {
+        "generated": 2,
+        "pending": 147,
+        "titles": [
+          "기장멸치축제",
+          "두릅 산나물 축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
