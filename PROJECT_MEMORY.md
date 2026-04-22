@@ -85,6 +85,7 @@
 - 단독 초이스 품질 게이트 추가: `scripts/validate-choice-quality.js`를 도입해 수동 초이스 포스트의 중간 이미지 이후 본문 밀도를 자동 검증.
 - 빌드 가드 적용: `npm run build`에 `npm run check:choice-quality` 선행 실행을 연결.
 - 2026-04-22 단독 3건(후지/라텍스/홀리카) 본문 보강 완료: 중간 이미지 이후 서사형 섹션 추가.
+- 운영 통일 고정: 단독 초이스 요청도 본문 직접 수동 작성 대신 `choice-input.latest.json -> generate:choice:latest -> check:choice-quality -> build` 체인으로만 처리.
 
 ---
 

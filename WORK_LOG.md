@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-04-22 (단독 초이스 생성 체인 통일 고정)
+
+- **운영 결정**:
+  - 단독 초이스 요청은 더 이상 본문 직접 수동 작성 경로를 사용하지 않음.
+  - 사용자 입력(제품명/쿠팡 링크/이미지/톤)을 `scripts/choice-input.latest.json`으로 정규화한 뒤,
+    `npm run generate:choice:latest -> npm run check:choice-quality -> npm run build` 체인으로만 처리.
+
+- **문서 동기화**:
+  - `.github/copilot-instructions.md` 작업 규칙에 "단독 초이스 생성 경로 통일 규칙(필수)" 추가.
+  - `CLAUDE.md` 작업 규칙에 동일 정책 추가.
+  - `PROJECT_MEMORY.md`, `COPILOT_MEMORY.md`에 통일 정책 기록.
+
+- **목적**:
+  1. 자동/단독 포스트 품질 편차 제거
+  2. 프롬프트/검증 체인 단일화로 유지보수 단순화
+  3. 재발 이슈 발생 시 RCA 경로 일원화
+
 ## 2026-04-22 (자동 초이스 다양성 보강 - 요일별 키워드 10개 확장)
 
 - **문제 인식**:

@@ -81,6 +81,7 @@
 - 단독 초이스 품질 고정: 수동 포스트는 `scripts/validate-choice-quality.js`에서 중간 이미지 이후 최소 서사형 소제목/문단 수를 강제 검증.
 - build 단계 가드: `npm run build` 전에 `npm run check:choice-quality`를 자동 실행해 빈약 본문이 빌드에서 차단되도록 적용.
 - 즉시 보강: `2026-04-22-choice-fuji-refill-paper.md`, `2026-04-22-choice-latex-handska-powerfree-s-set.md`, `2026-04-22-choice-holika-letter-from-spring.md` 본문 밀도 보강.
+- 운영 경로 통일: 단독 초이스 요청은 앞으로 `scripts/choice-input.latest.json` 기반으로 `generate:choice:latest -> check:choice-quality -> build` 체인만 사용하고, 본문 직접 수동 작성 경로는 사용하지 않음.
 
 ---
 

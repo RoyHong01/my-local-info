@@ -257,6 +257,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 커밋 전 자동 검증은 pre-commit 훅에서 `npm run check:worktree:commit`으로 실행한다.
   - pre-push 훅이 비어 있거나 없으면 `npm run hooks:install`로 복구한다.
   - push 전 자동 검증은 pre-push 훅에서 `npm run check:worktree:strict`로 강제한다.
+18. **단독 초이스 생성 경로 통일 규칙(필수)**:
+  - 사용자가 "단독 초이스 포스트" 작성을 요청해도, 본문을 직접 수동 작성하지 않는다.
+  - 반드시 `scripts/choice-input.latest.json` 입력 JSON 작성 -> `npm run generate:choice:latest` 실행 -> `npm run check:choice-quality` -> `npm run build` 순서로 처리한다.
+  - 위 체인을 통과하지 않은 단독 포스트는 완료본으로 간주하지 않는다.
+  - 목적: 자동/단독 품질 편차 제거, 동일 프롬프트·검증 체인 적용, 재발 이슈 RCA 단순화.
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
 
@@ -312,6 +317,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **중복 차단 고도화**: `scripts/generate-choice-post.js`에서 최근 14일 히스토리를 `productId + productGroupTokens` 기준으로 비교해 같은 상품군 반복 노출을 억제.
   - **추적 로그 보강**: 자동 생성 로그/GitHub output에 `실제 검색 키워드 수`, `선정된 상품군 토큰`을 함께 기록.
   - **단독 초이스 품질 게이트 도입**: `scripts/validate-choice-quality.js`를 추가해 수동 단독 포스트의 중간 이미지 이후 서사 밀도(소제목/문단 수)를 빌드 전에 자동 검증.
+  - **단독 생성 경로 완전 통일**: 단독 요청도 `choice-input.latest.json -> generate:choice:latest -> check:choice-quality -> build` 체인으로만 처리하도록 운영 규칙 고정.
   - **빈약 본문 즉시 보강**: `2026-04-22` 단독 3건(후지/라텍스/홀리카)에 중간 이미지 이후 서사형 섹션을 추가해 본문 밀도 복구.
   - **단독 초이스 포스트 추가**: `src/content/life/2026-04-22-choice-fuji-refill-paper.md` 생성.
   - **쿠팡 연동 반영**: `https://link.coupang.com/a/eugAVK`와 배너 이미지를 frontmatter에 반영.
