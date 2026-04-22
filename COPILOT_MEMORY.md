@@ -69,6 +69,11 @@
 - 쿠팡 링크: `https://link.coupang.com/a/eug11e`
 - 이미지: `public/images/choice/latex-hero.png`, `public/images/choice/latex-middle.png`
 - 본문 정책: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+- 단독 초이스 포스트 추가 생성: `2026-04-22-choice-holika-letter-from-spring.md`
+- 제품: 홀리카홀리카 마이페이브 무드 아이 팔레트, 11 레터프롬스프링, 1개
+- 쿠팡 링크: `https://link.coupang.com/a/euje3w`
+- 이미지: `public/images/choice/holy-hero.png`, `public/images/choice/holy-middle.png`
+- 본문 정책: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
 
 ---
 
