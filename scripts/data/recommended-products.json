@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "updatedAtKst": "2026-04-22T00:00:00+09:00",
+  "version": 2,
+  "updatedAtKst": "2026-04-23T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -11,7 +11,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "전기면도기",
+        "skiniq",
+        "전용",
+        "호환",
+        "세척기",
+        "클렌징"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -22,7 +30,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "청소도구",
+        "13종",
+        "변기청소솔",
+        "틈새청소솔",
+        "욕실용",
+        "청소용품"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -33,7 +49,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "옷정리",
+        "수납함",
+        "뚜껑형",
+        "수납박스",
+        "접이식",
+        "공간정리용"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -44,7 +68,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-health-2026-04-14.md",
       "sourceId": "manual-choice-health-2026-04-14",
       "themeKey": "health",
-      "themeName": "건강"
+      "themeName": "건강",
+      "productGroupTokens": [
+        "노르웨이",
+        "epax원료",
+        "rtg",
+        "알티지",
+        "헤링오일",
+        "오메가3"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -55,7 +87,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-health-2026-04-14.md",
       "sourceId": "manual-choice-health-2026-04-14",
       "themeKey": "health",
-      "themeName": "건강"
+      "themeName": "건강",
+      "productGroupTokens": [
+        "슈퍼",
+        "바이탈",
+        "100억",
+        "유산균",
+        "90정",
+        "health"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -66,7 +106,14 @@
       "postFile": "temp/choice-test/2026-04-14-choice-health-2026-04-14.md",
       "sourceId": "manual-choice-health-2026-04-14",
       "themeKey": "health",
-      "themeName": "건강"
+      "themeName": "건강",
+      "productGroupTokens": [
+        "노르웨이",
+        "헤링오일",
+        "오메가11",
+        "600mg",
+        "health"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -77,7 +124,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-kitchen-2026-04-14.md",
       "sourceId": "manual-choice-kitchen-2026-04-14",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "jar",
+        "스텐",
+        "접이식",
+        "수저",
+        "보온",
+        "죽통"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -88,7 +143,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-kitchen-2026-04-14.md",
       "sourceId": "manual-choice-kitchen-2026-04-14",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "vs6611px",
+        "롤팩",
+        "20cm",
+        "2m",
+        "15cm"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -99,7 +162,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-kitchen-2026-04-14.md",
       "sourceId": "manual-choice-kitchen-2026-04-14",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "vs8001롤팩",
+        "20cm",
+        "3m",
+        "28cm",
+        "3m세트"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -110,7 +181,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-digital-2026-04-14.md",
       "sourceId": "manual-choice-digital-2026-04-14",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "노이즈",
+        "캔슬링",
+        "오픈형",
+        "블루투스",
+        "이어폰",
+        "r6"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -121,7 +200,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-digital-2026-04-14.md",
       "sourceId": "manual-choice-digital-2026-04-14",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "무선충전",
+        "보조배터리"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -132,7 +219,14 @@
       "postFile": "temp/choice-test/2026-04-14-choice-digital-2026-04-14.md",
       "sourceId": "manual-choice-digital-2026-04-14",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "슬림",
+        "보조배터리",
+        "10000mah",
+        "케이블",
+        "digital"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -143,7 +237,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "대형",
+        "정리함",
+        "150l",
+        "폴딩",
+        "수납함",
+        "이동"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -154,7 +256,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "리빙박스",
+        "옷정리",
+        "수납함",
+        "상단지퍼",
+        "이불",
+        "보관함"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -165,7 +275,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "이불",
+        "수납",
+        "정리함",
+        "옷정리",
+        "수납함",
+        "4개"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -176,7 +294,14 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "이불",
+        "침구",
+        "수납함",
+        "앞면오픈형",
+        "living"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -187,7 +312,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "특대용량",
+        "의류",
+        "이불",
+        "보관",
+        "리빙박스",
+        "2개입"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -198,7 +331,15 @@
       "postFile": "temp/choice-test/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "아크릴",
+        "화장품",
+        "장신구",
+        "정리함",
+        "산화",
+        "방지"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -209,7 +350,15 @@
       "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "화장실",
+        "욕실",
+        "청소솔",
+        "스쿼지",
+        "바닥",
+        "청소"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -220,7 +369,15 @@
       "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "먼지왕",
+        "업그레이드형",
+        "양면흡착",
+        "정전기",
+        "먼지털이",
+        "롱핸들"
+      ]
     },
     {
       "date": "2026-04-14",
@@ -231,7 +388,13 @@
       "postFile": "src/content/life/2026-04-14-choice-living-2026-04-14.md",
       "sourceId": "manual-choice-living-2026-04-14",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "욕실",
+        "물기제거",
+        "스퀴지",
+        "living"
+      ]
     },
     {
       "date": "2026-04-15",
@@ -242,7 +405,14 @@
       "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
       "sourceId": "manual-choice-kitchen-2026-04-15",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "wh6010w",
+        "진공포장비닐",
+        "10p",
+        "kitchen"
+      ]
     },
     {
       "date": "2026-04-15",
@@ -253,7 +423,15 @@
       "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
       "sourceId": "manual-choice-kitchen-2026-04-15",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "건습",
+        "겸용",
+        "신선도",
+        "유지",
+        "원터치"
+      ]
     },
     {
       "date": "2026-04-15",
@@ -264,7 +442,11 @@
       "postFile": "src/content/life/2026-04-15-choice-kitchen-2026-04-15.md",
       "sourceId": "manual-choice-kitchen-2026-04-15",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "kitchen"
+      ]
     },
     {
       "date": "2026-04-16",
@@ -275,7 +457,15 @@
       "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
       "sourceId": "manual-choice-digital-2026-04-16",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "enc",
+        "노이즈",
+        "캔슬링",
+        "블루투스",
+        "이어폰",
+        "blp"
+      ]
     },
     {
       "date": "2026-04-16",
@@ -286,7 +476,15 @@
       "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
       "sourceId": "manual-choice-digital-2026-04-16",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "고음질",
+        "터치",
+        "이어버드",
+        "블루투스",
+        "이어폰",
+        "tws"
+      ]
     },
     {
       "date": "2026-04-16",
@@ -297,7 +495,15 @@
       "postFile": "src/content/life/2026-04-16-choice-digital-2026-04-16.md",
       "sourceId": "manual-choice-digital-2026-04-16",
       "themeKey": "digital",
-      "themeName": "디지털"
+      "themeName": "디지털",
+      "productGroupTokens": [
+        "인이어",
+        "블루투스",
+        "이어폰",
+        "네오",
+        "tat1300",
+        "digital"
+      ]
     },
     {
       "date": "2026-04-17",
@@ -308,7 +514,15 @@
       "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
       "sourceId": "manual-choice-pet-life-2026-04-17",
       "themeKey": "pet-life",
-      "themeName": "반려 생활"
+      "themeName": "반려 생활",
+      "productGroupTokens": [
+        "베터플러스",
+        "사료",
+        "샘플",
+        "4종",
+        "40g",
+        "pet"
+      ]
     },
     {
       "date": "2026-04-17",
@@ -319,7 +533,15 @@
       "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
       "sourceId": "manual-choice-pet-life-2026-04-17",
       "themeKey": "pet-life",
-      "themeName": "반려 생활"
+      "themeName": "반려 생활",
+      "productGroupTokens": [
+        "전연령",
+        "넥스탑",
+        "패밀리캣",
+        "건식사료",
+        "5kg",
+        "pet"
+      ]
     },
     {
       "date": "2026-04-17",
@@ -330,7 +552,15 @@
       "postFile": "src/content/life/2026-04-17-choice-pet-life-2026-04-17.md",
       "sourceId": "manual-choice-pet-life-2026-04-17",
       "themeKey": "pet-life",
-      "themeName": "반려 생활"
+      "themeName": "반려 생활",
+      "productGroupTokens": [
+        "어드밴스",
+        "콤보",
+        "고양이",
+        "간식",
+        "통조림",
+        "85g"
+      ]
     },
     {
       "date": "2026-04-18",
@@ -341,7 +571,15 @@
       "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
       "sourceId": "manual-choice-beauty-fashion-2026-04-18",
       "themeKey": "beauty-fashion",
-      "themeName": "뷰티/패션"
+      "themeName": "뷰티/패션",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ]
     },
     {
       "date": "2026-04-18",
@@ -352,7 +590,15 @@
       "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
       "sourceId": "manual-choice-beauty-fashion-2026-04-18",
       "themeKey": "beauty-fashion",
-      "themeName": "뷰티/패션"
+      "themeName": "뷰티/패션",
+      "productGroupTokens": [
+        "세라제닉",
+        "365플러스",
+        "스칼프",
+        "쿨링",
+        "샴푸",
+        "beauty"
+      ]
     },
     {
       "date": "2026-04-18",
@@ -363,7 +609,15 @@
       "postFile": "src/content/life/2026-04-18-choice-beauty-fashion-2026-04-18.md",
       "sourceId": "manual-choice-beauty-fashion-2026-04-18",
       "themeKey": "beauty-fashion",
-      "themeName": "뷰티/패션"
+      "themeName": "뷰티/패션",
+      "productGroupTokens": [
+        "r3",
+        "아르간",
+        "헤어",
+        "오일",
+        "오리지널",
+        "100ml"
+      ]
     },
     {
       "date": "2026-04-19",
@@ -374,7 +628,15 @@
       "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
       "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
       "themeKey": "home-appliance-furniture",
-      "themeName": "가전/가구"
+      "themeName": "가전/가구",
+      "productGroupTokens": [
+        "프렌치",
+        "빈티지",
+        "장스탠드",
+        "높이",
+        "조절",
+        "3색"
+      ]
     },
     {
       "date": "2026-04-19",
@@ -385,7 +647,15 @@
       "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
       "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
       "themeKey": "home-appliance-furniture",
-      "themeName": "가전/가구"
+      "themeName": "가전/가구",
+      "productGroupTokens": [
+        "led",
+        "거실",
+        "스탠드",
+        "오로라",
+        "인테리어",
+        "장스탠드"
+      ]
     },
     {
       "date": "2026-04-19",
@@ -396,7 +666,15 @@
       "postFile": "src/content/life/2026-04-19-choice-home-appliance-furniture-2026-04-19.md",
       "sourceId": "manual-choice-home-appliance-furniture-2026-04-19",
       "themeKey": "home-appliance-furniture",
-      "themeName": "가전/가구"
+      "themeName": "가전/가구",
+      "productGroupTokens": [
+        "슬림",
+        "플로어",
+        "장스탠드",
+        "전구색",
+        "home",
+        "appliance"
+      ]
     },
     {
       "date": "2026-04-21",
@@ -407,7 +685,15 @@
       "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
       "sourceId": "manual-choice-living-2026-04-21",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "옷정리",
+        "다용도",
+        "수납함",
+        "보관함",
+        "이불",
+        "겨울옷"
+      ]
     },
     {
       "date": "2026-04-21",
@@ -418,7 +704,15 @@
       "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
       "sourceId": "manual-choice-living-2026-04-21",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "이불",
+        "정리함",
+        "특대형",
+        "패브릭",
+        "리빙박스",
+        "정리"
+      ]
     },
     {
       "date": "2026-04-21",
@@ -429,7 +723,14 @@
       "postFile": "src/content/life/2026-04-21-choice-living-2026-04-21.md",
       "sourceId": "manual-choice-living-2026-04-21",
       "themeKey": "living",
-      "themeName": "생활"
+      "themeName": "생활",
+      "productGroupTokens": [
+        "옷보관박스",
+        "접이식",
+        "반투명",
+        "정리파우치",
+        "living"
+      ]
     },
     {
       "date": "2026-04-22",
@@ -440,7 +741,15 @@
       "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
       "sourceId": "manual-choice-kitchen-2026-04-22",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "vs8001롤팩",
+        "20cm",
+        "3m",
+        "28cm",
+        "3m세트"
+      ]
     },
     {
       "date": "2026-04-22",
@@ -451,7 +760,15 @@
       "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
       "sourceId": "manual-choice-kitchen-2026-04-22",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "vs6611px",
+        "롤팩",
+        "20cm",
+        "2m",
+        "15cm"
+      ]
     },
     {
       "date": "2026-04-22",
@@ -462,7 +779,72 @@
       "postFile": "src/content/life/2026-04-22-choice-kitchen-2026-04-22.md",
       "sourceId": "manual-choice-kitchen-2026-04-22",
       "themeKey": "kitchen",
-      "themeName": "주방"
+      "themeName": "주방",
+      "productGroupTokens": [
+        "진공포장기",
+        "건습",
+        "겸용",
+        "신선도",
+        "유지",
+        "원터치"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "9455273834",
+      "productName": "AURRA 스마트폰 오토 클릭커 택시 콜잡이 자동 터치기 디지털 속도 표시  게임용 틱톡 라이브 좋아요 택시 콜잡이 배달 콜수락 화면 터치기계",
+      "brand": "AURRA",
+      "productGroupTokens": [
+        "스마트폰",
+        "오토",
+        "클릭커",
+        "택시",
+        "콜잡이",
+        "자동"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-23-choice-digital-2026-04-23.md",
+      "sourceId": "manual-choice-digital-2026-04-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "9371398423",
+      "productName": "독일 안스만 슬림 보조배터리 5000mAh (USB 2포트 / 스마트폰 핸드폰 충전 등)",
+      "brand": "독일",
+      "productGroupTokens": [
+        "안스만",
+        "슬림",
+        "보조배터리",
+        "5000mah",
+        "usb",
+        "2포트"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-23-choice-digital-2026-04-23.md",
+      "sourceId": "manual-choice-digital-2026-04-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 무선충전 보조배터리 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "무선충전",
+        "보조배터리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-23-choice-digital-2026-04-23.md",
+      "sourceId": "manual-choice-digital-2026-04-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
