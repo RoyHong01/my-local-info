@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:choice-quality && next build",
     "verify:data": "node scripts/verify-data-json.js",
     "postbuild": "node scripts/generate-sitemap.js && node scripts/generate-search-index.js",
     "generate:blog": "node scripts/generate-blog-post.js",
@@ -12,6 +12,7 @@
     "generate:choice": "node scripts/generate-choice-post.js",
     "generate:choice:latest": "node scripts/run-choice-latest.js",
     "generate:choice:auto": "node scripts/generate-choice-posts-auto.js",
+    "check:choice-quality": "node scripts/validate-choice-quality.js",
     "collect:subsidy": "node scripts/collect-subsidy.js",
     "collect:life-restaurants": "node scripts/collect-life-restaurants.mjs",
     "generate:life-restaurant-posts": "node scripts/generate-life-restaurant-posts.mjs",

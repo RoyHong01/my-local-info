@@ -82,6 +82,9 @@
 - 자동 생성 보강: 품질 상품이 먼저 채워져도 `minKeywordSearchCount=10`에 도달할 때까지 실제 검색을 계속하도록 수정.
 - 자동 중복 차단 보강: 최근 14일 히스토리에서 `productId`뿐 아니라 `productGroupTokens`도 비교해 같은 상품군 재노출을 억제.
 - 자동 로그 보강: 실행 로그와 GitHub output에 `searched_keyword_count`, `selected_product_group_tokens`를 추가.
+- 단독 초이스 품질 게이트 추가: `scripts/validate-choice-quality.js`를 도입해 수동 초이스 포스트의 중간 이미지 이후 본문 밀도를 자동 검증.
+- 빌드 가드 적용: `npm run build`에 `npm run check:choice-quality` 선행 실행을 연결.
+- 2026-04-22 단독 3건(후지/라텍스/홀리카) 본문 보강 완료: 중간 이미지 이후 서사형 섹션 추가.
 
 ---
 

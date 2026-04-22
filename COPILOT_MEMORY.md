@@ -78,6 +78,9 @@
 - 조기 종료 보정: 품질 상품 3개가 먼저 잡혀도 최소 10개 키워드는 실제 검색하도록 수정.
 - 최근 14일 중복 차단 보강: `recommended-products.json` 히스토리 비교에 `productGroupTokens`를 추가해 같은 상품군 반복을 억제.
 - 로그 가시성 보강: 자동 생성 시 `실제 검색한 키워드 수`, `선정된 상품군 토큰`을 출력하고 GitHub output에도 남기도록 수정.
+- 단독 초이스 품질 고정: 수동 포스트는 `scripts/validate-choice-quality.js`에서 중간 이미지 이후 최소 서사형 소제목/문단 수를 강제 검증.
+- build 단계 가드: `npm run build` 전에 `npm run check:choice-quality`를 자동 실행해 빈약 본문이 빌드에서 차단되도록 적용.
+- 즉시 보강: `2026-04-22-choice-fuji-refill-paper.md`, `2026-04-22-choice-latex-handska-powerfree-s-set.md`, `2026-04-22-choice-holika-letter-from-spring.md` 본문 밀도 보강.
 
 ---
 

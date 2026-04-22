@@ -311,6 +311,8 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **자동 검색 보장 강화**: `scripts/generate-choice-posts-auto.js`/`scripts/generate-choice-post.js`에서 `minKeywordSearchCount=10`에 도달하기 전에는 조기 종료하지 않도록 보강.
   - **중복 차단 고도화**: `scripts/generate-choice-post.js`에서 최근 14일 히스토리를 `productId + productGroupTokens` 기준으로 비교해 같은 상품군 반복 노출을 억제.
   - **추적 로그 보강**: 자동 생성 로그/GitHub output에 `실제 검색 키워드 수`, `선정된 상품군 토큰`을 함께 기록.
+  - **단독 초이스 품질 게이트 도입**: `scripts/validate-choice-quality.js`를 추가해 수동 단독 포스트의 중간 이미지 이후 서사 밀도(소제목/문단 수)를 빌드 전에 자동 검증.
+  - **빈약 본문 즉시 보강**: `2026-04-22` 단독 3건(후지/라텍스/홀리카)에 중간 이미지 이후 서사형 섹션을 추가해 본문 밀도 복구.
   - **단독 초이스 포스트 추가**: `src/content/life/2026-04-22-choice-fuji-refill-paper.md` 생성.
   - **쿠팡 연동 반영**: `https://link.coupang.com/a/eugAVK`와 배너 이미지를 frontmatter에 반영.
   - **이미지 자산 반영**: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png` 추가.

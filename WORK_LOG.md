@@ -36,6 +36,33 @@
   - 테마별 키워드 개수 확인: 전 요일 `searchKeywordHint=10`, `minKeywordSearchCount=10`
   - `generate-choice-post.js` 오류 진단: VS Code Problems 0건 확인
 
+## 2026-04-22 (단독 초이스 본문 빈약 이슈 RCA + 재발 방지)
+
+- **이슈 요약**:
+  - 2026-04-22 단독 초이스 3건(후지/라텍스/홀리카)에서 중간 이미지 이후 본문이 `구매 전에 체크하면 좋은 포인트 -> 한 줄 정리`로 빠르게 종료되어, 과거 단독 포스트 대비 밀도가 낮아 보이는 문제 발생.
+
+- **원인(RCA)**:
+  1. 오늘 3건은 자동 생성 스크립트 경로가 아닌 수동 작성 경로로 생성됨.
+  2. 기존 품질 검증(`findChoiceValidationErrors`)은 `generate-choice-post.js` 실행 시에만 적용되며, 수동 작성 포스트에는 적용되지 않았음.
+  3. 기존 검증 규칙 자체도 금지어/CTA 중심이라, "중간 이미지 이후 서사 밀도"를 점검하지 못함.
+
+- **재발 방지 코드 조치**:
+  - `scripts/validate-choice-quality.js` 신규 추가.
+  - 수동(`published_by: manual`) + 초이스(`category: 픽앤조이 초이스`) 포스트를 대상으로 다음 강제 검증:
+    1) 중간 이미지 이후 `구매 전 체크/한 줄 정리` 외 서사형 소제목 1개 이상 필수
+    2) 중간 이미지 이후 실질 문단 4개 이상 필수
+  - `package.json`의 `build`를 `npm run check:choice-quality && next build`로 변경해 빌드 단계에서 자동 차단.
+
+- **콘텐츠 보강(즉시 수정)**:
+  - `src/content/life/2026-04-22-choice-fuji-refill-paper.md`
+  - `src/content/life/2026-04-22-choice-latex-handska-powerfree-s-set.md`
+  - `src/content/life/2026-04-22-choice-holika-letter-from-spring.md`
+  - 위 3건에 중간 이미지 이후 서사형 섹션을 추가해 본문 밀도 보강.
+
+- **검증**:
+  - `npm run check:choice-quality` 통과
+  - `npm run build` 통과
+
 ## 2026-04-22 (픽앤조이 초이스 단독 제품 포스트 추가 - 홀리카홀리카 아이 팔레트)
 
 - **요청 작업**: 홀리카홀리카 마이페이브 무드 아이 팔레트 단독 초이스 포스트 1건 생성
