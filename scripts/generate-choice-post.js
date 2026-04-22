@@ -27,6 +27,12 @@ const CHOICE_RELAXED_RATING_STEPS = String(process.env.CHOICE_RELAXED_RATING_STE
   .filter((value) => Number.isFinite(value) && value < CHOICE_MIN_RATING)
   .sort((a, b) => b - a);
 
+function getMinKeywordSearchCount(candidate) {
+  const raw = Number(candidate?.minKeywordSearchCount);
+  if (!Number.isFinite(raw) || raw <= 0) return 0;
+  return Math.floor(raw);
+}
+
 function getGeminiApiKey() {
   loadLocalEnvFiles();
   return process.env.GEMINI_API_KEY || '';
@@ -710,16 +716,19 @@ async function resolveProductsForCandidate(candidate) {
   let lastError = null;
   const today = todayIso();
   const publishedBy = getPublishedBy(candidate);
+  const minKeywordSearchCount = getMinKeywordSearchCount(candidate);
+  let searchedKeywordCount = 0;
 
   // 1단계: 주 키워드로 수집 (delay 포함)
   for (const keyword of primaryKeywords) {
     try {
       const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
+      searchedKeywordCount += 1;
       collectUniqueProducts(collected, products, seen);
       
       // 현재 수집분 필터링해서 품질 상품 수 체크
       const tempFiltered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, CHOICE_MIN_RATING);
-      if (tempFiltered.selectedPool.length >= CHOICE_QUALITY_TARGET_COUNT || collected.length >= CHOICE_TARGET_POOL_SIZE) {
+      if ((tempFiltered.selectedPool.length >= CHOICE_QUALITY_TARGET_COUNT && searchedKeywordCount >= minKeywordSearchCount) || collected.length >= CHOICE_TARGET_POOL_SIZE) {
         break; // 품질 상품 충분하거나 pool 가득 → 조기 종료
       }
       
@@ -739,13 +748,14 @@ async function resolveProductsForCandidate(candidate) {
     for (const keyword of fallbackKeywords) {
       try {
         const products = await searchProducts(keyword, { limit: CHOICE_SEARCH_LIMIT, sort: 'bestAsc' });
+        searchedKeywordCount += 1;
         collectUniqueProducts(collected, products, seen);
         
         filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
         freshQualified = filtered.selectedPool;
         usedTopRankFallback = filtered.usedTopRankFallback;
 
-        if (freshQualified.length >= 3 || collected.length >= CHOICE_TARGET_POOL_SIZE) {
+        if ((freshQualified.length >= 3 && searchedKeywordCount >= minKeywordSearchCount) || collected.length >= CHOICE_TARGET_POOL_SIZE) {
           break; // 품질 상품 3개 달성 또는 pool 가득
         }
         
@@ -785,6 +795,7 @@ async function resolveProductsForCandidate(candidate) {
     keywords: [...primaryKeywords, ...fallbackKeywords],
     primaryKeywords,
     fallbackKeywords,
+    searchedKeywordCount,
     appliedMinRating,
     usedTopRankFallback,
     collectedCandidateCount: collected.length,

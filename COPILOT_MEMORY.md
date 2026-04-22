@@ -74,6 +74,8 @@
 - 쿠팡 링크: `https://link.coupang.com/a/euje3w`
 - 이미지: `public/images/choice/holy-hero.png`, `public/images/choice/holy-middle.png`
 - 본문 정책: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+- 자동 초이스 다양성 보강: 요일별 자동 검색 키워드를 최소 10개로 확장.
+- 조기 종료 보정: 품질 상품 3개가 먼저 잡혀도 최소 10개 키워드는 실제 검색하도록 수정.
 
 ---
 

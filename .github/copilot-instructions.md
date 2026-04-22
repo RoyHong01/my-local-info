@@ -307,6 +307,8 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
 - 2026-04-22 핵심 반영(추가):
+  - **자동 초이스 다양성 보강**: `scripts/data/choice-daily-themes.json`의 요일별 `searchKeywordHint`를 최소 10개로 확장.
+  - **자동 검색 보장 강화**: `scripts/generate-choice-posts-auto.js`/`scripts/generate-choice-post.js`에서 `minKeywordSearchCount=10`에 도달하기 전에는 조기 종료하지 않도록 보강.
   - **단독 초이스 포스트 추가**: `src/content/life/2026-04-22-choice-fuji-refill-paper.md` 생성.
   - **쿠팡 연동 반영**: `https://link.coupang.com/a/eugAVK`와 배너 이미지를 frontmatter에 반영.
   - **이미지 자산 반영**: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png` 추가.

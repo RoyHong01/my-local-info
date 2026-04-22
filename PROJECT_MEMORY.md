@@ -78,6 +78,8 @@
 - 쿠팡 링크: `https://link.coupang.com/a/euje3w`
 - 이미지 반영: `public/images/choice/holy-hero.png`, `public/images/choice/holy-middle.png`
 - 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+- 자동 초이스 다양성 보강: 요일별 `searchKeywordHint`를 최소 10개로 확장.
+- 자동 생성 보강: 품질 상품이 먼저 채워져도 `minKeywordSearchCount=10`에 도달할 때까지 실제 검색을 계속하도록 수정.
 
 ---
 

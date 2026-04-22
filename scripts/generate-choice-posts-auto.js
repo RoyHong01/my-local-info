@@ -6,6 +6,7 @@ const { promisify } = require('util');
 
 const runFile = promisify(execFile);
 const DAILY_THEMES_PATH = path.join(process.cwd(), 'scripts', 'data', 'choice-daily-themes.json');
+const MIN_AUTO_KEYWORD_COUNT = 10;
 const BACKUP_THEME_KEYWORDS = {
   health: ['health supplement', 'daily vitamin', 'probiotic supplement', 'omega 3 supplement'],
   living: ['household item', 'cleaning tool', 'storage organizer', 'bathroom supplies'],
@@ -65,6 +66,7 @@ async function buildTempInput(themeInfo, dateKst) {
   const englishName = slugify(`${theme.key}-${dateKst}`);
   const weekdayNames = ['일', '월', '화', '수', '목', '금', '토'];
   const weekdayKo = weekdayNames[weekday] || '요일';
+  const autoKeywords = ensureMinimumAutoKeywords(theme);
   const payload = {
     title: `${weekdayKo}요일 픽앤조이 초이스 | ${theme.name} 카테고리 실시간 인기 상품 큐레이션`,
     englishName,
@@ -72,11 +74,12 @@ async function buildTempInput(themeInfo, dateKst) {
     brand: '픽앤조이 초이스',
     rating: '4.7',
     reviewCount: '100',
-    keywordHint: theme.searchKeywordHint || theme.keywordHint || [],
+    keywordHint: autoKeywords,
     fallbackKeywordHint: theme.fallbackKeywordHint || [],
     tags: Array.isArray(theme.tags) ? [...theme.tags, '쿠팡', '리뷰'] : ['쿠팡', '리뷰', '픽앤조이초이스'],
     themeKey: theme.key,
     themeName: theme.name,
+    minKeywordSearchCount: Number(theme.minKeywordSearchCount || MIN_AUTO_KEYWORD_COUNT),
     backupKeywordHint: theme.backupKeywordHint || [],
     publishedBy: 'auto',
     outputFileName: `${dateKst}-choice-${englishName}.md`,
@@ -92,6 +95,23 @@ function mergeKeywordHints(baseHints, extraHints) {
     .map((item) => String(item || '').trim())
     .filter(Boolean);
   return Array.from(new Set(merged));
+}
+
+function ensureMinimumAutoKeywords(theme) {
+  const primaryKeywords = mergeKeywordHints(theme.searchKeywordHint || theme.keywordHint || [], []);
+  const expansionKeywords = mergeKeywordHints(
+    theme.fallbackKeywordHint || [],
+    mergeKeywordHints(theme.backupKeywordHint || [], BACKUP_THEME_KEYWORDS[theme.key] || []),
+  );
+
+  const merged = [...primaryKeywords];
+  for (const keyword of expansionKeywords) {
+    if (merged.length >= MIN_AUTO_KEYWORD_COUNT) break;
+    if (merged.includes(keyword)) continue;
+    merged.push(keyword);
+  }
+
+  return merged;
 }
 
 async function runChoiceGenerator(payload, contextLabel = 'primary') {
@@ -127,6 +147,7 @@ async function run() {
 
   console.log(`자동 초이스 요일 테마: ${themeInfo.theme.name} (${themeInfo.theme.key})`);
   console.log(`자동 키워드: ${(payload.keywordHint || []).join(', ') || '없음'}`);
+  console.log(`최소 검색 키워드 수: ${payload.minKeywordSearchCount}`);
 
   try {
     await runChoiceGenerator(payload, 'primary');

@@ -5,6 +5,32 @@
 
 ---
 
+## 2026-04-22 (자동 초이스 다양성 보강 - 요일별 키워드 10개 확장)
+
+- **문제 인식**:
+  - 동일 요일 카테고리에서 비슷한 상품군이 반복 발행됨.
+  - 직접 원인은 `searchKeywordHint` 수가 3개 수준으로 좁고, `generate-choice-post.js`가 앞쪽 키워드 몇 개만으로 3개 상품을 확보하면 조기 종료하던 구조였음.
+
+- **조치 파일**:
+  - `scripts/data/choice-daily-themes.json`
+  - `scripts/generate-choice-posts-auto.js`
+  - `scripts/generate-choice-post.js`
+
+- **핵심 변경**:
+  1. 요일별 `searchKeywordHint`를 전부 최소 10개로 확장.
+  2. 각 요일 테마에 `minKeywordSearchCount: 10` 추가.
+  3. 자동 초이스 입력 생성 시 fallback/backup 키워드를 합쳐 최소 10개 검색 키워드를 보장.
+  4. 상품 수집 단계에서 품질 상품 3개가 먼저 확보되어도, 최소 10개 키워드를 실제 검색하기 전에는 조기 종료하지 않도록 보강.
+
+- **효과 기대치**:
+  - 동일 카테고리 내에서도 후보풀이 넓어져 반복 상품군 노출 빈도 감소.
+  - 앞쪽 2~3개 검색어에만 결과가 수렴되던 패턴 완화.
+
+- **검증**:
+  - `node --check scripts/generate-choice-posts-auto.js`
+  - `node --check scripts/generate-choice-post.js`
+  - 테마별 키워드 개수 확인: 전 요일 `searchKeywordHint=10`, `minKeywordSearchCount=10`
+
 ## 2026-04-22 (픽앤조이 초이스 단독 제품 포스트 추가 - 홀리카홀리카 아이 팔레트)
 
 - **요청 작업**: 홀리카홀리카 마이페이브 무드 아이 팔레트 단독 초이스 포스트 1건 생성

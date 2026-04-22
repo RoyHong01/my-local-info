@@ -4,7 +4,8 @@
     "key": "health",
     "name": "건강",
     "keywordHint": ["프로바이오틱스", "오메가3", "멀티비타민"],
-    "searchKeywordHint": ["probiotics", "omega 3", "multivitamin"],
+    "searchKeywordHint": ["probiotics", "omega 3", "multivitamin", "lutein", "magnesium", "vitamin c", "collagen supplement", "coenzyme q10", "zinc supplement", "vitamin d supplement"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "multivitamin", "lutein", "magnesium", "vitamin c", "gut health", "coenzyme q10",
       "collagen supplement", "joint supplement", "zinc supplement", "iron supplement",
@@ -23,7 +24,8 @@
     "key": "living",
     "name": "생활",
     "keywordHint": ["수납 정리함", "청소용품", "세탁용품"],
-    "searchKeywordHint": ["storage box", "cleaning supplies", "laundry detergent"],
+    "searchKeywordHint": ["storage box", "cleaning supplies", "laundry detergent", "bathroom organizer", "drying rack", "living box", "mop", "laundry basket", "microfiber cloth", "shoe rack"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "bathroom organizer", "drying rack", "living box", "mop", "storage organizer",
       "laundry basket", "cleaning tool", "household item", "microfiber cloth",
@@ -41,7 +43,8 @@
     "key": "kitchen",
     "name": "주방",
     "keywordHint": ["진공포장기", "밀폐용기", "에어프라이어"],
-    "searchKeywordHint": ["vacuum sealer", "food container", "air fryer"],
+    "searchKeywordHint": ["vacuum sealer", "food container", "air fryer", "frying pan", "kitchen organizer", "cutting board", "knife set", "kitchen scale", "silicone spatula", "lunch box"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "frying pan", "air fryer accessories", "kitchen organizer", "cutting board",
       "kitchenware", "knife set", "pot set", "food storage",
@@ -59,7 +62,8 @@
     "key": "digital",
     "name": "디지털",
     "keywordHint": ["무선이어폰", "보조배터리", "스마트폰 거치대"],
-    "searchKeywordHint": ["wireless earbuds", "power bank", "phone stand"],
+    "searchKeywordHint": ["wireless earbuds", "power bank", "phone stand", "wireless mouse", "bluetooth keyboard", "portable charger", "tablet stand", "usb hub", "webcam", "cable organizer"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "wireless mouse", "bluetooth keyboard", "portable charger", "tablet stand",
       "multi charger", "laptop stand", "usb hub", "desk setup",
@@ -77,7 +81,8 @@
     "key": "pet-life",
     "name": "반려 생활",
     "keywordHint": ["고양이 사료", "강아지 간식", "펫 케어"],
-    "searchKeywordHint": ["cat food", "dog treats", "pet care"],
+    "searchKeywordHint": ["cat food", "dog treats", "pet care", "pet pad", "cat litter", "dog toy", "pet shampoo", "pet carrier", "pet brush", "pet water fountain"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "pet pad", "pet care", "cat tower", "dog supplement", "cat litter",
       "dog toy", "pet supplies", "pet shampoo", "cat snack", "dog food",
@@ -95,7 +100,8 @@
     "key": "beauty-fashion",
     "name": "뷰티/패션",
     "keywordHint": ["헤어 케어", "선크림", "스킨케어"],
-    "searchKeywordHint": ["hair care", "sunscreen", "skin care"],
+    "searchKeywordHint": ["hair care", "sunscreen", "skin care", "cushion foundation", "treatment", "cleansing", "toner", "serum", "lip balm", "mascara"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "innerwear", "fashion accessories", "cushion foundation", "treatment",
       "skin care", "cleansing", "sun care", "hair essence",
@@ -113,7 +119,8 @@
     "key": "home-appliance-furniture",
     "name": "가전/가구",
     "keywordHint": ["스탠드 조명", "소형 가전", "정수기"],
-    "searchKeywordHint": ["floor lamp", "small appliance", "water purifier"],
+    "searchKeywordHint": ["floor lamp", "small appliance", "water purifier", "chair", "storage furniture", "mood light", "electric kettle", "rice cooker", "humidifier", "air purifier"],
+    "minKeywordSearchCount": 10,
     "fallbackKeywordHint": [
       "chair", "storage furniture", "table", "mood light", "home appliance",
       "cleaning appliance", "shelf", "organizer rack", "electric kettle",
