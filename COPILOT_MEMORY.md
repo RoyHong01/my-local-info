@@ -57,6 +57,14 @@
 - 히어로 이미지: `public/images/choice/pepsi-hero.png`
 - 본문 정책: 과장 없이 일상 시나리오 중심 + 자연스러운 CTA
 
+### 추가 반영 (2026-04-22)
+
+- 단독 초이스 포스트 생성: `2026-04-22-choice-fuji-refill-paper.md`
+- 제품: 후지 일회용 파마지 리필용
+- 쿠팡 링크: `https://link.coupang.com/a/eugAVK`
+- 이미지: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png`
+- 본문 정책: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+
 ---
 
 ## ⛔ 수정 범위 최우선 규칙 (항상 첫 번째로 적용)

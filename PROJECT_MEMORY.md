@@ -61,6 +61,14 @@
 - 포스트 파일: `src/content/life/2026-04-21-choice-pepsi-zero-lime-24pack.md`
 - 본문 규칙: 일상 시나리오 중심, 중간 이미지 없이 자연스러운 CTA 링크만 사용
 
+### 추가 반영 (2026-04-22)
+
+- 단독 초이스 포스트 생성: `2026-04-22-choice-fuji-refill-paper.md`
+- 제품: 후지 일회용 파마지 리필용
+- 쿠팡 링크: `https://link.coupang.com/a/eugAVK`
+- 이미지 반영: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png`
+- 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+
 ---
 
 ## ⛔ 수정 범위 최우선 규칙 (항상 첫 번째로 적용)

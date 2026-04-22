@@ -306,6 +306,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-22 핵심 반영(추가):
+  - **단독 초이스 포스트 추가**: `src/content/life/2026-04-22-choice-fuji-refill-paper.md` 생성.
+  - **쿠팡 연동 반영**: `https://link.coupang.com/a/eugAVK`와 배너 이미지를 frontmatter에 반영.
+  - **이미지 자산 반영**: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png` 추가.
+  - **본문 톤 유지**: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA 정책으로 작성.
 - 2026-04-21 핵심 반영(추가):
   - **Supabase 로그 노이즈 축소**: `scripts/collect-life-restaurants.mjs`에서 동일 유형 경고를 실행당 1회만 출력하도록 변경하고, 캐시 실패 시 Google API 폴백 동작은 유지.
   - **맛집 후처리 검증 로그 개선**: `scripts/generate-life-restaurant-posts.mjs`에서 검증 이슈를 요약형으로 출력해 원인 파악 가독성을 강화.
