@@ -68,6 +68,11 @@
 - 쿠팡 링크: `https://link.coupang.com/a/eugAVK`
 - 이미지 반영: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png`
 - 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+- 단독 초이스 포스트 추가 생성: `2026-04-22-choice-latex-handska-powerfree-s-set.md`
+- 제품: 라텍스 장갑 핸드스카 파워 프리 미용장갑 20개입(10켤레) x 5곽, S, 1세트
+- 쿠팡 링크: `https://link.coupang.com/a/eug11e`
+- 이미지 반영: `public/images/choice/latex-hero.png`, `public/images/choice/latex-middle.png`
+- 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
 
 ---
 

@@ -5,6 +5,20 @@
 
 ---
 
+## 2026-04-22 (픽앤조이 초이스 단독 제품 포스트 추가 - 라텍스 장갑)
+
+- **요청 작업**: 라텍스 장갑 핸드스카 파워 프리 미용장갑 단독 초이스 포스트 1건 생성
+- **수정 파일**:
+  - `src/content/life/2026-04-22-choice-latex-handska-powerfree-s-set.md`
+  - `public/images/choice/latex-hero.png`
+  - `public/images/choice/latex-middle.png`
+- **반영 내용**:
+  - 쿠팡 링크 반영: `https://link.coupang.com/a/eug11e`
+  - 배너 이미지 반영: `https://image15.coupangcdn.com/image/affiliate/banner/e088c6f96290a49a10b7749e70e52a08@2x.jpg`
+  - 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
+  - 이미지 구성: 히어로 1장 + 본문 중간 이미지 1장
+- **검증**: `npm run build` 성공
+
 ## 2026-04-22 (픽앤조이 초이스 단독 제품 포스트 추가)
 
 - **요청 작업**: 후지 일회용 파마지 리필용 단독 초이스 포스트 1건 생성
