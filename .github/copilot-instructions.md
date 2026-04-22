@@ -309,6 +309,8 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 - 2026-04-22 핵심 반영(추가):
   - **자동 초이스 다양성 보강**: `scripts/data/choice-daily-themes.json`의 요일별 `searchKeywordHint`를 최소 10개로 확장.
   - **자동 검색 보장 강화**: `scripts/generate-choice-posts-auto.js`/`scripts/generate-choice-post.js`에서 `minKeywordSearchCount=10`에 도달하기 전에는 조기 종료하지 않도록 보강.
+  - **중복 차단 고도화**: `scripts/generate-choice-post.js`에서 최근 14일 히스토리를 `productId + productGroupTokens` 기준으로 비교해 같은 상품군 반복 노출을 억제.
+  - **추적 로그 보강**: 자동 생성 로그/GitHub output에 `실제 검색 키워드 수`, `선정된 상품군 토큰`을 함께 기록.
   - **단독 초이스 포스트 추가**: `src/content/life/2026-04-22-choice-fuji-refill-paper.md` 생성.
   - **쿠팡 연동 반영**: `https://link.coupang.com/a/eugAVK`와 배너 이미지를 frontmatter에 반영.
   - **이미지 자산 반영**: `public/images/choice/fuji-hero.png`, `public/images/choice/fuji-middle.png` 추가.

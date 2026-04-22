@@ -10,6 +10,7 @@
 - **문제 인식**:
   - 동일 요일 카테고리에서 비슷한 상품군이 반복 발행됨.
   - 직접 원인은 `searchKeywordHint` 수가 3개 수준으로 좁고, `generate-choice-post.js`가 앞쪽 키워드 몇 개만으로 3개 상품을 확보하면 조기 종료하던 구조였음.
+  - 추가로 최근 14일 히스토리 기준 중복 차단이 `productId` 위주라, 같은 상품군의 다른 상품이 재노출되는 문제가 남아 있었음.
 
 - **조치 파일**:
   - `scripts/data/choice-daily-themes.json`
@@ -21,6 +22,9 @@
   2. 각 요일 테마에 `minKeywordSearchCount: 10` 추가.
   3. 자동 초이스 입력 생성 시 fallback/backup 키워드를 합쳐 최소 10개 검색 키워드를 보장.
   4. 상품 수집 단계에서 품질 상품 3개가 먼저 확보되어도, 최소 10개 키워드를 실제 검색하기 전에는 조기 종료하지 않도록 보강.
+  5. 최근 14일 히스토리 비교에 `productGroupTokens`를 추가해 같은 상품군 토큰이 겹치는 후보를 자동 제외.
+  6. 기존 `recommended-products.json` 기록도 로드 시 `productName` 기반으로 상품군 토큰을 즉시 보정해 신규 로직이 바로 동작하도록 처리.
+  7. 실행 로그에 `실제 검색한 키워드 수`, `선정된 상품군 토큰`을 추가해 반복 원인 추적성을 강화.
 
 - **효과 기대치**:
   - 동일 카테고리 내에서도 후보풀이 넓어져 반복 상품군 노출 빈도 감소.
@@ -30,6 +34,7 @@
   - `node --check scripts/generate-choice-posts-auto.js`
   - `node --check scripts/generate-choice-post.js`
   - 테마별 키워드 개수 확인: 전 요일 `searchKeywordHint=10`, `minKeywordSearchCount=10`
+  - `generate-choice-post.js` 오류 진단: VS Code Problems 0건 확인
 
 ## 2026-04-22 (픽앤조이 초이스 단독 제품 포스트 추가 - 홀리카홀리카 아이 팔레트)
 

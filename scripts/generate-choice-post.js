@@ -26,6 +26,14 @@ const CHOICE_RELAXED_RATING_STEPS = String(process.env.CHOICE_RELAXED_RATING_STE
   .map((value) => Number(value.trim()))
   .filter((value) => Number.isFinite(value) && value < CHOICE_MIN_RATING)
   .sort((a, b) => b - a);
+const PRODUCT_GROUP_TOKEN_STOPWORDS = new Set([
+  '쿠팡', '리뷰', '추천', '상품', '제품', '브랜드', '공식', '정품', '국내', '해외', '무료', '배송',
+  '가정용', '업소용', '대용량', '프리미엄', '데일리', '기본형', '기본', '실속형', '가성비',
+  '스마트', '무선', '유선', '휴대용', '미니', '포터블', 'portable', 'wireless', 'smart',
+  '세트', 'set', '패키지', 'package', '본품', '리필', '단품', '구성', '옵션', '한정', '특가',
+  '화이트', '블랙', '핑크', '베이지', '그레이', 'silver', 'black', 'white', 'pink', 'beige',
+  '1개', '2개', '3개', '1세트', '2세트', '3세트', '단일', '총', '입', '매', '팩', 'x',
+]);
 
 function getMinKeywordSearchCount(candidate) {
   const raw = Number(candidate?.minKeywordSearchCount);
@@ -97,21 +105,50 @@ async function loadRecommendedProductsHistory() {
   try {
     const raw = await fs.readFile(RECOMMENDED_PRODUCTS_HISTORY_PATH, 'utf-8');
     const parsed = JSON.parse(raw);
-    const entries = Array.isArray(parsed?.entries) ? parsed.entries : [];
-    return { version: 1, entries };
+    const entries = Array.isArray(parsed?.entries)
+      ? parsed.entries.map((entry) => ({
+          ...entry,
+          productGroupTokens: normalizeProductGroupTokens(
+            Array.isArray(entry?.productGroupTokens)
+              ? entry.productGroupTokens
+              : deriveProductGroupTokens({
+                  productName: entry?.productName,
+                  brand: entry?.brand,
+                }, entry?.themeKey),
+          ),
+        }))
+      : [];
+    return { version: 2, entries };
   } catch {
-    return { version: 1, entries: [] };
+    return { version: 2, entries: [] };
   }
 }
 
 async function saveRecommendedProductsHistory(history) {
   await fs.mkdir(path.dirname(RECOMMENDED_PRODUCTS_HISTORY_PATH), { recursive: true });
   const payload = {
-    version: 1,
+    version: 2,
     updatedAtKst: `${todayIso()}T00:00:00+09:00`,
     entries: Array.isArray(history?.entries) ? history.entries : [],
   };
   await fs.writeFile(RECOMMENDED_PRODUCTS_HISTORY_PATH, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
+}
+
+function isMatchingHistoryPublisher(entry, publishedBy) {
+  if (CHOICE_DEDUP_SCOPE !== 'same-publisher') return true;
+  const historyPublisher = String(entry?.publishedBy || '').trim().toLowerCase();
+  return !historyPublisher || historyPublisher === publishedBy;
+}
+
+function isRecentHistoryEntry(entry, today, publishedBy, themeKey) {
+  if (!isMatchingHistoryPublisher(entry, publishedBy)) return false;
+  const diff = daysBetweenIso(entry?.date, today);
+  if (!(diff >= 0 && diff < PRODUCT_HISTORY_LOOKBACK_DAYS)) return false;
+
+  const currentThemeKey = String(themeKey || '').trim();
+  const historyThemeKey = String(entry?.themeKey || '').trim();
+  if (currentThemeKey && historyThemeKey && currentThemeKey !== historyThemeKey) return false;
+  return true;
 }
 
 function isRecentlyPostedProduct(productId, historyEntries, today, publishedBy) {
@@ -120,12 +157,7 @@ function isRecentlyPostedProduct(productId, historyEntries, today, publishedBy) 
 
   return historyEntries.some((entry) => {
     if (String(entry?.productId || '').trim() !== id) return false;
-    if (CHOICE_DEDUP_SCOPE === 'same-publisher') {
-      const historyPublisher = String(entry?.publishedBy || '').trim().toLowerCase();
-      if (historyPublisher && historyPublisher !== publishedBy) return false;
-    }
-    const diff = daysBetweenIso(entry?.date, today);
-    return diff >= 0 && diff < PRODUCT_HISTORY_LOOKBACK_DAYS;
+    return isRecentHistoryEntry(entry, today, publishedBy, '');
   });
 }
 
@@ -187,6 +219,51 @@ function tokenizeText(text) {
     .split(/\s+/)
     .map((token) => token.trim())
     .filter((token) => token.length >= 2);
+}
+
+function normalizeProductGroupTokens(tokens) {
+  return Array.from(new Set((tokens || [])
+    .map((token) => String(token || '').trim().toLowerCase())
+    .filter((token) => {
+      if (!token || PRODUCT_GROUP_TOKEN_STOPWORDS.has(token)) return false;
+      if (/^\d+$/.test(token)) return false;
+      if (token.length < 2) return false;
+      return true;
+    })));
+}
+
+function deriveProductGroupTokens(product, themeKey = '') {
+  const brandTokens = new Set([
+    ...tokenizeText(product?.brand),
+    ...tokenizeText(product?.vendorName),
+  ]);
+
+  const titleTokens = tokenizeText(product?.productName).filter((token) => !brandTokens.has(token));
+  const themeTokens = tokenizeText(themeKey).filter((token) => !brandTokens.has(token));
+  return normalizeProductGroupTokens([...titleTokens, ...themeTokens]).slice(0, 6);
+}
+
+function hasOverlapToken(tokens, historyTokens) {
+  const tokenSet = new Set(normalizeProductGroupTokens(tokens));
+  if (tokenSet.size === 0) return false;
+  return normalizeProductGroupTokens(historyTokens).some((token) => tokenSet.has(token));
+}
+
+function isRecentlyPostedProductGroup(product, historyEntries, today, publishedBy, themeKey) {
+  if (!Array.isArray(historyEntries) || historyEntries.length === 0) return false;
+  const productGroupTokens = deriveProductGroupTokens(product, themeKey);
+  if (productGroupTokens.length === 0) return false;
+
+  return historyEntries.some((entry) => {
+    if (!isRecentHistoryEntry(entry, today, publishedBy, themeKey)) return false;
+    return hasOverlapToken(productGroupTokens, entry?.productGroupTokens);
+  });
+}
+
+function collectSelectedProductGroupTokens(products, themeKey) {
+  return normalizeProductGroupTokens(
+    (products || []).flatMap((product) => deriveProductGroupTokens(product, themeKey)),
+  );
 }
 
 function buildKeywordSignals(candidate) {
@@ -278,7 +355,7 @@ function isTopRankFallbackCandidate(product) {
   return Number(product.rank || 0) > 0 && Number(product.rank || 0) <= CHOICE_TOP_RANK_FALLBACK_LIMIT;
 }
 
-function rankAndFilterProducts(products, keywordSignals, historyEntries, today, publishedBy, minRating) {
+function rankAndFilterProducts(products, keywordSignals, historyEntries, today, publishedBy, minRating, themeKey) {
   const ranked = products
     .map((product) => ({
       ...product,
@@ -290,7 +367,11 @@ function rankAndFilterProducts(products, keywordSignals, historyEntries, today, 
       return 0;
     });
 
-  const freshRanked = ranked.filter((product) => !isRecentlyPostedProduct(product.productId, historyEntries, today, publishedBy));
+  const freshRanked = ranked.filter((product) => {
+    if (isRecentlyPostedProduct(product.productId, historyEntries, today, publishedBy)) return false;
+    if (isRecentlyPostedProductGroup(product, historyEntries, today, publishedBy, themeKey)) return false;
+    return true;
+  });
   const strictQualified = freshRanked.filter((product) => isQualifiedChoiceProduct(product, minRating));
 
   if (strictQualified.length >= 3 || !CHOICE_ALLOW_MISSING_QUALITY_METADATA) {
@@ -716,6 +797,7 @@ async function resolveProductsForCandidate(candidate) {
   let lastError = null;
   const today = todayIso();
   const publishedBy = getPublishedBy(candidate);
+  const themeKey = String(candidate.themeKey || '').trim();
   const minKeywordSearchCount = getMinKeywordSearchCount(candidate);
   let searchedKeywordCount = 0;
 
@@ -727,7 +809,7 @@ async function resolveProductsForCandidate(candidate) {
       collectUniqueProducts(collected, products, seen);
       
       // 현재 수집분 필터링해서 품질 상품 수 체크
-      const tempFiltered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, CHOICE_MIN_RATING);
+      const tempFiltered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, CHOICE_MIN_RATING, themeKey);
       if ((tempFiltered.selectedPool.length >= CHOICE_QUALITY_TARGET_COUNT && searchedKeywordCount >= minKeywordSearchCount) || collected.length >= CHOICE_TARGET_POOL_SIZE) {
         break; // 품질 상품 충분하거나 pool 가득 → 조기 종료
       }
@@ -739,7 +821,7 @@ async function resolveProductsForCandidate(candidate) {
   }
 
   let appliedMinRating = CHOICE_MIN_RATING;
-  let filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+  let filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating, themeKey);
   let freshQualified = filtered.selectedPool;
   let usedTopRankFallback = filtered.usedTopRankFallback;
 
@@ -751,7 +833,7 @@ async function resolveProductsForCandidate(candidate) {
         searchedKeywordCount += 1;
         collectUniqueProducts(collected, products, seen);
         
-        filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+        filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating, themeKey);
         freshQualified = filtered.selectedPool;
         usedTopRankFallback = filtered.usedTopRankFallback;
 
@@ -770,7 +852,7 @@ async function resolveProductsForCandidate(candidate) {
   if (freshQualified.length < 3 && CHOICE_RELAXED_RATING_STEPS.length > 0) {
     for (const minRating of CHOICE_RELAXED_RATING_STEPS) {
       appliedMinRating = minRating;
-      filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating);
+      filtered = rankAndFilterProducts(collected, keywordSignals, history.entries, today, publishedBy, appliedMinRating, themeKey);
       freshQualified = filtered.selectedPool;
       usedTopRankFallback = filtered.usedTopRankFallback;
 
@@ -796,6 +878,7 @@ async function resolveProductsForCandidate(candidate) {
     primaryKeywords,
     fallbackKeywords,
     searchedKeywordCount,
+    selectedProductGroupTokens: collectSelectedProductGroupTokens(selected, themeKey),
     appliedMinRating,
     usedTopRankFallback,
     collectedCandidateCount: collected.length,
@@ -1178,6 +1261,7 @@ async function appendRecommendedProductsHistory(products, meta) {
       productId: String(product.productId),
       productName: String(product.productName || '').trim(),
       brand: String(product.brand || product.vendorName || '').trim(),
+      productGroupTokens: deriveProductGroupTokens(product, meta.themeKey),
       publishedBy: meta.publishedBy,
       postFile: meta.postFile,
       sourceId: meta.sourceId,
@@ -1257,7 +1341,9 @@ async function run() {
   console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
   console.log(`입력 파일: ${inputPath}`);
   console.log(`자동 키워드: ${(productResolution.keywords || []).join(', ') || '없음'}`);
+  console.log(`실제 검색한 키워드 수: ${productResolution.searchedKeywordCount || 0}`);
   console.log(`자동 상품 수: ${productResolution.products.length}`);
+  console.log(`선정된 상품군 토큰: ${(productResolution.selectedProductGroupTokens || []).join(', ') || '없음'}`);
 
   let finalContent = '';
   let finalFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName}.md`;
@@ -1312,6 +1398,8 @@ async function run() {
     applied_min_rating: Number.isFinite(appliedMinRating) ? appliedMinRating : CHOICE_MIN_RATING,
     relaxed_fallback_applied_count: relaxedFallbackAppliedCount,
     selected_product_count: Array.isArray(candidate.products) ? candidate.products.length : 0,
+    searched_keyword_count: Number(productResolution.searchedKeywordCount || 0),
+    selected_product_group_tokens: (productResolution.selectedProductGroupTokens || []).join(','),
     choice_published_by: candidate.publishedBy || 'auto',
   });
 

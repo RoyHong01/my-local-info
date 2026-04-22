@@ -80,6 +80,8 @@
 - 본문 톤: 일상 시나리오 중심, 과장 금지, 자연스러운 CTA
 - 자동 초이스 다양성 보강: 요일별 `searchKeywordHint`를 최소 10개로 확장.
 - 자동 생성 보강: 품질 상품이 먼저 채워져도 `minKeywordSearchCount=10`에 도달할 때까지 실제 검색을 계속하도록 수정.
+- 자동 중복 차단 보강: 최근 14일 히스토리에서 `productId`뿐 아니라 `productGroupTokens`도 비교해 같은 상품군 재노출을 억제.
+- 자동 로그 보강: 실행 로그와 GitHub output에 `searched_keyword_count`, `selected_product_group_tokens`를 추가.
 
 ---
 
