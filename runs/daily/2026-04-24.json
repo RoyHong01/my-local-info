@@ -1,0 +1,247 @@
+{
+  "reportDateKst": "2026-04-24",
+  "generatedAtUtc": "2026-04-23T20:19:26.630Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24856311055",
+    "runNumber": 635,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24856311055",
+    "runStartedAtUtc": "2026-04-23T20:07:54Z",
+    "headSha": "7233e352d2900049dd7e7415989806d96c904ea2"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://a300af7e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 9건, 총 7492건",
+        "festival": "신규 4건, 업데이트 201건, 총 205건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://b2cc697e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://7173a8b9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "8857284a728b6bb97c252f7f97cc4b86a8ca7c63",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-04-23",
+      "authoredAt": "2026-04-23T20:19:25Z",
+      "files": [
+        "src/content/life/2026-04-24-incheon-restaurant-1648556071.md",
+        "src/content/life/2026-04-24-seongsu-restaurant-49642900.md",
+        "src/content/life/2026-04-24-suwon-restaurant-2026837061.md"
+      ]
+    },
+    {
+      "sha": "10b9cd3357223045d810d50cf5bb504c1e5acdae",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-04-23",
+      "authoredAt": "2026-04-23T20:15:41Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-04-24-choice-pet-life-2026-04-24.md"
+      ]
+    },
+    {
+      "sha": "e26f111add0ec5eb0117ae817a37d9b506d513f5",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-23",
+      "authoredAt": "2026-04-23T20:15:31Z",
+      "files": [
+        "src/content/posts/2026-04-23-gangseo-food-waste-disposer-support.md",
+        "src/content/posts/2026-04-23-geumsan-safety-insurance.md",
+        "src/content/posts/2026-04-23-hongcheon-wildvegetable-festival.md",
+        "src/content/posts/2026-04-23-post-1776975180712.md"
+      ]
+    },
+    {
+      "sha": "9d6e43fa81498c71ae8fe5bbb5a7f42499d6279e",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-23",
+      "authoredAt": "2026-04-23T20:09:26Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-23-gangseo-food-waste-disposer-support.md",
+      "src/content/posts/2026-04-23-geumsan-safety-insurance.md",
+      "src/content/posts/2026-04-23-hongcheon-wildvegetable-festival.md",
+      "src/content/posts/2026-04-23-post-1776975180712.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-04-24-choice-pet-life-2026-04-24.md",
+      "src/content/life/2026-04-24-incheon-restaurant-1648556071.md",
+      "src/content/life/2026-04-24-seongsu-restaurant-49642900.md",
+      "src/content/life/2026-04-24-suwon-restaurant-2026837061.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-04-24-choice-pet-life-2026-04-24.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-04-24-incheon-restaurant-1648556071.md",
+      "src/content/life/2026-04-24-seongsu-restaurant-49642900.md",
+      "src/content/life/2026-04-24-suwon-restaurant-2026837061.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-04-24-choice-pet-life-2026-04-24.md",
+      "src/content/life/2026-04-24-incheon-restaurant-1648556071.md",
+      "src/content/life/2026-04-24-seongsu-restaurant-49642900.md",
+      "src/content/life/2026-04-24-suwon-restaurant-2026837061.md",
+      "src/content/posts/2026-04-23-gangseo-food-waste-disposer-support.md",
+      "src/content/posts/2026-04-23-geumsan-safety-insurance.md",
+      "src/content/posts/2026-04-23-hongcheon-wildvegetable-festival.md",
+      "src/content/posts/2026-04-23-post-1776975180712.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 8,
+      "manual": 0,
+      "unknown": 0,
+      "total": 8
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 12.82,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "3091/2153",
+      "markdown": {
+        "generated": 2,
+        "pending": 234,
+        "titles": [
+          "인천 전세보증금반환보증 보증료 지원",
+          "인천시 청년월세 지원사업"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 9건, 총 7492건",
+      "validation": "ok",
+      "anthropicUsage": "4722/3469",
+      "markdown": {
+        "generated": 5,
+        "pending": 7364,
+        "titles": [
+          "초·중·고 신입생 입학준비금 지원",
+          "시흥시 초·중·고 입학준비금 지원",
+          "학교 밖 청소년 검정고시 합격축하금 지원",
+          "무주택 다자녀가정 전월세보증금 대출이자 지원",
+          "(수원시) 녹물없는 우리집 수도관 개량사업 안내"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 201건, 총 205건",
+      "validation": "ok",
+      "anthropicUsage": "1663/1059",
+      "markdown": {
+        "generated": 2,
+        "pending": 149,
+        "titles": [
+          "태백 천상의 산나물 축제",
+          "2026 아시아 이스포츠 대회"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
