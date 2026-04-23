@@ -5,7 +5,7 @@ summary: "만 40세 미만 청년 수산업 경영인(예정자 포함)이라면
 description: "만 40세 미만 청년 수산업 경영인(예정자 포함)이라면 주목! 어촌 정착 지원금으로 1년차 월 110만원, 2년차 월 100만원, 3년차 월 90만원을 지원받아 어촌에서 꿈을 펼칠 기회! 지금 바로 신청하세요."
 category: 전국 보조금·복지 정책
 tags: [청년어촌정착지원, 어촌정착, 수산업, 청년지원, 정부지원금]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://pick-n-joy.com/images/changgyeonggung-hero.png"
 source_id: "119200000174"
 slug: "2026-04-10-youth-fishing-village-settlement-support"
 source_snapshot_key: "청년어촌정착지원|||"

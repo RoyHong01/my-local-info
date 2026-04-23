@@ -6,7 +6,7 @@ description: "인천 미추홀구에서 공동주택, 단독주택, 상가주택
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천, 미추홀구, 미니태양광, 신재생에너지, 보조금]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://data.incheoneasy.com/jpass/img/trrsrt/ZoMo4i_240408092311526.jpg"
 source_id: "352000000103"
 slug: "2026-04-13-incheon-michuholgu-minisolar"
 source_snapshot_key: "신재생에너지미니태양광지원사업|||"

@@ -5,7 +5,7 @@ summary: "인천 동구에서 만 19~39세 청년 구직자 대상 취업 사진
 description: "인천 동구에서 만 19~39세 청년 구직자 대상 취업 사진 및 이미용비 지원 사업을 상시 진행해요. 방문 신청으로 간편하게 지원받고 취업 성공률을 높여보세요! 문의는 일자리경제과(032-770-6653)."
 category: 인천 지역 정보
 tags: [인천동구, 청년지원, 취업준비, 이미용비지원, 사진촬영비]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://pick-n-joy.com/images/gyeongbokgung-hero.png"
 source_id: "350000000107"
 slug: "2026-04-09-incheon-donggu-youth-support"
 source_snapshot_key: "청년정책활성화지원|||"
