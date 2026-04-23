@@ -204,18 +204,32 @@ async function run() {
         }
 
         const searchTokens = expandLandmarkTokens(fallbackTokens);
+        let tourApiAttempts = 0;
+        let tourApiMatches = 0;
 
         for (const token of searchTokens) {
-          const result = await getRegionalLandmark({
-            regionName: token,
-            tourApiKey: TOUR_API_KEY,
-            cache: landmarkCache,
-            numOfRows: 15,
-          });
-          if (result?.imageUrl) {
-            newImage = result.imageUrl;
-            break;
+          tourApiAttempts++;
+          try {
+            const result = await getRegionalLandmark({
+              regionName: token,
+              tourApiKey: TOUR_API_KEY,
+              cache: landmarkCache,
+              numOfRows: 15,
+            });
+            if (result?.imageUrl) {
+              newImage = result.imageUrl;
+              tourApiMatches++;
+              console.log(`    [TourAPI✅] ${token}: ${result.imageUrl.slice(0, 80)}`);
+              break;
+            } else {
+              console.log(`    [TourAPI❌] ${token}: no image found`);
+            }
+          } catch (apiErr) {
+            console.log(`    [TourAPI⚠️] ${token}: ${apiErr.message}`);
           }
+        }
+        if (tourApiAttempts > 0 && tourApiMatches === 0) {
+          console.log(`  💡 [진단] ${file}: TourAPI 시도 ${tourApiAttempts}회 → 이미지 0회 (2차 폴백 예정)`);
         }
       } catch (err) {
         console.error(`[ERROR] 랜드마크 조회 실패 (${file}): ${err.message}`);
@@ -227,6 +241,7 @@ async function run() {
       const seed = `${file}|${sourceId}|${category}`;
       const idx = hashToIndex(seed, INTERNAL_NATIONAL_LANDMARK_IMAGES.length);
       newImage = INTERNAL_NATIONAL_LANDMARK_IMAGES[idx];
+      console.log(`  [Fallback] ${file}: 내부 이미지 ${idx + 1}/${INTERNAL_NATIONAL_LANDMARK_IMAGES.length}`);
     }
 
     if (!newImage) {

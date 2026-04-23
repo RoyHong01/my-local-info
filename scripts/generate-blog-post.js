@@ -1678,23 +1678,43 @@ async function run() {
     console.log(`  미작성 항목: ${candidates.length}개`);
 
     if (category === '전국 보조금·복지 정책' && candidates.length > 0) {
-      const hasRecentSeoul = await hasRecentSeoulSubsidyPost(postsDir, 7);
-      if (!hasRecentSeoul) {
-        const seoulCandidates = candidates.filter((item) => isSeoulSubsidyItem(item));
-        if (seoulCandidates.length > 0) {
-          const pinned = seoulCandidates[0];
-          const pinnedId = String(pinned['서비스ID'] || pinned.id || pinned['서비스명'] || pinned.name || '');
-          const rest = candidates.filter((item) => {
-            const id = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
-            return id !== pinnedId;
-          });
-          candidates = [pinned, ...rest];
-          console.log(`  📌 서울 보조금 주간 보강 적용: "${pinned['서비스명'] || pinned.name || pinned.title || 'unknown'}" 우선 배치`);
+      // 권역-요일 분산 필터 적용 (활성화 시)
+      if (process.env.SUBSIDY_REGION_WEEKDAY_FILTER === 'true') {
+        const { regions, allowNational } = getSubsidyRegionByWeekday();
+        const kstDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+        const weekdayName = ['일', '월', '화', '수', '목', '금', '토'][kstDate.getDay()];
+        console.log(`  🗓️ 권역-요일 분산 활성화: ${weekdayName}요일 → ${regions.join('/')}${allowNational ? ' + 전국공통' : ''}`);
+        const filtered = filterSubsidiesByRegionWeekday(candidates);
+        if (filtered.length > 0 && filtered.length !== candidates.length) {
+          console.log(`  필터 적용 후: ${filtered.length}건 (기존 ${candidates.length}건에서 축소)`);
+          candidates = filtered;
+        } else if (filtered.length === 0) {
+          console.log(`  ⚠️ 해당 권역 후보 0건: 원본 ${candidates.length}건 유지`);
         } else {
-          console.log('  ℹ️ 서울 보조금 주간 보강 대상 없음(이번 배치 후보 내 서울 항목 없음)');
+          console.log(`  ✅ 권역 필터 매칭: ${candidates.length}건`);
         }
-      } else {
-        console.log('  ✅ 최근 7일 내 서울 보조금 포스트 존재: 주간 보강 스킵');
+      }
+      
+      // 기존 서울 주간 보강 로직 (권역 필터 비활성화 시에만)
+      if (process.env.SUBSIDY_REGION_WEEKDAY_FILTER !== 'true') {
+        const hasRecentSeoul = await hasRecentSeoulSubsidyPost(postsDir, 7);
+        if (!hasRecentSeoul) {
+          const seoulCandidates = candidates.filter((item) => isSeoulSubsidyItem(item));
+          if (seoulCandidates.length > 0) {
+            const pinned = seoulCandidates[0];
+            const pinnedId = String(pinned['서비스ID'] || pinned.id || pinned['서비스명'] || pinned.name || '');
+            const rest = candidates.filter((item) => {
+              const id = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
+              return id !== pinnedId;
+            });
+            candidates = [pinned, ...rest];
+            console.log(`  📌 서울 보조금 주간 보강 적용: "${pinned['서비스명'] || pinned.name || pinned.title || 'unknown'}" 우선 배치`);
+          } else {
+            console.log('  ℹ️ 서울 보조금 주간 보강 대상 없음(이번 배치 후보 내 서울 항목 없음)');
+          }
+        } else {
+          console.log('  ✅ 최근 7일 내 서울 보조금 포스트 존재: 주간 보강 스킵');
+        }
       }
     }
 
