@@ -5,7 +5,7 @@ summary: "해양수산부가 지원하는 어업경영자금은 어업인과 어
 description: "해양수산부가 지원하는 어업경영자금은 어업인과 어업법인을 대상으로 연 2.0~3% 저금리 운영자금을 융자해주는 제도입니다. 개인 최대 10억원, 법인 최대 15억원까지 지원하며, 수협은행 및 단위수협에서 연중 방문 신청 가능합니다."
 category: 전국 보조금·복지 정책
 tags: [어업경영자금, 해양수산부, 저금리융자, 어업인지원, 수협은행]
-image: "https://tong.visitkorea.or.kr/cms/resource/71/3531571_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/82/3534482_image2_1.jpg"
 source_id: "119200000045"
 slug: "2026-04-06-fishery-management-fund-support"
 source_snapshot_key: "어업경영자금지원|||"

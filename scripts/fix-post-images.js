@@ -14,6 +14,7 @@ const path = require('path');
 const {
   extractMetroFromText,
   getRegionalLandmark,
+  detectThemeFromText,
 } = require('./lib/landmark-engine');
 
 (function loadEnvLocal() {
@@ -103,14 +104,20 @@ function inferParentMetro(titleText, category) {
   return null;
 }
 
-async function resolveImageViaTourAPI({ titleText, category, landmarkCache }) {
+async function resolveImageViaTourAPI({ titleText, category, landmarkCache, themeText }) {
   const fullText = `${titleText} ${category}`;
   const metros = extractMetroFromText(fullText);
+  const theme = detectThemeFromText(`${titleText} ${themeText || ''}`);
 
   // 광역 정보가 전혀 없고 카테고리가 인천이면 인천으로 보강
   const attempts = [...metros];
   if (category && category.includes('인천') && !attempts.includes('인천')) {
     attempts.unshift('인천');
+  }
+  // 테마가 감지되면 "theme-only" 시도를 attempts 맨 앞에 한 번 추가
+  // (regionName은 더미 — getRegionalLandmark가 theme 풀을 우선 사용)
+  if (theme && attempts.length === 0) {
+    attempts.unshift('__THEME__');
   }
   // 폴백 풀 (전국 대표 랜드마크 9지역)
   for (const n of NATIONAL_LANDMARK_TOKEN_POOL) {
@@ -122,10 +129,11 @@ async function resolveImageViaTourAPI({ titleText, category, landmarkCache }) {
     attemptCount++;
     try {
       const result = await getRegionalLandmark({
-        regionName: region,
+        regionName: region === '__THEME__' ? '' : region,
         tourApiKey: TOUR_API_KEY,
         cache: landmarkCache,
         numOfRows: 15,
+        theme: region === '__THEME__' ? theme : (attemptCount === 1 ? theme : undefined),
       });
       if (result?.imageUrl) {
         console.log(`    [TourAPI OK] ${region} -> ${result.imageUrl.slice(0, 80)}`);
@@ -221,7 +229,9 @@ async function run() {
 
     if (!newImage && TOUR_API_KEY) {
       try {
-        const result = await resolveImageViaTourAPI({ titleText, category, landmarkCache });
+        const tagsText = Array.isArray(fm.tags) ? fm.tags.join(' ') : (fm.tags || '');
+        const themeText = `${tagsText} ${fm.summary || ''} ${fm.description || ''}`;
+        const result = await resolveImageViaTourAPI({ titleText, category, landmarkCache, themeText });
         if (result) {
           newImage = result.imageUrl;
           via = `tourapi:${result.via}`;

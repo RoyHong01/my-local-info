@@ -6,7 +6,7 @@ summary: "인천 연수구 지역화폐 연수e음으로 최대 10% 캐시백을
 description: "인천 연수구 지역화폐 연수e음으로 최대 10% 캐시백을 받으세요! 만 14세 이상 누구나 모바일앱으로 간편 신청 가능하며, 축제 기간에는 추가 5% 캐시백까지 제공합니다. 월 30만원 한도로 알뜰 소비를 시작해보세요."
 category: 인천 지역 정보
 tags: [연수e음, 지역화폐, 캐시백, 인천연수구, 전자상품권]
-image: "https://tong.visitkorea.or.kr/cms/resource/68/4055868_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "352000000102"
 ---
 

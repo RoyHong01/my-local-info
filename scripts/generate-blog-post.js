@@ -1153,7 +1153,7 @@ async function generatePost(candidate, postsDir) {
   let imageUrl = candidate.firstimage || candidate.firstimage2 || '';
   if (!imageUrl && process.env.TOUR_API_KEY) {
     try {
-      const { extractMetroFromText, getRegionalLandmark } = require('./lib/landmark-engine');
+      const { extractMetroFromText, getRegionalLandmark, detectThemeFromText } = require('./lib/landmark-engine');
       const regionText = [
         candidate['소관기관명'],
         candidate['접수기관명'],
@@ -1164,6 +1164,16 @@ async function generatePost(candidate, postsDir) {
       ].filter(Boolean).join(' ');
       // 광역(시·도) 단위만 사용. 구 단위는 노이즈 사진의 원인이라 제외.
       const metros = extractMetroFromText(regionText);
+      // 주제 풀 (예: 어선/수산 -> 바다 풀)
+      const themeText = [
+        candidate['서비스명'],
+        candidate.title,
+        candidate.summary,
+        candidate.description,
+        Array.isArray(candidate.tags) ? candidate.tags.join(' ') : (candidate.tags || ''),
+      ].filter(Boolean).join(' ');
+      const theme = detectThemeFromText(themeText);
+
       const expandedTokens = [];
       const seenTokens = new Set();
       for (const token of metros) {
@@ -1172,8 +1182,12 @@ async function generatePost(candidate, postsDir) {
           expandedTokens.push(token);
         }
       }
+      // 광역 정보가 전혀 없고 theme이 있으면 theme-only 시도를 맨 앞에
+      if (expandedTokens.length === 0 && theme) {
+        expandedTokens.unshift('__THEME__');
+      }
       // 광역 정보가 전혀 없을 때만 전국 대표 풀 폴백
-      if (expandedTokens.length === 0) {
+      if (expandedTokens.length === 0 || (expandedTokens.length === 1 && expandedTokens[0] === '__THEME__')) {
         for (const nationalToken of nationalTokenPool) {
           if (!seenTokens.has(nationalToken)) {
             seenTokens.add(nationalToken);
@@ -1185,10 +1199,11 @@ async function generatePost(candidate, postsDir) {
       const lmCache = generatePost._landmarkCache;
       for (const token of expandedTokens) {
         const result = await getRegionalLandmark({
-          regionName: token,
+          regionName: token === '__THEME__' ? '' : token,
           tourApiKey: process.env.TOUR_API_KEY,
           cache: lmCache,
           numOfRows: 15,
+          theme: token === '__THEME__' ? theme : (token === expandedTokens[0] ? theme : undefined),
         });
         if (result?.imageUrl) {
           imageUrl = result.imageUrl;

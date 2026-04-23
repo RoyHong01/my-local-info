@@ -5,7 +5,7 @@ summary: "인천 부평구 소상공인이라면 주목! 담보 부족으로 대
 description: "인천 부평구 소상공인이라면 주목! 담보 부족으로 대출이 어려웠던 분들을 위해 '소상공인 특례보증' 제도가 운영 중이에요. 신용보증재단 출연으로 금융 지원을 받을 수 있으며, 방문 신청 가능해요. 예산 소진 전 서두르세요!"
 category: 인천 지역 정보
 tags: [인천, 부평구, 소상공인, 특례보증, 금융지원]
-image: "https://tong.visitkorea.or.kr/cms/resource/45/3518645_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/94/3518594_image2_1.jpg"
 source_id: "354000000112"
 slug: "2026-04-04-bupyeong-special-guarantee"
 source_snapshot_key: "소상공인특례보증|||"

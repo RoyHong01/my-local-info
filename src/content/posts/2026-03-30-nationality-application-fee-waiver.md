@@ -5,7 +5,7 @@ summary: 국적 신청 수수료 면제 혜택! 특별공로자, 사할린동포
 description: 국적 신청 수수료 면제 혜택! 특별공로자, 사할린동포 배우자, 재난 피해자, 장애인 등이 귀화허가, 국적회복 신청 시 수수료를 전액 감면받을 수 있어요. 법무부 주관으로 상시 방문 신청 가능하며, 자세한 지원 대상과 신청 방법을 확인하세요.
 category: 전국 보조금·복지 정책
 tags: [귀화, 국적회복, 수수료면제, 법무부, 복지정책]
-image: "https://tong.visitkorea.or.kr/cms/resource/87/4002487_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/70/3089670_image2_1.jpg"
 source_id: "127000000023"
 slug: "2026-03-30-nationality-application-fee-waiver"
 source_snapshot_key: "귀화허가국적회복허가신청및국적업무증명서발급수수료면제안내|||"

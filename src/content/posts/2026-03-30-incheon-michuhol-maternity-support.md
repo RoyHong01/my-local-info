@@ -5,7 +5,7 @@ summary: 인천 미추홀구 산모를 위한 현금 지원! 산후도우미 이
 description: 인천 미추홀구 산모를 위한 현금 지원! 산후도우미 이용 후 본인부담금을 돌려받으세요. 기준중위소득 150% 이하 가정이 대상이며, 미추홀구보건소(032-880-5472)에서 상시 신청할 수 있습니다. 온라인 신청도 가능해요.
 category: 인천 지역 정보
 tags: [인천미추홀구, 산모지원, 출산혜택, 산후도우미, 정부지원금]
-image: "https://tong.visitkorea.or.kr/cms/resource/68/4055868_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
 source_id: "351050000111"
 slug: "2026-03-30-incheon-michuhol-maternity-support"
 ---

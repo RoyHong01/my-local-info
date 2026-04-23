@@ -6,7 +6,7 @@ description: "인천 중구 거주 65세 이상 어르신이라면 누구나 대
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천, 중구, 대상포진, 예방접종, 무료지원, 어르신, 보건소]
-image: "https://tong.visitkorea.or.kr/cms/resource/44/2780444_image2_1.png"
+image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
 source_id: "349000000107"
 slug: "2026-04-15-incheon-junggu-shingles-vaccination-support"
 source_snapshot_key: "대상포진예방접종지원|||"
