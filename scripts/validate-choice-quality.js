@@ -182,11 +182,10 @@ async function run() {
 
     const issues = [];
 
-    // [재발 방지] 자동/수동 모두 hook 검증 적용
-    issues.push(...validateIntroHook(body));
-
-    // 수동 단독 글은 추가로 중간 이미지 이후 본문 밀도 검증
+    // 수동 단독 글만 빌드 게이트로 검증한다.
+    // (자동 글의 hook 보장은 generate-choice-post.js의 생성 시 검증 + 후처리 fallback에서 처리)
     if (publishedBy === 'manual') {
+      issues.push(...validateIntroHook(body));
       issues.push(...validateManualChoiceBody(body, String(frontmatter.image || '').trim()));
     }
 

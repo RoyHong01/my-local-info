@@ -841,11 +841,50 @@ function ensureIntroHookFallback(content, candidate) {
   return newBody;
 }
 
+function isManualSinglePost(candidate) {
+  if (!candidate || typeof candidate !== 'object') return false;
+  const hasKeyword = splitKeywordHints(candidate.keywordHint).length > 0;
+  const hasManualAffiliate = Boolean(candidate.coupangUrl && candidate.coupangHtml);
+  return !hasKeyword && hasManualAffiliate;
+}
+
+function buildSinglePickBlock(candidate) {
+  const image = String(candidate.image || candidate.coupangBannerImage || '').trim();
+  const url = String(candidate.coupangUrl || '').trim();
+  if (!url) return '';
+
+  const altRaw = String(candidate.coupangBannerAlt || candidate.title || '단독 픽').trim();
+  const alt = altRaw.replace(/[\[\]]/g, '');
+  const brand = String(candidate.brand || '').trim();
+  const ctaLabel = brand ? `${brand} 단독 픽 가격 확인하기` : '단독 픽 가격 확인 및 상세정보 보기';
+
+  const lines = [];
+  lines.push('## 📍 픽앤조이 오늘의 단독 픽');
+  lines.push('');
+  if (image) {
+    lines.push(`![${alt}](${image})`);
+    lines.push('');
+  }
+  lines.push(`**👉 [${ctaLabel}](${url})**`);
+  return lines.join('\n');
+}
+
 function injectProductBlocks(content, candidate, products) {
   // [재발 방지] 후처리에서 "오늘의 픽" 블록을 본문 맨 위로 올리기 전에,
   // 첫 ## 헤딩 이전에 hook 단락이 있는지 확인하고 없으면 fallback hook을 자동 삽입한다.
   const hookEnsured = ensureIntroHookFallback(content, candidate);
   const normalizedContent = normalizeLegacyChoiceProductBlocks(hookEnsured);
+
+  // [단독 모드] keywordHint 없고 수동 제휴(coupangUrl+coupangHtml) 입력이면
+  // 자동 멀티 상품 블록(픽+비교 표) 삽입을 건너뛰고, 단독 픽 블록 1개만 첫 ## 앞에 삽입한다.
+  if (isManualSinglePost(candidate)) {
+    let value = normalizedContent;
+    const singleBlock = buildSinglePickBlock(candidate);
+    if (singleBlock) {
+      value = insertBeforeFirstHeading(value, singleBlock);
+    }
+    return ensureDisclosure(ensureFallbackAffiliate(value, candidate.coupangUrl, candidate.title));
+  }
 
   if (!Array.isArray(products) || products.length === 0) {
     return ensureDisclosure(ensureFallbackAffiliate(normalizedContent, candidate.coupangUrl, candidate.title));
@@ -990,14 +1029,20 @@ async function resolveProductsForCandidate(candidate) {
 
 function buildChoicePrompt(candidate, today, context = {}, angle = WRITING_ANGLES[0]) {
   const outputFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName || 'choice-item'}.md`;
-  const productCount = Array.isArray(context.products) ? context.products.length : 3;
+  const isSingle = isManualSinglePost(candidate);
+  const productCount = isSingle ? 1 : (Array.isArray(context.products) ? context.products.length : 3);
   const productCountNote = productCount === 1
     ? '단 하나의 제품에 집중하는 포스트입니다. "3종", "3가지", "3개" 같은 복수 상품 표현 절대 금지. 이 제품만의 특성과 사용 경험에 깊이 집중해서 쓸 것.'
     : '"추천 상품은 3개입니다", "총 3가지를 준비했습니다" 같은 기계적 나열 표현 절대 금지. 대신 맥락에 자연스럽게 녹일 것 — 예) "이번에 엄선한 것들만 알면 쇼핑이 훨씬 수월해져요", "핵심만 간추렸어요", "직접 살펴봤어요"';
-  const productContext = Array.isArray(context.products) && context.products.length > 0
-    ? context.products.map((product, index) => `${index + 1}. ${product.productName} | 이미지: ${product.productImage || '없음'} | 링크: ${product.affiliateUrl}`).join('\n')
-    : '검색 실패 또는 결과 없음. 본문에는 수동 제휴 링크/배너 기준 fallback 문구만 사용하세요.';
+  const productContext = isSingle
+    ? '단독 모드: 자동 추출 상품 없음. 본문에는 입력 데이터의 단일 제품에만 집중하세요.'
+    : (Array.isArray(context.products) && context.products.length > 0
+        ? context.products.map((product, index) => `${index + 1}. ${product.productName} | 이미지: ${product.productImage || '없음'} | 링크: ${product.affiliateUrl}`).join('\n')
+        : '검색 실패 또는 결과 없음. 본문에는 수동 제휴 링크/배너 기준 fallback 문구만 사용하세요.');
   const keywordContext = Array.isArray(context.keywords) && context.keywords.length > 0 ? context.keywords.join(', ') : '없음';
+  const pickBlockHeadingRule = isSingle
+    ? '- 본문에 "## 📍 픽앤조이 오늘의 단독 픽" 헤딩과 그 직속 이미지/CTA 링크는 작성하지 마세요. 후처리에서 자동으로 단독 픽 블록(이미지+CTA)이 첫 ## 소제목 앞에 삽입됩니다.'
+    : '- 오늘의 대표 상품 블록 제목은 반드시 정확히 "## **📍 픽앤조이가 선정한 오늘의 픽**" 형식으로 작성할 것';
 
   return `당신은 픽앤조이(Pick-n-Joy)의 30대 초반 라이프스타일 에디터입니다.
 아래 [입력 데이터]만 근거로, 호기심을 유발하지만 과장하지 않는 제품 큐레이션 포스트를 작성하세요.
@@ -1079,7 +1124,7 @@ coupang_banner_alt: "(제품명 + 핵심 사양 포함 대체텍스트)"
 - 리드 문단은 독자의 생활 장면을 먼저 보여주고, 바로 제품 자랑으로 뛰어들지 말 것
 - 본문에 "The Choice" 또는 영어 구조 라벨을 그대로 쓰지 마세요
 - "오늘의 픽 (Pick of the Day)"처럼 한글 제목 뒤 영어 부제를 붙이지 말고, 소제목은 한국어 중심으로 작성할 것
-- 오늘의 대표 상품 블록 제목은 반드시 정확히 "## **📍 픽앤조이가 선정한 오늘의 픽**" 형식으로 작성할 것
+${pickBlockHeadingRule}
 - 전문 용어/브랜드/고유 명사를 제외한 불필요한 영어 표현(영어 부제, 영어 슬로건, 영어 구조 라벨) 사용을 금지하고 한글 에디터 톤을 유지할 것
 
 [호기심 유발 장치 - 최소 3개 반영]
@@ -1406,7 +1451,24 @@ async function run() {
 
   const candidate = await loadCandidate(inputPath);
   const today = todayIso();
-  const productResolution = await resolveProductsForCandidate(candidate);
+  const isSinglePost = isManualSinglePost(candidate);
+
+  // [단독 모드] 키워드 없이 수동 제휴 입력만 들어온 경우, 자동 멀티 상품 검색을 건너뛴다.
+  // 멀티 상품 블록(픽+비교)도 건너뛰고 본문 양식은 단독 1제품 중심으로 유지된다.
+  const productResolution = isSinglePost
+    ? {
+        keywords: [],
+        primaryKeywords: [],
+        fallbackKeywords: [],
+        searchedKeywordCount: 0,
+        selectedProductGroupTokens: [],
+        appliedMinRating: CHOICE_MIN_RATING,
+        usedTopRankFallback: false,
+        collectedCandidateCount: 0,
+        products: [],
+        error: null,
+      }
+    : await resolveProductsForCandidate(candidate);
   const hasKeywordInput = splitKeywordHints(candidate.keywordHint).length > 0;
 
   if (productResolution.error) {
@@ -1441,6 +1503,7 @@ async function run() {
   console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
   console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
   console.log(`입력 파일: ${inputPath}`);
+  console.log(`모드: ${isSinglePost ? '단독(수동 제휴)' : '자동(멀티 상품)'}`);
   console.log(`자동 키워드: ${(productResolution.keywords || []).join(', ') || '없음'}`);
   console.log(`실제 검색한 키워드 수: ${productResolution.searchedKeywordCount || 0}`);
   console.log(`자동 상품 수: ${productResolution.products.length}`);
