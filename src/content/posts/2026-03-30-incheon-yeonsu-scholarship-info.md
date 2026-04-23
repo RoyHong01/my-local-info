@@ -5,7 +5,7 @@ summary: "인천 연수구 학생을 위한 (재)연수큰재장학재단 장학
 description: "인천 연수구 학생을 위한 (재)연수큰재장학재단 장학생 선발 소식! 2025년 4월 해외 어학연수(중1·2), 9~10월 장학금(초·중·고·대학생)을 지원해요. 방문 또는 온라인으로 신청 가능하며, 미래 인재를 위한 특별한 기회이니 놓치지 마세요. 문의는 032-749-7243."
 category: 인천 지역 정보
 tags: [인천연수구, 연수구장학금, 연수큰재장학재단, 해외어학연수, 청소년지원]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://pick-n-joy.com/images/incheon-family-month-hero.jpg"
 source_id: "352000000113"
 slug: "2026-03-30-incheon-yeonsu-scholarship-info"
 source_snapshot_key: "재연수큰재장학재단장학생선발|||"

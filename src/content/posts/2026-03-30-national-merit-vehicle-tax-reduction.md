@@ -5,7 +5,7 @@ summary: 국가유공자 차량 세금 감면 혜택! 보철·생업용 차량 1
 description: 국가유공자 차량 세금 감면 혜택! 보철·생업용 차량 1대에 대해 취득세, 자동차세를 2024년 12월 31일까지 전액 면제 또는 50% 경감해 드려요. 거주지 시·군·구청에 방문 신청하세요.
 category: 전국 보조금·복지 정책
 tags: [국가유공자, 자동차세 감면, 취득세 감면, 보훈 혜택, 차량 세금]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://pick-n-joy.com/images/incheon-family-month-hero.jpg"
 source_id: "131200000014"
 slug: "2026-03-30-national-merit-vehicle-tax-reduction"
 ---

@@ -6,7 +6,7 @@ summary: "2024년 이후 출생아 가정이라면 소득 무관하게 첫째 20
 description: "2024년 이후 출생아 가정이라면 소득 무관하게 첫째 200만원, 둘째 이상 300만원 바우처를 받을 수 있어요. 사용처, 신청 방법, 주의사항까지 픽앤조이가 한 번에 정리했습니다."
 category: "전국 보조금·복지 정책"
 tags: [출산지원금, 첫만남이용권, 육아바우처, 출산혜택, 육아지원]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://pick-n-joy.com/images/gyeongbokgung-hero.png"
 source_id: "subsidy-002"
 ---
 

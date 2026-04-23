@@ -390,6 +390,67 @@ function getCategoryTargetCount(category) {
   return defaults[category] || 1;
 }
 
+function isSeoulSubsidyItem(item) {
+  const fields = [
+    item?.['서비스명'],
+    item?.['소관기관명'],
+    item?.['접수기관명'],
+    item?.location,
+    item?.addr1,
+  ]
+    .map((value) => String(value || ''))
+    .join(' ');
+
+  return /서울|서울시|서울특별시/.test(fields);
+}
+
+function parseIsoDateFromFilename(filename) {
+  const base = path.basename(String(filename || ''));
+  const m = base.match(/^(\d{4})-(\d{2})-(\d{2})-/);
+  if (!m) return '';
+  return `${m[1]}-${m[2]}-${m[3]}`;
+}
+
+function getDateDiffDays(fromDate, toDate) {
+  const from = new Date(`${fromDate}T00:00:00Z`).getTime();
+  const to = new Date(`${toDate}T00:00:00Z`).getTime();
+  if (!Number.isFinite(from) || !Number.isFinite(to)) return Number.POSITIVE_INFINITY;
+  return Math.floor((to - from) / (1000 * 60 * 60 * 24));
+}
+
+async function hasRecentSeoulSubsidyPost(postsDir, withinDays = 7) {
+  const todayISO = new Date().toISOString().split('T')[0];
+  const files = await fs.readdir(postsDir);
+
+  for (const file of files) {
+    if (!file.endsWith('.md')) continue;
+    const dated = parseIsoDateFromFilename(file);
+    if (!dated) continue;
+    const age = getDateDiffDays(dated, todayISO);
+    if (age < 0 || age > withinDays) continue;
+
+    const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
+    const category = extractFrontmatterValue(content, 'category');
+    if (category !== 'subsidy') continue;
+
+    const haystack = [
+      extractFrontmatterValue(content, 'title'),
+      extractFrontmatterValue(content, 'source_title'),
+      extractFrontmatterValue(content, 'source_addr1'),
+      extractFrontmatterValue(content, 'source_locality'),
+      content,
+    ]
+      .map((value) => String(value || ''))
+      .join(' ');
+
+    if (/서울|서울시|서울특별시/.test(haystack)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // 이미 작성된 블로그 글의 source_id 및 파일명 목록 가져오기
 async function getExistingPosts(postsDir) {
   // source_id가 있는 파일: ID로 정확 매칭
@@ -1081,9 +1142,75 @@ async function generatePost(candidate, postsDir) {
     '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
     '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
   };
-  const imageUrl = candidate.firstimage || candidate.firstimage2
-    || defaultImages[candidate._category]
-    || 'https://pick-n-joy.com/images/default-og.svg';
+  const nationalTokenPool = ['서울', '부산', '제주', '경주', '강릉', '전주', '여수'];
+  const internalNationalLandmarkImages = [
+    'https://pick-n-joy.com/images/gyeongbokgung-hero.png',
+    'https://pick-n-joy.com/images/changdeokgung-hero.png',
+    'https://pick-n-joy.com/images/changgyeonggung-hero.png',
+    'https://pick-n-joy.com/images/incheon-family-month-hero.jpg',
+    'https://pick-n-joy.com/images/incheon-spring-festival-2026.jpg',
+  ];
+  let imageUrl = candidate.firstimage || candidate.firstimage2 || '';
+  if (!imageUrl && process.env.TOUR_API_KEY) {
+    try {
+      const { extractRegionTokens, getRegionalLandmark } = require('./lib/landmark-engine');
+      const regionText = [
+        candidate['소관기관명'],
+        candidate['접수기관명'],
+        candidate['서비스명'],
+        candidate.title,
+        candidate.location,
+        candidate.addr1,
+      ].filter(Boolean).join(' ');
+      const tokens = extractRegionTokens(regionText);
+      const fallbackTokens = tokens.length > 0 ? tokens : ['대한민국'];
+      const expandedTokens = [];
+      const seenTokens = new Set();
+      for (const token of fallbackTokens) {
+        const value = String(token || '').trim();
+        if (!value) continue;
+        if (value === '대한민국') {
+          for (const nationalToken of nationalTokenPool) {
+            if (!seenTokens.has(nationalToken)) {
+              seenTokens.add(nationalToken);
+              expandedTokens.push(nationalToken);
+            }
+          }
+        } else if (!seenTokens.has(value)) {
+          seenTokens.add(value);
+          expandedTokens.push(value);
+        }
+      }
+      if (!generatePost._landmarkCache) generatePost._landmarkCache = new Map();
+      const lmCache = generatePost._landmarkCache;
+      for (const token of expandedTokens) {
+        const result = await getRegionalLandmark({
+          regionName: token,
+          tourApiKey: process.env.TOUR_API_KEY,
+          cache: lmCache,
+          numOfRows: 15,
+        });
+        if (result?.imageUrl) {
+          imageUrl = result.imageUrl;
+          break;
+        }
+      }
+    } catch (_err) {
+      // 랜드마크 조회 실패 시 기본 이미지로 fallback
+    }
+  }
+  if (!imageUrl && candidate._category === '전국 보조금·복지 정책') {
+    const seedText = String(candidate['서비스ID'] || candidate['id'] || candidate['서비스명'] || candidate.title || 'national');
+    let seedHash = 0;
+    for (let i = 0; i < seedText.length; i++) {
+      seedHash = ((seedHash << 5) - seedHash) + seedText.charCodeAt(i);
+      seedHash |= 0;
+    }
+    imageUrl = internalNationalLandmarkImages[Math.abs(seedHash) % internalNationalLandmarkImages.length];
+  }
+  if (!imageUrl) {
+    imageUrl = defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
+  }
   const midImageUrl = (candidate.firstimage && candidate.firstimage2 && candidate.firstimage2 !== candidate.firstimage)
     ? candidate.firstimage2
     : '';
@@ -1511,7 +1638,7 @@ async function run() {
     }
 
     // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
-    const candidates = validItems.filter(item => {
+    let candidates = validItems.filter(item => {
       const name = item['서비스명'] || item['title'] || item['name'] || '';
       const id = String(item['서비스ID'] || item['contentid'] || item['id'] || '');
       const startDate = item['eventstartdate'] || item['startDate'] || '';
@@ -1549,6 +1676,27 @@ async function run() {
     });
 
     console.log(`  미작성 항목: ${candidates.length}개`);
+
+    if (category === '전국 보조금·복지 정책' && candidates.length > 0) {
+      const hasRecentSeoul = await hasRecentSeoulSubsidyPost(postsDir, 7);
+      if (!hasRecentSeoul) {
+        const seoulCandidates = candidates.filter((item) => isSeoulSubsidyItem(item));
+        if (seoulCandidates.length > 0) {
+          const pinned = seoulCandidates[0];
+          const pinnedId = String(pinned['서비스ID'] || pinned.id || pinned['서비스명'] || pinned.name || '');
+          const rest = candidates.filter((item) => {
+            const id = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
+            return id !== pinnedId;
+          });
+          candidates = [pinned, ...rest];
+          console.log(`  📌 서울 보조금 주간 보강 적용: "${pinned['서비스명'] || pinned.name || pinned.title || 'unknown'}" 우선 배치`);
+        } else {
+          console.log('  ℹ️ 서울 보조금 주간 보강 대상 없음(이번 배치 후보 내 서울 항목 없음)');
+        }
+      } else {
+        console.log('  ✅ 최근 7일 내 서울 보조금 포스트 존재: 주간 보강 스킵');
+      }
+    }
 
     const categoryTargetCount = getCategoryTargetCount(category);
     console.log(`  카테고리 목표 발행량: ${categoryTargetCount}건`);
