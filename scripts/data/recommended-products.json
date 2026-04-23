@@ -845,6 +845,61 @@
       "sourceId": "manual-choice-digital-2026-04-23",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "8989384912",
+      "productName": "티타임커피 1kg 골드 리치 원두커피 갓볶은 신선한 로스팅원두 커피머신 추천원두, 홀빈(분쇄안함), 1kg, 1개",
+      "brand": "티타임커피",
+      "productGroupTokens": [
+        "1kg",
+        "골드",
+        "리치",
+        "원두커피",
+        "갓볶은",
+        "신선한"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md",
+      "sourceId": "manual-choice-teatime-coffee-robusta-1kg",
+      "themeKey": "",
+      "themeName": ""
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "8578915101",
+      "productName": "티타임커피 카페 안단테 블렌드 원두커피",
+      "brand": "티타임커피",
+      "productGroupTokens": [
+        "카페",
+        "안단테",
+        "블렌드",
+        "원두커피"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md",
+      "sourceId": "manual-choice-teatime-coffee-robusta-1kg",
+      "themeKey": "",
+      "themeName": ""
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "8974062474",
+      "productName": "인도네시아 프리미엄 로브스타 저렴하고 맛있고 고소한 커피 - 브로일링 직화커피, 1개, 1kg, 홀빈(분쇄안함)",
+      "brand": "인도네시아",
+      "productGroupTokens": [
+        "로브스타",
+        "저렴하고",
+        "맛있고",
+        "고소한",
+        "커피",
+        "브로일링"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md",
+      "sourceId": "manual-choice-teatime-coffee-robusta-1kg",
+      "themeKey": "",
+      "themeName": ""
     }
   ]
 }

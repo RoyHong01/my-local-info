@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-04-23 (단독 초이스 생성: 티타임커피 1kg)
+
+- **요청**: 단독 초이스 1건 생성
+  - 제품명: `[대용량] 티타임커피 1kg 로부스타 하이 블렌드 ...`
+  - 쿠팡 링크: `https://link.coupang.com/a/euUaRe`
+  - 히어로: `coffee-hero.png` (다운로드)
+  - 본문 중간: `coffee-middle.png` (다운로드)
+  - 톤: 일상 시나리오 중심, 과장 금지, CTA 자연스럽게
+- **수행 방식(운영 규칙 준수)**:
+  1. `scripts/choice-input.latest.json`에 입력 반영
+  2. `npm run generate:choice:latest` 실행
+  3. `npm run check:choice-quality` 통과
+  4. `npm run build` 성공
+- **결과 파일**:
+  - 포스트: `src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md`
+  - 이미지: `public/images/choice/coffee-hero.png`, `public/images/choice/coffee-middle.png`
+- **후처리**: 생성 본문에 요청된 중간 이미지(`/images/choice/coffee-middle.png`)를 삽입해 사용자 지정 이미지 반영 완료.
+
+---
+
 ## 2026-04-23 (랜드마크 큐레이션 풀 + 주제 감지 도입)
 
 - **배경**: 광역 전용 정책 적용 후에도 지역명("서울"/"인천")으로 TourAPI를 검색하면 "지역명+시설명"으로 태깅된 노이즈 사진이 뽑힘. 사례:
