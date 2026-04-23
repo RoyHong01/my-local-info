@@ -1,23 +1,25 @@
 {
-  "title": "첫 잔이 아쉬웠던 아침, 할리스 에스프레소 로스트 블렌드 원두로 루틴 정리",
-  "englishName": "hollys-espresso-roast-blend-bean",
-  "summary": "아침마다 진한 커피 한 잔으로 시작하고 싶다면 할리스 에스프레소 로스트 블렌드 원두는 과한 산미 부담 없이 균형 잡힌 바디감으로 집에서도 카페 같은 루틴을 이어가기 좋아요.",
-  "sourceUrl": "https://link.coupang.com/a/euUo0N",
-  "coupangUrl": "https://link.coupang.com/a/euUo0N",
-  "coupangHtml": "<a href=\"https://link.coupang.com/a/euUo0N\" target=\"_blank\" referrerpolicy=\"unsafe-url\"><img src=\"https://image9.coupangcdn.com/image/affiliate/banner/7ca4bf74b1c86d7cba3d0c9ea883df89@2x.jpg\" alt=\"할리스 에스프레소 로스트 블렌드 원두, 홀빈(분쇄안함), 500g, 1개\" width=\"120\" height=\"240\"></a>",
+  "title": "매일 마시는 커피, 부담 없이 채우는 대용량 티타임커피 1kg 루틴",
+  "englishName": "teatime-coffee-robusta-1kg",
+  "summary": "매일 여러 잔 커피를 내려 마시는 집이나 사무실이라면 대용량 티타임커피 1kg이 재주문 부담을 줄여주고, 산미 부담 없는 고소한 맛으로 일상 커피 루틴을 안정적으로 이어가기 좋아요.",
+  "sourceUrl": "https://link.coupang.com/a/eu2kIZ",
+  "coupangUrl": "https://link.coupang.com/a/eu2kIZ",
+  "coupangHtml": "<a href=\"https://link.coupang.com/a/eu2kIZ\" target=\"_blank\" referrerpolicy=\"unsafe-url\"><img src=\"https://img5a.coupangcdn.com/image/affiliate/banner/7cb9db251db1e0c52a95d3e22dbb8b07@2x.jpg\" alt=\"[대용량] 티타임커피 1kg 로부스타 하이 블렌드 산미없는 고소하고 맛있는 원두커피 홀빈 블렌딩 베트남 에티오피아 커피머신 추천원두, 5개, 홀빈(분쇄안함)\" width=\"120\" height=\"240\"></a>",
   "rating": "4.8",
   "reviewCount": "100",
-  "brand": "할리스",
+  "brand": "티타임커피",
   "tags": [
-    "할리스",
+    "티타임커피",
     "원두커피",
-    "에스프레소원두",
-    "홀빈",
+    "대용량원두",
+    "산미없는커피",
     "커피루틴",
     "쿠팡",
     "리뷰"
   ],
-  "image": "/images/choice/holis-hero.png",
-  "fileName": "hollys-espresso-roast-blend-bean",
-  "outputFileName": "2026-04-23-choice-hollys-espresso-roast-blend-bean.md"
+  "image": "/images/choice/coffee-hero.png",
+  "middleImage": "/images/choice/coffee-middle.png",
+  "middleImageAlt": "대용량 티타임커피 1kg 로부스타 하이 블렌드 원두 패키지 디테일",
+  "fileName": "teatime-coffee-robusta-1kg",
+  "outputFileName": "2026-04-23-choice-teatime-coffee-robusta-1kg.md"
 }
