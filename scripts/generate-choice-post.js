@@ -696,6 +696,11 @@ function findChoiceValidationErrors(content) {
     errors.push('필수 ## 소제목이 없습니다.');
   }
 
+  // [재발 방지] 본문 첫 ## 헤딩 이전에 서론 hook 단락이 1개 이상 있어야 함.
+  // (없으면 후처리로 "오늘의 픽" 블록이 본문 맨 위로 올라가 hook 없이 시작됨)
+  const introErrors = findIntroHookValidationErrors(content);
+  errors.push(...introErrors);
+
   // CTA 검증은 본문만 대상으로 수행합니다.
   // frontmatter title에 포함된 이모지(예: 🛒)를 CTA로 오인하는 것을 방지합니다.
   const { body } = splitFrontmatterAndBody(String(content || ''));
@@ -714,6 +719,48 @@ function findChoiceValidationErrors(content) {
   if (ctaLinesWithoutUrl.length > 0) {
     const preview = ctaLinesWithoutUrl.slice(0, 2).join(' | ');
     errors.push(`URL 없는 CTA 문장이 남아 있습니다. (${preview})`);
+  }
+
+  return errors;
+}
+
+/**
+ * [재발 방지 - 서론 hook 검증]
+ * 본문 첫 ## 헤딩 이전에 hook 단락(텍스트 기반, 최소 길이 30+) 1개 이상이 있어야 한다.
+ * 없으면 후처리에서 "오늘의 픽" 블록이 본문 맨 위로 올라가, 독자에게 hook 없이 곧장 상품부터 보이게 됨.
+ * 자동/수동 모두 동일 규칙 적용.
+ */
+function findIntroHookValidationErrors(content) {
+  const errors = [];
+  const { body } = splitFrontmatterAndBody(String(content || ''));
+  const trimmedBody = String(body || '').trim();
+  if (!trimmedBody) {
+    errors.push('본문이 비어 있어 서론 hook 검증을 수행할 수 없습니다.');
+    return errors;
+  }
+
+  const lines = trimmedBody.split('\n');
+  const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+
+  // 첫 ## 헤딩이 없으면 다른 검증에서 잡히므로 여기서는 통과
+  if (firstHeadingIndex < 0) return errors;
+
+  const intro = lines.slice(0, firstHeadingIndex).join('\n').trim();
+  if (!intro) {
+    errors.push('서론 hook 단락이 없습니다. 첫 ## 소제목 이전에 독자 공감용 hook 단락 1~3개를 작성해야 합니다.');
+    return errors;
+  }
+
+  const introBlocks = intro.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const textBlocks = introBlocks.filter((block) => {
+    if (/^#{1,6}\s+/.test(block)) return false;
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(block)) return false;
+    if (/^\*\*(?:👉|🛒)/.test(block)) return false;
+    return block.length >= 30;
+  });
+
+  if (textBlocks.length < 1) {
+    errors.push('서론 hook 단락이 부족합니다. 첫 ## 소제목 이전에 30자 이상 텍스트 단락이 1개 이상 필요합니다.');
   }
 
   return errors;
@@ -743,8 +790,62 @@ function sanitizeBannedExpressions(content) {
   return next;
 }
 
+/**
+ * [재발 방지 - 서론 hook 자동 보정]
+ * 본문 첫 ## 헤딩 이전에 hook 단락이 1개 이상 없으면, candidate 정보를 기반으로
+ * 안전한 일반형 hook 2~3 단락을 자동 삽입한다. (Gemini 재시도 모두 실패해도 hook 보장)
+ */
+function ensureIntroHookFallback(content, candidate) {
+  const text = String(content || '');
+  const { frontmatter, body } = splitFrontmatterAndBody(text);
+  const trimmedBody = String(body || '').trim();
+  if (!trimmedBody) return text;
+
+  const lines = trimmedBody.split('\n');
+  const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (firstHeadingIndex < 0) return text;
+
+  const intro = lines.slice(0, firstHeadingIndex).join('\n').trim();
+  const introBlocks = intro.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+  const hasHookParagraph = introBlocks.some((block) => {
+    if (/^#{1,6}\s+/.test(block)) return false;
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(block)) return false;
+    if (/^\*\*(?:👉|🛒)/.test(block)) return false;
+    return block.length >= 30;
+  });
+  if (hasHookParagraph) return text;
+
+  // hook 단락이 없으면 안전한 일반형 hook을 candidate 정보 기반으로 생성
+  const productName = String(candidate?.title || candidate?.englishName || '오늘의 추천 상품').trim();
+  const summary = String(candidate?.summary || candidate?.description || '').trim();
+
+  const hookParagraphs = [];
+  hookParagraphs.push('하루 중 사소한 불편 하나가 의외로 길게 마음에 남을 때가 있어요. 막상 바꾸자니 뭘 골라야 할지 애매하고, 정보를 비교하다 보면 시간만 흘러가곤 하죠.');
+  hookParagraphs.push('그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.');
+  if (summary) {
+    hookParagraphs.push(summary);
+  } else {
+    hookParagraphs.push(`${productName} — 어떤 상황에서 쓸모 있는 선택지가 될 수 있는지, 핵심만 짚어 살펴봤어요.`);
+  }
+
+  const newBody = [hookParagraphs.join('\n\n'), '', ...lines].join('\n');
+
+  // frontmatter 복원
+  if (text.startsWith('---\n')) {
+    const fmEnd = text.indexOf('\n---\n', 4);
+    if (fmEnd > 0) {
+      const fm = text.slice(0, fmEnd + 5);
+      return `${fm}\n${newBody.trim()}\n`;
+    }
+  }
+  return newBody;
+}
+
 function injectProductBlocks(content, candidate, products) {
-  const normalizedContent = normalizeLegacyChoiceProductBlocks(content);
+  // [재발 방지] 후처리에서 "오늘의 픽" 블록을 본문 맨 위로 올리기 전에,
+  // 첫 ## 헤딩 이전에 hook 단락이 있는지 확인하고 없으면 fallback hook을 자동 삽입한다.
+  const hookEnsured = ensureIntroHookFallback(content, candidate);
+  const normalizedContent = normalizeLegacyChoiceProductBlocks(hookEnsured);
 
   if (!Array.isArray(products) || products.length === 0) {
     return ensureDisclosure(ensureFallbackAffiliate(normalizedContent, candidate.coupangUrl, candidate.title));

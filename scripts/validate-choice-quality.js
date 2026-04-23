@@ -39,6 +39,76 @@ function isTextParagraph(block) {
   return value.length >= 45;
 }
 
+/**
+ * [재발 방지 - 모든 초이스 hook 검증]
+ * 본문 첫 ## 헤딩 이전에 hook 단락(텍스트, 30자+) 1개 이상이 있어야 함.
+ * 자동(auto), 수동(manual) 모두 적용.
+ */
+function validateIntroHook(body) {
+  const errors = [];
+  const trimmed = String(body || '').trim();
+  if (!trimmed) return errors;
+
+  const lines = trimmed.split('\n');
+  const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (firstHeadingIndex < 0) return errors;
+
+  const intro = lines.slice(0, firstHeadingIndex).join('\n').trim();
+  if (!intro) {
+    errors.push('서론 hook 단락이 없습니다. 첫 ## 소제목 이전에 독자 공감용 hook 단락이 1개 이상 필요합니다.');
+    return errors;
+  }
+
+  const introBlocks = intro.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const textBlocks = introBlocks.filter((block) => {
+    if (/^#{1,6}\s+/.test(block)) return false;
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(block)) return false;
+    if (/^\*\*(?:👉|🛒)/.test(block)) return false;
+    return block.length >= 30;
+  });
+
+  if (textBlocks.length < 1) {
+    errors.push('서론 hook 단락이 부족합니다. 첫 ## 소제목 이전에 30자 이상 텍스트 단락이 1개 이상 필요합니다.');
+  }
+
+  return errors;
+}
+
+/**
+ * [재발 방지 - 모든 초이스 hook 검증]
+ * 본문 첫 ## 헤딩 이전에 hook 단락(텍스트, 30자+) 1개 이상이 있어야 함.
+ * 자동(auto), 수동(manual) 모두 적용.
+ */
+function validateIntroHook(body) {
+  const errors = [];
+  const trimmed = String(body || '').trim();
+  if (!trimmed) return errors;
+
+  const lines = trimmed.split('\n');
+  const firstHeadingIndex = lines.findIndex((line) => /^##\s+/.test(line.trim()));
+  if (firstHeadingIndex < 0) return errors;
+
+  const intro = lines.slice(0, firstHeadingIndex).join('\n').trim();
+  if (!intro) {
+    errors.push('서론 hook 단락이 없습니다. 첫 ## 소제목 이전에 독자 공감용 hook 단락이 1개 이상 필요합니다.');
+    return errors;
+  }
+
+  const introBlocks = intro.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const textBlocks = introBlocks.filter((block) => {
+    if (/^#{1,6}\s+/.test(block)) return false;
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(block)) return false;
+    if (/^\*\*(?:👉|🛒)/.test(block)) return false;
+    return block.length >= 30;
+  });
+
+  if (textBlocks.length < 1) {
+    errors.push('서론 hook 단락이 부족합니다. 첫 ## 소제목 이전에 30자 이상 텍스트 단락이 1개 이상 필요합니다.');
+  }
+
+  return errors;
+}
+
 function collectHeadingsAfterLine(lines, startLineIndex) {
   const headings = [];
   for (let i = startLineIndex + 1; i < lines.length; i++) {
@@ -109,9 +179,17 @@ async function run() {
     const publishedBy = String(frontmatter.published_by || '').trim().toLowerCase();
 
     if (category !== '픽앤조이 초이스') continue;
-    if (publishedBy !== 'manual') continue;
 
-    const issues = validateManualChoiceBody(body, String(frontmatter.image || '').trim());
+    const issues = [];
+
+    // [재발 방지] 자동/수동 모두 hook 검증 적용
+    issues.push(...validateIntroHook(body));
+
+    // 수동 단독 글은 추가로 중간 이미지 이후 본문 밀도 검증
+    if (publishedBy === 'manual') {
+      issues.push(...validateManualChoiceBody(body, String(frontmatter.image || '').trim()));
+    }
+
     if (issues.length > 0) {
       allIssues.push({
         filePath: `src/content/life/${fileName}`,
@@ -121,7 +199,7 @@ async function run() {
   }
 
   if (allIssues.length > 0) {
-    console.error('❌ 수동 단독 초이스 품질 검증 실패');
+    console.error('❌ 픽앤조이 초이스 품질 검증 실패');
     for (const item of allIssues) {
       console.error(`- ${item.filePath}`);
       for (const issue of item.issues) {
@@ -131,7 +209,7 @@ async function run() {
     process.exit(1);
   }
 
-  console.log('✅ 수동 단독 초이스 품질 검증 통과');
+  console.log('✅ 픽앤조이 초이스 품질 검증 통과');
 }
 
 run().catch((error) => {
