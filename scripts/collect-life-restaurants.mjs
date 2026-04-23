@@ -8,6 +8,7 @@ const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
+const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 'true';
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
 // 생성 스크립트(generate-*.mjs/js)의 fallback 'gemini-2.5-flash-lite'와 의도적으로 다름. 통일 수정 금지.
 // CI에서는 RESTAURANT_GEMINI_MODEL env(flash-lite)가 주입되므로 이 값은 로컬 미설정 시에만 사용됨.
@@ -460,6 +461,67 @@ async function fetchGooglePlacePhotoById(placeId, apiKey) {
   }
 }
 
+/**
+ * 네이버 이미지 검색 API로 맛집 사진을 가져온다.
+ * 블로그·카페 리뷰 이미지를 반환하므로 음식/인테리어 사진 비율이 높다.
+ * landscape 우선 선택 → 최소 400px 폭 기준.
+ */
+// topN: 반환할 최대 URL 개수 (기본 2개 - 히어로 + 본문 삽입용)
+async function fetchNaverRestaurantPhoto(name, address, clientId, clientSecret, topN = 2) {
+  if (!clientId || !clientSecret) return null;
+
+  // 주소 앞 2~3 토큰(시/구)만 추출해 검색어를 압축
+  const locationHint = (address || '').split(' ').slice(0, 2).join(' ');
+  const query = `${name} ${locationHint} 맛집`.trim();
+
+  const url = new URL('https://openapi.naver.com/v1/search/image');
+  url.searchParams.set('query', query);
+  url.searchParams.set('display', '10');
+  url.searchParams.set('sort', 'sim');
+  url.searchParams.set('filter', 'large'); // 큰 이미지만 (최소 800px 이상)
+
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        'X-Naver-Client-Id': clientId,
+        'X-Naver-Client-Secret': clientSecret,
+      },
+    });
+
+    if (!res.ok) {
+      console.warn(`  [Naver Image] 검색 실패(${res.status}): ${name}`);
+      return null;
+    }
+
+    const data = await res.json();
+    const items = data?.items || [];
+    if (items.length === 0) return null;
+
+    // landscape(가로 >= 세로) + 최소 400px 폭 이미지 우선 선택
+    const landscape = items.find((item) => {
+      const w = parseInt(item.sizewidth, 10) || 0;
+      const h = parseInt(item.sizeheight, 10) || 0;
+      return w >= 400 && w >= h;
+    });
+
+    // landscape 우선 candidates 순서로 상위 topN개 수집
+    const landscapeItems = items.filter((item) => {
+      const w = parseInt(item.sizewidth, 10) || 0;
+      const h = parseInt(item.sizeheight, 10) || 0;
+      return w >= 400 && w >= h;
+    });
+    const ordered = landscapeItems.length > 0
+      ? [...landscapeItems, ...items.filter((i) => !landscapeItems.includes(i))]
+      : items;
+    const urls = ordered.slice(0, topN).map((item) => item?.link).filter(Boolean);
+    if (topN === 1) return urls[0] || null;
+    return urls.length > 0 ? urls : null;
+  } catch (error) {
+    console.warn(`  [Naver Image] 요청 오류: ${name} - ${error?.message || error}`);
+    return null;
+  }
+}
+
 async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCacheClient) {
   const regions = payload?.regions && typeof payload.regions === 'object' ? payload.regions : {};
   const metrics = {
@@ -537,7 +599,7 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCac
   return { payload, metrics, updatedCount };
 }
 
-async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
+async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient, naverClientId, naverClientSecret) {
   const metrics = {
     cacheHit: 0,
     cacheMiss: 0,
@@ -611,12 +673,17 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
     } else {
       console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰${usedCache ? ', cache' : ''}${photoUrl ? ', 📷사진' : ''})`);
+      const naverUrls = naverClientId && naverClientSecret
+        ? (await fetchNaverRestaurantPhoto(item.name, item.address, naverClientId, naverClientSecret, 2)) || []
+        : [];
       filtered.push({
         ...item,
         googlePlaceId: placeId,
         googleRating: rating,
         googleRatingCount: ratingCount,
         googlePhotoUrl: photoUrl,
+        naverPhotoUrl: naverUrls[0] || null,
+        naverPhotoUrl2: naverUrls[1] || null,
         googlePriceLevel: '',
         googleBusinessStatus: '',
         googlePrimaryType: '',
@@ -635,6 +702,44 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient) {
     metrics,
   };
 }
+
+/**
+ * 기존 restaurants.json의 각 항목에 naverPhotoUrl을 보강한다.
+ * BACKFILL_NAVER_PHOTOS_ONLY=true 모드에서 사용.
+ * 이미 naverPhotoUrl이 있는 항목은 건너뛴다.
+ */
+async function enrichNaverPhotos(payload, naverClientId, naverClientSecret) {
+  const regions = payload?.regions && typeof payload.regions === 'object' ? payload.regions : {};
+  let updatedCount = 0;
+  let skippedCount = 0;
+
+  for (const [regionKey, items] of Object.entries(regions)) {
+    if (!Array.isArray(items)) continue;
+
+    for (const item of items) {
+      if (item.naverPhotoUrl && item.naverPhotoUrl2) {
+        skippedCount += 1;
+        continue;
+      }
+
+      const naverUrls = (await fetchNaverRestaurantPhoto(item.name, item.address, naverClientId, naverClientSecret, 2)) || [];
+      if (naverUrls.length > 0) {
+        if (!item.naverPhotoUrl) item.naverPhotoUrl = naverUrls[0];
+        if (!item.naverPhotoUrl2 && naverUrls[1]) item.naverPhotoUrl2 = naverUrls[1];
+        updatedCount += 1;
+        console.log(`  ✅ Naver 사진 보강: [${REGION_LABEL[regionKey] || regionKey}] ${item.name}`);
+      } else {
+        console.log(`  - Naver 사진 없음: [${REGION_LABEL[regionKey] || regionKey}] ${item.name}`);
+      }
+
+      // 네이버 API 속도 제한 방지 (100ms 간격)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  return { payload, updatedCount, skippedCount };
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 
 function extractJsonArray(text) {
@@ -767,7 +872,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
   }
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상)`);
-  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient);
+  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient, naverClientId, naverClientSecret);
   const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
   if (items.length === 0) {
     console.warn(`  [${region}] Google 평점 필터 후 후보 없음`);
@@ -802,6 +907,8 @@ async function run() {
   const kakaoKey = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_API_KEY;
   const geminiKey = process.env.GEMINI_API_KEY;
   const googleKey = process.env.GOOGLE_PLACES_API_KEY;
+  const naverClientId = process.env.NAVER_CLIENT_ID;
+  const naverClientSecret = process.env.NAVER_CLIENT_SECRET;
   const supabaseCacheClient = createSupabaseCacheClient();
   const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
 
@@ -836,6 +943,27 @@ async function run() {
     console.log(`✅ 기존 사진 보강 완료: ${OUTPUT_PATH}`);
     console.log(`   - 사진 보강 건수: ${updatedCount}`);
     console.log(`   - cache_hit=${metrics.cacheHit}, cache_miss=${metrics.cacheMiss}, google_called=${metrics.googleCalled}`);
+    return;
+  }
+
+  if (BACKFILL_NAVER_PHOTOS_ONLY) {
+    if (!naverClientId || !naverClientSecret) {
+      console.error('NAVER_CLIENT_ID / NAVER_CLIENT_SECRET이 없습니다. Naver 사진 보강을 중단합니다.');
+      process.exit(1);
+    }
+
+    console.log('🖼️  기존 restaurants.json 대상 Naver 이미지 사진 보강 시작');
+
+    const payload = await readExistingRestaurantsPayload();
+    const { payload: enrichedPayload, updatedCount, skippedCount } = await enrichNaverPhotos(payload, naverClientId, naverClientSecret);
+
+    enrichedPayload.updatedAt = new Date().toISOString();
+
+    await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
+    await fs.writeFile(OUTPUT_PATH, JSON.stringify(enrichedPayload, null, 2), 'utf-8');
+
+    console.log(`✅ Naver 사진 보강 완료: ${OUTPUT_PATH}`);
+    console.log(`   - 보강 건수: ${updatedCount}, 스킵(기존 보유): ${skippedCount}`);
     return;
   }
 

@@ -597,6 +597,16 @@ function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
     itemName: candidate.item.name,
   });
 
+  // 방문 정보 한눈에 바로 위에 두 번째 이미지 삽입 (네이버 2번째 이미지 우선)
+  const secondImg = candidate.item.naverPhotoUrl2 || null;
+  if (secondImg) {
+    const altText = (candidate.item.name || '맛집 사진').replace(/"/g, '');
+    finalContent = finalContent.replace(
+      /(## 방문 정보 한눈에)/,
+      `\n\n![${altText}](${secondImg})\n\n$1`,
+    );
+  }
+
   return { filename, finalContent };
 }
 
@@ -878,7 +888,7 @@ async function generateRestaurantPost(candidate) {
   const slugBase = buildRestaurantSlug(candidate, locality);
   const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-restaurant.svg';
-  const heroImage = candidate.item.googlePhotoUrl || defaultImage;
+  const heroImage = candidate.item.naverPhotoUrl || candidate.item.googlePhotoUrl || defaultImage;
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
 
   const ratingFrontmatter = candidate.item.googleRating != null
