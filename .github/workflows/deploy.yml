@@ -270,6 +270,8 @@ jobs:
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
           RESTAURANT_GEMINI_MODEL: 'gemini-2.5-flash-lite'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
           PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
           PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
 
@@ -282,6 +284,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-2.5-flash-lite'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
           PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
           PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
           LIFE_RESTAURANT_POSTS_PER_RUN: '3'
