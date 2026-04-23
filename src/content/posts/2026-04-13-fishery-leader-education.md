@@ -6,7 +6,7 @@ description: "해양수산부에서 어업인 및 후계자를 위한 '수산업
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [어업인교육, 수산업경영인, 후계자양성, 해양수산부, 무상교육]
-image: "https://pick-n-joy.com/images/incheon-family-month-hero.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/76/3507176_image2_1.jpg"
 source_id: "119200000073"
 slug: "2026-04-13-fishery-leader-education"
 source_snapshot_key: "어업인및어업인후계자교육지원수산업경영인교육|||"

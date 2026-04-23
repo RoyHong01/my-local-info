@@ -6,7 +6,7 @@ summary: "소득이 적은 근로자·사업자라면 근로장려금 최대 330
 description: "소득이 적은 근로자·사업자라면 근로장려금 최대 330만원, 자녀 1인당 100만원 자녀장려금을 국세청에서 직접 돌려줍니다. 5월 정기신청 놓치면 손해, 지금 바로 확인하세요."
 category: "전국 보조금·복지 정책"
 tags: [근로장려금, 자녀장려금, 세금환급, 국세청지원, 저소득근로자]
-image: "https://pick-n-joy.com/images/incheon-spring-festival-2026.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/71/3526271_image2_1.jpg"
 source_id: "105100000001"
 ---
 

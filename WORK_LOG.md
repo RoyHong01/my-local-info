@@ -5,6 +5,57 @@
 
 ---
 
+## 2026-04-23 (인천/보조금 히어로 이미지 교정 - 재실행)
+
+- **배경**: 기존 `fix-post-images.js` 1차/2차 실행 결과, 대부분의 인천/보조금 포스트가 TourAPI 조회에 실패하고 내부 폴백 풀(서울 궁 3종 + 인천 가정의달/봄꽃축제 이미지 2종)로 흘러감. 특히 인천 가정의달/봄꽃축제 이미지는 다른 블로그에서도 쓰이는 이미지라 "포스트 간 이미지 재사용" 이슈 발생.
+- **진단**:
+  - TourAPI `searchKeyword2`가 행정구역 접미사(`시/군/구/특별시/광역시/도`) 포함 시 0건을 반환 (예: `군산시` 0건, `군산` 5건 / `연수구` 0건, `연수` 5건 / `서울특별시` 0건, `서울` 5건).
+  - `extractRegionTokens`가 광역시 약칭(`대구`, `서울` 등 단독 단어) 인식 불가 → 전국 폴백으로 흘러가 오매칭.
+  - 내부 폴백 풀에 축제성 이미지 포함 → 재사용 문제.
+- **변경 내용**:
+  - `scripts/lib/landmark-engine.js` 전면 보강
+    - `METRO_SHORT_NAMES` / `PROVINCE_SHORT_NAMES` 상수화 + 단독 단어 토큰 추출 패턴 추가
+    - `stripAdministrativeSuffix()` 추가: 긴 접미사부터 순차 제거 (`특별자치도→도` 순)
+    - `buildKeywordCandidates()` 추가: 원본 + 접미사 제거 variant 후보 리스트 생성
+    - `getRegionalLandmark()`가 후보 리스트를 순차 시도하도록 개선
+    - `addressFilter` 옵션 추가: 구 단위 토큰으로 조회 시 상위 광역(`인천` 등) 주소 포함 결과만 채택하여 동명 구 혼선 차단
+  - `scripts/fix-post-images.js` 재작성
+    - `LEGACY_FALLBACK_IMAGES` 정의 + `FORCE_RECHECK=1` 모드에서 재처리
+    - `INTERNAL_SAFE_FALLBACK_IMAGES`에서 축제/행사 이미지 2개(`incheon-family-month-hero.jpg`, `incheon-spring-festival-2026.jpg`) 완전 제거 → 순수 궁 이미지 3개만 유지
+    - `resolveImageViaTourAPI()`: 추출 토큰(자체 접미사 제거 포함) → 부모 광역 → 카테고리 기본(인천) → 전국 대표 9지역 풀 순서로 순차 시도
+    - 구 단위 토큰에는 부모 광역을 `addressFilter`로 주입
+- **실행 결과**: `FORCE_RECHECK=1 node scripts/fix-post-images.js` → 67건 대상, **67건 전부 TourAPI 실제 이미지로 교체 성공**, safe-fallback 0건.
+  - 예: `미래 모빌리티 창업캠프`(대구) → 대구 TourAPI 이미지 / `인천 연수구 여성장애인` → 연수구(addressFilter:인천) 이미지 / `군포시 무료 독감` → 군포 이미지 / `창원시 신규입주민 지원` → 창원시 이미지
+- **검증**: `npm run build` 성공 (8281 URL).
+
+## 2026-04-23 (인천/보조금 랜드마크 히어로 보강)
+
+- **목적**: 인천/보조금 포스트의 기본 SVG 노출 비율을 줄이고, 지역 랜드마크 기반 히어로 이미지로 시각 밀도 강화
+- **변경 내용**:
+  - `scripts/lib/landmark-engine.js` 추가
+    - `extractRegionTokens()`으로 지역 토큰 추출
+    - `getRegionalLandmark()`로 TourAPI(KorService2/searchKeyword2) 랜덤 랜드마크 이미지 선택
+  - `scripts/collect-incheon.js`
+    - 기존 행사 매칭 이후 `firstimage` 비어있는 항목에 인천/군·구 기반 랜드마크 보강 추가
+    - `incheon_landmark_matched` GitHub output 추가
+  - `scripts/collect-subsidy.js`
+    - `firstimage` 비어있는 항목에 지자체명 기반 랜드마크 보강 추가
+    - `subsidy_landmark_matched` GitHub output 추가
+- **검증**: `npm run build` 성공
+
+## 2026-04-23 (맛집 포스트 두 번째 이미지 네이버 전환)
+
+- **목적**: 구글 이미지의 낮은 품질/수량 한계를 극복, 두 번째 본문 이미지를 네이버 2번째 검색 결과로 교체
+- **변경 내용**:
+  - `scripts/collect-life-restaurants.mjs`
+    - `fetchNaverRestaurantPhoto`에 `topN=2` 파라미터 추가, 최대 2개 landscape-first URL 배열 반환
+    - `filterByGoogleRating`: `naverPhotoUrl` + `naverPhotoUrl2` 동시 저장
+    - `enrichNaverPhotos`: 두 URL 모두 backfill, partial 지원(url1 있고 url2 없는 항목도 처리)
+  - `scripts/generate-life-restaurant-posts.mjs`: `secondImg` 로직을 `naverPhotoUrl2`로 단순화
+  - `restaurants.json`: 88건 `naverPhotoUrl2` 백필 완료
+- **커밋**: `faa32c4`, `c35c23c`
+- **검증**: `npm run build` 성공, `git push` 완료
+
 ## 2026-04-22 (단독 초이스 생성 체인 통일 고정)
 
 - **운영 결정**:

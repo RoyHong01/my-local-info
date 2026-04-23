@@ -6,6 +6,9 @@ function uniq(values) {
   return [...new Set(values.filter(Boolean))];
 }
 
+const METRO_SHORT_NAMES = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '제주'];
+const PROVINCE_SHORT_NAMES = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남'];
+
 function extractRegionTokens(text) {
   const src = normalizeSpace(text);
   if (!src) return [];
@@ -21,23 +24,44 @@ function extractRegionTokens(text) {
     .map((m) => m[1])
     .filter((token) => !/(특별시|광역시|특별자치시)$/.test(token));
 
-  return uniq([...siGunGu, ...metro, ...provinceCity]);
+  const shortMetros = [];
+  for (const name of [...METRO_SHORT_NAMES, ...PROVINCE_SHORT_NAMES]) {
+    const pattern = new RegExp(`(?:^|[^가-힣])${name}(?=[^가-힣]|$)`, 'g');
+    if (pattern.test(src)) {
+      shortMetros.push(name);
+    }
+  }
+
+  return uniq([...siGunGu, ...metro, ...provinceCity, ...shortMetros]);
+}
+
+function stripAdministrativeSuffix(token) {
+  const t = normalizeSpace(token);
+  if (!t) return '';
+  const suffixes = ['특별자치도', '특별자치시', '광역시', '특별시', '시', '군', '구', '도'];
+  for (const suf of suffixes) {
+    if (t.endsWith(suf) && t.length > suf.length) {
+      const stripped = t.slice(0, -suf.length);
+      if (stripped.length >= 2) return stripped;
+    }
+  }
+  return t;
+}
+
+function buildKeywordCandidates(regionName) {
+  const orig = normalizeSpace(regionName);
+  if (!orig) return [];
+  const first = orig.split(/\s+/)[0];
+  const stripped = stripAdministrativeSuffix(first);
+  const list = [first];
+  if (stripped && stripped !== first) list.push(stripped);
+  return uniq(list);
 }
 
 function pickRandom(items) {
   if (!Array.isArray(items) || items.length === 0) return null;
   const index = Math.floor(Math.random() * items.length);
   return items[index] || null;
-}
-
-function buildTourKeyword(regionName) {
-  // TourAPI searchKeyword2는 다중 단어 검색에서 0건을 반환하므로 단순 지역명만 사용
-  // "강릉" → "강릉 관광" 변환은 0건 결과를 야기함
-  // 해결: 단일 토큰 사용 (강릉, 서울, 제주 등)
-  const region = normalizeSpace(regionName);
-  if (!region) return '';
-  // Strip any trailing keywords to ensure single-word search
-  return region.split(/\s+/)[0];
 }
 
 async function fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows = 15 } = {}) {
@@ -78,29 +102,44 @@ async function getRegionalLandmark(options) {
     tourApiKey,
     cache,
     numOfRows = 15,
+    addressFilter,
   } = options || {};
 
-  const keyword = buildTourKeyword(regionName);
-  if (!keyword || !tourApiKey) return null;
+  if (!tourApiKey) return null;
+  const keywordVariants = buildKeywordCandidates(regionName);
+  if (keywordVariants.length === 0) return null;
 
   const map = cache || new Map();
-  if (!map.has(keyword)) {
-    const candidates = await fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows });
-    map.set(keyword, candidates);
+
+  for (const keyword of keywordVariants) {
+    if (!map.has(keyword)) {
+      const candidates = await fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows });
+      map.set(keyword, candidates);
+    }
+    let candidates = map.get(keyword) || [];
+    if (addressFilter && candidates.length > 0) {
+      const filtered = candidates.filter((c) => c.matchedAddr && c.matchedAddr.includes(addressFilter));
+      if (filtered.length > 0) candidates = filtered;
+    }
+    const picked = pickRandom(candidates);
+    if (picked) {
+      return {
+        ...picked,
+        keyword,
+        imageSource: '한국관광공사(TourAPI) 랜드마크',
+        imageSourceApi: 'KorService2/searchKeyword2',
+      };
+    }
   }
 
-  const picked = pickRandom(map.get(keyword) || []);
-  if (!picked) return null;
-
-  return {
-    ...picked,
-    keyword,
-    imageSource: '한국관광공사(TourAPI) 랜드마크',
-    imageSourceApi: 'KorService2/searchKeyword2',
-  };
+  return null;
 }
 
 module.exports = {
   extractRegionTokens,
+  stripAdministrativeSuffix,
+  buildKeywordCandidates,
   getRegionalLandmark,
+  METRO_SHORT_NAMES,
+  PROVINCE_SHORT_NAMES,
 };
