@@ -16,6 +16,12 @@ coupang_banner_image: "https://image10.coupangcdn.com/image/affiliate/banner/7cb
 coupang_banner_alt: "아침 커피 루틴이 흔들릴 때, 대용량 티타임커피 1kg로 안정감 있게"
 ---
 
+매일 커피를 마시는 분들이라면, 원두가 떨어지는 타이밍이 은근히 신경 쓰이실 거예요. 한두 잔이면 모를까, 집이나 사무실에서 하루에 여러 잔씩 내려 마시면 재주문 주기가 생각보다 빠르게 돌아오거든요.
+
+그래서 요즘은 같은 가격이라도 용량이 넉넉하고, 매일 마셔도 질리지 않는 무난한 풍미의 대용량 원두를 찾는 분들이 부쩍 늘었어요. 자주 사야 하는 부담을 줄이고, 한 번 사두면 한참 쓸 수 있는 여유가 있다는 점이 큰 이유죠.
+
+오늘 픽앤조이 초이스에서는 이런 흐름에 잘 맞는 대용량 원두 한 가지를 골랐습니다. 산미 부담 없는 고소한 맛 덕분에 매일 마시는 커피 루틴을 안정적으로 이어가기 좋은 제품이에요.
+
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![티타임커피 1kg 골드 리치 원두커피 갓볶은 신선한 로스팅원두 커피머신 추천원두, 홀빈(분쇄안함), 1kg, 1개](https://ads-partners.coupang.com/image1/Xlp7iJcwPmKMO49sXqtQCyadka0znjXbfQCp-SG2iRfrtwUF8BMrHM6hAUp11ySt_vgwVwSosocW0_ryN6sYn9188vKzCEWfp-0AmgyfFEMuOinLMNd_2MATTem4TQ7mXYMkZI9kQjTjhjJ65Wj-LeF7vOViPLmryNLtlxCeFnVRIIKssC_rlrB8pUrF1dFbsWTfE_htVw23ybg18lPM62koAS3iVy6Bkwe-0beDfU222rT27dCou5WERDsHJYcir2x97NwzyVcaVal_hSSPX6KZv4oUxxM5HrE4rvhTGOmeuzosuAXLC4p-da30ajftw6z5vVKyW6esFyT5BX4dBi_DmvFoUYTNDihVXW4zbGryqZb68w==)

@@ -16,6 +16,12 @@ coupang_banner_image: "https://image9.coupangcdn.com/image/affiliate/banner/7ca4
 coupang_banner_alt: "첫 잔이 아쉬웠던 아침, 할리스 에스프레소 로스트 블렌드 원두로 루틴 정리"
 ---
 
+바쁘게 시작하는 아침일수록, 손에 들리는 커피 한 잔의 만족도가 그날의 분위기를 좌우하기 마련이에요. 그런데 막상 내려 마셔보면 너무 시거나, 향이 약하거나, 어딘가 허전한 느낌이 남을 때가 있죠.
+
+집에서도 카페처럼 진하고 균형 잡힌 한 잔을 만들고 싶다면, 결국 가장 중요한 건 원두예요. 머신이나 도구를 바꾸는 것보다, 내 취향에 맞는 원두를 정해 두는 것이 가장 빠르게 만족도를 끌어올리는 방법이거든요.
+
+오늘 픽앤조이 초이스에서는 그런 고민을 가볍게 정리해 줄 원두 한 가지를 추렸어요. 과한 산미 없이 안정적인 바디감으로, 매일 아침 첫 잔의 아쉬움을 줄여 주는 선택지로 좋은 제품입니다.
+
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![할리스 원두커피500g, 홀빈, 500g, 1개](https://ads-partners.coupang.com/image1/HHAziGpYPW7EvfWHHE0a1x0OGhgLzzhV_9DphCnS2PPkpPPDnjAyP8bbVg_uU-07vYYdWQc63zyV_Me3L2BrnMB8Zr9kAq3P-Ln53f9UnjycZlTm95gVFgI4tkcMPb8pYVyvjXiPgFzDpXmnrOm7Hz7MXTQsXwiUhO-yee_2dAS-izKOAlrLDfAIKdpO-Ce8OaN9gVfspMDyrRik4DHI3qgaH2t2-ivnHXTQLL-KiKRZpxAOracRkJtYiEfBwc7cJEeh_mHaPARz-RsMmfTeFV9x62isyX6DhxlhXoEawhUDOvFSE5IwILLXEKR38fPEtaM34CCWwxSFKx3jRT-xF1_puhiQhFvORqXDvAevbjVtDciuf1A=)
