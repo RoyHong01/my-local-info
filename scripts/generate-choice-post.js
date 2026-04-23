@@ -850,6 +850,7 @@ function isManualSinglePost(candidate) {
 
 function buildSinglePickBlock(candidate) {
   const image = String(candidate.image || candidate.coupangBannerImage || '').trim();
+  const middleImage = String(candidate.middleImage || '').trim();
   const url = String(candidate.coupangUrl || '').trim();
   if (!url) return '';
 
@@ -857,12 +858,18 @@ function buildSinglePickBlock(candidate) {
   const alt = altRaw.replace(/[\[\]]/g, '');
   const brand = String(candidate.brand || '').trim();
   const ctaLabel = brand ? `${brand} 단독 픽 가격 확인하기` : '단독 픽 가격 확인 및 상세정보 보기';
+  const middleAltRaw = String(candidate.middleImageAlt || `${altRaw} 디테일`).trim();
+  const middleAlt = middleAltRaw.replace(/[\[\]]/g, '');
 
   const lines = [];
   lines.push('## 📍 픽앤조이 오늘의 단독 픽');
   lines.push('');
   if (image) {
     lines.push(`![${alt}](${image})`);
+    lines.push('');
+  }
+  if (middleImage) {
+    lines.push(`![${middleAlt}](${middleImage})`);
     lines.push('');
   }
   lines.push(`**👉 [${ctaLabel}](${url})**`);
