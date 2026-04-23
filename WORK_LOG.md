@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-04-23 (단독 초이스 생성: 할리스 에스프레소 로스트 블렌드 원두)
+
+- **요청**: 단독 초이스 1건 생성
+  - 제품명: `할리스 에스프레소 로스트 블렌드 원두`
+  - 쿠팡 링크: `https://link.coupang.com/a/euUo0N`
+  - 히어로: `holis-hero.png` (다운로드)
+  - 본문 중간: `holis-middle.png` (다운로드)
+  - 톤: 일상 시나리오 중심, 과장 금지, CTA 자연스럽게
+- **수행 방식(운영 규칙 준수)**:
+  1. `scripts/choice-input.latest.json` 입력 반영
+  2. `npm run generate:choice:latest` 실행
+  3. `npm run check:choice-quality` 통과
+  4. `npm run build` 성공
+- **결과 파일**:
+  - 포스트: `src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md`
+  - 이미지: `public/images/choice/holis-hero.png`, `public/images/choice/holis-middle.png`
+- **후처리**: 생성 본문에 요청된 중간 이미지(`/images/choice/holis-middle.png`)를 삽입해 사용자 지정 이미지 반영 완료.
+
+---
+
 ## 2026-04-23 (단독 초이스 생성: 티타임커피 1kg)
 
 - **요청**: 단독 초이스 1건 생성

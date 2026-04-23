@@ -900,6 +900,54 @@
       "sourceId": "manual-choice-teatime-coffee-robusta-1kg",
       "themeKey": "",
       "themeName": ""
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "9294386255",
+      "productName": "할리스 원두커피500g, 홀빈, 500g, 1개",
+      "brand": "할리스",
+      "productGroupTokens": [
+        "원두커피500g",
+        "홀빈",
+        "500g"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md",
+      "sourceId": "manual-choice-hollys-espresso-roast-blend-bean",
+      "themeKey": "",
+      "themeName": ""
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "8800986907",
+      "productName": "할리스 시그니처 아메리카노",
+      "brand": "할리스",
+      "productGroupTokens": [
+        "시그니처",
+        "아메리카노"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md",
+      "sourceId": "manual-choice-hollys-espresso-roast-blend-bean",
+      "themeKey": "",
+      "themeName": ""
+    },
+    {
+      "date": "2026-04-23",
+      "productId": "7079979733",
+      "productName": "아로마빌커피 핑크솔트 크림라떼, 20g, 10개입, 1개",
+      "brand": "아로마빌커피",
+      "productGroupTokens": [
+        "핑크솔트",
+        "크림라떼",
+        "20g",
+        "10개입"
+      ],
+      "publishedBy": "manual",
+      "postFile": "src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md",
+      "sourceId": "manual-choice-hollys-espresso-roast-blend-bean",
+      "themeKey": "",
+      "themeName": ""
     }
   ]
 }
