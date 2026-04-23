@@ -14,6 +14,7 @@ export interface PostData {
   category?: string;
   tags?: string[];
   image?: string;
+  heroOriginalSize?: boolean;
   imageSource?: string;
   imageSourceNote?: string;
   sourceId?: string;
@@ -208,6 +209,7 @@ export function getSortedPostsData(): PostData[] {
             category: matterResult.data.category,
             tags: matterResult.data.tags,
             image: matterResult.data.image,
+            heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
             imageSource: matterResult.data.image_source || matterResult.data.imageSource || '',
             imageSourceNote: matterResult.data.image_source_note || matterResult.data.imageSourceNote || '',
             sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
@@ -269,6 +271,7 @@ export function getSortedPostsData(): PostData[] {
             category: matterResult.data.category,
             tags: matterResult.data.tags,
             image: matterResult.data.image,
+            heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
             imageSource: matterResult.data.image_source || matterResult.data.imageSource || '',
             imageSourceNote: matterResult.data.image_source_note || matterResult.data.imageSourceNote || '',
             sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
@@ -386,6 +389,7 @@ export function getPostData(slug: string): PostData | null {
       category: matterResult.data.category,
       tags: matterResult.data.tags,
       image: matterResult.data.image,
+      heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
       sourceId: matterResult.data.source_id || matterResult.data.sourceId || '',
       coupangLink: matterResult.data.coupang_link || matterResult.data.coupangLink || '',
       coupangBannerImage: matterResult.data.coupang_banner_image || matterResult.data.coupangBannerImage || '',

@@ -7,6 +7,7 @@ category: 전국 축제·여행
 published_by: "manual"
 tags: [고양국제꽃박람회, 일산호수공원, 봄축제, 꽃축제, 고양여행]
 image: "/images/goyang-flower-hero.png"
+hero_original_size: true
 slug: "2026-04-23-goyang-international-flower-festival"
 source_title: "고양국제꽃박람회 공식 홈페이지"
 source_url: "https://flower.or.kr/main/"

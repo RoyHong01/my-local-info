@@ -434,6 +434,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const heroImageSourceNote = String(post.imageSourceNote || (post.imageSource ? `출처: ${post.imageSource}` : '')).trim();
   const shouldShowHero = !!post.image && (!isChoicePost || !shouldHideChoiceHero);
   const isSvgHero = !!post.image && post.image.endsWith('.svg');
+  const useOriginalHeroSize = !!post.heroOriginalSize && !isChoicePost && !isSvgHero;
   const heroImageSrc = post.image || '/images/default-lifestyle.svg';
 
   return (
@@ -491,16 +492,30 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   </div>
                 ) : (
                   <div className="mb-14">
-                    <div className={`relative w-full h-72 md:h-96 rounded-2xl overflow-hidden ${isSvgHero ? 'bg-white border border-stone-100' : ''}`}>
-                      <Image
-                        src={heroImageSrc}
-                        alt={post.title}
-                        fill
-                        className={isSvgHero ? 'object-contain p-6' : 'object-cover'}
-                        sizes="(max-width: 768px) 100vw, 1200px"
-                        priority
-                      />
-                    </div>
+                    {useOriginalHeroSize ? (
+                      <div className="rounded-2xl overflow-hidden border border-stone-100 bg-white">
+                        <Image
+                          src={heroImageSrc}
+                          alt={post.title}
+                          width={0}
+                          height={0}
+                          sizes="100vw"
+                          className="w-full h-auto object-contain"
+                          priority
+                        />
+                      </div>
+                    ) : (
+                      <div className={`relative w-full h-72 md:h-96 rounded-2xl overflow-hidden ${isSvgHero ? 'bg-white border border-stone-100' : ''}`}>
+                        <Image
+                          src={heroImageSrc}
+                          alt={post.title}
+                          fill
+                          className={isSvgHero ? 'object-contain p-6' : 'object-cover'}
+                          sizes="(max-width: 768px) 100vw, 1200px"
+                          priority
+                        />
+                      </div>
+                    )}
                     {heroImageSourceNote && (
                       <p className="mt-2 text-xs text-stone-500">{heroImageSourceNote}</p>
                     )}

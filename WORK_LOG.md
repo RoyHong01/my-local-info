@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-04-23 (고양국제꽃박람회 히어로 원본 비율 노출)
+
+- **요청**: 고양국제꽃박람회 글의 히어로 이미지를 고정 높이 크롭(`object-cover`)이 아니라 **원본 비율 그대로** 노출.
+- **원인**: 블로그 상세의 일반 포스트 히어로가 `h-72/md:h-96 + object-cover`로 강제되어 세로 포스터형 이미지 상·하단이 잘림.
+- **적용 방식(영향 최소화)**:
+  - 공통 레이아웃 전체 변경 없이 **포스트 단위 플래그** 방식 적용.
+  - `src/content/posts/2026-04-23-goyang-international-flower-festival.md` frontmatter에 `hero_original_size: true` 추가.
+  - `src/lib/posts.ts`에서 `hero_original_size`를 `heroOriginalSize`로 매핑.
+  - `src/app/blog/[slug]/page.tsx`에서 `heroOriginalSize=true`인 일반 포스트에 한해
+    - `fill + object-cover` 대신
+    - `w-full h-auto object-contain` 렌더 분기 적용.
+- **결과**: 고양국제꽃박람회 포스트는 히어로가 원본 비율 그대로 표시되고, 다른 포스트 히어로 동작은 기존 유지.
+
+---
+
 ## 2026-04-23 (단독 초이스 생성: 할리스 에스프레소 로스트 블렌드 원두)
 
 - **요청**: 단독 초이스 1건 생성
