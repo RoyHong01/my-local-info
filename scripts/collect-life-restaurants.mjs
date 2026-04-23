@@ -414,15 +414,26 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
   }
   const place = data?.places?.[0];
   if (!place) return null;
-  const photoName = place.photos?.[0]?.name;
+  const photos = place.photos || [];
+  // Prefer landscape photos (widthPx >= heightPx) — food/interior shots tend to be landscape.
+  // Portrait-oriented photos are more likely to be receipts, menus, stairways, etc.
+  const bestPhoto = photos.find(p => p.widthPx && p.heightPx && p.widthPx >= p.heightPx)
+    || photos[0];
+  const photoName = bestPhoto?.name;
   const photoUrl = photoName
     ? `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`
     : null;
+  // Also store up to 3 candidate URLs for future use
+  const photoUrls = photos
+    .filter(p => p.name)
+    .slice(0, 3)
+    .map(p => `https://places.googleapis.com/v1/${p.name}/media?maxWidthPx=800&key=${apiKey}`);
   return {
     placeId: place.id || '',
     rating: typeof place.rating === 'number' ? place.rating : null,
     userRatingCount: typeof place.userRatingCount === 'number' ? place.userRatingCount : null,
     photoUrl,
+    photoUrls: photoUrls.length > 0 ? photoUrls : undefined,
   };
 }
 
@@ -437,7 +448,11 @@ async function fetchGooglePlacePhotoById(placeId, apiKey) {
     });
     if (!res.ok) return null;
     const data = await res.json();
-    const photoName = data?.photos?.[0]?.name;
+    const photos = data?.photos || [];
+    // Prefer landscape photos (widthPx >= heightPx)
+    const bestPhoto = photos.find(p => p.widthPx && p.heightPx && p.widthPx >= p.heightPx)
+      || photos[0];
+    const photoName = bestPhoto?.name;
     if (!photoName) return null;
     return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`;
   } catch {

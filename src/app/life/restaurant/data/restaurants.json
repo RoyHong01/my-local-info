@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-21T05:43:58.530Z",
+  "updatedAt": "2026-04-23T01:23:53.198Z",
   "source": "kakao+google+gemini",
   "regions": {
     "incheon": [
@@ -352,7 +352,8 @@
           "토요일: 오전 11:00 ~ 오후 10:00",
           "일요일: 오전 11:00 ~ 오후 10:00"
         ],
-        "googlePlaceId": "ChIJCdteKQB3ezURZdQxkcNcZR8"
+        "googlePlaceId": "ChIJW3LVwa13ezURHmhnMqqTj-U",
+        "googlePhotoUrl": "https://places.googleapis.com/v1/places/ChIJW3LVwa13ezURHmhnMqqTj-U/photos/AU_ZVEFC47wDEGHR71brGU18LyU2A89leuUb5lJpHjD9qvVmPpK_Q_4qhNi76fqKXSawcLbacyhGmdkfBdfFWALf10cs9e9cDpAMkjVjYkNElSjzO7z225RGcJmWfwWpFKh_-6t6t7ITF6AhfBaL5gdeGTWSAH8otCGXdXMDW3pP0rjXi8sA5SSWkVY5PyiLdTkvvfzF-JN174-WrJvUwCjJ31pt1pcpozgvV_EJLv2szSlgvR2_oS_lE7nzZyIWAWCHZZPgBYJvP9rsUpHcGKYQtupkk87lmFzkDZd_6bFKNCcYdg/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
       },
       {
         "id": "172523332",
@@ -1543,7 +1544,7 @@
           "일요일: 오후 12:00~3:00, 오후 5:00~9:30"
         ],
         "googlePlaceId": "ChIJO9O0xymlfDURNjKCL57P27k",
-        "googlePhotoUrl": "https://places.googleapis.com/v1/places/ChIJO9O0xymlfDURNjKCL57P27k/photos/AU_ZVEFwB3rUVqiGW7AD22p41DU2pIKzDFEAxVpNy1E0ypNqzXyMy4-epgmaxl9MgUZGl-myLwYCFfuYEQ5IlXISU-h_SjfX73ww9YdinJDkWfOFvZtT8KG1ujtXDKqZM2DPr2yz2Fx0EOTUuHGX3x2yHs2mg6GLoSXcAfMHyq-BHs39VYqJVjzGBuTrqu_Ygg5sSJMJcZOzK5DDUJnmIcgCBBEgzdkw8qaX2V-xNgJkpLAk-YGZiQd3YTQwHE_yR-Vivofz6YepBrC6Hnw5jaW-wYJyqy4CtyOGRdRW2yELQJPxFg/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+        "googlePhotoUrl": "https://places.googleapis.com/v1/places/ChIJO9O0xymlfDURNjKCL57P27k/photos/AU_ZVEFUYd_kKIUyQf1nktgi9GuKICQCnwDC2ud3XIV5U8yj5pGZ6FIQgyov8h3SZgwrmyOvbAeIORjBraHlRdzBf_J9Ax0uxj_fs4GS5Zp1xGHZ_rW2hU0an8cbzNdJPnfEJc4t4ltDNPQk4CuiF5m8Igpy23OLDtp1TlrYN_BornhwuMEWkmVXjhNsAM_KUcmeSE8eSjZH61KrO_UFVnBSFtQJZlQIzPkfGFBkctUCaBIF1FfROo0J2lVdnfUR3eWY1q1F8juAgQTkoKPEtRsR-emzHM2t4thDxUMoQIdjn_F5Lqgy2KQa3RcRrX-lXEKTmrktK6yioyL4hBPsiV7DGtYDLBhkk0dcpPli0a2Invde1vyqk5hpUeS23v5EVNLcdtWaj0W3xOrw1ERg0djfUkZOyWWbaDdk80E3GoZ5TFj84aMJ/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
       },
       {
         "id": "952253898",
@@ -2578,6 +2579,6 @@
   "metrics": {
     "cache_hit": 0,
     "cache_miss": 88,
-    "google_called": 88
+    "google_called": 90
   }
 }
