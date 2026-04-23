@@ -31,10 +31,13 @@ function pickRandom(items) {
 }
 
 function buildTourKeyword(regionName) {
+  // TourAPI searchKeyword2는 다중 단어 검색에서 0건을 반환하므로 단순 지역명만 사용
+  // "강릉" → "강릉 관광" 변환은 0건 결과를 야기함
+  // 해결: 단일 토큰 사용 (강릉, 서울, 제주 등)
   const region = normalizeSpace(regionName);
   if (!region) return '';
-  if (region.includes('관광')) return region;
-  return `${region} 관광`;
+  // Strip any trailing keywords to ensure single-word search
+  return region.split(/\s+/)[0];
 }
 
 async function fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows = 15 } = {}) {
