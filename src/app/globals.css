@@ -101,6 +101,11 @@ body {
   margin-right: auto !important;
 }
 
+/* 단독 픽 블록 CTA(👉 ... 가격 확인하기) 단락 중앙 정렬 */
+.choice-post-prose p:has(> strong > a[href*="link.coupang.com"]) {
+  text-align: center !important;
+}
+
 /* 비교 테이블 이미지 크기 */
 .choice-post-prose :where(table td):not(:where([class~="not-prose"] *)) img {
   max-width: 160px !important;
