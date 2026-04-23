@@ -5,6 +5,20 @@
 
 ---
 
+## 2026-04-23 (초이스 hook 누락 재발 방지 — 3단 방어)
+
+- **이슈**: 오늘 생성된 초이스 글 2건(robusta-1kg, hollys-espresso)에 "픽앤조이가 선정한 오늘의 픽" 블록 앞 hook 단락이 비어 있음.
+- **원인**: Gemini 응답이 서론 없이 바로 `##`부터 시작 → 후처리 `insertBeforeFirstHeading`이 픽 블록을 본문 맨 위로 올려서 hook 자리가 사라짐. 기존 코드에는 hook 검증/안전망이 없었음.
+- **재발 방지 조치 (3단 방어)**:
+  1. 생성 단계 검증: `scripts/generate-choice-post.js`의 `findChoiceValidationErrors`에 hook 검증(`findIntroHookValidationErrors`) 추가 → 첫 H2 이전에 텍스트 단락이 없으면 재시도(최대 3회).
+  2. 후처리 안전망: `injectProductBlocks` 시작부에 `ensureIntroHookFallback(content, candidate)` 호출 추가 → 검증을 우회하고 도달해도 픽 블록 삽입 직전에 candidate 요약 기반 hook 단락을 자동으로 채워 넣음.
+  3. 빌드 게이트: `scripts/validate-choice-quality.js`에 `validateIntroHook`을 추가하고, 기존 `publishedBy === 'manual'` 한정 검증을 모든 초이스로 확장 → 자동/수동 모두 빌드 실패로 차단.
+- **부수 작업**: 기존 글 `src/content/life/2026-03-31-choice-cj-biocore-probiotics.md`에 hook 단락 1개를 보강해 신규 검증 통과.
+- **수동 보강**: `src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md`, `src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md`에 hook 단락 추가 후 1차 배포(`a3cf365`).
+- **검증/배포**: `npm run check:choice-quality` ✅ → `npm run build` ✅ → 커밋 `98c1828` push 완료.
+
+---
+
 ## 2026-04-23 (고양국제꽃박람회 히어로 원본 비율 노출)
 
 - **요청**: 고양국제꽃박람회 글의 히어로 이미지를 고정 높이 크롭(`object-cover`)이 아니라 **원본 비율 그대로** 노출.
