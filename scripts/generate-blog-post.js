@@ -1153,7 +1153,7 @@ async function generatePost(candidate, postsDir) {
   let imageUrl = candidate.firstimage || candidate.firstimage2 || '';
   if (!imageUrl && process.env.TOUR_API_KEY) {
     try {
-      const { extractRegionTokens, getRegionalLandmark } = require('./lib/landmark-engine');
+      const { extractMetroFromText, getRegionalLandmark } = require('./lib/landmark-engine');
       const regionText = [
         candidate['소관기관명'],
         candidate['접수기관명'],
@@ -1162,23 +1162,23 @@ async function generatePost(candidate, postsDir) {
         candidate.location,
         candidate.addr1,
       ].filter(Boolean).join(' ');
-      const tokens = extractRegionTokens(regionText);
-      const fallbackTokens = tokens.length > 0 ? tokens : ['대한민국'];
+      // 광역(시·도) 단위만 사용. 구 단위는 노이즈 사진의 원인이라 제외.
+      const metros = extractMetroFromText(regionText);
       const expandedTokens = [];
       const seenTokens = new Set();
-      for (const token of fallbackTokens) {
-        const value = String(token || '').trim();
-        if (!value) continue;
-        if (value === '대한민국') {
-          for (const nationalToken of nationalTokenPool) {
-            if (!seenTokens.has(nationalToken)) {
-              seenTokens.add(nationalToken);
-              expandedTokens.push(nationalToken);
-            }
+      for (const token of metros) {
+        if (!seenTokens.has(token)) {
+          seenTokens.add(token);
+          expandedTokens.push(token);
+        }
+      }
+      // 광역 정보가 전혀 없을 때만 전국 대표 풀 폴백
+      if (expandedTokens.length === 0) {
+        for (const nationalToken of nationalTokenPool) {
+          if (!seenTokens.has(nationalToken)) {
+            seenTokens.add(nationalToken);
+            expandedTokens.push(nationalToken);
           }
-        } else if (!seenTokens.has(value)) {
-          seenTokens.add(value);
-          expandedTokens.push(value);
         }
       }
       if (!generatePost._landmarkCache) generatePost._landmarkCache = new Map();

@@ -3,16 +3,17 @@
  * Hero image backfill for posts.
  *
  * Run:
- *   node scripts/fix-post-images.js                   # default SVG posts only
- *   FORCE_RECHECK=1 node scripts/fix-post-images.js   # also reprocess posts using legacy fallback images
+ *   node scripts/fix-post-images.js                       # default SVG posts only
+ *   FORCE_RECHECK=1 node scripts/fix-post-images.js       # also reprocess posts using legacy fallback images
+ *   FORCE_RECHECK_ALL=1 node scripts/fix-post-images.js   # also reprocess all incheon/subsidy posts that already use TourAPI images
+ *                                                         # (use after changing landmark policy, e.g., metro-only rule)
  */
 const fs = require('fs/promises');
 const fsSync = require('fs');
 const path = require('path');
 const {
-  extractRegionTokens,
+  extractMetroFromText,
   getRegionalLandmark,
-  METRO_SHORT_NAMES,
 } = require('./lib/landmark-engine');
 
 (function loadEnvLocal() {
@@ -29,10 +30,12 @@ const {
 
 const TOUR_API_KEY = process.env.TOUR_API_KEY || '';
 const FORCE_RECHECK = process.env.FORCE_RECHECK === '1' || process.env.FORCE_RECHECK === 'true';
+const FORCE_RECHECK_ALL = process.env.FORCE_RECHECK_ALL === '1' || process.env.FORCE_RECHECK_ALL === 'true';
 const POSTS_DIR = path.join(process.cwd(), 'src', 'content', 'posts');
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
 
 const DEFAULT_SVG_PATTERN = /https:\/\/pick-n-joy\.com\/images\/default-[^"'\s]+\.svg/;
+const TOURAPI_IMAGE_PATTERN = /tong\.visitkorea\.or\.kr/;
 
 const LEGACY_FALLBACK_IMAGES = [
   'https://pick-n-joy.com/images/gyeongbokgung-hero.png',
@@ -93,40 +96,29 @@ function hashToIndex(seed, length) {
 }
 
 function inferParentMetro(titleText, category) {
-  const combined = `${titleText} ${category}`;
-  for (const metro of METRO_SHORT_NAMES) {
-    const re = new RegExp(`(?:^|[^가-힣])${metro}(?=[^가-힣]|$)`);
-    if (re.test(combined)) return metro;
-  }
+  const fullText = `${titleText} ${category}`;
+  const metros = extractMetroFromText(fullText);
+  if (metros.length > 0) return metros[0];
   if (category && category.includes('인천')) return '인천';
   return null;
 }
 
-function isDistrictToken(token) {
-  return /구$/.test(token);
-}
-
 async function resolveImageViaTourAPI({ titleText, category, landmarkCache }) {
-  const parentMetro = inferParentMetro(titleText, category);
-  const extracted = extractRegionTokens(titleText);
+  const fullText = `${titleText} ${category}`;
+  const metros = extractMetroFromText(fullText);
 
-  const attempts = [];
-  for (const token of extracted) {
-    attempts.push({
-      region: token,
-      addressFilter: isDistrictToken(token) && parentMetro ? parentMetro : undefined,
-    });
+  // 광역 정보가 전혀 없고 카테고리가 인천이면 인천으로 보강
+  const attempts = [...metros];
+  if (category && category.includes('인천') && !attempts.includes('인천')) {
+    attempts.unshift('인천');
   }
-  if (parentMetro) attempts.push({ region: parentMetro });
-  if (category && category.includes('인천')) attempts.push({ region: '인천' });
-  for (const n of NATIONAL_LANDMARK_TOKEN_POOL) attempts.push({ region: n });
+  // 폴백 풀 (전국 대표 랜드마크 9지역)
+  for (const n of NATIONAL_LANDMARK_TOKEN_POOL) {
+    if (!attempts.includes(n)) attempts.push(n);
+  }
 
-  const seenRegions = new Set();
   let attemptCount = 0;
-  for (const { region, addressFilter } of attempts) {
-    const key = `${region}|${addressFilter || ''}`;
-    if (seenRegions.has(key)) continue;
-    seenRegions.add(key);
+  for (const region of attempts) {
     attemptCount++;
     try {
       const result = await getRegionalLandmark({
@@ -134,13 +126,12 @@ async function resolveImageViaTourAPI({ titleText, category, landmarkCache }) {
         tourApiKey: TOUR_API_KEY,
         cache: landmarkCache,
         numOfRows: 15,
-        addressFilter,
       });
       if (result?.imageUrl) {
-        console.log(`    [TourAPI OK] ${region}${addressFilter ? `(filter:${addressFilter})` : ''} -> ${result.imageUrl.slice(0, 80)}`);
+        console.log(`    [TourAPI OK] ${region} -> ${result.imageUrl.slice(0, 80)}`);
         return { imageUrl: result.imageUrl, keyword: result.keyword, via: region };
       } else {
-        console.log(`    [TourAPI --] ${region}${addressFilter ? `(filter:${addressFilter})` : ''} -> 0 items`);
+        console.log(`    [TourAPI --] ${region} -> 0 items`);
       }
     } catch (e) {
       console.log(`    [TourAPI !!] ${region}: ${e.message}`);
@@ -154,7 +145,7 @@ async function run() {
   if (!TOUR_API_KEY) {
     console.warn('[WARN] TOUR_API_KEY not set.');
   }
-  console.log(`Mode: ${FORCE_RECHECK ? 'FORCE_RECHECK (reprocess legacy fallback posts)' : 'default (SVG only)'}`);
+  console.log(`Mode: ${FORCE_RECHECK_ALL ? 'FORCE_RECHECK_ALL (reprocess all incheon/subsidy TourAPI posts)' : (FORCE_RECHECK ? 'FORCE_RECHECK (reprocess legacy fallback posts)' : 'default (SVG only)')}`);
 
   const [incheonItems, subsidyItems, festivalItems] = await Promise.all([
     loadDataJson('incheon.json'),
@@ -180,7 +171,19 @@ async function run() {
 
     const hasDefaultSvg = DEFAULT_SVG_PATTERN.test(content);
     const hasLegacyFallback = LEGACY_FALLBACK_IMAGES.some((img) => content.includes(img));
-    const isTarget = hasDefaultSvg || (FORCE_RECHECK && hasLegacyFallback);
+    const hasTourApiImage = TOURAPI_IMAGE_PATTERN.test(content);
+
+    // FORCE_RECHECK_ALL: 인천/보조금 카테고리에서 TourAPI 이미지 쓰는 글 모두 재처리
+    let isRecheckAllTarget = false;
+    if (FORCE_RECHECK_ALL && hasTourApiImage) {
+      const fmPeek = parseFrontmatter(content);
+      const cat = (fmPeek?.category || '');
+      if (cat.includes('인천') || cat.includes('보조금') || cat.includes('복지')) {
+        isRecheckAllTarget = true;
+      }
+    }
+
+    const isTarget = hasDefaultSvg || (FORCE_RECHECK && hasLegacyFallback) || isRecheckAllTarget;
     if (!isTarget) {
       skipped++;
       continue;

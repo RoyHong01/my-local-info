@@ -5,7 +5,7 @@ summary: "경찰청은 다문화 가족 및 국내 체류 외국인을 대상으
 description: "경찰청은 다문화 가족 및 국내 체류 외국인을 대상으로 실질적인 사회 정착 지원을 위한 '운전면허교실 운영 지원' 사업을 진행해요. 교통사고 예방, 사고 시 요령 등 실생활 중심 학과 교육과 전문 강사, 언어별 통역 지원으로 면허 취득을 돕습니다. 이주여성, 외국인 근로자 등 누구나 신청 가능하며, 방문 신청 시 경찰민원콜센터 182로 문의하면 됩니다."
 category: 전국 보조금·복지 정책
 tags: ["운전면허", "다문화가족", "외국인", "정착지원", "교육지원"]
-image: "https://tong.visitkorea.or.kr/cms/resource/06/3454106_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/45/3526145_image2_1.jpg"
 source_id: "132000000002"
 slug: "2026-03-31-driving-license-support-for-foreigners"
 source_snapshot_key: "다문화가족및국내체류외국인대상운전면허교실운영지원|||"

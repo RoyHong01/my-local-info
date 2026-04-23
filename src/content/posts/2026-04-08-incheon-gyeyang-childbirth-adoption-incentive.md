@@ -5,7 +5,7 @@ summary: "인천 계양구에서 셋째 이상 출산 또는 입양하는 가정
 description: "인천 계양구에서 셋째 이상 출산 또는 입양하는 가정에 최대 500만원의 장려금을 지원해요. 2024년 12월 31일까지 출생·입양한 자녀가 대상이며, 계양구 1년 이상 거주자라면 누구나 신청 가능해요. 정부24 또는 방문 신청 가능하며, 출생·입양 신고 후 180일 이내 신청해야 합니다."
 category: 인천 지역 정보
 tags: [인천, 계양구, 출산장려금, 입양장려금, 육아지원]
-image: "https://tong.visitkorea.or.kr/cms/resource/03/4056303_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/08/4056208_image2_1.jpg"
 source_id: "355000000108"
 slug: "2026-04-08-incheon-gyeyang-childbirth-adoption-incentive"
 source_snapshot_key: "출산입양장려금지원|||"

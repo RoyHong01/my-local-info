@@ -5,7 +5,7 @@ summary: "인천 동구에서 출산 장려를 위해 출산용품, 월 50만원
 description: "인천 동구에서 출산 장려를 위해 출산용품, 월 50만원씩 최대 6개월 육아휴직 장려금, 200만원 첫만남이용권(바우처)을 지원해요. 출생 신고일 기준 동구 거주 가정이 대상이며, 방문 신청하면 돼요. 문의: 032-770-7833."
 category: 인천 지역 정보
 tags: [인천동구, 출산장려, 출산용품, 육아휴직장려금, 첫만남이용권, 아기선물, 육아지원]
-image: "https://tong.visitkorea.or.kr/cms/resource/20/4056420_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/61/3524161_image2_1.jpg"
 source_id: "350000000105"
 slug: "2026-03-31-incheon-donggu-birth-incentive"
 source_snapshot_key: "출산장려활성화서비스|||"

@@ -9,6 +9,19 @@ function uniq(values) {
 const METRO_SHORT_NAMES = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '제주'];
 const PROVINCE_SHORT_NAMES = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남'];
 
+const PROVINCE_FULL_TO_SHORT = {
+  '경상남도': '경남',
+  '경상북도': '경북',
+  '충청남도': '충남',
+  '충청북도': '충북',
+  '전라남도': '전남',
+  '전라북도': '전북',
+  '강원특별자치도': '강원',
+  '제주특별자치도': '제주',
+  '제주도': '제주',
+  '경기도': '경기',
+};
+
 function extractRegionTokens(text) {
   const src = normalizeSpace(text);
   if (!src) return [];
@@ -56,6 +69,74 @@ function buildKeywordCandidates(regionName) {
   const list = [first];
   if (stripped && stripped !== first) list.push(stripped);
   return uniq(list);
+}
+
+/**
+ * 광역(시·도) 단위만 추출. 구(區) 토큰은 모두 무시.
+ * - "인천 연수구" -> ["인천"]
+ * - "서울 강북구" -> ["서울"]
+ * - "경기 광주시" -> ["경기"]   (광주 모호성: 경기 컨텍스트면 광주 제외)
+ * - "광주광역시 동구" -> ["광주"]
+ * - "군산시 청년", "안동시" -> ["군산"], ["안동"]   (광역 정보 없을 때만 시·군 폴백)
+ * - "대구광역시" -> ["대구"]
+ */
+function extractMetroFromText(text) {
+  const src = normalizeSpace(text);
+  if (!src) return [];
+
+  const result = [];
+  const seen = new Set();
+  const push = (name) => {
+    if (name && !seen.has(name)) {
+      seen.add(name);
+      result.push(name);
+    }
+  };
+
+  // 1순위: 광역시/특별시 풀네임 (예: 광주광역시 -> 광주)
+  for (const m of src.matchAll(/([가-힣]{2,}(?:특별시|광역시|특별자치시))/g)) {
+    push(stripAdministrativeSuffix(m[1]));
+  }
+
+  // 2순위: 도 풀네임 (예: 경기도, 충청남도, 강원특별자치도)
+  for (const m of src.matchAll(/([가-힣]{2,}(?:특별자치도|도))/g)) {
+    const full = m[1];
+    const mapped = PROVINCE_FULL_TO_SHORT[full];
+    if (mapped) {
+      push(mapped);
+    } else {
+      const stripped = stripAdministrativeSuffix(full);
+      if (METRO_SHORT_NAMES.includes(stripped) || PROVINCE_SHORT_NAMES.includes(stripped)) {
+        push(stripped);
+      }
+    }
+  }
+
+  // 3순위: 약칭 (단어 경계)
+  for (const name of [...METRO_SHORT_NAMES, ...PROVINCE_SHORT_NAMES]) {
+    if (seen.has(name)) continue;
+    const pattern = new RegExp(`(?:^|[^가-힣])${name}(?=[^가-힣]|$)`);
+    if (!pattern.test(src)) continue;
+    // 광주 모호성: 경기 컨텍스트에서 광주 약칭은 "경기 광주시" 가능성 -> 광주광역시 명시 없으면 제외
+    if (name === '광주' && seen.has('경기') && !/광주광역시/.test(src)) continue;
+    push(name);
+  }
+
+  // 4순위(폴백): 광역 정보 자체가 없을 때만 독립 시·군 추출 (도 산하 시·군 가정)
+  if (result.length === 0) {
+    for (const m of src.matchAll(/([가-힣]{2,}(?:시|군))/g)) {
+      const token = m[1];
+      // 광역시/특별시 접미사는 위에서 처리됨
+      if (/(광역시|특별시|특별자치시)$/.test(token)) continue;
+      const stripped = stripAdministrativeSuffix(token);
+      if (!stripped || stripped.length < 2) continue;
+      // 광주는 모호하므로 단독 시 폴백에서도 제외
+      if (stripped === '광주') continue;
+      push(stripped);
+    }
+  }
+
+  return result;
 }
 
 function pickRandom(items) {
@@ -137,6 +218,7 @@ async function getRegionalLandmark(options) {
 
 module.exports = {
   extractRegionTokens,
+  extractMetroFromText,
   stripAdministrativeSuffix,
   buildKeywordCandidates,
   getRegionalLandmark,
