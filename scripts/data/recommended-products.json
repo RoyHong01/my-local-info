@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-04-24T00:00:00+09:00",
+  "updatedAtKst": "2026-04-25T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1005,6 +1005,63 @@
       "sourceId": "manual-choice-pet-life-2026-04-24",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-04-25",
+      "productId": "6308586139",
+      "productName": "더샘 가든 플레져 캐모마일 클렌징 티슈, 100매입, 2개",
+      "brand": "더샘",
+      "productGroupTokens": [
+        "가든",
+        "플레져",
+        "캐모마일",
+        "클렌징",
+        "티슈",
+        "100매입"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-25-choice-beauty-fashion-2026-04-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-04-25",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-25-choice-beauty-fashion-2026-04-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-04-25",
+      "productId": "9373986892",
+      "productName": "이니스프리 데일리 유브이 톤업 선크림 핑크 SPF50+ PA++++",
+      "brand": "이니스프리",
+      "productGroupTokens": [
+        "유브이",
+        "톤업",
+        "선크림",
+        "spf50",
+        "pa",
+        "beauty"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-04-25-choice-beauty-fashion-2026-04-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-04-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
