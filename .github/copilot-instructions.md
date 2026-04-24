@@ -200,11 +200,19 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 4. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
 5. 빌드 성공 후 `git add . → git commit → git push` 순서로 배포
 6. 세션 종료 시 `WORK_LOG.md`, `COPILOT_MEMORY.md`, `.github/copilot-instructions.md` 업데이트
-7. **항상 적용할 종료 루틴(필수)**
-  - 코드 변경 작업 완료 후, 반드시 `build 성공 → commit/push → 문서/메모리 동기화` 순서를 수행
-  - 문서/메모리 동기화 대상: `WORK_LOG.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`
+7. **항상 적용할 종료 루틴(필수, 단일 호흡 배포)**
+  - 한 작업 단위는 반드시 다음 순서를 **하나의 호흡으로** 끝낸다:
+    1. 코드 수정
+    2. `npm run build` 성공
+    3. **문서/메모리 동기화** (`WORK_LOG.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`, 필요 시 `PROJECT_MEMORY.md`)
+    4. `git add` (코드 + 문서 한 번에)
+    5. **단일 commit** (예: `fix(xxx): ... + docs sync`)
+    6. **단일 push**
+    7. CI 결과 확인
   - 위 루틴 미완료 상태에서는 작업 완료로 보지 않음
-8. **커밋/배포 완료 직후 자동 동기화**: 작업 완료 후 즉시 `WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)을 자동으로 업데이트한다. 사용자에게 별도 확인 질문을 하지 않는다.
+8. **단일 커밋·단일 푸시 원칙(필수)**: 코드 커밋과 문서 동기화 커밋을 분리하지 않는다. "코드 push → 별도 docs sync push" 패턴은 금지. 이유: 연속 push 시 GitHub Actions가 이전 run을 자동 취소(`Canceling since a higher priority...`)하면서 빨간 X/⚠️가 누적되고, 빌드 시간도 낭비된다.
+  - 예외: 코드 push 후 CI에서 별도 이슈가 발견되어 추가 패치가 필요한 경우만 신규 커밋 허용.
+  - 사용자에게 별도 확인 질문 없이 자동으로 단일 커밋으로 묶는다.
 9. **사용자가 요청하지 않은 수정 금지**: 사용자가 명시적으로 요청한 파일·코드만 수정한다. 프롬프트가 불분명하거나 작업 대상이 모호할 경우, 임의로 짐작해서 수정하지 말고 반드시 사용자에게 확인 질문을 한 뒤 작업을 진행한다.
 10. **초이스 포스트 본문 배너 금지**: 쿠팡 배너/위젯은 본문(마크다운 body) 안에 절대 삽입하지 않는다. 쿠팡 배너는 frontmatter(`coupang_banner_image`)를 통해 사이드바에서 자동 렌더링된다. 본문에는 제품 정보·큐레이션 콘텐츠와 텍스트 기반 CTA 링크만 허용한다.
 11. **통합 콘텐츠 & 수익 링크 정책**: 일상의 즐거움 / 픽앤조이 초이스 자동 생성 글은 신규/기존 모두 Web/Mobile에 동일하게 적용되는 쿠팡 파트너스 제휴 링크 삽입이 필수다.
