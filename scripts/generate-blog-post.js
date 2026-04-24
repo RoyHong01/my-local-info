@@ -1143,13 +1143,9 @@ async function generatePost(candidate, postsDir) {
     '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
   };
   const nationalTokenPool = ['서울', '부산', '제주', '경주', '강릉', '전주', '여수'];
-  const internalNationalLandmarkImages = [
-    'https://pick-n-joy.com/images/gyeongbokgung-hero.png',
-    'https://pick-n-joy.com/images/changdeokgung-hero.png',
-    'https://pick-n-joy.com/images/changgyeonggung-hero.png',
-    'https://pick-n-joy.com/images/incheon-family-month-hero.jpg',
-    'https://pick-n-joy.com/images/incheon-spring-festival-2026.jpg',
-  ];
+  // NOTE: 사대궁/인천 가정의달/인천 봄꽃축제 등 사용자 큐레이션 이미지는
+  // 특정 글 전용 자산이므로 자동 생성 글의 랜덤 fallback 풀로 절대 재사용하지 않는다.
+  // (재발 방지: 2026-04-23 사대궁이 보조금 글에 잘못 붙는 회귀 발생)
   let imageUrl = candidate.firstimage || candidate.firstimage2 || '';
   const itemContextLabel = candidate['서비스명'] || candidate.title || candidate.name || candidate['서비스ID'] || candidate.id || '';
   if (!process.env.TOUR_API_KEY && !imageUrl) {
@@ -1226,26 +1222,9 @@ async function generatePost(candidate, postsDir) {
     }
   }
   if (!imageUrl && candidate._category === '전국 보조금·복지 정책') {
-    // 시드 해시 기반 결정적 선택 + 최근 사용된 이미지는 회피
-    let recentlyUsed = new Set();
-    try {
-      const { getRecentlyUsedImageUrls } = require('./lib/landmark-engine');
-      recentlyUsed = getRecentlyUsedImageUrls();
-    } catch (_e) {}
-    const seedText = String(candidate['서비스ID'] || candidate['id'] || candidate['서비스명'] || candidate.title || 'national');
-    let seedHash = 0;
-    for (let i = 0; i < seedText.length; i++) {
-      seedHash = ((seedHash << 5) - seedHash) + seedText.charCodeAt(i);
-      seedHash |= 0;
-    }
-    const fresh = internalNationalLandmarkImages.filter((u) => !recentlyUsed.has(u));
-    const pool = fresh.length > 0 ? fresh : internalNationalLandmarkImages;
-    imageUrl = pool[Math.abs(seedHash) % pool.length];
-    console.warn('[blog-image][WARN] 보조금 internal 폴백 사용 (TourAPI 결과 없음/오류): ' + imageUrl + ' (대상: ' + itemContextLabel + ')');
-    try {
-      const { recordImageUsage } = require('./lib/landmark-engine');
-      recordImageUsage(imageUrl, { context: `internal-fallback | ${itemContextLabel}` });
-    } catch (_e) {}
+    // 큐레이션 이미지 풀(사대궁 등) 재사용 금지 정책에 따라
+    // TourAPI 결과가 없으면 곧바로 카테고리 기본 SVG로 떨어진다.
+    console.warn('[blog-image][WARN] 보조금 TourAPI 결과 없음 → 카테고리 기본 이미지로 폴백 (대상: ' + itemContextLabel + ')');
   }
   if (!imageUrl) {
     imageUrl = defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';

@@ -48,11 +48,13 @@ const LEGACY_FALLBACK_IMAGES = [
 
 const NATIONAL_LANDMARK_TOKEN_POOL = ['서울', '부산', '제주', '경주', '강릉', '전주', '여수', '안동', '경기'];
 
-const INTERNAL_SAFE_FALLBACK_IMAGES = [
-  'https://pick-n-joy.com/images/gyeongbokgung-hero.png',
-  'https://pick-n-joy.com/images/changdeokgung-hero.png',
-  'https://pick-n-joy.com/images/changgyeonggung-hero.png',
-];
+// NOTE: 사대궁 이미지 등 사용자 큐레이션 자산은 자동 fallback 풀로 절대 재사용하지 않는다.
+// TourAPI 결과가 없으면 카테고리 기본 SVG로 떨어뜨려 큐레이션 이미지의 맥락 오염을 차단한다.
+const FALLBACK_DEFAULT_SVG = {
+  '인천 지역 정보': 'https://pick-n-joy.com/images/default-incheon.svg',
+  '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
+  '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
+};
 
 async function loadDataJson(filename) {
   try {
@@ -242,11 +244,9 @@ async function run() {
     }
 
     if (!newImage) {
-      const seed = `${file}|${sourceId}|${category}`;
-      const idx = hashToIndex(seed, INTERNAL_SAFE_FALLBACK_IMAGES.length);
-      newImage = INTERNAL_SAFE_FALLBACK_IMAGES[idx];
-      via = 'safe-fallback';
-      console.log(`  [Fallback-Safe] ${file}: gung ${idx + 1}/${INTERNAL_SAFE_FALLBACK_IMAGES.length}`);
+      newImage = FALLBACK_DEFAULT_SVG[category] || 'https://pick-n-joy.com/images/default-og.svg';
+      via = 'default-svg';
+      console.log(`  [Fallback-DefaultSVG] ${file}: ${newImage}`);
     }
 
     const newContent = updateFrontmatterImage(content, newImage);
