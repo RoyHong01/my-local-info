@@ -22,7 +22,7 @@ coupang_banner_alt: "후지 일회용 파지 리필용, 10000개"
 
 ## 📍 픽앤조이 오늘의 단독 픽
 
-![후지 일회용 파마지 리필용 10000개](/images/choice/fuji-hero.png)
+![후지 일회용 파마지 리필용 10000개 디테일](/images/choice/fuji-middle.png)
 
 **👉 [후지 일회용 파마지 리필용 10000개 가격 확인하기](https://link.coupang.com/a/eugAVK)**
 
@@ -33,8 +33,6 @@ coupang_banner_alt: "후지 일회용 파지 리필용, 10000개"
 
 한 번에 충분한 수량을 확보해두면 재주문 주기를 짧게 가져갈 필요가 없어집니다.
 덕분에 소모품 체크 빈도를 줄이고, 실제 고객 응대나 메뉴 품질에 더 집중하기 편해져요.
-
-![후지 일회용 파마지 리필용 사용 이미지](/images/choice/fuji-middle.png)
 
 ## 구매 전에 체크하면 좋은 포인트
 

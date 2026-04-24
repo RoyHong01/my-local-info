@@ -22,7 +22,7 @@ coupang_banner_alt: "라텍스 장갑 핸드스카 파워 프리 미용장갑 20
 
 ## 📍 픽앤조이 오늘의 단독 픽
 
-![라텍스 장갑 핸드스카 파워 프리 미용장갑 S 세트](/images/choice/latex-hero.png)
+![핸드스카 파워 프리 라텍스 장갑 S 세트 디테일](/images/choice/latex-middle.png)
 
 **👉 [핸드스카 파워 프리 라텍스 장갑 S 세트 가격 확인하기](https://link.coupang.com/a/eug11e)**
 
@@ -33,8 +33,6 @@ coupang_banner_alt: "라텍스 장갑 핸드스카 파워 프리 미용장갑 20
 
 오후에 셀프 염색이나 뷰티 케어를 하는 날도 비슷합니다.
 손에 제품이 직접 닿는 상황을 줄이면서 작업 흐름을 유지하기 쉬워집니다.
-
-![핸드스카 라텍스 장갑 사용 이미지](/images/choice/latex-middle.png)
 
 ## 구매 전에 체크하면 좋은 포인트
 

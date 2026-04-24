@@ -849,7 +849,13 @@ function isManualSinglePost(candidate) {
 }
 
 function buildSinglePickBlock(candidate) {
-  const image = String(candidate.image || candidate.coupangBannerImage || '').trim();
+  // [정책 고정 / 재발 방지]
+  // - 히어로 이미지(`image`)는 frontmatter의 image 필드를 통해 상세 페이지 상단에서 자동 렌더링되므로
+  //   본문 "📍 픽앤조이 오늘의 단독 픽" 헤딩 아래에는 다시 삽입하지 않는다.
+  // - 본문 첫 번째 이미지(=middleImage)는 반드시 이 헤딩 바로 아래에 위치하고,
+  //   그 아래 한 줄 아래에 "👉 가격 확인하기" CTA 링크가 따라온다.
+  // - middleImage가 없는 경우에만, 폴백으로 히어로 이미지를 본문에 노출한다(상단 자동 렌더 정책 변경 대비용).
+  const heroImage = String(candidate.image || candidate.coupangBannerImage || '').trim();
   const middleImage = String(candidate.middleImage || '').trim();
   const url = String(candidate.coupangUrl || '').trim();
   if (!url) return '';
@@ -861,19 +867,28 @@ function buildSinglePickBlock(candidate) {
   const middleAltRaw = String(candidate.middleImageAlt || `${altRaw} 디테일`).trim();
   const middleAlt = middleAltRaw.replace(/[\[\]]/g, '');
 
+  const bodyImage = middleImage || heroImage;
+  const bodyAlt = middleImage ? middleAlt : alt;
+
   const lines = [];
   lines.push('## 📍 픽앤조이 오늘의 단독 픽');
   lines.push('');
-  if (image) {
-    lines.push(`![${alt}](${image})`);
-    lines.push('');
-  }
-  if (middleImage) {
-    lines.push(`![${middleAlt}](${middleImage})`);
+  if (bodyImage) {
+    lines.push(`![${bodyAlt}](${bodyImage})`);
     lines.push('');
   }
   lines.push(`**👉 [${ctaLabel}](${url})**`);
   return lines.join('\n');
+}
+
+// [재발 방지] Gemini가 본문 다른 섹션에 middleImage 마크다운을 또 삽입한 경우 strip한다.
+// 단독 픽 블록 삽입 전에 호출해, "📍 픽앤조이 오늘의 단독 픽" 아래에만 단 한 번 노출되도록 강제한다.
+function stripDuplicateMiddleImage(markdown, candidate) {
+  const middleImage = String(candidate?.middleImage || '').trim();
+  if (!markdown || !middleImage) return markdown;
+  const escaped = middleImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pattern = new RegExp(`!\\[[^\\]]*\\]\\(${escaped}\\)\\s*\\n?`, 'gi');
+  return markdown.replace(pattern, '');
 }
 
 function injectProductBlocks(content, candidate, products) {
@@ -885,7 +900,8 @@ function injectProductBlocks(content, candidate, products) {
   // [단독 모드] keywordHint 없고 수동 제휴(coupangUrl+coupangHtml) 입력이면
   // 자동 멀티 상품 블록(픽+비교 표) 삽입을 건너뛰고, 단독 픽 블록 1개만 첫 ## 앞에 삽입한다.
   if (isManualSinglePost(candidate)) {
-    let value = normalizedContent;
+    // [재발 방지] Gemini가 본문 다른 섹션에 middleImage를 또 삽입한 경우 strip
+    let value = stripDuplicateMiddleImage(normalizedContent, candidate);
     const singleBlock = buildSinglePickBlock(candidate);
     if (singleBlock) {
       value = insertBeforeFirstHeading(value, singleBlock);
@@ -1170,7 +1186,9 @@ ${pickBlockHeadingRule}
    - 참고링크에서 추출 가능한 고화질 제품 이미지
    - 없으면 /images/choice/${candidate.fileName || candidate.englishName}.jpg
 3) 본문에 frontmatter image와 동일한 이미지 마크다운을 다시 넣지 말 것(상단 자동 노출과 중복 방지)
-4) 본문 중간 상세 이미지는 최대 1장만 허용하며, 대표 이미지와 다른 파일일 때만 사용
+4) [단독 모드 / 재발 방지] 입력 데이터의 middleImage(본문 첫 번째 이미지)는 후처리에서 "📍 픽앤조이 오늘의 단독 픽" 헤딩 바로 아래에 자동 삽입됩니다.
+   - 본문 어느 섹션에도 middleImage 마크다운을 직접 작성하지 마세요.
+   - 본문에는 어떤 이미지 마크다운(![...](...))도 추가하지 마세요. 모든 이미지는 후처리에서 정해진 위치에만 삽입됩니다.
 
 [문체/톤]
 - 반드시 경어체: ~해요 / ~거든요 / ~입니다 / ~네요
