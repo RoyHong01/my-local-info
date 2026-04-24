@@ -4,7 +4,8 @@ const path = require('path');
 const CONTENT_DIR = path.join(process.cwd(), 'src', 'content', 'life');
 
 function splitFrontmatterAndBody(content) {
-  const text = String(content || '');
+  // CRLF 환경(Windows)에서도 LF 기준 파서가 동작하도록 정규화 (재발 방지: pepsi CI #644 케이스)
+  const text = String(content || '').replace(/\r\n/g, '\n');
   if (!text.startsWith('---\n')) {
     return { frontmatter: {}, body: text };
   }
