@@ -1,5 +1,9 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-04-25)
+
+- **AI_WEBSITE_BLUEPRINT.md 완성본 v2**: Part K(운영 안전망 K-1~K-13) 신설 + D-6 concurrency 보강 + A-3/부록 교차참조 추가. build 성공 후 단일 호흡 배포(A-6).
+
 ## 최근 작업 (2026-04-19)
 
 ### 완료된 작업 3가지

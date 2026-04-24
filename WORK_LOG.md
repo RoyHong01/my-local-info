@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-04-25 (AI_WEBSITE_BLUEPRINT 완성본 v2)
+
+- **Part K 신설 (운영 안전망 13개 항목)**: 픽앤조이 운영중 누적된 재발 패턴을 일반화해 K-1 AI 모델 티어 / K-2 Git Hooks 2단계 / K-3 0바이트 복구 / K-4 품질 게이트 / K-5 verify:data / K-6 단일 생성 경로 / K-7 수정 범위 격리 / K-8 원격 우선 / K-9 4문서 동기화 / K-10 CI 실패 트리아지 / K-11 텔레그램 리포트 / K-12 톤앤매너 / K-13 영향도 분석 통합.
+- **D-6 deploy.yml 보강**: `concurrency` 그룹(`cancel-in-progress: true`) + `permissions: contents: write` yaml 모범 추가.
+- **A-3 / 부록 교차참조 강화**: A-3에 build 체이닝 패턴 + Part K-4/K-5 링크 추가, 부록 프롬프트에 K-1/K-2/K-4/K-9 적용 항목 추가 + 단일 호흡 배포 7단계 압축 카드.
+- **영향 파일**: `AI_WEBSITE_BLUEPRINT.md`(~2050줄, +400줄), 동기화: WORK_LOG/COPILOT_MEMORY/PROJECT_MEMORY 1줄씩.
+- **검증**: `npm run build` 성공(exit 0), 단일 커밋/푸시.
+
+---
+
 ## 2026-04-24 (CI #644 복구 + TourAPI detailImage2 도입)
 
 - **CI #644 실패 원인**: `src/content/life/2026-04-21-choice-pepsi-zero-lime-24pack.md` 본문에 frontmatter `image`(hero)와 동일한 이미지가 중복 삽입되어 있어 `validate-choice-quality`의 hero-in-body 검증에 차단됨.
