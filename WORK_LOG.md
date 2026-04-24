@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-04-24 (CI #644 복구 + TourAPI detailImage2 도입)
+
+- **CI #644 실패 원인**: `src/content/life/2026-04-21-choice-pepsi-zero-lime-24pack.md` 본문에 frontmatter `image`(hero)와 동일한 이미지가 중복 삽입되어 있어 `validate-choice-quality`의 hero-in-body 검증에 차단됨.
+- **로컬에서 통과처럼 보였던 이유 (재발 방지 포인트)**: 해당 파일이 Windows CRLF로 저장되어 있어 `splitFrontmatterAndBody`의 `text.startsWith('---\n')` 체크 실패 → frontmatter 파싱 스킵 → `published_by !== 'manual'`로 분류되어 검증 자체가 스킵됨. CI(Linux/LF)에서는 정상 파싱 → 차단됨.
+- **수정**:
+  - `src/content/life/2026-04-21-choice-pepsi-zero-lime-24pack.md`: `## 📍 픽앤조이 오늘의 단독 픽` 헤딩 + 본문 hero 이미지 라인 제거 (pepsi는 middle 이미지 자산이 없어 단독 픽 블록 구조를 만족시킬 수 없음). frontmatter `image`는 유지되어 상세 페이지 상단에서 정상 hero 렌더링.
+  - `scripts/validate-choice-quality.js`: `splitFrontmatterAndBody` 진입부에서 `\r\n -> \n` 정규화 1줄 추가. CRLF 환경에서도 동일하게 검증되도록 보장 (재발 방지).
+- **TourAPI detailImage2 도입 (Option B)**:
+  - `scripts/generate-blog-post.js`: `fetchTourDetailImages(contentId, apiKey)` 헬퍼 추가, `shareSameBaseImage(urlA, urlB)` 헬퍼로 TourAPI 파일명 base id(`/(\d{6,})_image\d+_\d+\.[ext]`) 비교.
+  - mid 이미지 결정 우선순위: (1) detailImage2 갤러리에서 hero와 다른 사진 → (2) firstimage2가 hero와 다른 URL → (3) firstimage2 fallback → (4) 생략. 기존엔 hero/firstimage2가 같은 사진의 large+thumbnail이라 사실상 같은 이미지가 두 번 노출되던 문제를 해소.
+- **검증**: `npm run build` 성공 (check:choice-quality + test:choice-single-pick + next build).
+- **커밋**: `6c5046e fix(choice): restore CI by removing duplicate hero image in pepsi post + CRLF-tolerant validator (CI #644)`, `48dc8e7 feat(blog-image): use TourAPI detailImage2 to pick distinct mid image for festival posts`.
+
+---
+
 ## 2026-04-24 (단독 초이스 본문 첫 이미지 위치 - 1+2+3 재발 방지 가드 도입)
 
 - **목표**: 단독 픽 본문 첫 이미지 위치 회귀가 더 이상 production에 도달하지 못하도록 빌드 단계에서 강제 차단.
