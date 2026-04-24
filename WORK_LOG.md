@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-04-23 (큐레이션 이미지 fallback 격리 — 근본 원인 추가 수정)
+
+- **사용자 재정의된 본질**: 단순 중복이 아니라, 사용자가 특정 글(경복궁/인천 가정의달 등) 전용으로 직접 만든 **고퀄리티·맥락 특화 이미지 5장**(사대궁 3 + 인천 2)이 자동 생성 보조금/인천 글의 랜덤 fallback 풀(`internalNationalLandmarkImages`)로 재활용되고 있어, TourAPI 실패 시마다 무관한 글에 사대궁 사진이 붙는 구조였음.
+- **수정 내용**:
+  - `scripts/generate-blog-post.js`: `internalNationalLandmarkImages` 배열과 보조금 카테고리용 seedHash fallback 블록을 완전히 제거. TourAPI 결과가 없으면 곧바로 카테고리 기본 SVG(`default-subsidy.svg` 등)로 폴백하고 WARN 로그 출력.
+  - `scripts/fix-post-images.js`(수동 백필): `INTERNAL_SAFE_FALLBACK_IMAGES`(사대궁 3장) 풀과 safe-fallback 분기를 제거하고 `FALLBACK_DEFAULT_SVG` 카테고리 매핑으로 대체.
+  - `LEGACY_FALLBACK_IMAGES` 상수는 백필 대상 식별용으로만 유지(자동 생성 경로에는 영향 없음).
+- **정책 고정**: 사용자가 직접 제공한 큐레이션 이미지(`gyeongbokgung-hero.png`, `changdeokgung-hero.png`, `changgyeonggung-hero.png`, `incheon-family-month-hero.jpg`, `incheon-spring-festival-2026.jpg`)는 의도된 원본 글에서만 사용하며, 자동 생성 글의 어떤 fallback 단계에서도 재사용하지 않는다.
+- **검증/배포**: `npm run build` ✅ (sitemap 8298 / search 8286) → 커밋 `0da1107` push 완료.
+
+---
+
 ## 2026-04-23 (자동 생성 글 히어로 이미지 회귀 — 근본 원인 3단 수정)
 
 - **이슈**: 2026-04-23 자동 생성 글 3건(인천 아이꿈수당 / 충남 금산 안전보험 / 서울 강서 음식물처리기)이 사대궁(경복궁 등) 사진으로 노출 → 한 달 넘게 반복된 회귀.
