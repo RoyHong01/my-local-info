@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-04-24 (단독 초이스 본문 첫 이미지 위치 버그 근본 원인 수정)
+
+- **증상**: 단독 초이스 글에서 `## 📍 픽앤조이 오늘의 단독 픽` 헤딩 바로 아래에 위치해야 할 본문 첫 이미지(=middleImage)가 다른 섹션에 떠 있고, 헤딩 아래에는 이미지 없이 CTA만 외톨이로 남는 회귀가 재발.
+- **근본 원인**:
+  - `scripts/generate-choice-post.js::buildSinglePickBlock`이 헤딩 아래에 히어로(`image`)와 `middleImage`를 둘 다 push.
+  - 상세 페이지 `removeFirstDuplicateHeroImage`가 frontmatter `image:`와 동일한 본문 이미지를 strip → 헤딩 아래 히어로 제거되어 CTA만 남음.
+  - 프롬프트가 "본문 중간 상세 이미지 1장 허용"이라 Gemini가 `middleImage`를 임의 섹션에 또 삽입.
+- **수정 파일**:
+  - `scripts/generate-choice-post.js`:
+    - `buildSinglePickBlock`: 헤딩 아래에는 `middleImage`만 사용(없으면 hero fallback). 히어로는 frontmatter 자동 렌더링에 위임.
+    - `stripDuplicateMiddleImage` 신설: 단독 모드에서 본문 다른 섹션의 `middleImage` 마크다운을 strip한 뒤 헤딩 블록 삽입.
+    - 프롬프트 [이미지 규칙]: 본문에 어떤 이미지 마크다운도 직접 작성 금지(모든 이미지는 후처리에서 정해진 위치에만 삽입).
+- **데이터 정리(기존 3개 글)**:
+  - `2026-04-22-choice-latex-handska-powerfree-s-set.md`
+  - `2026-04-22-choice-fuji-refill-paper.md`
+  - `2026-04-22-choice-holika-letter-from-spring.md`
+  - 각 파일에서 단독 픽 헤딩 아래 hero 이미지를 middle 이미지로 교체하고, 본문 다른 섹션에 있던 middle 이미지 중복 라인 제거.
+- **검증/배포**: `npm run check:choice-quality` 통과 → `npm run build` 성공 → commit/push 완료.
+
+---
+
 ## 2026-04-24 (맛집 글 회귀 버그 2건 근본 원인 수정)
 
 - **증상**:

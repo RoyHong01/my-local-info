@@ -317,6 +317,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-04-24 핵심 반영(추가):
+  - **단독 초이스 본문 첫 이미지 위치 회귀 수정**: `scripts/generate-choice-post.js::buildSinglePickBlock`이 `📍 픽앤조이 오늘의 단독 픽` 헤딩 아래에 hero+middle을 모두 삽입하던 버그를 수정해, 헤딩 아래에는 `middleImage`만(없으면 hero fallback) 노출하도록 변경.
+  - **중복 strip 도입**: `stripDuplicateMiddleImage`로 단독 모드에서 본문 다른 섹션에 들어간 `middleImage` 마크다운을 strip한 뒤 단독 픽 블록을 삽입.
+  - **프롬프트 강화**: 단독 모드 [이미지 규칙]을 "본문에 어떤 이미지 마크다운도 직접 작성 금지"로 변경(모든 이미지는 후처리에서 정해진 위치에만 삽입).
+  - **데이터 정리**: `2026-04-22` 단독 3건(latex/fuji/holika) 본문에서 헤딩 아래 hero를 middle 이미지로 교체하고, 다른 섹션의 중복 middle 이미지 라인 제거.
 - 2026-04-22 핵심 반영(추가):
   - **자동 초이스 다양성 보강**: `scripts/data/choice-daily-themes.json`의 요일별 `searchKeywordHint`를 최소 10개로 확장.
   - **자동 검색 보장 강화**: `scripts/generate-choice-posts-auto.js`/`scripts/generate-choice-post.js`에서 `minKeywordSearchCount=10`에 도달하기 전에는 조기 종료하지 않도록 보강.
