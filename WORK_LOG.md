@@ -5,6 +5,25 @@
 
 ---
 
+## 2026-04-23 (자동 생성 글 히어로 이미지 회귀 — 근본 원인 3단 수정)
+
+- **이슈**: 2026-04-23 자동 생성 글 3건(인천 아이꿈수당 / 충남 금산 안전보험 / 서울 강서 음식물처리기)이 사대궁(경복궁 등) 사진으로 노출 → 한 달 넘게 반복된 회귀.
+- **근본 원인 3가지**:
+  1. `.github/workflows/deploy.yml`의 `[2단계] AI 블로그 생성` step에 **`TOUR_API_KEY` env 누락** → CI에서 KTO TourAPI 호출 자체가 실패하고 내부 5장 fallback(3장이 사대궁)으로 떨어짐.
+  2. `landmark-engine.js`에 **영속 중복 방지 history가 없음** → 같은 fallback URL이 반복 선택됨.
+  3. `generate-blog-post.js`의 `internalNationalLandmarkImages` fallback이 **사대궁 비율이 60%**이고 dedup도 없어서 동일 사진이 누적.
+- **수정 내용**:
+  1. `deploy.yml` [2단계] env에 `TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}` 추가.
+  2. `scripts/lib/landmark-engine.js`: 14일 윈도우 영속 history(`scripts/data/landmark-image-history.json`) 도입 + `getRegionalLandmark`를 2-pass 구조로 변경(1차: 최근 사용 URL 제외, 2차: 풀 고갈 시 재사용 허용 + `reused: true` 플래그) + `recordImageUsage` 자동 기록 + 관련 유틸 export.
+  3. `scripts/generate-blog-post.js`: TOUR_API_KEY 누락 시 WARN 로그, `getRegionalLandmark`에 `context` 전달, internal fallback에서도 최근 사용 URL 필터 후 seedHash 선택, 모든 fallback 단계에 WARN 로그.
+- **즉시 보정**: `scripts/fix-2026-04-23-images.js`(일회성)로 3개 글의 frontmatter 이미지를 KTO 검증 URL로 교체.
+  - 인천 아이 꿈 수당 → `tong.visitkorea.or.kr/.../3393362_image2_1.JPG`
+  - 충남 금산군 군민안전보험 → `.../3493435_image2_1.jpg`
+  - 서울 강서구 음식물처리기 → `.../3083780_image2_1.jpg`
+- **검증/배포**: `npm run build` ✅ → 커밋 `7d38b96` push 완료. 다음 04:00 KST 자동 실행에서 TOUR_API_KEY 활성 + dedup 동작 확인 필요.
+
+---
+
 ## 2026-04-23 (초이스 hook 누락 재발 방지 — 3단 방어)
 
 - **이슈**: 오늘 생성된 초이스 글 2건(robusta-1kg, hollys-espresso)에 "픽앤조이가 선정한 오늘의 픽" 블록 앞 hook 단락이 비어 있음.
