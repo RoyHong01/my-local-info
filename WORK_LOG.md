@@ -5,6 +5,33 @@
 
 ---
 
+## 2026-04-24 (맛집 글 회귀 버그 2건 근본 원인 수정)
+
+- **증상**:
+  1. 어제 도입한 네이버 맛집 이미지 API 적용 후 일부 맛집 글 본문에 `<br/>`/`<br>` HTML 태그가 그대로 노출됨 (마크다운 렌더러가 escape).
+  2. 일식 글(싱싱초밥 인천검단본점)에 무관한 음식(치즈 치킨 추정) 이미지가 본문 중간에 삽입됨.
+- **근본 원인**:
+  1. Gemini 모델이 가독성을 위해 본문에 `<br/>`을 직접 삽입했고, postProcessRestaurantMarkdown 새니타이저/프롬프트 금지 규칙/검증기 모두에 차단 로직이 없었음.
+  2. `fetchNaverRestaurantPhoto`가 일반 `"이름 주소 맛집"` 검색으로 광범위한 블로그 리뷰 이미지를 가져오고, 두 번째 결과(`naverUrls[1]`)를 무신뢰로 그대로 사용함.
+- **수정 파일**:
+  - `scripts/generate-life-restaurant-posts.mjs`:
+    - `postProcessRestaurantMarkdown`: 본문 정규화 최상단에 `<br>`/`<p>` 태그를 빈 줄로 치환하는 새니타이저 추가.
+    - 프롬프트 `[필수]` 규칙에 HTML 태그(`<br>`, `<br/>`, `<p>`, `</p>`) 및 리터럴 `\n` 문자열 금지 명시 추가.
+    - `validateGeneratedRestaurantMarkdown`에 잔존 HTML 태그 감지 추가 → 최대 3회 재생성 트리거.
+  - `scripts/collect-life-restaurants.mjs::fetchNaverRestaurantPhoto`: 완전 재작성.
+    - 3단계 fallback 검색: `"name" locationHint` → `"name" 메뉴` → `name locationHint 맛집` (따옴표 정확 매칭 우선).
+    - 일식(스시/초밥/오마카세/사시미/우동/라멘/돈카츠) 카테고리 자동 감지 → " 메뉴" 키워드 추가.
+    - 광고 URL 블랙리스트(`blogproxy`, `adcr`, `/ad/`, `?ad=`, `advertisement`, `/sponsored`) 제외.
+    - 가게명 토큰(2자 이상) 기반 신뢰도 필터: 제목에 가게명 토큰이 포함된 결과만 채택.
+    - 신뢰 가능한 결과가 없으면 `null` 반환(억지 fallback 금지) → 본문 2번째 이미지가 누락되어도 무관 이미지보다는 안전.
+- **데이터 정리(기존 2개 글)**:
+  - `2026-04-24-incheon-restaurant-1648556071.md`(일식): `<br/>` 6개 제거 + 무관한 본문 2번째 이미지 블록 삭제(평점 5/리뷰 1의 신생 가게라 신뢰 가능한 추가 이미지 소스 없음).
+  - `2026-04-24-suwon-restaurant-2026837061.md`(애슐리퀸즈 광교): `<br>` 5개 제거. 두 이미지(매장 + 뉴스 기사)는 유효해 유지.
+- **검증/배포**: `npm run build` 성공(1416 페이지), 커밋 `8dc7aef`, push 완료(`4d4f601..8dc7aef`).
+- **재발 방지 정책**: 향후 맛집 글 생성 시 (1) 프롬프트 금지 규칙, (2) postProcess 새니타이저, (3) 검증기 잔존 태그 감지 → 재생성 — 3중 방어. 네이버 이미지는 가게명 토큰 기반 신뢰도 통과 시에만 부착.
+
+---
+
 ## 2026-04-23 (큐레이션 이미지 fallback 격리 — 근본 원인 추가 수정)
 
 - **사용자 재정의된 본질**: 단순 중복이 아니라, 사용자가 특정 글(경복궁/인천 가정의달 등) 전용으로 직접 만든 **고퀄리티·맥락 특화 이미지 5장**(사대궁 3 + 인천 2)이 자동 생성 보조금/인천 글의 랜덤 fallback 풀(`internalNationalLandmarkImages`)로 재활용되고 있어, TourAPI 실패 시마다 무관한 글에 사대궁 사진이 붙는 구조였음.
