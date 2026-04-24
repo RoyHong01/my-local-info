@@ -463,63 +463,113 @@ async function fetchGooglePlacePhotoById(placeId, apiKey) {
 
 /**
  * 네이버 이미지 검색 API로 맛집 사진을 가져온다.
- * 블로그·카페 리뷰 이미지를 반환하므로 음식/인테리어 사진 비율이 높다.
- * landscape 우선 선택 → 최소 400px 폭 기준.
+ * 가게명 정확 일치(쌍따옴표)를 우선하고, 광고/프록시 URL과 title에 가게명이 없는 결과는 제외하여
+ * 상호 불일치로 인한 오결(초밥집에 치즈치킨 사진이 들어가는 등) 재발을 차단한다.
  */
-// topN: 반환할 최대 URL 개수 (기본 2개 - 히어로 + 본문 삽입용)
+// topN: 반환할 최대 URL 개수 (기본 2개 - 히어로 + 본문 삽입용). 신뢰도 부족 시 topN보다 적게 반환할 수 있음.
 async function fetchNaverRestaurantPhoto(name, address, clientId, clientSecret, topN = 2) {
   if (!clientId || !clientSecret) return null;
+  const trimmedName = String(name || '').trim();
+  if (!trimmedName) return null;
 
-  // 주소 앞 2~3 토큰(시/구)만 추출해 검색어를 압축
-  const locationHint = (address || '').split(' ').slice(0, 2).join(' ');
-  const query = `${name} ${locationHint} 맛집`.trim();
+  // 주소 앞 2 토큰(시/구)만 추출해 검색어를 압축
+  const locationHint = String(address || '').split(' ').slice(0, 2).join(' ').trim();
 
-  const url = new URL('https://openapi.naver.com/v1/search/image');
-  url.searchParams.set('query', query);
-  url.searchParams.set('display', '10');
-  url.searchParams.set('sort', 'sim');
-  url.searchParams.set('filter', 'large'); // 큰 이미지만 (최소 800px 이상)
+  // 일식/스시 계열은 메뉴 사진 비율이 높은 ' 메뉴' 키워드를 우선 술어
+  const cuisineLike = `${trimmedName} ${address || ''}`;
+  const isJapanese = /(이식|스시|초밥|오마카세|사시미|우동|라멘|돈카즈)/.test(cuisineLike);
 
-  try {
-    const res = await fetch(url.toString(), {
-      headers: {
-        'X-Naver-Client-Id': clientId,
-        'X-Naver-Client-Secret': clientSecret,
-      },
-    });
+  // 다단계 폴백: 정확 일치 → 메뉴 조합 → 느슨한 일치
+  const queries = [
+    `"${trimmedName}" ${locationHint}`.trim(),
+    isJapanese ? `"${trimmedName}" 메뉴` : `"${trimmedName}" 메뉴`,
+    `${trimmedName} ${locationHint} 맛집`.trim(),
+  ];
 
-    if (!res.ok) {
-      console.warn(`  [Naver Image] 검색 실패(${res.status}): ${name}`);
-      return null;
+  // 가게명 핵심 토큰(2글자 이상) 추출 — 텍스트 매칭 신뢰도 검증에 사용
+  const nameTokens = trimmedName
+    .replace(/[()\[\]{}<>'"]/g, ' ')
+    .split(/\s+/)
+    .map((tok) => tok.trim())
+    .filter((tok) => tok.length >= 2);
+  const stripHtml = (s) => String(s || '').replace(/<[^>]+>/g, '');
+
+  const isAdLikeUrl = (link) => {
+    const u = String(link || '').toLowerCase();
+    if (!u) return true;
+    return /(blogproxy|adcr\.|\/ad\/|\?ad=|advertisement|\/sponsored)/.test(u);
+  };
+
+  for (const query of queries) {
+    const url = new URL('https://openapi.naver.com/v1/search/image');
+    url.searchParams.set('query', query);
+    url.searchParams.set('display', '20');
+    url.searchParams.set('sort', 'sim');
+    url.searchParams.set('filter', 'large');
+
+    let res;
+    try {
+      res = await fetch(url.toString(), {
+        headers: {
+          'X-Naver-Client-Id': clientId,
+          'X-Naver-Client-Secret': clientSecret,
+        },
+      });
+    } catch (error) {
+      console.warn(`  [Naver Image] 요청 오류: ${trimmedName} - ${error?.message || error}`);
+      continue;
     }
 
-    const data = await res.json();
-    const items = data?.items || [];
-    if (items.length === 0) return null;
+    if (!res.ok) {
+      console.warn(`  [Naver Image] 검색 실패(${res.status}): ${trimmedName} | q=${query}`);
+      continue;
+    }
 
-    // landscape(가로 >= 세로) + 최소 400px 폭 이미지 우선 선택
-    const landscape = items.find((item) => {
+    const data = await res.json().catch(() => null);
+    const items = Array.isArray(data?.items) ? data.items : [];
+    if (items.length === 0) continue;
+
+    // 1) 광고/프록시 URL 제외 + landscape + 폭 >= 500 우선
+    const cleaned = items.filter((item) => !isAdLikeUrl(item?.link));
+    const goodSize = cleaned.filter((item) => {
       const w = parseInt(item.sizewidth, 10) || 0;
       const h = parseInt(item.sizeheight, 10) || 0;
-      return w >= 400 && w >= h;
+      return w >= 500 && w >= h;
     });
 
-    // landscape 우선 candidates 순서로 상위 topN개 수집
-    const landscapeItems = items.filter((item) => {
-      const w = parseInt(item.sizewidth, 10) || 0;
-      const h = parseInt(item.sizeheight, 10) || 0;
-      return w >= 400 && w >= h;
+    // 2) title에 가게명 토큰이 하나라도 포함된 결과 우선 (신뢰도 상승)
+    const trustedFirst = (arr) => {
+      if (nameTokens.length === 0) return arr;
+      const trusted = arr.filter((item) => {
+        const text = `${stripHtml(item?.title)} ${String(item?.link || '')}`.toLowerCase();
+        return nameTokens.some((tok) => text.includes(tok.toLowerCase()));
+      });
+      const rest = arr.filter((item) => !trusted.includes(item));
+      return [...trusted, ...rest];
+    };
+
+    const ranked = trustedFirst(goodSize.length > 0 ? goodSize : cleaned);
+
+    // 3) 가게명 토큰 포함 결과만 신뢰 결과로 간주 — 몇 개가 있는지 세기
+    const trustedItems = ranked.filter((item) => {
+      if (nameTokens.length === 0) return true;
+      const text = `${stripHtml(item?.title)} ${String(item?.link || '')}`.toLowerCase();
+      return nameTokens.some((tok) => text.includes(tok.toLowerCase()));
     });
-    const ordered = landscapeItems.length > 0
-      ? [...landscapeItems, ...items.filter((i) => !landscapeItems.includes(i))]
-      : items;
-    const urls = ordered.slice(0, topN).map((item) => item?.link).filter(Boolean);
+
+    if (trustedItems.length === 0) {
+      // 신뢰 결과 없으면 다음 쿼리로 폴백
+      continue;
+    }
+
+    const urls = trustedItems.slice(0, topN).map((item) => item?.link).filter(Boolean);
+    if (urls.length === 0) continue;
     if (topN === 1) return urls[0] || null;
-    return urls.length > 0 ? urls : null;
-  } catch (error) {
-    console.warn(`  [Naver Image] 요청 오류: ${name} - ${error?.message || error}`);
-    return null;
+    return urls;
   }
+
+  // 모든 쿼리 실패 → 억지로 채우지 않고 null 반환 (무관 이미지 삽입 차단)
+  return null;
 }
 
 async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCacheClient) {

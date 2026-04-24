@@ -352,6 +352,13 @@ function postProcessRestaurantMarkdown(markdown, context) {
   const { frontmatter, body } = splitMarkdownSections(markdown);
   let normalizedBody = (body || '').trim();
 
+  // [SANITIZER] Gemini가 본문에 출력한 HTML 태그(<br>, <br/>, <p>, </p>)를 제거해
+  // 마크다운 렌더러에서 텍스트로 노출되는 회귀 버그를 차단한다.
+  // 문단 구분은 오직 빈 줄(double newline)로만 표현한다.
+  normalizedBody = normalizedBody
+    .replace(/\s*<br\s*\/?\s*>\s*/gi, '\n\n')
+    .replace(/<\/?p[^>]*>/gi, '\n\n');
+
   normalizedBody = normalizedBody
     .split('\n')
     .map((line) => line.replace(/^#\s+/, '## '))
@@ -742,6 +749,11 @@ function validateGeneratedRestaurantMarkdown(markdown) {
     issues.push(`최소 분량 미달(공백 제외 ${compactLength}자 / 기준 500자)`);
   }
 
+  // 본문에 HTML 줄바꿈 태그가 남아있으면 sanitizer를 통과 못 한 것 → 재생성 트리거
+  if (/<br\s*\/?\s*>/i.test(bodyText) || /<\/?p[^>]*>/i.test(bodyText)) {
+    issues.push('본문에 HTML 태그(<br>/<p>) 잔존');
+  }
+
   for (const rule of REQUIRED_SECTION_PATTERNS) {
     if (!rule.pattern.test(bodyText)) {
       issues.push(`필수 섹션/항목 누락: ${rule.label}`);
@@ -949,6 +961,8 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 모든 ### 소제목의 위/아래에는 빈 줄을 2개 이상 넣어 여백의 미를 살릴 것.
 - 각 소제목 아래 문단은 최대 3~4문장으로 끊고, 문단 사이에도 빈 줄을 넣어 가독성을 유지할 것.
 - 2~3문장마다 줄바꿈해 가독성을 유지.
+- 본문에 \`<br>\`, \`<br/>\`, \`<p>\`, \`</p>\` 등 HTML 태그를 절대 출력하지 말 것. 코드성 줄바꿈 문자열(\\n 등)도 텍스트로 쓰지 말 것.
+- 문단 구분은 오직 마크다운 표준인 빈 줄 1개(엔터 두 번)만 사용할 것.
 - 훅/소제목에 다음 단어를 사용하지 말 것: 동선, 고민, 막막, 답, 어디로 갈지, 솔직히, 진심으로, 정답, 해결.
 - 문제 제시 후 즉시 해결하는 문장 패턴("~고민이시죠", "여기서 답을")을 사용하지 말 것.
 - 이번 글의 주 스타일은 ${selectedStyle} 이다. 해당 스타일을 중심으로 문체를 구성하되 과장하지 말 것.
