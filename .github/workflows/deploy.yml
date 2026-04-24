@@ -168,6 +168,7 @@ jobs:
           BLOG_POSTS_INCHEON: '1'
           BLOG_POSTS_FESTIVAL: '1'
           BLOG_POSTS_SUBSIDY: '2'
+          TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
 
       - name: '[2단계] Next.js 빌드'
         id: build_stage2

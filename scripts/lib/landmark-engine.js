@@ -1,6 +1,63 @@
+const fs = require('fs');
+const path = require('path');
+
 function normalizeSpace(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
+
+// ─── 이미지 사용 이력 (중복 방지) ─────────────────────────────────────────
+// 같은 랜드마크 사진이 짧은 기간 내 여러 글에 반복 노출되는 것을 막기 위해
+// 사용 이력(URL+ISO 날짜)을 영속 저장한다.
+const DEFAULT_HISTORY_PATH = path.join(__dirname, '..', 'data', 'landmark-image-history.json');
+const DEFAULT_HISTORY_DAYS = 14;
+
+function loadImageHistory(historyPath = DEFAULT_HISTORY_PATH) {
+  try {
+    if (!fs.existsSync(historyPath)) return { version: 1, history: [] };
+    const raw = fs.readFileSync(historyPath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.history)) return { version: 1, history: [] };
+    return parsed;
+  } catch (_err) {
+    return { version: 1, history: [] };
+  }
+}
+
+function saveImageHistory(data, historyPath = DEFAULT_HISTORY_PATH) {
+  try {
+    fs.mkdirSync(path.dirname(historyPath), { recursive: true });
+    fs.writeFileSync(historyPath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+  } catch (_err) {
+    // history 저장 실패는 치명적이지 않음
+  }
+}
+
+function getRecentlyUsedImageUrls(historyDays = DEFAULT_HISTORY_DAYS, historyPath = DEFAULT_HISTORY_PATH) {
+  const data = loadImageHistory(historyPath);
+  const cutoff = Date.now() - historyDays * 24 * 60 * 60 * 1000;
+  const used = new Set();
+  for (const entry of data.history) {
+    if (!entry || !entry.url || !entry.usedAt) continue;
+    const t = Date.parse(entry.usedAt);
+    if (Number.isFinite(t) && t >= cutoff) used.add(entry.url);
+  }
+  return used;
+}
+
+function recordImageUsage(url, { historyDays = DEFAULT_HISTORY_DAYS, historyPath = DEFAULT_HISTORY_PATH, context = '' } = {}) {
+  if (!url) return;
+  const data = loadImageHistory(historyPath);
+  const cutoff = Date.now() - Math.max(historyDays * 2, 30) * 24 * 60 * 60 * 1000;
+  // cutoff(보존 기간 = historyDays의 2배 또는 최소 30일) 이전 항목은 정리
+  const pruned = data.history.filter((e) => {
+    if (!e || !e.usedAt) return false;
+    const t = Date.parse(e.usedAt);
+    return Number.isFinite(t) && t >= cutoff;
+  });
+  pruned.push({ url, usedAt: new Date().toISOString(), context: String(context || '').slice(0, 200) });
+  saveImageHistory({ version: 1, history: pruned }, historyPath);
+}
+// ─────────────────────────────────────────────────────────────────────────
 
 function uniq(values) {
   return [...new Set(values.filter(Boolean))];
@@ -286,9 +343,19 @@ async function getRegionalLandmark(options) {
     numOfRows = 15,
     addressFilter,
     theme,
+    excludeUrls,
+    historyDays = DEFAULT_HISTORY_DAYS,
+    historyPath = DEFAULT_HISTORY_PATH,
+    recordHistory = true,
+    context = '',
   } = options || {};
 
   if (!tourApiKey) return null;
+
+  // 최근 사용 이미지 집합 (영속 history + caller가 지정한 추가 제외 URL)
+  const recentlyUsed = getRecentlyUsedImageUrls(historyDays, historyPath);
+  const excludeSet = new Set(recentlyUsed);
+  if (Array.isArray(excludeUrls)) excludeUrls.forEach((u) => u && excludeSet.add(u));
 
   // 1순위: theme 풀 (예: 어선/수산 → 바다 풀)
   // 2순위: REGION_LANDMARKS[광역] 큐레이션 풀
@@ -313,24 +380,37 @@ async function getRegionalLandmark(options) {
 
   const map = cache || new Map();
 
-  for (const keyword of keywordVariants) {
-    if (!map.has(keyword)) {
-      const candidates = await fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows });
-      map.set(keyword, candidates);
-    }
-    let candidates = map.get(keyword) || [];
-    if (addressFilter && candidates.length > 0) {
-      const filtered = candidates.filter((c) => c.matchedAddr && c.matchedAddr.includes(addressFilter));
-      if (filtered.length > 0) candidates = filtered;
-    }
-    const picked = pickRandom(candidates);
-    if (picked) {
-      return {
-        ...picked,
-        keyword,
-        imageSource: '한국관광공사(TourAPI) 랜드마크',
-        imageSourceApi: 'KorService2/searchKeyword2',
-      };
+  // 1차 패스: 최근 사용되지 않은 이미지만 후보로 인정
+  // 2차 패스: 모든 키워드에서 1차 실패 시, 최근 사용 제한을 풀고 다시 시도
+  for (const pass of [1, 2]) {
+    for (const keyword of keywordVariants) {
+      if (!map.has(keyword)) {
+        const candidates = await fetchTourLandmarkCandidates(keyword, tourApiKey, { numOfRows });
+        map.set(keyword, candidates);
+      }
+      let candidates = map.get(keyword) || [];
+      if (addressFilter && candidates.length > 0) {
+        const filtered = candidates.filter((c) => c.matchedAddr && c.matchedAddr.includes(addressFilter));
+        if (filtered.length > 0) candidates = filtered;
+      }
+      if (pass === 1 && excludeSet.size > 0) {
+        const fresh = candidates.filter((c) => !excludeSet.has(c.imageUrl));
+        if (fresh.length === 0) continue;
+        candidates = fresh;
+      }
+      const picked = pickRandom(candidates);
+      if (picked) {
+        if (recordHistory) {
+          recordImageUsage(picked.imageUrl, { historyDays, historyPath, context });
+        }
+        return {
+          ...picked,
+          keyword,
+          imageSource: '한국관광공사(TourAPI) 랜드마크',
+          imageSourceApi: 'KorService2/searchKeyword2',
+          reused: pass === 2,
+        };
+      }
     }
   }
 
@@ -348,4 +428,11 @@ module.exports = {
   THEME_LANDMARKS,
   METRO_SHORT_NAMES,
   PROVINCE_SHORT_NAMES,
+  // 이미지 사용 이력 유틸 (재사용/테스트용)
+  loadImageHistory,
+  saveImageHistory,
+  getRecentlyUsedImageUrls,
+  recordImageUsage,
+  DEFAULT_HISTORY_PATH,
+  DEFAULT_HISTORY_DAYS,
 };

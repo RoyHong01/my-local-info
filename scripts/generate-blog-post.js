@@ -1151,6 +1151,10 @@ async function generatePost(candidate, postsDir) {
     'https://pick-n-joy.com/images/incheon-spring-festival-2026.jpg',
   ];
   let imageUrl = candidate.firstimage || candidate.firstimage2 || '';
+  const itemContextLabel = candidate['서비스명'] || candidate.title || candidate.name || candidate['서비스ID'] || candidate.id || '';
+  if (!process.env.TOUR_API_KEY && !imageUrl) {
+    console.warn('[blog-image][WARN] TOUR_API_KEY 미설정 → 랜드마크 자동 매칭이 동작하지 않습니다. (대상: ' + itemContextLabel + ')');
+  }
   if (!imageUrl && process.env.TOUR_API_KEY) {
     try {
       const { extractMetroFromText, getRegionalLandmark, detectThemeFromText } = require('./lib/landmark-engine');
@@ -1204,27 +1208,48 @@ async function generatePost(candidate, postsDir) {
           cache: lmCache,
           numOfRows: 15,
           theme: token === '__THEME__' ? theme : (token === expandedTokens[0] ? theme : undefined),
+          context: `${candidate._category || ''} | ${itemContextLabel}`,
         });
         if (result?.imageUrl) {
           imageUrl = result.imageUrl;
+          if (result.reused) {
+            console.warn('[blog-image][INFO] 랜드마크 재사용 (history pool 소진): ' + result.imageUrl);
+          }
           break;
         }
       }
-    } catch (_err) {
-      // 랜드마크 조회 실패 시 기본 이미지로 fallback
+      if (!imageUrl) {
+        console.warn('[blog-image][WARN] TourAPI 호출은 했지만 적합한 랜드마크 결과 없음. tokens=' + JSON.stringify(expandedTokens) + ' theme=' + (theme || '-') + ' (대상: ' + itemContextLabel + ')');
+      }
+    } catch (err) {
+      console.warn('[blog-image][ERROR] 랜드마크 조회 실패: ' + (err && err.message ? err.message : err));
     }
   }
   if (!imageUrl && candidate._category === '전국 보조금·복지 정책') {
+    // 시드 해시 기반 결정적 선택 + 최근 사용된 이미지는 회피
+    let recentlyUsed = new Set();
+    try {
+      const { getRecentlyUsedImageUrls } = require('./lib/landmark-engine');
+      recentlyUsed = getRecentlyUsedImageUrls();
+    } catch (_e) {}
     const seedText = String(candidate['서비스ID'] || candidate['id'] || candidate['서비스명'] || candidate.title || 'national');
     let seedHash = 0;
     for (let i = 0; i < seedText.length; i++) {
       seedHash = ((seedHash << 5) - seedHash) + seedText.charCodeAt(i);
       seedHash |= 0;
     }
-    imageUrl = internalNationalLandmarkImages[Math.abs(seedHash) % internalNationalLandmarkImages.length];
+    const fresh = internalNationalLandmarkImages.filter((u) => !recentlyUsed.has(u));
+    const pool = fresh.length > 0 ? fresh : internalNationalLandmarkImages;
+    imageUrl = pool[Math.abs(seedHash) % pool.length];
+    console.warn('[blog-image][WARN] 보조금 internal 폴백 사용 (TourAPI 결과 없음/오류): ' + imageUrl + ' (대상: ' + itemContextLabel + ')');
+    try {
+      const { recordImageUsage } = require('./lib/landmark-engine');
+      recordImageUsage(imageUrl, { context: `internal-fallback | ${itemContextLabel}` });
+    } catch (_e) {}
   }
   if (!imageUrl) {
     imageUrl = defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
+    console.warn('[blog-image][WARN] 최종 default 이미지 사용: ' + imageUrl + ' (대상: ' + itemContextLabel + ')');
   }
   const midImageUrl = (candidate.firstimage && candidate.firstimage2 && candidate.firstimage2 !== candidate.firstimage)
     ? candidate.firstimage2
