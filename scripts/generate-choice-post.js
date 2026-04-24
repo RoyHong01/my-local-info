@@ -855,6 +855,13 @@ function buildSinglePickBlock(candidate) {
   // - 본문 첫 번째 이미지(=middleImage)는 반드시 이 헤딩 바로 아래에 위치하고,
   //   그 아래 한 줄 아래에 "👉 가격 확인하기" CTA 링크가 따라온다.
   // - middleImage가 없는 경우에만, 폴백으로 히어로 이미지를 본문에 노출한다(상단 자동 렌더 정책 변경 대비용).
+  //
+  // [관련 파일 — 수정 시 3개 동시 점검]
+  //   1) 이 함수 (생성 측)
+  //   2) src/app/blog/[slug]/page.tsx::removeFirstDuplicateHeroImage (렌더 측: hero=image와 동일 URL은 본문에서 strip)
+  //   3) scripts/validate-choice-quality.js::validateManualSinglePickImagePosition (빌드 게이트)
+  //   참고: scripts/test-choice-single-pick.js 가 본 함수 + stripDuplicateMiddleImage 회귀를 빌드 직전에 검증한다.
+  //   운영 규칙: .github/copilot-instructions.md 규칙 #20
   const heroImage = String(candidate.image || candidate.coupangBannerImage || '').trim();
   const middleImage = String(candidate.middleImage || '').trim();
   const url = String(candidate.coupangUrl || '').trim();

@@ -268,6 +268,22 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 적용 시점: KST 기준 오전 08:00 이후에 당일 콘텐츠를 묻는 경우. 그 이전(새벽)은 자동화 실행 중일 수 있으므로 동기화 후 "아직 생성 중일 수 있습니다"를 안내한다.
   - 순서: `git pull` 실행 → pull 결과(신규 파일 목록) 확인 → 이후 파일 검색/작업 진행.
   - 목적: 자동화 결과물이 로컬에 없어 "파일 없음"으로 오답하는 사태 방지.
+20. **단독 초이스 본문 이미지 정책 (코드 강제 / 재발 방지)**:
+  - 단독 초이스(`isManualSinglePost`) 본문 `## 📍 픽앤조이 오늘의 단독 픽` 헤딩 직하 구조는 다음 3줄로 고정한다.
+    1. `![alt](middleImage URL)` — 본문 첫 이미지는 반드시 middleImage(없으면 hero fallback) 1회만
+    2. 빈 줄
+    3. `**👉 [브랜드 단독 픽 가격 확인하기](coupang_link)**` — CTA 1줄
+  - hero 이미지(frontmatter `image`)는 상세 페이지 상단에서 자동 렌더링되므로 **본문에 절대 직접 작성하지 않는다.**
+  - middleImage는 본문 전체에서 1회만 등장한다(다른 섹션 중복 금지).
+  - 위 규칙 위반은 **빌드 단계에서 차단된다.** 빌드 게이트:
+    - `scripts/validate-choice-quality.js::validateManualSinglePickImagePosition` (lint성 검증)
+    - `scripts/test-choice-single-pick.js` (`buildSinglePickBlock`+`stripDuplicateMiddleImage` 단위 회귀 테스트)
+    - `package.json`의 `build = check:choice-quality && test:choice-single-pick && next build`
+  - 위 영역을 수정할 때는 **3개 파일을 동시에 점검**한다:
+    1. `scripts/generate-choice-post.js::buildSinglePickBlock` / `stripDuplicateMiddleImage` (생성 측)
+    2. `src/app/blog/[slug]/page.tsx::removeFirstDuplicateHeroImage` (렌더 측)
+    3. `scripts/validate-choice-quality.js::validateManualSinglePickImagePosition` (검증 측)
+  - Gemini 프롬프트 수정 시 단독 모드 [이미지 규칙]을 약화시키면 즉시 위 검증기에 걸리도록 두고, 검증기를 우회하지 않는다.
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
 

@@ -120,6 +120,80 @@ function collectHeadingsAfterLine(lines, startLineIndex) {
   return headings;
 }
 
+/**
+ * [재발 방지 - 단독 픽 이미지 위치 강제 가드]
+ * 수동 단독 초이스 글에서 다음을 강제한다:
+ *   1) `## 📍 픽앤조이 오늘의 단독 픽` 헤딩이 정확히 1개 존재.
+ *   2) 헤딩 바로 다음 non-empty 라인은 이미지 마크다운(`![alt](url)`)이어야 한다.
+ *   3) 그 다음 non-empty 라인은 CTA 링크(`**👉 [...](url)**`)여야 한다.
+ *   4) frontmatter `image`(=hero) URL이 본문 어디에도 등장하면 안 된다.
+ *      (hero는 frontmatter 자동 렌더링에 위임 — render의 removeFirstDuplicateHeroImage와 충돌 방지)
+ *   5) middleImage URL이 본문에 2회 이상 등장하면 안 된다 (단독 픽 블록 1회만 허용).
+ *
+ * 이 가드가 통과해야만 빌드(next build) 진행. (npm run build는 check:choice-quality 선행)
+ *
+ * 관련 코드:
+ *   - 생성 측: scripts/generate-choice-post.js::buildSinglePickBlock, stripDuplicateMiddleImage
+ *   - 렌더 측: src/app/blog/[slug]/page.tsx::removeFirstDuplicateHeroImage
+ */
+function validateManualSinglePickImagePosition(body, frontmatter) {
+  const errors = [];
+  const heroImage = String(frontmatter.image || '').trim();
+  const text = String(body || '');
+  if (!text) return errors;
+
+  const headingRegex = /^##\s+📍\s+픽앤조이\s+오늘의\s+단독\s+픽\s*$/m;
+  const headingMatches = text.match(/^##\s+📍\s+픽앤조이\s+오늘의\s+단독\s+픽\s*$/gm) || [];
+
+  // 단독 픽 헤딩이 없으면 단독 모드 글이 아니므로 검증 스킵
+  if (headingMatches.length === 0) return errors;
+
+  if (headingMatches.length > 1) {
+    errors.push(`'## 📍 픽앤조이 오늘의 단독 픽' 헤딩이 ${headingMatches.length}회 등장합니다. 정확히 1회만 허용됩니다.`);
+  }
+
+  const lines = text.split('\n');
+  const headingIndex = lines.findIndex((line) => headingRegex.test(line));
+  if (headingIndex < 0) return errors;
+
+  // 헤딩 다음 non-empty 라인 1, 2 추출
+  const nextNonEmpty = [];
+  for (let i = headingIndex + 1; i < lines.length && nextNonEmpty.length < 2; i++) {
+    const trimmed = lines[i].trim();
+    if (!trimmed) continue;
+    nextNonEmpty.push(trimmed);
+  }
+
+  const [first, second] = nextNonEmpty;
+  if (!first || !/^!\[[^\]]*\]\([^)]+\)$/.test(first)) {
+    errors.push("'## 📍 픽앤조이 오늘의 단독 픽' 헤딩 바로 다음 라인은 이미지 마크다운(`![alt](url)`)이어야 합니다.");
+  }
+  if (!second || !/^\*\*👉\s*\[[^\]]+\]\([^)]+\)\*\*/.test(second)) {
+    errors.push("'## 📍 픽앤조이 오늘의 단독 픽' 이미지 다음 라인은 CTA 링크(`**👉 [...](url)**`)여야 합니다.");
+  }
+
+  // hero가 본문에 등장하면 실패 (frontmatter image 자동 렌더링과 중복)
+  if (heroImage) {
+    const escapedHero = heroImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const heroInBody = new RegExp(`!\\[[^\\]]*\\]\\(${escapedHero}\\)`, 'i');
+    if (heroInBody.test(text)) {
+      errors.push(`hero 이미지(frontmatter.image=${heroImage})가 본문에 등장합니다. hero는 frontmatter 자동 렌더링에 위임해야 합니다. (render의 removeFirstDuplicateHeroImage와 충돌)`);
+    }
+  }
+
+  // middleImage 중복 검사 (단독 픽 블록 1회만)
+  if (first && /^!\[[^\]]*\]\(([^)]+)\)$/.test(first)) {
+    const middleImageUrl = first.match(/^!\[[^\]]*\]\(([^)]+)\)$/)[1];
+    const escapedMid = middleImageUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const occurrences = (text.match(new RegExp(`!\\[[^\\]]*\\]\\(${escapedMid}\\)`, 'gi')) || []).length;
+    if (occurrences > 1) {
+      errors.push(`단독 픽 본문 이미지(${middleImageUrl})가 ${occurrences}회 등장합니다. 정확히 1회만 허용됩니다.`);
+    }
+  }
+
+  return errors;
+}
+
 function validateManualChoiceBody(body, heroImage) {
   const errors = [];
   const lines = body.split('\n');
@@ -186,6 +260,7 @@ async function run() {
     // (자동 글의 hook 보장은 generate-choice-post.js의 생성 시 검증 + 후처리 fallback에서 처리)
     if (publishedBy === 'manual') {
       issues.push(...validateIntroHook(body));
+      issues.push(...validateManualSinglePickImagePosition(body, frontmatter));
       issues.push(...validateManualChoiceBody(body, String(frontmatter.image || '').trim()));
     }
 

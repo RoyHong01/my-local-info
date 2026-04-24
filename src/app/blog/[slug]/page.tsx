@@ -47,6 +47,12 @@ function escapeRegExp(value: string): string {
 }
 
 function removeFirstDuplicateHeroImage(markdown: string, heroImage?: string): string {
+  // [재발 방지 - 단독 픽 본문 첫 이미지 위치 회귀 방지]
+  // 이 함수는 frontmatter `image`(=hero)와 동일한 본문 이미지를 첫 1회 strip한다.
+  // 따라서 단독 모드 초이스 글의 buildSinglePickBlock(scripts/generate-choice-post.js)은
+  // "## 📍 픽앤조이 오늘의 단독 픽" 헤딩 아래에 hero를 절대 푸시하면 안 된다
+  // (= middleImage만 사용. 안 그러면 헤딩 아래 이미지가 strip되어 CTA만 외톨이로 남음).
+  // 빌드 가드: scripts/validate-choice-quality.js::validateManualSinglePickImagePosition
   const image = String(heroImage || '').trim();
   if (!markdown || !image) return markdown;
 

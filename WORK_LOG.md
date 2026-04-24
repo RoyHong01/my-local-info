@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-04-24 (단독 초이스 본문 첫 이미지 위치 - 1+2+3 재발 방지 가드 도입)
+
+- **목표**: 단독 픽 본문 첫 이미지 위치 회귀가 더 이상 production에 도달하지 못하도록 빌드 단계에서 강제 차단.
+- **추가/변경**:
+  - **(1) 빌드 게이트 검증기 추가**: `scripts/validate-choice-quality.js`에 `validateManualSinglePickImagePosition` 함수 추가. 다음 위반 시 exit 1 → 빌드 차단:
+    1. `## 📍 픽앤조이 오늘의 단독 픽` 헤딩이 1회를 초과
+    2. 헤딩 다음 non-empty 라인이 이미지 마크다운이 아님
+    3. 그 다음 라인이 CTA(`**👉 [...](url)**`)가 아님
+    4. frontmatter `image`(=hero)가 본문에 등장
+    5. middleImage가 본문에 2회 이상 등장
+  - **(2) 코드 cross-reference 코멘트 추가**: `src/app/blog/[slug]/page.tsx::removeFirstDuplicateHeroImage`와 `scripts/generate-choice-post.js::buildSinglePickBlock` 양쪽에 정책/충돌 메커니즘 설명 주석 보강.
+  - **(3) 단위 회귀 테스트 추가**: `scripts/test-choice-single-pick.js` 신설. `buildSinglePickBlock` + `stripDuplicateMiddleImage`를 합성 fixture로 검증해 빌드 직전에 실행.
+  - **package.json**: `build` 스크립트를 `check:choice-quality && test:choice-single-pick && next build`로 확장.
+- **회귀 적발 사례 (즉시 수정)**:
+  - `src/content/life/2026-04-23-choice-hollys-espresso-roast-blend-bean.md`
+  - `src/content/life/2026-04-23-choice-teatime-coffee-robusta-1kg.md`
+  - 두 파일 모두 헤딩 아래에 hero+middle이 함께 들어 있어 새 검증기가 적발 → hero 라인 제거.
+- **검증**: `npm run build` 성공 (validator + unit test + next build 전 단계 통과).
+- **운영 규칙 추가**: `.github/copilot-instructions.md`에 신규 규칙 #20 (단독 초이스 본문 이미지 정책 코드 강제) 추가.
+
+---
+
 ## 2026-04-24 (단독 초이스 본문 첫 이미지 위치 버그 근본 원인 수정)
 
 - **증상**: 단독 초이스 글에서 `## 📍 픽앤조이 오늘의 단독 픽` 헤딩 바로 아래에 위치해야 할 본문 첫 이미지(=middleImage)가 다른 섹션에 떠 있고, 헤딩 아래에는 이미지 없이 CTA만 외톨이로 남는 회귀가 재발.

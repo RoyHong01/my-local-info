@@ -24,8 +24,6 @@ coupang_banner_alt: "매일 마시는 커피, 부담 없이 채우는 대용량 
 
 ## 📍 픽앤조이 오늘의 단독 픽
 
-![매일 마시는 커피, 부담 없이 채우는 대용량 티타임커피 1kg 루틴](/images/choice/coffee-hero.png)
-
 ![대용량 티타임커피 1kg 로부스타 하이 블렌드 원두 패키지 디테일](/images/choice/coffee-middle.png)
 
 **👉 [티타임커피 단독 픽 가격 확인하기](https://link.coupang.com/a/eu2kIZ)**
