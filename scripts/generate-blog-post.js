@@ -58,6 +58,42 @@ function publishBudgetOutputs() {
   setGithubOutput('mid_image_omitted_count', midImageOmittedCount);
 }
 
+// TourAPI detailImage2 호출: 특정 contentid의 갤러리 이미지 목록을 가져온다.
+// hero(firstimage)와 시각적으로 다른 사진을 mid 이미지로 사용하기 위함.
+// 실패 시 빈 배열 반환 -> 호출 측에서 기존 firstimage2 폴백.
+async function fetchTourDetailImages(contentId, apiKey) {
+  if (!contentId || !apiKey) return [];
+  const url = `https://apis.data.go.kr/B551011/KorService2/detailImage2?serviceKey=${apiKey}&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&contentId=${contentId}&imageYN=Y&numOfRows=20&pageNo=1`;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) return [];
+    const json = await res.json();
+    const items = json?.response?.body?.items?.item;
+    if (!items) return [];
+    const arr = Array.isArray(items) ? items : [items];
+    return arr.map(it => it.originimgurl || it.smallimageurl || '').filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+// hero와 같은 base 파일을 공유하는지 판정 (썸네일 vs 원본 = 같은 사진)
+function shareSameBaseImage(urlA, urlB) {
+  if (!urlA || !urlB) return false;
+  if (urlA === urlB) return true;
+  // tong.visitkorea.or.kr URL: 같은 숫자 prefix(예: 3301599)면 같은 사진의 다른 사이즈
+  const extract = (u) => {
+    const m = String(u).match(/\/(\d{6,})_image\d+_\d+\.[a-zA-Z]+$/);
+    return m ? m[1] : '';
+  };
+  const a = extract(urlA);
+  const b = extract(urlB);
+  return Boolean(a && b && a === b);
+}
+
 // 블로그 글 생성: 기본 모델은 비용 최적화를 위해 gemini-2.5-flash-lite
 async function callGemini(prompt) {
   if (budgetStopped) {
@@ -1230,9 +1266,33 @@ async function generatePost(candidate, postsDir) {
     imageUrl = defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
     console.warn('[blog-image][WARN] 최종 default 이미지 사용: ' + imageUrl + ' (대상: ' + itemContextLabel + ')');
   }
-  const midImageUrl = (candidate.firstimage && candidate.firstimage2 && candidate.firstimage2 !== candidate.firstimage)
-    ? candidate.firstimage2
-    : '';
+  // mid 이미지 결정 우선순위:
+  // 1) detailImage2 갤러리에서 hero와 다른 사진(같은 base 아님) 발견 시 사용
+  // 2) firstimage2가 hero와 다른 URL이면 사용 (현재 동작 유지)
+  // 3) firstimage2가 hero의 썸네일 버전이라도 사용 (사진은 동일하지만 mid 노출은 유지)
+  // 4) 둘 다 없으면 mid 생략
+  let midImageUrl = '';
+  const heroForMid = candidate.firstimage || candidate.firstimage2 || '';
+  if (candidate.contentid && process.env.TOUR_API_KEY) {
+    try {
+      const gallery = await fetchTourDetailImages(candidate.contentid, process.env.TOUR_API_KEY);
+      const distinct = gallery.find(u => u && !shareSameBaseImage(u, heroForMid));
+      if (distinct) {
+        midImageUrl = distinct;
+        console.log('[blog-image][INFO] mid 이미지 detailImage2 갤러리에서 선택: ' + distinct);
+      }
+    } catch (err) {
+      console.warn('[blog-image][WARN] detailImage2 호출 실패: ' + (err && err.message ? err.message : err));
+    }
+  }
+  if (!midImageUrl) {
+    if (candidate.firstimage2 && candidate.firstimage2 !== candidate.firstimage) {
+      midImageUrl = candidate.firstimage2;
+    } else if (candidate.firstimage2) {
+      // hero와 같은 사진의 썸네일이라도 mid 자리에 사용 (현 상태 유지)
+      midImageUrl = candidate.firstimage2;
+    }
+  }
 
   const itemName = candidate['서비스명'] || candidate['title'] || candidate['name'] || '';
   const sourceId = candidate['서비스ID'] || candidate['contentid'] || candidate['id'] || '';
