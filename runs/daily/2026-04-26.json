@@ -1,0 +1,212 @@
+{
+  "reportDateKst": "2026-04-26",
+  "generatedAtUtc": "2026-04-25T19:53:11.626Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24939159556",
+    "runNumber": 667,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24939159556",
+    "runStartedAtUtc": "2026-04-25T19:46:40Z",
+    "headSha": "7b72b13434190fd19ca3edb55cdde2405c19d88e"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://d8f389a0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 4건, 총 7489건",
+        "festival": "신규 0건, 업데이트 219건, 총 219건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://223e9cb0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "d4da9e1fb8cdd8599b2f238b4f66b1b9c371eed7",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-25",
+      "authoredAt": "2026-04-25T19:53:04Z",
+      "files": [
+        "src/content/posts/2026-04-25-gangdong-hyo-benefit.md",
+        "src/content/posts/2026-04-25-incheon-love-gift-certificate-cashback.md",
+        "src/content/posts/2026-04-25-wonju-youth-transportation-support.md",
+        "src/content/posts/2026-05-02-gongju-seokjangri-paleolithic-festival.md"
+      ]
+    },
+    {
+      "sha": "c729eaaa3e42569a8ef5180c2065d4a499549f99",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-25",
+      "authoredAt": "2026-04-25T19:48:11Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-25-gangdong-hyo-benefit.md",
+      "src/content/posts/2026-04-25-incheon-love-gift-certificate-cashback.md",
+      "src/content/posts/2026-04-25-wonju-youth-transportation-support.md",
+      "src/content/posts/2026-05-02-gongju-seokjangri-paleolithic-festival.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-25-gangdong-hyo-benefit.md",
+      "src/content/posts/2026-04-25-incheon-love-gift-certificate-cashback.md",
+      "src/content/posts/2026-04-25-wonju-youth-transportation-support.md",
+      "src/content/posts/2026-05-02-gongju-seokjangri-paleolithic-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.45,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "2003/1549",
+      "markdown": {
+        "generated": 2,
+        "pending": 230,
+        "titles": [
+          "산모·신생아 건강관리 본인부담금 지원",
+          "(인천)장애인 평생교육이용권 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 4건, 총 7489건",
+      "validation": "ok",
+      "anthropicUsage": "3570/2751",
+      "markdown": {
+        "generated": 5,
+        "pending": 7352,
+        "titles": [
+          "딸기 화분교배용 수정벌 지원",
+          "금정구 초등학교 입학지원금",
+          "초등학교 입학축하금 지원",
+          "정(난)관 복원수술비 지원",
+          "가축재해보험료지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 219건, 총 219건",
+      "validation": "ok",
+      "anthropicUsage": "1685/980",
+      "markdown": {
+        "generated": 2,
+        "pending": 159,
+        "titles": [
+          "2026 대한민국 과학축제 in 경기",
+          "종묘 묘현례"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
