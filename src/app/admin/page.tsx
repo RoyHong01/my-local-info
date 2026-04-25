@@ -65,6 +65,15 @@ export default async function AdminPage() {
               <p className="text-xs text-stone-400 mt-3">최근 {indexItems.length}건 기록됨 · 마지막 {latest.date}</p>
             )}
           </Link>
+
+          <Link
+            href="/admin/chat/"
+            className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-orange-300 transition-all group"
+          >
+            <div className="text-2xl mb-3">💬</div>
+            <h2 className="text-base font-bold text-stone-900 group-hover:text-orange-600 transition-colors">실시간 상담</h2>
+            <p className="text-sm text-stone-500 mt-1">방문자 챗봇의 상담원 모드 메시지 확인 및 답변 (2초 폴링)</p>
+          </Link>
         </div>
 
         <div className="mt-8">
