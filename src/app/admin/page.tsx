@@ -23,6 +23,21 @@ export default async function AdminPage() {
           </p>
           <h1 className="mt-3 text-2xl md:text-3xl font-extrabold text-stone-900">⚙️ 픽앤조이 관리자</h1>
           <p className="mt-2 text-sm text-stone-600">운영 현황을 확인하고 관리하는 내부 화면입니다.</p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/admin/runs/"
+              className="inline-flex items-center gap-1.5 rounded-full border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm hover:bg-orange-50 transition-colors"
+            >
+              📊 Daily 리포트
+            </Link>
+            <Link
+              href="/admin/chat/"
+              className="inline-flex items-center gap-1.5 rounded-full border border-orange-300 bg-white px-4 py-2 text-sm font-semibold text-orange-700 shadow-sm hover:bg-orange-50 transition-colors"
+            >
+              💬 실시간 상담
+            </Link>
+          </div>
         </div>
 
         {/* 최신 실행 상태 요약 */}
