@@ -3,13 +3,11 @@ const fs = require('fs/promises');
 const path = require('path');
 const { loadLocalEnvFiles, searchProducts, sleep } = require('./lib/coupang-api');
 
-const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
-const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
-if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
-  throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. 필요하면 ALLOW_GEMINI_PRO=true를 명시하세요.`);
-}
-const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);
-const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 8192);
+const Anthropic = require('@anthropic-ai/sdk');
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const HAIKU_MODEL = 'claude-3-haiku-20240307';
+const HAIKU_TIMEOUT_MS = Number(process.env.HAIKU_TIMEOUT_MS || 120000);
+const HAIKU_MAX_OUTPUT_TOKENS = Number(process.env.HAIKU_MAX_OUTPUT_TOKENS || 4096);
 const RECOMMENDED_PRODUCTS_HISTORY_PATH = path.join(process.cwd(), 'scripts', 'data', 'recommended-products.json');
 const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_DAYS || 14);
 const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
@@ -41,10 +39,7 @@ function getMinKeywordSearchCount(candidate) {
   return Math.floor(raw);
 }
 
-function getGeminiApiKey() {
-  loadLocalEnvFiles();
-  return process.env.GEMINI_API_KEY || '';
-}
+
 
 function parseArgs(argv) {
   const args = { input: '', outdir: '', help: false };
@@ -793,7 +788,7 @@ function sanitizeBannedExpressions(content) {
 /**
  * [재발 방지 - 서론 hook 자동 보정]
  * 본문 첫 ## 헤딩 이전에 hook 단락이 1개 이상 없으면, candidate 정보를 기반으로
- * 안전한 일반형 hook 2~3 단락을 자동 삽입한다. (Gemini 재시도 모두 실패해도 hook 보장)
+ * 안전한 일반형 hook 2~3 단락을 자동 삽입한다. (Haiku 재시도 모두 실패해도 hook 보장)
  */
 function ensureIntroHookFallback(content, candidate) {
   const text = String(content || '');
@@ -888,7 +883,7 @@ function buildSinglePickBlock(candidate) {
   return lines.join('\n');
 }
 
-// [재발 방지] Gemini가 본문 다른 섹션에 middleImage 마크다운을 또 삽입한 경우 strip한다.
+// [재발 방지] Haiku가 본문 다른 섹션에 middleImage 마크다운을 또 삽입한 경우 strip한다.
 // 단독 픽 블록 삽입 전에 호출해, "📍 픽앤조이 오늘의 단독 픽" 아래에만 단 한 번 노출되도록 강제한다.
 function stripDuplicateMiddleImage(markdown, candidate) {
   const middleImage = String(candidate?.middleImage || '').trim();
@@ -907,7 +902,7 @@ function injectProductBlocks(content, candidate, products) {
   // [단독 모드] keywordHint 없고 수동 제휴(coupangUrl+coupangHtml) 입력이면
   // 자동 멀티 상품 블록(픽+비교 표) 삽입을 건너뛰고, 단독 픽 블록 1개만 첫 ## 앞에 삽입한다.
   if (isManualSinglePost(candidate)) {
-    // [재발 방지] Gemini가 본문 다른 섹션에 middleImage를 또 삽입한 경우 strip
+    // [재발 방지] Haiku가 본문 다른 섹션에 middleImage를 또 삽입한 경우 strip
     let value = stripDuplicateMiddleImage(normalizedContent, candidate);
     const singleBlock = buildSinglePickBlock(candidate);
     if (singleBlock) {
@@ -1241,38 +1236,25 @@ function dedupeAffiliateLinks(content, coupangUrl) {
   return removed.replace(/\n{3,}/g, '\n\n').trim();
 }
 
-async function callGemini(prompt) {
-  const geminiApiKey = getGeminiApiKey();
-  if (!geminiApiKey) {
-    throw new Error('Missing GEMINI_API_KEY');
+async function callHaiku(prompt) {
+  if (!ANTHROPIC_API_KEY) {
+    throw new Error('Missing ANTHROPIC_API_KEY');
   }
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${geminiApiKey}`;
+  const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
-
+  const timer = setTimeout(() => controller.abort(), HAIKU_TIMEOUT_MS);
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.35,
-          topP: 0.92,
-          maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
-        },
-      }),
+    const msg = await anthropic.messages.create({
+      model: HAIKU_MODEL,
+      max_tokens: HAIKU_MAX_OUTPUT_TOKENS,
+      temperature: 0.35,
+      system: '',
+      messages: [{ role: 'user', content: prompt }],
+      stop_sequences: ["\n\nHuman:"],
+      stream: false,
+      abortSignal: controller.signal,
     });
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Gemini API 오류: ${res.status} ${err}`);
-    }
-
-    const data = await res.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    return msg?.content?.[0]?.text || '';
   } finally {
     clearTimeout(timer);
   }
@@ -1532,7 +1514,7 @@ async function run() {
   const writingAngle = pickWritingAngle();
   const prompt = buildChoicePrompt(candidate, today, productResolution, writingAngle);
 
-  console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
+  console.log(`CHOICE_HAIKU_MODEL: ${HAIKU_MODEL}`);
   console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
   console.log(`입력 파일: ${inputPath}`);
   console.log(`모드: ${isSinglePost ? '단독(수동 제휴)' : '자동(멀티 상품)'}`);
@@ -1546,9 +1528,9 @@ async function run() {
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const generated = await callGemini(prompt);
+      const generated = await callHaiku(prompt);
       if (!generated || !generated.trim()) {
-        throw new Error('Gemini 응답이 비어 있습니다.');
+        throw new Error('Haiku 응답이 비어 있습니다.');
       }
 
       const stripped = removeCodeFence(generated);
@@ -1566,12 +1548,12 @@ async function run() {
       break;
     } catch (err) {
       if (attempt === maxAttempts) throw err;
-      console.warn(`Gemini 호출 재시도 ${attempt + 1}/${maxAttempts}: ${err.message}`);
+      console.warn(`Haiku 호출 재시도 ${attempt + 1}/${maxAttempts}: ${err.message}`);
     }
   }
 
   if (!finalContent || !finalContent.trim()) {
-    throw new Error('Gemini 응답이 비어 있습니다.');
+    throw new Error('Haiku 응답이 비어 있습니다.');
   }
 
   await fs.mkdir(outDir, { recursive: true });
