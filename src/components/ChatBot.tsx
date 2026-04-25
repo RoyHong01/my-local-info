@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ChatItem = {
   question: string;
@@ -24,7 +24,20 @@ export default function ChatBot({ items }: ChatBotProps) {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const hasItems = useMemo(() => items.length > 0, [items]);
+  const suggestedQuestions = (
+    Array.isArray(items)
+      ? items.map((item) => String(item?.question || "").trim()).filter(Boolean)
+      : []
+  ).slice(0, 2);
+
+  const fallbackQuestions = [
+    "이 블로그는 어떤 블로그인가요?",
+    "정보는 얼마나 자주 업데이트되나요?",
+  ];
+
+  const quickQuestions = suggestedQuestions.length > 0
+    ? suggestedQuestions
+    : fallbackQuestions;
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -71,20 +84,6 @@ export default function ChatBot({ items }: ChatBotProps) {
     }
   };
 
-  const handleQuestionClick = (item: ChatItem) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: `${Date.now()}-q-${Math.random()}`, role: "user", text: item.question },
-    ]);
-
-    window.setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { id: `${Date.now()}-a-${Math.random()}`, role: "bot", text: item.answer },
-      ]);
-    }, 220);
-  };
-
   const handleSubmit = async () => {
     const current = inputText;
     setInputText("");
@@ -127,7 +126,7 @@ export default function ChatBot({ items }: ChatBotProps) {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-3 py-4 sm:px-4">
             {messages.length === 0 && (
               <div className="mx-auto max-w-[85%] rounded-2xl bg-white px-4 py-3 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
-                아래 질문 버튼을 누르거나 직접 질문을 입력해보세요.
+                메시지를 입력해 대화를 시작해보세요.
               </div>
             )}
 
@@ -160,22 +159,19 @@ export default function ChatBot({ items }: ChatBotProps) {
           </div>
 
           <div className="border-t border-slate-200 bg-white p-3 sm:p-4">
-            {hasItems ? (
-              <div className="mb-3 max-h-24 space-y-2 overflow-y-auto pr-1 sm:max-h-28">
-                {items.map((item) => (
-                  <button
-                    key={item.question}
-                    type="button"
-                    onClick={() => handleQuestionClick(item)}
-                    className="w-full rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-left text-sm text-blue-700 transition-colors hover:bg-blue-100"
-                  >
-                    {item.question}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className="mb-3 text-sm text-slate-500">표시할 질문이 없습니다.</p>
-            )}
+            <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+              {quickQuestions.map((question) => (
+                <button
+                  key={question}
+                  type="button"
+                  onClick={() => submitQuestionToApi(question)}
+                  disabled={isLoading}
+                  className="shrink-0 rounded-full bg-slate-100 px-3 py-1.5 text-xs text-slate-700 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {question}
+                </button>
+              ))}
+            </div>
 
             <div className="flex items-center gap-2">
               <input
