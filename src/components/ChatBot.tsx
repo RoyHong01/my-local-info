@@ -13,13 +13,15 @@ type Message = {
   text: string;
 };
 
-type ChatWidgetProps = {
+type ChatBotProps = {
   items: ChatItem[];
 };
 
-export default function ChatWidget({ items }: ChatWidgetProps) {
+export default function ChatBot({ items }: ChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const hasItems = useMemo(() => items.length > 0, [items]);
@@ -27,23 +29,72 @@ export default function ChatWidget({ items }: ChatWidgetProps) {
   useEffect(() => {
     if (!scrollRef.current) return;
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isLoading]);
 
-  const handleQuestionClick = (item: ChatItem) => {
-    const questionId = `${Date.now()}-q`;
-    const answerId = `${Date.now()}-a`;
+  const addBotMessage = (text: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { id: `${Date.now()}-a-${Math.random()}`, role: "bot", text },
+    ]);
+  };
+
+  const submitQuestionToApi = async (question: string) => {
+    const trimmed = question.trim();
+    if (!trimmed || isLoading) return;
 
     setMessages((prev) => [
       ...prev,
-      { id: questionId, role: "user", text: item.question },
+      { id: `${Date.now()}-q-${Math.random()}`, role: "user", text: trimmed },
+    ]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: trimmed }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        addBotMessage("요청 처리 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.");
+        return;
+      }
+
+      const answer = typeof data?.answer === "string" ? data.answer : "답변을 받지 못했어요.";
+      addBotMessage(answer);
+    } catch {
+      addBotMessage("네트워크 오류가 발생했어요. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleQuestionClick = (item: ChatItem) => {
+    setMessages((prev) => [
+      ...prev,
+      { id: `${Date.now()}-q-${Math.random()}`, role: "user", text: item.question },
     ]);
 
     window.setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { id: answerId, role: "bot", text: item.answer },
+        { id: `${Date.now()}-a-${Math.random()}`, role: "bot", text: item.answer },
       ]);
     }, 220);
+  };
+
+  const handleSubmit = async () => {
+    const current = inputText;
+    setInputText("");
+    await submitQuestionToApi(current);
+  };
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = async (event) => {
+    if (event.key !== "Enter" || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    await handleSubmit();
   };
 
   return (
@@ -76,7 +127,7 @@ export default function ChatWidget({ items }: ChatWidgetProps) {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-3 py-4 sm:px-4">
             {messages.length === 0 && (
               <div className="mx-auto max-w-[85%] rounded-2xl bg-white px-4 py-3 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
-                아래 질문 버튼을 눌러 대화를 시작해보세요.
+                아래 질문 버튼을 누르거나 직접 질문을 입력해보세요.
               </div>
             )}
 
@@ -97,11 +148,20 @@ export default function ChatWidget({ items }: ChatWidgetProps) {
                 </div>
               );
             })}
+
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="inline-flex items-center gap-2 rounded-2xl rounded-bl-md bg-slate-200 px-3 py-2 text-sm text-slate-700 shadow-sm">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" />
+                  답변 생성 중...
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="border-t border-slate-200 bg-white p-3 sm:p-4">
             {hasItems ? (
-              <div className="max-h-32 space-y-2 overflow-y-auto pr-1 sm:max-h-36">
+              <div className="mb-3 max-h-24 space-y-2 overflow-y-auto pr-1 sm:max-h-28">
                 {items.map((item) => (
                   <button
                     key={item.question}
@@ -114,8 +174,28 @@ export default function ChatWidget({ items }: ChatWidgetProps) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-500">표시할 질문이 없습니다.</p>
+              <p className="mb-3 text-sm text-slate-500">표시할 질문이 없습니다.</p>
             )}
+
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={inputText}
+                onChange={(event) => setInputText(event.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="질문을 입력하세요"
+                className="h-10 flex-1 rounded-xl border border-slate-300 px-3 text-sm outline-none focus:border-blue-400"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={isLoading || !inputText.trim()}
+                className="h-10 rounded-xl bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                전송
+              </button>
+            </div>
           </div>
         </div>
       </div>

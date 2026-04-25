@@ -1,3 +1,6 @@
 name = "my-local-info"
 pages_build_output_dir = "out"
 compatibility_date = "2024-03-17"
+
+[ai]
+binding = "AI"
