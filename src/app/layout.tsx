@@ -4,6 +4,8 @@ import "./globals.css";
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import PageContentShell from '@/components/PageContentShell';
+import ChatWidget from '@/components/ChatWidget';
+import chatItems from '../../chat-data.json';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -155,6 +157,7 @@ gtag('config', '${gaId}');`,
         <SiteHeader />
         <PageContentShell>{children}</PageContentShell>
         <SiteFooter />
+        <ChatWidget items={chatItems} />
       </body>
     </html>
   );
