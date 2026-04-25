@@ -129,7 +129,7 @@ jobs:
           fi
           set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -198,7 +198,7 @@ jobs:
           fi
           set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -320,7 +320,7 @@ jobs:
           fi
           set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info 2>&1 | tee "$DEPLOY_LOG"
+          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -467,7 +467,7 @@ jobs:
             echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
             exit 0
           fi
-          npx wrangler pages deploy out --project-name=my-local-info
+          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -512,7 +512,7 @@ jobs:
             echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
             exit 0
           fi
-          npx wrangler pages deploy out --project-name=my-local-info
+          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
