@@ -5,6 +5,7 @@ import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import { getTopFestival } from '@/lib/priority-calculator';
 
 export const metadata: Metadata = {
   title: '전국 축제·여행 정보 | 픽앤조이',
@@ -40,7 +41,9 @@ export default async function FestivalPage() {
   const all = await readJson('festival.json');
   const activeItems = all.filter(i => !i.expired);
   const apiItems = activeItems.filter(hasContentId);
-  const items = apiItems.length > 0 ? apiItems : activeItems;
+  const baseItems = apiItems.length > 0 ? apiItems : activeItems;
+  // SSG된 상세 페이지(Top 300)만 우선 노출 → 404 링크 차단
+  const items = getTopFestival(baseItems, 300) as DataItem[];
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">

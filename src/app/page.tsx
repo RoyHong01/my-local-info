@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { getTopIncheon, getTopSubsidy, getTopFestival } from '@/lib/priority-calculator';
 
 export const metadata: Metadata = {
   title: '픽앤조이 | 시민 체감형 공공 복지·라이프 큐레이션',
@@ -90,7 +91,7 @@ function SubsidyCard({ item }: { item: DataItem }) {
   );
   const id = getField(item, ['서비스ID', 'id']);
   return (
-    <Link href={`/subsidy/view?id=${encodeURIComponent(id)}`} className="block group">
+    <Link href={`/subsidy/${encodeURIComponent(id)}/`} className="block group">
       <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-gray-100 h-[150px] flex flex-col">
         <div className="flex items-start justify-between mb-2">
           <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-600">보조금</span>
@@ -141,9 +142,9 @@ export default async function Home() {
     readJson('festival.json'),
   ]);
 
-  const incheon = incheonAll.filter(i => !i.expired).slice(0, 3);
-  const subsidy = subsidyAll.filter(i => !i.expired).slice(0, 3);
-  const festival = festivalAll.filter(i => !i.expired).slice(0, 3);
+  const incheon = (getTopIncheon(incheonAll, 500) as DataItem[]).slice(0, 3);
+  const subsidy = (getTopSubsidy(subsidyAll, 800) as DataItem[]).slice(0, 3);
+  const festival = (getTopFestival(festivalAll, 300) as DataItem[]).slice(0, 3);
   const subsidyCount = subsidyAll.filter(i => !i.expired).length;
   const festivalCount = festivalAll.filter(i => !i.expired).length;
 

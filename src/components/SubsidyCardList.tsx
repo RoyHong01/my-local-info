@@ -36,7 +36,7 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
         return (
           <Link
             key={i}
-            href={`/subsidy/view?id=${itemId}`}
+            href={`/subsidy/${itemId}/`}
             onClick={() => sessionStorage.setItem('subsidyScrollY', String(window.scrollY))}
           >
             <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col h-full cursor-pointer">

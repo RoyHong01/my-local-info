@@ -5,6 +5,7 @@ import ScrollRestorer from '@/components/ScrollRestorer';
 import IncheonCardList from '@/components/IncheonCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import { getTopIncheon } from '@/lib/priority-calculator';
 
 export const metadata: Metadata = {
   title: '인천 지역 정보 | 픽앤조이',
@@ -34,7 +35,8 @@ async function readJson(filename: string): Promise<DataItem[]> {
 
 export default async function IncheonPage() {
   const all = await readJson('incheon.json');
-  const items = all.filter(i => !i.expired);
+  // SSG된 상세 페이지(Top 500)만 우선 노출 → 404 링크 차단
+  const items = getTopIncheon(all, 500) as DataItem[];
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">

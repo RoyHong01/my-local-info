@@ -5,6 +5,7 @@ import ScrollRestorer from '@/components/ScrollRestorer';
 import SubsidyCardList from '@/components/SubsidyCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
+import { getTopSubsidy } from '@/lib/priority-calculator';
 
 export const metadata: Metadata = {
   title: '전국 보조금·복지 정보 | 픽앤조이',
@@ -34,7 +35,8 @@ async function readJson(filename: string): Promise<DataItem[]> {
 
 export default async function SubsidyPage() {
   const all = await readJson('subsidy.json');
-  const items = all.filter(i => !i.expired);
+  // SSG된 상세 페이지(Top 800)만 우선 노출 → 404 링크 차단
+  const items = getTopSubsidy(all, 800) as DataItem[];
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">

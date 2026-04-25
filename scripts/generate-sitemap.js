@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
+const { getAllTopIds } = require('./lib/priority-calculator');
 
 const baseUrl = 'https://pick-n-joy.com';
 const postsDirs = [
@@ -99,36 +100,40 @@ function collectMarkdownPages() {
   return pages;
 }
 
-function collectIncheonPages() {
+function collectIncheonPages(topIds) {
   return readJsonArray('incheon.json')
     .map((item) => item['서비스ID'] || item.id)
     .filter(Boolean)
+    .filter((id) => topIds.has(id))
     .map((id) => buildPage(`/incheon/${encodeURIComponent(String(id))}/`, '0.7', 'weekly'));
 }
 
-function collectSubsidyPages() {
+function collectSubsidyPages(topIds) {
   return readJsonArray('subsidy.json')
     .map((item) => item['서비스ID'] || item.id)
     .filter(Boolean)
+    .filter((id) => topIds.has(id))
     .map((id) => buildPage(`/subsidy/${encodeURIComponent(String(id))}/`, '0.7', 'weekly'));
 }
 
-function collectFestivalPages() {
+function collectFestivalPages(topIds) {
   return readJsonArray('festival.json')
     .map((item) => ({
       id: item.contentid || item.id,
       lastmod: item.description_markdown_updated_at || item.collectedAt || item.modifiedtime,
     }))
-    .filter((item) => item.id)
+    .filter((item) => item.id && topIds.has(String(item.id)))
     .map((item) => buildPage(`/festival/${encodeURIComponent(String(item.id))}/`, '0.7', 'weekly', item.lastmod));
 }
+
+const topIds = getAllTopIds();
 
 const allPages = [
   ...staticPages.map((page) => buildPage(page.url, page.priority, page.changefreq, today)),
   ...collectMarkdownPages(),
-  ...collectIncheonPages(),
-  ...collectSubsidyPages(),
-  ...collectFestivalPages(),
+  ...collectIncheonPages(topIds.incheon),
+  ...collectSubsidyPages(topIds.subsidy),
+  ...collectFestivalPages(topIds.festival),
 ];
 
 const uniquePages = Array.from(new Map(allPages.map((page) => [page.url, page])).values())
