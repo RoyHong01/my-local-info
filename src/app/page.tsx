@@ -142,11 +142,22 @@ export default async function Home() {
     readJson('festival.json'),
   ]);
 
-  const incheon = (getTopIncheon(incheonAll, 500) as DataItem[]).slice(0, 3);
-  const subsidy = (getTopSubsidy(subsidyAll, 800) as DataItem[]).slice(0, 3);
-  const festival = (getTopFestival(festivalAll, 300) as DataItem[]).slice(0, 3);
-  const subsidyCount = subsidyAll.filter(i => !i.expired).length;
-  const festivalCount = festivalAll.filter(i => !i.expired).length;
+  // 목록 페이지(Top-N SSG)와 동일한 셀렉션을 사용해 카운트 정합성 유지
+  const subsidyTop = getTopSubsidy(subsidyAll, 800) as DataItem[];
+  const incheonTop = getTopIncheon(incheonAll, 500) as DataItem[];
+  // 축제는 목록 페이지에서 contentid 보유 항목 우선 노출하므로 동일 로직 반영
+  const festivalActive = festivalAll.filter(i => !i.expired);
+  const festivalApi = festivalActive.filter(
+    i => typeof i.contentid === 'string' && (i.contentid as string).trim().length > 0
+  );
+  const festivalBase = festivalApi.length > 0 ? festivalApi : festivalActive;
+  const festivalTop = getTopFestival(festivalBase, 300) as DataItem[];
+
+  const incheon = incheonTop.slice(0, 3);
+  const subsidy = subsidyTop.slice(0, 3);
+  const festival = festivalTop.slice(0, 3);
+  const subsidyCount = subsidyTop.length;
+  const festivalCount = festivalTop.length;
 
   const categories = [
     {
