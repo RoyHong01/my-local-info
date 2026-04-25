@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run check:choice-quality && npm run test:choice-single-pick && next build",
+    "prebuild": "node scripts/build-search-index.js",
     "verify:data": "node scripts/verify-data-json.js",
     "postbuild": "node scripts/generate-sitemap.js && node scripts/generate-search-index.js",
     "generate:blog": "node scripts/generate-blog-post.js",
