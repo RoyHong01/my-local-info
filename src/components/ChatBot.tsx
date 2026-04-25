@@ -183,7 +183,7 @@ export default function ChatBot({ items }: ChatBotProps) {
                 value={inputText}
                 onChange={(event) => setInputText(event.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="질문을 입력하세요"
+                placeholder="메시지를 입력하세요"
                 className="h-10 flex-1 rounded-xl border border-slate-300 px-3 text-sm outline-none focus:border-blue-400"
                 disabled={isLoading}
               />
