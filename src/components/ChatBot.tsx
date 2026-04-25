@@ -57,11 +57,12 @@ export default function ChatBot({ items }: ChatBotProps) {
     Array.isArray(items)
       ? items.map((item) => String(item?.question || "").trim()).filter(Boolean)
       : []
-  ).slice(0, 2);
+  ).slice(0, 3);
 
   const fallbackQuestions = [
     "이 블로그는 어떤 블로그인가요?",
     "정보는 얼마나 자주 업데이트되나요?",
+    "어떤 정보를 제공하나요?",
   ];
 
   const quickQuestions = suggestedQuestions.length > 0
@@ -329,7 +330,9 @@ export default function ChatBot({ items }: ChatBotProps) {
 
           <div className="border-t border-slate-200 bg-white p-3 sm:p-4">
             {mode === "ai" && (
-              <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+              <div className="mb-3">
+                <p className="mb-1.5 text-xs font-medium text-slate-400">자주 묻는 질문</p>
+                <div className="flex gap-2 overflow-x-auto pb-1">
                 {quickQuestions.map((question) => (
                   <button
                     key={question}
@@ -340,8 +343,7 @@ export default function ChatBot({ items }: ChatBotProps) {
                   >
                     {question}
                   </button>
-                ))}
-              </div>
+                ))}                </div>              </div>
             )}
 
             <div className="flex items-center gap-2">
