@@ -1,0 +1,212 @@
+{
+  "reportDateKst": "2026-04-27",
+  "generatedAtUtc": "2026-04-26T19:57:59.633Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "24965517679",
+    "runNumber": 668,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24965517679",
+    "runStartedAtUtc": "2026-04-26T19:49:34Z",
+    "headSha": "1c27a87478a4d92786eb4d2c4b7d34c798ba8de5"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://44c31de7.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 2건, 총 7488건",
+        "festival": "신규 0건, 업데이트 214건, 총 214건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://fb606e03.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "0702c4b58b9d8e2edf5c8056d415fdd04e4d035d",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-26",
+      "authoredAt": "2026-04-26T19:57:51Z",
+      "files": [
+        "src/content/posts/2026-04-26-dongasia-culture-andong.md",
+        "src/content/posts/2026-04-26-gangseo-maternity-care.md",
+        "src/content/posts/2026-04-26-post-1777233284848.md",
+        "src/content/posts/2026-04-26-youth-culture-pass.md"
+      ]
+    },
+    {
+      "sha": "459760d0583ab1ba1194e7eb5aa39d7a0f88ba6a",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-26",
+      "authoredAt": "2026-04-26T19:51:07Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-26-dongasia-culture-andong.md",
+      "src/content/posts/2026-04-26-gangseo-maternity-care.md",
+      "src/content/posts/2026-04-26-post-1777233284848.md",
+      "src/content/posts/2026-04-26-youth-culture-pass.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-26-dongasia-culture-andong.md",
+      "src/content/posts/2026-04-26-gangseo-maternity-care.md",
+      "src/content/posts/2026-04-26-post-1777233284848.md",
+      "src/content/posts/2026-04-26-youth-culture-pass.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 18.85,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "1357/1211",
+      "markdown": {
+        "generated": 2,
+        "pending": 228,
+        "titles": [
+          "SOS 긴급복지 지원",
+          "구직청년 드림체크카드 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 2건, 총 7488건",
+      "validation": "ok",
+      "anthropicUsage": "3234/2934",
+      "markdown": {
+        "generated": 5,
+        "pending": 7346,
+        "titles": [
+          "서구 교복구입비 지원",
+          "청년 자격증 취득 응시료 지원",
+          "스터디카페·독서실 이용료 지원",
+          "2026년 음성군 청년 면접수당 지원사업",
+          "미취업 청년 자격증 응시료 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 214건, 총 214건",
+      "validation": "ok",
+      "anthropicUsage": "1525/1071",
+      "markdown": {
+        "generated": 2,
+        "pending": 157,
+        "titles": [
+          "2026 청산도슬로걷기 축제",
+          "홍성남당항 새조개축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
