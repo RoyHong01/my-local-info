@@ -1,0 +1,212 @@
+{
+  "reportDateKst": "2026-04-28",
+  "generatedAtUtc": "2026-04-27T20:19:18.312Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25017009487",
+    "runNumber": 669,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25017009487",
+    "runStartedAtUtc": "2026-04-27T20:10:27Z",
+    "headSha": "846e8327e915a80d443f3f4d28239f16928e5101"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://f6fb23d9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 1건, 총 342건",
+        "subsidy": "신규 13건, 총 7493건",
+        "festival": "신규 15건, 업데이트 201건, 총 216건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://524e1fd3.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "76ecf0739f8280d79119161ba21b2b24c418a6d1",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-27",
+      "authoredAt": "2026-04-27T20:19:10Z",
+      "files": [
+        "src/content/posts/2026-04-27-chunhyangje-namwon.md",
+        "src/content/posts/2026-04-27-post-1777320950986.md",
+        "src/content/posts/2026-04-27-post-1777320990868.md",
+        "src/content/posts/2026-04-27-school-dropout-youth-scholarship.md"
+      ]
+    },
+    {
+      "sha": "19ef721f244ecb8f9a262790429e90d33ac957b4",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-27",
+      "authoredAt": "2026-04-27T20:12:13Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-27-chunhyangje-namwon.md",
+      "src/content/posts/2026-04-27-post-1777320950986.md",
+      "src/content/posts/2026-04-27-post-1777320990868.md",
+      "src/content/posts/2026-04-27-school-dropout-youth-scholarship.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-27-chunhyangje-namwon.md",
+      "src/content/posts/2026-04-27-post-1777320950986.md",
+      "src/content/posts/2026-04-27-post-1777320990868.md",
+      "src/content/posts/2026-04-27-school-dropout-youth-scholarship.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 15.41,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 1건, 총 342건",
+      "validation": "ok",
+      "anthropicUsage": "1665/1404",
+      "markdown": {
+        "generated": 2,
+        "pending": 231,
+        "titles": [
+          "인천시민안전보험",
+          "초·중·고 학생 교육비 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 13건, 총 7493건",
+      "validation": "ok",
+      "anthropicUsage": "5225/3081",
+      "markdown": {
+        "generated": 5,
+        "pending": 7347,
+        "titles": [
+          "김제시 장애인 평생교육이용권 지원사업",
+          "군산시 장애인 평생교육이용권 지원",
+          "서구 초등학교 입학준비금 지원",
+          "부산 중구 초등학교 입학준비금 지원",
+          "청년 1:1 맞춤형 취업 멘토링 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 15건, 업데이트 201건, 총 216건",
+      "validation": "ok",
+      "anthropicUsage": "1740/1094",
+      "markdown": {
+        "generated": 2,
+        "pending": 168,
+        "titles": [
+          "불로초 원정대, 불로초를 찾아라!",
+          "임실N펫스타"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
