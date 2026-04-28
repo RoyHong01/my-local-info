@@ -1,0 +1,211 @@
+{
+  "reportDateKst": "2026-04-29",
+  "generatedAtUtc": "2026-04-28T20:29:31.949Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25075590246",
+    "runNumber": 670,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25075590246",
+    "runStartedAtUtc": "2026-04-28T20:19:59Z",
+    "headSha": "4fb52c339f3ed47a1239fab96d993529c3851020"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://001b7d1c.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 340건",
+        "subsidy": "신규 14건, 총 7495건",
+        "festival": "신규 6건, 업데이트 212건, 총 218건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://721ffad5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "ef3dea9a94935978ef76bd3533c6055fb1c81208",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-28",
+      "authoredAt": "2026-04-28T20:29:24Z",
+      "files": [
+        "src/content/posts/2026-04-28-mapo-youth-employment-support.md",
+        "src/content/posts/2026-04-28-post-1777407946072.md",
+        "src/content/posts/2026-04-28-post-1777408029266.md",
+        "src/content/posts/2026-05-08-cheongju-green-festival.md"
+      ]
+    },
+    {
+      "sha": "161216647f23e12f91975393034d2e50fd740c56",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-28",
+      "authoredAt": "2026-04-28T20:21:37Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-28-mapo-youth-employment-support.md",
+      "src/content/posts/2026-04-28-post-1777407946072.md",
+      "src/content/posts/2026-04-28-post-1777408029266.md",
+      "src/content/posts/2026-05-08-cheongju-green-festival.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-28-mapo-youth-employment-support.md",
+      "src/content/posts/2026-04-28-post-1777407946072.md",
+      "src/content/posts/2026-04-28-post-1777408029266.md",
+      "src/content/posts/2026-05-08-cheongju-green-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 17.28,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 340건",
+      "validation": "ok",
+      "anthropicUsage": "592/542",
+      "markdown": {
+        "generated": 1,
+        "pending": 227,
+        "titles": [
+          "시간제청년근로자 장려금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 14건, 총 7495건",
+      "validation": "ok",
+      "anthropicUsage": "5704/2934",
+      "markdown": {
+        "generated": 5,
+        "pending": 7346,
+        "titles": [
+          "(전주시)장애인 평생교육이용권 지원",
+          "의왕시 초등학교 입학축하금 지원",
+          "미취업 청년 어학·자격증 취득 지원",
+          "친환경 벼 재배농가 보전금 지원",
+          "광양시 북스타트 사업"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 6건, 업데이트 212건, 총 218건",
+      "validation": "ok",
+      "anthropicUsage": "1543/1072",
+      "markdown": {
+        "generated": 2,
+        "pending": 169,
+        "titles": [
+          "아산 성웅 이순신축제",
+          "보령·AMC 국제 모터 페스티벌"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
