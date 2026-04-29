@@ -1,0 +1,212 @@
+{
+  "reportDateKst": "2026-04-30",
+  "generatedAtUtc": "2026-04-29T20:21:25.423Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25131412054",
+    "runNumber": 671,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25131412054",
+    "runStartedAtUtc": "2026-04-29T20:12:38Z",
+    "headSha": "3fc0d3ebfe1d20ab5bdd85e5a37cc3d9f4374061"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://1d19baa8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 1건, 총 341건",
+        "subsidy": "신규 13건, 총 7496건",
+        "festival": "신규 13건, 업데이트 210건, 총 223건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://f5e8852b.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "1670f901fdd9b2d1c638f17cb52c8f443e6deb27",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-29",
+      "authoredAt": "2026-04-29T20:21:15Z",
+      "files": [
+        "src/content/posts/2026-04-29-post-1777493876850.md",
+        "src/content/posts/2026-04-29-youth-interview-suit-rental.md",
+        "src/content/posts/2026-04-29-꼬마농부의컬러팜대모험.md",
+        "src/content/posts/2026-04-29-세종시다자녀가정입학지원금.md"
+      ]
+    },
+    {
+      "sha": "65abae1e0613618009460ddc686be2a128111a14",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-29",
+      "authoredAt": "2026-04-29T20:14:18Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-29-post-1777493876850.md",
+      "src/content/posts/2026-04-29-youth-interview-suit-rental.md",
+      "src/content/posts/2026-04-29-꼬마농부의컬러팜대모험.md",
+      "src/content/posts/2026-04-29-세종시다자녀가정입학지원금.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-29-post-1777493876850.md",
+      "src/content/posts/2026-04-29-youth-interview-suit-rental.md",
+      "src/content/posts/2026-04-29-꼬마농부의컬러팜대모험.md",
+      "src/content/posts/2026-04-29-세종시다자녀가정입학지원금.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 16.34,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 1건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "4568/1656",
+      "markdown": {
+        "generated": 2,
+        "pending": 229,
+        "titles": [
+          "2025년 천사지원금 지급(2026년 천사지원금 지급 페이지에서 신청해 주시기 바랍니다)",
+          "인천시 청년월세 지원사업"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 13건, 총 7496건",
+      "validation": "ok",
+      "anthropicUsage": "5842/3397",
+      "markdown": {
+        "generated": 5,
+        "pending": 7343,
+        "titles": [
+          "학교 밖 청소년 검정고시 합격축하금 지원",
+          "부산진구 초등학교 입학지원금 지원",
+          "부산진구 교복구입비 지원",
+          "안성농특산물 택배비 지원",
+          "귀농·귀향인 임시거주지 임대료 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 13건, 업데이트 210건, 총 223건",
+      "validation": "ok",
+      "anthropicUsage": "1629/1247",
+      "markdown": {
+        "generated": 2,
+        "pending": 174,
+        "titles": [
+          "과천재즈피크닉",
+          "강북구 어린이날 대축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
