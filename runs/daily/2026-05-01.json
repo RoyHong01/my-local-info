@@ -1,0 +1,212 @@
+{
+  "reportDateKst": "2026-05-01",
+  "generatedAtUtc": "2026-04-30T20:18:40.894Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25186961936",
+    "runNumber": 672,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25186961936",
+    "runStartedAtUtc": "2026-04-30T20:11:00Z",
+    "headSha": "eaf169180d94ffee0523ae3b39573624d5fc773b"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://a19fb82e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 7건, 총 7497건",
+        "festival": "신규 5건, 업데이트 219건, 총 224건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://85a69cda.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "d383277a36657a182e4c5a43b869bd177f0448ef",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-04-30",
+      "authoredAt": "2026-04-30T20:18:33Z",
+      "files": [
+        "src/content/posts/2026-04-30-asan-youth-farmer-loan-interest-support.md",
+        "src/content/posts/2026-04-30-gyeomjae-culture-arts-festival.md",
+        "src/content/posts/2026-04-30-yangcheon-laundry-support.md",
+        "src/content/posts/2026-04-30-인천항공취업지원.md"
+      ]
+    },
+    {
+      "sha": "287377a2edfe22e3aca11941faaf251d8a19622b",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-04-30",
+      "authoredAt": "2026-04-30T20:12:45Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 7,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-04-30-asan-youth-farmer-loan-interest-support.md",
+      "src/content/posts/2026-04-30-gyeomjae-culture-arts-festival.md",
+      "src/content/posts/2026-04-30-yangcheon-laundry-support.md",
+      "src/content/posts/2026-04-30-인천항공취업지원.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-04-30-asan-youth-farmer-loan-interest-support.md",
+      "src/content/posts/2026-04-30-gyeomjae-culture-arts-festival.md",
+      "src/content/posts/2026-04-30-yangcheon-laundry-support.md",
+      "src/content/posts/2026-04-30-인천항공취업지원.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 4,
+      "manual": 0,
+      "unknown": 0,
+      "total": 4
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.8,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "1291/1069",
+      "markdown": {
+        "generated": 2,
+        "pending": 227,
+        "titles": [
+          "한부모가정 명절 위문",
+          "신혼ㆍ신생아 매입임대주택 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 7건, 총 7497건",
+      "validation": "ok",
+      "anthropicUsage": "3928/2923",
+      "markdown": {
+        "generated": 5,
+        "pending": 7339,
+        "titles": [
+          "교복구입비 지원사업",
+          "초등학교 입학준비금 지원",
+          "귀농·귀촌·귀향인 집들이 비용 지원",
+          "귀농·귀촌·귀향인 건축설계 비용 지원",
+          "광양시 여성청소년 보건위생용품 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 5건, 업데이트 219건, 총 224건",
+      "validation": "ok",
+      "anthropicUsage": "1616/1140",
+      "markdown": {
+        "generated": 2,
+        "pending": 175,
+        "titles": [
+          "어린이·가족 예술축제",
+          "보령 어린이날 기념행사"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
