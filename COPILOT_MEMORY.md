@@ -33,10 +33,14 @@
 - **`scripts/generate-editor-notes.js` 신규**: Claude Haiku로 인천/보조금/축제 각 항목에 `editor_note: ["tip1","tip2","tip3"]` 배열 생성. 배치 단위 처리, 중복 방지.
 - **상세 페이지 3곳 editor_note UI 추가**: 인천(파란색), 보조금(황색), 축제(장미색) 콜아웃 박스. 큐레이터 한 마디 형태.
 - **`scripts/generate-curation-posts.js` 신규**: Gemini로 요일별 TOP-N 집계 큐레이션 포스트 자동 생성. `category: 큐레이션`.
+  - frontmatter 필수 필드: `summary:` (description과 동일 내용, BlogFilter.tsx가 카드 설명으로 사용)
+  - buildPrompt 규칙: `---/***` 구분선 절대 금지, 항목당 3~5문장(구체적 혜택 금액·지원 대상·신청 방법 포함), 총 900~1400자
+- **큐레이션 카드 썸네일**: `BlogFilter.tsx`의 `getCurationThumbnail()`이 tags 기반 토픽별 이미지 반환 (보조금→`subsidy-thumbnail.png`, 인천→`incheon-thumbnail.jpg`, 기타→rose gradient)
+- **일상의 즐거움 전체탭**: `LifeFilterClient.tsx` 에서 `[...restaurants, ...choices]` 를 date 내림차순 정렬해 최신 choice 글이 상단에 노출
 - **메인 페이지 "이번 주 픽" 섹션**: `getSortedPostsData()`로 큐레이션 포스트 최신 3개 노출. 없으면 null(graceful).
 - **deploy.yml 2개 step 추가**: editor_note 생성 + 큐레이션 포스트 생성(둘 다 `continue-on-error: true`).
-- **빌드**: 성공(1439 pages). 커밋 `7b72b13` push 완료.
-- **npm audit 취약점**: `brace-expansion/flatted/picomatch/undici` → `npm audit fix` 대상, `@anthropic-ai/sdk`/`next` → breaking change 별도 검토 필요.
+- **빌드**: 성공(1476 pages). 커밋 `48cb3a6` push 완료.
+- **npm audit**: `npm audit fix` + postcss override 적용으로 취약점 0건 달성(커밋 `9c9835c`).
 
 ## 최근 작업 (2026-04-25)
 

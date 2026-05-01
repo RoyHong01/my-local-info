@@ -5,6 +5,39 @@
 
 ---
 
+## 2026-05-01 (일상의 즐거움 전체탭 + 큐레이션 카드 개선)
+
+- **커밋**: `48cb3a6` `fix(life+curation): 전체탭 초이스 정렬 + 큐레이션 카드 개선 + 프롬프트 보강`
+
+- **수정 1: 일상의 즐거움 전체탭 초이스 누락 버그 수정**
+  - 파일: `src/components/LifeFilterClient.tsx`
+  - 문제: `[...restaurants, ...choices]` 에서 맛집 100건 뒤에 choice 글이 배치되어 화면 아래 묻힘
+  - 수정: `"전체"` 탭 필터 시 date 내림차순 정렬 추가 (`b.date.localeCompare(a.date)`)
+
+- **수정 2: 큐레이션 카드 썸네일 개선**
+  - 파일: `src/components/BlogFilter.tsx`
+  - 변경:
+    - `getCurationThumbnail()` 함수 추가: 태그 기반 토픽별 이미지 반환 (보조금→`subsidy-thumbnail.png`, 인천→`incheon-thumbnail.jpg`, 기타→rose gradient)
+    - `getCardThumbnail()`에 큐레이션 케이스 추가
+    - `CategoryThumbnail` configs에 `'큐레이션'` 항목 추가
+
+- **수정 3: 큐레이션 카드 description 표시**
+  - 파일: `scripts/generate-curation-posts.js`
+  - `buildFrontmatter()`에 `summary: ${escaped(description)}` 라인 추가 (posts.ts는 `post.summary`로 카드 설명 표시)
+
+- **수정 4: 큐레이션 프롬프트 보강**
+  - 파일: `scripts/generate-curation-posts.js` (`buildPrompt()`)
+  - `---/***` 구분선 사용 절대 금지 규칙 추가
+  - 항목당 설명: "2~3문장" → "3~5문장, 구체적 혜택 금액·지원 대상·신청 방법 포함"
+  - 총 글자수: "500~800자" → "900~1400자"
+
+- **수정 5: 기존 큐레이션 포스트 직접 수정**
+  - 파일: `src/content/posts/2026-05-01-curation-5월-신청-추천-보조금복지-정책.md`
+  - frontmatter에 `summary:` 추가 (description과 동일 내용)
+  - 본문의 `---` 구분선 라인 5개 제거
+
+---
+
 ## 2026-05-01 (보안 취약점 패치 4단계 실행: 비파괴 1차 + Anthropic 메이저 2차)
 
 - **목표**: `npm audit` 기준 취약점을 안전하게 축소하되, 기능 리스크가 있는 메이저 업데이트는 분리 적용.
