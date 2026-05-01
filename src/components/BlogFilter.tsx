@@ -70,6 +70,10 @@ function getCardThumbnail(post: PostData) {
   return primary;
 }
 
+function isTextHeavyThumbnail(src?: string) {
+  return src === '/images/incheon-thumbnail.jpg' || src === '/images/subsidy-thumbnail.png';
+}
+
 // 카테고리별 썸네일 컴포넌트
 const CATEGORY_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 지역 정보': '/images/incheon-thumbnail.jpg',
@@ -80,13 +84,15 @@ function CategoryThumbnail({ category }: { category?: string }) {
   const imageUrl = category ? CATEGORY_THUMBNAIL_IMAGES[category] : null;
   if (imageUrl) {
     return (
-      <Image
-        src={imageUrl}
-        alt={category!}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      />
+      <div className="relative w-full h-full bg-white">
+        <Image
+          src={imageUrl}
+          alt={category!}
+          fill
+          className={`${isTextHeavyThumbnail(imageUrl) ? 'object-contain p-1' : 'object-cover'}`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
     );
   }
 
@@ -188,7 +194,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
             >
               <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
                 {/* 썸네일 영역 */}
-                <div className="relative h-20 w-full flex-shrink-0">
+                <div className="relative h-24 w-full flex-shrink-0 bg-white">
                   {(() => {
                     const thumb = getCardThumbnail(post);
                     return thumb ? (
@@ -196,7 +202,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                       src={thumb}
                       alt={post.title}
                       fill
-                      className="object-cover"
+                      className={isTextHeavyThumbnail(thumb) ? 'object-contain p-1' : 'object-cover'}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     ) : (

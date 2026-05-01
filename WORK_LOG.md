@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-05-02 (큐레이션 제목 중복 제거 + 썸네일 선명도 복원)
+
+- **수정 파일**: `scripts/generate-curation-posts.js`, `src/components/BlogFilter.tsx`, `src/content/posts/2026-05-01-curation-5월-신청-추천-보조금복지-정책.md`
+
+- **수정 1: 히어로 제목/본문 제목 중복 제거 (큐레이션)**
+  - 생성 스크립트에 `stripLeadingDuplicateTitleHeading()` 추가
+  - 모델 출력 본문 첫 줄이 제목과 동일한 Markdown heading(`#`, `##`, `###`)이면 자동 제거
+  - 프롬프트 규칙에도 "본문 시작에서 제목 재출력 금지" 명시
+  - 기존 생성본 1건(`2026-05-01-curation-...`)의 중복 H1 직접 제거
+
+- **수정 2: 블로그 카드 썸네일 선명도 복원**
+  - 원인: 텍스트형 썸네일(`incheon-thumbnail.jpg`, `subsidy-thumbnail.png`)이 카드에서 `object-cover + h-20`로 과도 축소/크롭됨
+  - `BlogFilter.tsx`에서 텍스트형 썸네일에 `object-contain + p-1 + bg-white` 적용
+  - 카드 썸네일 높이 `h-20 -> h-24` 상향
+
+- **빌드**: `npm run build` 성공
+
 ## 2026-05-02 (큐레이션 포스트 제목 다양화 + 글쓰기 앵글 4종 로테이션)
 
 - **수정 파일**: `scripts/generate-curation-posts.js`

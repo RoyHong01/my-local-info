@@ -319,13 +319,14 @@ ${itemSummaries.join('\n\n')}
 [작성 규칙]
 1. 종결어미는 경어체 (~해요/~거든요/~입니다/~더라고요). 평어체(~이다/~한다) 절대 금지.
 2. 서론 2~3문단: 위 글쓰기 앵글을 반드시 적용하세요. "TOP N", 번호 나열 같은 기계적 표현 금지.
-3. 에디터 개인 의견이나 소감을 최소 1곳에 자연스럽게 녹여 주세요. (예: "솔직히 이건 저도 챙겨놨어요")
-4. 각 항목 소제목은 단순 정보 라벨(예: "1. 보조금명") 금지. 독자가 읽고 싶어지는 매거진형 문장으로 작성하세요.
-5. 각 항목 설명은 3~5문장: 혜택 금액, 지원 대상, 신청 방법, 신청 기한 포함. 딱딱하지 않게.
-6. 각 항목 설명 뒤에 링크([자세히 보기](URL))를 그대로 유지하세요.
-7. 마무리: 독자가 행동하고 싶어지는 자연스러운 1~2문장.
-8. 이미지 마크다운 삽입 금지. 구분선(---, ***, ___) 절대 금지.
-9. AI 티 나는 표현 절대 금지: 결론적으로/다양한/인상적인/포착한/정답/한마디로/종합하면/요약하면
+3. 본문 시작에 제목(`# ...`)을 다시 쓰지 마세요. 제목은 frontmatter/Hero에서 이미 노출되므로, 본문은 서론 문단으로 시작하세요.
+4. 에디터 개인 의견이나 소감을 최소 1곳에 자연스럽게 녹여 주세요. (예: "솔직히 이건 저도 챙겨놨어요")
+5. 각 항목 소제목은 단순 정보 라벨(예: "1. 보조금명") 금지. 독자가 읽고 싶어지는 매거진형 문장으로 작성하세요.
+6. 각 항목 설명은 3~5문장: 혜택 금액, 지원 대상, 신청 방법, 신청 기한 포함. 딱딱하지 않게.
+7. 각 항목 설명 뒤에 링크([자세히 보기](URL))를 그대로 유지하세요.
+8. 마무리: 독자가 행동하고 싶어지는 자연스러운 1~2문장.
+9. 이미지 마크다운 삽입 금지. 구분선(---, ***, ___) 절대 금지.
+10. AI 티 나는 표현 절대 금지: 결론적으로/다양한/인상적인/포착한/정답/한마디로/종합하면/요약하면
 
 [출력 형식]
 - 마크다운 본문만 출력 (frontmatter 없이)
@@ -345,6 +346,34 @@ function makeSlug(title, date) {
     .slice(0, 40)
     .replace(/-+$/, '');
   return `${date}-curation-${clean}`;
+}
+
+function normalizeHeadingText(text) {
+  return String(text || '')
+    .replace(/["'`]/g, '')
+    .replace(/[·•]/g, '')
+    .replace(/\s+/g, '')
+    .toLowerCase();
+}
+
+function stripLeadingDuplicateTitleHeading(markdown, title) {
+  if (!markdown) return markdown;
+
+  const lines = String(markdown).split('\n');
+  let i = 0;
+  while (i < lines.length && lines[i].trim() === '') i++;
+
+  const first = lines[i] || '';
+  const m = first.match(/^#{1,3}\s+(.+)$/);
+  if (!m) return markdown;
+
+  const headingText = normalizeHeadingText(m[1]);
+  const titleText = normalizeHeadingText(title);
+  if (!headingText || !titleText || headingText !== titleText) return markdown;
+
+  lines.splice(i, 1);
+  while (i < lines.length && lines[i].trim() === '') lines.splice(i, 1);
+  return lines.join('\n').trim();
 }
 
 // frontmatter 생성
@@ -409,6 +438,7 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
 
   // frontmatter가 생성 결과에 포함됐으면 제거
   body = body.replace(/^---[\s\S]*?---\n?/, '').trim();
+  body = stripLeadingDuplicateTitleHeading(body, title);
 
   const description = topItems
     .slice(0, 3)
