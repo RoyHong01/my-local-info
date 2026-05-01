@@ -5,6 +5,31 @@
 
 ---
 
+## 2026-05-02 (큐레이션 포스트 제목 다양화 + 글쓰기 앵글 4종 로테이션)
+
+- **수정 파일**: `scripts/generate-curation-posts.js`
+- **목적**: Google AdSense 심사 통과를 위한 AI 자동생성 패턴 제거
+
+- **변경 1: `dateSeed()` + `getWritingAngle()` 헬퍼 추가**
+  - `dateSeed(dateISO, pool)`: 날짜 숫자값 % pool.length로 결정론적 인덱스 반환 (같은 날 = 같은 결과)
+  - `getWritingAngle(dateISO)`: empathy / discovery / seasonal / editorial 4종 순환
+
+- **변경 2: `generateTitle()` 다양화**
+  - subsidy 일반 7개 + 긴급 5개 풀, festival 7개, incheon 7개로 확장
+  - "TOP N" 고정 패턴 → 자연어 패턴 혼합 ("에디터 픽", "N선", "이것만 보세요" 등)
+  - 날짜 시드로 매일 다른 제목 선택
+
+- **변경 3: `buildPrompt()` 앵글 4종 적용**
+  - 공감형(Empathy): 독자 일상 공감 + 에디터 경험 녹이기
+  - 발견형(Discovery): 몰랐던 정보 발굴 톤
+  - 시즌형(Seasonal): 계절/월 맥락 활용
+  - 에디터 큐레이션형(Editorial): 신뢰감 있는 선별 목소리
+  - AI 금지어 확장: 총N가지소개합니다/추천드립니다 등 기계적 나열 문구 추가
+
+- **빌드**: `npm run build` 성공
+
+---
+
 ## 2026-05-01 (일상의 즐거움 전체탭 + 큐레이션 카드 개선)
 
 - **커밋**: `48cb3a6` `fix(life+curation): 전체탭 초이스 정렬 + 큐레이션 카드 개선 + 프롬프트 보강`

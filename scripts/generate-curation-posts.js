@@ -174,35 +174,78 @@ function summarizeItem(item, category, index) {
   return summary;
 }
 
-// 포스트 제목 생성 (카테고리 + 토픽)
+// 날짜 기반 결정론적 인덱스 (매일 다르게, 같은 날 재실행 시 동일)
+function dateSeed(dateISO, pool) {
+  const day = Number(String(dateISO).replace(/-/g, ''));
+  return day % pool.length;
+}
+
+// 글쓰기 앵글 결정 (날짜 기반 4가지 순환)
+function getWritingAngle(dateISO) {
+  const angles = ['empathy', 'discovery', 'seasonal', 'editorial'];
+  return angles[dateSeed(dateISO, angles)];
+}
+
+// 포스트 제목 생성 (카테고리 + 날짜 시드 기반 다양한 패턴)
 function generateTitle(category, items, todayISO) {
   const now = getKstNow();
   const month = now.getMonth() + 1;
   const n = items.length;
 
   if (category === 'subsidy') {
-    // 마감 임박 여부 확인
     const hasUrgent = items.some(item => {
       const dl = getDeadline(item, 'subsidy');
       if (!dl) return false;
       const diff = Math.ceil((new Date(dl) - new Date(todayISO)) / 86400000);
       return diff <= 14;
     });
-    if (hasUrgent) {
-      return `이번 주 마감 임박 보조금 TOP ${n} — 지금 바로 확인하세요`;
-    }
-    return `${month}월 신청 추천 보조금·복지 정책 TOP ${n}`;
+    const urgentPatterns = [
+      `마감 코앞! 이번 주 놓치면 후회하는 보조금 ${n}가지`,
+      `지금 당장 신청해야 할 보조금·지원금 ${n}선`,
+      `오늘 확인 안 하면 늦는 복지 혜택 에디터 픽 ${n}`,
+      `마감 임박 — 서둘러야 할 복지 지원 ${n}가지`,
+      `이번 달 기한 끝나는 보조금, 에디터가 직접 골랐어요 ${n}선`,
+    ];
+    const normalPatterns = [
+      `${month}월 꼭 챙겨야 할 보조금·복지 정책 ${n}가지`,
+      `에디터가 직접 고른 ${month}월 복지 혜택 ${n}선`,
+      `지금 신청하면 딱 좋은 보조금 ${n}가지 — ${month}월 편`,
+      `${month}월에 이것만큼은 알고 계세요 — 복지 지원 ${n}선`,
+      `픽앤조이 에디터 픽: ${month}월 보조금·지원 정책 ${n}가지`,
+      `신청 기간 놓치기 아까운 ${month}월 복지 정책 ${n}가지`,
+      `${month}월 보조금, 에디터가 추린 ${n}가지만 보세요`,
+    ];
+    const pool = hasUrgent ? urgentPatterns : normalPatterns;
+    return pool[dateSeed(todayISO, pool)];
   }
 
   if (category === 'festival') {
-    return `${month}월 꼭 가봐야 할 전국 축제 베스트 ${n}`;
+    const patterns = [
+      `${month}월 이 축제는 진짜 가봐야 해요 — 에디터 픽 ${n}선`,
+      `주말 나들이 딱 좋은 ${month}월 전국 축제 ${n}가지`,
+      `에디터가 직접 추린 ${month}월 축제·여행 추천 ${n}선`,
+      `가족·커플 모두 OK — ${month}월 전국 축제 베스트 ${n}`,
+      `이번 달 어디 갈지 고르세요 — ${month}월 축제 에디터 큐레이션`,
+      `${month}월 풍경 속으로 — 전국 축제 여행 추천 ${n}곳`,
+      `${month}월 기억에 남을 여행, 이 축제들로 채워보세요`,
+    ];
+    return patterns[dateSeed(todayISO, patterns)];
   }
 
   if (category === 'incheon') {
-    return `인천 ${month}월 생활 혜택 모음 TOP ${n}`;
+    const patterns = [
+      `인천 사람이라면 놓치지 마세요 — ${month}월 혜택 ${n}가지`,
+      `${month}월 인천 생활 꿀팁 — 에디터가 고른 지원 ${n}선`,
+      `인천 시민이라면 지금 바로 확인해야 할 혜택 ${n}가지`,
+      `에디터 픽: ${month}월 인천에서 챙길 수 있는 혜택 ${n}선`,
+      `인천 살면서 이것만큼은 알아야 해요 — ${month}월 편`,
+      `${month}월 인천 지역 혜택 총정리, 이것만 보세요`,
+      `인천 ${month}월 — 생활비 아껴주는 지원 정책 ${n}가지`,
+    ];
+    return patterns[dateSeed(todayISO, patterns)];
   }
 
-  return `이번 주 픽앤조이 큐레이션 TOP ${n}`;
+  return `픽앤조이 에디터 픽 — 이번 주 놓치면 아쉬운 정보 ${n}선`;
 }
 
 // Gemini 호출
@@ -249,33 +292,44 @@ function buildPrompt(category, title, itemSummaries, todayISO) {
     : category === 'festival' ? '전국 축제·여행'
     : '인천 지역 혜택';
 
-  const ctaHint = category === 'subsidy' || category === 'incheon'
-    ? '각 항목 설명 뒤에 "→ 자세히 보기" 링크를 그대로 유지하세요.'
-    : '각 항목 설명 뒤에 "→ 자세히 보기" 링크를 그대로 유지하세요.';
+  const angle = getWritingAngle(todayISO);
+  const angleGuide = {
+    empathy: `[글쓰기 앵글: 공감형]
+서론에서 독자의 일상 속 놓쳤던 경험이나 아쉬웠던 순간을 먼저 공감해 주세요. 에디터 본인 경험을 살짝 섞어도 좋아요. (예: "저도 작년에 이거 모르고 지나쳤거든요")`,
+    discovery: `[글쓰기 앵글: 발견형]
+서론에서 "생각보다 많은 분들이 모르고 지나치는 정보예요"처럼 독자가 새로운 걸 발견한 기분이 들도록 시작해 주세요. 에디터가 직접 찾아낸 것처럼 써주세요.`,
+    seasonal: `[글쓰기 앵글: 시즌형]
+서론에서 지금 이 시기(계절, 월)에 특히 유용한 이유를 먼저 짚어 주세요. "5월이라서", "이맘때면" 같은 시간적 맥락을 활용해 주세요.`,
+    editorial: `[글쓰기 앵글: 에디터 큐레이션형]
+서론에서 픽앤조이 에디터가 직접 고른 이유를 밝혀 주세요. "수백 개 중에서 이것만 남겼어요", "직접 확인해보니" 같은 신뢰감 있는 목소리로 시작해 주세요.`,
+  }[angle];
 
-  return `당신은 픽앤조이(pick-n-joy.com)의 큐레이터 에디터입니다.
-아래 ${categoryLabel} 항목들을 바탕으로 **독자에게 유익한 큐레이션 블로그 포스트**를 작성하세요.
+  return `당신은 픽앤조이(pick-n-joy.com)의 30대 생활정보 에디터입니다. 독자에게 친절하고 솔직하게, 실제 사람이 쓴 것처럼 자연스럽게 글을 작성합니다.
+아래 ${categoryLabel} 항목들을 바탕으로 블로그 포스트를 작성하세요.
 
 [오늘 날짜] ${todayISO}
 [포스트 제목] ${title}
 [포함 항목 수] ${itemSummaries.length}개
 
+${angleGuide}
+
 [항목 데이터]
 ${itemSummaries.join('\n\n')}
 
 [작성 규칙]
-1. 종결어미는 반드시 경어체 (~해요/~거든요/~입니다). 평어체(~이다/~한다) 절대 금지.
-2. 서론 2~3문단: 독자가 왜 이 정보가 필요한지 공감 유발. "정답/고민/막막" 단어 금지.
-3. 각 항목은 소제목(### 또는 ** **) + **구체적 설명 3~5문장**(혜택 금액, 지원 대상, 신청 방법, 신청 기한 포함) + 링크([자세히 보기](URL)) 형식으로 작성.
-4. ${ctaHint}
-5. 마무리 문단: 독자 행동을 부드럽게 유도하는 1~2문장.
-6. Unsplash 등 외부 이미지 URL 사용 금지. 이미지 마크다운 삽입 금지.
-7. AI 금지어: 결론적으로/다양한/인상적인/포착한/정답
-8. 구분선(---, ***, ___) 사용 절대 금지.
+1. 종결어미는 경어체 (~해요/~거든요/~입니다/~더라고요). 평어체(~이다/~한다) 절대 금지.
+2. 서론 2~3문단: 위 글쓰기 앵글을 반드시 적용하세요. "TOP N", 번호 나열 같은 기계적 표현 금지.
+3. 에디터 개인 의견이나 소감을 최소 1곳에 자연스럽게 녹여 주세요. (예: "솔직히 이건 저도 챙겨놨어요")
+4. 각 항목 소제목은 단순 정보 라벨(예: "1. 보조금명") 금지. 독자가 읽고 싶어지는 매거진형 문장으로 작성하세요.
+5. 각 항목 설명은 3~5문장: 혜택 금액, 지원 대상, 신청 방법, 신청 기한 포함. 딱딱하지 않게.
+6. 각 항목 설명 뒤에 링크([자세히 보기](URL))를 그대로 유지하세요.
+7. 마무리: 독자가 행동하고 싶어지는 자연스러운 1~2문장.
+8. 이미지 마크다운 삽입 금지. 구분선(---, ***, ___) 절대 금지.
+9. AI 티 나는 표현 절대 금지: 결론적으로/다양한/인상적인/포착한/정답/한마디로/종합하면/요약하면
 
 [출력 형식]
-- 반드시 마크다운 본문만 출력하세요 (frontmatter 없이)
-- 서론 → 항목별 섹션 → 마무리 순서 유지
+- 마크다운 본문만 출력 (frontmatter 없이)
+- 서론 → 항목별 섹션 → 마무리 순서
 - 총 900~1400자 내외
 
 지금 바로 작성해 주세요.`;
