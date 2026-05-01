@@ -3,11 +3,10 @@ const fs = require('fs/promises');
 const path = require('path');
 const { loadLocalEnvFiles, searchProducts, sleep } = require('./lib/coupang-api');
 
-const Anthropic = require('@anthropic-ai/sdk');
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const HAIKU_MODEL = 'claude-3-haiku-20240307';
-const HAIKU_TIMEOUT_MS = Number(process.env.HAIKU_TIMEOUT_MS || 120000);
-const HAIKU_MAX_OUTPUT_TOKENS = Number(process.env.HAIKU_MAX_OUTPUT_TOKENS || 4096);
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);
+const GEMINI_MAX_OUTPUT_TOKENS = Number(process.env.CHOICE_GEMINI_MAX_OUTPUT_TOKENS || 4096);
 const RECOMMENDED_PRODUCTS_HISTORY_PATH = path.join(process.cwd(), 'scripts', 'data', 'recommended-products.json');
 const PRODUCT_HISTORY_LOOKBACK_DAYS = Number(process.env.CHOICE_PRODUCT_HISTORY_DAYS || 14);
 const CHOICE_MIN_RATING = Number(process.env.CHOICE_MIN_RATING || 4.5);
@@ -1236,25 +1235,32 @@ function dedupeAffiliateLinks(content, coupangUrl) {
   return removed.replace(/\n{3,}/g, '\n\n').trim();
 }
 
-async function callHaiku(prompt) {
-  if (!ANTHROPIC_API_KEY) {
-    throw new Error('Missing ANTHROPIC_API_KEY');
+async function callGemini(prompt) {
+  if (!GEMINI_API_KEY) {
+    throw new Error('Missing GEMINI_API_KEY');
   }
-  const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), HAIKU_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
   try {
-    const msg = await anthropic.messages.create({
-      model: HAIKU_MODEL,
-      max_tokens: HAIKU_MAX_OUTPUT_TOKENS,
-      temperature: 0.35,
-      system: '',
-      messages: [{ role: 'user', content: prompt }],
-      stop_sequences: ["\n\nHuman:"],
-      stream: false,
-      abortSignal: controller.signal,
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.35,
+          maxOutputTokens: GEMINI_MAX_OUTPUT_TOKENS,
+        },
+      }),
+      signal: controller.signal,
     });
-    return msg?.content?.[0]?.text || '';
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`Gemini API 오류 ${res.status}: ${errText}`);
+    }
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
   } finally {
     clearTimeout(timer);
   }
@@ -1528,9 +1534,9 @@ async function run() {
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const generated = await callHaiku(prompt);
+      const generated = await callGemini(prompt);
       if (!generated || !generated.trim()) {
-        throw new Error('Haiku 응답이 비어 있습니다.');
+        throw new Error('Gemini 응답이 비어 있습니다.');
       }
 
       const stripped = removeCodeFence(generated);
@@ -1548,12 +1554,12 @@ async function run() {
       break;
     } catch (err) {
       if (attempt === maxAttempts) throw err;
-      console.warn(`Haiku 호출 재시도 ${attempt + 1}/${maxAttempts}: ${err.message}`);
+      console.warn(`Gemini 호출 재시도 ${attempt + 1}/${maxAttempts}: ${err.message}`);
     }
   }
 
   if (!finalContent || !finalContent.trim()) {
-    throw new Error('Haiku 응답이 비어 있습니다.');
+    throw new Error('Gemini 응답이 비어 있습니다.');
   }
 
   await fs.mkdir(outDir, { recursive: true });

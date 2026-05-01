@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-05-01 (초이스 Gemini 원복 + 텔레그램 보조금 활성 건수 표시 + deploy.yml 안정화)
+
+- **배경**: 2026-05-01 일일 자동화 실패 원인 수정. `generate-choice-post.js`가 Anthropic Haiku로 교체됐으나 `deploy.yml [2.5단계]` env에 `ANTHROPIC_API_KEY`가 없어 초이스 0건 발생.
+
+- **수정 1: `scripts/generate-choice-post.js` Gemini 원복**
+  - Anthropic SDK(`require('@anthropic-ai/sdk')`) 및 `callHaiku()` 함수 제거.
+  - Gemini REST API(`callGemini()`) 호출 방식으로 교체.
+  - 환경변수: `GEMINI_API_KEY`, `CHOICE_GEMINI_MODEL || GEMINI_MODEL || 'gemini-2.5-flash-lite'`.
+  - 재시도 로그 메시지도 Gemini로 통일.
+
+- **수정 2: `scripts/notify-telegram.mjs` 보조금 활성 건수 표시**
+  - `collectSummary.subsidy`는 `collect-subsidy.js`가 보고한 `신규 N건, 총 7497건`(expired 포함 누적 전체) 형식.
+  - `buildMessage()` 내에서 `public/data/subsidy.json`을 직접 읽어 `!item.expired` 필터링으로 활성 건수 계산.
+  - 텔레그램 메시지에 `보조금: 612건(활성)` 형식으로 표시.
+
+- **수정 3: `.github/workflows/deploy.yml` [2.5단계] 커밋 step 안정화**
+  - `[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)` step에 `continue-on-error: true` 추가.
+  - 이유: 이 step 실패 시 3단계(맛집)가 blocked되던 문제 해소.
+
+---
+
 ## 2026-05-01 (Phase 2: Google AdSense 저품질 대응 - 에디터 노트 + 큐레이션 자동화)
 
 - **배경**: Google AdSense "Low Value Content" 거절 해소를 위한 Phase 2 구현. Phase 1(SSG 노이즈 제거)에 이어, 데이터 페이지에 고유한 편집적 가치를 추가하는 것이 목표.

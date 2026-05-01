@@ -167,9 +167,16 @@ async function buildMessage(report) {
     : '';
 
   // 수집 건수 상세
+  let subsidyActiveCount = 0;
+  try {
+    const subsidyAll = JSON.parse(await readFile(join(process.cwd(), 'public/data/subsidy.json'), 'utf8'));
+    subsidyActiveCount = Array.isArray(subsidyAll) ? subsidyAll.filter((item) => !item.expired).length : 0;
+  } catch { /* ignore */ }
+
   const summaryParts = [];
   if (collectSummary.incheon) summaryParts.push(`인천: ${collectSummary.incheon}`);
-  if (collectSummary.subsidy) summaryParts.push(`보조금: ${collectSummary.subsidy}`);
+  const subsidyDisplay = subsidyActiveCount > 0 ? `${subsidyActiveCount}건(활성)` : collectSummary.subsidy;
+  if (subsidyDisplay) summaryParts.push(`보조금: ${subsidyDisplay}`);
   if (collectSummary.festival) summaryParts.push(`축제: ${collectSummary.festival}`);
   const collectDetailLine = summaryParts.length > 0
     ? `📋 수집 결과: ${summaryParts.join(' | ')}`

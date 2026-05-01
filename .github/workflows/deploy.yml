@@ -273,6 +273,7 @@ jobs:
 
       - name: '[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        continue-on-error: true
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
