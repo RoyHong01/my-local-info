@@ -22,7 +22,14 @@ const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const HAIKU_MODEL = 'claude-3-haiku-20240307';
+const HAIKU_MODELS = String(
+  process.env.EDITOR_NOTES_MODELS
+  || process.env.ANTHROPIC_MODEL
+  || 'claude-haiku-4-5,claude-3-5-haiku-latest,claude-3-haiku-20240307'
+)
+  .split(',')
+  .map((v) => v.trim())
+  .filter(Boolean);
 const BATCH_SIZE = Number(process.env.EDITOR_NOTES_BATCH_SIZE || 10);
 const ONLY_FILE = (process.env.EDITOR_NOTES_ONLY_FILE || '').trim().toLowerCase();
 const DELAY_MS = Number(process.env.EDITOR_NOTES_DELAY_MS || 1000);
@@ -51,6 +58,39 @@ function getField(item, keys) {
     if (item[key] && typeof item[key] === 'string') return String(item[key]).trim();
   }
   return '';
+}
+
+function parseNotesFromModelText(rawText) {
+  const raw = String(rawText || '').trim();
+  if (!raw) return null;
+
+  const candidates = [];
+  candidates.push(raw);
+
+  // ```json ... ``` 형태 우선 추출
+  const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  if (fenced?.[1]) candidates.push(String(fenced[1]).trim());
+
+  // 본문 중 JSON 배열 부분만 추출
+  const bracket = raw.match(/\[[\s\S]*\]/);
+  if (bracket?.[0]) candidates.push(String(bracket[0]).trim());
+
+  for (const text of candidates) {
+    try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const normalized = parsed
+          .map((v) => String(v || '').trim())
+          .filter(Boolean)
+          .slice(0, 3);
+        if (normalized.length > 0) return normalized;
+      }
+    } catch {
+      // 다음 후보로 재시도
+    }
+  }
+
+  return null;
 }
 
 function buildItemContext(item, type) {
@@ -133,24 +173,41 @@ ${context}
 - 마감일, 소득 기준, 서류, 신청 방법상 주의점, 실제 적용 팁 위주`;
 
   try {
-    const response = await client.messages.create({
-      model: HAIKU_MODEL,
-      max_tokens: 256,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
-    });
+    let response = null;
+    let lastError = null;
+
+    for (const model of HAIKU_MODELS) {
+      try {
+        response = await client.messages.create({
+          model,
+          max_tokens: 256,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }],
+        });
+        break;
+      } catch (err) {
+        lastError = err;
+        const status = err?.status || err?.statusCode;
+        const message = String(err?.message || '');
+        // 모델 미존재/권한 오류일 때 다음 모델로 폴백 시도
+        if (status === 404 || status === 403 || /model|not\s*found|doesn'?t\s*exist/i.test(message)) {
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (!response) {
+      throw lastError || new Error('사용 가능한 Anthropic 모델을 찾지 못했습니다.');
+    }
 
     const raw = response.content[0]?.text?.trim() || '';
-    // JSON 배열 파싱
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) {
+    const parsedNotes = parseNotesFromModelText(raw);
+    if (!parsedNotes) {
       console.warn('  ⚠️ JSON 파싱 실패:', raw.slice(0, 100));
       return null;
     }
-    const parsed = JSON.parse(jsonMatch[0]);
-    if (!Array.isArray(parsed) || parsed.length === 0) return null;
-    // 문자열 배열 보장
-    return parsed.slice(0, 3).map(t => String(t).trim()).filter(Boolean);
+    return parsedNotes;
   } catch (err) {
     console.warn('  ⚠️ API 오류:', err.message?.slice(0, 100));
     return null;
@@ -252,7 +309,7 @@ async function processFile({ file, type }) {
 
 async function main() {
   console.log('🚀 editor_note 생성 시작');
-  console.log(`  모델: ${HAIKU_MODEL}`);
+  console.log(`  모델 후보: ${HAIKU_MODELS.join(' -> ')}`);
   console.log(`  배치 크기: ${BATCH_SIZE}건/파일`);
   console.log(`  FORCE 덮어쓰기: ${FORCE}`);
   console.log(`  호출 간 지연: ${DELAY_MS}ms`);
