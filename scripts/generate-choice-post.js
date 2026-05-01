@@ -848,6 +848,8 @@ function buildSinglePickBlock(candidate) {
   //   본문 "📍 픽앤조이 오늘의 단독 픽" 헤딩 아래에는 다시 삽입하지 않는다.
   // - 본문 첫 번째 이미지(=middleImage)는 반드시 이 헤딩 바로 아래에 위치하고,
   //   그 아래 한 줄 아래에 "👉 가격 확인하기" CTA 링크가 따라온다.
+  // - 본문 두 번째 이미지(=middleImage2)가 제공되면,
+  //   CTA 아래 본문 중간(마지막 섹션 직전)에 후처리로 1회 삽입한다.
   // - middleImage가 없는 경우에만, 폴백으로 히어로 이미지를 본문에 노출한다(상단 자동 렌더 정책 변경 대비용).
   //
   // [관련 파일 — 수정 시 3개 동시 점검]
@@ -882,14 +884,81 @@ function buildSinglePickBlock(candidate) {
   return lines.join('\n');
 }
 
-// [재발 방지] Haiku가 본문 다른 섹션에 middleImage 마크다운을 또 삽입한 경우 strip한다.
-// 단독 픽 블록 삽입 전에 호출해, "📍 픽앤조이 오늘의 단독 픽" 아래에만 단 한 번 노출되도록 강제한다.
+function resolveSecondaryMiddleImage(candidate) {
+  const secondImage = [
+    candidate?.middleImage2,
+    candidate?.middleImageSecond,
+    candidate?.secondMiddleImage,
+  ]
+    .map((value) => String(value || '').trim())
+    .find(Boolean) || '';
+
+  const rawAlt = String(
+    candidate?.middleImageAlt2
+    || candidate?.middleImage2Alt
+    || candidate?.middleImageSecondAlt
+    || candidate?.secondMiddleImageAlt
+    || candidate?.middleImageAlt
+    || candidate?.coupangBannerAlt
+    || candidate?.title
+    || '단독 픽 디테일'
+  ).trim();
+
+  return {
+    secondImage,
+    secondAlt: rawAlt.replace(/[\[\]]/g, ''),
+  };
+}
+
+// [재발 방지] Haiku가 본문 다른 섹션에 middleImage(1/2) 마크다운을 또 삽입한 경우 strip한다.
+// 단독 픽 블록 삽입 전에 호출해, 지정된 위치에만 노출되도록 강제한다.
 function stripDuplicateMiddleImage(markdown, candidate) {
-  const middleImage = String(candidate?.middleImage || '').trim();
-  if (!markdown || !middleImage) return markdown;
-  const escaped = middleImage.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = new RegExp(`!\\[[^\\]]*\\]\\(${escaped}\\)\\s*\\n?`, 'gi');
-  return markdown.replace(pattern, '');
+  if (!markdown) return markdown;
+
+  let value = String(markdown);
+  const primaryImage = String(candidate?.middleImage || '').trim();
+  const { secondImage } = resolveSecondaryMiddleImage(candidate);
+  const imageUrls = [primaryImage, secondImage].filter(Boolean);
+
+  for (const imageUrl of imageUrls) {
+    const escaped = imageUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`!\\[[^\\]]*\\]\\(${escaped}\\)\\s*\\n?`, 'gi');
+    value = value.replace(pattern, '');
+  }
+
+  return value;
+}
+
+function injectSecondaryMiddleImage(markdown, candidate) {
+  const { secondImage, secondAlt } = resolveSecondaryMiddleImage(candidate);
+  if (!markdown || !secondImage) return markdown;
+
+  const imageNeedle = `](${secondImage})`;
+  if (String(markdown).includes(imageNeedle)) {
+    return markdown;
+  }
+
+  const lines = String(markdown).split('\n');
+  const regretIndex = lines.findIndex((line) => /^###\s+솔직히\s+아쉬운\s+점\s+딱\s+하나/.test(line.trim()));
+
+  const candidateHeadingIndexes = [];
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!/^(##|###)\s+/.test(trimmed)) continue;
+    if (trimmed.includes('픽앤조이 오늘의 단독 픽')) continue;
+    if (/^###\s+솔직히\s+아쉬운\s+점\s+딱\s+하나/.test(trimmed)) continue;
+    if (regretIndex >= 0 && i >= regretIndex) continue;
+    candidateHeadingIndexes.push(i);
+  }
+
+  let insertAt = regretIndex >= 0 ? regretIndex : lines.length;
+  if (candidateHeadingIndexes.length >= 2) {
+    // 마지막 서사 섹션 직전에 삽입해 소제목+내용과 소제목+내용 사이를 유지한다.
+    insertAt = candidateHeadingIndexes[candidateHeadingIndexes.length - 1];
+  }
+
+  lines.splice(insertAt, 0, '', `![${secondAlt}](${secondImage})`, '');
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function injectProductBlocks(content, candidate, products) {
@@ -907,6 +976,7 @@ function injectProductBlocks(content, candidate, products) {
     if (singleBlock) {
       value = insertBeforeFirstHeading(value, singleBlock);
     }
+    value = injectSecondaryMiddleImage(value, candidate);
     return ensureDisclosure(ensureFallbackAffiliate(value, candidate.coupangUrl, candidate.title));
   }
 

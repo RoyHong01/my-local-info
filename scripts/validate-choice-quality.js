@@ -130,6 +130,8 @@ function collectHeadingsAfterLine(lines, startLineIndex) {
  *   4) frontmatter `image`(=hero) URL이 본문 어디에도 등장하면 안 된다.
  *      (hero는 frontmatter 자동 렌더링에 위임 — render의 removeFirstDuplicateHeroImage와 충돌 방지)
  *   5) middleImage URL이 본문에 2회 이상 등장하면 안 된다 (단독 픽 블록 1회만 허용).
+ *   6) 본문 이미지가 2장 이상인 경우, 2번째 이미지는 CTA 아래이면서
+ *      `### 솔직히 아쉬운 점 딱 하나` 헤딩 위에 있어야 한다.
  *
  * 이 가드가 통과해야만 빌드(next build) 진행. (npm run build는 check:choice-quality 선행)
  *
@@ -189,6 +191,40 @@ function validateManualSinglePickImagePosition(body, frontmatter) {
     const occurrences = (text.match(new RegExp(`!\\[[^\\]]*\\]\\(${escapedMid}\\)`, 'gi')) || []).length;
     if (occurrences > 1) {
       errors.push(`단독 픽 본문 이미지(${middleImageUrl})가 ${occurrences}회 등장합니다. 정확히 1회만 허용됩니다.`);
+    }
+  }
+
+  // 2번째 이미지 위치 검사 (옵션)
+  const imageLineItems = lines
+    .map((line, index) => ({ index, line: line.trim() }))
+    .filter((item) => /^!\[[^\]]*\]\([^)]+\)$/.test(item.line));
+
+  const nonHeroImages = imageLineItems.filter((item) => {
+    const imageUrl = String(item.line.match(/^!\[[^\]]*\]\(([^)]+)\)$/)?.[1] || '').trim();
+    if (!imageUrl) return false;
+    if (heroImage && imageUrl === heroImage) return false;
+    return true;
+  });
+
+  if (nonHeroImages.length >= 2) {
+    const ctaIndex = lines.findIndex((line) => /^\*\*👉\s*\[[^\]]+\]\([^)]+\)\*\*/.test(line.trim()));
+    const secondImageIndex = nonHeroImages[1].index;
+    const regretIndex = lines.findIndex((line) => /^###\s+솔직히\s+아쉬운\s+점\s+딱\s+하나/.test(line.trim()));
+
+    if (ctaIndex >= 0 && secondImageIndex <= ctaIndex) {
+      errors.push('2번째 본문 이미지는 CTA 링크 아래에 위치해야 합니다.');
+    }
+    if (regretIndex >= 0 && secondImageIndex >= regretIndex) {
+      errors.push('2번째 본문 이미지는 `### 솔직히 아쉬운 점 딱 하나` 헤딩 위에 위치해야 합니다.');
+    }
+
+    const secondImageUrl = String(nonHeroImages[1].line.match(/^!\[[^\]]*\]\(([^)]+)\)$/)?.[1] || '').trim();
+    if (secondImageUrl) {
+      const escapedSecond = secondImageUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const secondOccurrences = (text.match(new RegExp(`!\\[[^\\]]*\\]\\(${escapedSecond}\\)`, 'gi')) || []).length;
+      if (secondOccurrences > 1) {
+        errors.push(`2번째 본문 이미지(${secondImageUrl})가 ${secondOccurrences}회 등장합니다. 정확히 1회만 허용됩니다.`);
+      }
     }
   }
 

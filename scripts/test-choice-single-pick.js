@@ -9,6 +9,7 @@
  *   2. 그 다음 라인은 CTA 링크.
  *   3. 본문에 hero 이미지가 등장하지 않음.
  *   4. middleImage가 다른 섹션에 추가로 들어가도 strip되어 1회만 남음.
+ *   5. middleImage2가 있으면 CTA 아래, `솔직히 아쉬운 점` 섹션 위에 1회 삽입됨.
  */
 const path = require('path');
 const Module = require('module');
@@ -42,12 +43,19 @@ function extractFunction(src, name) {
 
 const code = [
   extractFunction(generatorSrc, 'buildSinglePickBlock'),
+  extractFunction(generatorSrc, 'resolveSecondaryMiddleImage'),
   extractFunction(generatorSrc, 'stripDuplicateMiddleImage'),
+  extractFunction(generatorSrc, 'injectSecondaryMiddleImage'),
 ].join('\n\n');
 
 // eslint-disable-next-line no-new-func
-const factory = new Function(`${code}\nreturn { buildSinglePickBlock, stripDuplicateMiddleImage };`);
-const { buildSinglePickBlock, stripDuplicateMiddleImage } = factory();
+const factory = new Function(`${code}\nreturn { buildSinglePickBlock, resolveSecondaryMiddleImage, stripDuplicateMiddleImage, injectSecondaryMiddleImage };`);
+const {
+  buildSinglePickBlock,
+  resolveSecondaryMiddleImage,
+  stripDuplicateMiddleImage,
+  injectSecondaryMiddleImage,
+} = factory();
 
 const failures = [];
 
@@ -59,6 +67,8 @@ const candidate = {
   image: '/images/choice/test-hero.png',
   middleImage: '/images/choice/test-middle.png',
   middleImageAlt: '테스트 디테일',
+  middleImage2: '/images/choice/test-middle-2.png',
+  middleImageAlt2: '테스트 디테일 2',
   coupangUrl: 'https://link.coupang.com/a/test',
   coupangBannerAlt: '테스트 상품',
   brand: '테스트 브랜드',
@@ -89,6 +99,8 @@ const dirtyBody = `## 어떤 섹션
 
 ![중복 디테일](/images/choice/test-middle.png)
 
+![중복 디테일2](/images/choice/test-middle-2.png)
+
 다른 문단.
 
 ## 다른 섹션
@@ -99,16 +111,54 @@ assert(
   !cleaned.includes('/images/choice/test-middle.png'),
   '[2-1] 본문에서 middleImage가 strip되지 않음'
 );
+assert(
+  !cleaned.includes('/images/choice/test-middle-2.png'),
+  '[2-2] 본문에서 middleImage2가 strip되지 않음'
+);
 assert(cleaned.includes('## 어떤 섹션'), '[2-2] 섹션 헤딩이 보존되지 않음');
 assert(cleaned.includes('## 다른 섹션'), '[2-3] 다른 섹션 헤딩이 보존되지 않음');
 
-// 3) middleImage 누락 시 hero fallback 동작
+// 3) middleImage2 삽입 위치 검증
+const bodyWithSections = `## 섹션 A
+본문 A
+
+## 섹션 B
+본문 B
+
+### 솔직히 아쉬운 점 딱 하나 🧐
+본문 C`;
+
+const bodyWithSecond = injectSecondaryMiddleImage(bodyWithSections, candidate);
+assert(
+  bodyWithSecond.includes('/images/choice/test-middle-2.png'),
+  '[3-1] middleImage2가 삽입되지 않음'
+);
+
+const sectionAIndex = bodyWithSecond.indexOf('## 섹션 A');
+const sectionBIndex = bodyWithSecond.indexOf('## 섹션 B');
+const secondImageIndex = bodyWithSecond.indexOf('/images/choice/test-middle-2.png');
+const regretIndex = bodyWithSecond.indexOf('### 솔직히 아쉬운 점 딱 하나 🧐');
+assert(
+  secondImageIndex > sectionAIndex && secondImageIndex < sectionBIndex,
+  '[3-2] middleImage2가 마지막 본문 섹션 직전(섹션 사이)에 삽입되지 않음'
+);
+assert(
+  secondImageIndex < regretIndex,
+  '[3-3] middleImage2가 솔직히 섹션 위에 위치하지 않음'
+);
+
+// 4) middleImage 누락 시 hero fallback 동작
 const noMiddle = { ...candidate, middleImage: '' };
 const fallbackBlock = buildSinglePickBlock(noMiddle);
 assert(
   fallbackBlock.includes('/images/choice/test-hero.png'),
-  '[3] middleImage가 없으면 hero를 fallback으로 사용해야 함'
+  '[4] middleImage가 없으면 hero를 fallback으로 사용해야 함'
 );
+
+// 5) secondary 이미지 해석 유틸
+const secondary = resolveSecondaryMiddleImage(candidate);
+assert(secondary.secondImage === '/images/choice/test-middle-2.png', '[5-1] middleImage2 해석 실패');
+assert(secondary.secondAlt === '테스트 디테일 2', '[5-2] middleImageAlt2 해석 실패');
 
 if (failures.length > 0) {
   console.error('❌ 단독 픽 단위 테스트 실패');
