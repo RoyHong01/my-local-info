@@ -1,5 +1,13 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-01) — 보안 패치 4단계 실행
+
+- 브랜치: `chore/security-audit-2026-05-01`
+- 1차 비파괴 패치: `npm audit fix`, `next 16.2.4`, `eslint-config-next 16.2.4`, `wrangler 4.87.0`
+- 2차 메이저 패치: `@anthropic-ai/sdk 0.92.0`
+- 검증: `npm run build` 성공 + Anthropic SDK 스모크(`messages.create` 존재) 통과
+- 현재 잔여: `next -> postcss` 경로 Moderate 2건 (audit fixAvailable 비정상 버전 제시)
+
 ## 최근 작업 (2026-05-01) — RSS SSG 동기화
 
 - 수정 파일: `src/app/rss.xml/route.ts`

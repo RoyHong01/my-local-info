@@ -5,6 +5,43 @@
 
 ---
 
+## 2026-05-01 (보안 취약점 패치 4단계 실행: 비파괴 1차 + Anthropic 메이저 2차)
+
+- **목표**: `npm audit` 기준 취약점을 안전하게 축소하되, 기능 리스크가 있는 메이저 업데이트는 분리 적용.
+
+- **실행 1단계: 작업 격리**
+  - 브랜치 생성: `chore/security-audit-2026-05-01`
+  - 시작 전 점검: `npm run check:worktree` 통과
+
+- **실행 2단계: 1차 비파괴 패치**
+  - `npm audit fix` 실행
+  - 비파괴 범위 업데이트:
+    - `next` -> `16.2.4`
+    - `eslint-config-next` -> `16.2.4`
+    - `wrangler` -> `4.87.0`
+  - 중간 결과: High 취약점 제거, 잔여는 Moderate 중심으로 축소
+
+- **실행 3단계: 1차 검증 + 커밋**
+  - 검증: `npm run build` 성공
+  - 커밋: `chore(security): apply non-breaking audit updates (next/wrangler stack)`
+
+- **실행 4단계: 2차 Anthropic 메이저 + 재검증**
+  - 업데이트: `@anthropic-ai/sdk` `0.80.0 -> 0.92.0`
+  - 스모크 검증:
+    - SDK 초기화/메서드 체크(`messages.create` 함수 존재)
+    - `node --check scripts/generate-blog-post.js`
+    - `node --check scripts/generate-editor-notes.js`
+  - 최종 검증: `npm run build` 성공
+
+- **잔여 보안 이슈(2026-05-01 기준)**
+  - `next -> postcss` 경로의 Moderate 2건이 `npm audit`에 잔여
+  - audit 리포트 상 fixAvailable가 비정상(`next@9.3.3`)으로 제시되어 즉시 자동 적용 불가
+  - 현재는 고위험 제거 + 안정 빌드 유지 상태로 고정하고, upstream advisory/next 패치 추이를 모니터링하기로 결정
+
+- **의미**
+  - 기능 리스크를 통제하면서 취약점 규모를 단계적으로 축소.
+  - 메이저 변경을 분리 커밋해 회귀 추적 가능성을 확보.
+
 ## 2026-05-01 (RSS SSG 동기화: URL 체계 정합 + Top ID 필터 적용)
 
 - **배경**: 사이트맵을 SSG 기준으로 축소한 상태에서 RSS도 동일 기준으로 맞춰야 검색엔진(구글/네이버)에 일관된 품질 신호를 제공할 수 있음.

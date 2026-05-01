@@ -1,5 +1,14 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-01, 보안 패치)
+
+### 완료: npm audit 단계형 패치(1차 비파괴 + 2차 Anthropic 메이저)
+
+- 1차 비파괴: `npm audit fix` + `next 16.2.4` + `eslint-config-next 16.2.4` + `wrangler 4.87.0`
+- 2차 메이저: `@anthropic-ai/sdk 0.92.0` 분리 적용
+- 검증: `npm run build` 성공, Anthropic SDK 스모크 체크 통과
+- 잔여: `next -> postcss` 경로 Moderate 2건(자동 fixAvailable가 비정상 버전 제시) → upstream 패치 모니터링
+
 ## 최근 마일스톤 (2026-05-01, RSS 동기화)
 
 ### 완료: RSS를 SSG 기준으로 동기화
