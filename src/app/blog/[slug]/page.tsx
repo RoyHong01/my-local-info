@@ -422,6 +422,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const renderedContent = isChoicePost
     ? (shouldHideChoiceHero ? choiceContentBase : removeFirstDuplicateHeroImage(choiceContentBase, post.image))
     : sanitizedContent;
+  const isSingleChoicePost = isChoicePost && /(^|\n)##\s+📍\s+픽앤조이\s+오늘의\s+단독\s+픽\s*(\n|$)/m.test(renderedContent);
   const extractedChoiceSidebarProducts = isChoicePost
     ? extractChoiceSidebarProducts(renderedContent, post.coupangBannerAlt || post.title)
     : [];
@@ -528,7 +529,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   </div>
                 )
               )}
-              <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
+              <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''}${isSingleChoicePost ? ' choice-single-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {renderedContent}
                 </ReactMarkdown>

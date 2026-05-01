@@ -101,6 +101,18 @@ body {
   margin-right: auto !important;
 }
 
+/* 단독 초이스 포스트 본문 이미지: 가독성 확보를 위해 더 크게 표시 */
+.choice-single-post-prose img {
+  max-width: min(520px, 100%) !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* 단독 초이스에서도 비교 테이블 이미지 규칙은 기존 크기 유지 */
+.choice-single-post-prose :where(table td):not(:where([class~="not-prose"] *)) img {
+  max-width: 160px !important;
+}
+
 /* 단독 픽 블록 CTA(👉 ... 가격 확인하기) 단락 중앙 정렬 */
 .choice-post-prose p:has(> strong > a[href*="link.coupang.com"]) {
   text-align: center !important;
