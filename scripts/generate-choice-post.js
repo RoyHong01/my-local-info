@@ -1520,7 +1520,7 @@ async function run() {
   const writingAngle = pickWritingAngle();
   const prompt = buildChoicePrompt(candidate, today, productResolution, writingAngle);
 
-  console.log(`CHOICE_HAIKU_MODEL: ${HAIKU_MODEL}`);
+  console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
   console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
   console.log(`입력 파일: ${inputPath}`);
   console.log(`모드: ${isSinglePost ? '단독(수동 제휴)' : '자동(멀티 상품)'}`);
