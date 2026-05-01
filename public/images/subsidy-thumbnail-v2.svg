@@ -11,7 +11,7 @@
 
   <rect width="1200" height="480" fill="url(#bg)"/>
 
-  <g transform="translate(60,128)">
+  <g transform="translate(60,220)">
     <text x="0" y="0" font-size="84" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-weight="800" fill="#0f2f3d" filter="url(#shadow)">전국 보조금·복지</text>
     <text x="2" y="88" font-size="34" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-weight="700" fill="#1d4a54">한눈에 보는 정책 지원 소식</text>
   </g>

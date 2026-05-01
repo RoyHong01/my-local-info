@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-05-02 (보조금/인천 썸네일 텍스트 수직 중앙 정렬)
+
+- **수정 파일**: `public/images/subsidy-thumbnail-v2.svg`, `public/images/incheon-thumbnail-v2.svg`
+- **수정 내용**: 제목/서브카피 텍스트 블록의 Y 오프셋을 아래로 이동해 카드 내 상하 중앙에 오도록 조정
+  - subsidy: `translate(60,128) -> translate(60,220)`
+  - incheon: `translate(58,128) -> translate(58,220)`
+- **빌드**: `npm run build` 성공
+
 ## 2026-05-02 (블로그 썸네일 꽉채움 복원 + 이미지 리터치)
 
 - **수정 파일**: `src/components/BlogFilter.tsx`, `public/images/subsidy-thumbnail-v2.svg`, `public/images/incheon-thumbnail-v2.svg`

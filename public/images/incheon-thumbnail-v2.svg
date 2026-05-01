@@ -11,7 +11,7 @@
 
   <rect width="1200" height="480" fill="url(#bg2)"/>
 
-  <g transform="translate(58,128)">
+  <g transform="translate(58,220)">
     <text x="0" y="0" font-size="84" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-weight="800" fill="#11334a" filter="url(#shadow2)">인천 지역 정보</text>
     <text x="2" y="88" font-size="34" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-weight="700" fill="#225878">한눈에 보는 생활 혜택과 지역 소식</text>
   </g>
