@@ -1,5 +1,17 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-01) — 색인 제외 완화: subsidy/view 레거시 경로 제거
+
+- 배경: Search Console의 `NOINDEX`/리디렉션 관련 제외 누적 완화를 위해 `/subsidy/view` 레거시 경로를 noindex 유지가 아닌 route 제거 방식으로 전환.
+- 코드 변경:
+  - `src/app/subsidy/view/page.tsx` 삭제
+  - `src/app/subsidy/view/layout.tsx` 삭제
+  - `public/_redirects`에 `301` 추가 (`/subsidy/view`, `/subsidy/view/*` -> `/subsidy/`)
+- 검증:
+  - `npm run build` 성공
+  - `out/subsidy/view/index.html` 미생성 확인
+  - `out/**/*.html` 내 `/subsidy/view` 문자열 0건 확인
+
 ## 최근 작업 (2026-05-01) — Phase 2: Google AdSense 저품질 대응
 
 - **`scripts/generate-editor-notes.js` 신규**: Claude Haiku로 인천/보조금/축제 각 항목에 `editor_note: ["tip1","tip2","tip3"]` 배열 생성. 배치 단위 처리, 중복 방지.

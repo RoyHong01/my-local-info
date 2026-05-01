@@ -5,6 +5,33 @@
 
 ---
 
+## 2026-05-01 (색인 제외 정리: subsidy/view 레거시 라우트 제거 + 리다이렉트 보강)
+
+- **배경**: Search Console에서 `NOINDEX`/리디렉션 관련 제외가 누적되고, 과거 레거시 경로(`/subsidy/view?id=...`) 잔존 여부가 색인 품질 이슈로 이어질 가능성이 확인됨.
+
+- **수정 1: 레거시 라우트 완전 제거**
+  - 삭제: `src/app/subsidy/view/page.tsx`
+  - 삭제: `src/app/subsidy/view/layout.tsx`
+  - 기존에는 noindex 레이아웃으로 페이지가 실제 배포 산출물에 남았으나, 이제 route 자체를 제거해 `out/subsidy/view/index.html`이 생성되지 않도록 정리.
+
+- **수정 2: 리다이렉트 정책 추가**
+  - 수정 파일: `public/_redirects`
+  - 추가 규칙:
+    - `/subsidy/view /subsidy/ 301`
+    - `/subsidy/view/* /subsidy/ 301`
+  - 목적: 외부/과거 링크 유입 시 표준 목록 URL로 정규화.
+
+- **검증**
+  - `npm run build` 성공 (1473 static pages, postbuild sitemap/search-index 생성)
+  - 검증 결과:
+    - `out/subsidy/view/index.html` 미생성 확인 (`False`)
+    - `out/**/*.html` 내 `/subsidy/view` 링크 0건 확인
+
+- **영향도 요약**
+  - 데이터 구조 영향: 없음 (`public/data/*.json` 미수정)
+  - 컴포넌트 의존성 영향: 없음 (내부 링크는 이미 `/subsidy/[id]/` 표준 사용)
+  - 예외 케이스 처리: 과거 레거시 유입은 301로 `/subsidy/` 정규화
+
 ## 2026-05-01 (초이스 Gemini 원복 + 텔레그램 보조금 활성 건수 표시 + deploy.yml 안정화)
 
 - **배경**: 2026-05-01 일일 자동화 실패 원인 수정. `generate-choice-post.js`가 Anthropic Haiku로 교체됐으나 `deploy.yml [2.5단계]` env에 `ANTHROPIC_API_KEY`가 없어 초이스 0건 발생.

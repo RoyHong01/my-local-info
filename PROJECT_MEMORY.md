@@ -1,8 +1,26 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-01)
+
+### 완료: 색인 제외 완화용 레거시 subsidy/view 경로 정리
+
+- 배경: Search Console 제외 사유(`NOINDEX`, 리디렉션 오류) 잔존 원인 중 하나로 `/subsidy/view` 레거시 경로가 배포 산출물에 남아 있던 상태 확인.
+- 조치:
+  - `src/app/subsidy/view/page.tsx` 삭제
+  - `src/app/subsidy/view/layout.tsx` 삭제
+  - `public/_redirects`에 `301` 정규화 규칙 추가:
+    - `/subsidy/view -> /subsidy/`
+    - `/subsidy/view/* -> /subsidy/`
+- 검증:
+  - 빌드 성공(`npm run build`)
+  - `out/subsidy/view/index.html` 미생성 확인
+  - `out/**/*.html` 내 `/subsidy/view` 링크 0건 확인
+- 의미: noindex로 "살려두는" 방식에서 route 자체 제거 + canonical 경로 강제 방식으로 전환.
+
 ## 최근 마일스톤 (2026-04-25)
 
 ### 완료: AI_WEBSITE_BLUEPRINT.md 완성본 v2 (휴대용 운영 매뉴얼)
+
 - Part K(운영 안전망) 13개 항목 신설: AI 모델 티어, Git Hooks 2단계, 0바이트 복구, 빌드 게이트, verify:data, 단일 생성 경로, 수정 범위 격리, 원격 우선 동기화, 4문서 동기화, CI 트리아지, 텔레그램 리포트, 톤앤매너, 영향도 분석.
 - D-6 deploy.yml에 `concurrency` + `permissions` 보강.
 - 새 프로젝트 부트스트래핑 시 휴대 가능한 단일 매뉴얼 완성.

@@ -6,6 +6,8 @@
 /festival /festival/ 308
 /incheon /incheon/ 308
 /subsidy /subsidy/ 308
+/subsidy/view /subsidy/ 301
+/subsidy/view/* /subsidy/ 301
 /life /life/ 308
 /life/choice /life/choice/ 308
 /life/restaurant /life/restaurant/ 308
