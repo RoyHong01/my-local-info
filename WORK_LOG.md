@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-05-02 (블로그 썸네일 꽉채움 복원 + 이미지 리터치)
+
+- **수정 파일**: `src/components/BlogFilter.tsx`, `public/images/subsidy-thumbnail-v2.svg`, `public/images/incheon-thumbnail-v2.svg`
+
+- **수정 1: 카드 썸네일 꽉채움 복원**
+  - 텍스트형 썸네일 임시 대응으로 적용했던 `object-contain + p-1` 제거
+  - 카드/카테고리 썸네일 렌더를 다시 `object-cover`로 통일
+  - 카드 썸네일 높이 `h-24 -> h-20` 원복
+
+- **수정 2: 썸네일 이미지 자체 리터치(가독성 개선)**
+  - `subsidy-thumbnail-v2.svg`: 타이틀 폰트 확대(대형), 진한 네이비 톤 대비, 서브카피 굵기 상향
+  - `incheon-thumbnail-v2.svg`: 타이틀 폰트 확대(대형), 진한 블루 톤 대비, 서브카피 굵기 상향
+  - 기존 저가독성 텍스트 영역을 고대비/대형 타이포로 재구성
+  - Blog 카드 경로를 v2 썸네일로 교체
+
+- **빌드**: `npm run build` 성공
+
 ## 2026-05-02 (큐레이션 제목 중복 제거 + 썸네일 선명도 복원)
 
 - **수정 파일**: `scripts/generate-curation-posts.js`, `src/components/BlogFilter.tsx`, `src/content/posts/2026-05-01-curation-5월-신청-추천-보조금복지-정책.md`
