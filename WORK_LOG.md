@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-05-01 (AI_WEBSITE_BLUEPRINT.md v2.1 업데이트)
+
+- **수정 파일**: `AI_WEBSITE_BLUEPRINT.md`
+- **커밋**: `docs(blueprint): v2.1 — AdSense 실전 교훈 + editor_note/큐레이션 패턴 추가`
+- **수정 내용 (7개 섹션)**:
+  - **C-1**: SSG vs CSR 섹션에 AdSense 위험 경고 blockquote 추가 (fallback CSR = 심사봇 빈 페이지)
+  - **H-5**: AdSense "Low Value Content" 섹션 대폭 확장 — 5원인 테이블, Phase 1~3 해결 플랜, curl 검증법, 픽앤조이 실전 교훈
+  - **I-2**: Cloudflare 파일 제한 섹션에 wrangler 실사용량 확인 명령어 + AdSense×하이브리드 충돌 경고 추가
+  - **J-5**: Pitfalls 테이블 8→11개 행으로 확장 (AdSense 거절 / sitemap 불일치 / 공공API Low Value)
+  - **K-14** (신규): `editor_note` 자동화 패턴 섹션 추가 (Claude Haiku 배치, 카테고리별 컬러 UI, CI 연동)
+  - **K-15** (신규): 큐레이션 포스트 자동 생성 & AI 패턴 방지 섹션 추가 (앵글 4종 로테이션, 홈 "이번 주 픽" 패턴)
+  - **부록**: 날짜 `2026-04-25` → `2026-05-02 (v2.1)`
+
+---
+
 ## 2026-05-02 (보조금/인천 썸네일 텍스트 수직 중앙 정렬)
 
 - **수정 파일**: `public/images/subsidy-thumbnail-v2.svg`, `public/images/incheon-thumbnail-v2.svg`
