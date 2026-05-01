@@ -37,12 +37,24 @@ function isChoicePost(post: PostData) {
     ].join(' '));
 }
 
+function getCurationThumbnail(post: PostData): string {
+  const tags = post.tags || [];
+  if (tags.includes('보조금')) return '/images/subsidy-thumbnail.png';
+  if (tags.includes('인천')) return '/images/incheon-thumbnail.jpg';
+  return '';
+}
+
 function getCardThumbnail(post: PostData) {
   const primary = post.image && !post.image.endsWith('.svg') ? post.image : '';
 
   // 초이스는 대표 이미지(또는 쿠팡 배너 이미지) 우선 유지
   if (isChoicePost(post)) {
     return primary || post.coupangBannerImage || '';
+  }
+
+  // 큐레이션은 태그 기반 카테고리 이미지 사용
+  if (post.category === '큐레이션') {
+    return getCurationThumbnail(post);
   }
 
   // 인천/보조금은 카테고리 기본 썸네일만 사용
@@ -86,6 +98,10 @@ function CategoryThumbnail({ category }: { category?: string }) {
     '전국 축제·여행': {
       gradient: 'from-rose-400 to-pink-600',
       label: '전국 축제·여행',
+    },
+    '큐레이션': {
+      gradient: 'from-rose-400 to-pink-600',
+      label: '픽앤조이 큐레이션',
     },
   };
 
