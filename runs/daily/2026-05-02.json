@@ -1,0 +1,215 @@
+{
+  "reportDateKst": "2026-05-02",
+  "generatedAtUtc": "2026-05-01T20:16:46.800Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25230938297",
+    "runNumber": 695,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25230938297",
+    "runStartedAtUtc": "2026-05-01T20:06:24Z",
+    "headSha": "2dbef2c6814dff51317587ffe23e7d46e9586aa1"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://82ee0818.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 0건, 총 7492건",
+        "festival": "신규 0건, 업데이트 222건, 총 222건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://c0626682.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "failure",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "5454d9ce68608a322d0c8c70cc8f2db268b0f040",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-01",
+      "authoredAt": "2026-05-01T20:16:33Z",
+      "files": [
+        "src/content/posts/2026-05-01-incheon-pregnancy-support.md",
+        "src/content/posts/2026-05-01-mungyeong-teaware-festival.md",
+        "src/content/posts/2026-05-01-post-1777666466608.md",
+        "src/content/posts/2026-05-01-seoul-youth-rent-support.md",
+        "src/content/posts/2026-05-02-curation-5월에-이것만큼은-알고-계세요-복지-지원-5선.md"
+      ]
+    },
+    {
+      "sha": "6f8b5cb0deaf9316557e82bf29dcaecbe9cee8c3",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-01",
+      "authoredAt": "2026-05-01T20:08:06Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-01-incheon-pregnancy-support.md",
+      "src/content/posts/2026-05-01-mungyeong-teaware-festival.md",
+      "src/content/posts/2026-05-01-post-1777666466608.md",
+      "src/content/posts/2026-05-01-seoul-youth-rent-support.md",
+      "src/content/posts/2026-05-02-curation-5월에-이것만큼은-알고-계세요-복지-지원-5선.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-05-01-incheon-pregnancy-support.md",
+      "src/content/posts/2026-05-01-mungyeong-teaware-festival.md",
+      "src/content/posts/2026-05-01-post-1777666466608.md",
+      "src/content/posts/2026-05-01-seoul-youth-rent-support.md",
+      "src/content/posts/2026-05-02-curation-5월에-이것만큼은-알고-계세요-복지-지원-5선.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 5,
+      "manual": 0,
+      "unknown": 0,
+      "total": 5
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 15.25,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "2026/1276",
+      "markdown": {
+        "generated": 2,
+        "pending": 225,
+        "titles": [
+          "저소득 한부모가족 지원",
+          "문화시설 이용요금 감면(어린이과학관)"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 7492건",
+      "validation": "ok",
+      "anthropicUsage": "3791/3142",
+      "markdown": {
+        "generated": 5,
+        "pending": 7334,
+        "titles": [
+          "귀농·귀촌·귀향인 이사 비용 지원",
+          "기장군 청년 면접수당 지원",
+          "기장군 청년 자격시험 응시료 지원",
+          "경기도민 중고등 신입생 교복비 지원(대안교육기관, 다른 시도)",
+          "기장군 신입생 입학축하금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 222건, 총 222건",
+      "validation": "ok",
+      "anthropicUsage": "1758/1024",
+      "markdown": {
+        "generated": 2,
+        "pending": 173,
+        "titles": [
+          "진봉새만금보리밭축제",
+          "하전바지락 오감체험 페스티벌"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
