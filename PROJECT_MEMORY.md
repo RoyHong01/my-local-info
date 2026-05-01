@@ -1,5 +1,17 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-01, RSS 동기화)
+
+### 완료: RSS를 SSG 기준으로 동기화
+
+- 수정 파일: `src/app/rss.xml/route.ts`
+- 변경 사항:
+  - RSS 링크를 canonical 상세 경로(`/subsidy/[id]/`, `/incheon/[id]/`, `/festival/[id]/`, `/blog/[slug]/`)로 통일.
+  - `getAllTopIds()`로 SSG 대상 ID만 RSS에 포함.
+  - 카테고리별 최신순 제한 + 전체 100건 상한 적용.
+  - XML escape/dedupe 적용으로 피드 안정성 보강.
+- 검증: `npm run build` 성공, `out/rss.xml`에서 `/subsidy/view` 0건 확인.
+
 ## 최근 마일스톤 (2026-05-01)
 
 ### 완료: 색인 제외 완화용 레거시 subsidy/view 경로 정리

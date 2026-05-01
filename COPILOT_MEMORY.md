@@ -1,5 +1,13 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-01) — RSS SSG 동기화
+
+- 수정 파일: `src/app/rss.xml/route.ts`
+- RSS에 `/subsidy/view?id=` 같은 레거시 경로가 생성되지 않도록 canonical URL(`/subsidy/[id]/`, `/incheon/[id]/`, `/festival/[id]/`, `/blog/[slug]/`)만 사용하도록 정리.
+- `public/data/*.json` + `getAllTopIds()` 필터를 적용해 SSG 대상 상세 페이지만 RSS에 포함.
+- 최신성 유지 정책: 카테고리별 최신순 제한 + 전체 100건 상한.
+- 검증: `npm run build` 성공, `out/rss.xml`에서 `/subsidy/view` 0건 확인.
+
 ## 최근 작업 (2026-05-01) — 색인 제외 완화: subsidy/view 레거시 경로 제거
 
 - 배경: Search Console의 `NOINDEX`/리디렉션 관련 제외 누적 완화를 위해 `/subsidy/view` 레거시 경로를 noindex 유지가 아닌 route 제거 방식으로 전환.

@@ -5,6 +5,37 @@
 
 ---
 
+## 2026-05-01 (RSS SSG 동기화: URL 체계 정합 + Top ID 필터 적용)
+
+- **배경**: 사이트맵을 SSG 기준으로 축소한 상태에서 RSS도 동일 기준으로 맞춰야 검색엔진(구글/네이버)에 일관된 품질 신호를 제공할 수 있음.
+
+- **수정 파일**: `src/app/rss.xml/route.ts`
+
+- **핵심 변경**
+  - RSS 링크를 표준 상세 경로로 고정:
+    - `/subsidy/[id]/`, `/incheon/[id]/`, `/festival/[id]/`, `/blog/[slug]/`
+    - 레거시 `/subsidy/view?id=...` 경로는 생성하지 않음.
+  - 데이터 페이지 RSS 포함 시 SSG 필터 적용:
+    - `public/data/incheon.json`, `subsidy.json`, `festival.json` 로드
+    - `getAllTopIds()` 결과로 Top ID(=SSG 대상)만 포함
+  - 최신성 기준 적용:
+    - 카테고리별 최신순 정렬 후 제한(`incheon 20 / subsidy 25 / festival 15 / blog 40`)
+    - 전체 feed 최대 100건으로 제한
+  - XML 안전 처리:
+    - title/description/category/link XML escape 적용
+    - URL 중복 제거(링크 기준 dedupe)
+
+- **검증 결과**
+  - `npm run build` 성공
+  - 생성 RSS: `out/rss.xml`
+  - `<item>` 100건 생성 확인
+  - `/subsidy/view` 링크 0건 확인
+  - `/subsidy/`, `/incheon/`, `/festival/`, `/blog/` 표준 경로 링크 포함 확인
+
+- **의도/효과**
+  - 사이트맵과 RSS 모두 동일한 SSG 기준으로 동기화되어 크롤러가 일관된 canonical 상세 URL만 인식하도록 정리.
+  - 저가치/레거시 경로 노출을 줄이고 최신 핵심 페이지 중심으로 피드 품질 유지.
+
 ## 2026-05-01 (색인 제외 정리: subsidy/view 레거시 라우트 제거 + 리다이렉트 보강)
 
 - **배경**: Search Console에서 `NOINDEX`/리디렉션 관련 제외가 누적되고, 과거 레거시 경로(`/subsidy/view?id=...`) 잔존 여부가 색인 품질 이슈로 이어질 가능성이 확인됨.
