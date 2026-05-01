@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-05-01 (Phase 2: Google AdSense 저품질 대응 - 에디터 노트 + 큐레이션 자동화)
+
+- **배경**: Google AdSense "Low Value Content" 거절 해소를 위한 Phase 2 구현. Phase 1(SSG 노이즈 제거)에 이어, 데이터 페이지에 고유한 편집적 가치를 추가하는 것이 목표.
+
+- **신규 파일 생성**:
+  - `scripts/generate-editor-notes.js`: Claude Haiku(`claude-haiku-4-5`)로 인천/보조금/축제 데이터 각 항목에 `editor_note: ["tip1","tip2","tip3"]` 배열 자동 생성. 배치 단위(`EDITOR_NOTES_BATCH_SIZE`, 기본 10), 지연 제어(`EDITOR_NOTES_DELAY_MS`), 파일 단독 실행(`EDITOR_NOTES_ONLY_FILE`) 지원. GitHub Actions outputs: `editor_notes_generated`, `editor_notes_errors`.
+  - `scripts/generate-curation-posts.js`: Gemini(`gemini-2.5-flash-lite`)로 요일별 테마에 따라 TOP-N 집계형 큐레이션 블로그 포스트 자동 생성. `category: 큐레이션` 사용. 슬러그 패턴: `YYYY-MM-DD-curation-{제목}`. 요일별 카테고리: `['incheon','subsidy','festival','subsidy','festival','incheon','subsidy']`.
+
+- **UI 변경**:
+  - `src/app/incheon/[id]/page.tsx`: `editor_note` 항목을 **파란색** 콜아웃 박스(`bg-blue-50 border-blue-200`)로 렌더링 — "📌 픽앤조이 큐레이터의 한 마디".
+  - `src/app/subsidy/[id]/page.tsx`: `editor_note`를 **황색** 콜아웃 박스(`bg-amber-50 border-amber-200`)로 렌더링.
+  - `src/app/festival/[id]/page.tsx`: `editor_note`를 **장미색** 콜아웃 박스(`bg-rose-50 border-rose-200`)로 렌더링.
+  - `src/app/page.tsx`: "이번 주 픽" 섹션 추가. `getSortedPostsData()`로 `category === '큐레이션'` 포스트 최대 3개를 IIFE로 렌더링. 큐레이션 포스트가 없으면 `null` 반환(빈 상태 안전 처리). 위치: Problem Section 아래, Category Cards Section 위.
+
+- **워크플로우 변경** (`.github/workflows/deploy.yml`):
+  - `[2단계] 큐레이터 에디터 노트 생성 (editor_note)` step 추가: `ANTHROPIC_API_KEY` 필요, `continue-on-error: true`, timeout 20분.
+  - `[2단계] 큐레이션 블로그 포스트 자동 생성` step 추가: `GEMINI_API_KEY`/`GEMINI_MODEL` 필요, `continue-on-error: true`, timeout 15분, `CURATION_COUNT=1`.
+  - 두 step 모두 `generate_blog` step 이전에 위치하며 실패해도 블로그 생성을 차단하지 않음.
+
+- **npm audit 취약점 확인** (비파괴 패치 대상):
+  - `brace-expansion`, `flatted`, `picomatch`, `undici`: `npm audit fix`로 해결 가능 (별도 패치 필요)
+  - `@anthropic-ai/sdk` 0.80→0.91, `next` 16.1.7→16.2.4: breaking change 포함 → 별도 검토 후 업그레이드
+
+- **빌드 결과**: `npm run build` 성공(1439개 정적 페이지, sitemap 1432개 URL).
+- **커밋**: Phase 2 관련 변경 포함 커밋 완료 + 추가 `scripts/generate-choice-post.js` 수정(Haiku 전환) 단독 커밋 `7b72b13`.
+
+---
+
 ## 2026-04-25 (AI_WEBSITE_BLUEPRINT 완성본 v2)
 
 - **Part K 신설 (운영 안전망 13개 항목)**: 픽앤조이 운영중 누적된 재발 패턴을 일반화해 K-1 AI 모델 티어 / K-2 Git Hooks 2단계 / K-3 0바이트 복구 / K-4 품질 게이트 / K-5 verify:data / K-6 단일 생성 경로 / K-7 수정 범위 격리 / K-8 원격 우선 / K-9 4문서 동기화 / K-10 CI 실패 트리아지 / K-11 텔레그램 리포트 / K-12 톤앤매너 / K-13 영향도 분석 통합.

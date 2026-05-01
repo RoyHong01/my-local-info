@@ -1,5 +1,15 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-01) — Phase 2: Google AdSense 저품질 대응
+
+- **`scripts/generate-editor-notes.js` 신규**: Claude Haiku로 인천/보조금/축제 각 항목에 `editor_note: ["tip1","tip2","tip3"]` 배열 생성. 배치 단위 처리, 중복 방지.
+- **상세 페이지 3곳 editor_note UI 추가**: 인천(파란색), 보조금(황색), 축제(장미색) 콜아웃 박스. 큐레이터 한 마디 형태.
+- **`scripts/generate-curation-posts.js` 신규**: Gemini로 요일별 TOP-N 집계 큐레이션 포스트 자동 생성. `category: 큐레이션`.
+- **메인 페이지 "이번 주 픽" 섹션**: `getSortedPostsData()`로 큐레이션 포스트 최신 3개 노출. 없으면 null(graceful).
+- **deploy.yml 2개 step 추가**: editor_note 생성 + 큐레이션 포스트 생성(둘 다 `continue-on-error: true`).
+- **빌드**: 성공(1439 pages). 커밋 `7b72b13` push 완료.
+- **npm audit 취약점**: `brace-expansion/flatted/picomatch/undici` → `npm audit fix` 대상, `@anthropic-ai/sdk`/`next` → breaking change 별도 검토 필요.
+
 ## 최근 작업 (2026-04-25)
 
 - **AI_WEBSITE_BLUEPRINT.md 완성본 v2**: Part K(운영 안전망 K-1~K-13) 신설 + D-6 concurrency 보강 + A-3/부록 교차참조 추가. build 성공 후 단일 호흡 배포(A-6).

@@ -149,6 +149,29 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
+      - name: '[2단계] 큐레이터 에디터 노트 생성 (editor_note)'
+        id: generate_editor_notes
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        continue-on-error: true
+        run: node scripts/generate-editor-notes.js
+        timeout-minutes: 20
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          EDITOR_NOTES_BATCH_SIZE: '10'
+          EDITOR_NOTES_DELAY_MS: '1000'
+
+      - name: '[2단계] 큐레이션 블로그 포스트 자동 생성'
+        id: generate_curation
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        continue-on-error: true
+        run: node scripts/generate-curation-posts.js
+        timeout-minutes: 15
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          CURATION_COUNT: '1'
+          CURATION_TOP_N: '5'
+
       - name: '[2단계] AI 블로그 글 자동 생성 (인천1/축제1/보조금2)'
         id: generate_blog
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')

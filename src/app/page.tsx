@@ -3,6 +3,7 @@ import path from 'path';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getTopIncheon, getTopSubsidy, getTopFestival } from '@/lib/priority-calculator';
+import { getSortedPostsData, type PostData } from '@/lib/posts';
 
 export const metadata: Metadata = {
   title: '픽앤조이 | 시민 체감형 공공 복지·라이프 큐레이션',
@@ -336,6 +337,51 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── 이번 주 픽 (큐레이션) Section ── */}
+      {(() => {
+        const allPosts: PostData[] = getSortedPostsData();
+        const curationPosts = allPosts
+          .filter(p => p.category === '큐레이션')
+          .slice(0, 3);
+        if (curationPosts.length === 0) return null;
+        return (
+          <section className="py-10">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">✨</span>
+                  <h2 className="text-lg sm:text-xl font-extrabold text-gray-900">이번 주 픽</h2>
+                  <span className="ml-1 px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-xs font-bold">큐레이션</span>
+                </div>
+                <Link href="/blog?category=큐레이션" className="text-xs text-orange-500 hover:text-orange-600 font-medium hover:underline transition-colors">
+                  전체 보기 →
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {curationPosts.map(post => (
+                  <Link key={post.slug} href={`/blog/${post.slug}`} className="block group">
+                    <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border border-orange-100 h-full flex flex-col">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-500">큐레이션</span>
+                        <span className="text-xs text-gray-400">{post.date}</span>
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 leading-snug">{post.title}</h3>
+                      {post.description && (
+                        <p className="text-xs text-gray-500 line-clamp-2 flex-1 leading-relaxed">{post.description}</p>
+                      )}
+                      <div className="mt-3 flex items-center gap-1 text-xs text-orange-500 font-medium">
+                        <span>자세히 보기</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ── Category Cards Section ── */}
       <section className="pt-16 md:pt-20 pb-20" id="categories">

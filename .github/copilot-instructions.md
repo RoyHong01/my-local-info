@@ -341,6 +341,13 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-05-01 핵심 반영(Phase 2 AdSense 저품질 대응):
+  - **`generate-editor-notes.js` 신규**: Claude Haiku로 인천/보조금/축제 항목 각각에 `editor_note: ["tip1","tip2","tip3"]` 자동 생성. 배치 처리, CI `continue-on-error: true`.
+  - **상세 페이지 3곳 editor_note UI**: 인천(파란색)/보조금(황색)/축제(장미색) 콜아웃 박스 — "📌 픽앤조이 큐레이터의 한 마디".
+  - **`generate-curation-posts.js` 신규**: Gemini로 요일별 테마(인천/보조금/축제) TOP-N 집계형 큐레이션 포스트 자동 생성(`category: 큐레이션`).
+  - **메인 홈 "이번 주 픽" 섹션**: `getSortedPostsData()`로 큐레이션 포스트 최신 3개 노출. 없으면 null(graceful).
+  - **deploy.yml 2 step 추가**: `generate_editor_notes` + `generate_curation` — 기존 `generate_blog` 이전, 둘 다 `continue-on-error: true`.
+  - **npm audit 비파괴 취약점 미처리**: `brace-expansion/flatted/picomatch/undici` → 별도 `npm audit fix` 필요(현재 미적용). `@anthropic-ai/sdk`/`next` → breaking change 별도 검토.
 - 2026-04-24 핵심 반영(추가):
   - **단독 초이스 본문 첫 이미지 위치 회귀 수정**: `scripts/generate-choice-post.js::buildSinglePickBlock`이 `📍 픽앤조이 오늘의 단독 픽` 헤딩 아래에 hero+middle을 모두 삽입하던 버그를 수정해, 헤딩 아래에는 `middleImage`만(없으면 hero fallback) 노출하도록 변경.
   - **중복 strip 도입**: `stripDuplicateMiddleImage`로 단독 모드에서 본문 다른 섹션에 들어간 `middleImage` 마크다운을 strip한 뒤 단독 픽 블록을 삽입.

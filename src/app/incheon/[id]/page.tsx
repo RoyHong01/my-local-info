@@ -92,6 +92,9 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
     org,
   });
   const detailMarkdown = sanitizeMarkdown(getField(item, ['description_markdown']) || generatedMarkdown);
+  const editorNote = Array.isArray(item.editor_note)
+    ? (item.editor_note as string[]).filter((t): t is string => typeof t === 'string')
+    : [];
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -124,6 +127,22 @@ export default async function IncheonDetailPage({ params }: { params: Promise<{ 
                   {detailMarkdown}
                 </ReactMarkdown>
               </div>
+
+              {editorNote.length > 0 && (
+                <div className="mt-6 p-5 bg-blue-50 border border-blue-200 rounded-2xl">
+                  <h3 className="text-sm font-extrabold text-blue-700 mb-3 flex items-center gap-1.5">
+                    <span>📌</span> 픽앤조이 큐레이터의 한 마디
+                  </h3>
+                  <ul className="space-y-2">
+                    {editorNote.map((tip, i) => (
+                      <li key={i} className="text-sm text-stone-700 flex items-start gap-2">
+                        <span className="text-blue-500 font-bold flex-shrink-0 mt-0.5">✓</span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div className="mt-8 pt-6 border-t border-stone-100">
                 {officialUrl && officialUrl !== '#' ? (
