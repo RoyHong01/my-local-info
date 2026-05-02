@@ -155,13 +155,15 @@ export default function ChatBot({ items }: ChatBotProps) {
                 <div key={message.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
                   <div className={`flex max-w-[82%] flex-col ${isUser ? "items-end" : "items-start"}`}>
                     <div
-                      className={`rounded-2xl px-3 py-2 text-sm leading-relaxed shadow-sm ${
+                      className={`max-w-full overflow-hidden rounded-2xl px-3 py-2 text-sm leading-relaxed shadow-sm ${
                         isUser
                           ? "rounded-br-md bg-blue-500 text-white"
                           : "rounded-bl-md bg-slate-200 text-slate-900"
                       }`}
                     >
-                      {message.text}
+                      <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+                        {message.text}
+                      </p>
                     </div>
                   </div>
                 </div>
