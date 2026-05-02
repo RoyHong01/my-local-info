@@ -341,6 +341,12 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-05-06 핵심 반영(축제 블로그·상세 페이지 SEO 품질 강화 Phase 1~4):
+  - **Phase 1 — 실용 섹션 자동 삽입**: `generate-blog-post.js` 프롬프트에 [교통·주차]/[방문 전 체크리스트]/[현지 꿀팁] 섹션 지시문 고정 추가.
+  - **Phase 1 — 카카오맵 길찾기 링크 자동 삽입**: `buildFestivalKakaoMapLink()` — `mapx`/`mapy` 좌표 딥링크, 없으면 주소 검색 fallback. 본문 끝 자동 삽입(중복 방지).
+  - **Phase 2 — 근처 맛집 섹션 자동 삽입**: `fetchNearbyRestaurants()` (카카오 로컬 API, 반경 2km, 음식점 FD6, 최대 5건) + `buildNearbyRestaurantSection()`. `FESTIVAL_NEARBY_RESTAURANTS` env로 on/off 제어.
+  - **Phase 3 — 같은 지역 다른 축제 내부 링크**: `buildRelatedFestivalsSection()`. `lDongRegnCd` 기준(areacode fallback), 만료/종료 제외, 기존 포스트 보유 항목 최대 3건. 삽입 순서: 관련 축제 → 근처 맛집 → 카카오맵.
+  - **Phase 4 — festival/[id] 상세 페이지 UI**: `src/app/festival/[id]/page.tsx`에 ① 카카오맵 길찾기 버튼(노란 버튼, 좌표/주소 fallback) ② "같은 지역 다른 축제" 카드 3개 섹션(서버사이드 필터링, md:grid-cols-3 반응형) 추가. 기존 모든 축제 상세에 즉시 반영.
 - 2026-05-01 핵심 반영(Phase 2 AdSense 저품질 대응):
   - **`generate-editor-notes.js` 신규**: Claude Haiku로 인천/보조금/축제 항목 각각에 `editor_note: ["tip1","tip2","tip3"]` 자동 생성. 배치 처리, CI `continue-on-error: true`.
   - **상세 페이지 3곳 editor_note UI**: 인천(파란색)/보조금(황색)/축제(장미색) 콜아웃 박스 — "📌 픽앤조이 큐레이터의 한 마디".
