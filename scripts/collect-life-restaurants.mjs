@@ -7,6 +7,7 @@ const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant',
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
+const GOOGLE_PLACES_MIN_REVIEW_COUNT = Number(process.env.GOOGLE_PLACES_MIN_REVIEW_COUNT || 10); // 구글 리뷰 수 최소 기준
 const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
 const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 'true';
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
@@ -149,18 +150,18 @@ const REGION_QUERY_MAP = {
   'incheon': [
     { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
     { query: '송도 오마카세', scenarioHint: '기념일 저녁 약속', vibeHint: '집중도 높은 다이닝', cuisineHint: '오마카세' },
-    { query: '송도 오픈런 파스타', scenarioHint: '데이트 코스 첫 식사', vibeHint: '오픈런 저장각 파스타', cuisineHint: '파스타' },
+    { query: '청라 브런치 맛집', scenarioHint: '주말 브런치 약속', vibeHint: '여유로운 신도시 브런치', cuisineHint: '브런치' },
     { query: '인천 퓨전 한식 맛집', scenarioHint: '한식인데 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 다이닝', cuisineHint: '퓨전 한식' },
     { query: '인천 화덕피자 맛집', scenarioHint: '캐주얼하지만 무드 있는 저녁', vibeHint: '따뜻한 오븐 무드', cuisineHint: '화덕피자' },
     { query: '청라 분위기 술집', scenarioHint: '퇴근 후 하이볼 한잔', vibeHint: '조도 낮은 저녁 약속', cuisineHint: '주점' },
     { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
     { query: '부평 웨이팅 맛집', scenarioHint: '기다려서라도 가는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
     { query: '인천 내추럴 와인바', scenarioHint: '친구와 느슨한 저녁 모임', vibeHint: '와인바 감도', cuisineHint: '와인바' },
-    { query: '송도 에스프레소 바', scenarioHint: '짧고 진한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
+    { query: '영종도 바다뷰 카페', scenarioHint: '드라이브 후 카페 타임', vibeHint: '바다뷰 감성 카페', cuisineHint: '카페' },
     { query: '인천 스테이크 맛집', scenarioHint: '특별한 날 고기 한 판', vibeHint: '스테이크 다이닝', cuisineHint: '스테이크' },
     { query: '주안 맛집', scenarioHint: '동네 숨은 맛집 탐방', vibeHint: '로컬 핫플', cuisineHint: '한식' },
     { query: '인천 일식 오마카세', scenarioHint: '일식 코스가 땡기는 날', vibeHint: '정갈한 일식 다이닝', cuisineHint: '일식' },
-    { query: '송도 디저트 카페', scenarioHint: '식후 디저트 코스', vibeHint: '감성 디저트 카페', cuisineHint: '디저트' },
+    { query: '동인천 노포 맛집', scenarioHint: '클래식한 한 끼가 당기는 날', vibeHint: '오래된 로컬 노포 감성', cuisineHint: '한식' },
     { query: '인천 태국음식 맛집', scenarioHint: '이국적인 한 끼', vibeHint: '동남아 무드', cuisineHint: '태국음식' },
   ],
   'seoul': [
@@ -721,6 +722,8 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient, na
 
     if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
+    } else if (!Number.isFinite(Number(ratingCount)) || Number(ratingCount) < GOOGLE_PLACES_MIN_REVIEW_COUNT) {
+      console.log(`  ❌ 리뷰 수 미달 제외: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
     } else {
       console.log(`  ✅ 평점 통과: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰${usedCache ? ', cache' : ''}${photoUrl ? ', 📷사진' : ''})`);
       const naverUrls = naverClientId && naverClientSecret
@@ -921,7 +924,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
     };
   }
 
-  console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상)`);
+  console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상, 리뷰 ${GOOGLE_PLACES_MIN_REVIEW_COUNT}개 이상)`);
   const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient, naverClientId, naverClientSecret);
   const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
   if (items.length === 0) {
