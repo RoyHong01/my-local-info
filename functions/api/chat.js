@@ -66,17 +66,15 @@ function buildQueryTokens(query) {
 
 function detectPreferredCategories(query) {
   const q = String(query || "").toLowerCase();
-  const categories = [];
-  if (/(보조금|복지|지원금|지원사업|정부지원|혜택)/.test(q)) {
-    categories.push("전국 보조금·복지");
-  }
-  if (/(축제|행사|여행|가볼만|공연|전시)/.test(q)) {
-    categories.push("전국 축제·여행");
-  }
-  if (/(인천|부평|송도|미추홀|계양|연수|남동|중구|동구|서구|강화|옹진)/.test(q)) {
-    categories.push("인천시 정보");
-  }
-  return categories;
+  const hasSubsidyIntent = /(보조금|복지|지원금|지원사업|정부지원|혜택)/.test(q);
+  const hasFestivalIntent = /(축제|행사|여행|가볼만|공연|전시)/.test(q);
+  const hasIncheonIntent = /(인천|부평|송도|미추홀|계양|연수|남동|중구|동구|서구|강화|옹진)/.test(q);
+
+  // 의도 충돌 시 단일 카테고리를 우선 선택해 URL/내용 불일치를 줄입니다.
+  if (hasSubsidyIntent) return ["전국 보조금·복지"];
+  if (hasFestivalIntent) return ["전국 축제·여행"];
+  if (hasIncheonIntent) return ["인천시 정보"];
+  return [];
 }
 
 function searchTopK(index, query, k = 3) {
@@ -87,7 +85,8 @@ function searchTopK(index, query, k = 3) {
   const scored = [];
   for (const item of index) {
     if (!item) continue;
-    const searchText = [item.title, item.summary, item.body, item.category]
+    const tagsText = Array.isArray(item.tags) ? item.tags.join(" ") : "";
+    const searchText = [item.title, item.summary, item.body, item.category, tagsText]
       .filter(Boolean)
       .join(" ")
       .toLowerCase();
@@ -159,6 +158,7 @@ export async function onRequestPost(context) {
     반드시 한국어로만 답하세요. 3~5문장으로 핵심 정보를 전달하세요.
     마크다운 기호(**, *, #, -)는 절대 사용하지 마세요. 순수 텍스트로만 답하세요.
     아래 픽앤조이 데이터를 우선 참고하여 사용자 질문에 답하세요.
+    아래 데이터에 없는 사실은 추측해서 쓰지 마세요. 데이터가 부족하면 "해당 조건에 맞는 정보를 찾지 못했습니다."라고 답하세요.
     여러 항목을 안내할 때는 "항목별로 문단을 분리"하고, 각 문단 마지막 줄에 "URL: https://..." 형태로 관련 주소를 1개씩 붙이세요.
     문단과 문단 사이에는 반드시 빈 줄 1줄을 넣으세요.
 
