@@ -47,6 +47,16 @@ const fmtDate = (d: string) => d.length === 8
   ? `${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`
   : d;
 
+function toNumberString(value: unknown): string {
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  if (typeof value === 'string') return value.trim();
+  return '';
+}
+
+function normalizeDateKey(value: string): string {
+  return value.replace(/[^0-9]/g, '');
+}
+
 export async function generateStaticParams() {
   const all = await readJson('festival.json');
   const topItems = getTopFestival(all, 300);
@@ -74,6 +84,36 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
   const overview = formatText(getField(item, ['overview', 'summary', 'description', '서비스목적요약']));
   const addr = getField(item, ['addr1', 'location']);
   const addr2 = getField(item, ['addr2']);
+  const mapx = toNumberString(item.mapx);
+  const mapy = toNumberString(item.mapy);
+  const mapTargetName = name || '축제장';
+  const kakaoMapHref = mapx && mapy
+    ? `https://map.kakao.com/link/to/${encodeURIComponent(mapTargetName)},${mapy},${mapx}`
+    : addr
+      ? `https://map.kakao.com/?q=${encodeURIComponent(addr)}`
+      : '';
+  const regionCode = getField(item, ['lDongRegnCd', 'areacode']).trim();
+  const currentId = getField(item, ['contentid', 'id']);
+  const todayKey = normalizeDateKey(new Date().toISOString().slice(0, 10));
+  const relatedFestivals = regionCode
+    ? all
+        .filter(f => {
+          const fid = getField(f, ['contentid', 'id']);
+          if (!fid || fid === currentId) return false;
+          if (f.expired === true) return false;
+          const fRegion = getField(f, ['lDongRegnCd', 'areacode']).trim();
+          if (!fRegion || fRegion !== regionCode) return false;
+          const fEnd = normalizeDateKey(getField(f, ['eventenddate', 'endDate']));
+          if (fEnd && fEnd < todayKey) return false;
+          return Boolean(getField(f, ['title', 'name']));
+        })
+        .sort((a, b) => {
+          const aStart = normalizeDateKey(getField(a, ['eventstartdate', 'startDate'])) || '99999999';
+          const bStart = normalizeDateKey(getField(b, ['eventstartdate', 'startDate'])) || '99999999';
+          return aStart.localeCompare(bStart);
+        })
+        .slice(0, 3)
+    : [];
   const tel = getField(item, ['tel']);
   const homepage = getField(item, ['homepage']);
   const generatedMarkdown = buildFestivalMarkdown({
@@ -113,6 +153,18 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
                     <span>📅</span> {dateStr}
                   </p>
                 )}
+                {kakaoMapHref && (
+                  <div className="mt-4">
+                    <a
+                      href={kakaoMapHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-stone-900 font-extrabold px-5 py-2.5 rounded-xl transition-colors"
+                    >
+                      🧭 카카오맵 길찾기
+                    </a>
+                  </div>
+                )}
               </header>
 
               <div className="prose prose-stone prose-orange lg:prose-lg max-w-none prose-p:my-3 prose-p:leading-8 prose-p:text-stone-900 prose-h2:text-2xl prose-h3:text-xl">
@@ -148,6 +200,39 @@ export default async function FestivalDetailPage({ params }: { params: Promise<{
                     공식 홈페이지 방문하기 →
                   </a>
                 </div>
+              )}
+
+              {relatedFestivals.length > 0 && (
+                <section className="mt-10 pt-8 border-t border-stone-100">
+                  <h2 className="text-xl font-extrabold text-stone-900 mb-4">같은 지역 다른 축제</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {relatedFestivals.map(f => {
+                      const fid = getField(f, ['contentid', 'id']);
+                      const fTitle = getField(f, ['title', 'name', '서비스명']);
+                      const fAddr = getField(f, ['addr1', 'location']);
+                      const fStart = getField(f, ['eventstartdate', 'startDate']);
+                      const fEnd = getField(f, ['eventenddate', 'endDate']);
+                      const fDate = fStart
+                        ? fEnd
+                          ? `${fmtDate(normalizeDateKey(fStart))} ~ ${fmtDate(normalizeDateKey(fEnd))}`
+                          : fmtDate(normalizeDateKey(fStart))
+                        : '일정 추후 공지';
+
+                      return (
+                        <Link
+                          key={fid}
+                          href={`/festival/${encodeURIComponent(fid)}`}
+                          className="block rounded-2xl border border-rose-100 bg-rose-50/50 p-4 hover:bg-rose-50 transition-colors"
+                        >
+                          <p className="text-xs font-bold text-rose-600 mb-2">추천 축제</p>
+                          <h3 className="text-sm font-extrabold text-stone-900 leading-6 mb-2">{fTitle}</h3>
+                          <p className="text-xs text-stone-600 mb-1">📅 {fDate}</p>
+                          {fAddr && <p className="text-xs text-stone-500 line-clamp-2">📍 {fAddr}</p>}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
               )}
             </article>
           </div>
