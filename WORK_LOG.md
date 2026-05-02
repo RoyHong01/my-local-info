@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-05-02 (Gemini 3.1 Flash-Lite Preview 기본 전환 + 2.5 fallback 허용)
+
+- **수정 파일**:
+  - `.github/workflows/deploy.yml`
+  - `scripts/collect-incheon.js`
+  - `scripts/collect-subsidy.js`
+  - `scripts/collect-festival.js`
+  - `scripts/collect-life-restaurants.mjs`
+  - `scripts/generate-blog-post.js`
+  - `scripts/generate-curation-posts.js`
+  - `scripts/generate-choice-post.js`
+  - `scripts/generate-life-restaurant-posts.mjs`
+- **핵심 반영**:
+  1. 자동화/생성 기본 모델을 `gemini-3.1-flash-lite-preview`로 상향.
+  2. 수집 스크립트 3종은 `gemini-3.1-flash-lite-preview`, `gemini-2.5-flash-lite`만 허용하는 화이트리스트 검증 적용.
+  3. Pro 모델 사용 시 즉시 차단하는 안전장치 유지.
+  4. 워크플로우 env(`GEMINI_MODEL`, `CHOICE_GEMINI_MODEL`, `RESTAURANT_GEMINI_MODEL`)를 3.1 preview로 통일.
+- **검증**:
+  - `node --check` 대상 8개 스크립트 통과
+  - `npm run build` 성공
+
 ## 2026-05-01 (AI_WEBSITE_BLUEPRINT.md v2.1 업데이트)
 
 - **수정 파일**: `AI_WEBSITE_BLUEPRINT.md`

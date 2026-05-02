@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: '실행 모드 선택 (full: 데이터수집+글생성+배포, deploy_only: 현재 main 기준 배포만)'
+        description: '?�행 모드 ?�택 (full: ?�이?�수�?글?�성+배포, deploy_only: ?�재 main 기�? 배포�?'
         required: true
         default: 'full'
         type: choice
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: '[공통] 리포트 실행 컨텍스트 초기화 (full 모드)'
+      - name: '[공통] 리포???�행 컨텍?�트 초기??(full 모드)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           echo "RUN_STARTED_AT_UTC=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
@@ -48,7 +48,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: '[1단계] 인천 지역 정보 수집'
+      - name: '[1?�계] ?�천 지???�보 ?�집'
         id: collect_incheon
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-incheon.js
@@ -56,48 +56,48 @@ jobs:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '2'
 
-      - name: '[1단계] 전국 보조금 정책 수집'
+      - name: '[1?�계] ?�국 보조�??�책 ?�집'
         id: collect_subsidy
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-subsidy.js
         env:
           PUBLIC_DATA_API_KEY: ${{ secrets.PUBLIC_DATA_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '5'
 
-      - name: '[1단계] 전국 축제·여행 정보 수집'
+      - name: '[1?�계] ?�국 축제·?�행 ?�보 ?�집'
         id: collect_festival
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/collect-festival.js
         env:
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           DESCRIPTION_MARKDOWN_BATCH_LIMIT: '2'
 
-      - name: '[1단계] 만료 콘텐츠 처리'
+      - name: '[1?�계] 만료 콘텐�?처리'
         id: cleanup_expired
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/cleanup-expired.js
 
-      - name: '[1단계] 변경사항 커밋 & 푸시 (공공데이터)'
+      - name: '[1?�계] 변경사??커밋 & ?�시 (공공?�이??'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/data scripts/cleanup-expired.js
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(1단계): 공공데이터 동기화 $(date +'%Y-%m-%d')"
+            git commit -m "?�동 ?�데?�트(1?�계): 공공?�이???�기??$(date +'%Y-%m-%d')"
             git push
           else
-            echo "변경사항 없음"
+            echo "변경사???�음"
           fi
 
-      - name: '[1단계] Next.js 빌드'
+      - name: '[1?�계] Next.js 빌드'
         id: build_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
@@ -105,25 +105,25 @@ jobs:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
-      - name: '[1단계] Playwright 브라우저 설치'
+      - name: '[1?�계] Playwright 브라?��? ?�치'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npx playwright install --with-deps chromium
 
-      - name: '[1단계] Playwright E2E 테스트 (배포 전)'
+      - name: '[1?�계] Playwright E2E ?�스??(배포 ??'
         id: e2e_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
-      - name: '[1단계] Cloudflare Pages 배포'
+      - name: '[1?�계] Cloudflare Pages 배포'
         id: deploy_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          echo "out ?�일 ?? ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
+            echo "?�️ Cloudflare Pages ?�일 ???�한(20000) 초과�?배포�?건너?�니??"
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -136,7 +136,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: '[1단계] Cloudflare Cache Purge'
+      - name: '[1?�계] Cloudflare Cache Purge'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           PURGE_RESULT=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -144,12 +144,12 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$PURGE_RESULT"
-          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "✅ Cache purged" || echo "⚠️ Cache purge failed"
+          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "??Cache purged" || echo "?�️ Cache purge failed"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
-      - name: '[2단계] 큐레이터 에디터 노트 생성 (editor_note)'
+      - name: '[2?�계] ?�레?�터 ?�디???�트 ?�성 (editor_note)'
         id: generate_editor_notes
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         continue-on-error: true
@@ -160,7 +160,7 @@ jobs:
           EDITOR_NOTES_BATCH_SIZE: '10'
           EDITOR_NOTES_DELAY_MS: '1000'
 
-      - name: '[2단계] 큐레이션 블로그 포스트 자동 생성'
+      - name: '[2?�계] ?�레?�션 블로�??�스???�동 ?�성'
         id: generate_curation
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         continue-on-error: true
@@ -168,18 +168,18 @@ jobs:
         timeout-minutes: 15
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           CURATION_COUNT: '1'
           CURATION_TOP_N: '5'
 
-      - name: '[2단계] AI 블로그 글 자동 생성 (인천1/축제1/보조금2)'
+      - name: '[2?�계] AI 블로�?글 ?�동 ?�성 (?�천1/축제1/보조�?)'
         id: generate_blog
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-blog-post.js
         timeout-minutes: 30
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           GEMINI_MAX_OUTPUT_TOKENS: '8192'
           GEMINI_TIMEOUT_MS: '120000'
           BLOG_MAX_GENERATION_SECONDS: '900'
@@ -193,7 +193,7 @@ jobs:
           BLOG_POSTS_SUBSIDY: '2'
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
 
-      - name: '[2단계] Next.js 빌드'
+      - name: '[2?�계] Next.js 빌드'
         id: build_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
@@ -201,21 +201,21 @@ jobs:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
-      - name: '[2단계] Playwright E2E 테스트 (배포 전)'
+      - name: '[2?�계] Playwright E2E ?�스??(배포 ??'
         id: e2e_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
-      - name: '[2단계] Cloudflare Pages 배포'
+      - name: '[2?�계] Cloudflare Pages 배포'
         id: deploy_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          echo "out ?�일 ?? ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
+            echo "?�️ Cloudflare Pages ?�일 ???�한(20000) 초과�?배포�?건너?�니??"
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -228,7 +228,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: '[2단계] Cloudflare Cache Purge'
+      - name: '[2?�계] Cloudflare Cache Purge'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           PURGE_RESULT=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -236,25 +236,25 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$PURGE_RESULT"
-          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "✅ Cache purged" || echo "⚠️ Cache purge failed"
+          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "??Cache purged" || echo "?�️ Cache purge failed"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
-      - name: '[2단계] 변경사항 커밋 & 푸시 (블로그)'
+      - name: '[2?�계] 변경사??커밋 & ?�시 (블로�?'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/content/posts
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(2단계): 블로그 4건 생성 $(date +'%Y-%m-%d')"
+            git commit -m "?�동 ?�데?�트(2?�계): 블로�?4�??�성 $(date +'%Y-%m-%d')"
             git push
           else
-            echo "변경사항 없음"
+            echo "변경사???�음"
           fi
 
-      - name: '[2.5단계] 픽앤조이 초이스 자동 생성'
+      - name: '[2.5?�계] ?�앤조이 초이???�동 ?�성'
         id: generate_choice
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         continue-on-error: true
@@ -265,13 +265,13 @@ jobs:
           CHOICE_MIN_REVIEW_COUNT: '50'
           CHOICE_PRODUCT_HISTORY_DAYS: '7'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          CHOICE_GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          CHOICE_GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           CHOICE_GEMINI_TIMEOUT_MS: '120000'
           CHOICE_GEMINI_MAX_OUTPUT_TOKENS: '8192'
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
 
-      - name: '[2.5단계] 변경사항 커밋 & 푸시 (픽앤조이 초이스)'
+      - name: '[2.5?�계] 변경사??커밋 & ?�시 (?�앤조이 초이??'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         continue-on-error: true
         run: |
@@ -279,35 +279,35 @@ jobs:
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/content/life scripts/data/recommended-products.json
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(2.5단계): 초이스 1건 생성 $(date +'%Y-%m-%d')"
+            git commit -m "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 $(date +'%Y-%m-%d')"
             git push
           else
-            echo "변경사항 없음"
+            echo "변경사???�음"
           fi
 
-      - name: '[3단계] 일상의 즐거움 맛집 후보 점검/필요 시 재수집'
+      - name: '[3?�계] ?�상??즐거?� 맛집 ?�보 ?��?/?�요 ???�수�?
         id: collect_restaurants
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/ensure-life-restaurant-candidates.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
-          RESTAURANT_GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
+          RESTAURANT_GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
           PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
           PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
 
-      - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
+      - name: '[3?�계] ?�상??즐거?� 맛집 ?�스???�성'
         id: generate_restaurant_posts
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: 'gemini-2.5-flash-lite'
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
@@ -316,7 +316,7 @@ jobs:
           LIFE_RESTAURANT_POSTS_PER_RUN: '3'
           LIFE_RESTAURANT_POSTS_PER_BUCKET: '1'
 
-      - name: '[3단계] Next.js 빌드'
+      - name: '[3?�계] Next.js 빌드'
         id: build_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run build
@@ -324,21 +324,21 @@ jobs:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
-      - name: '[3단계] Playwright E2E 테스트 (배포 전)'
+      - name: '[3?�계] Playwright E2E ?�스??(배포 ??'
         id: e2e_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: npm run test:e2e
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
 
-      - name: '[3단계] Cloudflare Pages 배포'
+      - name: '[3?�계] Cloudflare Pages 배포'
         id: deploy_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          echo "out ?�일 ?? ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
+            echo "?�️ Cloudflare Pages ?�일 ???�한(20000) 초과�?배포�?건너?�니??"
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -351,7 +351,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: '[3단계] Cloudflare Cache Purge'
+      - name: '[3?�계] Cloudflare Cache Purge'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           PURGE_RESULT=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -359,25 +359,25 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$PURGE_RESULT"
-          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "✅ Cache purged" || echo "⚠️ Cache purge failed"
+          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "??Cache purged" || echo "?�️ Cache purge failed"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
-      - name: '[3단계] 변경사항 커밋 & 푸시 (일상의 즐거움)'
+      - name: '[3?�계] 변경사??커밋 & ?�시 (?�상??즐거?�)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/app/life/restaurant/data/restaurants.json src/content/life
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
+            git commit -m "?�동 ?�데?�트(3?�계): 맛집 3�??�성 $(date +'%Y-%m-%d')"
             git push
           else
-            echo "변경사항 없음"
+            echo "변경사???�음"
           fi
 
-      - name: '[리포트] 일일 실행 요약 생성 (full 모드)'
+      - name: '[리포?? ?�일 ?�행 ?�약 ?�성 (full 모드)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: node scripts/write-daily-report.mjs
         env:
@@ -449,30 +449,30 @@ jobs:
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_SHA: ${{ github.sha }}
 
-      - name: '[리포트] GitHub Actions Summary 출력 (full 모드)'
+      - name: '[리포?? GitHub Actions Summary 출력 (full 모드)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           REPORT_MD="runs/daily/${REPORT_DATE_KST}.md"
           if [ -f "$REPORT_MD" ]; then
             cat "$REPORT_MD" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "- 리포트 파일이 아직 생성되지 않았습니다." >> "$GITHUB_STEP_SUMMARY"
+            echo "- 리포???�일???�직 ?�성?��? ?�았?�니??" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      - name: '[리포트] 일일 실행 요약 커밋 & 푸시 (full 모드)'
+      - name: '[리포?? ?�일 ?�행 ?�약 커밋 & ?�시 (full 모드)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add runs/daily
           if ! git diff-index --quiet HEAD; then
-            git commit -m "자동 업데이트(리포트): 일일 실행 요약 $(date +'%Y-%m-%d')"
+            git commit -m "?�동 ?�데?�트(리포??: ?�일 ?�행 ?�약 $(date +'%Y-%m-%d')"
             git push
           else
-            echo "리포트 변경사항 없음"
+            echo "리포??변경사???�음"
           fi
 
-      - name: '[리포트] Telegram 알림 발송 (full 모드)'
+      - name: '[리포?? Telegram ?�림 발송 (full 모드)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: node scripts/notify-telegram.mjs
         env:
@@ -483,14 +483,14 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
 
-      - name: '[리포트] 최종 빌드 & 배포 (리포트 포함)'
+      - name: '[리포?? 최종 빌드 & 배포 (리포???�함)'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           npm run build
           FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          echo "out ?�일 ?? ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
+            echo "?�️ Cloudflare Pages ?�일 ???�한(20000) 초과�?배포�?건너?�니??"
             exit 0
           fi
           npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
@@ -499,7 +499,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: '[리포트] Cloudflare Cache Purge'
+      - name: '[리포?? Cloudflare Cache Purge'
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           PURGE_RESULT=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -507,12 +507,12 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$PURGE_RESULT"
-          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "✅ Cache purged" || echo "⚠️ Cache purge failed"
+          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "??Cache purged" || echo "?�️ Cache purge failed"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
 
-      - name: '[공통] Playwright 브라우저 설치 (deploy_only / push)'
+      - name: '[공통] Playwright 브라?��? ?�치 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: npx playwright install --with-deps chromium
 
@@ -523,7 +523,7 @@ jobs:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_ADSENSE_ID: 'ca-pub-5984189992308575'
 
-      - name: '[공통] Playwright E2E 테스트 (deploy_only / push)'
+      - name: '[공통] Playwright E2E ?�스??(deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: npm run test:e2e
         env:
@@ -533,9 +533,9 @@ jobs:
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: |
           FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          echo "out ?�일 ?? ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 제한(20000) 초과로 배포를 건너뜁니다."
+            echo "?�️ Cloudflare Pages ?�일 ???�한(20000) 초과�?배포�?건너?�니??"
             exit 0
           fi
           npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
@@ -551,7 +551,8 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
           echo "$PURGE_RESULT"
-          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "✅ Cache purged" || echo "⚠️ Cache purge failed"
+          echo "$PURGE_RESULT" | grep -q '"success":true' && echo "??Cache purged" || echo "?�️ Cache purge failed"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+

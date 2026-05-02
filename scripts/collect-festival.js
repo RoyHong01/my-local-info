@@ -2,14 +2,16 @@ const fs = require('fs/promises');
 const path = require('path');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TOUR_PHOTO_GALLERY_BASE = 'https://apis.data.go.kr/B551011/PhotoGalleryService1';
-const GEMINI_MODEL = 'gemini-2.5-flash-lite';
+const DEFAULT_GEMINI_MODEL = 'gemini-3.1-flash-lite-preview';
+const requestedGeminiModel = String(process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL).trim();
+const ALLOWED_GEMINI_MODELS = new Set([DEFAULT_GEMINI_MODEL, 'gemini-2.5-flash-lite']);
+const GEMINI_MODEL = requestedGeminiModel || DEFAULT_GEMINI_MODEL;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
-const requestedGeminiModel = process.env.GEMINI_MODEL || '';
 if (/\bpro\b/i.test(requestedGeminiModel)) {
-  throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다. gemini-2.5-flash-lite만 허용됩니다.');
+  throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다.');
 }
-if (requestedGeminiModel && requestedGeminiModel !== GEMINI_MODEL) {
-  console.warn(`GEMINI_MODEL 오버라이드(${requestedGeminiModel}) 무시: ${GEMINI_MODEL} 고정 사용`);
+if (!ALLOWED_GEMINI_MODELS.has(GEMINI_MODEL)) {
+  throw new Error(`허용되지 않은 GEMINI_MODEL: ${GEMINI_MODEL}. 허용값: ${Array.from(ALLOWED_GEMINI_MODELS).join(', ')}`);
 }
 
 // detailCommon2로 축제 상세 설명(overview) 가져오기

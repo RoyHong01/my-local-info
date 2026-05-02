@@ -8,7 +8,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const BLOG_MAX_GENERATION_SECONDS = Number(process.env.BLOG_MAX_GENERATION_SECONDS || 900);
 const BLOG_MAX_CANDIDATES_PER_CATEGORY = Number(process.env.BLOG_MAX_CANDIDATES_PER_CATEGORY || 8);
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite-preview';
 const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
 if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
   throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. 필요하면 ALLOW_GEMINI_PRO=true를 명시하세요.`);
@@ -94,7 +94,7 @@ function shareSameBaseImage(urlA, urlB) {
   return Boolean(a && b && a === b);
 }
 
-// 블로그 글 생성: 기본 모델은 비용 최적화를 위해 gemini-2.5-flash-lite
+// 블로그 글 생성: 기본 모델은 비용 최적화를 위해 gemini-3.1-flash-lite-preview
 async function callGemini(prompt) {
   if (budgetStopped) {
     throw new Error(`BLOG_BUDGET_STOP:${budgetStopReason || '일일 예산 상한 도달'}`);
