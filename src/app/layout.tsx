@@ -157,7 +157,8 @@ gtag('config', '${gaId}');`,
         <SiteHeader />
         <PageContentShell>{children}</PageContentShell>
         <SiteFooter />
-        <ChatBot items={chatItems} />
+        {/* ChatBot 임시 비활성화 - 추후 재활성화 시 아래 주석 해제 */}
+        {/* <ChatBot items={chatItems} /> */}
       </body>
     </html>
   );
