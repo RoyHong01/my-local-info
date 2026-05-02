@@ -331,15 +331,14 @@ export default function ChatBot({ items }: ChatBotProps) {
           <div className="border-t border-slate-200 bg-white p-3 sm:p-4">
             {mode === "ai" && (
               <div className="mb-3">
-                <p className="mb-1.5 text-xs font-medium text-slate-400">자주 묻는 질문</p>
-                <div className="flex gap-2 overflow-x-auto pb-1">
+                <div className="flex flex-col gap-1.5">
                 {quickQuestions.map((question) => (
                   <button
                     key={question}
                     type="button"
                     onClick={() => submitQuestion(question)}
                     disabled={isLoading}
-                    className="shrink-0 rounded-full bg-slate-100 px-3 py-1.5 text-xs text-slate-700 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-lg bg-slate-100 px-3 py-1.5 text-left text-xs text-slate-700 transition-colors hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {question}
                   </button>
@@ -366,17 +365,8 @@ export default function ChatBot({ items }: ChatBotProps) {
               </button>
             </div>
 
-            <div className="mt-3 flex justify-center">
-              {mode === "ai" ? (
-                <button
-                  type="button"
-                  onClick={handleConnectHuman}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  상담원 연결
-                </button>
-              ) : (
+            {mode === "human" && (
+              <div className="mt-3 flex justify-center">
                 <button
                   type="button"
                   onClick={handleBackToAi}
@@ -384,8 +374,8 @@ export default function ChatBot({ items }: ChatBotProps) {
                 >
                   AI 도우미로 돌아가기
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
