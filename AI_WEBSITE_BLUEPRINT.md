@@ -1276,6 +1276,65 @@ candidates.sort((a, b) => {
 });
 ```
 
+### G-2.5. AI 재가공 필드 비용 최적화: source_hash 비교 패턴
+
+**문제**: 매일 수집 시 모든 항목에 대해 AI(Claude/Gemini)를 호출하면 API 비용이 일 단위로 누적된다.
+
+**해결**: `source_hash`를 활용해 원본 데이터가 실제로 변경된 항목만 재생성한다.
+
+```javascript
+// 원본 데이터의 핵심 필드로 해시 생성
+function sourceHash(item) {
+  const key = JSON.stringify([
+    item['서비스명'] || item.title || '',
+    item['소관기관명'] || item.agency || '',
+    item['신청기한'] || item.endDate || '',
+  ]);
+  return require('crypto').createHash('md5').update(key).digest('hex');
+}
+
+// 수집 → 머지 시 AI 재가공 필드 보존 패턴
+const merged = [];
+for (const item of fetchedItems) {
+  const prev = existingByKey.get(item.id);  // 기존 데이터 (description_markdown 포함)
+
+  merged.push({
+    ...(prev || {}),    // ← 기존 데이터 전체를 먼저 펼침 (AI 재가공 필드 포함)
+    ...item,            // ← 새 API 응답으로 덮어씀 (원본 필드만 갱신됨)
+    collectedAt: todayStr,
+  });
+  // 결과: description_markdown 등 AI 생성 필드는 item에 없으므로 prev 값이 그대로 유지됨
+}
+
+// 재생성 필요 여부 판단 (Top N 대상 중 hash 변경된 것만)
+const targets = merged.filter((item) => {
+  if (!topNIds.has(item.id)) return false;          // Top N 밖은 생성 안 함
+  const hash = sourceHash(item);
+  return !(
+    item.description_markdown &&
+    item.description_markdown_source_hash === hash  // hash 같으면 스킵 (재가공 필요 없음)
+  );
+});
+
+// 생성 후 hash 저장
+const result = await callAI(item);
+item.description_markdown = result;
+item.description_markdown_source_hash = sourceHash(item);  // 다음 실행 시 비교용
+```
+
+**핵심 효과**:
+- 원본이 바뀌지 않는 한 AI 재호출 없음 → API 비용이 점진적으로 수렴
+- 한번 생성된 고품질 텍스트가 수천 일 유지됨 → 콘텐츠 안정성 확보
+- `source_hash`를 JSON 필드로 함께 저장하면 어떤 항목이 재생성 대상인지 즉시 파악 가능
+
+**Top N 제한과 조합**:
+```javascript
+// 전체 7,000건 중 Top 800만 생성 대상으로 제한 → 신규 항목도 점진적으로만 생성됨
+const topN = getTopItems(allItems, 800);
+const topNIds = new Set(topN.map(i => i.id));
+// → 매일 실제 AI 호출은 '변경된 Top N 항목'에만 발생 (통상 수십 건 이하)
+```
+
 ### G-3. 텔레그램 알림 메시지 구조
 
 ```javascript
