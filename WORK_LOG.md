@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-05-06 (축제 블로그 SEO 품질 강화: Phase 1+2 — 실용섹션 + 카카오맵 + 근처맛집)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+- **핵심 반영**:
+  - **Phase 1 — 실용 섹션 3개 강제 추가**: `festivalStyleOverride` 프롬프트에 [교통·주차], [방문 전 체크리스트], [현지 꿀팁] 섹션 지시문 추가
+  - **Phase 1 — 카카오맵 길찾기 링크 자동 삽입**: `buildFestivalKakaoMapLink()` 함수 추가. `mapx`/`mapy` 좌표 기반 딥링크 URL 생성. 좌표 없으면 주소 검색 fallback. `postProcessGeneratedMarkdown`에서 본문 끝에 자동 삽입(중복 방지)
+  - **Phase 2 — 카카오 로컬 API 근처 맛집 섹션**: `fetchNearbyRestaurants()` async 함수 추가 (반경 2km, FD6, 최대 5건). `buildNearbyRestaurantSection()` 마크다운 빌더 추가. `generatePost()` 내부에서 축제 카테고리 시 비동기 호출 후 `nearbyRestaurantsSection`을 context에 전달. `postProcessGeneratedMarkdown`에서 카카오맵 링크 앞에 자동 삽입
+  - `FESTIVAL_NEARBY_RESTAURANTS` 환경변수로 근처 맛집 기능 on/off 제어 가능
+- **빌드**: ✅ 성공
+- **커밋**: Phase 1+2 통합 단일 커밋
+
 ## 2026-05-02 (Gemini 3.1 Flash-Lite Preview 기본 전환 + 2.5 fallback 허용)
 
 - **수정 파일**:

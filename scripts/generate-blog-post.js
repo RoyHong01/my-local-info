@@ -26,6 +26,9 @@ const BLOG_ONLY_KEYWORD_MATCH = String(process.env.BLOG_ONLY_KEYWORD_MATCH || 'c
 const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const ALLOW_EXISTING_BLOG_POST_OVERWRITE = process.env.ALLOW_EXISTING_BLOG_POST_OVERWRITE === 'true';
 const SHORT_MODE = process.env.SHORT_MODE === 'true';
+const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
+// 축제 블로그에서 근처 맛집 섹션 자동 삽입 여부 (기본 활성화)
+const FESTIVAL_NEARBY_RESTAURANTS = process.env.FESTIVAL_NEARBY_RESTAURANTS !== 'false';
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -673,6 +676,86 @@ function enforceFestivalLeadDiversity(markdown, itemName) {
   return `${nextFrontmatter}\n\n${nextBody}`.trim();
 }
 
+/**
+ * 카카오 로컬 API로 근처 음식점을 검색합니다.
+ * @param {string} mapx - 경도
+ * @param {string} mapy - 위도
+ * @returns {Promise<Array>} 음식점 목록 (최대 5개)
+ */
+async function fetchNearbyRestaurants(mapx, mapy) {
+  if (!KAKAO_REST_API_KEY) return [];
+  const lngNum = parseFloat(mapx);
+  const latNum = parseFloat(mapy);
+  if (isNaN(lngNum) || isNaN(latNum) || lngNum <= 100 || latNum <= 30) return [];
+  try {
+    const url = `https://dapi.kakao.com/v2/local/search/category.json?category_group_code=FD6&x=${lngNum}&y=${latNum}&radius=2000&size=5&sort=accuracy`;
+    const res = await fetch(url, {
+      headers: { Authorization: `KakaoAK ${KAKAO_REST_API_KEY}` },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.documents || []).slice(0, 5);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * 근처 음식점 목록을 마크다운 섹션으로 변환합니다.
+ * @param {Array} restaurants - 카카오 로컬 API 응답 문서 배열
+ * @returns {string} 마크다운 섹션 문자열
+ */
+function buildNearbyRestaurantSection(restaurants) {
+  if (!restaurants || restaurants.length === 0) return '';
+  const lines = restaurants.map((r) => {
+    const name = r.place_name || '';
+    const category = (r.category_name || '').split('>').pop().trim();
+    const addr = r.road_address_name || r.address_name || '';
+    const dist = r.distance ? `${Math.round(Number(r.distance))}m` : '';
+    const mapLink = r.place_url || '';
+    const distStr = dist ? ` *(${dist})*` : '';
+    const catStr = category ? ` — ${category}` : '';
+    const linkStr = mapLink ? ` [📍](${mapLink})` : '';
+    return `- **${name}**${catStr}${distStr}${linkStr}  \n  ${addr}`;
+  });
+  return `\n\n---\n\n### 🍽️ 근처 맛집 추천 (반경 2km)\n\n${lines.join('\n')}`;
+}
+
+/**
+ * 카카오맵 길찾기 링크를 생성합니다 (API 호출 없음, 좌표 기반).
+ * @param {object} candidate - festival 항목 (title, mapx, mapy, addr1)
+ * @returns {string|null} 마크다운 섹션 문자열, 또는 null (데이터 없을 때)
+ */
+function buildFestivalKakaoMapLink(candidate) {
+  const title = (candidate.title || candidate.name || '').trim();
+  const mapx = (candidate.mapx || '').trim();
+  const mapy = (candidate.mapy || '').trim();
+  const addr1 = (candidate.addr1 || '').trim();
+  const tel = (candidate.tel || '').trim();
+
+  if (!title) return null;
+
+  let mapUrl = null;
+
+  // 1순위: 좌표 기반 (가장 정확)
+  const lngNum = parseFloat(mapx);
+  const latNum = parseFloat(mapy);
+  if (!isNaN(lngNum) && !isNaN(latNum) && lngNum > 100 && latNum > 30) {
+    const encodedTitle = encodeURIComponent(title);
+    mapUrl = `https://map.kakao.com/link/map/${encodedTitle},${latNum},${lngNum}`;
+  } else if (addr1) {
+    // 2순위: 주소 검색
+    mapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(addr1)}`;
+  }
+
+  if (!mapUrl) return null;
+
+  const telLine = tel ? `\n> 📞 현장 문의: **${tel}**` : '';
+
+  return `\n\n---\n\n### 📍 위치 확인 & 길찾기\n\n${addr1 ? `📌 **주소:** ${addr1}\n\n` : ''}[🗺️ 카카오맵으로 길찾기](${mapUrl})${telLine}`;
+}
+
 function normalizeNumberedInlineSections(content) {
   const lines = content.split('\n');
   const out = [];
@@ -1147,6 +1230,21 @@ function postProcessGeneratedMarkdown(markdown, context) {
   // 표 헤더만 남는 케이스/핵심 항목 누락 케이스를 방지하기 위해 source 데이터를 기준으로 표 서식만 보정
   normalizedBody = ensureOneGlanceInfoSection(normalizedBody, context.candidate || {}, context.category);
 
+  // 전국 축제·여행: 카카오맵 길찾기 링크 자동 삽입 (이미 링크가 있으면 생략)
+  if (context.category === '전국 축제·여행' && context.candidate) {
+    // 근처 맛집 섹션 삽입 (context.nearbyRestaurantsSection에 미리 채워져 있을 때)
+    if (context.nearbyRestaurantsSection && !/🍽️ 근처 맛집/.test(normalizedBody)) {
+      normalizedBody = normalizedBody.trimEnd() + context.nearbyRestaurantsSection;
+    }
+    const alreadyHasMapLink = /map\.kakao\.com/.test(normalizedBody);
+    if (!alreadyHasMapLink) {
+      const kakaoMapSection = buildFestivalKakaoMapLink(context.candidate);
+      if (kakaoMapSection) {
+        normalizedBody = normalizedBody.trimEnd() + kakaoMapSection;
+      }
+    }
+  }
+
   // 범위 표시 ~ 를 - 로 치환 (remarkGfm이 ~text~를 취소선으로 해석하는 문제 방지)
   // ~~취소선~~ 은 건드리지 않고, 단독 ~ 만 교체
   normalizedBody = normalizedBody
@@ -1344,6 +1442,38 @@ async function generatePost(candidate, postsDir) {
 - 상단 image 필드 URL과 동일한 이미지는 본문 중간에 절대 다시 쓰지 마.
 - 위치는 첫 번째 핵심 소제목(###) 설명이 끝난 뒤, 다음 소제목으로 넘어가기 직전이 가장 자연스럽게 보이도록 배치해.
 - TourAPI에 추가 이미지가 없으면 본문 중간 이미지는 생략해.
+
+■ 실용 정보 3섹션 (반드시 본문에 포함 - 단순 데이터 나열 탈피의 핵심):
+
+[1] 교통·주차 꿀팁 (반드시 포함):
+- 소제목 예: "### 🚗 가는 법 & 주차 꿀팁" (매번 조금씩 변형해도 좋아)
+- addr1 주소를 기반으로 주변 지하철역/버스 정류장 방향을 추정해서 자연스럽게 안내해줘
+  - 예: "가장 가까운 전철역은 ○○역인데, 2번 출구에서 도보로 약 10분 거리예요"
+  - 지하철이 없는 지역이면 "가까운 버스 터미널이나 기차역에서 택시 이용이 편리해요"로 대체해도 돼
+- 자가용 방문 시 주차 꿀팁 필수 포함:
+  - 현장 주차장이 혼잡하거나 유료일 가능성, 일찍 도착 권장
+  - 주말·공휴일에는 대중교통이나 셔틀버스 이용 추천
+  - tel이 있으면: "자세한 주차 정보는 {tel}로 미리 확인해보세요" 형태로 멘트 추가
+
+[2] 방문 전 체크리스트 (반드시 포함):
+- 소제목 예: "### ✅ 방문 전 이것만 챙겨요" (변형 가능)
+- 이모지 리스트 형식으로 3~5가지 항목 작성
+- 예시 항목(축제 성격에 맞게 조합):
+  - 👟 운동화·편한 신발 필수 (야외 행사 기준)
+  - 💳 카드 결제 대부분 가능 / 소액 현금도 챙기면 좋아요
+  - 🌂 날씨 변화 대비 얇은 겉옷 또는 우산 챙기기
+  - 🧴 야외 축제라면 자외선 차단제 필수
+  - 📸 사진 잘 나오는 시간대: 오전 10시 이전이 인파가 적어요
+  - 🐕 반려동물 동반 가능 여부는 주최측 확인 (기본 불가 지역이 많아요)
+  - 📱 입장권 또는 신청 확인 화면 미리 캡처해두기
+
+[3] 현지 꿀팁 (반드시 포함):
+- 소제목 예: "### 💡 알아두면 더 즐거운 꿀팁" (변형 가능)
+- 방문 최적 시간대, 붐비는 시간대 회피법, 인생샷 포인트, 놓치기 쉬운 체험 등 실용 조언
+- 2~3개 항목으로 구성
+- 단순 정보 나열 말고, "실제로 가본 사람"이 알려주는 느낌으로 써줘
+  - 예: "오전 10시 이후엔 주차장이 꽉 차는 경우가 많아서, 9시 전에 도착하면 자리도 여유롭고 사람도 없어요."
+  - 예: "행사장 입구에서 제일 먼저 프로그램 일정표부터 받아두세요. 시간대별로 공연이 달라서요."
 ` : '';
 
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
@@ -1563,12 +1693,27 @@ ${festivalStyleOverride}
   }
 
   // 생성 후 자동 후처리(구조 보정 + 감성 품질 점검)
+  // 전국 축제·여행: 카카오 로컬 API로 근처 맛집 수집 (비동기, 실패 시 graceful 생략)
+  let nearbyRestaurantsSection = '';
+  if (candidate._category === '전국 축제·여행' && FESTIVAL_NEARBY_RESTAURANTS) {
+    try {
+      const nearbyList = await fetchNearbyRestaurants(candidate.mapx || '', candidate.mapy || '');
+      if (nearbyList.length > 0) {
+        nearbyRestaurantsSection = buildNearbyRestaurantSection(nearbyList);
+        console.log(`  🍽️ 근처 맛집 ${nearbyList.length}건 수집 완료`);
+      }
+    } catch {
+      // 맛집 수집 실패는 무시하고 계속 진행
+    }
+  }
+
   const postProcessed = postProcessGeneratedMarkdown(finalContent, {
     itemName,
     category: candidate._category,
     imageUrl,
     midImageUrl,
     candidate,
+    nearbyRestaurantsSection,
   });
   finalContent = postProcessed.content;
   if (candidate._category === '전국 축제·여행') {
