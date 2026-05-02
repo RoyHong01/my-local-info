@@ -33,7 +33,7 @@ function readMarkdownDir(dirPath) {
   }
 }
 
-function truncate(str, len = 120) {
+function truncate(str, len = 200) {
   if (!str) return '';
   const cleaned = str.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
   return cleaned.length > len ? cleaned.slice(0, len) + '…' : cleaned;
@@ -49,10 +49,11 @@ function buildIndex() {
     index.push({
       id: `incheon-${item.id || item['서비스ID']}`,
       title: item.name || item['서비스명'] || '',
-      summary: truncate(item.summary || item['서비스목적요약'] || ''),
+      summary: truncate(item.summary || item['서비스목적요약'] || item.description || ''),
       category: '인천시 정보',
       href: `/incheon/${encodeURIComponent(item.id || item['서비스ID'])}/`,
       tags: [item.category || '', item.location || item['소관기관명'] || ''].filter(Boolean),
+      sourceUrl: item['상세조회URL'] || null,
     });
   }
 
@@ -63,10 +64,11 @@ function buildIndex() {
     index.push({
       id: `subsidy-${item.id || item['서비스ID']}`,
       title: item.name || item['서비스명'] || '',
-      summary: truncate(item.summary || item['서비스목적요약'] || ''),
+      summary: truncate(item.summary || item['서비스목적요약'] || item.description || ''),
       category: '전국 보조금·복지',
       href: `/subsidy/${encodeURIComponent(item.id || item['서비스ID'])}/`,
       tags: [item.category || '', item.target || item['지원대상'] || ''].filter(Boolean),
+      sourceUrl: item['상세조회URL'] || null,
     });
   }
 
@@ -77,10 +79,11 @@ function buildIndex() {
     index.push({
       id: `festival-${item.contentid || item.id}`,
       title: item.title || item.name || '',
-      summary: truncate(item.overview || item.summary || ''),
+      summary: truncate(item.overview || item.summary || item.description || ''),
       category: '전국 축제·여행',
       href: `/festival/${encodeURIComponent(item.contentid || item.id)}/`,
       tags: [item.addr1 || ''].filter(Boolean),
+      sourceUrl: item.homepage || (item.contentid ? `https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=${item.contentid}` : null),
     });
   }
 

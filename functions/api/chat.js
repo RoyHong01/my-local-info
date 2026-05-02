@@ -86,15 +86,22 @@ export async function onRequestPost(context) {
 
     const hasData = topItems.length > 0;
     const blogDataBlock = hasData
-      ? topItems.map((it, i) => `${i + 1}. ${it.title}\n   ${it.summary || ""}`).join("\n\n")
+      ? topItems.map((it, i) => {
+          const ourUrl = `https://pick-n-joy.com${it.href || ''}`;
+          const urlLine = it.sourceUrl
+            ? `   픽앤조이 페이지: ${ourUrl}\n   공식 정보: ${it.sourceUrl}`
+            : `   픽앤조이 페이지: ${ourUrl}`;
+          return `${i + 1}. [${it.category}] ${it.title}\n   ${it.summary || ""}\n${urlLine}`;
+        }).join("\n\n")
       : "";
 
     const systemPrompt = hasData
       ? `당신은 픽앤조이(pick-n-joy.com)의 AI 도우미입니다.
-반드시 한국어로만 답하세요. 2~3문장으로 간결하게 답하세요.
-마크다운 기호(**, *, #, -)는 절대 사용하지 마세요. 순수 텍스트로만 답하세요.
-아래 픽앤조이 데이터를 우선 참고하여 사용자 질문에 답하세요.
+    반드시 한국어로만 답하세요. 3~5문장으로 핵심 정보를 전달하세요.
+    마크다운 기호(**, *, #, -)는 절대 사용하지 마세요. 순수 텍스트로만 답하세요.
+    아래 픽앤조이 데이터를 우선 참고하여 사용자 질문에 답하세요. 답변 마지막에 관련 페이지 주소를 안내해 주세요.
 
+[픽앤조이 데이터]
 [픽앤조이 데이터]
 ${blogDataBlock}`
       : `당신은 픽앤조이(pick-n-joy.com)의 AI 도우미입니다.
@@ -105,7 +112,7 @@ ${blogDataBlock}`
 만약 답을 알 수 없다면 "질문에 해당하는 답을 찾을 수 없습니다."라고만 말하세요.`;
 
     const result = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
-      max_tokens: 150,
+      max_tokens: 400,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userMessage },
@@ -125,13 +132,15 @@ ${blogDataBlock}`
       headers: { "Content-Type": "application/json; charset=utf-8" },
     });
   } catch (error) {
+    const errMsg = error instanceof Error ? error.message.toLowerCase() : "";
+    const isRateLimit = errMsg.includes("rate limit") || errMsg.includes("quota") || errMsg.includes("exceeded") || errMsg.includes("too many");
+    const answer = isRateLimit
+      ? "현재 AI 응답 한도에 도달했습니다. 잠시 후 다시 질문해 주세요."
+      : "죄송합니다. AI 서비스에 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
     return new Response(
-      JSON.stringify({
-        error: "failed to generate answer",
-        detail: error instanceof Error ? error.message : "unknown error",
-      }),
+      JSON.stringify({ answer }),
       {
-        status: 500,
+        status: 200,
         headers: { "Content-Type": "application/json; charset=utf-8" },
       }
     );
