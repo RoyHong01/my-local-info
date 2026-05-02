@@ -1,0 +1,257 @@
+{
+  "reportDateKst": "2026-05-03",
+  "generatedAtUtc": "2026-05-02T20:19:27.402Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25260332878",
+    "runNumber": 713,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25260332878",
+    "runStartedAtUtc": "2026-05-02T19:47:32Z",
+    "headSha": "a94c2a8adfe9b9f4b653fe129e03f2e7d4927b55"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0f5b0500.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 0건, 총 607건",
+        "festival": "신규 0건, 업데이트 222건, 총 222건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://eefd99e8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://c6445a7f.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "b84016d87992795434ba63590e2e712dd8ae00f9",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-02",
+      "authoredAt": "2026-05-02T20:19:26Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-05-03-incheon-restaurant-392099146.md",
+        "src/content/life/2026-05-03-seongsu-restaurant-12447534.md",
+        "src/content/life/2026-05-03-suwon-restaurant-69459537.md"
+      ]
+    },
+    {
+      "sha": "cc3d30f8ec1014aef88273ab33eef82bd25369d8",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-02",
+      "authoredAt": "2026-05-02T19:55:56Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md"
+      ]
+    },
+    {
+      "sha": "52cc08891d7ea893288d475bc90b8713090f21d3",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-02",
+      "authoredAt": "2026-05-02T19:55:47Z",
+      "files": [
+        "src/content/posts/2026-05-02-GangneungDanoje.md",
+        "src/content/posts/2026-05-02-incheon-disability-education.md",
+        "src/content/posts/2026-05-02-seoul-youth-allowance.md",
+        "src/content/posts/2026-05-02-strawberry-bee-support.md",
+        "src/content/posts/2026-05-03-curation-인천-살면서-이것만큼은-알아야-해요-5월-편.md"
+      ]
+    },
+    {
+      "sha": "e9689c26ae6c5a431d43978c323281b79b664d61",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-02",
+      "authoredAt": "2026-05-02T19:48:51Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-02-GangneungDanoje.md",
+      "src/content/posts/2026-05-02-incheon-disability-education.md",
+      "src/content/posts/2026-05-02-seoul-youth-allowance.md",
+      "src/content/posts/2026-05-02-strawberry-bee-support.md",
+      "src/content/posts/2026-05-03-curation-인천-살면서-이것만큼은-알아야-해요-5월-편.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md",
+      "src/content/life/2026-05-03-incheon-restaurant-392099146.md",
+      "src/content/life/2026-05-03-seongsu-restaurant-12447534.md",
+      "src/content/life/2026-05-03-suwon-restaurant-69459537.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-03-incheon-restaurant-392099146.md",
+      "src/content/life/2026-05-03-seongsu-restaurant-12447534.md",
+      "src/content/life/2026-05-03-suwon-restaurant-69459537.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md",
+      "src/content/life/2026-05-03-incheon-restaurant-392099146.md",
+      "src/content/life/2026-05-03-seongsu-restaurant-12447534.md",
+      "src/content/life/2026-05-03-suwon-restaurant-69459537.md",
+      "src/content/posts/2026-05-02-GangneungDanoje.md",
+      "src/content/posts/2026-05-02-incheon-disability-education.md",
+      "src/content/posts/2026-05-02-seoul-youth-allowance.md",
+      "src/content/posts/2026-05-02-strawberry-bee-support.md",
+      "src/content/posts/2026-05-03-curation-인천-살면서-이것만큼은-알아야-해요-5월-편.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.54,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "1392/1108",
+      "markdown": {
+        "generated": 2,
+        "pending": 223,
+        "titles": [
+          "소상공인전용 노란우산공제 가입장려금 지원",
+          "장애인 하이패스 감면 단말기 무상 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 607건",
+      "validation": "ok",
+      "anthropicUsage": "4684/3184",
+      "markdown": {
+        "generated": 5,
+        "pending": 523,
+        "titles": [
+          "기장군 신입생 교복구입비 지원",
+          "인구감소지역 결혼지원금",
+          "청년 취업준비 비용 지원사업",
+          "교복구입비 지원",
+          "동구 학교 밖 청소년 검정고시 합격축하금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 222건, 총 222건",
+      "validation": "ok",
+      "anthropicUsage": "2056/947",
+      "markdown": {
+        "generated": 2,
+        "pending": 171,
+        "titles": [
+          "여수거북선축제",
+          "종묘대제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
