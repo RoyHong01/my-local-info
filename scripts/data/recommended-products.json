@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-04-25T00:00:00+09:00",
+  "updatedAtKst": "2026-05-03T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1062,6 +1062,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-04-25",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-03",
+      "productId": "9265234427",
+      "productName": "접착식 이동바퀴 무타공 가구 이동 수납함 정리함 슬라이더 바퀴",
+      "brand": "접착식",
+      "productGroupTokens": [
+        "이동바퀴",
+        "무타공",
+        "가구",
+        "이동",
+        "수납함",
+        "정리함"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-03",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-03",
+      "productId": "9188443405",
+      "productName": "COUCAMP 대용량 서랍장 수납장 다용도 수납장 이동식 심플 인테리어 가구, 화이트, 5단",
+      "brand": "COUCAMP",
+      "productGroupTokens": [
+        "서랍장",
+        "수납장",
+        "다용도",
+        "이동식",
+        "심플",
+        "인테리어"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-03",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-03",
+      "productId": "8159267499",
+      "productName": "이어폰 청소 키트 에어팟 청소 갤럭시버즈 클리너 소형 가전 청소",
+      "brand": "이어폰",
+      "productGroupTokens": [
+        "청소",
+        "키트",
+        "에어팟",
+        "갤럭시버즈",
+        "클리너",
+        "소형"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-03-choice-home-appliance-furniture-2026-05-03.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-03",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
