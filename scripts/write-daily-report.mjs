@@ -579,6 +579,10 @@ async function main() {
       cacheMiss: Number(process.env.RESTAURANT_CACHE_MISS || 0),
       googleCalled: Number(process.env.RESTAURANT_GOOGLE_CALLED || 0),
     },
+    failureReasons: {
+      generateChoice: process.env.GENERATE_CHOICE_FAILURE_REASON || '',
+      collectRestaurants: process.env.COLLECT_RESTAURANTS_FAILURE_REASON || '',
+    },
     dataValidation: {
       incheon: {
         summary: process.env.COLLECT_INCHEON_SUMMARY || '',

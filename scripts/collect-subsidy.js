@@ -57,6 +57,57 @@ function extractEndDateFromSubsidyItem(item) {
   return dates[dates.length - 1];
 }
 
+function getTopSubsidyVisible(items, limit = 800) {
+  if (!Array.isArray(items)) return [];
+
+  const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const active = items.filter((item) => !item.expired);
+  const hasDeadline = [];
+  const noDeadline = [];
+
+  for (const item of active) {
+    const deadline = String(item['신청기한'] || '').trim();
+    if (
+      deadline &&
+      !deadline.includes('신청불필요') &&
+      !deadline.includes('상시신청') &&
+      !deadline.includes('모집시기별 상이') &&
+      deadline.match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)
+    ) {
+      hasDeadline.push(item);
+    } else {
+      noDeadline.push(item);
+    }
+  }
+
+  hasDeadline.sort((a, b) => {
+    const deadlineA = String(a['신청기한'] || '').match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)?.[0] || '';
+    const deadlineB = String(b['신청기한'] || '').match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)?.[0] || '';
+    const normA = deadlineA.replace(/[.\/-]/g, '');
+    const normB = deadlineB.replace(/[.\/-]/g, '');
+
+    if (normA === normB) return 0;
+    if (normA < today) return 1;
+    if (normB < today) return -1;
+    return normA.localeCompare(normB);
+  });
+
+  noDeadline.sort((a, b) => {
+    const scoreA = (Number(b['조회수'] || 0) * 1000) +
+      (b['등록일시'] ? parseInt(String(b['등록일시']).substring(0, 8), 10) : 0);
+    const scoreB = (Number(a['조회수'] || 0) * 1000) +
+      (a['등록일시'] ? parseInt(String(a['등록일시']).substring(0, 8), 10) : 0);
+    return scoreA - scoreB;
+  });
+
+  const deadlineTopN = Math.floor(limit * 0.4);
+  const noDeadlineTopN = limit - deadlineTopN;
+  return [
+    ...hasDeadline.slice(0, deadlineTopN),
+    ...noDeadline.slice(0, noDeadlineTopN),
+  ];
+}
+
 async function fetchSubsidyPages(apiKey, { perPage = 100, maxPages = 80 } = {}) {
   const all = [];
   let totalCount = 0;
@@ -227,6 +278,9 @@ async function run() {
     });
   }
 
+  const topVisible = getTopSubsidyVisible(merged, 800);
+  const topVisibleIds = new Set(topVisible.map((item) => String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '')));
+
   let markdownGenerated = 0;
   let markdownGeneratedTitles = [];
   let markdownAttempted = 0;
@@ -238,6 +292,8 @@ async function run() {
     console.log('GEMINI_API_KEY 없음: description_markdown 생성 건너뜀');
   } else {
     const markdownTargets = merged.filter((item) => {
+      const id = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
+      if (!topVisibleIds.has(id)) return false;
       const hash = sourceHash(item);
       return !(item.description_markdown && item.description_markdown_source_hash === hash);
     });
@@ -318,7 +374,7 @@ async function run() {
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItemsCount}건 추가, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건, 윈도우 ${SUBSIDY_WINDOW_MONTHS}개월)`);
+  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItemsCount}건 추가, markdown ${markdownGenerated}건 생성 (노출 ${topVisible.length}건 / 원천 ${merged.length}건, 윈도우 ${SUBSIDY_WINDOW_MONTHS}개월)`);
   if (markdownGenerated > 0) {
     console.log(`  Gemini usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
@@ -329,7 +385,7 @@ async function run() {
   // GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
     const { appendFileSync } = require('fs');
-    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${merged.length}건\n`);
+    appendFileSync(process.env.GITHUB_OUTPUT, `collect_summary=신규 ${newItemsCount}건, 총 ${topVisible.length}건\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `gemini_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `anthropic_usage=${inputTokens}/${outputTokens}\n`);
     appendFileSync(process.env.GITHUB_OUTPUT, `markdown_generated=${markdownGenerated}\n`);

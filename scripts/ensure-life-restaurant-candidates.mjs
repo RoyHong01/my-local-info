@@ -109,6 +109,11 @@ function appendGithubOutput(name, value) {
   }
 }
 
+function trimFailureReason(error) {
+  const message = String(error?.message || error || '').trim();
+  return message.length > 500 ? `${message.slice(0, 500)}...` : message;
+}
+
 function emitMetrics(snapshot, recollectPerformed) {
   const metrics = snapshot?.metrics || {};
   const cacheHit = recollectPerformed ? Number(metrics.cache_hit || 0) : 0;
@@ -155,6 +160,7 @@ async function main() {
 }
 
 main().catch((error) => {
+  appendGithubOutput('failure_reason', trimFailureReason(error));
   console.error('❌ 맛집 후보 점검 실패', error);
   process.exit(1);
 });

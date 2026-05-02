@@ -415,6 +415,7 @@ jobs:
           DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
           GENERATE_BLOG_OUTCOME: ${{ steps.generate_blog.outcome }}
           GENERATE_CHOICE_OUTCOME: ${{ steps.generate_choice.outcome }}
+          GENERATE_CHOICE_FAILURE_REASON: ${{ steps.generate_choice.outputs.failure_reason }}
           CHOICE_RELAXED_FALLBACK_APPLIED_COUNT: ${{ steps.generate_choice.outputs.relaxed_fallback_applied_count }}
           CHOICE_APPLIED_MIN_RATING: ${{ steps.generate_choice.outputs.applied_min_rating }}
           CHOICE_MIN_RATING: '4.5'
@@ -430,6 +431,7 @@ jobs:
           DEPLOY_STAGE2_OUTCOME: ${{ steps.deploy_stage2.outcome }}
           DEPLOY_STAGE2_URL: ${{ steps.deploy_stage2.outputs.deploy_url }}
           COLLECT_RESTAURANTS_OUTCOME: ${{ steps.collect_restaurants.outcome }}
+          COLLECT_RESTAURANTS_FAILURE_REASON: ${{ steps.collect_restaurants.outputs.failure_reason }}
           RESTAURANT_RECOLLECT_PERFORMED: ${{ steps.collect_restaurants.outputs.recollect_performed }}
           RESTAURANT_CACHE_HIT: ${{ steps.collect_restaurants.outputs.cache_hit }}
           RESTAURANT_CACHE_MISS: ${{ steps.collect_restaurants.outputs.cache_miss }}

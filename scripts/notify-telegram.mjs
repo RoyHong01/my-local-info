@@ -46,6 +46,10 @@ function normalizeBlogCategory(categoryRaw, filePath) {
   const lowerCategory = category.toLowerCase();
   const lowerPath = String(filePath || '').toLowerCase();
 
+  if (category.includes('큐레이션') || lowerCategory.includes('curation') || lowerPath.includes('-curation-')) {
+    return 'curation';
+  }
+
   if (category.includes('인천') || lowerCategory.includes('incheon') || lowerPath.includes('incheon')) {
     return 'incheon';
   }
@@ -143,6 +147,7 @@ async function buildMessage(report) {
   const incheonBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'incheon').map((meta) => meta.title).filter(Boolean);
   const subsidyBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'subsidy').map((meta) => meta.title).filter(Boolean);
   const festivalBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'festival').map((meta) => meta.title).filter(Boolean);
+  const curationBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
   const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
   let budgetLine = '';
@@ -167,16 +172,9 @@ async function buildMessage(report) {
     : '';
 
   // 수집 건수 상세
-  let subsidyActiveCount = 0;
-  try {
-    const subsidyAll = JSON.parse(await readFile(join(process.cwd(), 'public/data/subsidy.json'), 'utf8'));
-    subsidyActiveCount = Array.isArray(subsidyAll) ? subsidyAll.filter((item) => !item.expired).length : 0;
-  } catch { /* ignore */ }
-
   const summaryParts = [];
   if (collectSummary.incheon) summaryParts.push(`인천: ${collectSummary.incheon}`);
-  const subsidyDisplay = subsidyActiveCount > 0 ? `${subsidyActiveCount}건(활성)` : collectSummary.subsidy;
-  if (subsidyDisplay) summaryParts.push(`보조금: ${subsidyDisplay}`);
+  if (collectSummary.subsidy) summaryParts.push(`보조금: ${collectSummary.subsidy}`);
   if (collectSummary.festival) summaryParts.push(`축제: ${collectSummary.festival}`);
   const collectDetailLine = summaryParts.length > 0
     ? `📋 수집 결과: ${summaryParts.join(' | ')}`
@@ -218,7 +216,7 @@ async function buildMessage(report) {
     incheonPhotoLine,
     incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,
-    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
+    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건${curationBlogTitles.length > 0 ? ` | 큐레이션 ${curationBlogTitles.length}건` : ''}${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
     `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
@@ -247,6 +245,12 @@ async function buildMessage(report) {
     festivalBlogTitles.forEach((title) => lines.push(`  • ${title}`));
   }
 
+  if (curationBlogTitles.length > 0) {
+    lines.push('');
+    lines.push('*큐레이션 블로그:*');
+    curationBlogTitles.forEach((title) => lines.push(`  • ${title}`));
+  }
+
   if (choiceTitles.filter(Boolean).length > 0) {
     lines.push('');
     lines.push('*생성된 초이스 제목:*');
@@ -262,6 +266,14 @@ async function buildMessage(report) {
   lines.push('');
   if (hasFailed && failedStages) {
     lines.push(`*실패 단계:*\n${failedStages}`);
+    const choiceFailReason = String(report.failureReasons?.generateChoice || '').trim();
+    const restaurantFailReason = String(report.failureReasons?.collectRestaurants || '').trim();
+    if (choiceFailReason) {
+      lines.push(`  - generateChoice 원인: ${choiceFailReason}`);
+    }
+    if (restaurantFailReason) {
+      lines.push(`  - collectRestaurants 원인: ${restaurantFailReason}`);
+    }
     lines.push('');
   }
 

@@ -888,7 +888,7 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
   return map;
 }
 
-async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCacheClient) {
+async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCacheClient, naverClientId, naverClientSecret) {
   const queries = REGION_QUERY_MAP[region];
   const results = [];
   for (const meta of queries) {
@@ -1031,7 +1031,15 @@ async function run() {
   const regions = {};
   let totalCacheMetrics = { cacheHit: 0, cacheMiss: 0, googleCalled: 0 };
   for (const regionKey of Object.keys(REGION_QUERY_MAP)) {
-    const { items, cacheMetrics } = await collectRegion(regionKey, kakaoKey, geminiKey, googleKey, supabaseCacheClient);
+    const { items, cacheMetrics } = await collectRegion(
+      regionKey,
+      kakaoKey,
+      geminiKey,
+      googleKey,
+      supabaseCacheClient,
+      naverClientId,
+      naverClientSecret,
+    );
     regions[regionKey] = items;
     totalCacheMetrics = mergeCacheMetrics(totalCacheMetrics, cacheMetrics);
 

@@ -1,3 +1,4 @@
+const fsSync = require('fs');
 const fs = require('fs/promises');
 const path = require('path');
 const os = require('os');
@@ -16,6 +17,24 @@ const BACKUP_THEME_KEYWORDS = {
   'beauty-fashion': ['beauty', 'skin care', 'hair care', 'fashion accessories'],
   'home-appliance-furniture': ['home appliance', 'furniture', 'interior lighting', 'home living'],
 };
+
+function appendGithubOutput(name, value) {
+  const outputPath = String(process.env.GITHUB_OUTPUT || '').trim();
+  if (!outputPath) return;
+  try {
+    fsSync.appendFileSync(outputPath, `${name}=${String(value ?? '').replace(/\r?\n/g, ' ')}\n`, 'utf-8');
+  } catch {
+    // ignore output write failure
+  }
+}
+
+function extractErrorDetail(error) {
+  const stdout = String(error?.stdout || '').trim();
+  const stderr = String(error?.stderr || '').trim();
+  const message = String(error?.message || '').trim();
+  const detail = stderr || stdout || message || 'unknown error';
+  return detail.length > 500 ? `${detail.slice(0, 500)}...` : detail;
+}
 
 function getTodayKstDate() {
   const now = new Date();
@@ -151,6 +170,7 @@ async function run() {
 
   try {
     await runChoiceGenerator(payload, 'primary');
+    appendGithubOutput('failure_reason', '');
     return;
   } catch (primaryError) {
     const themeKey = String(themeInfo.theme?.key || '').trim();
@@ -168,12 +188,21 @@ async function run() {
       ...payload,
       fallbackKeywordHint: mergedFallbacks,
     };
-
-    await runChoiceGenerator(retryPayload, 'retry');
+    try {
+      await runChoiceGenerator(retryPayload, 'retry');
+      appendGithubOutput('failure_reason', '');
+      return;
+    } catch (retryError) {
+      const detail = extractErrorDetail(retryError);
+      appendGithubOutput('failure_reason', detail);
+      throw retryError;
+    }
   }
 }
 
 run().catch((error) => {
-  console.error(`❌ 자동 초이스 생성 실패: ${error.message}`);
+  const detail = extractErrorDetail(error);
+  appendGithubOutput('failure_reason', detail);
+  console.error(`❌ 자동 초이스 생성 실패: ${detail}`);
   process.exit(1);
 });
