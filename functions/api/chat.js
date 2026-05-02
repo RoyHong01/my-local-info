@@ -34,8 +34,46 @@ function tokenize(text) {
     .filter((t) => t && t.length >= 2);
 }
 
+function normalizeKoreanToken(token) {
+  if (!token) return "";
+  // 조사/어미를 단순 제거해 "보조금이" 같은 형태도 핵심어로 매칭되게 합니다.
+  return String(token)
+    .toLowerCase()
+    .replace(/(으로|에서|에게|까지|부터|처럼|보다|마다|라도|이나|나|도|만|의|에|와|과|은|는|이|가|을|를|로|랑|께|한테|인데|이며|이고)$/u, "")
+    .trim();
+}
+
+function buildQueryTokens(query) {
+  const rawTokens = tokenize(query);
+  const tokenSet = new Set();
+  for (const tok of rawTokens) {
+    tokenSet.add(tok);
+    const normalized = normalizeKoreanToken(tok);
+    if (normalized && normalized.length >= 2) {
+      tokenSet.add(normalized);
+    }
+  }
+  return Array.from(tokenSet);
+}
+
+function detectPreferredCategories(query) {
+  const q = String(query || "").toLowerCase();
+  const categories = [];
+  if (/(보조금|복지|지원금|지원사업|정부지원|혜택)/.test(q)) {
+    categories.push("전국 보조금·복지");
+  }
+  if (/(축제|행사|여행|가볼만|공연|전시)/.test(q)) {
+    categories.push("전국 축제·여행");
+  }
+  if (/(인천|부평|송도|미추홀|계양|연수|남동|중구|동구|서구|강화|옹진)/.test(q)) {
+    categories.push("인천시 정보");
+  }
+  return categories;
+}
+
 function searchTopK(index, query, k = 3) {
-  const tokens = Array.from(new Set(tokenize(query)));
+  const tokens = buildQueryTokens(query);
+  const preferredCategories = detectPreferredCategories(query);
   if (!tokens.length || !Array.isArray(index)) return [];
 
   const scored = [];
@@ -53,10 +91,23 @@ function searchTopK(index, query, k = 3) {
       if (item.title && item.title.toLowerCase().includes(tok)) score += 3;
       if (searchText.includes(tok)) score += 1;
     }
+
+    if (preferredCategories.length && preferredCategories.includes(item.category)) {
+      score += 8;
+    }
+
     if (score > 0) scored.push({ item, score });
   }
 
   scored.sort((a, b) => b.score - a.score);
+
+  if (preferredCategories.length) {
+    const preferredOnly = scored.filter((s) => preferredCategories.includes(s.item.category));
+    if (preferredOnly.length) {
+      return preferredOnly.slice(0, k).map((s) => s.item);
+    }
+  }
+
   return scored.slice(0, k).map((s) => s.item);
 }
 
@@ -101,7 +152,6 @@ export async function onRequestPost(context) {
     마크다운 기호(**, *, #, -)는 절대 사용하지 마세요. 순수 텍스트로만 답하세요.
     아래 픽앤조이 데이터를 우선 참고하여 사용자 질문에 답하세요. 답변 마지막에 관련 페이지 주소를 안내해 주세요.
 
-[픽앤조이 데이터]
 [픽앤조이 데이터]
 ${blogDataBlock}`
       : `당신은 픽앤조이(pick-n-joy.com)의 AI 도우미입니다.
