@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-05-06 (축제 블로그 SEO 품질 강화: Phase 3 — 같은 지역 다른 축제 내부 링크)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+- **핵심 반영**:
+  - **Phase 3 — 관련 축제 내부 링크 자동 삽입**: `buildRelatedFestivalsSection(candidate, allFestivals, festivalSlugMap)` 함수 추가
+  - `getExistingPosts()`에서 `전국 축제·여행` 카테고리 포스트의 `source_id → { slug, title }` 맵(`festivalSlugMap`) 수집 후 반환값에 추가
+  - 매인 루프에서 축제 카테고리 처리 시 `_allFestivals`, `_festivalSlugMap`을 candidate에 주입
+  - `generatePost()`에서 `relatedFestivalsSection` 계산 후 postProcess context로 전달
+  - `postProcessGeneratedMarkdown`에서 관련 축제 → 근처 맛집 → 카카오맵 링크 순서로 삽입
+  - 같은 지역(`lDongRegnCd` 기준, `areacode` fallback) + 만료·종료 제외 + 기존 포스트 보유 항목 최대 3건
+  - 링크 형식: `- [축제명](/blog/slug) (YYYY.MM.DD~)`
+- **빌드**: ✅ 성공
+- **커밋**: Phase 3 단일 커밋
+
 ## 2026-05-06 (축제 블로그 SEO 품질 강화: Phase 1+2 — 실용섹션 + 카카오맵 + 근처맛집)
 
 - **수정 파일**:

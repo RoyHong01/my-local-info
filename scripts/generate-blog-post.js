@@ -494,6 +494,8 @@ async function hasRecentSeoulSubsidyPost(postsDir, withinDays = 7) {
 async function getExistingPosts(postsDir) {
   // source_id가 있는 파일: ID로 정확 매칭
   const serviceIds = new Set();
+  // 전국 축제·여행: source_id → { slug, title } 맵 (관련 축제 내부 링크용)
+  const festivalSlugMap = new Map();
   // source_id가 없는 파일: 파일명 키워드로 부분 매칭
   const filenameKeywords = [];
   // 기존 포스트 제목 키워드
@@ -530,7 +532,14 @@ async function getExistingPosts(postsDir) {
       // source_id 추출 — 따옴표 제거 후 저장
       const idMatch = content.match(/^source_id:\s*(.+)\s*$/m);
       if (idMatch) {
-        serviceIds.add(idMatch[1].trim().replace(/^["']|["']$/g, ''));
+        const idRaw = idMatch[1].trim().replace(/^["']|["']$/g, '');
+        serviceIds.add(idRaw);
+        // 전국 축제·여행 카테고리 포스트만 slug 맵에 추가
+        const categoryValue = extractFrontmatterValue(content, 'category');
+        if (categoryValue === '전국 축제·여행') {
+          const slugVal = extractFrontmatterValue(content, 'slug') || file.replace(/\.md$/, '');
+          festivalSlugMap.set(idRaw, { slug: slugVal, title: titleValue || '' });
+        }
       } else {
         // source_id 없는 파일은 파일명(날짜 제외)을 키워드로 보관
         const keyword = file.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/\.md$/, '');
@@ -539,7 +548,7 @@ async function getExistingPosts(postsDir) {
     }
   } catch (_) {}
 
-  return { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys };
+  return { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys, festivalSlugMap };
 }
 
 // 30초 대기
@@ -720,6 +729,48 @@ function buildNearbyRestaurantSection(restaurants) {
     return `- **${name}**${catStr}${distStr}${linkStr}  \n  ${addr}`;
   });
   return `\n\n---\n\n### 🍽️ 근처 맛집 추천 (반경 2km)\n\n${lines.join('\n')}`;
+}
+
+/**
+ * 같은 지역의 다른 축제 내부 링크 섹션을 생성합니다.
+ * @param {object} candidate - 현재 축제 항목 (contentid, lDongRegnCd, areacode)
+ * @param {Array} allFestivals - festival.json 전체 배열
+ * @param {Map} festivalSlugMap - source_id → { slug, title } 맵
+ * @returns {string} 마크다운 섹션 또는 빈 문자열
+ */
+function buildRelatedFestivalsSection(candidate, allFestivals, festivalSlugMap) {
+  const regionCode = (candidate.lDongRegnCd || candidate.areacode || '').trim();
+  if (!regionCode || !allFestivals || !festivalSlugMap || festivalSlugMap.size === 0) return '';
+
+  const currentId = String(candidate.contentid || '');
+  const todayStr = getTodayKST(); // YYYYMMDD
+
+  const related = allFestivals
+    .filter(f => {
+      if (String(f.contentid) === currentId) return false;
+      if (f.expired) return false;
+      const fRegion = (f.lDongRegnCd || f.areacode || '').trim();
+      if (!fRegion || fRegion !== regionCode) return false;
+      const endDate = (f.eventenddate || '').replace(/-/g, '');
+      if (endDate && endDate < todayStr) return false;
+      return festivalSlugMap.has(String(f.contentid));
+    })
+    .slice(0, 3);
+
+  if (related.length === 0) return '';
+
+  const lines = related.map(f => {
+    const info = festivalSlugMap.get(String(f.contentid));
+    const title = f.title || info.title;
+    const slug = info.slug;
+    const startDate = f.eventstartdate
+      ? f.eventstartdate.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')
+      : '';
+    const dateStr = startDate ? ` (${startDate}~)` : '';
+    return `- [${title}](/blog/${slug})${dateStr}`;
+  });
+
+  return `\n\n---\n\n### 🎪 같은 지역 다른 축제\n\n${lines.join('\n')}`;
 }
 
 /**
@@ -1232,6 +1283,10 @@ function postProcessGeneratedMarkdown(markdown, context) {
 
   // 전국 축제·여행: 카카오맵 길찾기 링크 자동 삽입 (이미 링크가 있으면 생략)
   if (context.category === '전국 축제·여행' && context.candidate) {
+    // 같은 지역 다른 축제 내부 링크 섹션 삽입
+    if (context.relatedFestivalsSection && !/같은 지역 다른 축제/.test(normalizedBody)) {
+      normalizedBody = normalizedBody.trimEnd() + context.relatedFestivalsSection;
+    }
     // 근처 맛집 섹션 삽입 (context.nearbyRestaurantsSection에 미리 채워져 있을 때)
     if (context.nearbyRestaurantsSection && !/🍽️ 근처 맛집/.test(normalizedBody)) {
       normalizedBody = normalizedBody.trimEnd() + context.nearbyRestaurantsSection;
@@ -1707,6 +1762,15 @@ ${festivalStyleOverride}
     }
   }
 
+  // 같은 지역 다른 축제 내부 링크 섹션
+  let relatedFestivalsSection = '';
+  if (candidate._category === '전국 축제·여행' && candidate._allFestivals && candidate._festivalSlugMap) {
+    relatedFestivalsSection = buildRelatedFestivalsSection(candidate, candidate._allFestivals, candidate._festivalSlugMap);
+    if (relatedFestivalsSection) {
+      console.log(`  🎪 관련 축제 내부 링크 삽입`);
+    }
+  }
+
   const postProcessed = postProcessGeneratedMarkdown(finalContent, {
     itemName,
     category: candidate._category,
@@ -1714,6 +1778,7 @@ ${festivalStyleOverride}
     midImageUrl,
     candidate,
     nearbyRestaurantsSection,
+    relatedFestivalsSection,
   });
   finalContent = postProcessed.content;
   if (candidate._category === '전국 축제·여행') {
@@ -1784,7 +1849,7 @@ async function run() {
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
   await fs.mkdir(postsDir, { recursive: true });
 
-  const { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys } = await getExistingPosts(postsDir);
+  const { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys, festivalSlugMap } = await getExistingPosts(postsDir);
   console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건, 제목 키워드 ${titleKeys.length}건, 스냅샷키 ${sourceSnapshotKeys.size}건`);
   const runStartedAt = Date.now();
 
@@ -1973,7 +2038,12 @@ async function run() {
       if (generated >= categoryTargetCount) break;
       triedCandidates++;
       try {
-        const ok = await generatePost({ ...candidate, _category: category }, postsDir);
+        const ok = await generatePost(
+          category === '전국 축제·여행'
+            ? { ...candidate, _category: category, _allFestivals: items, _festivalSlugMap: festivalSlugMap }
+            : { ...candidate, _category: category },
+          postsDir
+        );
         if (ok) {
           generated++;
           totalGenerated++;
