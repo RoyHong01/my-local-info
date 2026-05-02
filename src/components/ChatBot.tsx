@@ -2,6 +2,40 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+const URL_EXACT_REGEX = /^https?:\/\/[^\s]+$/;
+
+function renderTextWithLinks(text: string) {
+  const lines = String(text || "").split("\n");
+
+  return lines.map((line, lineIndex) => {
+    const chunks = line.split(URL_REGEX);
+
+    return (
+      <span key={`line-${lineIndex}`}>
+        {chunks.map((chunk, chunkIndex) => {
+          if (URL_EXACT_REGEX.test(chunk)) {
+            return (
+              <a
+                key={`chunk-${lineIndex}-${chunkIndex}`}
+                href={chunk}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline break-all"
+              >
+                {chunk}
+              </a>
+            );
+          }
+
+          return <span key={`chunk-${lineIndex}-${chunkIndex}`}>{chunk}</span>;
+        })}
+        {lineIndex < lines.length - 1 && <br />}
+      </span>
+    );
+  });
+}
+
 type ChatItem = {
   question: string;
   answer: string;
@@ -162,7 +196,7 @@ export default function ChatBot({ items }: ChatBotProps) {
                       }`}
                     >
                       <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
-                        {message.text}
+                        {renderTextWithLinks(message.text)}
                       </p>
                     </div>
                   </div>
