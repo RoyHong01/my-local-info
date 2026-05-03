@@ -328,16 +328,33 @@ function buildKakaoSearchLink(query: string) {
   return `https://map.kakao.com/link/search/${encodeURIComponent(query.trim())}`;
 }
 
+function extractLikelyKoreanAddress(text: string): string {
+  const raw = String(text || '').trim();
+  if (!raw) return '';
+
+  const compact = raw.replace(/\s+/g, ' ').trim();
+  const addressLike = compact.match(/[가-힣0-9\s]+(?:특별시|광역시|특별자치시|특별자치도|도)\s+[가-힣0-9\s]+(?:시|군|구)\s+[가-힣0-9\s-]+(?:면|읍|동|로|길)\s*[0-9-번지\s]*/);
+  if (addressLike?.[0]) return addressLike[0].replace(/\s+/g, ' ').trim();
+
+  // 보조 규칙: 첫 문장만 남겨 주소 검색 노이즈를 줄인다.
+  const firstSentence = compact.split(/[.!?。！？]/)[0]?.trim() || '';
+  return firstSentence;
+}
+
 function extractAddressCandidateFromContent(content: string): string {
   const markerPatterns = [
     /📌\s*\*\*주소\*\*:\s*([^\n]+)/,
     /📍\s*장소:\s*([^\n]+)/,
     /-\s+\*\*주소\*\*:\s*([^\n]+)/,
+    /\*\*📍\s*어디로\s*가야\s*하나요\??\*\*\s*\n\s*([^\n]+)/,
   ];
 
   for (const pattern of markerPatterns) {
     const match = content.match(pattern);
-    if (match?.[1]) return match[1].trim();
+    if (match?.[1]) {
+      const normalized = extractLikelyKoreanAddress(match[1]);
+      if (normalized) return normalized;
+    }
   }
 
   return '';
@@ -533,6 +550,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     : null;
   const festivalSectionSplit = isFestivalPost
     ? findFirstSectionSplit(renderedContent, [
+        /^###\s*.*알고\s*가세요.*$/m,
+        /^##\s*.*알고\s*가세요.*$/m,
         /^###\s*📍\s*위치 확인\s*&\s*길찾기\s*$/m,
         /^##\s*📌\s*한눈에 보는\s*(?:여행|축제|행사)\s*정보\s*$/m,
         /^###\s*📌\s*한눈에 보는\s*(?:여행|축제|행사)\s*정보\s*$/m,
