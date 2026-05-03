@@ -341,6 +341,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-05-03 핵심 반영(festival-versus 카카오맵 렌더 복구):
+  - **RCA 확정**: `src/lib/markdown-utils.ts::sanitizeMarkdown`의 좌표 필터가 `map.kakao.com` URL 내부 좌표를 삭제해 `👉`만 남는 현상이 발생.
+  - **필터 보정**: 링크 문법 라인을 좌표 필터보다 우선 보존하고, 좌표 패턴에서 `📍` 토큰을 제거해 주소/위치 라인 오삭제를 방지.
+  - **상세 렌더 안정화**: `src/app/blog/[slug]/page.tsx`에서 `markdownComponents` 타입 안정화(`Components`) 및 본문 내 카카오맵 링크 존재 시 fallback 버튼 중복 노출 방지.
 - 2026-05-03 핵심 반영(큐레이션+축제 품질 보강):
   - **큐레이션 소제목 이모지 캐주얼화**: `scripts/generate-curation-posts.js`의 카테고리별 이모지 풀을 더 가벼운 톤(`🫶/😎/🔥/💖` 등)으로 조정해 젊은층 타깃 가독성 강화.
   - **축제 포스트 정합성 가드 추가**: `scripts/generate-blog-post.js`에 `extractFestivalIdentityTokens()`/`isFestivalContentConsistent()`를 추가해, 생성된 제목/본문이 대상 행사명과 불일치하면 재시도 후 저장 차단.

@@ -1,5 +1,20 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-03, festival-versus 카카오맵 렌더 안정화)
+
+### 완료: 손가락만 남던 카카오맵 링크 삭제 이슈 복구
+
+- 원인:
+  - `sanitizeMarkdown()` 좌표 필터가 카카오맵 URL 좌표를 삭제 대상으로 오인.
+  - `normalizeShortcutCtaLinks()`로 `👉`와 링크가 분리된 뒤 링크 줄만 제거되어 이모지만 남음.
+- 조치:
+  - `src/lib/markdown-utils.ts`에 링크 라인 우선 보존 가드 추가.
+  - 좌표 필터에서 `📍` 토큰 제거.
+  - `src/app/blog/[slug]/page.tsx`에서 카카오맵 링크 렌더 컴포넌트 타입 안정화 및 fallback 중복 방지.
+- 검증:
+  - `npm run build` 성공.
+  - `out/blog/2026-05-03-festival-versus-jongmyo-ceramic-boryeong/index.html`에서 행사별 카카오맵 버튼 3개 확인.
+
 ## 최근 마일스톤 (2026-05-01, 보안 패치)
 
 ### 완료: npm audit 단계형 패치(1차 비파괴 + 2차 Anthropic 메이저)

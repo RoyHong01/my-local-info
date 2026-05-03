@@ -1,5 +1,18 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-03) — festival-versus 카카오맵 버튼 렌더 복구
+
+- 증상: 비교형 축제 포스트에서 `👉`만 보이고 카카오맵 링크/버튼이 사라지는 현상.
+- RCA:
+  - `src/lib/markdown-utils.ts::sanitizeMarkdown` 좌표 필터가 `map.kakao.com` URL의 좌표값까지 제거 대상으로 오인.
+  - `normalizeShortcutCtaLinks`가 `👉`와 링크를 분리해, 링크 줄 삭제 시 손가락만 남음.
+- 조치:
+  - 링크 문법 라인은 좌표 필터보다 우선 보존하도록 가드 추가.
+  - 좌표 필터에서 `📍` 토큰 제거(주소/위치 라인 과잉 삭제 방지).
+  - `src/app/blog/[slug]/page.tsx`에서 `markdownComponents` 타입 안정화(`Components`) + `node` prop 제거.
+  - 본문 내 카카오맵 링크가 있으면 fallback 버튼 중복 출력 방지 조건 추가.
+- 검증: `npm run build` 성공 + versus 산출 HTML에서 행사별 카카오맵 버튼 3개 렌더 확인.
+
 ## 최근 작업 (2026-05-01) — 보안 패치 4단계 실행
 
 - 브랜치: `chore/security-audit-2026-05-01`

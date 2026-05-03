@@ -5,6 +5,32 @@
 
 ---
 
+## 2026-05-03 (festival-versus 카카오맵 버튼 미노출 RCA + 렌더 안정화)
+
+- **수정 파일**:
+  - `src/lib/markdown-utils.ts`
+  - `src/app/blog/[slug]/page.tsx`
+- **문제 증상**:
+  - festival-versus 본문의 `👉 [카카오맵 바로가기](...)`에서 링크는 사라지고 손가락 이모지만 남아, 행사별 노란 버튼이 보이지 않음.
+- **근본 원인(RCA)**:
+  - `sanitizeMarkdown()`의 좌표 제거 필터가 카카오맵 URL 내부 좌표(`lat,lng`)까지 좌표 라인으로 오인해 링크 줄을 삭제.
+  - `normalizeShortcutCtaLinks()`가 `👉`와 링크를 분리한 뒤 링크 줄만 삭제되면서 손가락 이모지만 잔존.
+- **핵심 반영**:
+  - `src/lib/markdown-utils.ts`
+    - 좌표 패턴에서 `📍` 토큰을 제거해 위치/주소 라인의 과잉 삭제를 방지.
+    - 링크 문법 라인(`[text](url)`)은 좌표 필터보다 우선 보존하도록 가드 추가.
+  - `src/app/blog/[slug]/page.tsx`
+    - `markdownComponents`를 `Components` 타입으로 명시하고 `node` prop을 제외해 불필요 DOM 속성 출력 제거.
+    - 본문에 이미 카카오맵 링크가 있으면 fallback 버튼을 추가하지 않도록 `hasInlineKakaoMapLink` 조건 추가.
+    - (선행 반영) `kakaoMapLink` 계산에서 `!isFestivalVersusPost` 가드를 제거해 versus 포스트도 fallback 경로를 사용할 수 있도록 정리.
+- **검증**:
+  - `npm run build` ✅ 성공
+  - `out/blog/2026-05-03-festival-versus-jongmyo-ceramic-boryeong/index.html`에서 행사별 `🗺️ 카카오맵 길찾기` 3개 렌더 확인
+  - `node="[object Object]"` 잔존 없음 확인
+- **커밋**:
+  - `1a857d6` — versus 포스트 fallback 경로 복구
+  - `bd0fb14` — sanitizeMarkdown 링크 보존 + 렌더 안정화
+
 ## 2026-05-03 (festival-versus 비교표 헤더 명확화 + 카카오맵 바로가기 가시성 강화)
 
 - **수정 파일**:
