@@ -324,6 +324,28 @@ function findFirstSectionSplit(markdown: string, headingPatterns: RegExp[]): Mar
   return null;
 }
 
+// Custom ReactMarkdown components: renders map.kakao.com links as styled yellow buttons
+const markdownComponents = {
+  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    if (href && href.includes('map.kakao.com')) {
+      return (
+        <span className="not-prose inline-block my-2">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 px-5 py-3 font-bold text-gray-900 no-underline transition-colors hover:bg-yellow-500"
+            {...props}
+          >
+            <span>🗺️ 카카오맵 길찾기</span>
+          </a>
+        </span>
+      );
+    }
+    return <a href={href} target={href?.startsWith('http') ? '_blank' : undefined} rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined} {...props}>{children}</a>;
+  },
+};
+
 function buildKakaoSearchLink(query: string) {
   return `https://map.kakao.com/link/search/${encodeURIComponent(query.trim())}`;
 }
@@ -715,10 +737,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''}${isSingleChoicePost ? ' choice-single-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
                 {mapSectionSplit && kakaoMapLink ? (
                   <>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {mapSectionSplit.before}
                     </ReactMarkdown>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {mapSectionSplit.section}
                     </ReactMarkdown>
                     <div className="my-8 not-prose">
@@ -731,13 +753,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         <span>🗺️ 카카오맵 길찾기</span>
                       </a>
                     </div>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {mapSectionSplit.after}
                     </ReactMarkdown>
                   </>
                 ) : (
                   <>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {renderedContent}
                     </ReactMarkdown>
                     {shouldShowFallbackMapButton && (
