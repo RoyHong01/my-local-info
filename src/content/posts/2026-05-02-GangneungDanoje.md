@@ -70,8 +70,8 @@ source_title: "강릉단오제"
 
 ### 🎪 같은 지역 다른 축제
 
-* [홍천 산나물축제](/blog/2026-04-23-hongcheon-wildvegetable-festival) (2026.05.01-)
-* [강릉 경포벚꽃축제](/blog/2026-04-10-gangneung-gyeongpo-cherryblossom-festival) (2026.04.04-)
+* [강릉해양레저 펫가족 힐링페스티벌](/festival/3493120) (2026.06.13~)
+* [삼척 장미축제](/festival/2493939) (2026.05.19~)
 
 ---
 

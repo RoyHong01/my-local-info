@@ -781,34 +781,55 @@ function buildNearbyRestaurantSection(restaurants) {
  */
 function buildRelatedFestivalsSection(candidate, allFestivals, festivalSlugMap) {
   const regionCode = (candidate.lDongRegnCd || candidate.areacode || '').trim();
-  if (!regionCode || !allFestivals || !festivalSlugMap || festivalSlugMap.size === 0) return '';
+  if (!regionCode || !allFestivals) return '';
 
   const currentId = String(candidate.contentid || '');
+  const currentSigngu = (candidate.lDongSignguCd || '').trim();
   const todayStr = getTodayKST(); // YYYYMMDD
 
-  const related = allFestivals
-    .filter(f => {
-      if (String(f.contentid) === currentId) return false;
-      if (f.expired) return false;
-      const fRegion = (f.lDongRegnCd || f.areacode || '').trim();
-      if (!fRegion || fRegion !== regionCode) return false;
-      const endDate = (f.eventenddate || '').replace(/-/g, '');
-      if (endDate && endDate < todayStr) return false;
-      return festivalSlugMap.has(String(f.contentid));
-    })
-    .slice(0, 3);
+  // 공통 필터: 자기 자신 제외, 만료·종료 제외, 같은 광역시도
+  const candidatePool = allFestivals.filter(f => {
+    if (String(f.contentid) === currentId) return false;
+    if (f.expired) return false;
+    const fRegion = (f.lDongRegnCd || f.areacode || '').trim();
+    if (!fRegion || fRegion !== regionCode) return false;
+    const endDate = (f.eventenddate || '').replace(/-/g, '');
+    if (endDate && endDate < todayStr) return false;
+    return true;
+  });
 
-  if (related.length === 0) return '';
+  // 같은 시군구(lDongSignguCd) 우선, 그 다음 광역 내 날짜 임박 순
+  const sameSigngu = currentSigngu
+    ? candidatePool.filter(f => (f.lDongSignguCd || '').trim() === currentSigngu)
+    : [];
+  const otherSigngu = candidatePool.filter(f => (f.lDongSignguCd || '').trim() !== currentSigngu);
 
-  const lines = related.map(f => {
-    const info = festivalSlugMap.get(String(f.contentid));
-    const title = f.title || info.title;
-    const slug = info.slug;
+  // 날짜 임박 순 정렬 (startdate 기준)
+  const sortByDate = arr => [...arr].sort((a, b) => {
+    const sa = (a.eventstartdate || '').replace(/-/g, '');
+    const sb = (b.eventstartdate || '').replace(/-/g, '');
+    return sa.localeCompare(sb);
+  });
+
+  const sorted = [...sortByDate(sameSigngu), ...sortByDate(otherSigngu)].slice(0, 3);
+
+  if (sorted.length === 0) return '';
+
+  const lines = sorted.map(f => {
+    const contentId = String(f.contentid);
+    const title = f.title || '';
     const startDate = f.eventstartdate
       ? f.eventstartdate.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')
       : '';
     const dateStr = startDate ? ` (${startDate}~)` : '';
-    return `- [${title}](/blog/${slug})${dateStr}`;
+
+    // blog post가 있으면 /blog/[slug], 없으면 /festival/[id] 상세 페이지로 링크
+    if (festivalSlugMap && festivalSlugMap.has(contentId)) {
+      const info = festivalSlugMap.get(contentId);
+      return `- [${title}](/blog/${info.slug})${dateStr}`;
+    } else {
+      return `- [${title}](/festival/${contentId})${dateStr}`;
+    }
   });
 
   return `\n\n---\n\n### 🎪 같은 지역 다른 축제\n\n${lines.join('\n')}`;
