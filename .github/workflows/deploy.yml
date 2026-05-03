@@ -193,6 +193,21 @@ jobs:
           BLOG_POSTS_SUBSIDY: '2'
           TOUR_API_KEY: ${{ secrets.TOUR_API_KEY }}
 
+      - name: '[2?�계] festival-versus ?�도 ?�인 ?�동 ?�성 (금요일/연휴 전)'
+        id: generate_festival_versus
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: node scripts/generate-festival-versus-post.js
+        timeout-minutes: 10
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: 'gemini-3.1-flash-lite-preview'
+          GEMINI_TIMEOUT_MS: '120000'
+          FESTIVAL_VERSUS_ENABLE_FRIDAY: 'true'
+          FESTIVAL_VERSUS_ENABLE_HOLIDAY_EVE: 'true'
+          FESTIVAL_VERSUS_HOLIDAY_MIN_STREAK: '2'
+          FESTIVAL_VERSUS_WEEKEND_COUNT: '2'
+          FESTIVAL_VERSUS_HOLIDAY_COUNT: '3'
+
       - name: '[2?�계] Next.js 빌드'
         id: build_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')

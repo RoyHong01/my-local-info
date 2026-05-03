@@ -5,6 +5,32 @@
 
 ---
 
+## 2026-05-03 (festival-versus 별도 라인 신설: 금요일/연휴 전)
+
+- **수정 파일**:
+  - `scripts/generate-festival-versus-post.js` (신규)
+  - `.github/workflows/deploy.yml`
+  - `package.json`
+- **핵심 반영**:
+  - 기존 일일 축제 블로그 생성(`generate-blog-post.js`)은 유지하고, 비교형 축제 포스트를 **별도 스크립트 라인**으로 분리.
+  - 신규 스크립트 `generate-festival-versus-post.js` 추가:
+    - 실행 모드 판정: 금요일(`weekend`) 또는 연휴 직전(`holiday`)일 때만 생성.
+    - 연휴 판정: 한국 공휴일 API(Nager.Date) + 주말 결합으로 비근무일 연속 구간(streak) 계산.
+    - 비교 포맷: A vs B(주말 기본 2개), A vs B vs C(연휴 기본 3개).
+    - 중복 방지: `versus_key`(mode + source_ids 조합) 기반 동일 비교글 재생성 차단.
+    - 내부 이동 링크: `/festival/[contentid]` 링크 섹션 보강.
+  - 워크플로우 2단계에 festival-versus 실행 step 추가(빌드 전 실행):
+    - `FESTIVAL_VERSUS_ENABLE_FRIDAY=true`
+    - `FESTIVAL_VERSUS_ENABLE_HOLIDAY_EVE=true`
+    - `FESTIVAL_VERSUS_HOLIDAY_MIN_STREAK=2`
+    - `FESTIVAL_VERSUS_WEEKEND_COUNT=2`
+    - `FESTIVAL_VERSUS_HOLIDAY_COUNT=3`
+  - `package.json` 스크립트 추가: `generate:festival:versus`.
+- **영향도**:
+  - 데이터 파일(`festival.json`) 스키마 변경 없음.
+  - 기존 축제 일일 포스트 생성 취지/로직 유지, 비교형만 별도 라인으로 추가.
+- **빌드**: ✅ 성공 (1476 URLs, 8346건)
+
 ## 2026-05-03 (보조금 블로그 subsidy-analysis 1차 도입)
 
 - **수정 파일**:
