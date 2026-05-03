@@ -1,0 +1,255 @@
+{
+  "reportDateKst": "2026-05-04",
+  "generatedAtUtc": "2026-05-03T19:58:38.348Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25289023528",
+    "runNumber": 738,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25289023528",
+    "runStartedAtUtc": "2026-05-03T19:47:06Z",
+    "headSha": "827c3053901e46acf8d8d2fa8ffc828363b22f34"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://44f37ff5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 341건",
+        "subsidy": "신규 0건, 총 607건",
+        "festival": "신규 0건, 업데이트 219건, 총 219건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://0920b8dd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://835a3643.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "fc474ebff130f228f3957312ca77989bab8cc7c6",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-03",
+      "authoredAt": "2026-05-03T19:58:37Z",
+      "files": [
+        "src/content/life/2026-05-04-pangyo-restaurant-388514220.md",
+        "src/content/life/2026-05-04-seongsu-restaurant-2139543219.md",
+        "src/content/life/2026-05-04-songdo-restaurant-781921628.md"
+      ]
+    },
+    {
+      "sha": "1c39c111fb4662417c18dbee0671c475c5de5fba",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-03",
+      "authoredAt": "2026-05-03T19:55:32Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-04-choice-health-2026-05-04.md"
+      ]
+    },
+    {
+      "sha": "99cc5368521b4184bc02603622007b35f9169b09",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-03",
+      "authoredAt": "2026-05-03T19:55:21Z",
+      "files": [
+        "src/content/posts/2026-05-03-ansan-school-support.md",
+        "src/content/posts/2026-05-03-forestfoodfestival.md",
+        "src/content/posts/2026-05-03-gangnam-local-currency.md",
+        "src/content/posts/2026-05-03-incheon-sos-welfare.md",
+        "src/content/posts/2026-05-04-curation-신청-기간-놓치기-아까운-5월-복지-정책-5가지.md"
+      ]
+    },
+    {
+      "sha": "d6b6c0b61320cc33efd1d2aa098b2c6101c343b1",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-03",
+      "authoredAt": "2026-05-03T19:48:23Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-03-ansan-school-support.md",
+      "src/content/posts/2026-05-03-forestfoodfestival.md",
+      "src/content/posts/2026-05-03-gangnam-local-currency.md",
+      "src/content/posts/2026-05-03-incheon-sos-welfare.md",
+      "src/content/posts/2026-05-04-curation-신청-기간-놓치기-아까운-5월-복지-정책-5가지.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-04-choice-health-2026-05-04.md",
+      "src/content/life/2026-05-04-pangyo-restaurant-388514220.md",
+      "src/content/life/2026-05-04-seongsu-restaurant-2139543219.md",
+      "src/content/life/2026-05-04-songdo-restaurant-781921628.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-04-choice-health-2026-05-04.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-04-pangyo-restaurant-388514220.md",
+      "src/content/life/2026-05-04-seongsu-restaurant-2139543219.md",
+      "src/content/life/2026-05-04-songdo-restaurant-781921628.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-04-choice-health-2026-05-04.md",
+      "src/content/life/2026-05-04-pangyo-restaurant-388514220.md",
+      "src/content/life/2026-05-04-seongsu-restaurant-2139543219.md",
+      "src/content/life/2026-05-04-songdo-restaurant-781921628.md",
+      "src/content/posts/2026-05-03-ansan-school-support.md",
+      "src/content/posts/2026-05-03-forestfoodfestival.md",
+      "src/content/posts/2026-05-03-gangnam-local-currency.md",
+      "src/content/posts/2026-05-03-incheon-sos-welfare.md",
+      "src/content/posts/2026-05-04-curation-신청-기간-놓치기-아까운-5월-복지-정책-5가지.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.73,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 341건",
+      "validation": "ok",
+      "anthropicUsage": "1429/1243",
+      "markdown": {
+        "generated": 2,
+        "pending": 221,
+        "titles": [
+          "산모·신생아 건강관리 지원",
+          "I-Mom 방문건강관리 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 607건",
+      "validation": "ok",
+      "anthropicUsage": "3631/2684",
+      "markdown": {
+        "generated": 5,
+        "pending": 518,
+        "titles": [
+          "연제구 면접사진 촬영비 지원",
+          "금정구 신입생 교복구입비 현금 지원",
+          "화순군 청년 자격증 응시료 지원사업",
+          "청년 구정참여 마일리지 및 인센티브 제공",
+          "청년 면접정장 대여사업"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 219건, 총 219건",
+      "validation": "ok",
+      "anthropicUsage": "1741/1015",
+      "markdown": {
+        "generated": 2,
+        "pending": 169,
+        "titles": [
+          "홍천 산나물축제",
+          "포천펫스타"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
