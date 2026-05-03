@@ -365,6 +365,12 @@ function resolveRestaurantKakaoMapLink(post: NonNullable<ReturnType<typeof getPo
   return buildKakaoSearchLink(query);
 }
 
+function normalizeFestivalRelatedSectionSpacing(content: string): string {
+  return String(content || '')
+    .replace(/\n\s*---\s*\n(?=\s*#{2,3}\s*🎪\s*같은 지역 다른 축제)/g, '\n\n')
+    .replace(/\n\s*---\s*\n(?=\s*#{1,6}\s*📍\s*위치 확인\s*&\s*길찾기)/g, '\n\n');
+}
+
 async function resolveSourceLink(post: { sourceId?: string; category?: string }): Promise<string | null> {
   if (!post.sourceId) return null;
   const cat = post.category || '';
@@ -492,9 +498,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     ? extractChoiceSidebarProducts(choiceContentBase, post.coupangBannerAlt || post.title)
     : [];
   const shouldHideChoiceHero = isChoicePost && extractedFromBase.length >= 2;
-  const renderedContent = isChoicePost
+  const contentWithChoiceAdjustments = isChoicePost
     ? (shouldHideChoiceHero ? choiceContentBase : removeFirstDuplicateHeroImage(choiceContentBase, post.image))
     : sanitizedContent;
+  const renderedContent = isFestivalPost
+    ? normalizeFestivalRelatedSectionSpacing(contentWithChoiceAdjustments)
+    : contentWithChoiceAdjustments;
   const isSingleChoicePost = isChoicePost && /(^|\n)##\s+📍\s+픽앤조이\s+오늘의\s+단독\s+픽\s*(\n|$)/m.test(renderedContent);
   const extractedChoiceSidebarProducts = isChoicePost
     ? extractChoiceSidebarProducts(renderedContent, post.coupangBannerAlt || post.title)
@@ -522,6 +531,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const festivalSectionSplit = isFestivalPost
     ? findFirstSectionSplit(renderedContent, [
         /^###\s*📍\s*위치 확인\s*&\s*길찾기\s*$/m,
+        /^##\s*📌\s*한눈에 보는\s*(?:여행|축제|행사)\s*정보\s*$/m,
+        /^###\s*📌\s*한눈에 보는\s*(?:여행|축제|행사)\s*정보\s*$/m,
         /^##\s*📌\s*한눈에 보는 여행 정보\s*$/m,
       ])
     : null;
