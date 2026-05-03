@@ -81,6 +81,20 @@ const HOOK_SUBHEADING_BANNED_PATTERNS = [
   /답을\s*찾/,
 ];
 const RESTAURANT_STYLES = ['Sensory', 'Discovery', 'Curation', 'Aesthetic'];
+const VISIT_INFO_VARIANTS = [
+  {
+    courseLabel: '식후 2차 코스(선택)',
+    editorLabel: '에디터 코멘트',
+  },
+  {
+    courseLabel: '식후 이동 포인트',
+    editorLabel: '오늘의 한마디',
+  },
+  {
+    courseLabel: '식사 뒤 이어가기 좋은 코스',
+    editorLabel: '에디터 메모',
+  },
+];
 const REQUIRED_SECTION_PATTERNS = [
   { label: '방문 정보 한눈에', pattern: /##\s*방문 정보 한눈에/ },
   { label: '상호명:', pattern: /(?:\*\*\s*)?상호명(?:\s*\*\*)?\s*:/ },
@@ -273,6 +287,16 @@ function pickStyleBySourceId(sourceId) {
   return RESTAURANT_STYLES[idx];
 }
 
+function pickVisitInfoVariantBySourceId(sourceId) {
+  const text = String(sourceId || '');
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  }
+  const idx = Math.abs(hash) % VISIT_INFO_VARIANTS.length;
+  return VISIT_INFO_VARIANTS[idx];
+}
+
 async function callGemini(prompt) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
   const res = await fetch(url, {
@@ -378,6 +402,11 @@ function postProcessRestaurantMarkdown(markdown, context) {
     .replace(/^###\s+2\.\s+/gm, '### 그래서 후보에서 안 빼게 돼요 — ')
     .replace(/^###\s+3\.\s+/gm, '### 가기 전에 이것만 챙기면 돼요 — ')
     .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  normalizedBody = normalizedBody
+    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${context.courseLabel}$3:`)
+    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)에디터 한\s*줄\s*평(\*\*?)?\s*:/g, `$1$2${context.editorLabel}$3:`)
     .trim();
 
   normalizedBody = enforceHookBridgeAndHeadingSpacing(normalizedBody, context);
@@ -602,6 +631,8 @@ function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
 
   finalContent = postProcessRestaurantMarkdown(finalContent, {
     itemName: candidate.item.name,
+    courseLabel: candidate.visitInfoVariant.courseLabel,
+    editorLabel: candidate.visitInfoVariant.editorLabel,
   });
 
   // 방문 정보 한눈에 바로 위에 두 번째 이미지 삽입 (네이버 2번째 이미지 우선)
@@ -786,7 +817,13 @@ function validateGeneratedRestaurantMarkdown(markdown) {
     '주차:',
     '이럴 때 체크하면 좋아요:',
     '식사 후 동선:',
+    '식후 2차 코스(선택):',
+    '식후 이동 포인트:',
+    '식사 뒤 이어가기 좋은 코스:',
     '에디터 한 줄 평',
+    '에디터 코멘트:',
+    '오늘의 한마디:',
+    '에디터 메모:',
     '"',
     '{',
     '}',
@@ -814,6 +851,13 @@ function validateGeneratedRestaurantMarkdown(markdown) {
 
   if (plainStyleSamples.length > 0) {
     issues.push(`평어체 의심 문장 발견: ${plainStyleSamples.slice(0, 3).join(' | ')}`);
+  }
+
+  if (/식사\s*후\s*동선\s*:\s*여기서\s*식사하고\s*도보\s*\d+분\s*거리/i.test(bodyText)) {
+    issues.push('템플릿 반복 문구 감지: 식사 후 동선 문장이 기계적으로 반복됨');
+  }
+  if (/에디터\s*한\s*줄\s*평\s*:\s*(분위기|행복|완성돼요|좋아요)/i.test(bodyText)) {
+    issues.push('템플릿 반복 문구 감지: 에디터 한 줄 평이 추상 표현 위주로 반복됨');
   }
 
   const headingAndReadabilityIssues = validateSubheadingAndReadability(bodyText);
@@ -902,6 +946,7 @@ async function generateRestaurantPost(candidate) {
   const defaultImage = '/images/default-restaurant.svg';
   const heroImage = candidate.item.naverPhotoUrl || candidate.item.googlePhotoUrl || defaultImage;
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
+  candidate.visitInfoVariant = pickVisitInfoVariantBySourceId(candidate.item.id);
 
   const ratingFrontmatter = candidate.item.googleRating != null
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
@@ -989,8 +1034,10 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 전화번호
 - 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)
 - 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄
-- 식사 후 동선: '여기서 식사하고 도보 5분 거리의 OO 카페까지 이어가면 코스가 완성돼요' 같은 형태로 한 줄
-- 에디터 한 줄 평
+- 아래 라벨 후보 중 2개를 골라 사용하고, 같은 문장을 복붙하지 말 것:
+  - ${candidate.visitInfoVariant.courseLabel}: 식후에 이어가기 좋은 코스를 한 줄(실존 장소 단정 금지, category 수준 표현 허용)
+  - ${candidate.visitInfoVariant.editorLabel}: 추상 칭찬 금지, 메뉴/시간대/선호 상황 중 최소 1개를 포함한 한 줄
+- 금지: "여기서 식사하고 도보 5분 거리의 OO 카페..." 같은 기계적 상투 문구
 
 [형식 규칙]
 - 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, "훅"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.
