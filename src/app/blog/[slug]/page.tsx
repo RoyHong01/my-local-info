@@ -526,7 +526,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const useOriginalHeroSize = !!post.heroOriginalSize && !isChoicePost && !isSvgHero;
   const heroImageSrc = post.image || '/images/default-lifestyle.svg';
   const restaurantSectionSplit = isRestaurantPost
-    ? findFirstSectionSplit(renderedContent, [/^##\s*방문 정보 한눈에\s*$/m])
+    ? findFirstSectionSplit(renderedContent, [
+        /^##\s*(?:📌\s*)?방문 정보(?:\s*한눈에)?\s*$/m,
+        /^###\s*(?:📌\s*)?방문 정보(?:\s*한눈에)?\s*$/m,
+      ])
     : null;
   const festivalSectionSplit = isFestivalPost
     ? findFirstSectionSplit(renderedContent, [
@@ -542,6 +545,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     : isFestivalPost
       ? resolveFestivalKakaoMapLink(post, renderedContent)
       : null;
+  const shouldShowFallbackMapButton = !mapSectionSplit && !!kakaoMapLink && (isRestaurantPost || isFestivalPost);
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -652,9 +656,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     </ReactMarkdown>
                   </>
                 ) : (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {renderedContent}
-                  </ReactMarkdown>
+                  <>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {renderedContent}
+                    </ReactMarkdown>
+                    {shouldShowFallbackMapButton && (
+                      <div className="my-8 not-prose">
+                        <a
+                          href={kakaoMapLink!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 px-5 py-3 font-bold text-gray-900 transition-colors hover:bg-yellow-500"
+                        >
+                          <span>🗺️ 카카오맵 길찾기</span>
+                        </a>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
               <AdBanner />
