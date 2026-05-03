@@ -650,6 +650,47 @@ function hasFestivalLeadRepetitionInGeneratedText(text) {
   return false;
 }
 
+function extractFestivalIdentityTokens(itemName) {
+  const raw = String(itemName || '').trim();
+  if (!raw) return [];
+
+  const stopWords = new Set(['제', '주년', '행사', '축제', '기념식', '페스티벌']);
+  const pieces = raw
+    .replace(/[0-9]/g, ' ')
+    .replace(/[()\[\]{}"'“”‘’.,:;!?/\\-]/g, ' ')
+    .split(/\s+/)
+    .map((part) => normalizeMatchText(part))
+    .filter(Boolean)
+    .filter((part) => part.length >= 2 && !stopWords.has(part));
+
+  if (pieces.length > 0) return [...new Set(pieces)].slice(0, 5);
+
+  const normalized = normalizeMatchText(raw);
+  if (!normalized) return [];
+  return [normalized.slice(0, Math.min(8, normalized.length))];
+}
+
+function extractFestivalCoreBodyText(markdownBody) {
+  const body = String(markdownBody || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const sectionStart = body.search(/^###\s+📌\s+한눈에 보는/m);
+  const core = sectionStart >= 0 ? body.slice(0, sectionStart) : body;
+  return normalizeMatchText(core.slice(0, 1800));
+}
+
+function isFestivalContentConsistent(markdown, itemName) {
+  const tokens = extractFestivalIdentityTokens(itemName);
+  if (tokens.length === 0) return true;
+
+  const { frontmatter, body } = splitMarkdownSections(markdown);
+  const title = extractTitleFromFrontmatter(frontmatter || '');
+  const titleNorm = normalizeMatchText(title);
+  const bodyNorm = extractFestivalCoreBodyText(body || markdown);
+
+  const titleHit = tokens.some((token) => titleNorm.includes(token));
+  const bodyHit = tokens.some((token) => bodyNorm.includes(token));
+  return titleHit && bodyHit;
+}
+
 function normalizeFestivalTitleDiversity(title, itemName) {
   if (!hasFestivalBannedLead(title)) return title;
   const base = String(itemName || title || '이번 주말 여행').trim();
@@ -1630,6 +1671,9 @@ ${festivalStyleOverride}
   let generatedText = '';
   let lastFinishReason = '';
   const maxAttempts = 3;
+  const festivalConsistencyHint = isFestival
+    ? `\n\n[정합성 필수 규칙]\n- 제목과 본문(훅 포함)은 반드시 행사명 "${itemName}"을 중심으로 작성하세요.\n- 다른 축제/행사명(예: 다른 도시의 축제명)으로 바꿔 쓰면 실패입니다.\n- 주소/문의/한눈에 보는 정보는 행사명 "${itemName}"과 동일한 항목으로 일치해야 합니다.`
+    : '';
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const retryHint = attempt > 1
@@ -1638,7 +1682,7 @@ ${festivalStyleOverride}
 
     let gemini;
     try {
-      gemini = await callGemini(`${prompt}${retryHint}`);
+      gemini = await callGemini(`${prompt}${festivalConsistencyHint}${retryHint}`);
     } catch (err) {
       if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
         throw err;
@@ -1662,6 +1706,14 @@ ${festivalStyleOverride}
       }
     }
 
+    if (isFestival && !isFestivalContentConsistent(generatedText, itemName)) {
+      if (attempt < maxAttempts) {
+        console.warn(`  ⚠️ 축제 본문 정합성 불일치(행사명 중심 불충분). 재시도 ${attempt + 1}/${maxAttempts}`);
+        await sleep(2000);
+        continue;
+      }
+    }
+
     const isIncomplete =
       lastFinishReason === 'MAX_TOKENS' ||
       looksIncompleteGeminiOutput(generatedText);
@@ -1677,6 +1729,11 @@ ${festivalStyleOverride}
   if (!generatedText || looksIncompleteGeminiOutput(generatedText)) {
     console.error(`Gemini 응답 불완전(최종 finishReason=${lastFinishReason || 'N/A'})`);
     console.error('Gemini API 응답 없음');
+    return false;
+  }
+
+  if (isFestival && !isFestivalContentConsistent(generatedText, itemName)) {
+    console.error(`축제 본문 정합성 검사 실패: 행사명("${itemName}")과 제목/본문이 불일치합니다. 생성 건을 저장하지 않습니다.`);
     return false;
   }
 

@@ -341,10 +341,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
-- 2026-05-03 핵심 반영(큐레이션 가독성 개선 — 소제목 이모지):
-  - `src/content/posts/2026-05-03-curation-인천-살면서-이것만큼은-알아야-해요-5월-편.md`의 5개 서비스 소제목에 의미형 이모지(`🩺/🧩/🌾/🏠/🎗️`) 적용.
-  - `scripts/generate-curation-posts.js` 후처리에 `addEmojiToItemHeadings()`/`hasLeadingEmoji()`를 추가해 큐레이션 자동 생성 시 항목 소제목(`###`, fallback `##`)에 카테고리별 이모지를 순환 주입.
-  - 이미 이모지가 있는 소제목은 중복 삽입하지 않도록 보호해 수동 편집 결과와 충돌을 방지.
+- 2026-05-03 핵심 반영(큐레이션+축제 품질 보강):
+  - **큐레이션 소제목 이모지 캐주얼화**: `scripts/generate-curation-posts.js`의 카테고리별 이모지 풀을 더 가벼운 톤(`🫶/😎/🔥/💖` 등)으로 조정해 젊은층 타깃 가독성 강화.
+  - **축제 포스트 정합성 가드 추가**: `scripts/generate-blog-post.js`에 `extractFestivalIdentityTokens()`/`isFestivalContentConsistent()`를 추가해, 생성된 제목/본문이 대상 행사명과 불일치하면 재시도 후 저장 차단.
+  - **실제 오류 포스트 교정**: `src/content/posts/2026-05-02-GangneungDanoje.md`의 source 메타·이미지·한눈에 보는 정보·주소/길찾기·같은 지역 링크를 강릉단오제 데이터(`source_id: 531391`)로 복구.
 - 2026-05-06 핵심 반영(축제 블로그·상세 페이지 SEO 품질 강화 Phase 1~4):
   - **Phase 1 — 실용 섹션 자동 삽입**: `generate-blog-post.js` 프롬프트에 [교통·주차]/[방문 전 체크리스트]/[현지 꿀팁] 섹션 지시문 고정 추가.
   - **Phase 1 — 카카오맵 길찾기 링크 자동 삽입**: `buildFestivalKakaoMapLink()` — `mapx`/`mapy` 좌표 딥링크, 없으면 주소 검색 fallback. 본문 끝 자동 삽입(중복 방지).

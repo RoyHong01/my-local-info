@@ -499,10 +499,10 @@ function addEmojiToItemHeadings(markdown, category, dateISO) {
   if (!markdown) return markdown;
 
   const emojiPools = {
-    subsidy: ['💸', '🧾', '📌', '🏦', '✅', '🛎️', '🎯'],
-    festival: ['🎉', '🎭', '🎶', '🎪', '📸', '🌸', '✨'],
-    incheon: ['🩺', '🧩', '🌾', '🏠', '🎗️', '📍', '💡'],
-    default: ['📌', '✅', '💡', '🧭', '📍', '✨', '🎯'],
+    subsidy: ['🤑', '💸', '🧾', '✅', '📌', '🙌', '🔥'],
+    festival: ['🎉', '🎪', '🎈', '📸', '✨', '😎', '🫶'],
+    incheon: ['💖', '🏠', '🩺', '🌾', '🎯', '🫧', '🌟'],
+    default: ['✨', '✅', '💡', '📌', '🎯', '🫶', '😄'],
   };
 
   const pool = emojiPools[category] || emojiPools.default;

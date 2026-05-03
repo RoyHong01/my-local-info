@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-05-03 (축제 포스트 정합성 오류 수정 + 재발 방지)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `src/content/posts/2026-05-02-GangneungDanoje.md`
+  - `scripts/generate-curation-posts.js`
+- **문제 원인 분석**:
+  - 축제 자동 생성에서 AI가 다른 행사명을 섞어 제목/본문을 작성해도, 기존 로직은 생성 결과의 **행사명 정합성 검증** 없이 저장되어 `source_*` 메타와 본문이 충돌할 수 있었음.
+- **핵심 반영**:
+  - `generate-blog-post.js`에 `isFestivalContentConsistent()` 검증 추가.
+  - 축제 글 생성 시 제목/본문 핵심 구간이 대상 행사명 토큰과 불일치하면 자동 재시도, 최종 불일치 시 저장 차단.
+  - 문제 포스트 `2026-05-02-GangneungDanoje.md`의 `source_id/source_*`, 대표·중간 이미지, 여행정보 표, 지역 축제 링크, 카카오맵 주소/좌표를 **강릉단오제(531391)** 기준으로 교정.
+  - 큐레이션 이모지 톤을 더 캐주얼하게 조정(`scripts/generate-curation-posts.js` 이모지 풀 업데이트).
+- **빌드**: ✅ 성공 (1476 URLs)
+
 ## 2026-05-03 (큐레이션 소제목 이모지 적용 + 자동화 규칙 반영)
 
 - **수정 파일**:
