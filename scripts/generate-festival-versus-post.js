@@ -449,12 +449,17 @@ function buildFinalGuide(mode, candidates) {
 
 function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
   const comparisonHeading = buildComparisonHeading(mode, candidates);
+  const columnEmojis = ['🏛️', '🎨', '🔥'];
+  const safeCell = (value) => String(value || '').replace(/\|/g, '/').trim();
+  const candidateHeaders = candidates.map((candidate, idx) => `${columnEmojis[idx] || '📍'} ${safeCell(candidate.title || `후보 ${idx + 1}`)}`);
+  const tableSeparator = ['---', ...candidates.map(() => '---')].join(' | ');
+  const row = (label, valueFn) => `| ${label} | ${candidates.map((c) => safeCell(valueFn(c))).join(' | ')} |`;
   const comparisonTable = [
-    '| 비교 항목 | A | B | C |',
-    '|---|---|---|---|',
-    `| ✨ 바이브 (분위기) | ${deriveVibe(candidates[0])} | ${deriveVibe(candidates[1])} | ${candidates[2] ? deriveVibe(candidates[2]) : '-'} |`,
-    `| 🚗 가는 길 (이동·접근성) | ${deriveAccess(candidates[0])} | ${deriveAccess(candidates[1])} | ${candidates[2] ? deriveAccess(candidates[2]) : '-'} |`,
-    `| ⏳ 머무는 시간 (체류감) | ${deriveStay(candidates[0])} | ${deriveStay(candidates[1])} | ${candidates[2] ? deriveStay(candidates[2]) : '-'} |`,
+    `| 비교 항목 | ${candidateHeaders.join(' | ')} |`,
+    `| ${tableSeparator} |`,
+    row('✨ 바이브 (분위기)', deriveVibe),
+    row('🚗 가는 길 (이동·접근성)', deriveAccess),
+    row('⏳ 머무는 시간 (체류감)', deriveStay),
   ].join('\n');
 
   const detailSections = candidates.map((candidate, index) => {
@@ -480,7 +485,7 @@ function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
       '',
       paragraph2,
       '',
-      `[🗺️ 카카오맵 길찾기](${mapLink})`,
+      `👉 [카카오맵 바로가기](${mapLink})`,
     ].join('\n');
   });
 
@@ -509,7 +514,7 @@ function buildGeminiFrontmatterPrompt({ mode, todayIso, candidates }) {
     overview: item.overview,
   })), null, 2);
 
-  return `아래 데이터로 비교형 축제 블로그 frontmatter를 작성해줘.\n후보 데이터:\n${sourceJson}\n\n반드시 아래 형식만 출력:\n---\ntitle: \"${targetLabel}에는 A vs B${candidates[2] ? ' vs C' : ''}, 어디가 더 맞을까요?\"\ndate: ${todayIso}\nsummary: (130~160자, 사용자 의사결정 중심)\ndescription: (summary와 동일)\ncategory: 전국 축제·여행\npublished_by: ${BLOG_PUBLISHED_BY}\ntags: [전국 축제·여행, 비교 분석, ${targetLabel}]\n---\n\nFILENAME: YYYY-MM-DD-festival-versus-....md`;
+  return `아래 데이터로 비교형 축제 블로그 frontmatter를 작성해줘.\n후보 데이터:\n${sourceJson}\n\n반드시 아래 형식만 출력:\n---\ntitle: "${targetLabel}에는 ${candidates[0]?.title || '축제 A'}${candidates[1] ? ` vs ${candidates[1].title}` : ''}${candidates[2] ? ` vs ${candidates[2].title}` : ''}, 어디가 더 맞을까요?"\ndate: ${todayIso}\nsummary: (130~160자, 사용자 의사결정 중심)\ndescription: (summary와 동일)\ncategory: 전국 축제·여행\npublished_by: ${BLOG_PUBLISHED_BY}\ntags: [전국 축제·여행, 비교 분석, ${targetLabel}]\n---\n\nFILENAME: YYYY-MM-DD-festival-versus-....md`;
 }
 
 async function callGemini(prompt) {

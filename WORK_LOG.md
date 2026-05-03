@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-05-03 (festival-versus 비교표 헤더 명확화 + 카카오맵 바로가기 가시성 강화)
+
+- **수정 파일**:
+  - `scripts/generate-festival-versus-post.js`
+  - `src/content/posts/2026-05-03-festival-versus-jongmyo-ceramic-boryeong.md` (재생성)
+- **핵심 반영**:
+  - 비교표 컬럼 헤더를 `A/B/C`에서 실제 축제명 기반으로 변경:
+    - `🏛️ 종묘대제 | 🎨 어린이 도자축제 | 🔥 보령 어린이날 기념행사`
+  - 비교표 생성을 동적 컬럼 방식으로 정리해 2개/3개 후보 모두 자연스럽게 렌더링되도록 보강.
+  - 각 행사 본문 하단 링크 문구를 `카카오맵 길찾기`에서 `👉 카카오맵 바로가기`로 통일해 가시성과 클릭 의도를 강화.
+  - Gemini frontmatter 예시 타이틀에서도 `A vs B vs C` 표기를 제거하고 실제 축제명 기반으로 안내.
+- **검증**:
+  - `npm run generate:festival:versus` (holiday 강제) ✅
+  - `npm run build` ✅ 성공 (1477 URLs, 8346건)
+
 ## 2026-05-03 (festival-versus 본문 품질 개편 + 상세 단일 맵 버튼 예외 처리)
 
 - **수정 파일**:
