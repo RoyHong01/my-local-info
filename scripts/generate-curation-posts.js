@@ -491,6 +491,59 @@ function stripLeadingDuplicateTitleHeading(markdown, title) {
   return lines.join('\n').trim();
 }
 
+function hasLeadingEmoji(text) {
+  return /^(?:[\u{1F300}-\u{1FAFF}]|[\u2600-\u27BF])\s*/u.test(String(text || '').trim());
+}
+
+function addEmojiToItemHeadings(markdown, category, dateISO) {
+  if (!markdown) return markdown;
+
+  const emojiPools = {
+    subsidy: ['💸', '🧾', '📌', '🏦', '✅', '🛎️', '🎯'],
+    festival: ['🎉', '🎭', '🎶', '🎪', '📸', '🌸', '✨'],
+    incheon: ['🩺', '🧩', '🌾', '🏠', '🎗️', '📍', '💡'],
+    default: ['📌', '✅', '💡', '🧭', '📍', '✨', '🎯'],
+  };
+
+  const pool = emojiPools[category] || emojiPools.default;
+  const lines = String(markdown).split('\n');
+
+  let headingIndexes = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^###\s+/.test(lines[i])) headingIndexes.push(i);
+  }
+
+  // 모델이 h3를 안 쓴 경우, 첫 h2(섹션 제목)를 제외한 h2를 항목 소제목으로 간주
+  if (headingIndexes.length === 0) {
+    const h2Indexes = [];
+    for (let i = 0; i < lines.length; i++) {
+      if (/^##\s+/.test(lines[i])) h2Indexes.push(i);
+    }
+    if (h2Indexes.length >= 2) headingIndexes = h2Indexes.slice(1);
+  }
+
+  if (headingIndexes.length === 0) return markdown;
+
+  const seed = dateSeed(dateISO, pool);
+  let used = 0;
+
+  for (const lineIndex of headingIndexes) {
+    const line = lines[lineIndex];
+    const m = line.match(/^(#{2,3}\s+)(.+)$/);
+    if (!m) continue;
+
+    const prefix = m[1];
+    const headingText = m[2].trim();
+    if (!headingText || hasLeadingEmoji(headingText)) continue;
+
+    const emoji = pool[(seed + used) % pool.length];
+    lines[lineIndex] = `${prefix}${emoji} ${headingText}`;
+    used += 1;
+  }
+
+  return lines.join('\n');
+}
+
 // frontmatter 생성
 function buildFrontmatter({ title, date, slug, category, description }) {
   const escaped = (s) => `"${String(s || '').replace(/"/g, "'")}"`;
@@ -555,6 +608,7 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   // frontmatter가 생성 결과에 포함됐으면 제거
   body = body.replace(/^---[\s\S]*?---\n?/, '').trim();
   body = stripLeadingDuplicateTitleHeading(body, title);
+  body = addEmojiToItemHeadings(body, category, todayISO);
 
   const description = topItems
     .slice(0, 3)
