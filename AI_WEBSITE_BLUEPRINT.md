@@ -2308,6 +2308,117 @@ const curationPosts = getSortedPostsData()
 
 ---
 
+### K-16. 비교형 포스트 + 지도 링크 렌더 안정화 패턴
+
+**목적**: 여러 항목을 비교하는 포스트(예: A vs B vs C)에서 항목별 지도 링크가 사라지거나, CTA 텍스트만 남는 문제를 구조적으로 방지한다.
+
+**적용 대상**:
+- 여행/축제/맛집처럼 항목별 위치 정보가 중요한 콘텐츠
+- 본문 내 링크를 버튼 형태로 렌더링하는 프로젝트
+- Markdown 후처리(sanitize/normalize) 단계를 거치는 콘텐츠 파이프라인
+
+**1) 비교형 포스트 메타 표준 (재생성/중복방지용)**
+
+```yaml
+---
+content_type: category-versus
+versus_mode: weekend # or holiday / custom
+versus_key: "weekend|id1,id2,id3"
+source_ids: "id1,id2,id3"
+---
+```
+
+- `content_type`: 상세 렌더 분기 키
+- `versus_mode`: 생성 맥락(주말/연휴/테마)
+- `versus_key`: 동일 비교 조합 중복 방지 키
+- `source_ids`: 원본 데이터 추적/디버깅 키
+
+**2) 비교표는 고정 A/B/C가 아니라 동적 컬럼으로 생성**
+
+```javascript
+const headers = candidates.map((c) => `${c.emoji} ${c.title}`);
+// | 비교 항목 | header1 | header2 | header3 |
+```
+
+- 항목 수가 2개/3개로 바뀌어도 동일 템플릿으로 렌더
+- 모델 출력이 아닌 생성기에서 테이블 구조를 확정해 레이아웃 회귀를 줄임
+
+**3) 지도 링크 추출 우선순위 (공용 resolver 규칙)**
+
+```text
+1순위: 본문에 이미 있는 map.kakao.com 링크 재사용
+2순위: 본문/데이터의 주소 텍스트로 검색 링크 생성
+3순위: 항목명(행사명/상호명)으로 검색 링크 생성
+```
+
+즉, 링크가 없더라도 주소 또는 이름만 있으면 항상 지도 CTA를 만들 수 있어야 한다.
+
+**4) Markdown sanitize 단계의 안전 가드 (핵심 재발 방지)**
+
+문제 패턴:
+- 좌표 제거 정규식이 `https://map.kakao.com/link/map/name,lat,lng`의 `lat,lng`를 좌표 라인으로 오인
+- normalize 단계에서 `👉`와 링크가 분리된 뒤 링크 줄만 삭제되어 이모지만 잔존
+
+해결 패턴:
+
+```javascript
+// sanitize에서 링크 라인은 좌표 필터보다 우선 보존
+if (/\[[^\]]+\]\(https?:\/\/[^)\s]+\)/i.test(trimmed)) return true;
+
+// 좌표 패턴은 "좌표/위도/경도" 키워드 중심으로 제한
+// (위치 아이콘 문자 자체를 좌표 키워드로 쓰지 않는다)
+const coordinatePattern = /\b(?:좌표|위도|경도|북위|남위|동경|서경|지도상\s*좌표)\b|\d+\.\d+\s*[, ]\s*\d+\.\d+/i;
+```
+
+**5) ReactMarkdown 링크 버튼 렌더 표준**
+
+```typescript
+import type { Components } from 'react-markdown';
+
+const markdownComponents: Components = {
+  a: ({ node: _node, href, children, ...props }) => {
+    if (href && href.includes('map.kakao.com')) {
+      return <a href={href} className="inline-flex ... bg-yellow-400 ...">🗺️ 카카오맵 길찾기</a>;
+    }
+    return <a href={href} {...props}>{children}</a>;
+  },
+};
+```
+
+- `node` prop을 직접 DOM에 내려보내지 않도록 분리
+- 버튼 스타일은 프로젝트 디자인 시스템 변수로 통일
+
+**6) fallback CTA 중복 방지 규칙**
+
+```javascript
+const hasInlineMapLink = /\[[^\]]*카카오맵[^\]]*\]\(https?:\/\/map\.kakao\.com\/[^)]+\)/i.test(content);
+const shouldShowFallbackMapButton = !hasInlineMapLink && !!kakaoMapLink;
+```
+
+- 본문에 이미 지도 링크가 있으면 fallback 버튼을 추가하지 않는다
+- 본문 링크가 없을 때만 하단 공통 CTA를 노출한다
+
+**7) 검증 체크리스트 (CI에 넣을 항목)**
+
+- [ ] `npm run build` 성공
+- [ ] 비교형 샘플 포스트 산출 HTML에서 지도 버튼 개수 확인 (`2개/3개`)
+- [ ] sanitize 후 본문에서 `👉` 단독 라인(링크 없는 CTA 텍스트) 미존재
+- [ ] fallback 버튼 중복 미발생
+
+**8) AI에게 바로 주는 실행 지시문 (복사용)**
+
+```text
+비교형 포스트를 구현할 때는 다음을 고정해라:
+1) frontmatter에 content_type/versus_mode/versus_key/source_ids를 넣는다.
+2) 비교표는 동적 컬럼으로 생성한다(2~3개 항목 대응).
+3) 지도 링크 resolver는 본문 링크 -> 주소 -> 항목명 순서로 fallback한다.
+4) sanitize 단계에서 링크 라인은 절대 삭제하지 않는다.
+5) 본문에 지도 링크가 이미 있으면 fallback CTA는 추가하지 않는다.
+6) 빌드 후 산출 HTML에서 항목별 지도 버튼 렌더를 검증한다.
+```
+
+---
+
 ## 부록: 새 프로젝트 시작 시 AI에게 전달할 프롬프트
 
 ```
@@ -2349,4 +2460,4 @@ const curationPosts = getSortedPostsData()
 ---
 
 *이 매뉴얼은 픽앤조이(pick-n-joy.com) 프로젝트 실전 경험을 기반으로 작성되었습니다.*
-*최종 업데이트: 2026-05-02 (v2.1 — AdSense 실전 교훈 + editor_note/큐레이션 패턴 추가)*
+*최종 업데이트: 2026-05-03 (v2.2 — 비교형 포스트/카카오맵 렌더 안정화 패턴 추가)*
