@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-05-03 (festival-versus 텔레그램 반영 + workflow_dispatch 강제 테스트)
+
+- **수정 파일**:
+  - `scripts/notify-telegram.mjs`
+  - `scripts/write-daily-report.mjs`
+  - `.github/workflows/deploy.yml`
+  - `src/content/posts/2026-05-03-festival-versus-holiday-selection.md` (강제 테스트 생성)
+- **핵심 반영**:
+  - 텔레그램 메시지에서 축제 카테고리를 일반 축제와 비교형(`content_type: festival-versus`)으로 분리 집계/표시.
+  - 일일 리포트(stage2 steps)에 `generateFestivalVersus` 상태를 포함하도록 확장.
+  - `workflow_dispatch` 입력에 강제 테스트 옵션 추가:
+    - `festival_versus_force` (`true/false`)
+    - `festival_versus_mode` (`holiday/weekend`)
+  - festival-versus step env에 위 입력을 연결해 수동 리허설 시 요일/연휴 조건 무시 강제 실행 가능하도록 적용.
+- **강제 테스트 결과**:
+  - 로컬 강제 실행: `FESTIVAL_VERSUS_FORCE=true`, `FESTIVAL_VERSUS_MODE=holiday`
+  - 생성 완료: `2026-05-03-festival-versus-holiday-selection.md`
+  - 후보: 종묘대제 / 어린이 도자축제 / 보령 어린이날 기념행사
+- **빌드**: ✅ 성공 (1477 URLs, 8346건)
+
 ## 2026-05-03 (festival-versus 별도 라인 신설: 금요일/연휴 전)
 
 - **수정 파일**:

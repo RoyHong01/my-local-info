@@ -16,6 +16,22 @@ on:
         options:
           - full
           - deploy_only
+      festival_versus_force:
+        description: 'festival-versus 강제 실행 여부 (true면 요일/연휴 조건 무시)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      festival_versus_mode:
+        description: 'festival-versus 강제 실행 모드 (holiday=연휴형, weekend=주말형)'
+        required: false
+        default: 'holiday'
+        type: choice
+        options:
+          - holiday
+          - weekend
 
 permissions:
   contents: write
@@ -207,6 +223,8 @@ jobs:
           FESTIVAL_VERSUS_HOLIDAY_MIN_STREAK: '2'
           FESTIVAL_VERSUS_WEEKEND_COUNT: '2'
           FESTIVAL_VERSUS_HOLIDAY_COUNT: '3'
+          FESTIVAL_VERSUS_FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.festival_versus_force == 'true' && 'true' || 'false' }}
+          FESTIVAL_VERSUS_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.festival_versus_mode || 'holiday' }}
 
       - name: '[2?�계] Next.js 빌드'
         id: build_stage2
@@ -429,6 +447,7 @@ jobs:
           DEPLOY_STAGE1_OUTCOME: ${{ steps.deploy_stage1.outcome }}
           DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
           GENERATE_BLOG_OUTCOME: ${{ steps.generate_blog.outcome }}
+          GENERATE_FESTIVAL_VERSUS_OUTCOME: ${{ steps.generate_festival_versus.outcome }}
           GENERATE_CHOICE_OUTCOME: ${{ steps.generate_choice.outcome }}
           GENERATE_CHOICE_FAILURE_REASON: ${{ steps.generate_choice.outputs.failure_reason }}
           CHOICE_RELAXED_FALLBACK_APPLIED_COUNT: ${{ steps.generate_choice.outputs.relaxed_fallback_applied_count }}

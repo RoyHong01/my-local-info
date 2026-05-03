@@ -67,13 +67,15 @@ async function readPostMeta(filePath) {
     const raw = await readFile(join(process.cwd(), filePath), 'utf8');
     const titleMatch = raw.match(/^title:\s*(.+)$/m);
     const categoryMatch = raw.match(/^category:\s*(.+)$/m);
+    const contentTypeMatch = raw.match(/^content_type:\s*(.+)$/m);
 
     const title = titleMatch ? stripQuotes(titleMatch[1]) : '';
     const categoryKey = normalizeBlogCategory(categoryMatch ? stripQuotes(categoryMatch[1]) : '', filePath);
+    const contentType = contentTypeMatch ? stripQuotes(contentTypeMatch[1]) : '';
 
-    return { title, categoryKey };
+    return { title, categoryKey, contentType };
   } catch {
-    return { title: '', categoryKey: 'other' };
+    return { title: '', categoryKey: 'other', contentType: '' };
   }
 }
 
@@ -146,7 +148,14 @@ async function buildMessage(report) {
 
   const incheonBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'incheon').map((meta) => meta.title).filter(Boolean);
   const subsidyBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'subsidy').map((meta) => meta.title).filter(Boolean);
-  const festivalBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'festival').map((meta) => meta.title).filter(Boolean);
+  const festivalVersusTitles = blogMetas
+    .filter((meta) => meta.categoryKey === 'festival' && meta.contentType === 'festival-versus')
+    .map((meta) => meta.title)
+    .filter(Boolean);
+  const festivalBlogTitles = blogMetas
+    .filter((meta) => meta.categoryKey === 'festival' && meta.contentType !== 'festival-versus')
+    .map((meta) => meta.title)
+    .filter(Boolean);
   const curationBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
   const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
@@ -216,7 +225,7 @@ async function buildMessage(report) {
     incheonPhotoLine,
     incheonPhotoFailureLine,
     `📝 블로그 생성: ${blogCount}건`,
-    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건${curationBlogTitles.length > 0 ? ` | 큐레이션 ${curationBlogTitles.length}건` : ''}${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
+    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건 | 축제비교 ${festivalVersusTitles.length}건${curationBlogTitles.length > 0 ? ` | 큐레이션 ${curationBlogTitles.length}건` : ''}${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
     `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
@@ -243,6 +252,12 @@ async function buildMessage(report) {
     lines.push('');
     lines.push('*전국축제 블로그:*');
     festivalBlogTitles.forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (festivalVersusTitles.length > 0) {
+    lines.push('');
+    lines.push('*전국축제 비교형 블로그:*');
+    festivalVersusTitles.forEach((title) => lines.push(`  • ${title}`));
   }
 
   if (curationBlogTitles.length > 0) {

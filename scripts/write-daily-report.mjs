@@ -214,6 +214,7 @@ function buildStagesFromEnv(env) {
       deployUrl: env.DEPLOY_STAGE2_URL || '',
       steps: {
         generateBlog: normalizeOutcome(env.GENERATE_BLOG_OUTCOME),
+        generateFestivalVersus: normalizeOutcome(env.GENERATE_FESTIVAL_VERSUS_OUTCOME),
         generateChoice: normalizeOutcome(env.GENERATE_CHOICE_OUTCOME),
         build: normalizeOutcome(env.BUILD_STAGE2_OUTCOME),
         e2e: normalizeOutcome(env.E2E_STAGE2_OUTCOME),
@@ -253,6 +254,7 @@ function toMarkdown(report) {
     },
     stage2: {
       generateBlog: 'AI 블로그 생성',
+      generateFestivalVersus: 'festival-versus 생성',
       generateChoice: '픽앤조이 초이스 자동 생성',
       build: '빌드',
       e2e: 'E2E 테스트',
