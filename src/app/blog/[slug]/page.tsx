@@ -414,10 +414,15 @@ function diversifyLegacyRestaurantInfoContent(content: string, key: string): str
 
   const variant = variants[stableHash(key || 'restaurant') % variants.length];
   let transformed = String(content || '');
+  const hasExistingEditorLabel = /(^|\n)\s*[-*]?\s*\*\*?(?:에디터\s*한\s*줄\s*평|에디터\s*한줄\s*평|에디터\s*코멘트|오늘의\s*한마디|에디터\s*메모)(\*\*?)?\s*:/m.test(transformed);
+  const isEditorCourseLabel = /에디터\s*한\s*줄\s*평|에디터\s*한줄\s*평/.test(variant.courseLabel);
+  const courseLabelToApply = isEditorCourseLabel && hasExistingEditorLabel
+    ? variant.editorLabel
+    : variant.courseLabel;
 
   // 기존 포스트의 레거시 라벨 → 새 라벨로 치환
   transformed = transformed
-    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${variant.courseLabel}$3:`)
+    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${courseLabelToApply}$3:`)
     .replace(/(^|\n)(\s*[-*]?\s*\*\*?)(에디터 코멘트|오늘의 한마디|에디터 메모)(\*\*?)?\s*:/g, `$1$2${variant.editorLabel}$4:`);
 
   // 기계적 상투 문구 → 자연스러운 템플릿으로 교체

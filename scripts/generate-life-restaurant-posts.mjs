@@ -85,20 +85,20 @@ const VISIT_INFO_VARIANTS = [
   {
     courseLabel: '방문 전 체크',
     editorLabel: '에디터 한줄 평',
-    courseLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 구체적으로 한 줄 (확인되지 않은 정보 단정 금지)',
-    editorLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 한 주관적 한 줄 총평 (추상 칭찬·감탄사 금지)',
+    courseLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 바탕으로 2~4문장으로 구체적으로 안내 (확인되지 않은 정보 단정 금지)',
+    editorLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 2~4문장으로 주관적 총평 (추상 칭찬·감탄사 금지)',
   },
   {
     courseLabel: '이런 분께 강추',
     editorLabel: '방문 전 체크',
-    courseLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 가장 잘 맞는 상황과 사람을 구체적으로 한 줄',
-    editorLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 구체적으로 한 줄 (확인되지 않은 정보 단정 금지)',
+    courseLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 잘 맞는 상황/사람을 2~4문장으로 구체적으로 제안',
+    editorLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 바탕으로 2~4문장으로 안내 (확인되지 않은 정보 단정 금지)',
   },
   {
     courseLabel: '에디터 한줄 평',
     editorLabel: '이런 분께 강추',
-    courseLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 한 주관적 한 줄 총평 (추상 칭찬·감탄사 금지)',
-    editorLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 가장 잘 맞는 상황과 사람을 구체적으로 한 줄',
+    courseLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 2~4문장으로 주관적 총평 (추상 칭찬·감탄사 금지)',
+    editorLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 잘 맞는 상황/사람을 2~4문장으로 구체적으로 제안',
   },
 ];
 const REQUIRED_SECTION_PATTERNS = [
@@ -382,6 +382,12 @@ function postProcessRestaurantMarkdown(markdown, context) {
   const { frontmatter, body } = splitMarkdownSections(markdown);
   let normalizedBody = (body || '').trim();
 
+  const hasExistingEditorLabel = /(^|\n)\s*[-*]?\s*\*\*?(?:에디터\s*한\s*줄\s*평|에디터\s*한줄\s*평|에디터\s*코멘트|오늘의\s*한마디|에디터\s*메모)(\*\*?)?\s*:/m.test(normalizedBody);
+  const isEditorCourseLabel = /에디터\s*한\s*줄\s*평|에디터\s*한줄\s*평/.test(String(context.courseLabel || ''));
+  const courseLabelToApply = isEditorCourseLabel && hasExistingEditorLabel
+    ? context.editorLabel
+    : context.courseLabel;
+
   // [SANITIZER] Gemini가 본문에 출력한 HTML 태그(<br>, <br/>, <p>, </p>)를 제거해
   // 마크다운 렌더러에서 텍스트로 노출되는 회귀 버그를 차단한다.
   // 문단 구분은 오직 빈 줄(double newline)로만 표현한다.
@@ -411,7 +417,7 @@ function postProcessRestaurantMarkdown(markdown, context) {
     .trim();
 
   normalizedBody = normalizedBody
-    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${context.courseLabel}$3:`)
+    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${courseLabelToApply}$3:`)
     .trim();
 
   normalizedBody = enforceHookBridgeAndHeadingSpacing(normalizedBody, context);

@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-05-03 (맛집 방문정보 라벨 중복 원인 제거 + 3~4문장 가이드 반영)
+
+- **수정 파일**:
+  - `src/app/blog/[slug]/page.tsx`
+  - `scripts/generate-life-restaurant-posts.mjs`
+- **문제 원인 분석**:
+  - 레거시 맛집 본문에 이미 `에디터 한 줄 평` 항목이 있는 상태에서, variant 3(`courseLabel = 에디터 한줄 평`)가 `식사 후 동선`을 같은 라벨로 치환해 **동일 라벨 2개가 동시에 노출**되는 케이스가 발생함.
+- **핵심 반영**:
+  - 렌더러 `diversifyLegacyRestaurantInfoContent()`에 중복 방지 가드 추가:
+    - 본문에 에디터 라벨이 이미 있으면 `식사 후 동선` 치환 시 `courseLabel` 대신 `editorLabel`을 사용해 라벨 충돌 차단.
+  - 생성기 `postProcessRestaurantMarkdown()`에도 동일 중복 방지 가드 추가:
+    - 생성 단계에서도 같은 충돌이 생기지 않도록 동일 규칙 적용.
+  - `VISIT_INFO_VARIANTS` 설명 문구를 `한 줄` 강제에서 `2~4문장` 가이드로 완화해 내용 밀도 강화.
+- **검증**:
+  - `npm run build` ✅ 성공
+  - `out/blog/incheon-restaurant-8914792/index.html` 기준 방문정보 라벨이 `이런 분께 강추` + `에디터 한 줄 평`으로 단일 조합만 노출되는 것 확인
+
 ## 2026-05-03 (축제 포스트 정합성 오류 수정 + 재발 방지)
 
 - **수정 파일**:
