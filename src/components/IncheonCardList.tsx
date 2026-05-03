@@ -21,9 +21,12 @@ export default function IncheonCardList({ items }: { items: DataItem[] }) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {items.map((item, i) => {
         const name = getField(item, ['서비스명', 'name', 'title']);
+        const purposeSummary = cleanText(getField(item, ['서비스목적요약', 'summary', 'description']));
+        const supportContent = cleanText(getField(item, ['지원내용']));
         const rawSummary = (
-          cleanText(getField(item, ['서비스목적요약', 'summary', 'description'])) ||
-          cleanText(getField(item, ['지원내용'])).slice(0, 80) ||
+          purposeSummary.length > 20 ? purposeSummary :
+          supportContent ||
+          purposeSummary ||
           '상세 정보는 클릭하여 확인하세요.'
         ).slice(0, 120);
         const org = cleanText(getField(item, ['소관기관명', 'location', 'addr1']));
