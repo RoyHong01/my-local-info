@@ -328,7 +328,8 @@ function findFirstSectionSplit(markdown: string, headingPatterns: RegExp[]): Mar
 // Custom ReactMarkdown components: renders map.kakao.com links as styled yellow buttons
 const markdownComponents: Components = {
   a: ({ node: _node, href, children, ...props }) => {
-    if (href && href.includes('map.kakao.com')) {
+    const isKakaoDirectionLink = !!href && /https?:\/\/map\.kakao\.com\/link\//i.test(href);
+    if (isKakaoDirectionLink) {
       return (
         <span className="not-prose inline-block my-2">
           <a
