@@ -5,6 +5,31 @@
 
 ---
 
+## 2026-05-03 (festival-versus 본문 품질 개편 + 상세 단일 맵 버튼 예외 처리)
+
+- **수정 파일**:
+  - `scripts/generate-festival-versus-post.js`
+  - `src/lib/posts.ts`
+  - `src/app/blog/[slug]/page.tsx`
+  - `src/content/posts/2026-05-03-festival-versus-jongmyo-ceramic-boryeong.md` (강제 재생성)
+- **핵심 반영**:
+  - festival-versus 생성기를 전면 보강해 다음 요소를 고정 반영:
+    - 히어로 이미지를 3개 후보 중 랜덤 선택하여 frontmatter `image`에 주입
+    - 비교 소제목을 감성형 문장 + 이모지 조합으로 재구성
+    - 비교표 라벨을 `✨/🚗/⏳` 형태로 가독성 강화
+    - A/B/C 각각에 개별 본문 이미지 + 개별 카카오맵 길찾기 링크 삽입
+    - 본문 하단 링크 섹션 제목을 `🔎 구체적인 정보 더 보기`로 통일
+    - 에필로그를 `💡 에디터 성우의 한 줄 정리` 형식으로 강화
+  - frontmatter 안정화:
+    - `content_type: festival-versus`, `versus_mode`, `versus_key`, `source_ids`, `image`를 항상 보장하도록 재구성
+  - 상세 렌더러 예외 처리:
+    - `src/app/blog/[slug]/page.tsx`에서 `content_type === festival-versus`인 경우 기존 단일 축제 카카오맵 버튼 자동 주입을 비활성화.
+  - posts 파서 확장:
+    - `src/lib/posts.ts`에서 `content_type/contentType`를 `contentType` 필드로 파싱해 상세 렌더 분기에서 사용.
+- **검증**:
+  - `npm run generate:festival:versus` (holiday 강제) ✅
+  - `npm run build` ✅ 성공 (1477 URLs, 8346건)
+
 ## 2026-05-03 (festival-versus 텔레그램 반영 + workflow_dispatch 강제 테스트)
 
 - **수정 파일**:

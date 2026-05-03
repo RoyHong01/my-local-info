@@ -565,6 +565,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isFestivalPost = !isRestaurantPost && !isChoicePost && /축제|여행/.test(post.category || '');
+  const isFestivalVersusPost = isFestivalPost && post.contentType === 'festival-versus';
   const isIncheonOrSubsidyPost = /인천|보조금|복지/.test(post.category || '');
   const useExpandedSourceSpacing = isIncheonOrSubsidyPost && !isChoicePost && !!sourceLink;
   const choiceContentBase = isChoicePost ? stripTrailingChoiceDisclosure(sanitizedContent) : sanitizedContent;
@@ -608,7 +609,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         /^###\s*(?:📌\s*)?방문 정보(?:\s*한눈에)?\s*$/m,
       ])
     : null;
-  const festivalSectionSplit = isFestivalPost
+  const festivalSectionSplit = isFestivalPost && !isFestivalVersusPost
     ? findFirstSectionSplit(renderedContent, [
         /^###\s*.*알고\s*가세요.*$/m,
         /^##\s*.*알고\s*가세요.*$/m,
@@ -621,7 +622,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const mapSectionSplit = restaurantSectionSplit || festivalSectionSplit;
   const kakaoMapLink = isRestaurantPost
     ? resolveRestaurantKakaoMapLink(post, renderedContent)
-    : isFestivalPost
+    : isFestivalPost && !isFestivalVersusPost
       ? resolveFestivalKakaoMapLink(post, renderedContent)
       : null;
   const shouldShowFallbackMapButton = !mapSectionSplit && !!kakaoMapLink && (isRestaurantPost || isFestivalPost);

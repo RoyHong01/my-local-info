@@ -12,6 +12,7 @@ export interface PostData {
   summary: string;
   description?: string;
   category?: string;
+  contentType?: string;
   tags?: string[];
   image?: string;
   heroOriginalSize?: boolean;
@@ -207,6 +208,7 @@ export function getSortedPostsData(): PostData[] {
             summary: matterResult.data.summary || '',
             description: matterResult.data.description || matterResult.data.summary || '',
             category: matterResult.data.category,
+            contentType: matterResult.data.content_type || matterResult.data.contentType || '',
             tags: matterResult.data.tags,
             image: matterResult.data.image,
             heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
@@ -269,6 +271,7 @@ export function getSortedPostsData(): PostData[] {
             summary: matterResult.data.summary || '',
             description: matterResult.data.description || matterResult.data.summary || '',
             category: matterResult.data.category,
+            contentType: matterResult.data.content_type || matterResult.data.contentType || '',
             tags: matterResult.data.tags,
             image: matterResult.data.image,
             heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
@@ -387,6 +390,7 @@ export function getPostData(slug: string): PostData | null {
       summary: matterResult.data.summary || '',
       description: matterResult.data.description || matterResult.data.summary || '',
       category: matterResult.data.category,
+      contentType: matterResult.data.content_type || matterResult.data.contentType || '',
       tags: matterResult.data.tags,
       image: matterResult.data.image,
       heroOriginalSize: Boolean(matterResult.data.hero_original_size || matterResult.data.heroOriginalSize),
