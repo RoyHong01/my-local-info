@@ -83,16 +83,22 @@ const HOOK_SUBHEADING_BANNED_PATTERNS = [
 const RESTAURANT_STYLES = ['Sensory', 'Discovery', 'Curation', 'Aesthetic'];
 const VISIT_INFO_VARIANTS = [
   {
-    courseLabel: '식후 2차 코스(선택)',
-    editorLabel: '에디터 코멘트',
+    courseLabel: '방문 전 체크',
+    editorLabel: '에디터 한줄 평',
+    courseLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 구체적으로 한 줄 (확인되지 않은 정보 단정 금지)',
+    editorLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 한 주관적 한 줄 총평 (추상 칭찬·감탄사 금지)',
   },
   {
-    courseLabel: '식후 이동 포인트',
-    editorLabel: '오늘의 한마디',
+    courseLabel: '이런 분께 강추',
+    editorLabel: '방문 전 체크',
+    courseLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 가장 잘 맞는 상황과 사람을 구체적으로 한 줄',
+    editorLabelDesc: '예약 여부·웨이팅 강도·주차 팁 중 하나를 구체적으로 한 줄 (확인되지 않은 정보 단정 금지)',
   },
   {
-    courseLabel: '식사 뒤 이어가기 좋은 코스',
-    editorLabel: '에디터 메모',
+    courseLabel: '에디터 한줄 평',
+    editorLabel: '이런 분께 강추',
+    courseLabelDesc: '메뉴·시간대·분위기 중 하나를 바탕으로 한 주관적 한 줄 총평 (추상 칭찬·감탄사 금지)',
+    editorLabelDesc: '혼밥·데이트·가족·소개팅 중 이 식당과 가장 잘 맞는 상황과 사람을 구체적으로 한 줄',
   },
 ];
 const REQUIRED_SECTION_PATTERNS = [
@@ -406,7 +412,6 @@ function postProcessRestaurantMarkdown(markdown, context) {
 
   normalizedBody = normalizedBody
     .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${context.courseLabel}$3:`)
-    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)에디터 한\s*줄\s*평(\*\*?)?\s*:/g, `$1$2${context.editorLabel}$3:`)
     .trim();
 
   normalizedBody = enforceHookBridgeAndHeadingSpacing(normalizedBody, context);
@@ -1034,10 +1039,9 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 전화번호
 - 주차: 확인 필요 (명확한 정보가 없으면 이렇게 쓰기)
 - 이럴 때 체크하면 좋아요: scenarioHint를 바탕으로 한 한 줄
-- 아래 라벨 후보 중 2개를 골라 사용하고, 같은 문장을 복붙하지 말 것:
-  - ${candidate.visitInfoVariant.courseLabel}: 식후에 이어가기 좋은 코스를 한 줄(실존 장소 단정 금지, category 수준 표현 허용)
-  - ${candidate.visitInfoVariant.editorLabel}: 추상 칭찬 금지, 메뉴/시간대/선호 상황 중 최소 1개를 포함한 한 줄
-- 금지: "여기서 식사하고 도보 5분 거리의 OO 카페..." 같은 기계적 상투 문구
+- 아래 라벨 2개를 반드시 사용하고, 각 라벨의 가이드에 맞춰 작성할 것:
+  - ${candidate.visitInfoVariant.courseLabel}: ${candidate.visitInfoVariant.courseLabelDesc}
+  - ${candidate.visitInfoVariant.editorLabel}: ${candidate.visitInfoVariant.editorLabelDesc}
 
 [형식 규칙]
 - 본문 첫 줄 ## 헤딩은 훅 문장 자체를 그대로 써줘. 예: ## 여기 안 가본 사람 아직도 있어요? 처럼 작성하고, "훅"이라는 단어 자체를 제목으로 쓰는 것은 절대 금지.

@@ -393,35 +393,43 @@ function stableHash(value: string): number {
 function diversifyLegacyRestaurantInfoContent(content: string, key: string): string {
   const variants = [
     {
-      courseLabel: '식후 2차 코스(선택)',
-      editorLabel: '에디터 코멘트',
-      courseTemplate: '식사 후에는 인근 카페나 산책 스팟처럼 분위기를 이어가기 좋은 장소를 한 곳 더 붙이면 코스 만족도가 높아져요.',
-      editorTemplate: '메뉴 완성도와 공간 결이 잘 맞아떨어져, 취향이 분명한 날 다시 찾기 좋은 타입이에요.',
+      courseLabel: '방문 전 체크',
+      editorLabel: '에디터 한줄 평',
+      courseTemplate: '주차 가능 여부와 웨이팅은 방문 전 전화나 SNS로 미리 확인하면 헛걸음을 줄일 수 있어요.',
+      editorTemplate: '메뉴 완성도와 공간 분위기가 잘 맞아, 취향이 분명한 날 다시 찾기 좋은 타입이에요.',
     },
     {
-      courseLabel: '식후 이동 포인트',
-      editorLabel: '오늘의 한마디',
-      courseTemplate: '메인 식사를 마친 뒤에는 도보권 디저트 카페나 조용한 골목 산책을 붙이면 흐름이 자연스럽게 이어져요.',
-      editorTemplate: '특정 시간대에 방문하면 맛과 분위기의 밸런스가 더 또렷하게 느껴지는 곳이에요.',
+      courseLabel: '이런 분께 강추',
+      editorLabel: '방문 전 체크',
+      courseTemplate: '조용한 분위기에서 대화에 집중하고 싶은 소규모 모임이나 데이트 코스로 잘 어울려요.',
+      editorTemplate: '주말에는 대기가 생길 수 있어서 평일 방문이나 예약 가능 여부를 미리 확인하면 좋아요.',
     },
     {
-      courseLabel: '식사 뒤 이어가기 좋은 코스',
-      editorLabel: '에디터 메모',
-      courseTemplate: '식후에는 가까운 카페 또는 가벼운 산책 코스를 조합해, 대화가 이어지는 여운형 코스로 마무리하면 좋아요.',
-      editorTemplate: '한 번의 식사로 끝내기보다, 취향 코스의 시작점으로 잡기 좋은 매력이 있어요.',
+      courseLabel: '에디터 한줄 평',
+      editorLabel: '이런 분께 강추',
+      courseTemplate: '특정 시간대에 방문하면 맛과 분위기의 밸런스가 더 또렷하게 느껴지는 곳이에요.',
+      editorTemplate: '입맛이 까다로운 분이나 사진 찍는 걸 좋아하는 분에게 특히 잘 맞는 곳이에요.',
     },
   ];
 
   const variant = variants[stableHash(key || 'restaurant') % variants.length];
   let transformed = String(content || '');
 
+  // 기존 포스트의 레거시 라벨 → 새 라벨로 치환
   transformed = transformed
     .replace(/(^|\n)(\s*[-*]?\s*\*\*?)식사 후 동선(\*\*?)?\s*:/g, `$1$2${variant.courseLabel}$3:`)
-    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)에디터 한\s*줄\s*평(\*\*?)?\s*:/g, `$1$2${variant.editorLabel}$3:`);
+    .replace(/(^|\n)(\s*[-*]?\s*\*\*?)(에디터 코멘트|오늘의 한마디|에디터 메모)(\*\*?)?\s*:/g, `$1$2${variant.editorLabel}$4:`);
 
+  // 기계적 상투 문구 → 자연스러운 템플릿으로 교체
   transformed = transformed
-    .replace(/(식후\s*2차\s*코스\(선택\)|식후\s*이동\s*포인트|식사\s*뒤\s*이어가기\s*좋은\s*코스)\s*:\s*여기서\s*식사하고\s*도보\s*\d+분\s*거리의\s*.+?코스가\s*완성돼요\./g, `$1: ${variant.courseTemplate}`)
-    .replace(/(에디터\s*코멘트|오늘의\s*한마디|에디터\s*메모|에디터\s*한\s*줄\s*평)\s*:\s*(복잡한\s*도심을\s*벗어나.+?|보기만\s*해도\s*행복해지는.+?|힙한\s*분위기\s*속에서.+?)\./g, `$1: ${variant.editorTemplate}`);
+    .replace(
+      /(식후\s*2차\s*코스\(선택\)|식후\s*이동\s*포인트|식사\s*뒤\s*이어가기\s*좋은\s*코스|방문\s*전\s*체크|이런\s*분께\s*강추)\s*:\s*여기서\s*식사하고\s*도보\s*\d+분\s*거리의\s*.+?코스가\s*완성돼요\./g,
+      `$1: ${variant.courseTemplate}`,
+    )
+    .replace(
+      /(에디터\s*코멘트|오늘의\s*한마디|에디터\s*메모|에디터\s*한\s*줄\s*평)\s*:\s*(복잡한\s*도심을\s*벗어나.+?|보기만\s*해도\s*행복해지는.+?|힙한\s*분위기\s*속에서.+?)\./g,
+      `$1: ${variant.editorTemplate}`,
+    );
 
   return transformed;
 }

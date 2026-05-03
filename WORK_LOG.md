@@ -3331,3 +3331,17 @@
 - 블로그 자동 생성 구축: Gemini → (쿼터 문제로) Claude API 전환
 - BlogFilter.tsx, RSS 피드, 사이트맵 자동생성 추가
 - 기술 스택 문서 수정: Next.js 14→16, Gemini→Claude API(claude-haiku-4-5)
+
+## 2026-05-07 (맛집 방문정보 섹션 앵글 3종 전환)
+
+- **수정 파일**:
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `src/app/blog/[slug]/page.tsx`
+- **핵심 반영**:
+  - `VISIT_INFO_VARIANTS` 3개 앵글을 "식사 후 동선/에디터 한줄 평" 패턴에서 **방문 전 체크 / 이런 분께 강추 / 에디터 한줄 평** 3종으로 교체
+  - Gemini 프롬프트 라벨 지시문도 새 앵글로 동기화
+  - `normalizeBody`에서 "에디터 한줄 평" 2번째 replace를 제거해 variant 2 라벨 충돌 방지
+  - `page.tsx`의 `diversifyLegacyRestaurantInfoContent` 함수를 새 3종 앵글 + 자연스러운 템플릿 문장으로 교체 (레거시 포스트 렌더 단계에서도 동일 앵글 적용)
+  - 생성기·렌더러 두 파일의 variant 배열 순서·라벨 완전 일치 확인
+- **빌드**: ✅ 성공 (1476 URLs, 8346 건)
+- **커밋**: `eea40c0`
