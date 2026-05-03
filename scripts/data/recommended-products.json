@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-03T00:00:00+09:00",
+  "updatedAtKst": "2026-05-04T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1119,6 +1119,61 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-05-03",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-04",
+      "productId": "5449810685",
+      "productName": "++단기행사++ 종근당건강 프로메가 알티지 오메가3 듀얼 혈행 건강 //, 180정, 1개",
+      "brand": "단기행사",
+      "productGroupTokens": [
+        "종근당건강",
+        "프로메가",
+        "알티지",
+        "오메가3",
+        "듀얼",
+        "혈행"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-04-choice-health-2026-05-04.md",
+      "sourceId": "manual-choice-health-2026-05-04",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-04",
+      "productId": "9423398720",
+      "productName": "헬로바이오 생유산균 19 프로바이오틱스 7.5g",
+      "brand": "헬로바이오",
+      "productGroupTokens": [
+        "생유산균",
+        "프로바이오틱스",
+        "5g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-04-choice-health-2026-05-04.md",
+      "sourceId": "manual-choice-health-2026-05-04",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-04",
+      "productId": "9416900767",
+      "productName": "비타민마을 노르웨이 Epax원료 rTG 알티지 헤링오일 오메가3-9-11",
+      "brand": "비타민마을",
+      "productGroupTokens": [
+        "노르웨이",
+        "epax원료",
+        "rtg",
+        "알티지",
+        "헤링오일",
+        "오메가3"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-04-choice-health-2026-05-04.md",
+      "sourceId": "manual-choice-health-2026-05-04",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
