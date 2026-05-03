@@ -293,6 +293,78 @@ function classifyPostForSeo(post: { title: string; category?: string; tags?: str
   };
 }
 
+type MarkdownSectionSplit = {
+  before: string;
+  section: string;
+  after: string;
+};
+
+function splitMarkdownByHeadingBlock(markdown: string, headingPattern: RegExp): MarkdownSectionSplit | null {
+  const headingMatch = headingPattern.exec(markdown);
+  if (!headingMatch || headingMatch.index == null) return null;
+
+  const sectionStart = headingMatch.index;
+  const afterHeadingStart = sectionStart + headingMatch[0].length;
+  const rest = markdown.slice(afterHeadingStart);
+  const nextHeadingMatch = /\n#{1,6}\s+/.exec(rest);
+  const sectionEnd = nextHeadingMatch ? afterHeadingStart + nextHeadingMatch.index + 1 : markdown.length;
+
+  return {
+    before: markdown.slice(0, sectionStart),
+    section: markdown.slice(sectionStart, sectionEnd),
+    after: markdown.slice(sectionEnd),
+  };
+}
+
+function findFirstSectionSplit(markdown: string, headingPatterns: RegExp[]): MarkdownSectionSplit | null {
+  for (const pattern of headingPatterns) {
+    const split = splitMarkdownByHeadingBlock(markdown, pattern);
+    if (split) return split;
+  }
+  return null;
+}
+
+function buildKakaoSearchLink(query: string) {
+  return `https://map.kakao.com/link/search/${encodeURIComponent(query.trim())}`;
+}
+
+function extractAddressCandidateFromContent(content: string): string {
+  const markerPatterns = [
+    /📌\s*\*\*주소\*\*:\s*([^\n]+)/,
+    /📍\s*장소:\s*([^\n]+)/,
+    /-\s+\*\*주소\*\*:\s*([^\n]+)/,
+  ];
+
+  for (const pattern of markerPatterns) {
+    const match = content.match(pattern);
+    if (match?.[1]) return match[1].trim();
+  }
+
+  return '';
+}
+
+function resolveFestivalKakaoMapLink(post: NonNullable<ReturnType<typeof getPostData>>, content: string): string | null {
+  const existingMapLink = content.match(/\[[^\]]*카카오맵[^\]]*\]\((https?:\/\/map\.kakao\.com\/[^)]+)\)/i)?.[1];
+  if (existingMapLink) return existingMapLink;
+
+  const address = extractAddressCandidateFromContent(content);
+  if (address) return buildKakaoSearchLink(address);
+
+  const fallbackQuery = String(post.title || '').trim();
+  if (!fallbackQuery) return null;
+  return buildKakaoSearchLink(fallbackQuery);
+}
+
+function resolveRestaurantKakaoMapLink(post: NonNullable<ReturnType<typeof getPostData>>, content: string): string | null {
+  const query = String(post.placeAddress || '').trim()
+    || extractAddressCandidateFromContent(content)
+    || String(post.placeName || '').trim()
+    || String(post.title || '').trim();
+
+  if (!query) return null;
+  return buildKakaoSearchLink(query);
+}
+
 async function resolveSourceLink(post: { sourceId?: string; category?: string }): Promise<string | null> {
   if (!post.sourceId) return null;
   const cat = post.category || '';
@@ -412,6 +484,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const isRestaurantPost = post.category === '픽앤조이 맛집 탐방' || /맛집|restaurant|food|먹거리/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
   const isChoicePost = post.category === '픽앤조이 초이스' || /픽앤조이 초이스|쿠팡|review|쇼핑|가전|디지털/i.test([post.title, post.category || '', ...(post.tags || [])].join(' '));
+  const isFestivalPost = !isRestaurantPost && !isChoicePost && /축제|여행/.test(post.category || '');
   const isIncheonOrSubsidyPost = /인천|보조금|복지/.test(post.category || '');
   const useExpandedSourceSpacing = isIncheonOrSubsidyPost && !isChoicePost && !!sourceLink;
   const choiceContentBase = isChoicePost ? stripTrailingChoiceDisclosure(sanitizedContent) : sanitizedContent;
@@ -443,6 +516,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const isSvgHero = !!post.image && post.image.endsWith('.svg');
   const useOriginalHeroSize = !!post.heroOriginalSize && !isChoicePost && !isSvgHero;
   const heroImageSrc = post.image || '/images/default-lifestyle.svg';
+  const restaurantSectionSplit = isRestaurantPost
+    ? findFirstSectionSplit(renderedContent, [/^##\s*방문 정보 한눈에\s*$/m])
+    : null;
+  const festivalSectionSplit = isFestivalPost
+    ? findFirstSectionSplit(renderedContent, [
+        /^###\s*📍\s*위치 확인\s*&\s*길찾기\s*$/m,
+        /^##\s*📌\s*한눈에 보는 여행 정보\s*$/m,
+      ])
+    : null;
+  const mapSectionSplit = restaurantSectionSplit || festivalSectionSplit;
+  const kakaoMapLink = isRestaurantPost
+    ? resolveRestaurantKakaoMapLink(post, renderedContent)
+    : isFestivalPost
+      ? resolveFestivalKakaoMapLink(post, renderedContent)
+      : null;
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
@@ -530,9 +618,33 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 )
               )}
               <div className={`blog-prose${isChoicePost ? ' choice-post-prose' : ''}${isSingleChoicePost ? ' choice-single-post-prose' : ''} prose prose-stone prose-orange max-w-none mb-12 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h1:font-extrabold prose-h2:font-bold`}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {renderedContent}
-                </ReactMarkdown>
+                {mapSectionSplit && kakaoMapLink ? (
+                  <>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {mapSectionSplit.before}
+                    </ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {mapSectionSplit.section}
+                    </ReactMarkdown>
+                    <div className="my-8 not-prose">
+                      <a
+                        href={kakaoMapLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-yellow-400 px-5 py-3 font-bold text-gray-900 transition-colors hover:bg-yellow-500"
+                      >
+                        <span>🗺️ 카카오맵 길찾기</span>
+                      </a>
+                    </div>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {mapSectionSplit.after}
+                    </ReactMarkdown>
+                  </>
+                ) : (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {renderedContent}
+                  </ReactMarkdown>
+                )}
               </div>
               <AdBanner />
               <div className={`mt-4 pt-4 ${isChoicePost ? '' : 'border-t border-stone-100'} text-sm text-stone-500 ${useExpandedSourceSpacing ? 'flex flex-col gap-8' : ''}`}>
