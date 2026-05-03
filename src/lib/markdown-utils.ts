@@ -4,13 +4,15 @@ export function sanitizeMarkdown(markdown: string): string {
   const normalized = markdown.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   const normalizedListIndent = normalizeIndentedBulletsAfterOrderedList(normalized);
   const normalizedShortcutLinks = normalizeShortcutCtaLinks(normalizedListIndent);
-  const coordinatePattern = /\b(?:좌표|위도|경도|북위|남위|동경|서경|지도상\s*좌표|📍)\b|°[NSWE]|\d+\.\d+\s*[, ]\s*\d+\.\d+/i;
+  const coordinatePattern = /\b(?:좌표|위도|경도|북위|남위|동경|서경|지도상\s*좌표)\b|°[NSWE]|\d+\.\d+\s*[, ]\s*\d+\.\d+/i;
 
   const lines = normalizedShortcutLinks
     .split('\n')
     .filter((line) => {
       const trimmed = line.trim();
       if (!trimmed) return true;
+      // 지도 링크는 좌표가 URL에 포함되더라도 보존해야 버튼 렌더링이 가능하다.
+      if (/\[[^\]]+\]\(https?:\/\/[^)\s]+\)/i.test(trimmed)) return true;
       return !coordinatePattern.test(trimmed);
     });
 

@@ -1,6 +1,7 @@
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
@@ -325,8 +326,8 @@ function findFirstSectionSplit(markdown: string, headingPatterns: RegExp[]): Mar
 }
 
 // Custom ReactMarkdown components: renders map.kakao.com links as styled yellow buttons
-const markdownComponents = {
-  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+const markdownComponents: Components = {
+  a: ({ node: _node, href, children, ...props }) => {
     if (href && href.includes('map.kakao.com')) {
       return (
         <span className="not-prose inline-block my-2">
@@ -647,7 +648,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
        : isFestivalPost
        ? resolveFestivalKakaoMapLink(post, renderedContent)
        : null;
-  const shouldShowFallbackMapButton = !mapSectionSplit && !!kakaoMapLink && (isRestaurantPost || isFestivalPost);
+  const hasInlineKakaoMapLink = /\[[^\]]*카카오맵[^\]]*\]\(https?:\/\/map\.kakao\.com\/[^)]+\)/i.test(renderedContent);
+  const shouldShowFallbackMapButton = !mapSectionSplit && !hasInlineKakaoMapLink && !!kakaoMapLink && (isRestaurantPost || isFestivalPost);
 
   return (
     <div className="bg-cherry-blossom font-sans text-stone-800">
