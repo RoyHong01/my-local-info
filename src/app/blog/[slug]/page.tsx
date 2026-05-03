@@ -644,9 +644,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const mapSectionSplit = restaurantSectionSplit || festivalSectionSplit;
   const kakaoMapLink = isRestaurantPost
     ? resolveRestaurantKakaoMapLink(post, renderedContent)
-    : isFestivalPost && !isFestivalVersusPost
-      ? resolveFestivalKakaoMapLink(post, renderedContent)
-      : null;
+       : isFestivalPost
+       ? resolveFestivalKakaoMapLink(post, renderedContent)
+       : null;
   const shouldShowFallbackMapButton = !mapSectionSplit && !!kakaoMapLink && (isRestaurantPost || isFestivalPost);
 
   return (
