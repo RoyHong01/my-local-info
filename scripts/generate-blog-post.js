@@ -691,6 +691,18 @@ function isFestivalContentConsistent(markdown, itemName) {
   return titleHit && bodyHit;
 }
 
+function hasSubsidyAnalysisStructure(markdown) {
+  const { body } = splitMarkdownSections(markdown);
+  const source = String(body || markdown || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const requiredPatterns = [
+    /###\s+.*(이런\s*분|유리|Best\s*Fit|베스트\s*핏|베스트핏).*$/m,
+    /###\s+.*(신청\s*전|준비할|체크리스트|준비\s*체크).*$/m,
+    /###\s+.*(비슷한\s*제도|유사\s*제도|우선순위|먼저\s*볼\s*제도).*$/m,
+  ];
+
+  return requiredPatterns.every((pattern) => pattern.test(source));
+}
+
 function normalizeFestivalTitleDiversity(title, itemName) {
   if (!hasFestivalBannedLead(title)) return title;
   const base = String(itemName || title || '이번 주말 여행').trim();
@@ -1510,6 +1522,7 @@ async function generatePost(candidate, postsDir) {
   }
 
   const itemName = candidate['서비스명'] || candidate['title'] || candidate['name'] || '';
+  const isSubsidy = candidate._category === '전국 보조금·복지 정책';
   const sourceId = candidate['서비스ID'] || candidate['contentid'] || candidate['id'] || '';
   const sourceTitle = itemName;
   const sourceStartDate = candidate['eventstartdate'] || candidate['startDate'] || '';
@@ -1593,6 +1606,34 @@ async function generatePost(candidate, postsDir) {
   - 예: "행사장 입구에서 제일 먼저 프로그램 일정표부터 받아두세요. 시간대별로 공연이 달라서요."
 ` : '';
 
+  const subsidyAnalysisOverride = isSubsidy ? `
+[전국 보조금·복지 정책 카테고리 전용 추가 규칙 - 아래 내용이 기존 규칙보다 우선 적용됨]
+
+■ 본문 목적:
+- 단순 제도 소개가 아니라, 사용자가 "내 상황에서 무엇을 먼저 신청해야 할지"를 판단할 수 있게 작성할 것.
+- 확인되지 않은 개인 경험을 꾸며 쓰지 말고, 제공된 데이터 기반의 상황형 조언으로 작성할 것.
+
+■ 필수 섹션 (반드시 3개 모두 포함):
+1) ### 이런 분께 유리해요 (Best Fit)
+- 연령/거주지/소득/가구 형태/상황(취업 준비, 육아, 돌봄 등) 관점에서 "누가 유리한지"를 2~4문장으로 구체적으로 설명.
+- "조건 미충족 시 대안"이 있으면 한 문장으로 함께 제시.
+
+2) ### 신청 전에 준비할 3가지
+- 실제 신청 단계에서 실패를 줄이는 준비물을 3개 제시.
+- 예: 신분 확인 서류, 소득 관련 증빙, 온라인 신청 계정/인증서 준비 등.
+- 모호한 문장 대신 바로 실행 가능한 체크 포인트로 작성.
+
+3) ### 비슷한 제도와 우선순위
+- 유사 제도 비교 관점(신청 난이도/지원 폭/처리 속도)을 설명하고,
+- "A를 먼저 확인하고, 다음으로 B를 확인" 같은 우선순위를 제안.
+- 데이터에 없는 특정 제도명을 단정적으로 창작하지 말 것.
+
+■ 표현 규칙:
+- "만약 당신이 인천 거주 20대 청년이라면"처럼 페르소나 문장을 서두 또는 중간에 1회 이상 포함.
+- 법령 해석처럼 딱딱한 문장보다 생활형 의사결정 문장 중심으로 작성.
+- 과장/허위/확인되지 않은 수치·경쟁률 단정 금지.
+` : '';
+
   const prompt = `아래 공공서비스/행사/정보를 바탕으로 블로그 글을 작성해줘.
 카테고리: ${candidate._category}
 
@@ -1638,6 +1679,7 @@ ${buildApplicationInfoPrompt(candidate, candidate._category)}
 
 (본문: 1500자 이상, 아래 스타일 가이드 반드시 적용)
 ${festivalStyleOverride}
+${subsidyAnalysisOverride}
 [글쓰기 스타일 가이드 - 반드시 따를 것]
 - 페르소나: 30대 초반의 감각적인 여행·생활정보 에디터. 친절하고 세련된 형/오빠가 동생에게 추천해주는 톤.
 - 종결어미 규칙 (절대 준수):
@@ -1735,6 +1777,14 @@ ${festivalStyleOverride}
       }
     }
 
+    if (isSubsidy && !hasSubsidyAnalysisStructure(generatedText)) {
+      if (attempt < maxAttempts) {
+        console.warn(`  ⚠️ 보조금 분석형 필수 섹션 누락. 재시도 ${attempt + 1}/${maxAttempts}`);
+        await sleep(2000);
+        continue;
+      }
+    }
+
     const isIncomplete =
       lastFinishReason === 'MAX_TOKENS' ||
       looksIncompleteGeminiOutput(generatedText);
@@ -1755,6 +1805,11 @@ ${festivalStyleOverride}
 
   if (isFestival && !isFestivalContentConsistent(generatedText, itemName)) {
     console.error(`축제 본문 정합성 검사 실패: 행사명("${itemName}")과 제목/본문이 불일치합니다. 생성 건을 저장하지 않습니다.`);
+    return false;
+  }
+
+  if (isSubsidy && !hasSubsidyAnalysisStructure(generatedText)) {
+    console.error('보조금 분석형 구조 검사 실패: 필수 섹션(유리한 대상/신청 전 준비/유사 제도 우선순위) 누락으로 저장하지 않습니다.');
     return false;
   }
 
