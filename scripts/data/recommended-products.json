@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-04T00:00:00+09:00",
+  "updatedAtKst": "2026-05-05T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1174,6 +1174,63 @@
       "sourceId": "manual-choice-health-2026-05-04",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-05-05",
+      "productId": "9472461655",
+      "productName": "이고다 7in1 만능 에어팟 키보드 컴퓨터 청소 키트",
+      "brand": "이고다",
+      "productGroupTokens": [
+        "7in1",
+        "만능",
+        "에어팟",
+        "키보드",
+        "컴퓨터",
+        "청소"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-05-choice-living-2026-05-05.md",
+      "sourceId": "manual-choice-living-2026-05-05",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-05",
+      "productId": "9148083602",
+      "productName": "호밍사이 2단 다용도 건조대 튼튼한 이동식 360도 회전 가정용 빨래건조대, 블랙",
+      "brand": "호밍사이",
+      "productGroupTokens": [
+        "2단",
+        "다용도",
+        "건조대",
+        "튼튼한",
+        "이동식",
+        "360도"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-05-choice-living-2026-05-05.md",
+      "sourceId": "manual-choice-living-2026-05-05",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-05",
+      "productId": "8774298566",
+      "productName": "포도스 고급 린넨 수납정리함 접이식 리빙박스, 4개, 샌드 베이지",
+      "brand": "포도스",
+      "productGroupTokens": [
+        "고급",
+        "린넨",
+        "수납정리함",
+        "접이식",
+        "리빙박스",
+        "4개"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-05-choice-living-2026-05-05.md",
+      "sourceId": "manual-choice-living-2026-05-05",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
