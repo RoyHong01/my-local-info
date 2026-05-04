@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-05-06 (축제 카카오맵 위치 버그 + 맛집 방문정보 줄바꿈 버그 수정 + curation buildPrompt 개선)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `scripts/generate-curation-posts.js`
+- **버그 1 — 단독 축제 블로그 카카오맵 섹션 위치**:
+  - 증상: `📍 위치 확인 & 길찾기`(카카오맵 노란 버튼) 섹션이 글 맨 끝에 붙어서 "같은 지역 다른 축제", "근처 맛집" 뒤에 위치함
+  - 수정: `generate-blog-post.js` 후처리 섹션 append 순서를 카카오맵 → 같은 지역 다른 축제 → 근처 맛집 순으로 변경
+- **버그 2 — 맛집 포스트 "방문 정보 한눈에" 필드 한 줄 병합**:
+  - 증상: Gemini가 `상호명: 값\n주소: 값` plain text로 출력 → blank line 없이 연속된 줄이 HTML 단락 1개로 병합되어 한 줄 출력
+  - 수정: `VISIT_INFO_FIELDS` 상수 + `normalizeVisitInfoSection()` 함수 추가 및 `postProcessRestaurantMarkdown` 내 `enforceHookBridgeAndHeadingSpacing` 직후 호출
+  - 변환 규칙: `라벨: 값` → `- **라벨**: 값`, `**라벨**: 값` → `- **라벨**: 값`
+- **개선 — curation buildPrompt 개선** (이전 세션 완료):
+  - Rule 5 소제목 필수, Rule 7 링크 분리, Rule 8 결론 2문단, 출력 예시 블록, 출력 길이 1000~1600자
+- **검증**: `npm run build` ✅ 성공
+- **커밋**: `fix(blog): 축제 카카오맵 섹션 위치 수정 + 맛집 방문정보 줄바꿈 수정 + curation buildPrompt 개선`
+- **커밋 해시**: d9bdedf + cdbf5d1 (search-index.json 동기화)
+
+---
+
 ## 2026-05-03 (festival-versus 카카오맵 버튼 미노출 RCA + 렌더 안정화)
 
 - **수정 파일**:
