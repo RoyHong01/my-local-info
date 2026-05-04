@@ -378,6 +378,58 @@ function buildHookFromTitle(title, fallback) {
   return `## ${core}, 여기서 결정하면 고민이 좀 줄어들어요`;
 }
 
+const VISIT_INFO_FIELDS = [
+  '상호명', '주소', '전화번호', '전화', '주차',
+  '이럴 때 체크하면 좋아요', '에디터 한 줄 평', '에디터 한줄 평',
+  '에디터 코멘트', '오늘의 한마디', '에디터 메모',
+  '식사 후 동선', '식후 2차 코스', '식후 이동 포인트',
+  '식사 뒤 이어가기 좋은 코스',
+];
+
+/**
+ * 방문 정보 한눈에 섹션 필드를 `- **라벨**: 값` 리스트 형식으로 정규화.
+ * Gemini가 plain text 줄 `라벨: 값`으로 출력할 경우 HTML 렌더링 시 단락 병합
+ * (한 줄 출력) 버그를 방지한다.
+ */
+function normalizeVisitInfoSection(body) {
+  if (!/## 방문 정보 한눈에/.test(body)) return body;
+
+  const parts = body.split(/(## 방문 정보 한눈에)/);
+  if (parts.length < 3) return body;
+
+  const before = parts[0];
+  const heading = parts[1];
+  const after = parts.slice(2).join('');
+
+  const lines = after.split('\n');
+  const normalizedLines = lines.map((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return line;
+    // 이미 리스트(`-` 또는 `*`)로 시작하면 유지
+    if (/^[-*]\s/.test(trimmed)) return line;
+    // 헤딩이면 유지
+    if (/^#{2,}/.test(trimmed)) return line;
+    // 필드 패턴 감지 및 변환
+    for (const field of VISIT_INFO_FIELDS) {
+      // `**라벨**: 값` → `- **라벨**: 값`
+      const boldPattern = new RegExp(`^\\*\\*${field}\\*\\*\\s*:`);
+      if (boldPattern.test(trimmed)) {
+        return `- ${trimmed}`;
+      }
+      // `라벨: 값` → `- **라벨**: 값`
+      const plainPattern = new RegExp(`^${field}\\s*:`);
+      if (plainPattern.test(trimmed)) {
+        const colonIdx = trimmed.indexOf(':');
+        const rest = trimmed.slice(colonIdx); // `: 값`
+        return `- **${field}**${rest}`;
+      }
+    }
+    return line;
+  });
+
+  return before + heading + normalizedLines.join('\n');
+}
+
 function postProcessRestaurantMarkdown(markdown, context) {
   const { frontmatter, body } = splitMarkdownSections(markdown);
   let normalizedBody = (body || '').trim();
@@ -421,6 +473,9 @@ function postProcessRestaurantMarkdown(markdown, context) {
     .trim();
 
   normalizedBody = enforceHookBridgeAndHeadingSpacing(normalizedBody, context);
+
+  // 방문 정보 한눈에 섹션 필드를 - **라벨**: 값 리스트 형식으로 정규화
+  normalizedBody = normalizeVisitInfoSection(normalizedBody);
 
   return `${frontmatter}\n\n${normalizedBody}`.trim();
 }

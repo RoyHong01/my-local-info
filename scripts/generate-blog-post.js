@@ -1357,20 +1357,21 @@ function postProcessGeneratedMarkdown(markdown, context) {
 
   // 전국 축제·여행: 카카오맵 길찾기 링크 자동 삽입 (이미 링크가 있으면 생략)
   if (context.category === '전국 축제·여행' && context.candidate) {
-    // 같은 지역 다른 축제 내부 링크 섹션 삽입
-    if (context.relatedFestivalsSection && !/같은 지역 다른 축제/.test(normalizedBody)) {
-      normalizedBody = normalizedBody.trimEnd() + context.relatedFestivalsSection;
-    }
-    // 근처 맛집 섹션 삽입 (context.nearbyRestaurantsSection에 미리 채워져 있을 때)
-    if (context.nearbyRestaurantsSection && !/🍽️ 근처 맛집/.test(normalizedBody)) {
-      normalizedBody = normalizedBody.trimEnd() + context.nearbyRestaurantsSection;
-    }
+    // 1순위: 카카오맵 길찾기 섹션 (위치 정보가 가장 먼저)
     const alreadyHasMapLink = /map\.kakao\.com/.test(normalizedBody);
     if (!alreadyHasMapLink) {
       const kakaoMapSection = buildFestivalKakaoMapLink(context.candidate);
       if (kakaoMapSection) {
         normalizedBody = normalizedBody.trimEnd() + kakaoMapSection;
       }
+    }
+    // 2순위: 같은 지역 다른 축제 내부 링크 섹션 삽입
+    if (context.relatedFestivalsSection && !/같은 지역 다른 축제/.test(normalizedBody)) {
+      normalizedBody = normalizedBody.trimEnd() + context.relatedFestivalsSection;
+    }
+    // 3순위: 근처 맛집 섹션 삽입
+    if (context.nearbyRestaurantsSection && !/🍽️ 근처 맛집/.test(normalizedBody)) {
+      normalizedBody = normalizedBody.trimEnd() + context.nearbyRestaurantsSection;
     }
   }
 
