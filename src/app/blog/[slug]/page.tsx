@@ -463,6 +463,25 @@ function diversifyLegacyRestaurantInfoContent(content: string, key: string): str
   return transformed;
 }
 
+function normalizeRestaurantInfoSection(content: string): string {
+  const infoHeadingMatch = /^#{2,3}\s*(?:📌\s*)?방문 정보(?:\s*한눈에)?\s*$/m.exec(content);
+  if (!infoHeadingMatch) return content;
+  const headingEnd = infoHeadingMatch.index + infoHeadingMatch[0].length;
+  const rest = content.slice(headingEnd);
+  const nextHeadingMatch = /\n#{1,6}\s+/.exec(rest);
+  const sectionEnd = nextHeadingMatch ? headingEnd + nextHeadingMatch.index + 1 : content.length;
+  const sectionContent = content.slice(headingEnd, sectionEnd);
+  // Insert a blank line before each plain "라벨: 값" line that follows another non-blank line
+  // without a blank line separator (causes GFM to merge all fields into one <p>).
+  // Only targets lines starting with Korean/English characters — leaves "- item" and
+  // "## heading" lines untouched.
+  const normalized = sectionContent.replace(
+    /([^\n])\n(?=[가-힣a-zA-Z][가-힣a-zA-Z\w \t·]*:[ \t])/g,
+    '$1\n\n',
+  );
+  return content.slice(0, headingEnd) + normalized + content.slice(sectionEnd);
+}
+
 function normalizeFestivalRelatedSectionSpacing(content: string): string {
   return String(content || '')
     .replace(/\n\s*---\s*\n(?=\s*#{2,3}\s*🎪\s*같은 지역 다른 축제)/g, '\n\n')
@@ -601,7 +620,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     ? (shouldHideChoiceHero ? choiceContentBase : removeFirstDuplicateHeroImage(choiceContentBase, post.image))
     : sanitizedContent;
   const contentWithRestaurantPolish = isRestaurantPost
-    ? diversifyLegacyRestaurantInfoContent(contentWithChoiceAdjustments, `${post.sourceId || post.slug || post.title}`)
+    ? normalizeRestaurantInfoSection(
+        diversifyLegacyRestaurantInfoContent(contentWithChoiceAdjustments, `${post.sourceId || post.slug || post.title}`)
+      )
     : contentWithChoiceAdjustments;
   const renderedContent = isFestivalPost
     ? normalizeFestivalRelatedSectionSpacing(contentWithRestaurantPolish)
