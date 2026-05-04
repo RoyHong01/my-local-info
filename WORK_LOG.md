@@ -5,6 +5,19 @@
 
 ---
 
+## 2026-05-08 (축제 블로그 카카오맵 버튼 앞에 전화번호 이동)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `src/content/posts/2026-05-02-GangneungDanoje.md`
+  - `src/content/posts/2026-05-03-forestfoodfestival.md`
+- **버그 — 축제 포스트 전화번호가 카카오맵 버튼 아래 blockquote로 배치됨**:
+  - 증상: `buildFestivalKakaoMapLink()`에서 전화번호가 `\n> 📞 현장 문의: **xxx**` (blockquote) 형식으로 카카오맵 링크 뒤에 붙어서 순서가 주소 → 버튼 → 전화번호로 렌더링
+  - 수정: `generate-blog-post.js` `buildFestivalKakaoMapLink()` 함수에서 `telLine` 형식을 `📞 **현장 문의:** xxx\n\n`(일반 텍스트)으로 변경하고 카카오맵 링크 앞으로 이동
+  - 결과 순서: 주소 → 전화번호 → 카카오맵 버튼
+  - 기존 포스트 2건도 동일하게 수동 수정
+- **빌드**: 성공 (`npm run build` 1476 pages)
+
 ## 2026-05-06 (축제 카카오맵 위치 버그 + 맛집 방문정보 줄바꿈 버그 수정 + curation buildPrompt 개선)
 
 - **수정 파일**:

@@ -876,9 +876,9 @@ function buildFestivalKakaoMapLink(candidate) {
 
   if (!mapUrl) return null;
 
-  const telLine = tel ? `\n> 📞 현장 문의: **${tel}**` : '';
+  const telLine = tel ? `📞 **현장 문의:** ${tel}\n\n` : '';
 
-  return `\n\n---\n\n### 📍 위치 확인 & 길찾기\n\n${addr1 ? `📌 **주소:** ${addr1}\n\n` : ''}[🗺️ 카카오맵으로 길찾기](${mapUrl})${telLine}`;
+  return `\n\n---\n\n### 📍 위치 확인 & 길찾기\n\n${addr1 ? `📌 **주소:** ${addr1}\n\n` : ''}${telLine}[🗺️ 카카오맵으로 길찾기](${mapUrl})`;
 }
 
 function normalizeNumberedInlineSections(content) {
