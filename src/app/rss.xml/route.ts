@@ -95,15 +95,21 @@ async function readJsonArray(fileName: string): Promise<DataItem[]> {
   }
 }
 
+const CHOICE_BOILERPLATE_RE = /테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한/;
+
 function buildBlogItems(): FeedItem[] {
   return getSortedPostsData()
     .slice(0, MAX_BLOG_ITEMS)
     .map((post) => {
       const link = `${SITE_URL}/blog/${post.slug}/`;
+      let description = post.summary || post.description || '';
+      if (post.category === '픽앤조이 초이스' && CHOICE_BOILERPLATE_RE.test(description)) {
+        description = `픽앤조이 초이스: ${post.title}. 품질·가성비를 검증한 쿠팡 추천 상품을 소개합니다.`;
+      }
       return {
         title: post.title || post.slug,
         link,
-        description: post.summary || post.description || '',
+        description,
         pubDate: parseDateCandidate(post.date) || new Date(),
         category: post.category || '블로그',
         guid: link,
@@ -127,7 +133,7 @@ function buildSubsidyItems(items: DataItem[], topIds: Set<unknown>): FeedItem[] 
         link,
         description: summary,
         pubDate: pickDate(item, ['수정일시', '등록일시', 'updatedAt', 'collectedAt']),
-        category: '전국 보조금·복지',
+        category: '전국 보조금·복지 정책',
         guid: link,
       } as FeedItem;
     })
