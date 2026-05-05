@@ -52,9 +52,9 @@ function getCardThumbnail(post: PostData) {
     return primary || post.coupangBannerImage || '';
   }
 
-  // 큐레이션은 태그 기반 카테고리 이미지 사용
+  // 큐레이션은 post.image 우선, 없으면 태그 기반 카테고리 이미지
   if (post.category === '큐레이션') {
-    return getCurationThumbnail(post);
+    return primary || getCurationThumbnail(post);
   }
 
   // 인천/보조금은 카테고리 기본 썸네일만 사용
