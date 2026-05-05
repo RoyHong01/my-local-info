@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-05-06 (축제 506909 구글 색인 404 리다이렉트 처리)
+
+- **수정 파일**: `public/_redirects`
+- **배경**: 구글 서치 콘솔에서 `/festival/506909/` 404 색인 오류 발견. 과거 수집됐다가 재수집 과정에서 제거된 항목으로 `festival.json`에 미존재.
+- **조치**: `_redirects`에 301 리다이렉트 2줄 추가 (`/festival/506909` → `/festival/`, `/festival/506909/` → `/festival/`)
+- **빌드**: 성공 (1480 pages)
+- **커밋**: `21f6d39`, `main -> main` push 완료
+
+## 2026-05-09 (축제 포스트 카카오맵 버튼 중복 렌더링 수정)
+
+- **수정 파일**: `src/app/blog/[slug]/page.tsx`
+- **버그 — 카카오맵 길찾기 노랑 버튼이 2개 렌더링됨**:
+  - 증상: `2026-05-04-SejongNakhwaFestival.md` 등 자동 생성 축제 포스트에서 노랑 버튼 2개 노출
+  - 원인:
+    1. **Button #1 (inline)**: 마크다운 본문에 `[🗺️ 카카오맵으로 길찾기](https://map.kakao.com/link/map/...)` 링크가 포함되어, ReactMarkdown 커스텀 `a` 컴포넌트가 노랑 버튼으로 렌더링
+    2. **Button #2 (injected)**: `### 📍 위치 확인 & 길찾기` 헤딩이 `festivalSectionSplit` 트리거 → `mapSectionSplit && kakaoMapLink` 분기에서 조건 없이 노랑 버튼을 추가 주입
+    - `hasInlineKakaoMapLink` 플래그가 `shouldShowFallbackMapButton`(fallback 경로)에는 적용되어 있었으나 `mapSectionSplit` 분기(split 경로)에는 미적용 상태였음
+  - 수정: `mapSectionSplit` 분기의 버튼 `<div>`를 `{!hasInlineKakaoMapLink && (...)}` 조건으로 래핑
+  - 결과: 인라인 카카오맵 링크가 있으면 injected 버튼 억제 → 버튼 1개만 노출
+- **빌드**: 성공 (`npm run build` 1480 pages)
+- **커밋**: `5984071` + `22e3b14` (search-index.json 동기화), `main -> main` push 완료
+
 ## 2026-05-08 (축제 블로그 카카오맵 버튼 앞에 전화번호 이동)
 
 - **수정 파일**:
