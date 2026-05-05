@@ -767,6 +767,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {mapSectionSplit.section}
                     </ReactMarkdown>
+                    {!hasInlineKakaoMapLink && (
                     <div className="my-8 not-prose">
                       <a
                         href={kakaoMapLink}
@@ -777,6 +778,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         <span>🗺️ 카카오맵 길찾기</span>
                       </a>
                     </div>
+                    )}
                     <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                       {mapSectionSplit.after}
                     </ReactMarkdown>
