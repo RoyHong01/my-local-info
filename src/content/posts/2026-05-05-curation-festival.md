@@ -5,7 +5,7 @@ category: "큐레이션"
 tags: ["큐레이션", "축제"]
 description: "2026 우리 임산물 숲푸드 대축제, 강서 아이들 까치까치 페스티벌, 세종낙화축제 등 5가지"
 summary: "2026 우리 임산물 숲푸드 대축제, 강서 아이들 까치까치 페스티벌, 세종낙화축제 등 5가지"
-image: "https://tong.visitkorea.or.kr/cms/resource/06/4061406_image2_1.png"
+image: "https://tong.visitkorea.or.kr/cms/resource/06/4061406_image3_1.png"
 published_by: "auto"
 source_ids: "2560317,3489679,3300114,4060006,4056597"
 ---
