@@ -470,16 +470,119 @@ ${itemSummaries.join('\n\n')}
 지금 바로 작성해 주세요.`;
 }
 
-// 파일명 슬러그 생성
-function makeSlug(title, date) {
-  const clean = title
-    .replace(/TOP\s*\d+/gi, '')
-    .replace(/[^\uAC00-\uD7A3\w\s]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .slice(0, 40)
-    .replace(/-+$/, '');
-  return `${date}-curation-${clean}`;
+// 파일명 슬러그 생성 (짧은 영어 슬러그: YYYY-MM-DD-curation-{category})
+function makeSlug(category, date) {
+  const cat = category === 'festival' ? 'festival'
+    : category === 'subsidy' ? 'subsidy'
+    : 'incheon';
+  return `${date}-curation-${cat}`;
+}
+
+// 항목 이미지 URL 목록 (firstimage, firstimage2)
+function getItemImages(item) {
+  const images = [];
+  const img1 = String(item.firstimage || item.image || '').trim();
+  const img2 = String(item.firstimage2 || '').trim();
+  if (img1.startsWith('http')) images.push(img1);
+  if (img2.startsWith('http') && img2 !== img1) images.push(img2);
+  return images;
+}
+
+// 히어로 이미지 선택 (날짜 시드 기반 결정론적)
+function selectHeroImage(topItems, dateISO) {
+  const all = topItems.flatMap(getItemImages).filter(Boolean);
+  if (all.length === 0) return '';
+  const seed = Number(String(dateISO).replace(/-/g, '')) % all.length;
+  return all[seed];
+}
+
+// 카카오맵 딥링크 또는 주소 검색 링크 생성
+function buildCurationKakaoMapLink(item) {
+  const title = String(item.title || item['서비스명'] || item.name || '').trim();
+  const mapx = String(item.mapx || '').trim();
+  const mapy = String(item.mapy || '').trim();
+  const addr = String(item.addr1 || item['주소'] || '').trim();
+  const lngNum = parseFloat(mapx);
+  const latNum = parseFloat(mapy);
+  if (!isNaN(lngNum) && !isNaN(latNum) && lngNum > 100 && latNum > 30) {
+    return `https://map.kakao.com/link/map/${encodeURIComponent(title || addr || '위치')},${latNum},${lngNum}`;
+  }
+  if (addr) return `https://map.kakao.com/link/search/${encodeURIComponent(addr)}`;
+  if (title) return `https://map.kakao.com/link/search/${encodeURIComponent(title)}`;
+  return '';
+}
+
+// 행사 기간 텍스트 생성
+function buildItemPeriodText(item) {
+  const start = normDate(item.eventstartdate || item.startDate || '');
+  const end = normDate(item.eventenddate || item.endDate || '');
+  if (start && end) return `${start} ~ ${end}`;
+  return start || end || '현장 공지 확인';
+}
+
+// 각 섹션을 비교형(versus) 블로그와 동일한 구조로 변환
+// festival: ### hook → #### 행사명 → 이미지 → 기간/주소/문의 → Gemini 본문 → 카카오맵
+// others:   ### hook → 이미지 → Gemini 본문
+function buildStructuredSections(body, topItems, category) {
+  if (!body) return body;
+  const lines = body.split('\n');
+  const h3Indexes = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^### /.test(lines[i])) h3Indexes.push(i);
+  }
+  if (h3Indexes.length === 0) return body;
+
+  const pairCount = Math.min(h3Indexes.length, topItems.length);
+
+  // 역순 삽입 — 앞 인덱스가 뒤 삽입의 영향을 받지 않도록
+  for (let i = pairCount - 1; i >= 0; i--) {
+    const headingIdx = h3Indexes[i];
+    const item = topItems[i];
+    const images = getItemImages(item);
+    const imgUrl = images[0] || '';
+    const itemTitle = getField(item, ['title', 'name', '서비스명']) || '';
+
+    // 이 섹션의 끝(다음 ### 또는 배열 끝)
+    const nextH3 = i + 1 < h3Indexes.length ? h3Indexes[i + 1] : lines.length;
+
+    // [자세히 보기] 라인 위치 탐색
+    let detailLinkIdx = -1;
+    for (let j = headingIdx + 1; j < nextH3; j++) {
+      if (/^\[자세히 보기\]/.test(lines[j].trim())) { detailLinkIdx = j; break; }
+    }
+
+    if (category === 'festival') {
+      const addr = String(item.addr1 || '').trim();
+      const tel = String(item.tel || '').trim();
+      const period = buildItemPeriodText(item);
+      const mapLink = buildCurationKakaoMapLink(item);
+
+      // heading 뒤에 삽입할 블록 구성
+      const insertBlock = [];
+      if (itemTitle) insertBlock.push(`#### ${itemTitle}`);
+      if (imgUrl) insertBlock.push(`![${itemTitle || '행사'} 이미지](${imgUrl})`);
+      insertBlock.push('');
+      if (period) insertBlock.push(`- 📅 행사 기간: ${period}`);
+      if (addr) insertBlock.push(`- 📍 주소: ${addr}`);
+      if (tel) insertBlock.push(`- 📞 문의: ${tel}`);
+      insertBlock.push('');
+
+      lines.splice(headingIdx + 1, 0, ...insertBlock);
+
+      // 카카오맵 링크 삽입 ([자세히 보기] 바로 뒤)
+      if (mapLink && detailLinkIdx >= 0) {
+        const shiftedIdx = detailLinkIdx + insertBlock.length;
+        lines.splice(shiftedIdx + 1, 0, '', `👉 [카카오맵 바로가기](${mapLink})`);
+      }
+    } else {
+      // 비-festival: heading 뒤에 이미지만 삽입
+      if (imgUrl) {
+        lines.splice(headingIdx + 1, 0, `![${itemTitle || '항목'} 이미지](${imgUrl})`, '');
+      }
+    }
+  }
+
+  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function normalizeHeadingText(text) {
@@ -564,7 +667,7 @@ function addEmojiToItemHeadings(markdown, category, dateISO) {
 }
 
 // frontmatter 생성
-function buildFrontmatter({ title, date, slug, category, description }) {
+function buildFrontmatter({ title, date, slug, category, description, image = '' }) {
   const escaped = (s) => `"${String(s || '').replace(/"/g, "'")}"`;
   return [
     '---',
@@ -574,7 +677,7 @@ function buildFrontmatter({ title, date, slug, category, description }) {
     `tags: ["큐레이션", "${category === 'subsidy' ? '보조금' : category === 'festival' ? '축제' : '인천'}"]`,
     `description: ${escaped(description)}`,
     `summary: ${escaped(description)}`,
-    `image: ""`,
+    `image: ${escaped(image)}`,
     `published_by: "auto"`,
     '---',
   ].join('\n');
@@ -597,10 +700,10 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
 
   const title = generateTitle(category, topItems, todayISO);
 
-  // 오늘 동일 카테고리 큐레이션 포스트 중복 체크
+  // 오늘 동일 카테고리 큐레이션 포스트 중복 체크 (영어 슬러그 기준)
   if (!ALLOW_EXISTING_OVERWRITE) {
-    const todayPrefix = `${todayISO}-curation-`;
-    const alreadyExists = existingSlugs.some(s => s.startsWith(todayPrefix) && s.includes(category === 'subsidy' ? '보조금' : category === 'festival' ? '축제' : '인천'));
+    const expectedSlug = makeSlug(category, todayISO);
+    const alreadyExists = existingSlugs.some(s => s === expectedSlug);
     if (alreadyExists) {
       console.log(`  ⏭️ ${category}: 오늘 큐레이션 포스트 이미 있음, 건너뜀`);
       return false;
@@ -628,6 +731,11 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   body = body.replace(/^---[\s\S]*?---\n?/, '').trim();
   body = stripLeadingDuplicateTitleHeading(body, title);
   body = addEmojiToItemHeadings(body, category, todayISO);
+  // 각 섹션을 비교형 구조로 변환 (festival: 행사명+이미지+기간/주소+카카오맵, others: 이미지만)
+  body = buildStructuredSections(body, topItems, category);
+
+  // 히어로 이미지 선택
+  const heroImage = selectHeroImage(topItems, todayISO);
 
   const description = topItems
     .slice(0, 3)
@@ -635,8 +743,8 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
     .filter(Boolean)
     .join(', ') + ` 등 ${topItems.length}가지`;
 
-  const slug = makeSlug(title, todayISO);
-  const frontmatter = buildFrontmatter({ title, date: todayISO, slug, category, description });
+  const slug = makeSlug(category, todayISO);
+  const frontmatter = buildFrontmatter({ title, date: todayISO, slug, category, description, image: heroImage });
   const fullContent = `${frontmatter}\n\n${body}\n`;
 
   const filename = `${slug}.md`;

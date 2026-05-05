@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-05-09 (큐레이션 포스트 versus-style 섹션 구조 적용)
+
+- **수정 파일**:
+  - `scripts/generate-curation-posts.js`
+  - `src/content/posts/2026-05-05-curation-festival.md` (재작성)
+  - 삭제: `src/content/posts/2026-05-05-curation-5월-기억에-남을-여행-이-축제들로-채워보세요.md`
+- **배경**: 자동 생성 큐레이션 포스트의 섹션에 이미지만 삽입하던 `insertSectionImages` 함수가 versus-style 구조(행사명/이미지/기간·주소·전화/카카오맵)를 반영하지 못했음.
+- **변경 내용**:
+  1. `generate-curation-posts.js` — `insertSectionImages` 제거, 다음 3개 함수 신규 추가:
+     - `buildCurationKakaoMapLink(item)`: 좌표 기반 카카오맵 딥링크(좌표 없으면 주소/타이틀 검색 fallback)
+     - `buildItemPeriodText(item)`: `eventstartdate ~ eventenddate` 포맷(없으면 `'현장 공지 확인'`)
+     - `buildStructuredSections(body, topItems, category)`: `### ` 헤딩 아래에 `#### 행사명` + 이미지 + 정보 bullet + 카카오맵 링크 역순 삽입 (축제 카테고리), 비축제는 이미지만 삽입
+  2. `generateCurationPost` 파이프라인에서 `insertSectionImages` → `buildStructuredSections` 교체
+  3. `2026-05-05-curation-festival.md`: 기존 본문을 versus-style 5개 섹션(####+이미지+bullet+카카오맵)으로 완전 재작성 (7725바이트)
+  4. 구버전 Korean-filename 포스트 `git rm` 삭제
+- **빌드**: 성공 (1486 pages)
+- **커밋**: 단일 커밋 + push
+
+---
+
 ## 2026-05-09 (RSS 품질 개선 — 보조금 카테고리명 통일 + 초이스 설명 개선)
 
 - **수정 파일**: `src/app/rss.xml/route.ts`
