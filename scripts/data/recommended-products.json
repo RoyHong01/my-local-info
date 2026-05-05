@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-05T00:00:00+09:00",
+  "updatedAtKst": "2026-05-06T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1231,6 +1231,61 @@
       "sourceId": "manual-choice-living-2026-05-05",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-05-06",
+      "productId": "7851870107",
+      "productName": "안쏘니 무타공 주방 선반 조미료 양념 수납 선반, 그레이(가로40cm)",
+      "brand": "안쏘니",
+      "productGroupTokens": [
+        "무타공",
+        "주방",
+        "선반",
+        "조미료",
+        "양념",
+        "수납"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-06-choice-kitchen-2026-05-06.md",
+      "sourceId": "manual-choice-kitchen-2026-05-06",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-05-06",
+      "productId": "9482689090",
+      "productName": "주방 그릇정리 식기정리 접시꽂이",
+      "brand": "주방",
+      "productGroupTokens": [
+        "그릇정리",
+        "식기정리",
+        "접시꽂이",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-06-choice-kitchen-2026-05-06.md",
+      "sourceId": "manual-choice-kitchen-2026-05-06",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-05-06",
+      "productId": "9360575489",
+      "productName": "아싸레 대나무 원목 2단 주방 수납 선반",
+      "brand": "아싸레",
+      "productGroupTokens": [
+        "대나무",
+        "원목",
+        "2단",
+        "주방",
+        "수납",
+        "선반"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-06-choice-kitchen-2026-05-06.md",
+      "sourceId": "manual-choice-kitchen-2026-05-06",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
