@@ -528,8 +528,8 @@ function addClosingGapAfterLastDetailLink(body) {
     if (/^\[자세히 보기\]/.test(lines[i].trim())) lastDetailIdx = i;
   }
   if (lastDetailIdx < 0) return body;
-  // 마지막 [자세히 보기] 바로 다음에 빈 줄 + <br> 삽입
-  lines.splice(lastDetailIdx + 1, 0, '', '<br>');
+  // 마지막 [자세히 보기] 바로 다음에 빈 줄 + &nbsp; 단락 삽입 (ReactMarkdown에서 <br> 미지원)
+  lines.splice(lastDetailIdx + 1, 0, '', '&nbsp;');
   return lines.join('\n');
 }
 
