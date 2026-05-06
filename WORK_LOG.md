@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-05-06 (buildRestaurantSlug 짧은 ASCII slug 충돌 방지 강화)
+
+- **수정 파일**: `scripts/generate-life-restaurant-posts.mjs`
+- **배경**: `slugifyAscii("부빵 곽지원빵공방 2호점")` → 한글 제거 → `"2"` (1자) → `gyeonggi-2` 생성. 다른 식당도 같은 패턴이면 동일 slug 충돌 재발 가능. 이전에는 `nameSlugAscii`가 빈 문자열일 때만 ID fallback 사용.
+- **변경 내용**: `buildRestaurantSlug()`에서 `nameSlugAscii` 길이가 3자 미만이면 `restaurant-{id}` fallback 사용하도록 조건 추가 (`length >= 3`). 예) `"2"` → `gyeonggi-restaurant-{kakao_id}`.
+- **빌드**: 성공 (1470 pages)
+- **커밋**: 단일 커밋 + push
+
+---
+
 ## 2026-05-06 (맛집 포스트 품질 개선 — 이디야 삭제, 프렌차이즈 필터, 제목 상호명 강제)
 
 - **수정/삭제 파일**:

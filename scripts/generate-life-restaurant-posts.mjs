@@ -166,7 +166,10 @@ function inferAreaSlug(candidate, locality) {
 function buildRestaurantSlug(candidate, locality) {
   const areaSlug = inferAreaSlug(candidate, locality);
   const nameSlugAscii = slugifyAscii(candidate?.item?.name || '');
-  const nameSlug = nameSlugAscii || `restaurant-${candidate?.item?.id || 'unknown'}`;
+  // 3자 미만이면 충돌 가능성이 높으므로(예: "2호점" → "2") ID 기반 slug 사용
+  const nameSlug = (nameSlugAscii && nameSlugAscii.length >= 3)
+    ? nameSlugAscii
+    : `restaurant-${candidate?.item?.id || 'unknown'}`;
   return `${areaSlug}-${nameSlug}`;
 }
 
