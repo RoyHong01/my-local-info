@@ -1,0 +1,255 @@
+{
+  "reportDateKst": "2026-05-07",
+  "generatedAtUtc": "2026-05-06T20:30:15.689Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25458759097",
+    "runNumber": 758,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25458759097",
+    "runStartedAtUtc": "2026-05-06T20:16:49Z",
+    "headSha": "5b3feeef266eb74af796e462ed302912dc10937f"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://78035c52.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 2건, 총 343건",
+        "subsidy": "신규 17건, 총 613건",
+        "festival": "신규 8건, 업데이트 174건, 총 182건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://40f1fca6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://d29adced.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "7d55b37cdf62922c2d9e49d19f59350d5863ef0e",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-06",
+      "authoredAt": "2026-05-06T20:30:14Z",
+      "files": [
+        "src/content/life/2026-05-07-cheongna-restaurant-824753307.md",
+        "src/content/life/2026-05-07-seongsu-restaurant-1466610374.md",
+        "src/content/life/2026-05-07-suwon-restaurant-448683461.md"
+      ]
+    },
+    {
+      "sha": "d36b8b9120b32ab4c15c24b1dc311ec1f9cfc918",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-06",
+      "authoredAt": "2026-05-06T20:26:48Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-07-choice-digital-2026-05-07.md"
+      ]
+    },
+    {
+      "sha": "758f23b0e723f7a4e1dfb48b51da4c29410da87b",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-06",
+      "authoredAt": "2026-05-06T20:26:37Z",
+      "files": [
+        "src/content/posts/2026-05-06-SejongKingBirthdayFestival.md",
+        "src/content/posts/2026-05-06-incheon-education-support.md",
+        "src/content/posts/2026-05-06-yeongdeungpo-gift-certificate.md",
+        "src/content/posts/2026-05-06-yeongdo-startup-rent-support.md",
+        "src/content/posts/2026-05-07-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "bc203da428fd1b809ad1f09424e7459b691396dc",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-06",
+      "authoredAt": "2026-05-06T20:18:52Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-06-incheon-education-support.md",
+      "src/content/posts/2026-05-06-SejongKingBirthdayFestival.md",
+      "src/content/posts/2026-05-06-yeongdeungpo-gift-certificate.md",
+      "src/content/posts/2026-05-06-yeongdo-startup-rent-support.md",
+      "src/content/posts/2026-05-07-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-07-cheongna-restaurant-824753307.md",
+      "src/content/life/2026-05-07-choice-digital-2026-05-07.md",
+      "src/content/life/2026-05-07-seongsu-restaurant-1466610374.md",
+      "src/content/life/2026-05-07-suwon-restaurant-448683461.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-07-choice-digital-2026-05-07.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-07-cheongna-restaurant-824753307.md",
+      "src/content/life/2026-05-07-seongsu-restaurant-1466610374.md",
+      "src/content/life/2026-05-07-suwon-restaurant-448683461.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-07-cheongna-restaurant-824753307.md",
+      "src/content/life/2026-05-07-choice-digital-2026-05-07.md",
+      "src/content/life/2026-05-07-seongsu-restaurant-1466610374.md",
+      "src/content/life/2026-05-07-suwon-restaurant-448683461.md",
+      "src/content/posts/2026-05-06-incheon-education-support.md",
+      "src/content/posts/2026-05-06-SejongKingBirthdayFestival.md",
+      "src/content/posts/2026-05-06-yeongdeungpo-gift-certificate.md",
+      "src/content/posts/2026-05-06-yeongdo-startup-rent-support.md",
+      "src/content/posts/2026-05-07-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.19,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 2건, 총 343건",
+      "validation": "ok",
+      "anthropicUsage": "4061/1426",
+      "markdown": {
+        "generated": 2,
+        "pending": 223,
+        "titles": [
+          "초·중·고 학생 교육비 지원",
+          "공영주차장 이용요금 감면"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 17건, 총 613건",
+      "validation": "ok",
+      "anthropicUsage": "4353/2765",
+      "markdown": {
+        "generated": 5,
+        "pending": 511,
+        "titles": [
+          "영도구 청년 창업자 임차료 지원",
+          "양주시 경기청년 역량강화 기회지원",
+          "북한이탈주민 자녀 학습비 지원",
+          "영도 청년 자격증 응시료 지원",
+          "동구 여성청소년 보건위생용품 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 8건, 업데이트 174건, 총 182건",
+      "validation": "ok",
+      "anthropicUsage": "1702/991",
+      "markdown": {
+        "generated": 2,
+        "pending": 145,
+        "titles": [
+          "청남대 봄꽃축제 영춘제",
+          "춘향제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
