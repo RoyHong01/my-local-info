@@ -520,6 +520,19 @@ function buildItemPeriodText(item) {
   return start || end || '현장 공지 확인';
 }
 
+// 보조금 큐레이션: 마지막 [자세히 보기] 뒤 클로징 문단 앞에 시각적 여백(<br>) 추가
+function addClosingGapAfterLastDetailLink(body) {
+  const lines = body.split('\n');
+  let lastDetailIdx = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\[자세히 보기\]/.test(lines[i].trim())) lastDetailIdx = i;
+  }
+  if (lastDetailIdx < 0) return body;
+  // 마지막 [자세히 보기] 바로 다음에 빈 줄 + <br> 삽입
+  lines.splice(lastDetailIdx + 1, 0, '', '<br>');
+  return lines.join('\n');
+}
+
 // 각 섹션을 비교형(versus) 블로그와 동일한 구조로 변환
 // festival: ### hook → #### 행사명 → 이미지 → 기간/주소/문의 → Gemini 본문 → 카카오맵
 // others:   ### hook → 이미지 → Gemini 본문
@@ -733,6 +746,10 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   body = addEmojiToItemHeadings(body, category, todayISO);
   // 각 섹션을 비교형 구조로 변환 (festival: 행사명+이미지+기간/주소+카카오맵, others: 이미지만)
   body = buildStructuredSections(body, topItems, category);
+  // 보조금 큐레이션: 마지막 [자세히 보기]와 클로징 문단 사이 시각적 여백 추가
+  if (category === 'subsidy') {
+    body = addClosingGapAfterLastDetailLink(body);
+  }
 
   // 히어로 이미지 선택
   const heroImage = selectHeroImage(topItems, todayISO);
