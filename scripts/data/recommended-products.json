@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-06T00:00:00+09:00",
+  "updatedAtKst": "2026-05-07T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1286,6 +1286,63 @@
       "sourceId": "manual-choice-kitchen-2026-05-06",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-05-07",
+      "productId": "8421629273",
+      "productName": "UOOFON  일체형 보조배터리 고속충전 30000mAh 대용량 PD 22.5W QC3.0 잔량표시+ 4개 케이블 멀티단자",
+      "brand": "UOOFON",
+      "productGroupTokens": [
+        "일체형",
+        "보조배터리",
+        "고속충전",
+        "30000mah",
+        "pd",
+        "5w"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-07-choice-digital-2026-05-07.md",
+      "sourceId": "manual-choice-digital-2026-05-07",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-07",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 무선충전 보조배터리 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "무선충전",
+        "보조배터리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-07-choice-digital-2026-05-07.md",
+      "sourceId": "manual-choice-digital-2026-05-07",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-07",
+      "productId": "8473595119",
+      "productName": "와피크 노이즈 캔슬링 오픈형 블루투스 5.4 무선 이어폰, R6, 베이지",
+      "brand": "와피크",
+      "productGroupTokens": [
+        "노이즈",
+        "캔슬링",
+        "오픈형",
+        "블루투스",
+        "이어폰",
+        "r6"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-07-choice-digital-2026-05-07.md",
+      "sourceId": "manual-choice-digital-2026-05-07",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
