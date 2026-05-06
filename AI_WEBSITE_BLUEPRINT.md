@@ -2419,9 +2419,62 @@ const shouldShowFallbackMapButton = !hasInlineMapLink && !!kakaoMapLink;
 
 ---
 
+### K-17. 버그 수정 프로토콜 (Bug Fix Protocol — 필수)
+
+버그를 즉각 수정한 직후, 반드시 다음 3단계를 연속으로 수행한다. **"빌드 성공"이 나와도 이 단계를 건너뛰지 않는다.**
+
+1. **근본 원인 분석**: 왜 이 버그가 발생했는가? (로직/데이터/구조 중 어디서 기인했는지 명시)
+2. **재발 시나리오 열거**: 동일/유사 패턴으로 재발 가능한 케이스를 최소 2개 이상 사용자에게 보고
+3. **구조적 수정 제안**: 재발 방지를 위한 코드/로직 수정안을 사용자에게 먼저 제안하고, 승인 후 적용
+
+**이 규칙이 만들어진 배경**:
+
+- "빌드 성공 = 완료" 흐름에서 AI가 근본 원인 분석 단계를 자동으로 건너뛰는 사고가 반복됨
+- 기존 "방어적 구현" 규칙이 조건부("예상되면 제안")로 기술되어, 빌드 성공 직후 완료 처리 흐름에서 자동 발동되지 않음
+- 버그 수정 시 무조건 실행하는 고정 절차로 격상해 이 gap을 해소
+
+**적용 기준**:
+
+- 빌드 에러, 런타임 오류, 정적 파일 충돌 등 모든 종류의 버그 수정 후 적용
+- "이미 알고 있는 버그", "단순 오타" 포함 — 예외 없음
+- 근본 원인 분석이 완료되어야 해결로 인정 (빌드 성공만으로 완료 처리 금지)
+
+**실전 예시 (픽앤조이 slug 충돌 사고)**:
+
+```text
+버그: slugifyAscii("2호점") → "2" (1자) → 서로 다른 식당이 같은 slug 보유
+      → Next.js 정적 빌드 실패 (generateStaticParams 중복)
+
+즉각 조치: 충돌 파일 삭제 (임시 해결)
+
+Bug Fix Protocol 3단계:
+1. 근본 원인: slugifyAscii()가 한글 제거 후 3자 미만 ASCII를 그대로 사용 → 유일성 보장 불가
+2. 재발 시나리오:
+   - "2호점", "3층" 등 숫자+한글 조합 → 1~2자 ASCII slug
+   - 영어 약자 상호명("KFC", "GS") → 2~3자 slug로 타 지점과 충돌 가능
+3. 구조적 수정: nameSlugAscii 길이 3자 미만이면 ID 기반 fallback 적용
+```
+
+```javascript
+// 수정 전
+const nameSlug = nameSlugAscii || `restaurant-${id}`;
+
+// 수정 후 (3자 미만이면 ID fallback)
+const nameSlug = (nameSlugAscii && nameSlugAscii.length >= 3)
+  ? nameSlugAscii
+  : `restaurant-${id}`;
+```
+
+**AI 협업 시 강제 규칙**:
+
+- `copilot-instructions.md`(또는 `AGENTS.md`)의 `방어적 기획 및 구현` 섹션에 이 3단계를 **고정 절차**로 명시해야 AI가 조건부 판단 없이 자동 실행한다.
+- 규칙 문구에서 "예상되면" 같은 조건절을 제거하고 "버그 수정 직후 반드시" 형태로 명령형으로 작성한다.
+
+---
+
 ## 부록: 새 프로젝트 시작 시 AI에게 전달할 프롬프트
 
-```
+```text
 이 매뉴얼(AI_WEBSITE_BLUEPRINT.md)을 완전히 숙지했다고 가정하고 아래 프로젝트를 시작한다.
 
 프로젝트명: [XXXX]
@@ -2443,11 +2496,12 @@ const shouldShowFallbackMapButton = !hasInlineMapLink && !!kakaoMapLink;
 8. [Part A-6] 단일 호흡 배포 7단계를 모든 작업 종료 루틴으로 고정
 9. [Part K-1] AI 모델 티어 정책(Pro/Flash/Lite) 결정 + ALLOW_GEMINI_PRO 가드 코드 삽입
 10. [Part K-4] 콘텐츠 품질 게이트(`validate-*.js`)를 `build` 스크립트에 처음부터 체이닝
+11. [Part K-17] 버그 수정 시 Bug Fix Protocol 3단계(원인 분석 → 재발 시나리오 → 구조적 수정 제안)를 고정 절차로 적용
 ```
 
 ### 부록 — 단일 호흡 배포 7단계 (A-6) 압축 카드
 
-```
+```text
 1. 코드 수정
 2. npm run build (성공 확인)
 3. 4문서 동기화 (WORK_LOG + copilot-instructions + COPILOT_MEMORY + PROJECT_MEMORY)
@@ -2460,4 +2514,4 @@ const shouldShowFallbackMapButton = !hasInlineMapLink && !!kakaoMapLink;
 ---
 
 *이 매뉴얼은 픽앤조이(pick-n-joy.com) 프로젝트 실전 경험을 기반으로 작성되었습니다.*
-*최종 업데이트: 2026-05-03 (v2.2 — 비교형 포스트/카카오맵 렌더 안정화 패턴 추가)*
+*최종 업데이트: 2026-05-06 (v2.3 — K-17 Bug Fix Protocol 추가)*
