@@ -15,7 +15,7 @@ export interface ChoiceArticle {
 
 const CURATED_CHOICES: ChoiceArticle[] = [];
 
-const CORE_CATEGORIES = ['인천 지역 정보', '전국 보조금·복지 정책', '전국 축제·여행'];
+const CORE_CATEGORIES = ['인천 지역 정보', '전국 보조금·복지 정책', '전국 축제·여행', '픽앤조이 맛집 탐방', '큐레이션'];
 
 function isChoiceCandidate(post: PostData): boolean {
   // 기존 3대 카테고리 포스트는 무조건 제외

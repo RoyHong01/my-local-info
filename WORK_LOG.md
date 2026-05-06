@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-05-06 (맛집 포스트 품질 개선 — 이디야 삭제, 프렌차이즈 필터, 제목 상호명 강제)
+
+- **수정/삭제 파일**:
+  - `src/content/life/2026-04-17-gyeonggi-2.md` (삭제 — `git rm`)
+  - `src/lib/life-choice.ts`
+  - `scripts/collect-life-restaurants.mjs`
+  - `scripts/generate-life-restaurant-posts.mjs`
+- **배경**: 자동화 수집에서 이디야커피 전국 프렌차이즈 포스트가 생성됨. `2026-04-17-gyeonggi-2.md`가 슬러그 `gyeonggi-2`를 선점해 오늘 생성된 정상 포스트(`2026-05-06-gyeonggi-2.md`, 부빵 곽지원빵공방)가 충돌. 제목에 상호명이 포함되지 않는 문제도 동시 발견.
+- **변경 내용**:
+  1. **이디야커피 포스트 삭제**: `src/content/life/2026-04-17-gyeonggi-2.md` (`이디야커피 하남현대지식산업센터2차점`, `source_id: 781674152`) — `git rm`으로 제거, 슬러그 충돌 해소
+  2. **CORE_CATEGORIES 방어코드** (`src/lib/life-choice.ts`): `isChoiceCandidate()`가 맛집/큐레이션 카테고리를 명시 차단하도록 배열에 `'픽앤조이 맛집 탐방'`, `'큐레이션'` 추가
+  3. **프렌차이즈 블랙리스트 필터** (`scripts/collect-life-restaurants.mjs`):
+     - `FRANCHISE_BLACKLIST` 배열 추가: 이디야/메가커피/빽다방/스타벅스/맥도날드 등 23개 키워드
+     - `isFranchise(name)` 함수 + `collectRegion` 루프에 차단 로직 삽입
+  4. **제목 상호명 포함 규칙** (`scripts/generate-life-restaurant-posts.mjs`):
+     - 프롬프트 `[필수]` 섹션: `[감성 훅], [상호명]` 형식으로 제목 강제 (예: "창가로 스며드는 햇살의 온기, 부빵 곽지원빵공방 2호점")
+     - `normalizeGeneratedMarkdown` 후처리: `title:` 값에 상호명 미포함 시 `, [상호명]` 자동 append
+- **빌드**: 성공 (1470 pages)
+- **커밋**: 단일 커밋 + push
+
+---
+
 ## 2026-05-09 (큐레이션 포스트 versus-style 섹션 구조 적용)
 
 - **수정 파일**:

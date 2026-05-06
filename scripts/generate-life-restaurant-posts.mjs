@@ -689,6 +689,19 @@ function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
     return match;
   });
 
+  // 상호명 미포함 시 자동 append: "[감성 훅], [상호명]" 형식 보장
+  if (candidate?.item?.name) {
+    const placeName = String(candidate.item.name).trim();
+    finalContent = finalContent.replace(/^(title:\s*)"?([^"\n]+)"?$/m, (match, prefix, rawTitle) => {
+      const cleanTitle = rawTitle.replace(/^"|"$/g, '').trim();
+      if (!cleanTitle.includes(placeName)) {
+        const appended = `${cleanTitle}, ${placeName}`;
+        return `${prefix}"${appended.replace(/"/g, '\\"')}"`;
+      }
+      return match;
+    });
+  }
+
   finalContent = finalContent.replace(/^(description:\s*)(.+)$/m, (match, prefix, value) => {
     const clean = String(value || '').replace(/^"|"$/g, '').trim();
     const shortened = clean.length > 160 ? `${clean.slice(0, 157).trimEnd()}...` : clean;
@@ -1049,7 +1062,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 단순 정보 전달을 넘어, 독자의 상황에 공감하고 "여긴 진짜 가보고 싶다"는 감정을 만들 것.
 
 [필수]
-- 제목 규칙: [지역명] + [대표 메뉴/장르] + [호기심 유발 키워드] 조합으로 작성.
+- 제목 규칙: [감성 훅], [상호명] 형식으로 작성. 끝에 반드시 쉼표 + 상호명(아래 place_name 값)을 붙여야 한다. 예: "창가로 스며드는 햇살의 온기, 부빵 곽지원빵공방 2호점". 상호명: "${candidate.item.name.replace(/"/g, '\\"')}"
 - 제목에는 반드시 음식 장르(한식/양식/일식/카페/브런치 등) 또는 대표 메뉴(파스타/오마카세/국밥 등)를 포함.
 - slug는 이미 정해져 있으니 절대 변경하지 마.
 - 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 결핍/불안을 전제로 하지 말고 감각, 발견, 취향 제안, 미학 중심으로 작성.
