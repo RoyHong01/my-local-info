@@ -5,6 +5,30 @@
 
 ---
 
+## 2026-05-09 (pre-push auto-amend + Cloudflare catch-all 404 fix)
+
+- **수정 파일**: `scripts/install-git-hooks.ps1`, `.git/hooks/pre-push` (직접 업데이트), `public/_redirects`
+
+### Issue 1: pre-push 훅 auto-amend 로직 추가
+- **배경**: `npm run build` postbuild(`build-search-index.js`, `generate-search-index.js`)가 `public/data/search-index.json`, `public/sitemap.xml`을 갱신 → git tracked 파일 dirty → pre-push strict 검사 실패로 불필요한 별도 커밋 발생.
+- **해결**: `pre-push` 훅에 auto-amend 블록 추가:
+  1. `POSTBUILD_FILES='public/data/search-index.json public/sitemap.xml'`을 순회
+  2. `git status --porcelain`으로 dirty 여부 감지
+  3. dirty이면 `git add` + `git commit --amend --no-edit --no-verify --quiet` 실행
+  4. amend 후 기존 `check:worktree:strict` 실행
+- **결과**: 빌드 직후 push 시 postbuild 아티팩트가 자동으로 last commit에 amend → 별도 커밋 없이 단일 커밋 유지
+
+### Issue 2: GSC 404 4,882페이지 → Cloudflare catch-all 리다이렉트로 해결
+- **배경**: `getTopSubsidy(800)`, `getTopFestival(300)`, `getTopIncheon(500)` 제한으로 정적 파일 미생성된 ID들을 Google이 계속 크롤링 → 404 반환.
+- **원인 분석**: `generate-sitemap.js`는 `topIds.has(id)` 필터로 이미 생성 페이지와 정렬됨 (sitemap 자체 문제 아님). URL 수(4,882개)가 Cloudflare 2,000개 규칙 제한 초과 → 개별 redirect 불가.
+- **해결**: `public/_redirects`에 catch-all 규칙 추가:
+  - `/subsidy/* /subsidy/ 301`, `/festival/* /festival/ 301`, `/incheon/* /incheon/ 301` — Cloudflare는 정적 파일이 존재하면 규칙을 건너뜀(assets take precedence), 없는 페이지에만 적용됨
+  - `https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!` — www. → apex 강제 리다이렉트 (`!` suffix로 assets 우선 무시)
+- **빌드**: 성공 (1481 pages, sitemap.xml 1,481 URL)
+- **커밋**: 단일 커밋 + push
+
+---
+
 ## 2026-05-08 (큐레이션 포스트 중복 방지 로직 추가 + source_ids 저장)
 
 - **수정 파일**: `scripts/generate-curation-posts.js`, `src/content/posts/2026-05-07-curation-festival.md`
