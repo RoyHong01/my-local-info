@@ -15,23 +15,23 @@ $preCommitContent = @"
 npm run check:worktree:commit
 "@
 
-$prePushContent = @"
+$prePushContent = @'
 #!/bin/sh
 # Auto-amend postbuild artifacts (search-index.json, sitemap.xml) into the last commit
 POSTBUILD_FILES='public/data/search-index.json public/sitemap.xml'
 AMENDED=0
-for f in \$POSTBUILD_FILES; do
-  STATUS=\$(git status --porcelain -- "\$f" 2>/dev/null)
-  if [ -n "\$STATUS" ]; then
-    git add "\$f"
+for f in $POSTBUILD_FILES; do
+  STATUS=$(git status --porcelain -- "$f" 2>/dev/null)
+  if [ -n "$STATUS" ]; then
+    git add "$f"
     AMENDED=1
   fi
 done
-if [ "\$AMENDED" = "1" ]; then
+if [ "$AMENDED" = "1" ]; then
   git commit --amend --no-edit --no-verify --quiet
 fi
 npm run check:worktree:strict
-"@
+'@
 
 Set-Content -Path $preCommitHookPath -Value $preCommitContent -NoNewline
 Set-Content -Path $prePushHookPath -Value $prePushContent -NoNewline
