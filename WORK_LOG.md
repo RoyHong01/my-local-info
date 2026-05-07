@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-05-08 (큐레이션 포스트 중복 방지 로직 추가 + source_ids 저장)
+
+- **수정 파일**: `scripts/generate-curation-posts.js`, `src/content/posts/2026-05-07-curation-festival.md`
+- **배경**: 큐레이션 포스트가 매번 동일 상위 N개 항목을 선정해 반복 노출. 동일 축제/보조금이 연속 게재되는 문제.
+- **변경 내용**:
+  1. **`getRecentlyUsedCurationIds(category, postsDir, lookbackDays=30)` 함수 추가**: 최근 30일 `-curation-` 파일 스캔, frontmatter `source_ids:` 파싱 (1순위) + 본문 URL 패턴 `pick-n-joy.com/{pathPart}/ID` 추출 (2순위, 구버전 대응), `Set<string>` 반환.
+  2. **`buildFrontmatter` 수정**: `sourceIds` 파라미터 추가, `source_ids:` 조건부 출력.
+  3. **`generateCurationPost` 중복 제외 로직**: `sorted` 다음 `getRecentlyUsedCurationIds` 호출 → `freshItems` 필터 → 부족 시 재사용 항목 보충 → `candidateItems.slice(0, CURATION_TOP_N)`.
+  4. **`generateCurationPost` sourceIds 저장**: 최종 선정 항목 ID를 `source_ids` frontmatter로 저장.
+  5. **2026-05-07 축제 큐레이션 포스트 source_ids 소급 반영**: `src/content/posts/2026-05-07-curation-festival.md`에 `source_ids: "2560317,3489679,3300114,4060006,4056597"` 추가.
+- **빌드**: 성공 (1487 pages, EXIT_CODE:0)
+- **커밋**: 단일 커밋 + push
+
+---
+
 ## 2026-05-06 (buildRestaurantSlug 짧은 ASCII slug 충돌 방지 강화)
 
 - **수정 파일**: `scripts/generate-life-restaurant-posts.mjs`

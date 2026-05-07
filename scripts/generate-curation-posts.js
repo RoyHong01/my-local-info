@@ -102,6 +102,48 @@ function getItemId(item, category) {
   return getField(item, ['서비스ID', 'id']);
 }
 
+// 최근 큐레이션 포스트에서 사용된 source_id 목록을 추출 (중복 방지용, lookbackDays 이내)
+async function getRecentlyUsedCurationIds(category, postsDir, lookbackDays = 30) {
+  const usedIds = new Set();
+  try {
+    const files = await fs.readdir(postsDir);
+    const kstNow = getKstNow();
+    const cutoff = new Date(kstNow.getTime());
+    cutoff.setDate(cutoff.getDate() - lookbackDays);
+    const cutoffISO = cutoff.toISOString().split('T')[0];
+
+    const curationFiles = files.filter(f => {
+      if (!f.endsWith('.md')) return false;
+      if (!f.includes('-curation-')) return false;
+      const m = f.match(/^(\d{4}-\d{2}-\d{2})/);
+      return m && m[1] >= cutoffISO;
+    });
+
+    const pathPart = category === 'festival' ? 'festival'
+      : category === 'subsidy' ? 'subsidy'
+      : 'incheon';
+
+    for (const file of curationFiles) {
+      try {
+        const content = await fs.readFile(path.join(postsDir, file), 'utf-8');
+        // 1순위: frontmatter source_ids 필드
+        const fmMatch = content.match(/^source_ids:\s*"?([^"\n]+)"?\s*$/m);
+        if (fmMatch) {
+          fmMatch[1].split(',').map(s => s.trim()).filter(Boolean).forEach(id => usedIds.add(id));
+          continue;
+        }
+        // 2순위: 본문 URL에서 카테고리별 ID 추출 (구버전 포스트 대응)
+        const urlPattern = new RegExp(`pick-n-joy\\.com\\/${pathPart}\\/([^)\\s"]+)`, 'g');
+        let m;
+        while ((m = urlPattern.exec(content)) !== null) {
+          usedIds.add(decodeURIComponent(m[1]));
+        }
+      } catch { /* ignore */ }
+    }
+  } catch { /* ignore */ }
+  return usedIds;
+}
+
 function getTopIncheonSsgItems(items = [], limit = SSG_LIMITS.incheon) {
   if (!Array.isArray(items)) return [];
 
@@ -680,7 +722,7 @@ function addEmojiToItemHeadings(markdown, category, dateISO) {
 }
 
 // frontmatter 생성
-function buildFrontmatter({ title, date, slug, category, description, image = '' }) {
+function buildFrontmatter({ title, date, slug, category, description, image = '', sourceIds = '' }) {
   const escaped = (s) => `"${String(s || '').replace(/"/g, "'")}"`;
   return [
     '---',
@@ -692,6 +734,7 @@ function buildFrontmatter({ title, date, slug, category, description, image = ''
     `summary: ${escaped(description)}`,
     `image: ${escaped(image)}`,
     `published_by: "auto"`,
+    ...(sourceIds ? [`source_ids: "${sourceIds}"`] : []),
     '---',
   ].join('\n');
 }
@@ -704,7 +747,31 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   const all = await readJson(file);
   const ssgEligibleIds = getSsgEligibleIds(all, category);
   const sorted = sortItems(all, category, todayISO);
-  const topItems = sorted.slice(0, CURATION_TOP_N);
+
+  // 최근 사용 항목 제외 (중복 방지)
+  const recentlyUsedIds = await getRecentlyUsedCurationIds(category, postsDir);
+  let candidateItems;
+  if (recentlyUsedIds.size > 0) {
+    const freshItems = sorted.filter(item => {
+      const id = getItemId(item, category);
+      return !id || !recentlyUsedIds.has(id);
+    });
+    if (freshItems.length >= CURATION_TOP_N) {
+      candidateItems = freshItems;
+      console.log(`  🔄 중복 제외: 최근 ${recentlyUsedIds.size}개 ID 제외 → 신규 후보 ${freshItems.length}개`);
+    } else {
+      // 신규 후보 부족 시 재사용 항목으로 보충 (신규 우선)
+      const usedItems = sorted.filter(item => {
+        const id = getItemId(item, category);
+        return id && recentlyUsedIds.has(id);
+      });
+      candidateItems = [...freshItems, ...usedItems];
+      console.log(`  ⚠️ 신규 후보 ${freshItems.length}개 부족 — 재사용 보충 (신규 ${freshItems.length} + 재사용 ${Math.min(usedItems.length, CURATION_TOP_N - freshItems.length)}개)`);
+    }
+  } else {
+    candidateItems = sorted;
+  }
+  const topItems = candidateItems.slice(0, CURATION_TOP_N);
 
   if (topItems.length === 0) {
     console.log(`  ⚠️ ${category}: 유효 항목 없음, 건너뜀`);
@@ -761,7 +828,8 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
     .join(', ') + ` 등 ${topItems.length}가지`;
 
   const slug = makeSlug(category, todayISO);
-  const frontmatter = buildFrontmatter({ title, date: todayISO, slug, category, description, image: heroImage });
+  const sourceIds = topItems.map(item => getItemId(item, category)).filter(Boolean).join(',');
+  const frontmatter = buildFrontmatter({ title, date: todayISO, slug, category, description, image: heroImage, sourceIds });
   const fullContent = `${frontmatter}\n\n${body}\n`;
 
   const filename = `${slug}.md`;

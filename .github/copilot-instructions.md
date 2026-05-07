@@ -366,6 +366,11 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - **메인 홈 "이번 주 픽" 섹션**: `getSortedPostsData()`로 큐레이션 포스트 최신 3개 노출. 없으면 null(graceful).
   - **deploy.yml 2 step 추가**: `generate_editor_notes` + `generate_curation` — 기존 `generate_blog` 이전, 둘 다 `continue-on-error: true`.
   - **npm audit 비파괴 취약점 미처리**: `brace-expansion/flatted/picomatch/undici` → 별도 `npm audit fix` 필요(현재 미적용). `@anthropic-ai/sdk`/`next` → breaking change 별도 검토.
+- 2026-05-08 핵심 반영(큐레이션 포스트 중복 방지 + source_ids 저장):
+  - **`getRecentlyUsedCurationIds` 함수 추가** (`scripts/generate-curation-posts.js`): 최근 30일 `-curation-` 파일 스캔, frontmatter `source_ids:` 파싱(1순위) + 본문 URL 패턴 `pick-n-joy.com/{pathPart}/ID` 추출(2순위, 구버전 대응), `Set<string>` 반환.
+  - **`generateCurationPost` 중복 제외 로직**: `freshItems` 필터 → 부족 시 재사용 항목 보충 → `candidateItems.slice(0, CURATION_TOP_N)`.
+  - **frontmatter `source_ids` 자동 저장**: 선정된 항목 ID를 `buildFrontmatter`에 전달해 `source_ids:` 키로 저장. 이후 중복 감지에 활용.
+  - **2026-05-07 축제 큐레이션 포스트 source_ids 소급 반영**: `src/content/posts/2026-05-07-curation-festival.md`에 `source_ids: "2560317,3489679,3300114,4060006,4056597"` 추가.
 - 2026-04-24 핵심 반영(추가):
   - **단독 초이스 본문 첫 이미지 위치 회귀 수정**: `scripts/generate-choice-post.js::buildSinglePickBlock`이 `📍 픽앤조이 오늘의 단독 픽` 헤딩 아래에 hero+middle을 모두 삽입하던 버그를 수정해, 헤딩 아래에는 `middleImage`만(없으면 hero fallback) 노출하도록 변경.
   - **중복 strip 도입**: `stripDuplicateMiddleImage`로 단독 모드에서 본문 다른 섹션에 들어간 `middleImage` 마크다운을 strip한 뒤 단독 픽 블록을 삽입.
