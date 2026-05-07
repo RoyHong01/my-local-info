@@ -345,6 +345,17 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-05-09 핵심 반영(pre-push auto-amend + Cloudflare catch-all 404 fix):
+  - **pre-push 훅 auto-amend 로직**: postbuild 아티팩트(`public/data/search-index.json`, `public/sitemap.xml`) dirty 여부 감지 → 자동 `git add` + `git commit --amend --no-edit --no-verify --quiet`.
+  - **PowerShell 헤어독 버그 수정**: `scripts/install-git-hooks.ps1`의 `@"..."@` → `@'...'@`(literal heredoc). `$(...)` 포함 shell 스크립트는 반드시 literal heredoc 사용.
+  - **GSC 404 해결 — `public/_redirects` 규칙 보완**: Next.js `trailingSlash: true` 환경에서 `:id` placeholder는 슬래시 없는 세그먼트만 매칭. `:id/`(트레일링 슬래시 포함) 버전을 반드시 함께 추가해야 함. `*` splat은 빈 문자열도 매칭해 루프 발생 → `:id` placeholder 사용.
+  - **재발 방지 원칙**: `_redirects` 수정 시 ① `next.config.ts` `trailingSlash` 확인 ② `:id` vs `*` 매칭 범위 확인 ③ `:id/` 트레일링 슬래시 버전 병행 추가 세 가지를 수정 전에 반드시 처리.
+  - **www. → apex 강제 리다이렉트**: `https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!`
+- 2026-05-08 핵심 반영(큐레이션 포스트 중복 방지 + source_ids 저장):
+  - **`getRecentlyUsedCurationIds` 함수 추가** (`scripts/generate-curation-posts.js`): 최근 30일 `-curation-` 파일 스캔, frontmatter `source_ids:` 파싱(1순위) + 본문 URL 패턴 추출(2순위), `Set<string>` 반환.
+  - **`generateCurationPost` 중복 제외 로직**: `freshItems` 필터 → 부족 시 재사용 항목 보충 → `candidateItems.slice(0, CURATION_TOP_N)`.
+  - **frontmatter `source_ids` 자동 저장**: 선정된 항목 ID를 `buildFrontmatter`에 전달해 `source_ids:` 키로 저장.
+  - **2026-05-07 축제 큐레이션 포스트 source_ids 소급 반영**: `src/content/posts/2026-05-07-curation-festival.md`에 `source_ids` 추가.
 - 2026-05-03 핵심 반영(festival-versus 카카오맵 렌더 복구):
   - **RCA 확정**: `src/lib/markdown-utils.ts::sanitizeMarkdown`의 좌표 필터가 `map.kakao.com` URL 내부 좌표를 삭제해 `👉`만 남는 현상이 발생.
   - **필터 보정**: 링크 문법 라인을 좌표 필터보다 우선 보존하고, 좌표 패턴에서 `📍` 토큰을 제거해 주소/위치 라인 오삭제를 방지.
