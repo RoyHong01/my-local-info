@@ -13,9 +13,9 @@
 /life/restaurant /life/restaurant/ 308
 /festival/506909 /festival/ 301
 /festival/506909/ /festival/ 301
-# Catch-all for non-existent item pages → category list (301, assets take precedence)
-/subsidy/* /subsidy/ 301
-/festival/* /festival/ 301
-/incheon/* /incheon/ 301
+# Catch-all for non-existent item pages → category list (:id matches single segment only, not empty path)
+/subsidy/:id /subsidy/ 301
+/festival/:id /festival/ 301
+/incheon/:id /incheon/ 301
 # www. → apex redirect (force: applies even if asset exists)
 https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!
