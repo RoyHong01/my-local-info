@@ -257,6 +257,14 @@ function getDetailPath(category, item) {
 }
 
 function getBestDetailUrl(category, item, ssgEligibleIds) {
+  const officialUrl = getField(item, ['상세조회URL', 'homepage', 'link']);
+
+  // 인천/보조금은 공공포털 원문 링크를 우선 제공해
+  // 상세 페이지 미생성/리디렉션 이슈를 원천 회피한다.
+  if ((category === 'incheon' || category === 'subsidy') && officialUrl) {
+    return officialUrl;
+  }
+
   const itemId = getItemId(item, category);
   const path = getDetailPath(category, item);
 
@@ -264,7 +272,7 @@ function getBestDetailUrl(category, item, ssgEligibleIds) {
     return `https://pick-n-joy.com${path}`;
   }
 
-  return getField(item, ['상세조회URL', 'homepage', 'link']) || (path ? `https://pick-n-joy.com${path}` : '');
+  return officialUrl || (path ? `https://pick-n-joy.com${path}` : '');
 }
 
 // 항목 마감일 추출
@@ -570,8 +578,9 @@ function addClosingGapAfterLastDetailLink(body) {
     if (/^\[자세히 보기\]/.test(lines[i].trim())) lastDetailIdx = i;
   }
   if (lastDetailIdx < 0) return body;
-  // 마지막 [자세히 보기] 바로 다음에 빈 줄 + &nbsp; 단락 삽입 (ReactMarkdown에서 <br> 미지원)
-  lines.splice(lastDetailIdx + 1, 0, '', '&nbsp;');
+  // 마지막 [자세히 보기]와 클로징 문단을 시각적으로 분리한다.
+  // (ReactMarkdown에서 <br> 미지원이므로 &nbsp; 단락을 여백용으로 사용)
+  lines.splice(lastDetailIdx + 1, 0, '', '&nbsp;', '', '&nbsp;', '');
   return lines.join('\n');
 }
 
@@ -630,9 +639,13 @@ function buildStructuredSections(body, topItems, category) {
         lines.splice(shiftedIdx + 1, 0, '', `👉 [카카오맵 바로가기](${mapLink})`);
       }
     } else {
-      // 비-festival: heading 뒤에 이미지만 삽입
-      if (imgUrl) {
-        lines.splice(headingIdx + 1, 0, `![${itemTitle || '항목'} 이미지](${imgUrl})`, '');
+      // 비-festival: heading 뒤에 항목 제목 + 이미지를 삽입
+      const insertBlock = [];
+      if (itemTitle) insertBlock.push(`#### ${itemTitle}`);
+      if (imgUrl) insertBlock.push(`![${itemTitle || '항목'} 이미지](${imgUrl})`);
+      if (insertBlock.length > 0) {
+        insertBlock.push('');
+        lines.splice(headingIdx + 1, 0, ...insertBlock);
       }
     }
   }
@@ -813,10 +826,8 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   body = addEmojiToItemHeadings(body, category, todayISO);
   // 각 섹션을 비교형 구조로 변환 (festival: 행사명+이미지+기간/주소+카카오맵, others: 이미지만)
   body = buildStructuredSections(body, topItems, category);
-  // 보조금 큐레이션: 마지막 [자세히 보기]와 클로징 문단 사이 시각적 여백 추가
-  if (category === 'subsidy') {
-    body = addClosingGapAfterLastDetailLink(body);
-  }
+  // 모든 큐레이션: 마지막 [자세히 보기]와 클로징 문단 사이 시각적 여백 추가
+  body = addClosingGapAfterLastDetailLink(body);
 
   // 히어로 이미지 선택
   const heroImage = selectHeroImage(topItems, todayISO);
