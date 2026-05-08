@@ -12,6 +12,7 @@ if (-not (Test-Path $hookDir)) {
 
 $preCommitContent = @"
 #!/bin/sh
+# Requires .git/change-scope-allowlist.txt with allowed path patterns
 npm run check:worktree:commit
 "@
 
@@ -30,6 +31,7 @@ done
 if [ "$AMENDED" = "1" ]; then
   git commit --amend --no-edit --no-verify --quiet
 fi
+# Requires .git/change-scope-allowlist.txt with allowed path patterns
 npm run check:worktree:strict
 '@
 

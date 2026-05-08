@@ -1,7 +1,9 @@
 param(
     [switch]$FailOnDirty,
     [int]$MaxChanged = 10,
-    [switch]$RepairHooks
+    [switch]$RepairHooks,
+    [switch]$RequireScope,
+    [string]$ScopeFile = ".git/change-scope-allowlist.txt"
 )
 
 $ErrorActionPreference = "Stop"
@@ -11,10 +13,44 @@ function Write-Section {
     Write-Host "\n=== $Text ==="
 }
 
+function Get-NormalizedScopePatterns {
+    param([string[]]$Lines)
+
+    $patterns = @()
+    foreach ($line in $Lines) {
+        $value = [string]$line
+        if (-not $value) { continue }
+        $trimmed = $value.Trim()
+        if (-not $trimmed) { continue }
+        if ($trimmed.StartsWith('#')) { continue }
+        if ($trimmed.EndsWith('/')) {
+            $trimmed = "$trimmed*"
+        }
+        $patterns += $trimmed
+    }
+    return $patterns
+}
+
+function Test-PathMatchesScope {
+    param(
+        [string]$Path,
+        [string[]]$Patterns
+    )
+
+    foreach ($pattern in $Patterns) {
+        $wildcard = New-Object System.Management.Automation.WildcardPattern($pattern, [System.Management.Automation.WildcardOptions]::IgnoreCase)
+        if ($wildcard.IsMatch($Path)) {
+            return $true
+        }
+    }
+    return $false
+}
+
 Write-Section "Git safety preflight"
 
 $statusLines = git status --porcelain
 $changedCount = if ($statusLines) { ($statusLines | Measure-Object).Count } else { 0 }
+$stagedFiles = @(git diff --cached --name-only)
 
 if ($changedCount -gt 0) {
     Write-Host "Changed files: $changedCount"
@@ -70,6 +106,42 @@ if ($RepairHooks -and $hookInvalid) {
 }
 
 $shouldFail = $false
+
+if ($RequireScope) {
+    Write-Section "Allowed change scope"
+
+    if (-not (Test-Path -LiteralPath $ScopeFile)) {
+        Write-Host "ERROR: Scope file is required but missing: $ScopeFile"
+        Write-Host "Create it with one glob per line (example: src/content/posts/2026-05-08-*.md)."
+        $shouldFail = $true
+    } else {
+        $scopeRaw = Get-Content -LiteralPath $ScopeFile -ErrorAction SilentlyContinue
+        $scopePatterns = Get-NormalizedScopePatterns -Lines $scopeRaw
+
+        if ($scopePatterns.Count -eq 0) {
+            Write-Host "ERROR: Scope file exists but has no valid patterns: $ScopeFile"
+            $shouldFail = $true
+        } else {
+            Write-Host "Scope file: $ScopeFile"
+            $scopePatterns | ForEach-Object { Write-Host "  allow: $_" }
+
+            $violations = @()
+            foreach ($file in $stagedFiles) {
+                if (-not (Test-PathMatchesScope -Path $file -Patterns $scopePatterns)) {
+                    $violations += $file
+                }
+            }
+
+            if ($violations.Count -gt 0) {
+                Write-Host "ERROR: Staged files outside allowed scope detected."
+                $violations | ForEach-Object { Write-Host "  blocked: $_" }
+                $shouldFail = $true
+            } else {
+                Write-Host "All staged files are within allowed scope."
+            }
+        }
+    }
+}
 
 if ($zeroByteFiles.Count -gt 0) {
     Write-Host "ERROR: Zero-byte tracked files detected."

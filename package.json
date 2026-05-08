@@ -22,9 +22,11 @@
     "start": "next start",
     "lint": "eslint",
     "check:worktree": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1",
-    "check:worktree:commit": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1 -MaxChanged 30",
-    "check:worktree:strict": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1 -FailOnDirty -MaxChanged 10",
+    "check:worktree:commit": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1 -MaxChanged 30 -RequireScope",
+    "check:worktree:strict": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1 -FailOnDirty -MaxChanged 10 -RequireScope",
     "check:worktree:repair-hooks": "powershell -ExecutionPolicy Bypass -File scripts/check-worktree-safety.ps1 -RepairHooks",
+    "scope:set": "powershell -ExecutionPolicy Bypass -File scripts/set-change-scope.ps1",
+    "scope:clear": "powershell -ExecutionPolicy Bypass -File scripts/set-change-scope.ps1 -Clear",
     "hooks:install": "powershell -ExecutionPolicy Bypass -File scripts/install-git-hooks.ps1",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed"
