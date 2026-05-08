@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-09",
+  "generatedAtUtc": "2026-05-08T20:17:27.778Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25576826293",
+    "runNumber": 772,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25576826293",
+    "runStartedAtUtc": "2026-05-08T20:04:05Z",
+    "headSha": "f1733aa32049b5790d0b6e7442ab9eb142eeed73"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://81cacda6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 2건, 총 347건",
+        "subsidy": "신규 6건, 총 618건",
+        "festival": "신규 9건, 업데이트 183건, 총 192건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://ca249e89.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://a9d30114.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "20f2c6cd972f4b869f95281ceb131c5385e591a1",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-08",
+      "authoredAt": "2026-05-08T20:17:26Z",
+      "files": [
+        "src/content/life/2026-05-09-cheongna-mgc.md",
+        "src/content/life/2026-05-09-seongsu-restaurant-859994451.md",
+        "src/content/life/2026-05-09-suwon-restaurant-1532895684.md"
+      ]
+    },
+    {
+      "sha": "9b2896e1274d01c919b7070c9509216bbf87e7bb",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-08",
+      "authoredAt": "2026-05-08T20:14:08Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md"
+      ]
+    },
+    {
+      "sha": "badaa59b1958f2830068fa5bd506fb3da825ab36",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-08",
+      "authoredAt": "2026-05-08T20:13:58Z",
+      "files": [
+        "src/content/posts/2026-05-08-cheongju-rice-subsidy.md",
+        "src/content/posts/2026-05-08-ganghwa-youth-support.md",
+        "src/content/posts/2026-05-08-gwanak-child-support.md",
+        "src/content/posts/2026-05-08-naju-festival.md",
+        "src/content/posts/2026-05-09-curation-subsidy.md",
+        "src/content/posts/2026-05-09-festival-versus-daejeon-busan.md"
+      ]
+    },
+    {
+      "sha": "2379f98a5bb9b253d67d0361cd2e90a41380d419",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-08",
+      "authoredAt": "2026-05-08T20:06:21Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-08-cheongju-rice-subsidy.md",
+      "src/content/posts/2026-05-08-ganghwa-youth-support.md",
+      "src/content/posts/2026-05-08-gwanak-child-support.md",
+      "src/content/posts/2026-05-08-naju-festival.md",
+      "src/content/posts/2026-05-09-curation-subsidy.md",
+      "src/content/posts/2026-05-09-festival-versus-daejeon-busan.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-09-cheongna-mgc.md",
+      "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md",
+      "src/content/life/2026-05-09-seongsu-restaurant-859994451.md",
+      "src/content/life/2026-05-09-suwon-restaurant-1532895684.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-09-cheongna-mgc.md",
+      "src/content/life/2026-05-09-seongsu-restaurant-859994451.md",
+      "src/content/life/2026-05-09-suwon-restaurant-1532895684.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-09-cheongna-mgc.md",
+      "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md",
+      "src/content/life/2026-05-09-seongsu-restaurant-859994451.md",
+      "src/content/life/2026-05-09-suwon-restaurant-1532895684.md",
+      "src/content/posts/2026-05-08-cheongju-rice-subsidy.md",
+      "src/content/posts/2026-05-08-ganghwa-youth-support.md",
+      "src/content/posts/2026-05-08-gwanak-child-support.md",
+      "src/content/posts/2026-05-08-naju-festival.md",
+      "src/content/posts/2026-05-09-curation-subsidy.md",
+      "src/content/posts/2026-05-09-festival-versus-daejeon-busan.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 11.59,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 2건, 총 347건",
+      "validation": "ok",
+      "anthropicUsage": "1671/1210",
+      "markdown": {
+        "generated": 2,
+        "pending": 227,
+        "titles": [
+          "스포츠강좌 이용권 제공(인천북부교육문화센터)",
+          "소상공인 보증지원제도"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 6건, 총 618건",
+      "validation": "ok",
+      "anthropicUsage": "3390/2471",
+      "markdown": {
+        "generated": 5,
+        "pending": 506,
+        "titles": [
+          "경주시 청년 주택구입 대출이자 지원",
+          "창원 새내기 지원금 신청",
+          "중·고등학교 신입생 교복 지원",
+          "여주시 초등학생 입학축하금 지원",
+          "취약계층 인플루엔자 예방접종 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 9건, 업데이트 183건, 총 192건",
+      "validation": "ok",
+      "anthropicUsage": "1471/892",
+      "markdown": {
+        "generated": 2,
+        "pending": 155,
+        "titles": [
+          "꼬마농부의 컬러 팜 대모험",
+          "부산 밀 페스티벌"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
