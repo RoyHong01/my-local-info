@@ -101,6 +101,17 @@ body {
   margin-right: auto !important;
 }
 
+/* 메인 픽 블록(standalone image + 바로 다음 CTA)은 본래 크게 보여준다. */
+.choice-post-prose p:has(> img):has(+ p > strong > a[href*="link.coupang.com"]) {
+  max-width: min(520px, 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.choice-post-prose p:has(> img):has(+ p > strong > a[href*="link.coupang.com"]) > img {
+  max-width: min(520px, 100%) !important;
+}
+
 /* 단독 초이스 포스트 본문 이미지: 가독성 확보를 위해 더 크게 표시 */
 .choice-single-post-prose img {
   max-width: min(520px, 100%) !important;
