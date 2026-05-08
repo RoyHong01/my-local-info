@@ -5,6 +5,32 @@
 
 ---
 
+## 2026-05-09 (맛집 프랜차이즈 재발 이슈 수정 — 메가MGC/이디야 포스트 삭제 + 이중 필터 보강)
+
+- **수정 파일**:
+  - `scripts/collect-life-restaurants.mjs`
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `public/data/search-index.json`
+- **삭제 파일**:
+  - `src/content/life/2026-05-09-cheongna-mgc.md`
+  - `src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md`
+- **배경**: 프랜차이즈 제외 정책에도 `메가MGC커피`/`이디야` 계열 맛집 포스트가 생성됨.
+- **원인(RCA)**:
+  1. 수집 단계 블랙리스트가 `메가커피` 중심이라 `메가MGC` 변형 표기를 놓침
+  2. 생성 단계에 프랜차이즈 2차 방어 필터가 없어 오염된 스냅샷 후보가 포스트로 생성됨
+- **조치**:
+  1. `collect-life-restaurants.mjs`
+     - 블랙리스트에 `메가mgc`, `mgc커피`, `mega mgc` 등 변형 키워드 추가
+     - `normalizeFranchiseText()` 도입(공백/기호 제거 + 소문자화)
+     - `isFranchise(name, categoryName)`로 상호명 + 카테고리 동시 검사
+  2. `generate-life-restaurant-posts.mjs`
+     - 동일 정규화 기반 `isFranchiseCandidate()` 추가
+     - `buildFilteredCandidates()`에서 생성 직전 프랜차이즈 후보 차단(2차 안전장치)
+  3. 이미 생성된 프랜차이즈 포스트 2건 삭제(메가MGC, 이디야)
+- **검증**:
+  - `npm run build` 성공 (choice 품질검증/단독픽 테스트 포함)
+  - 정적 페이지/검색 인덱스 재생성 정상 완료
+
 ## 2026-05-09 (pre-push auto-amend + Cloudflare catch-all 404 fix)
 
 - **수정 파일**: `scripts/install-git-hooks.ps1`, `.git/hooks/pre-push` (직접 업데이트), `public/_redirects`

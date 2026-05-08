@@ -150,15 +150,25 @@ async function readExistingRestaurantsPayload() {
 // 로컬 맛집 큐레이션 취지에 맞지 않는 전국 프렌차이즈 브랜드를 수집 단계에서 차단한다.
 const FRANCHISE_BLACKLIST = [
   '이디야', '메가커피', '빽다방', '백다방', '컴포즈커피', '컴포즈', '더벤티',
+  '메가mgc', '메가mgc커피', 'mgc커피', 'mega mgc',
   '투썸플레이스', '스타벅스', '커피빈', '커피베이', '공차', '할리스',
   '파리바게뜨', '뚜레쥬르', '브레댄코',
   '맥도날드', '버거킹', '롯데리아', 'KFC', '맘스터치', '써브웨이', '서브웨이',
   '배스킨라빈스', '던킨', '크리스피크림',
 ];
 
-function isFranchise(name) {
-  const n = String(name || '').trim();
-  return FRANCHISE_BLACKLIST.some((kw) => n.includes(kw));
+function normalizeFranchiseText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[\s\-_.()]/g, '');
+}
+
+const FRANCHISE_BLACKLIST_NORMALIZED = FRANCHISE_BLACKLIST.map((kw) => normalizeFranchiseText(kw));
+
+function isFranchise(name, categoryName = '') {
+  const source = `${name || ''} ${categoryName || ''}`;
+  const normalizedSource = normalizeFranchiseText(source);
+  return FRANCHISE_BLACKLIST_NORMALIZED.some((kw) => normalizedSource.includes(kw));
 }
 
 const REGION_QUERY_MAP = {
@@ -919,7 +929,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
     for (const row of places) {
       if (!row.id) continue;
       const item = toRestaurantItem(row, meta);
-      if (isFranchise(item.name)) {
+      if (isFranchise(item.name, item.categoryName)) {
         console.log(`  [${region}] 프렌차이즈 제외: ${item.name}`);
         continue;
       }

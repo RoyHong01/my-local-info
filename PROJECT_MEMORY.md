@@ -1,5 +1,23 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-09, 맛집 프랜차이즈 포스트 제거 및 필터 이중화)
+
+### 완료: 메가MGC/이디야 포스트 삭제 + 수집/생성 이중 차단
+
+- 배경: 프랜차이즈 제외 정책에도 `메가MGC커피`, `이디야커피` 관련 맛집 포스트가 잔존/생성됨.
+- 원인:
+  - 수집 단계 문자열 매칭이 브랜드 변형 표기(`메가MGC`)를 완전히 커버하지 못함.
+  - 생성 단계에 프랜차이즈 2차 방어가 없어 스냅샷 오염이 포스트 생성으로 이어짐.
+- 조치:
+  - `scripts/collect-life-restaurants.mjs`: `normalizeFranchiseText` 기반 정규화 필터로 강화하고 `name + categoryName` 동시 검사.
+  - `scripts/generate-life-restaurant-posts.mjs`: `isFranchiseCandidate` 추가로 생성 직전 프랜차이즈 차단.
+  - 프랜차이즈 포스트 2건 삭제:
+    - `src/content/life/2026-05-09-cheongna-mgc.md`
+    - `src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md`
+- 검증:
+  - `npm run build` 성공
+  - 검색 인덱스/정적 페이지 재생성 정상
+
 ## 최근 마일스톤 (2026-05-03, festival-versus 카카오맵 렌더 안정화)
 
 ### 완료: 손가락만 남던 카카오맵 링크 삭제 이슈 복구

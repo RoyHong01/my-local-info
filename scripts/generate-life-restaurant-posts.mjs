@@ -43,12 +43,35 @@ const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATE
 const LIFE_RESTAURANT_PUBLISHED_BY = String(process.env.LIFE_RESTAURANT_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const ALLOW_EXISTING_POST_DELETION = process.env.ALLOW_EXISTING_POST_DELETION === 'true';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
+const FRANCHISE_BLACKLIST = [
+  '이디야', '메가커피', '메가mgc', '메가mgc커피', 'mgc커피', 'mega mgc',
+  '빽다방', '백다방', '컴포즈커피', '컴포즈', '더벤티',
+  '투썸플레이스', '스타벅스', '커피빈', '커피베이', '공차', '할리스',
+  '파리바게뜨', '뚜레쥬르', '브레댄코',
+  '맥도날드', '버거킹', '롯데리아', 'kfc', '맘스터치', '써브웨이', '서브웨이',
+  '배스킨라빈스', '던킨', '크리스피크림',
+];
 const FORCE_RESTAURANT_SOURCE_IDS = new Set(
   String(process.env.FORCE_RESTAURANT_SOURCE_IDS || '')
     .split(',')
     .map((value) => value.trim())
     .filter(Boolean)
 );
+
+function normalizeFranchiseText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[\s\-_.()]/g, '');
+}
+
+const FRANCHISE_BLACKLIST_NORMALIZED = FRANCHISE_BLACKLIST.map((kw) => normalizeFranchiseText(kw));
+
+function isFranchiseCandidate(item) {
+  const source = [item?.name || '', item?.categoryName || ''].join(' ');
+  const normalizedSource = normalizeFranchiseText(source);
+  return FRANCHISE_BLACKLIST_NORMALIZED.some((kw) => normalizedSource.includes(kw));
+}
+
 if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && !ALLOW_EXISTING_POST_DELETION) {
   console.warn('안전장치: FORCE_RESTAURANT_SOURCE_IDS가 설정되었지만 ALLOW_EXISTING_POST_DELETION=true가 아니므로 기존 글 삭제 없이 진행합니다.');
 }
@@ -1269,6 +1292,13 @@ function buildFilteredCandidates(snapshot, existingIds) {
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
   return rawCandidates
     .filter(({ item }) => item?.id && item?.name)
+    .filter(({ item }) => {
+      if (isFranchiseCandidate(item)) {
+        console.log(`🚫 프랜차이즈 후보 제외: ${item.name}`);
+        return false;
+      }
+      return true;
+    })
     .filter(({ item }) => {
       const sourceId = String(item.id);
       if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && ALLOW_EXISTING_POST_DELETION) {

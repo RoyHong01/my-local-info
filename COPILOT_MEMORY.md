@@ -1,5 +1,17 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-09) — 맛집 프랜차이즈(메가MGC/이디야) 재발 방지
+
+- 증상: 프랜차이즈 제외 정책에도 `메가MGC커피` 및 `이디야` 맛집 포스트가 생성됨.
+- RCA:
+  - 수집 단계 블랙리스트가 `메가MGC` 변형 표기를 충분히 포괄하지 못함.
+  - 생성 단계에 프랜차이즈 2차 차단이 없어 오염 스냅샷이 포스트로 생성됨.
+- 조치:
+  - `scripts/collect-life-restaurants.mjs`: 정규화 기반(`normalizeFranchiseText`) + `name/categoryName` 동시 검사 + 변형 키워드 확장.
+  - `scripts/generate-life-restaurant-posts.mjs`: `isFranchiseCandidate` 2차 필터 추가.
+  - 삭제: `src/content/life/2026-05-09-cheongna-mgc.md`, `src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md`.
+- 검증: `npm run build` 성공.
+
 ## 최근 작업 (2026-05-03) — festival-versus 카카오맵 버튼 렌더 복구
 
 - 증상: 비교형 축제 포스트에서 `👉`만 보이고 카카오맵 링크/버튼이 사라지는 현상.
