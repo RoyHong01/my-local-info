@@ -258,20 +258,16 @@ function getDetailPath(category, item) {
 
 function getBestDetailUrl(category, item, ssgEligibleIds) {
   const officialUrl = getField(item, ['상세조회URL', 'homepage', 'link']);
-
-  // 인천/보조금은 공공포털 원문 링크를 우선 제공해
-  // 상세 페이지 미생성/리디렉션 이슈를 원천 회피한다.
-  if ((category === 'incheon' || category === 'subsidy') && officialUrl) {
-    return officialUrl;
-  }
-
   const itemId = getItemId(item, category);
   const path = getDetailPath(category, item);
 
+  // 내부 상세 페이지가 실제 정적 생성 대상이면 우리 페이지를 우선 사용한다.
+  // (사용자 친화적으로 가공된 본문 제공)
   if (itemId && path && ssgEligibleIds.has(itemId)) {
     return `https://pick-n-joy.com${path}`;
   }
 
+  // 내부 상세 페이지가 없으면 원문 링크로 보낸다.
   return officialUrl || (path ? `https://pick-n-joy.com${path}` : '');
 }
 
