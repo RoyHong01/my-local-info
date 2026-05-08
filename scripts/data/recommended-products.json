@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-08T00:00:00+09:00",
+  "updatedAtKst": "2026-05-09T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1400,6 +1400,62 @@
       "sourceId": "manual-choice-pet-life-2026-05-08",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-09",
+      "productId": "9165805224",
+      "productName": "에이지투웨니스 시그니처 에센스 커버 팩트 인텐스 케이스 1p + 리필 14g 2p, 21호, 1개",
+      "brand": "에이지투웨니스",
+      "productGroupTokens": [
+        "시그니처",
+        "에센스",
+        "커버",
+        "팩트",
+        "인텐스",
+        "케이스"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-09",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-09",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-09",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-09",
+      "productId": "7166913299",
+      "productName": "더마팩토리 나이아신아마이드 20% 세럼, 30ml, 1개",
+      "brand": "더마팩토리",
+      "productGroupTokens": [
+        "나이아신아마이드",
+        "세럼",
+        "30ml",
+        "beauty",
+        "fashion"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-09-choice-beauty-fashion-2026-05-09.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-09",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
