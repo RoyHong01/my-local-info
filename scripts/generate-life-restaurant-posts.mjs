@@ -282,6 +282,69 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function canEmbedImageUrl(url) {
+  const value = String(url || '').trim();
+  if (!/^https?:\/\//i.test(value)) return false;
+
+  const headers = {
+    // 실제 상세 페이지에서 발생하는 cross-origin referer 환경을 모사한다.
+    Referer: 'https://pick-n-joy.com/',
+    Accept: 'image/*,*/*;q=0.8',
+  };
+
+  try {
+    const headRes = await fetch(value, {
+      method: 'HEAD',
+      headers,
+      redirect: 'follow',
+    });
+
+    if (headRes.ok) {
+      const contentType = String(headRes.headers.get('content-type') || '').toLowerCase();
+      if (!contentType || contentType.startsWith('image/')) {
+        return true;
+      }
+    }
+  } catch {
+    // HEAD 미지원 서버 대비 GET 재시도
+  }
+
+  try {
+    const getRes = await fetch(value, {
+      method: 'GET',
+      headers: {
+        ...headers,
+        Range: 'bytes=0-0',
+      },
+      redirect: 'follow',
+    });
+
+    if (!getRes.ok) return false;
+
+    const contentType = String(getRes.headers.get('content-type') || '').toLowerCase();
+    return !contentType || contentType.startsWith('image/');
+  } catch {
+    return false;
+  }
+}
+
+async function resolveSafeHeroImage(item, defaultImage) {
+  const candidates = [item?.naverPhotoUrl, item?.naverPhotoUrl2, item?.googlePhotoUrl]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean);
+
+  for (const candidateUrl of candidates) {
+    // 외부 Referer에서 403이 발생하는 핫링크 이미지는 히어로에서 제외한다.
+    // 예: ruliweb 이미지가 pick-n-joy referer로 차단되는 케이스.
+    if (await canEmbedImageUrl(candidateUrl)) {
+      return candidateUrl;
+    }
+    console.warn(`⚠️ 히어로 이미지 제외(임베드 불가): ${candidateUrl}`);
+  }
+
+  return defaultImage;
+}
+
 function getTodayKST() {
   return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0];
 }
@@ -1026,7 +1089,7 @@ async function generateRestaurantPost(candidate) {
   const slugBase = buildRestaurantSlug(candidate, locality);
   const fileStem = `${today}-${slugBase}`;
   const defaultImage = '/images/default-restaurant.svg';
-  const heroImage = candidate.item.naverPhotoUrl || candidate.item.googlePhotoUrl || defaultImage;
+  const heroImage = await resolveSafeHeroImage(candidate.item, defaultImage);
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
   candidate.visitInfoVariant = pickVisitInfoVariantBySourceId(candidate.item.id);
 
