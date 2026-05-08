@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 120
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: '[공통] 리포???�행 컨텍?�트 초기??(full 모드)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
@@ -57,7 +57,7 @@ jobs:
           mkdir -p runs/daily
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
 
