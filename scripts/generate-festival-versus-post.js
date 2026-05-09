@@ -304,18 +304,33 @@ function selectHeroImage(candidates, todayIso) {
 }
 
 function selectBodyImage(candidate, heroImage) {
-  const pool = candidate._imagePool || [];
+  const pool = sortImagePoolByQuality(candidate._imagePool || [], [candidate]);
   if (pool.length === 0) return DEFAULT_IMAGE;
   if (pool.length === 1) return pool[0];
+
+  const bestImage = pool[0];
+  const bestScore = scoreHeroImageUrl(bestImage, [candidate]);
+
+  // 본문 이미지는 기본적으로 가장 품질이 좋은 이미지를 유지한다.
+  // 히어로와 다르게 만들기 위해 저화질 대체 이미지를 본문에 쓰지 않는다.
+  if (bestImage !== heroImage && !shareSameBaseImage(bestImage, heroImage)) {
+    return bestImage;
+  }
 
   // 히어로와 동일 URL은 본문에서 우선 배제한다.
   const withoutHero = pool.filter((img) => img !== heroImage);
   if (withoutHero.length > 0) {
-    return sortImagePoolByQuality(withoutHero, [candidate])[0] || withoutHero[0];
+    const bestAlternative = withoutHero[0];
+    const alternativeScore = scoreHeroImageUrl(bestAlternative, [candidate]);
+
+    // 고해상도에 준하는 대체 이미지일 때만 히어로와 분리한다.
+    if (alternativeScore >= bestScore - 10) {
+      return bestAlternative;
+    }
   }
 
   const noHeroBase = pool.find((img) => !shareSameBaseImage(img, heroImage));
-  return noHeroBase || pool[0];
+  return noHeroBase || bestImage;
 }
 
 function buildPeriodText(candidate) {
