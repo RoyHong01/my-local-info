@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-09T00:00:00+09:00",
+  "updatedAtKst": "2026-05-10T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1456,6 +1456,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-05-09",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-10",
+      "productId": "9480977967",
+      "productName": "하루꿈 와이드 멀티 정리함 거실 안방 옷서랍 가구 모던 디자인 패브릭 수납장 수납함",
+      "brand": "하루꿈",
+      "productGroupTokens": [
+        "와이드",
+        "멀티",
+        "정리함",
+        "거실",
+        "안방",
+        "옷서랍"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-10-choice-home-appliance-furniture-2026-05-10.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-10",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-10",
+      "productId": "9498379126",
+      "productName": "소형 냉동고 음식물 쓰레기 자취 가전 기숙사 서랍형",
+      "brand": "소형",
+      "productGroupTokens": [
+        "냉동고",
+        "음식물",
+        "쓰레기",
+        "자취",
+        "가전",
+        "기숙사"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-10-choice-home-appliance-furniture-2026-05-10.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-10",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-10",
+      "productId": "9494404409",
+      "productName": "드림공간 국산 사각스위치 정격 10A 250V AC 전등 소형전기가구 스위치",
+      "brand": "드림공간",
+      "productGroupTokens": [
+        "국산",
+        "사각스위치",
+        "정격",
+        "10a",
+        "250v",
+        "ac"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-10-choice-home-appliance-furniture-2026-05-10.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-10",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
