@@ -100,6 +100,39 @@ function shareSameBaseImage(urlA, urlB) {
   return Boolean(a && b && a === b);
 }
 
+function getVisitKoreaImageOrder(url) {
+  const m = String(url || '').match(/_image(\d+)_\d+\.[a-zA-Z]+$/);
+  if (!m) return Number.POSITIVE_INFINITY;
+  return Number(m[1]) || Number.POSITIVE_INFINITY;
+}
+
+function scoreHeroImageUrl(url, candidates) {
+  const text = String(url || '').trim();
+  if (!text) return -9999;
+
+  // TourAPI 리소스는 image2_1이 image3_1보다 고해상도인 경우가 많아 우선순위를 둔다.
+  const imageOrder = getVisitKoreaImageOrder(text);
+  const hasLowResHint = /_image[3-9]_\d+\.[a-zA-Z]+$/i.test(text);
+  const isFirstImage = candidates.some((item) => String(item.firstimage || '').trim() === text);
+  const isFirstImage2 = candidates.some((item) => String(item.firstimage2 || '').trim() === text);
+
+  let score = 0;
+  if (isFirstImage) score += 100;
+  if (isFirstImage2) score += 40;
+  if (Number.isFinite(imageOrder)) score += Math.max(0, 20 - imageOrder);
+  if (hasLowResHint) score -= 20;
+
+  return score;
+}
+
+function sortImagePoolByQuality(urls, candidates) {
+  return [...uniqueUrls(urls)].sort((a, b) => {
+    const diff = scoreHeroImageUrl(b, candidates) - scoreHeroImageUrl(a, candidates);
+    if (diff !== 0) return diff;
+    return String(a).localeCompare(String(b));
+  });
+}
+
 function splitSentences(text) {
   return String(text || '')
     .replace(/\s+/g, ' ')
@@ -259,11 +292,15 @@ async function enrichCandidateImages(candidate) {
 }
 
 function selectHeroImage(candidates, todayIso) {
-  const pool = uniqueUrls(candidates.flatMap((item) => item._imagePool || []));
+  const pool = sortImagePoolByQuality(candidates.flatMap((item) => item._imagePool || []), candidates);
   if (pool.length === 0) return DEFAULT_IMAGE;
-  const seed = `${todayIso}|${candidates.map((c) => c.contentid || c.title || '').join('|')}`;
-  const idx = hashString(seed) % pool.length;
-  return pool[idx];
+
+  // 상위 품질 그룹에서만 랜덤 선택해 저해상도 히어로가 뽑히는 경우를 방지한다.
+  const bestScore = scoreHeroImageUrl(pool[0], candidates);
+  const topPool = pool.filter((url) => scoreHeroImageUrl(url, candidates) === bestScore);
+  const seed = `${todayIso}|hero|${candidates.map((c) => c.contentid || c.title || '').join('|')}`;
+  const idx = hashString(seed) % topPool.length;
+  return topPool[idx];
 }
 
 function selectBodyImage(candidate, heroImage) {
@@ -271,8 +308,14 @@ function selectBodyImage(candidate, heroImage) {
   if (pool.length === 0) return DEFAULT_IMAGE;
   if (pool.length === 1) return pool[0];
 
-  const noHero = pool.find((img) => !shareSameBaseImage(img, heroImage));
-  return noHero || pool[0];
+  // 히어로와 동일 URL은 본문에서 우선 배제한다.
+  const withoutHero = pool.filter((img) => img !== heroImage);
+  if (withoutHero.length > 0) {
+    return sortImagePoolByQuality(withoutHero, [candidate])[0] || withoutHero[0];
+  }
+
+  const noHeroBase = pool.find((img) => !shareSameBaseImage(img, heroImage));
+  return noHeroBase || pool[0];
 }
 
 function buildPeriodText(candidate) {

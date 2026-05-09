@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-05-09 (festival-versus 히어로 저해상도/중복 이미지 재발 방지)
+
+- **수정 파일**:
+  - `scripts/generate-festival-versus-post.js`
+  - `src/content/posts/2026-05-09-festival-versus-daejeon-busan.md`
+- **배경**: 비교형 축제 포스트에서 히어로와 본문 이미지가 사실상 동일 후보군에서 뽑히며, 히어로가 300x200 썸네일(`*_image3_1.jpg`)로 선택되어 화질 저하 발생.
+- **원인(RCA)**:
+  1. 히어로 선택이 품질 고려 없이 해시 랜덤 기반이라 저해상도 URL도 동일 확률로 선택됨
+  2. 본문 이미지 선택은 base 비교 중심이라 같은 행사의 대체 이미지가 있어도 품질 우선 분리가 약했음
+- **조치**:
+  1. `generate-festival-versus-post.js`
+     - `getVisitKoreaImageOrder`, `scoreHeroImageUrl`, `sortImagePoolByQuality` 추가
+     - 히어로는 상위 품질 그룹에서만 deterministic 랜덤 선택(저해상도 썸네일 감점)
+     - 본문 이미지는 히어로 동일 URL 우선 배제 + 품질 우선 선택으로 보강
+  2. 대상 포스트 직접 교정
+     - 히어로: `4062825_image3_1.jpg` -> `4062825_image2_1.jpg`
+     - 세계인 어울림 축제 본문: `4062825_image2_1.jpg` -> `4062825_image3_1.jpg`
+- **검증**:
+  - `npm run build` 성공
+  - 변경 후 히어로/본문 이미지 분리 및 히어로 품질 개선 확인
+
 ## 2026-05-09 (맛집 프랜차이즈 재발 이슈 수정 — 메가MGC/이디야 포스트 삭제 + 이중 필터 보강)
 
 - **수정 파일**:

@@ -6,7 +6,7 @@ description: "이번 주말 일정에서 고민되는 세계인 어울림 축제
 category: 전국 축제·여행
 published_by: auto
 tags: [전국 축제·여행, 비교 분석, 이번 주말]
-image: "https://tong.visitkorea.or.kr/cms/resource/25/4062825_image3_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/25/4062825_image2_1.jpg"
 content_type: festival-versus
 versus_mode: weekend
 versus_key: "weekend|1954396,3303393"
@@ -29,7 +29,7 @@ source_ids: "1954396,3303393"
 
 ### 🤔 조용한 사색이 필요한 오늘, 세계인 어울림 축제는 어떠세요?
 #### 세계인 어울림 축제
-![세계인 어울림 축제 현장 이미지](https://tong.visitkorea.or.kr/cms/resource/25/4062825_image2_1.jpg)
+![세계인 어울림 축제 현장 이미지](https://tong.visitkorea.or.kr/cms/resource/25/4062825_image3_1.jpg)
 - 📅 행사 기간: 2026-05-09 ~ 2026-05-09
 - 📍 주소: 대전광역시 중구 문화동 1-40
 - 📞 문의: 042-223-0789
