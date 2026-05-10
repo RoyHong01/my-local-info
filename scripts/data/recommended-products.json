@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-10T00:00:00+09:00",
+  "updatedAtKst": "2026-05-11T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1513,6 +1513,58 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-05-10",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-11",
+      "productId": "9423398720",
+      "productName": "헬로바이오 생유산균 19 프로바이오틱스 7.5g",
+      "brand": "헬로바이오",
+      "productGroupTokens": [
+        "생유산균",
+        "프로바이오틱스",
+        "5g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-11-choice-health-2026-05-11.md",
+      "sourceId": "manual-choice-health-2026-05-11",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-11",
+      "productId": "7830427593",
+      "productName": "뉴트리디데이 프리미엄 비타민C 1000 골드, 150정, 1개",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "비타민c",
+        "골드",
+        "150정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-11-choice-health-2026-05-11.md",
+      "sourceId": "manual-choice-health-2026-05-11",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-11",
+      "productId": "7976993906",
+      "productName": "뉴트리디데이 프리미엄 슈퍼 피쉬오일 오메가3 180g",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "슈퍼",
+        "피쉬오일",
+        "오메가3",
+        "180g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-11-choice-health-2026-05-11.md",
+      "sourceId": "manual-choice-health-2026-05-11",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
