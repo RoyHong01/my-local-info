@@ -3,6 +3,8 @@ const fs = require('fs/promises');
 const path = require('path');
 const { loadLocalEnvFiles, searchProducts, sleep } = require('./lib/coupang-api');
 
+loadLocalEnvFiles();
+
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.CHOICE_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite-preview';
 const GEMINI_TIMEOUT_MS = Number(process.env.CHOICE_GEMINI_TIMEOUT_MS || 120000);

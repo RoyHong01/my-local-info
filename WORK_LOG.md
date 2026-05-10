@@ -5,6 +5,31 @@
 
 ---
 
+## 2026-05-10 (단독 초이스 생성 — CJ 바이오코어 500억 유산균)
+
+- **수정 파일**:
+  - `scripts/choice-input.latest.json`
+  - `scripts/generate-choice-post.js`
+  - `public/data/search-index.json`
+- **생성 파일**:
+  - `src/content/life/2026-05-10-choice-cj-biocore-500b-probiotics-60caps.md`
+  - `public/images/choice/biocore-hero.png`
+  - `public/images/choice/biocore-middle.png`
+  - `public/images/choice/biocore-middle-1.png`
+- **배경**: 사용자 요청으로 단독 초이스 1건(제품/쿠팡 링크/이미지 3종 지정) 생성 필요.
+- **원인(RCA) 및 수정**:
+  1. `generate:choice:latest` 1차 실행 실패 (`Missing GEMINI_API_KEY`)
+  2. 원인: `scripts/generate-choice-post.js`에서 `GEMINI_API_KEY`를 읽기 전에 `.env.local` 로딩이 호출되지 않음
+  3. 조치: 파일 상단에 `loadLocalEnvFiles();`를 추가해 env 로딩 순서 보정
+- **실행 체인**:
+  - `npm run generate:choice:latest`
+  - `npm run check:choice-quality`
+  - `npm run build`
+- **검증**:
+  - 단독 초이스 생성 성공
+  - 품질 검증 통과
+  - 빌드 성공
+
 ## 2026-05-09 (festival-versus 히어로 저해상도/중복 이미지 재발 방지)
 
 - **수정 파일**:

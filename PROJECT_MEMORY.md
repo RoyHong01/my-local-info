@@ -1,5 +1,24 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-10, 단독 초이스 생성 체인 정상화)
+
+### 완료: CJ 바이오코어 500억 유산균 단독 포스트 생성 + env 로딩 순서 버그 수정
+
+- 배경: 사용자 지정 입력(제품/쿠팡 링크/히어로/중간이미지 2종)으로 단독 초이스 글 1건 생성 필요.
+- 원인:
+  - `generate:choice:latest` 1차 실행에서 `Missing GEMINI_API_KEY` 발생.
+  - `scripts/generate-choice-post.js`가 `.env.local` 로드 전에 API 키를 참조하고 있었음.
+- 조치:
+  - `scripts/generate-choice-post.js` 상단에 `loadLocalEnvFiles();`를 선행 호출하도록 수정.
+  - 입력 JSON 갱신 + 이미지 자산 복사 + 단독 생성 체인 실행.
+- 결과:
+  - `src/content/life/2026-05-10-choice-cj-biocore-500b-probiotics-60caps.md` 생성.
+  - `public/images/choice/biocore-hero.png`, `biocore-middle.png`, `biocore-middle-1.png` 반영.
+- 검증:
+  - `npm run generate:choice:latest` 성공
+  - `npm run check:choice-quality` 통과
+  - `npm run build` 성공
+
 ## 최근 마일스톤 (2026-05-09, festival-versus 히어로 화질 개선)
 
 ### 완료: 저해상도 히어로 선택 방지 + 본문 이미지 분리 안정화

@@ -1,5 +1,18 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-10) — 단독 초이스 생성(CJ 바이오코어 500억 유산균)
+
+- 요청값(제품명/쿠팡 링크/이미지 3종)을 `scripts/choice-input.latest.json`에 반영하고 단독 생성 체인을 실행.
+- 생성 결과:
+  - `src/content/life/2026-05-10-choice-cj-biocore-500b-probiotics-60caps.md`
+  - `/images/choice/biocore-hero.png`, `/images/choice/biocore-middle.png`, `/images/choice/biocore-middle-1.png`
+- 버그 수정:
+  - `scripts/generate-choice-post.js`에서 `.env.local` 로딩 이전에 `GEMINI_API_KEY`를 읽어 실패하던 순서 문제 수정(`loadLocalEnvFiles();` 선행 호출).
+- 검증:
+  - `npm run generate:choice:latest` 성공
+  - `npm run check:choice-quality` 통과
+  - `npm run build` 성공
+
 ## 최근 작업 (2026-05-09) — festival-versus 히어로 저해상도 선택 방지
 
 - 증상: 비교형 축제 포스트 히어로에 `*_image3_1.jpg`(300x200) 썸네일이 선택되어 얼굴이 뭉개져 보임.
