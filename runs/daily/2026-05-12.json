@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-12",
+  "generatedAtUtc": "2026-05-11T21:05:00.925Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25695329550",
+    "runNumber": 779,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25695329550",
+    "runStartedAtUtc": "2026-05-11T20:27:13Z",
+    "headSha": "8a060696fa774202b159b843585d80c943a8c653"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://490cb498.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 35건, 총 618건",
+        "festival": "신규 3건, 업데이트 171건, 총 174건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://f7f3fef8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://72a8caf9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "89c5824c54999d6daa61f66a53c58eaba274e704",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-11",
+      "authoredAt": "2026-05-11T21:04:59Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-05-12-gyeonggi-restaurant-414979255.md",
+        "src/content/life/2026-05-12-incheon-restaurant-1169962852.md",
+        "src/content/life/2026-05-12-seongsu-restaurant-663439868.md"
+      ]
+    },
+    {
+      "sha": "ff852efc5e0e709923a3d9dd5e2c8881ddc7a54b",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-11",
+      "authoredAt": "2026-05-11T20:39:48Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-12-choice-living-2026-05-12.md"
+      ]
+    },
+    {
+      "sha": "5e7f69597d3b66c4cdfbbe2d2e48d177dfe661e6",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-11",
+      "authoredAt": "2026-05-11T20:39:36Z",
+      "files": [
+        "src/content/posts/2026-05-11-KStartupGrandChallenge.md",
+        "src/content/posts/2026-05-11-busan-taeksulin.md",
+        "src/content/posts/2026-05-11-incheon-yellowumbrella.md",
+        "src/content/posts/2026-05-11-seoul-citizen-safety-insurance.md",
+        "src/content/posts/2026-05-12-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "0c474f449685c962fce8f80a2507830ffe6dc5d3",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-11",
+      "authoredAt": "2026-05-11T20:28:54Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-11-busan-taeksulin.md",
+      "src/content/posts/2026-05-11-incheon-yellowumbrella.md",
+      "src/content/posts/2026-05-11-KStartupGrandChallenge.md",
+      "src/content/posts/2026-05-11-seoul-citizen-safety-insurance.md",
+      "src/content/posts/2026-05-12-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-12-choice-living-2026-05-12.md",
+      "src/content/life/2026-05-12-gyeonggi-restaurant-414979255.md",
+      "src/content/life/2026-05-12-incheon-restaurant-1169962852.md",
+      "src/content/life/2026-05-12-seongsu-restaurant-663439868.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-12-choice-living-2026-05-12.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-12-gyeonggi-restaurant-414979255.md",
+      "src/content/life/2026-05-12-incheon-restaurant-1169962852.md",
+      "src/content/life/2026-05-12-seongsu-restaurant-663439868.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-05-12-choice-living-2026-05-12.md",
+      "src/content/life/2026-05-12-gyeonggi-restaurant-414979255.md",
+      "src/content/life/2026-05-12-incheon-restaurant-1169962852.md",
+      "src/content/life/2026-05-12-seongsu-restaurant-663439868.md",
+      "src/content/posts/2026-05-11-busan-taeksulin.md",
+      "src/content/posts/2026-05-11-incheon-yellowumbrella.md",
+      "src/content/posts/2026-05-11-KStartupGrandChallenge.md",
+      "src/content/posts/2026-05-11-seoul-citizen-safety-insurance.md",
+      "src/content/posts/2026-05-12-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.38,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "1552/1060",
+      "markdown": {
+        "generated": 2,
+        "pending": 222,
+        "titles": [
+          "인천형 장애인 가족돌봄 휴식지원",
+          "국가보훈대상자 위문금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 35건, 총 618건",
+      "validation": "ok",
+      "anthropicUsage": "6177/3161",
+      "markdown": {
+        "generated": 5,
+        "pending": 493,
+        "titles": [
+          "K-스타트업 그랜드 챌린지",
+          "초·중·고 신입생 입학준비금 지원",
+          "버팀목전세자금대출",
+          "청년주택드림 청약통장",
+          "공유형모기지 융자"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 171건, 총 174건",
+      "validation": "ok",
+      "anthropicUsage": "1719/979",
+      "markdown": {
+        "generated": 2,
+        "pending": 141,
+        "titles": [
+          "제132주년 동학농민혁명 기념식",
+          "2026 귀어귀촌 어촌관광 한마당"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
