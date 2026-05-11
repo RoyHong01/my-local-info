@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-11T00:00:00+09:00",
+  "updatedAtKst": "2026-05-12T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1565,6 +1565,63 @@
       "sourceId": "manual-choice-health-2026-05-11",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-05-12",
+      "productId": "9472461655",
+      "productName": "이고다 7in1 만능 에어팟 키보드 컴퓨터 청소 키트",
+      "brand": "이고다",
+      "productGroupTokens": [
+        "7in1",
+        "만능",
+        "에어팟",
+        "키보드",
+        "컴퓨터",
+        "청소"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-12-choice-living-2026-05-12.md",
+      "sourceId": "manual-choice-living-2026-05-12",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-12",
+      "productId": "8297709471",
+      "productName": "아이코지 무타공 수납형 드라이기 거치대, 차콜, 1개",
+      "brand": "아이코지",
+      "productGroupTokens": [
+        "무타공",
+        "수납형",
+        "드라이기",
+        "거치대",
+        "차콜",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-12-choice-living-2026-05-12.md",
+      "sourceId": "manual-choice-living-2026-05-12",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-12",
+      "productId": "8188171189",
+      "productName": "에이스 고농축 액체세탁세제 일반드럼겸용 2.5L, 4개, 2.5L",
+      "brand": "에이스",
+      "productGroupTokens": [
+        "고농축",
+        "액체세탁세제",
+        "일반드럼겸용",
+        "5l",
+        "4개",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-12-choice-living-2026-05-12.md",
+      "sourceId": "manual-choice-living-2026-05-12",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
