@@ -1,0 +1,255 @@
+{
+  "reportDateKst": "2026-05-14",
+  "generatedAtUtc": "2026-05-13T20:39:44.658Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25824486088",
+    "runNumber": 781,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25824486088",
+    "runStartedAtUtc": "2026-05-13T20:26:54Z",
+    "headSha": "ce8310f9a4d362bf96a0045c9e229bc6878732e0"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://607031e4.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 0건, 총 618건",
+        "festival": "신규 9건, 업데이트 178건, 총 187건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d7c2b2eb.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://767c3e6e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "972939b330ac8dc5086ab63dee5ea77577415b68",
+      "subject": "?�동 ?�데?�트(3?�계): 맛집 3�??�성 2026-05-13",
+      "authoredAt": "2026-05-13T20:39:43Z",
+      "files": [
+        "src/content/life/2026-05-14-bucheon-260.md",
+        "src/content/life/2026-05-14-incheon-restaurant-1855715679.md",
+        "src/content/life/2026-05-14-seongsu-restaurant-27585835.md"
+      ]
+    },
+    {
+      "sha": "295a3c54ac3d0bbefeb6bf4883bdd39c262457d0",
+      "subject": "?�동 ?�데?�트(2.5?�계): 초이??1�??�성 2026-05-13",
+      "authoredAt": "2026-05-13T20:36:25Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-14-choice-digital-2026-05-14.md"
+      ]
+    },
+    {
+      "sha": "eeebca5c30ca6de8f41f9815a0d24bbae2230186",
+      "subject": "?�동 ?�데?�트(2?�계): 블로�?4�??�성 2026-05-13",
+      "authoredAt": "2026-05-13T20:36:11Z",
+      "files": [
+        "src/content/posts/2026-05-13-ING-festival.md",
+        "src/content/posts/2026-05-13-eunpyeong-holiday-support.md",
+        "src/content/posts/2026-05-13-geoje-entrance-fee.md",
+        "src/content/posts/2026-05-13-incheon-hipass-support.md",
+        "src/content/posts/2026-05-14-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "f060d19e307871bc5d13a8e02f72ac9c94015bde",
+      "subject": "?�동 ?�데?�트(1?�계): 공공?�이???�기??2026-05-13",
+      "authoredAt": "2026-05-13T20:28:23Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-13-eunpyeong-holiday-support.md",
+      "src/content/posts/2026-05-13-geoje-entrance-fee.md",
+      "src/content/posts/2026-05-13-incheon-hipass-support.md",
+      "src/content/posts/2026-05-13-ING-festival.md",
+      "src/content/posts/2026-05-14-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-14-bucheon-260.md",
+      "src/content/life/2026-05-14-choice-digital-2026-05-14.md",
+      "src/content/life/2026-05-14-incheon-restaurant-1855715679.md",
+      "src/content/life/2026-05-14-seongsu-restaurant-27585835.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-14-choice-digital-2026-05-14.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-14-bucheon-260.md",
+      "src/content/life/2026-05-14-incheon-restaurant-1855715679.md",
+      "src/content/life/2026-05-14-seongsu-restaurant-27585835.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-14-bucheon-260.md",
+      "src/content/life/2026-05-14-choice-digital-2026-05-14.md",
+      "src/content/life/2026-05-14-incheon-restaurant-1855715679.md",
+      "src/content/life/2026-05-14-seongsu-restaurant-27585835.md",
+      "src/content/posts/2026-05-13-eunpyeong-holiday-support.md",
+      "src/content/posts/2026-05-13-geoje-entrance-fee.md",
+      "src/content/posts/2026-05-13-incheon-hipass-support.md",
+      "src/content/posts/2026-05-13-ING-festival.md",
+      "src/content/posts/2026-05-14-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 16.84,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "1398/1029",
+      "markdown": {
+        "generated": 2,
+        "pending": 219,
+        "titles": [
+          "수영장 강습료 할인",
+          "매점 및 음료자판기 우선임대"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 618건",
+      "validation": "ok",
+      "anthropicUsage": "4676/2944",
+      "markdown": {
+        "generated": 5,
+        "pending": 485,
+        "titles": [
+          "산림복지서비스이용권(바우처) 지급",
+          "평생교육바우처 지원",
+          "생활안정자금(융자)",
+          "구직자 취업지원 서비스 제공",
+          "서울시 청년 월세 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 9건, 업데이트 178건, 총 187건",
+      "validation": "ok",
+      "anthropicUsage": "1517/945",
+      "markdown": {
+        "generated": 2,
+        "pending": 152,
+        "titles": [
+          "제12회 하늘숲길 걷기축제",
+          "제629돌 세종대왕 나신 날"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
