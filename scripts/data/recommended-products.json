@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-13T00:00:00+09:00",
+  "updatedAtKst": "2026-05-14T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1677,6 +1677,63 @@
       "sourceId": "manual-choice-kitchen-2026-05-13",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-05-14",
+      "productId": "8495198081",
+      "productName": "보조배터리 대용량 66W 초고속 충전 디지털 디스플레이 초경량 내장 4개 케이블 고급 유리 광택 마감 기내 반입 가능 다양한 색상 선택 가능 여행을 함께 떠나요, 블랙",
+      "brand": "보조배터리",
+      "productGroupTokens": [
+        "66w",
+        "초고속",
+        "충전",
+        "디지털",
+        "디스플레이",
+        "초경량"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-14-choice-digital-2026-05-14.md",
+      "sourceId": "manual-choice-digital-2026-05-14",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-14",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 무선충전 보조배터리 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "무선충전",
+        "보조배터리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-14-choice-digital-2026-05-14.md",
+      "sourceId": "manual-choice-digital-2026-05-14",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-14",
+      "productId": "8019765127",
+      "productName": "바우아토 포켓쉴 고속 입출력 케이블 일체형 미니 대용량 난연 보조배터리 20000mAh C타입 애플8핀 PD 22.5W, 단일상품, 아이보리",
+      "brand": "바우아토",
+      "productGroupTokens": [
+        "포켓쉴",
+        "고속",
+        "입출력",
+        "케이블",
+        "일체형",
+        "난연"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-14-choice-digital-2026-05-14.md",
+      "sourceId": "manual-choice-digital-2026-05-14",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
