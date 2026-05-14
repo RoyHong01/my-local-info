@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-14T00:00:00+09:00",
+  "updatedAtKst": "2026-05-15T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1734,6 +1734,63 @@
       "sourceId": "manual-choice-digital-2026-05-14",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-15",
+      "productId": "9447192675",
+      "productName": "에누온드 여름 강아지 반려 동물 쿨 매트 방석",
+      "brand": "에누온드",
+      "productGroupTokens": [
+        "여름",
+        "강아지",
+        "반려",
+        "동물",
+        "매트",
+        "방석"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-15-choice-pet-life-2026-05-15.md",
+      "sourceId": "manual-choice-pet-life-2026-05-15",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-15",
+      "productId": "9375664440",
+      "productName": "ANF 베터플러스 캣 사료 샘플 4종 x 40g 세트",
+      "brand": "ANF",
+      "productGroupTokens": [
+        "베터플러스",
+        "사료",
+        "샘플",
+        "4종",
+        "40g",
+        "pet"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-15-choice-pet-life-2026-05-15.md",
+      "sourceId": "manual-choice-pet-life-2026-05-15",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-15",
+      "productId": "7501590061",
+      "productName": "핏펫 강아지 고래 배변패드, 60개입, 1개",
+      "brand": "핏펫",
+      "productGroupTokens": [
+        "강아지",
+        "고래",
+        "배변패드",
+        "60개입",
+        "pet",
+        "life"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-15-choice-pet-life-2026-05-15.md",
+      "sourceId": "manual-choice-pet-life-2026-05-15",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
