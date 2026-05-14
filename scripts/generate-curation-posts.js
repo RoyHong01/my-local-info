@@ -632,7 +632,11 @@ function buildStructuredSections(body, topItems, category) {
       // 카카오맵 링크 삽입 ([자세히 보기] 바로 뒤)
       if (mapLink && detailLinkIdx >= 0) {
         const shiftedIdx = detailLinkIdx + insertBlock.length;
-        lines.splice(shiftedIdx + 1, 0, '', `[카카오맵 바로가기](${mapLink})`, '', '&nbsp;');
+        const isLastFestivalSection = i === pairCount - 1;
+        const mapGapBlock = isLastFestivalSection
+          ? ['', `[카카오맵 바로가기](${mapLink})`, '', '&nbsp;', '', '&nbsp;']
+          : ['', `[카카오맵 바로가기](${mapLink})`, '', '&nbsp;'];
+        lines.splice(shiftedIdx + 1, 0, ...mapGapBlock);
       }
     } else {
       // 비-festival: heading 뒤에 항목 제목 + 이미지를 삽입
