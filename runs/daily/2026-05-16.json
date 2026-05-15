@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-16",
+  "generatedAtUtc": "2026-05-15T20:22:56.826Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25939017413",
+    "runNumber": 790,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25939017413",
+    "runStartedAtUtc": "2026-05-15T20:10:06Z",
+    "headSha": "3217fe43b4acdf1ce8cb19fbf81ab37b2290b3c7"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://713bcf8d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 5건, 총 621건",
+        "festival": "신규 0건, 업데이트 186건, 총 186건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://7840d44e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://d6971de2.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "19a1a664f0ff150d1a2e1504b3f0a9bb91a267e0",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-15",
+      "authoredAt": "2026-05-15T20:22:55Z",
+      "files": [
+        "src/content/life/2026-05-16-bucheon-restaurant-144816533.md",
+        "src/content/life/2026-05-16-incheon-restaurant-2034938843.md",
+        "src/content/life/2026-05-16-seongsu-restaurant-144888274.md"
+      ]
+    },
+    {
+      "sha": "6bdf6ff627ea6a36dc23a57296918bcd62621026",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-15",
+      "authoredAt": "2026-05-15T20:19:37Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md"
+      ]
+    },
+    {
+      "sha": "a6e624cee1a8bc7be9df6e094457c03866d95026",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-15",
+      "authoredAt": "2026-05-15T20:19:24Z",
+      "files": [
+        "src/content/posts/2026-05-15-gangnam-postpartum-support.md",
+        "src/content/posts/2026-05-15-incheon-lifelong-education.md",
+        "src/content/posts/2026-05-15-oil-subsidy-guide.md",
+        "src/content/posts/2026-05-15-suragan-sishik-gonggam.md",
+        "src/content/posts/2026-05-16-curation-subsidy.md",
+        "src/content/posts/2026-05-16-festival-versus-gongju-daehakro.md"
+      ]
+    },
+    {
+      "sha": "dc34a9ff4bdb763c821dcaaee52d03fdb5871689",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-15",
+      "authoredAt": "2026-05-15T20:11:37Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-15-gangnam-postpartum-support.md",
+      "src/content/posts/2026-05-15-incheon-lifelong-education.md",
+      "src/content/posts/2026-05-15-oil-subsidy-guide.md",
+      "src/content/posts/2026-05-15-suragan-sishik-gonggam.md",
+      "src/content/posts/2026-05-16-curation-subsidy.md",
+      "src/content/posts/2026-05-16-festival-versus-gongju-daehakro.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-16-bucheon-restaurant-144816533.md",
+      "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md",
+      "src/content/life/2026-05-16-incheon-restaurant-2034938843.md",
+      "src/content/life/2026-05-16-seongsu-restaurant-144888274.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-16-bucheon-restaurant-144816533.md",
+      "src/content/life/2026-05-16-incheon-restaurant-2034938843.md",
+      "src/content/life/2026-05-16-seongsu-restaurant-144888274.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-16-bucheon-restaurant-144816533.md",
+      "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md",
+      "src/content/life/2026-05-16-incheon-restaurant-2034938843.md",
+      "src/content/life/2026-05-16-seongsu-restaurant-144888274.md",
+      "src/content/posts/2026-05-15-gangnam-postpartum-support.md",
+      "src/content/posts/2026-05-15-incheon-lifelong-education.md",
+      "src/content/posts/2026-05-15-oil-subsidy-guide.md",
+      "src/content/posts/2026-05-15-suragan-sishik-gonggam.md",
+      "src/content/posts/2026-05-16-curation-subsidy.md",
+      "src/content/posts/2026-05-16-festival-versus-gongju-daehakro.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 16.12,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "1410/1205",
+      "markdown": {
+        "generated": 2,
+        "pending": 215,
+        "titles": [
+          "광견병 예방접종비 지원",
+          "한의약 난임 치료 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 5건, 총 621건",
+      "validation": "ok",
+      "anthropicUsage": "5141/2850",
+      "markdown": {
+        "generated": 5,
+        "pending": 479,
+        "titles": [
+          "(전주시)장애인 평생교육이용권 지원",
+          "고유가 피해지원금 지급 서비스 안내",
+          "장애인·노인 보조기기 맞춤형 서비스 (지역 보조기기센터)",
+          "명절 위문금 지원",
+          "12세 이하 어린이 국가예방접종사업"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 186건, 총 186건",
+      "validation": "ok",
+      "anthropicUsage": "1576/944",
+      "markdown": {
+        "generated": 2,
+        "pending": 150,
+        "titles": [
+          "장미꽃 필(Feel) 무렵",
+          "천년나주목읍성문화축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
