@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run check:choice-quality && npm run test:choice-single-pick && next build",
-    "prebuild": "node scripts/build-search-index.js",
+    "prebuild": "npm run clean:build && node scripts/build-search-index.js",
+    "clean:build": "node -e \"const fs=require('fs'); for (const dir of ['.next','out']) fs.rmSync(dir,{ recursive:true, force:true });\"",
     "verify:data": "node scripts/verify-data-json.js",
     "postbuild": "node scripts/generate-sitemap.js && node scripts/generate-search-index.js",
     "generate:blog": "node scripts/generate-blog-post.js",
