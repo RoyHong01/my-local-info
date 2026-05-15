@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-15T00:00:00+09:00",
+  "updatedAtKst": "2026-05-16T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1791,6 +1791,63 @@
       "sourceId": "manual-choice-pet-life-2026-05-15",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-16",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-16",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-16",
+      "productId": "9088017324",
+      "productName": "비플레인 녹두 약산성 클렌징폼 120ml + 80ml 기획세트, 1세트",
+      "brand": "비플레인",
+      "productGroupTokens": [
+        "녹두",
+        "약산성",
+        "클렌징폼",
+        "120ml",
+        "80ml",
+        "기획세트"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-16",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-16",
+      "productId": "9492235340",
+      "productName": "토니모리 그린티 수분 선크림 SPF50+ PA++++",
+      "brand": "토니모리",
+      "productGroupTokens": [
+        "그린티",
+        "수분",
+        "선크림",
+        "spf50",
+        "pa",
+        "beauty"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-16-choice-beauty-fashion-2026-05-16.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-16",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
