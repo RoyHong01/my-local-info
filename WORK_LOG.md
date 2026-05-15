@@ -5,6 +5,33 @@
 
 ---
 
+## 2026-05-15 (GSC 리다이렉트 오류 수정 — 스테일 out/_redirects 근본 원인 제거)
+
+- **수정 파일**:
+  - `package.json`
+  - `public/_redirects`
+- **배경**: Google Search Console에서 5개 URL이 "리다이렉트 오류"로 보고됨.
+  - `/festival/141759/`, `/festival/727285/`, `/festival/506909/` — 만료 축제 ID
+  - `/subsidy/154300000325/`, `/subsidy/374000000146/` — 보조금 상세 페이지
+- **원인(RCA)**:
+  - `public/_redirects`(소스)는 깨끗했으나 배포 대상인 `out/_redirects`에 이전 빌드 산출물이 잔류
+  - 잔류 파일에 `/festival/:id/ /festival/ 301`, `/subsidy/:id/ /subsidy/ 301` 같은 catch-all 규칙이 남아
+    있어, 존재하는 상세 페이지까지 전부 목록으로 301 리다이렉트
+  - `next build`가 `out/` 디렉터리를 비우지 않고 파일을 덮어씌우는 방식이라 구 규칙이 계속 배포됨
+- **조치**:
+  1. `package.json`에 `clean:build` 스크립트 추가 (`.next`와 `out` 디렉터리 삭제)
+  2. `prebuild` 훅에 `clean:build` 연결 → 이후 모든 빌드 전 자동 정리
+  3. `public/_redirects`에 만료 festival ID(506909, 727285, 141759) 전용 301 규칙 명시 추가
+- **재발 방지**:
+  - `prebuild: npm run clean:build && ...` 고정으로 stale `out/_redirects` 재발 원천 차단
+  - SEO/리다이렉트 작업 후에는 `out/_redirects` 실제 파일도 검증하는 절차 권장
+- **검증 (수정 후 live 상태)**:
+  - `/festival/` → 200 OK ✓
+  - `/subsidy/154300000325/` → 200 OK ✓
+  - `/subsidy/374000000146/` → 200 OK ✓
+  - `/festival/141759/`, `/festival/727285/` → 301 (의도적 — 만료 ID, sitemap에서 제외됨)
+  - `npm run build` 성공
+
 ## 2026-05-10 (단독 초이스 생성 — CJ 바이오코어 500억 유산균)
 
 - **수정 파일**:
