@@ -13,6 +13,11 @@
 /life/restaurant /life/restaurant/ 308
 /festival/506909 /festival/ 301
 /festival/506909/ /festival/ 301
+/festival/727285 /festival/ 301
+/festival/727285/ /festival/ 301
+/festival/141759 /festival/ 301
+/festival/141759/ /festival/ 301
 # Catch-all for non-existent item pages → category list (trailing slash variant for trailingSlash:true)
 # www. → apex redirect (force: applies even if asset exists)
+https://my-local-info-2gs.pages.dev/* https://pick-n-joy.com/:splat 301!
 https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!
