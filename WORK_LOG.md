@@ -4,6 +4,21 @@
 > 최신 항목이 위에 오도록 작성.
 
 ---
+## 2026-05-15 (deploy.yml 한글 mojibake 복원 완료)
+
+- **수정 파일**: `.github/workflows/deploy.yml`
+- **배경**: 이전 세션에서 PowerShell WriteAllBytes 잘못된 인코딩으로 YAML 파일 내 한글이 깨짐
+- **V1 수정 (이전 세션)**: git commit 명령 구조 복원 + 대부분 `name:` 필드 복원
+- **V2 수정 (이번 세션)**: 남은 8개 항목 수정
+  - `[1단계] 변경사항 커밋 & 푸시 (공공데이터)` name 필드
+  - `echo "변경사항 없음"` (4곳: 1단계/2단계/2.5단계/3단계 커밋 else 분기)
+  - `echo "리포트 변경사항 없음"` (리포트 커밋 else 분기)
+  - `echo "- 리포트 파일이 아직 생성되지 않았습니다" >> "$GITHUB_STEP_SUMMARY"`
+  - `[리포트] Cloudflare Cache Purge` name 필드 (full 모드)
+- **검증**: `npm run build` 성공, 임시 스크립트(`fix-deploy-yml.js`, `fix-deploy-yml-v2.js`) 삭제
+
+---
+
 
 ## 2026-05-15 (GSC 리다이렉트 오류 수정 — 스테일 out/_redirects 근본 원인 제거)
 
