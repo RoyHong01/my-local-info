@@ -14,11 +14,5 @@
 /festival/506909 /festival/ 301
 /festival/506909/ /festival/ 301
 # Catch-all for non-existent item pages → category list (trailing slash variant for trailingSlash:true)
-/subsidy/:id/ /subsidy/ 301
-/festival/:id/ /festival/ 301
-/incheon/:id/ /incheon/ 301
-/subsidy/:id /subsidy/ 301
-/festival/:id /festival/ 301
-/incheon/:id /incheon/ 301
 # www. → apex redirect (force: applies even if asset exists)
 https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!
