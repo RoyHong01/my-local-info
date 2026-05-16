@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-17",
+  "generatedAtUtc": "2026-05-16T20:32:38.481Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "25971442069",
+    "runNumber": 791,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25971442069",
+    "runStartedAtUtc": "2026-05-16T19:57:20Z",
+    "headSha": "a5ecaabeefc64ffd6e803908e12bffd89afd43c0"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://c5542d7b.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 0건, 총 620건",
+        "festival": "신규 0건, 업데이트 186건, 총 186건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://57f43d38.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://52c8999e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "117b0548f404134930146c36c3b309dcc28738bd",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-16",
+      "authoredAt": "2026-05-16T20:32:37Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-05-17-seongsu-restaurant-2065662781.md",
+        "src/content/life/2026-05-17-songdo-restaurant-691707373.md",
+        "src/content/life/2026-05-17-suwon-restaurant-1561823511.md"
+      ]
+    },
+    {
+      "sha": "aa9ff506a65b55ec73f0c032450dfb03f36083b0",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-16",
+      "authoredAt": "2026-05-16T20:08:19Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md"
+      ]
+    },
+    {
+      "sha": "61d00e60a5970d106a1e61d2ab857eedff44089a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-16",
+      "authoredAt": "2026-05-16T20:08:07Z",
+      "files": [
+        "src/content/posts/2026-05-16-gwanak-youth-account.md",
+        "src/content/posts/2026-05-16-incheon-childcare-support.md",
+        "src/content/posts/2026-05-16-samcheok-cert-support.md",
+        "src/content/posts/2026-05-16-ulsan-rose-festival.md",
+        "src/content/posts/2026-05-17-curation-incheon.md"
+      ]
+    },
+    {
+      "sha": "24fc0628951be5ee12a917464f08eee3e12f72d8",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-16",
+      "authoredAt": "2026-05-16T19:58:52Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-16-gwanak-youth-account.md",
+      "src/content/posts/2026-05-16-incheon-childcare-support.md",
+      "src/content/posts/2026-05-16-samcheok-cert-support.md",
+      "src/content/posts/2026-05-16-ulsan-rose-festival.md",
+      "src/content/posts/2026-05-17-curation-incheon.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md",
+      "src/content/life/2026-05-17-seongsu-restaurant-2065662781.md",
+      "src/content/life/2026-05-17-songdo-restaurant-691707373.md",
+      "src/content/life/2026-05-17-suwon-restaurant-1561823511.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-17-seongsu-restaurant-2065662781.md",
+      "src/content/life/2026-05-17-songdo-restaurant-691707373.md",
+      "src/content/life/2026-05-17-suwon-restaurant-1561823511.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md",
+      "src/content/life/2026-05-17-seongsu-restaurant-2065662781.md",
+      "src/content/life/2026-05-17-songdo-restaurant-691707373.md",
+      "src/content/life/2026-05-17-suwon-restaurant-1561823511.md",
+      "src/content/posts/2026-05-16-gwanak-youth-account.md",
+      "src/content/posts/2026-05-16-incheon-childcare-support.md",
+      "src/content/posts/2026-05-16-samcheok-cert-support.md",
+      "src/content/posts/2026-05-16-ulsan-rose-festival.md",
+      "src/content/posts/2026-05-17-curation-incheon.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.82,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "1943/1243",
+      "markdown": {
+        "generated": 2,
+        "pending": 213,
+        "titles": [
+          "인천대공원 주차장 이용요금 감면",
+          "청년 매입임대주택 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 620건",
+      "validation": "ok",
+      "anthropicUsage": "3660/2764",
+      "markdown": {
+        "generated": 5,
+        "pending": 474,
+        "titles": [
+          "치매 치료관리비 지원",
+          "화성시 기초생활수급자 명절위로금 지원",
+          "경기도청년기본소득",
+          "지역맞춤형 생활체육 활성화(어르신 스포츠강좌 프로그램 지원)",
+          "한부모가족 임대주택 특별공급"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 186건, 총 186건",
+      "validation": "ok",
+      "anthropicUsage": "1875/1033",
+      "markdown": {
+        "generated": 2,
+        "pending": 148,
+        "titles": [
+          "D.FESTA 거리공연축제",
+          "글로벌 영도커피페스티벌"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
