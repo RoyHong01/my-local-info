@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-16T00:00:00+09:00",
+  "updatedAtKst": "2026-05-17T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1848,6 +1848,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-05-16",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-17",
+      "productId": "9480977967",
+      "productName": "하루꿈 와이드 멀티 정리함 거실 안방 옷서랍 가구 모던 디자인 패브릭 수납장 수납함",
+      "brand": "하루꿈",
+      "productGroupTokens": [
+        "와이드",
+        "멀티",
+        "정리함",
+        "거실",
+        "안방",
+        "옷서랍"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-17",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-17",
+      "productId": "9414569847",
+      "productName": "슬립스틱 고릴라글라이드 가구 소형가전 슬라이더 24p",
+      "brand": "슬립스틱",
+      "productGroupTokens": [
+        "고릴라글라이드",
+        "가구",
+        "소형가전",
+        "슬라이더",
+        "24p",
+        "home"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-17",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-17",
+      "productId": "8519961774",
+      "productName": "ZIO-BIZ 서랍레일 3단 볼레일 1조 250mm / 고하중 슬라이드레일 서랍장레일 가구 옷장 수납장 하부장 책상 책장 싱크대 레일 서랍댐퍼 헤펠레 가구부품",
+      "brand": "ZIOBIZ",
+      "productGroupTokens": [
+        "zio",
+        "biz",
+        "서랍레일",
+        "3단",
+        "볼레일",
+        "1조"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-17-choice-home-appliance-furniture-2026-05-17.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-17",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
