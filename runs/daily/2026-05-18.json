@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-18",
+  "generatedAtUtc": "2026-05-17T20:54:14.541Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26001207223",
+    "runNumber": 792,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26001207223",
+    "runStartedAtUtc": "2026-05-17T20:00:33Z",
+    "headSha": "05bbcd967274467eb8fc2a110494fecd8009d08f"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://94d0a1ea.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 0건, 총 620건",
+        "festival": "신규 0건, 업데이트 182건, 총 182건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://cd2c397d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://57eca328.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "b356619f9ea61dda4887bd87ba4f476117663951",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-17",
+      "authoredAt": "2026-05-17T20:54:13Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-05-18-incheon-restaurant-655120315.md",
+        "src/content/life/2026-05-18-seongsu-restaurant-1079903424.md",
+        "src/content/life/2026-05-18-seongsu-restaurant-2103758000.md"
+      ]
+    },
+    {
+      "sha": "488da1e8fd0030469c6fdf0d322b988928d9db8b",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-17",
+      "authoredAt": "2026-05-17T20:09:40Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-18-choice-health-2026-05-18.md"
+      ]
+    },
+    {
+      "sha": "32b1d025d5cce947977698ca62656a9bcd61d5b9",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-17",
+      "authoredAt": "2026-05-17T20:09:29Z",
+      "files": [
+        "src/content/posts/2026-05-17-diaspora-film-festival.md",
+        "src/content/posts/2026-05-17-gangnam-birth-subsidy.md",
+        "src/content/posts/2026-05-17-gyeongju-school-support.md",
+        "src/content/posts/2026-05-17-hyodream-welfare-card.md",
+        "src/content/posts/2026-05-18-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "53f6227edec58116e6f39233fc041ab059c6c9fe",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-17",
+      "authoredAt": "2026-05-17T20:02:09Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-17-diaspora-film-festival.md",
+      "src/content/posts/2026-05-17-gangnam-birth-subsidy.md",
+      "src/content/posts/2026-05-17-gyeongju-school-support.md",
+      "src/content/posts/2026-05-17-hyodream-welfare-card.md",
+      "src/content/posts/2026-05-18-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-18-choice-health-2026-05-18.md",
+      "src/content/life/2026-05-18-incheon-restaurant-655120315.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-1079903424.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-2103758000.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-18-choice-health-2026-05-18.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-18-incheon-restaurant-655120315.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-1079903424.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-2103758000.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-05-18-choice-health-2026-05-18.md",
+      "src/content/life/2026-05-18-incheon-restaurant-655120315.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-1079903424.md",
+      "src/content/life/2026-05-18-seongsu-restaurant-2103758000.md",
+      "src/content/posts/2026-05-17-diaspora-film-festival.md",
+      "src/content/posts/2026-05-17-gangnam-birth-subsidy.md",
+      "src/content/posts/2026-05-17-gyeongju-school-support.md",
+      "src/content/posts/2026-05-17-hyodream-welfare-card.md",
+      "src/content/posts/2026-05-18-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.44,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "2236/1121",
+      "markdown": {
+        "generated": 2,
+        "pending": 211,
+        "titles": [
+          "체육시설 이용요금 감면(아시아드경기장 외)",
+          "인천공항 견학 프로그램"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 620건",
+      "validation": "ok",
+      "anthropicUsage": "4519/2962",
+      "markdown": {
+        "generated": 5,
+        "pending": 469,
+        "titles": [
+          "긴급복지 주거지원",
+          "산재근로자사회심리재활지원",
+          "의료급여 수급권자 우체국 실손 의료보험료 할인",
+          "서울 청년수당 지원",
+          "광역구직활동비"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 182건, 총 182건",
+      "validation": "ok",
+      "anthropicUsage": "1611/978",
+      "markdown": {
+        "generated": 2,
+        "pending": 146,
+        "titles": [
+          "서천 자연산 광어 도미 축제",
+          "양재아트살롱"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
