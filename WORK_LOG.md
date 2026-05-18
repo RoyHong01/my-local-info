@@ -29,6 +29,51 @@
 
 ---
 
+## 2026-05-18 (전국 보조금 포스트 Best Fit 문구 제거)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `src/content/posts/2026-05-03-ansan-school-support.md`
+  - `src/content/posts/2026-05-03-gangnam-local-currency.md`
+  - `src/content/posts/2026-05-04-oral-health-support.md`
+  - `src/content/posts/2026-05-04-seoul-welfare-support.md`
+  - `src/content/posts/2026-05-05-Gangnam-Holiday-Support.md`
+  - `src/content/posts/2026-05-05-Siheung-Entrance-Support.md`
+  - `src/content/posts/2026-05-06-yeongdeungpo-gift-certificate.md`
+  - `src/content/posts/2026-05-06-yeongdo-startup-rent-support.md`
+  - `src/content/posts/2026-05-07-seoul-pregnancy-transport-support.md`
+  - `src/content/posts/2026-05-07-youth-savings-account.md`
+  - `src/content/posts/2026-05-08-cheongju-rice-subsidy.md`
+  - `src/content/posts/2026-05-08-gwanak-child-support.md`
+  - `src/content/posts/2026-05-09-gyeongju-youth-housing-support.md`
+  - `src/content/posts/2026-05-09-seoul-emergency-welfare.md`
+  - `src/content/posts/2026-05-10-hongseong-housing-support.md`
+  - `src/content/posts/2026-05-10-seoul-youth-moving-support.md`
+  - `src/content/posts/2026-05-11-KStartupGrandChallenge.md`
+  - `src/content/posts/2026-05-11-seoul-citizen-safety-insurance.md`
+  - `src/content/posts/2026-05-12-gwangjin-safety-insurance.md`
+  - `src/content/posts/2026-05-12-suwon-water-pipe-support.md`
+  - `src/content/posts/2026-05-13-eunpyeong-holiday-support.md`
+  - `src/content/posts/2026-05-13-geoje-entrance-fee.md`
+  - `src/content/posts/2026-05-14-guro-fertility-support.md`
+  - `src/content/posts/2026-05-14-uiwang-school-support.md`
+  - `src/content/posts/2026-05-15-gangnam-postpartum-support.md`
+  - `src/content/posts/2026-05-15-oil-subsidy-guide.md`
+  - `src/content/posts/2026-05-16-gwanak-youth-account.md`
+  - `src/content/posts/2026-05-16-samcheok-cert-support.md`
+  - `src/content/posts/2026-05-17-gangnam-birth-subsidy.md`
+  - `src/content/posts/2026-05-17-gyeongju-school-support.md`
+- **배경**:
+  - 전국 보조금 글의 섹션 제목에 영문 Best Fit 표기가 반복되어 스타일을 한글로 통일할 필요가 있었음.
+- **원인(RCA)**:
+  - `scripts/generate-blog-post.js`의 보조금 전용 프롬프트가 Best Fit 문구를 그대로 지시하고 있었음.
+- **조치**:
+  1. 보조금 프롬프트의 섹션 제목을 `이런 분들께 유리해요`로 변경.
+  2. 기존 5월 3일 이후 보조금 포스트 30건의 헤딩을 일괄 치환.
+- **검증**:
+  - `node scripts/replace-best-fit-headings.mjs` 실행 후 30개 파일 갱신 확인.
+  - `functions.get_errors`로 `scripts/generate-blog-post.js` 오류 없음 확인.
+
 ## 2026-05-18 (기록 기준 통일 및 기존 항목 정리)
 
 - **수정 파일**:
