@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-18T00:00:00+09:00",
+  "updatedAtKst": "2026-05-19T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -1956,6 +1956,62 @@
       "sourceId": "manual-choice-health-2026-05-18",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-05-19",
+      "productId": "9496924688",
+      "productName": "이고다 롤픽 휴대용 미니 돌돌이 반영구 클리너 1p+리필 테이프 10p 세트",
+      "brand": "이고다",
+      "productGroupTokens": [
+        "롤픽",
+        "돌돌이",
+        "반영구",
+        "클리너",
+        "1p",
+        "테이프"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-19-choice-living-2026-05-19.md",
+      "sourceId": "manual-choice-living-2026-05-19",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-19",
+      "productId": "9084173290",
+      "productName": "위벨라 공간절약 무타공 틈새 욕실선반, 화이트, 1개",
+      "brand": "위벨라",
+      "productGroupTokens": [
+        "공간절약",
+        "무타공",
+        "틈새",
+        "욕실선반",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-19-choice-living-2026-05-19.md",
+      "sourceId": "manual-choice-living-2026-05-19",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-05-19",
+      "productId": "8687771994",
+      "productName": "허글리 8IN1 딥 클린 초고농축 캡슐 세탁세제 코튼캔디 향, 1개, 100개입",
+      "brand": "허글리",
+      "productGroupTokens": [
+        "8in1",
+        "클린",
+        "초고농축",
+        "캡슐",
+        "세탁세제",
+        "코튼캔디"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-19-choice-living-2026-05-19.md",
+      "sourceId": "manual-choice-living-2026-05-19",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
