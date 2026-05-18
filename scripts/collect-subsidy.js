@@ -255,19 +255,21 @@ async function run() {
 
   const validationStatus = validateFetchedData('전국 보조금·복지 정책', existing.length, filtered.length);
 
-  // active window 기준으로 재구성 (지난 데이터는 파일에서 제거)
+  // active window를 우선 갱신하되, 기존 데이터는 보존해 과거 상세 URL 404를 방지
   const existingByKey = new Map(
     existing.map((item) => [
       String(item['서비스ID'] || item.id || item['서비스명'] || item.name),
       item,
     ])
   );
+  const fetchedKeySet = new Set();
 
   const merged = [];
   let newItemsCount = 0;
   for (const item of filtered) {
     const key = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
     if (!key) continue;
+    fetchedKeySet.add(key);
     const prev = existingByKey.get(key);
     if (!prev) newItemsCount++;
 
@@ -278,6 +280,23 @@ async function run() {
       expired: false,
       collectedAt: todayStr,
     });
+  }
+
+  let preservedCount = 0;
+  for (const prev of existing) {
+    const key = String(prev['서비스ID'] || prev.id || prev['서비스명'] || prev.name || '');
+    if (!key || fetchedKeySet.has(key)) continue;
+
+    const endDate = prev.endDate || extractEndDateFromSubsidyItem(prev) || null;
+    const expired = endDate ? endDate < todayStr : Boolean(prev.expired);
+
+    merged.push({
+      ...prev,
+      endDate,
+      expired,
+      collectedAt: prev.collectedAt || todayStr,
+    });
+    preservedCount++;
   }
 
   const topVisible = getTopSubsidyVisible(merged, 800);
@@ -376,7 +395,7 @@ async function run() {
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItemsCount}건 추가, markdown ${markdownGenerated}건 생성 (노출 ${topVisible.length}건 / 원천 ${merged.length}건, 윈도우 ${SUBSIDY_WINDOW_MONTHS}개월)`);
+  console.log(`전국 보조금·복지 정책 수집 완료: 신규 ${newItemsCount}건 추가, 기존보존 ${preservedCount}건, markdown ${markdownGenerated}건 생성 (노출 ${topVisible.length}건 / 원천 ${merged.length}건, 윈도우 ${SUBSIDY_WINDOW_MONTHS}개월)`);
   if (markdownGenerated > 0) {
     console.log(`  Gemini usage - input: ${inputTokens}, output: ${outputTokens}`);
   }

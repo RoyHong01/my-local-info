@@ -352,13 +352,15 @@ async function run() {
   existing = existing.filter(ex => !(ex?.id && !ex?.contentid && String(ex.id).startsWith('festival-')));
   const removedLegacyCount = beforeLegacyCleanup - existing.length;
 
-  // 오늘~6개월 범위의 API 응답을 기준으로 active set 재구성 (지난 데이터는 제거)
+  // 오늘~6개월 API 응답을 우선 갱신하되, 기존 데이터는 보존해 과거 상세 URL 404를 방지
+  const fetchedKeySet = new Set();
   const merged = [];
   let updatedCount = 0;
   let newItemsCount = 0;
   for (const item of items) {
     const key = String(item.contentid || item.id || '');
     if (!key) continue;
+    fetchedKeySet.add(key);
     const prev = existingById.get(key);
     const mergedItem = {
       ...(prev || {}),
@@ -373,6 +375,23 @@ async function run() {
       newItemsCount++;
     }
     merged.push(mergedItem);
+  }
+
+  const todayKey = normalizeFestivalDate(new Date().toISOString().slice(0, 10));
+  let preservedCount = 0;
+  for (const prev of existing) {
+    const key = String(prev?.contentid || prev?.id || '');
+    if (!key || fetchedKeySet.has(key)) continue;
+
+    const endDate = normalizeFestivalDate(prev?.eventenddate || prev?.endDate || '');
+    const expired = endDate ? endDate < todayKey : Boolean(prev?.expired);
+
+    merged.push({
+      ...prev,
+      expired,
+      collectedAt: prev?.collectedAt || new Date().toISOString().split('T')[0],
+    });
+    preservedCount++;
   }
 
   // description_markdown 생성 (신규/변경 항목만)
@@ -439,7 +458,7 @@ async function run() {
 
   await fs.mkdir(path.dirname(dataPath), { recursive: true });
   await fs.writeFile(dataPath, JSON.stringify(merged, null, 2), 'utf-8');
-  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItemsCount}건 추가, 기존 ${updatedCount}건 갱신, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
+  console.log(`전국 축제·여행 정보 수집 완료: 신규 ${newItemsCount}건 추가, 기존 ${updatedCount}건 갱신, 기존보존 ${preservedCount}건, 샘플 ${replacedLegacyCount}건 API 교체, 샘플 ${removedLegacyCount}건 정리, markdown ${markdownGenerated}건 생성 (총 ${merged.length}건)`);
   if (markdownGenerated > 0) {
     console.log(`  Gemini usage - input: ${inputTokens}, output: ${outputTokens}`);
   }
