@@ -801,7 +801,7 @@ ${content}`.trim();
   }
 }
 
-function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
+async function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
   const lines = String(generatedText || '').split('\n');
   let filename = `${fileStem}.md`;
   const contentLines = [];
@@ -1295,7 +1295,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
     throw new Error(`Gemini 응답 불완전(finishReason=${lastFinishReason || 'N/A'})`);
   }
 
-  let { filename, finalContent } = normalizeGeneratedMarkdown(generatedText, fileStem, candidate);
+  let { filename, finalContent } = await normalizeGeneratedMarkdown(generatedText, fileStem, candidate);
   let validationIssues = validateGeneratedRestaurantMarkdown(finalContent);
 
   if (validationIssues.length > 0) {
@@ -1313,7 +1313,7 @@ parking_info: "확인 필요"${ratingFrontmatter}
           continue;
         }
 
-        const normalizedRetry = normalizeGeneratedMarkdown(retryText, fileStem, candidate);
+        const normalizedRetry = await normalizeGeneratedMarkdown(retryText, fileStem, candidate);
         filename = normalizedRetry.filename;
         finalContent = normalizedRetry.finalContent;
         validationIssues = validateGeneratedRestaurantMarkdown(finalContent);

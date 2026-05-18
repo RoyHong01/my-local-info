@@ -1,0 +1,235 @@
+{
+  "reportDateKst": "2026-05-19",
+  "generatedAtUtc": "2026-05-18T20:52:27.400Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26058230002",
+    "runNumber": 800,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26058230002",
+    "runStartedAtUtc": "2026-05-18T20:21:41Z",
+    "headSha": "02ead96563629ddbf1e9c04cb7102d06345c06fc"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://5ea2a958.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 0건, 총 620건",
+        "festival": "신규 7건, 업데이트 164건, 총 189건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://4a1fc474.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "failure",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "1c4791c402ffa0e67c14adf45d2eef2275c168d5",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-18",
+      "authoredAt": "2026-05-18T20:31:04Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-19-choice-living-2026-05-19.md"
+      ]
+    },
+    {
+      "sha": "fd1cdae25af3391561a0f8dfeaa35ecf709097aa",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-18",
+      "authoredAt": "2026-05-18T20:30:52Z",
+      "files": [
+        "src/content/posts/2026-05-18-cheongju-pet-festival.md",
+        "src/content/posts/2026-05-18-dongjak-youth-support.md",
+        "src/content/posts/2026-05-18-geumjeong-school-subsidy.md",
+        "src/content/posts/2026-05-18-incheon-small-business-support.md",
+        "src/content/posts/2026-05-19-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "da73556f9ee01a46ceb282fd06a42870457c70db",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-18",
+      "authoredAt": "2026-05-18T20:23:23Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-18-cheongju-pet-festival.md",
+      "src/content/posts/2026-05-18-dongjak-youth-support.md",
+      "src/content/posts/2026-05-18-geumjeong-school-subsidy.md",
+      "src/content/posts/2026-05-18-incheon-small-business-support.md",
+      "src/content/posts/2026-05-19-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-19-choice-living-2026-05-19.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-19-choice-living-2026-05-19.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-19-choice-living-2026-05-19.md",
+      "src/content/posts/2026-05-18-cheongju-pet-festival.md",
+      "src/content/posts/2026-05-18-dongjak-youth-support.md",
+      "src/content/posts/2026-05-18-geumjeong-school-subsidy.md",
+      "src/content/posts/2026-05-18-incheon-small-business-support.md",
+      "src/content/posts/2026-05-19-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 6,
+      "manual": 0,
+      "unknown": 0,
+      "total": 6
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.67,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "2397/1104",
+      "markdown": {
+        "generated": 2,
+        "pending": 209,
+        "titles": [
+          "체육시설 이용요금 감면(미추홀구 국민체육센터)",
+          "고령친화 맞춤형 집수리 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 620건",
+      "validation": "ok",
+      "anthropicUsage": "6694/2784",
+      "markdown": {
+        "generated": 5,
+        "pending": 466,
+        "titles": [
+          "경주시 청년 주택구입 대출이자 지원",
+          "(전주시)장애인 평생교육이용권 지원",
+          "의료급여 (의료급여 건강생활 유지비)",
+          "취약계층 통신요금감면",
+          "국가장학금 Ⅱ유형 (대학자체노력연계형)"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 164건, 총 189건",
+      "validation": "ok",
+      "anthropicUsage": "1471/945",
+      "markdown": {
+        "generated": 2,
+        "pending": 151,
+        "titles": [
+          "해운대 모래축제",
+          "제23회 한강사랑 그림그리기 대회"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
