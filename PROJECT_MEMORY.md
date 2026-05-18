@@ -1,5 +1,20 @@
 # Project Memory & Status
 
+## 최근 마일스톤 (2026-05-18, 성수동 벱 포스트 이미지 정정)
+
+### 완료: 비-음식 이미지 차단 + 게시본 교정 + 빌드 검증
+
+- 배경: 성수동 맛집 포스트에 Naver news / Seoul mediahub 계열 이미지가 음식 사진처럼 노출됨.
+- 원인:
+  - 데이터 스냅샷의 후보 이미지가 음식점 사진이 아닌 일반 뉴스/홍보 이미지였음.
+  - 생성기가 URL 존재 여부는 확인했지만, 이미지 출처의 성격까지 판별하지 못했음.
+- 조치:
+  - `scripts/generate-life-restaurant-posts.mjs`에 비-음식 이미지 호스트 블랙리스트 추가.
+  - 게시본 `src/content/life/2026-05-18-seongsu-restaurant-1079903424.md`의 hero 이미지를 Google Places 사진으로 교체하고 inline 오염 이미지를 제거.
+- 검증:
+  - `functions.get_errors` 통과
+  - `npm run build` 성공
+
 ## 최근 마일스톤 (2026-05-10, 단독 초이스 생성 체인 정상화)
 
 ### 완료: CJ 바이오코어 500억 유산균 단독 포스트 생성 + env 로딩 순서 버그 수정

@@ -1,5 +1,16 @@
 # COPILOT_MEMORY.md — 픽앤조이 작업 메모
 
+## 최근 작업 (2026-05-18) — 성수동 벱 포스트 이미지 정정
+
+- 증상: `성수동 골목에서 마주한 베트남의 온도, 벱` 포스트에 음식점 사진이 아닌 news/mediahub 계열 이미지가 섞여 노출됨.
+- 조치:
+  - `scripts/generate-life-restaurant-posts.mjs`에 `isLikelyRestaurantImageUrl()` / `resolveSafeRestaurantInlineImage()` 추가.
+  - `imgnews.naver.net`, `mediahub.seoul.go.kr` 같은 명백한 비-음식 이미지 호스트를 생성 단계에서 차단.
+  - `src/content/life/2026-05-18-seongsu-restaurant-1079903424.md`의 hero 이미지를 Google Places 사진으로 교체하고 inline 오염 이미지를 삭제.
+- 검증:
+  - `functions.get_errors` 통과
+  - `npm run build` 성공
+
 ## 최근 작업 (2026-05-10) — 단독 초이스 생성(CJ 바이오코어 500억 유산균)
 
 - 요청값(제품명/쿠팡 링크/이미지 3종)을 `scripts/choice-input.latest.json`에 반영하고 단독 생성 체인을 실행.

@@ -351,12 +351,45 @@ async function canEmbedImageUrl(url) {
   }
 }
 
+function isLikelyRestaurantImageUrl(url) {
+  const value = String(url || '').trim();
+  if (!/^https?:\/\//i.test(value)) return false;
+
+  let hostname = '';
+  try {
+    hostname = new URL(value).hostname.toLowerCase();
+  } catch {
+    return false;
+  }
+
+  const blockedHosts = [
+    'imgnews.naver.net',
+    'mediahub.seoul.go.kr',
+  ];
+
+  if (blockedHosts.includes(hostname)) return false;
+
+  const blockedPatterns = [
+    /\/news\//i,
+    /\/press\//i,
+    /\/article\//i,
+    /\/uploads\/mediahub\//i,
+  ];
+
+  return !blockedPatterns.some((pattern) => pattern.test(value));
+}
+
 async function resolveSafeHeroImage(item, defaultImage) {
   const candidates = [item?.naverPhotoUrl, item?.naverPhotoUrl2, item?.googlePhotoUrl]
     .map((value) => String(value || '').trim())
     .filter(Boolean);
 
   for (const candidateUrl of candidates) {
+    if (!isLikelyRestaurantImageUrl(candidateUrl)) {
+      console.warn(`⚠️ 히어로 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
+      continue;
+    }
+
     // 외부 Referer에서 403이 발생하는 핫링크 이미지는 히어로에서 제외한다.
     // 예: ruliweb 이미지가 pick-n-joy referer로 차단되는 케이스.
     if (await canEmbedImageUrl(candidateUrl)) {
@@ -366,6 +399,26 @@ async function resolveSafeHeroImage(item, defaultImage) {
   }
 
   return defaultImage;
+}
+
+async function resolveSafeRestaurantInlineImage(item) {
+  const candidates = [item?.naverPhotoUrl2, item?.googlePhotoUrl, item?.naverPhotoUrl]
+    .map((value) => String(value || '').trim())
+    .filter(Boolean);
+
+  for (const candidateUrl of candidates) {
+    if (!isLikelyRestaurantImageUrl(candidateUrl)) {
+      console.warn(`⚠️ 본문 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
+      continue;
+    }
+
+    if (await canEmbedImageUrl(candidateUrl)) {
+      return candidateUrl;
+    }
+    console.warn(`⚠️ 본문 이미지 제외(임베드 불가): ${candidateUrl}`);
+  }
+
+  return null;
 }
 
 function getTodayKST() {
@@ -803,8 +856,8 @@ function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
     editorLabel: candidate.visitInfoVariant.editorLabel,
   });
 
-  // 방문 정보 한눈에 바로 위에 두 번째 이미지 삽입 (네이버 2번째 이미지 우선)
-  const secondImg = candidate.item.naverPhotoUrl2 || null;
+  // 방문 정보 한눈에 바로 위에 두 번째 이미지 삽입 (유효한 식당 사진만 허용)
+  const secondImg = await resolveSafeRestaurantInlineImage(candidate.item);
   if (secondImg) {
     const altText = (candidate.item.name || '맛집 사진').replace(/"/g, '');
     finalContent = finalContent.replace(

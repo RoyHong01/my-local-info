@@ -4,6 +4,25 @@
 > 최신 항목이 위에 오도록 작성.
 
 ---
+
+## 2026-05-18 (성수동 벱 포스트 이미지 정정 + 생성기 재발 방지)
+
+- **수정 파일**:
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `src/content/life/2026-05-18-seongsu-restaurant-1079903424.md`
+  - `public/data/search-index.json`
+- **배경**: 성수동 맛집 포스트에 음식 사진이 아닌 Naver news / Seoul mediahub 계열 이미지가 섞여 노출됨.
+- **원인(RCA)**:
+  - 데이터 스냅샷의 `naverPhotoUrl`/`naverPhotoUrl2`가 비-음식 이미지였지만, 생성기에서 구조적으로 차단하지 못함.
+  - 게시본에는 잘못된 inline 이미지가 남아 있었고, 상단 hero도 부적절한 이미지로 세팅돼 있었음.
+- **조치**:
+  1. 포스트 본문 inline 이미지를 제거하고 hero 이미지를 Google Places 사진으로 교체.
+  2. 생성기에 `isLikelyRestaurantImageUrl()` / `resolveSafeRestaurantInlineImage()` 추가해 `imgnews.naver.net`, `mediahub.seoul.go.kr` 같은 명백한 비-음식 이미지 호스트를 차단.
+  3. 마크다운 내 중복 빈 줄을 정리해 `MD012/no-multiple-blanks`를 해소.
+- **검증**:
+  - `functions.get_errors` 통과
+  - `npm run build` 성공
+
 ## 2026-05-15 (deploy.yml 한글 mojibake 복원 완료)
 
 - **수정 파일**: `.github/workflows/deploy.yml`
