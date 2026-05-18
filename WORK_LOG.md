@@ -3,7 +3,48 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 기록 규칙
+
+- 모든 항목은 날짜와 작업명으로 시작한다.
+- 제목 형식은 `YYYY-MM-DD (작업명)`으로 고정한다.
+- 본문은 항상 `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증` 순서로 적는다.
+- `수정 파일`에는 실제 변경 파일만 적고, 추정 파일은 넣지 않는다.
+- `검증`에는 실행한 명령이나 확인 도구를 짧게 적는다.
+- 기존 항목은 같은 형식을 유지하고, 새 항목도 아래 형식만 따른다.
+
+## 기록 템플릿
+
+- **수정 파일**:
+  - `path/to/file.ext`
+- **배경**:
+  - 한 줄 요약
+- **원인(RCA)**:
+  - 한 줄 요약
+- **조치**:
+  1. 첫 번째 조치
+  2. 두 번째 조치
+- **검증**:
+  - 실행한 검증 1
+  - 실행한 검증 2
+
 ---
+
+## 2026-05-18 (기록 기준 통일 및 기존 항목 정리)
+
+- **수정 파일**:
+  - `WORK_LOG.md`
+  - `PROJECT_MEMORY.md`
+  - `COPILOT_MEMORY.md`
+- **배경**:
+  - 기록 파일의 형식이 항목별로 달라져서 같은 기준으로 관리할 필요가 있었음.
+- **원인(RCA)**:
+  - 기존 항목들이 서로 다른 상세도와 중첩 목록 스타일로 누적되어 있었음.
+- **조치**:
+  1. WORK_LOG 상단에 공통 기록 규칙과 템플릿을 고정.
+  2. 기존 항목을 같은 `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증` 순서로 정리.
+  3. PROJECT_MEMORY와 COPILOT_MEMORY에도 동일한 기록 기준을 짧게 복제.
+- **검증**:
+  - `functions.get_errors` 통과.
 
 ## 2026-05-18 (성수동 벱 포스트 이미지 정정 + 생성기 재발 방지)
 
@@ -11,7 +52,8 @@
   - `scripts/generate-life-restaurant-posts.mjs`
   - `src/content/life/2026-05-18-seongsu-restaurant-1079903424.md`
   - `public/data/search-index.json`
-- **배경**: 성수동 맛집 포스트에 음식 사진이 아닌 Naver news / Seoul mediahub 계열 이미지가 섞여 노출됨.
+- **배경**:
+  - 성수동 맛집 포스트에 음식 사진이 아닌 Naver news / Seoul mediahub 계열 이미지가 섞여 노출됨.
 - **원인(RCA)**:
   - 데이터 스냅샷의 `naverPhotoUrl`/`naverPhotoUrl2`가 비-음식 이미지였지만, 생성기에서 구조적으로 차단하지 못함.
   - 게시본에는 잘못된 inline 이미지가 남아 있었고, 상단 hero도 부적절한 이미지로 세팅돼 있었음.
@@ -25,46 +67,40 @@
 
 ## 2026-05-15 (deploy.yml 한글 mojibake 복원 완료)
 
-- **수정 파일**: `.github/workflows/deploy.yml`
-- **배경**: 이전 세션에서 PowerShell WriteAllBytes 잘못된 인코딩으로 YAML 파일 내 한글이 깨짐
-- **V1 수정 (이전 세션)**: git commit 명령 구조 복원 + 대부분 `name:` 필드 복원
-- **V2 수정 (이번 세션)**: 남은 8개 항목 수정
-  - `[1단계] 변경사항 커밋 & 푸시 (공공데이터)` name 필드
-  - `echo "변경사항 없음"` (4곳: 1단계/2단계/2.5단계/3단계 커밋 else 분기)
-  - `echo "리포트 변경사항 없음"` (리포트 커밋 else 분기)
-  - `echo "- 리포트 파일이 아직 생성되지 않았습니다" >> "$GITHUB_STEP_SUMMARY"`
-  - `[리포트] Cloudflare Cache Purge` name 필드 (full 모드)
-- **검증**: `npm run build` 성공, 임시 스크립트(`fix-deploy-yml.js`, `fix-deploy-yml-v2.js`) 삭제
+- **수정 파일**:
+  - `.github/workflows/deploy.yml`
+- **배경**:
+  - 이전 세션에서 PowerShell WriteAllBytes 잘못된 인코딩으로 YAML 파일 내 한글이 깨짐.
+- **원인(RCA)**:
+  - `deploy.yml` 일부가 잘못된 인코딩으로 재저장되며 한글 문자열이 손상됨.
+- **조치**:
+  1. git commit 명령 구조와 대부분의 `name:` 필드를 복원.
+  2. 남은 8개 항목을 추가 수정.
+  3. 임시 복구 스크립트(`fix-deploy-yml.js`, `fix-deploy-yml-v2.js`) 삭제.
+- **검증**:
+  - `npm run build` 성공
 
 ---
-
 
 ## 2026-05-15 (GSC 리다이렉트 오류 수정 — 스테일 out/_redirects 근본 원인 제거)
 
 - **수정 파일**:
   - `package.json`
   - `public/_redirects`
-- **배경**: Google Search Console에서 5개 URL이 "리다이렉트 오류"로 보고됨.
-  - `/festival/141759/`, `/festival/727285/`, `/festival/506909/` — 만료 축제 ID
-  - `/subsidy/154300000325/`, `/subsidy/374000000146/` — 보조금 상세 페이지
+- **배경**:
+  - Google Search Console에서 5개 URL이 리다이렉트 오류로 보고됨.
 - **원인(RCA)**:
-  - `public/_redirects`(소스)는 깨끗했으나 배포 대상인 `out/_redirects`에 이전 빌드 산출물이 잔류
-  - 잔류 파일에 `/festival/:id/ /festival/ 301`, `/subsidy/:id/ /subsidy/ 301` 같은 catch-all 규칙이 남아
-    있어, 존재하는 상세 페이지까지 전부 목록으로 301 리다이렉트
-  - `next build`가 `out/` 디렉터리를 비우지 않고 파일을 덮어씌우는 방식이라 구 규칙이 계속 배포됨
+  - `public/_redirects`(소스)는 깨끗했으나 배포 대상인 `out/_redirects`에 이전 빌드 산출물이 잔류.
+  - 잔류 파일에 상세 페이지를 목록으로 돌리는 catch-all 규칙이 남아 있었음.
+  - `next build`가 `out/` 디렉터리를 비우지 않고 파일을 덮어씌우는 방식이라 구 규칙이 계속 배포됨.
 - **조치**:
-  1. `package.json`에 `clean:build` 스크립트 추가 (`.next`와 `out` 디렉터리 삭제)
-  2. `prebuild` 훅에 `clean:build` 연결 → 이후 모든 빌드 전 자동 정리
-  3. `public/_redirects`에 만료 festival ID(506909, 727285, 141759) 전용 301 규칙 명시 추가
-- **재발 방지**:
-  - `prebuild: npm run clean:build && ...` 고정으로 stale `out/_redirects` 재발 원천 차단
-  - SEO/리다이렉트 작업 후에는 `out/_redirects` 실제 파일도 검증하는 절차 권장
-- **검증 (수정 후 live 상태)**:
-  - `/festival/` → 200 OK ✓
-  - `/subsidy/154300000325/` → 200 OK ✓
-  - `/subsidy/374000000146/` → 200 OK ✓
-  - `/festival/141759/`, `/festival/727285/` → 301 (의도적 — 만료 ID, sitemap에서 제외됨)
-  - `npm run build` 성공
+  1. `package.json`에 `clean:build` 스크립트 추가.
+  2. `prebuild` 훅에 `clean:build` 연결.
+  3. `public/_redirects`에 만료 festival ID 전용 301 규칙 명시 추가.
+- **검증**:
+  - `/festival/`와 보조금 상세 페이지 2건은 200 OK로 확인.
+  - 만료 festival ID 2건은 의도된 301로 확인.
+  - `npm run build` 성공.
 
 ## 2026-05-10 (단독 초이스 생성 — CJ 바이오코어 500억 유산균)
 
@@ -77,58 +113,53 @@
   - `public/images/choice/biocore-hero.png`
   - `public/images/choice/biocore-middle.png`
   - `public/images/choice/biocore-middle-1.png`
-- **배경**: 사용자 요청으로 단독 초이스 1건(제품/쿠팡 링크/이미지 3종 지정) 생성 필요.
-- **원인(RCA) 및 수정**:
-  1. `generate:choice:latest` 1차 실행 실패 (`Missing GEMINI_API_KEY`)
-  2. 원인: `scripts/generate-choice-post.js`에서 `GEMINI_API_KEY`를 읽기 전에 `.env.local` 로딩이 호출되지 않음
-  3. 조치: 파일 상단에 `loadLocalEnvFiles();`를 추가해 env 로딩 순서 보정
-- **실행 체인**:
-  - `npm run generate:choice:latest`
-  - `npm run check:choice-quality`
-  - `npm run build`
+- **배경**:
+  - 사용자 요청으로 단독 초이스 1건을 생성해야 했음.
+- **원인(RCA)**:
+  - `generate:choice:latest` 1차 실행에서 API 키 로딩 순서가 잘못돼 실패.
+- **조치**:
+  1. `scripts/generate-choice-post.js` 상단에 `loadLocalEnvFiles();`를 추가.
+  2. 입력 JSON 반영 후 단독 생성 체인 재실행.
+  3. 이미지 자산과 검색 인덱스를 함께 갱신.
 - **검증**:
-  - 단독 초이스 생성 성공
-  - 품질 검증 통과
-  - 빌드 성공
+  - `npm run generate:choice:latest` 성공.
+  - `npm run check:choice-quality` 통과.
+  - `npm run build` 성공.
 
 ## 2026-05-09 (festival-versus 히어로 저해상도/중복 이미지 재발 방지)
 
 - **수정 파일**:
   - `scripts/generate-festival-versus-post.js`
   - `src/content/posts/2026-05-09-festival-versus-daejeon-busan.md`
-- **배경**: 비교형 축제 포스트에서 히어로와 본문 이미지가 사실상 동일 후보군에서 뽑히며, 히어로가 300x200 썸네일(`*_image3_1.jpg`)로 선택되어 화질 저하 발생.
+- **배경**:
+  - 비교형 축제 포스트에서 히어로가 300x200 썸네일로 선택되어 화질 저하가 발생.
 - **원인(RCA)**:
-  1. 히어로 선택이 품질 고려 없이 해시 랜덤 기반이라 저해상도 URL도 동일 확률로 선택됨
-  2. 본문 이미지 선택은 base 비교 중심이라 같은 행사의 대체 이미지가 있어도 품질 우선 분리가 약했음
+  - 히어로 선택이 품질 고려 없이 해시 랜덤 기반이라 저해상도 URL도 같은 확률로 선택됨.
+  - 본문 이미지 선택은 대체 이미지가 있어도 품질 우선 분리가 약했음.
 - **조치**:
-  1. `generate-festival-versus-post.js`
-     - `getVisitKoreaImageOrder`, `scoreHeroImageUrl`, `sortImagePoolByQuality` 추가
-     - 히어로는 상위 품질 그룹에서만 deterministic 랜덤 선택(저해상도 썸네일 감점)
-     - 본문 이미지는 히어로 동일 URL 우선 배제 + 품질 우선 선택으로 보강
-  2. 대상 포스트 직접 교정
-     - 히어로: `4062825_image3_1.jpg` -> `4062825_image2_1.jpg`
-     - 세계인 어울림 축제 본문: `4062825_image2_1.jpg` -> `4062825_image3_1.jpg`
+  1. `generate-festival-versus-post.js`에 품질 점수 기반 선택 로직 추가.
+  2. 히어로는 상위 품질 그룹에서만 선택하도록 변경.
+  3. 본문 이미지는 히어로 동일 URL을 우선 배제하고 품질 우선으로 보강.
+  4. 대상 포스트의 히어로와 본문 이미지를 직접 교정.
 - **검증**:
-  - `npm run build` 성공
-  - 변경 후 히어로/본문 이미지 분리 및 히어로 품질 개선 확인
+  - `npm run build` 성공.
+  - 히어로/본문 이미지 분리와 히어로 품질 개선 확인.
 
 ## 2026-05-09 (festival-versus 후속 보정 — 본문 저화질 이미지 회귀 복구)
 
 - **수정 파일**:
   - `scripts/generate-festival-versus-post.js`
   - `src/content/posts/2026-05-09-festival-versus-daejeon-busan.md`
-- **배경**: 히어로와 본문을 분리하는 과정에서 세계인 어울림 축제 본문 이미지가 300x200 썸네일로 교체되어 본문 품질이 저하됨.
+- **배경**:
+  - 히어로와 본문을 분리하는 과정에서 본문 이미지가 300x200 썸네일로 바뀌어 품질이 떨어짐.
 - **원인(RCA)**:
-  1. 본문 이미지 선택이 "히어로와 다른 URL"을 우선하다 보니 고해상도 원본보다 저화질 대체 이미지가 채택됨
-  2. 사용자는 히어로 품질과 히어로-본문 관계만 요청했으며, 본문 축제 이미지 축소는 요구하지 않았음
+  - 본문 이미지 선택이 히어로와 다른 URL을 우선하다가 고해상도 원본보다 저화질 대체 이미지를 채택함.
 - **조치**:
-  1. `generate-festival-versus-post.js`
-     - 본문 이미지는 기본적으로 가장 품질이 좋은 이미지를 유지하도록 변경
-     - 대체 이미지가 있어도 품질 차이가 크면 본문 이미지를 바꾸지 않도록 가드 추가
-  2. 대상 포스트 직접 복구
-     - 세계인 어울림 축제 본문 이미지를 다시 `4062825_image2_1.jpg` 고해상도 URL로 복원
+  1. 본문 이미지는 기본적으로 가장 품질이 좋은 이미지를 유지하도록 변경.
+  2. 품질 차이가 클 때는 본문 이미지를 바꾸지 않도록 가드 추가.
+  3. 대상 포스트 본문 이미지를 고해상도 URL로 복원.
 - **검증**:
-  - `npm run build` 성공
+  - `npm run build` 성공.
 
 ## 2026-05-09 (맛집 프랜차이즈 재발 이슈 수정 — 메가MGC/이디야 포스트 삭제 + 이중 필터 보강)
 
@@ -139,44 +170,39 @@
 - **삭제 파일**:
   - `src/content/life/2026-05-09-cheongna-mgc.md`
   - `src/content/life/2026-04-18-gyeonggi-restaurant-997347977.md`
-- **배경**: 프랜차이즈 제외 정책에도 `메가MGC커피`/`이디야` 계열 맛집 포스트가 생성됨.
+- **배경**:
+  - 프랜차이즈 제외 정책에도 메가MGC와 이디야 계열 맛집 포스트가 생성됨.
 - **원인(RCA)**:
-  1. 수집 단계 블랙리스트가 `메가커피` 중심이라 `메가MGC` 변형 표기를 놓침
-  2. 생성 단계에 프랜차이즈 2차 방어 필터가 없어 오염된 스냅샷 후보가 포스트로 생성됨
+  - 수집 단계 블랙리스트가 메가커피 중심이라 메가MGC 변형 표기를 놓침.
+  - 생성 단계에 프랜차이즈 2차 방어 필터가 없었음.
 - **조치**:
-  1. `collect-life-restaurants.mjs`
-     - 블랙리스트에 `메가mgc`, `mgc커피`, `mega mgc` 등 변형 키워드 추가
-     - `normalizeFranchiseText()` 도입(공백/기호 제거 + 소문자화)
-     - `isFranchise(name, categoryName)`로 상호명 + 카테고리 동시 검사
-  2. `generate-life-restaurant-posts.mjs`
-     - 동일 정규화 기반 `isFranchiseCandidate()` 추가
-     - `buildFilteredCandidates()`에서 생성 직전 프랜차이즈 후보 차단(2차 안전장치)
-  3. 이미 생성된 프랜차이즈 포스트 2건 삭제(메가MGC, 이디야)
+  1. 수집 단계에 변형 키워드와 정규화 검사 추가.
+  2. 생성 단계에 동일 정규화 기반 2차 안전장치 추가.
+  3. 이미 생성된 프랜차이즈 포스트 2건 삭제.
 - **검증**:
-  - `npm run build` 성공 (choice 품질검증/단독픽 테스트 포함)
-  - 정적 페이지/검색 인덱스 재생성 정상 완료
+  - `npm run build` 성공.
+  - 정적 페이지와 검색 인덱스 재생성 정상 완료.
 
 ## 2026-05-09 (pre-push auto-amend + Cloudflare catch-all 404 fix)
 
-- **수정 파일**: `scripts/install-git-hooks.ps1`, `.git/hooks/pre-push` (직접 업데이트), `public/_redirects`
-
-### Issue 1: pre-push 훅 auto-amend 로직 추가
-- **배경**: `npm run build` postbuild(`build-search-index.js`, `generate-search-index.js`)가 `public/data/search-index.json`, `public/sitemap.xml`을 갱신 → git tracked 파일 dirty → pre-push strict 검사 실패로 불필요한 별도 커밋 발생.
-- **해결**: `pre-push` 훅에 auto-amend 블록 추가:
-  1. `POSTBUILD_FILES='public/data/search-index.json public/sitemap.xml'`을 순회
-  2. `git status --porcelain`으로 dirty 여부 감지
-  3. dirty이면 `git add` + `git commit --amend --no-edit --no-verify --quiet` 실행
-  4. amend 후 기존 `check:worktree:strict` 실행
-- **결과**: 빌드 직후 push 시 postbuild 아티팩트가 자동으로 last commit에 amend → 별도 커밋 없이 단일 커밋 유지
-
-### Issue 2: GSC 404 4,882페이지 → Cloudflare catch-all 리다이렉트로 해결
-- **배경**: `getTopSubsidy(800)`, `getTopFestival(300)`, `getTopIncheon(500)` 제한으로 정적 파일 미생성된 ID들을 Google이 계속 크롤링 → 404 반환.
-- **원인 분석**: `generate-sitemap.js`는 `topIds.has(id)` 필터로 이미 생성 페이지와 정렬됨 (sitemap 자체 문제 아님). URL 수(4,882개)가 Cloudflare 2,000개 규칙 제한 초과 → 개별 redirect 불가.
-- **해결**: `public/_redirects`에 catch-all 규칙 추가:
-  - `/subsidy/* /subsidy/ 301`, `/festival/* /festival/ 301`, `/incheon/* /incheon/ 301` — Cloudflare는 정적 파일이 존재하면 규칙을 건너뜀(assets take precedence), 없는 페이지에만 적용됨
-  - `https://www.pick-n-joy.com/* https://pick-n-joy.com/:splat 301!` — www. → apex 강제 리다이렉트 (`!` suffix로 assets 우선 무시)
-- **빌드**: 성공 (1481 pages, sitemap.xml 1,481 URL)
-- **커밋**: 단일 커밋 + push
+- **수정 파일**:
+  - `scripts/install-git-hooks.ps1`
+  - `.git/hooks/pre-push` (직접 업데이트)
+  - `public/_redirects`
+- **배경**:
+  - 빌드 후 생성되는 검색 인덱스와 sitemap 때문에 pre-push strict 검사에서 불필요한 별도 커밋이 생김.
+  - 미생성 상세 페이지가 Google에 계속 크롤링되어 404가 발생함.
+- **원인(RCA)**:
+  - postbuild 산출물이 마지막 커밋에 자동 반영되지 않아 작업 트리가 dirty 상태로 남음.
+  - 상세 페이지 수가 많아 개별 redirect 규칙으로는 대응이 어려웠음.
+- **조치**:
+  1. pre-push 훅에 auto-amend 블록 추가.
+  2. Cloudflare catch-all redirect 규칙 추가.
+  3. www 도메인에서 apex로 강제 리다이렉트하는 규칙 추가.
+- **검증**:
+  - 빌드 직후 push 시 postbuild 아티팩트가 자동 반영되는 흐름 확인.
+  - 상세 페이지와 리다이렉트 동작 확인.
+  - 빌드 성공.
 
 ---
 
@@ -235,13 +261,13 @@
   - 삭제: `src/content/posts/2026-05-05-curation-5월-기억에-남을-여행-이-축제들로-채워보세요.md`
 - **배경**: 자동 생성 큐레이션 포스트의 섹션에 이미지만 삽입하던 `insertSectionImages` 함수가 versus-style 구조(행사명/이미지/기간·주소·전화/카카오맵)를 반영하지 못했음.
 - **변경 내용**:
-  1. `generate-curation-posts.js` — `insertSectionImages` 제거, 다음 3개 함수 신규 추가:
-     - `buildCurationKakaoMapLink(item)`: 좌표 기반 카카오맵 딥링크(좌표 없으면 주소/타이틀 검색 fallback)
-     - `buildItemPeriodText(item)`: `eventstartdate ~ eventenddate` 포맷(없으면 `'현장 공지 확인'`)
-     - `buildStructuredSections(body, topItems, category)`: `### ` 헤딩 아래에 `#### 행사명` + 이미지 + 정보 bullet + 카카오맵 링크 역순 삽입 (축제 카테고리), 비축제는 이미지만 삽입
-  2. `generateCurationPost` 파이프라인에서 `insertSectionImages` → `buildStructuredSections` 교체
-  3. `2026-05-05-curation-festival.md`: 기존 본문을 versus-style 5개 섹션(####+이미지+bullet+카카오맵)으로 완전 재작성 (7725바이트)
-  4. 구버전 Korean-filename 포스트 `git rm` 삭제
+  - `generate-curation-posts.js` — `insertSectionImages` 제거, 다음 3개 함수 신규 추가:
+    - `buildCurationKakaoMapLink(item)`: 좌표 기반 카카오맵 딥링크(좌표 없으면 주소/타이틀 검색 fallback)
+    - `buildItemPeriodText(item)`: `eventstartdate ~ eventenddate` 포맷(없으면 `'현장 공지 확인'`)
+    - `buildStructuredSections(body, topItems, category)`: 3단계 헤딩 아래에 `#### 행사명` + 이미지 + 정보 bullet + 카카오맵 링크를 역순으로 삽입 (축제 카테고리), 비축제는 이미지만 삽입
+  - `generateCurationPost` 파이프라인에서 `insertSectionImages` → `buildStructuredSections` 교체
+  - `2026-05-05-curation-festival.md`: 기존 본문을 versus-style 5개 섹션(####+이미지+bullet+카카오맵)으로 완전 재작성 (7725바이트)
+  - 구버전 Korean-filename 포스트 `git rm` 삭제
 - **빌드**: 성공 (1486 pages)
 - **커밋**: 단일 커밋 + push
 
