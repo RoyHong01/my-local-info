@@ -331,7 +331,7 @@ const markdownComponents: Components = {
     const isKakaoDirectionLink = !!href && /https?:\/\/map\.kakao\.com\/link\//i.test(href);
     if (isKakaoDirectionLink) {
       return (
-        <span className="not-prose inline-block my-2">
+        <span className="not-prose inline-block mt-2 mb-8">
           <a
             href={href}
             target="_blank"

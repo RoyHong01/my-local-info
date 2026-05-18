@@ -489,17 +489,20 @@ function buildIntro(mode, candidates) {
 function buildFinalGuide(mode, candidates) {
   const targetLabel = mode === 'holiday' ? '연휴' : '주말';
   const tags = candidates.map((c) => `#${String(c.title || '').replace(/\s+/g, '')}`);
+  const vibeSummary = candidates.map((candidate, index) => `${tags[index]}는 ${deriveVibe(candidate)} 흐름에 가까워요.`);
+  const accessSummary = candidates.map((candidate, index) => `${tags[index]}는 ${deriveAccess(candidate)}`);
+  const staySummary = candidates.map((candidate, index) => `${tags[index]}는 ${deriveStay(candidate)}`);
 
   const lines = [
-    '### 💡 에디터 성우의 한 줄 정리',
-    `${targetLabel}에 차분한 결을 느끼고 싶다면 ${tags[0]}를,`,
-    `체험 중심으로 손에 잡히는 추억을 만들고 싶다면 ${tags[1]}를,`,
+    '### 💡 에디터의 한 줄 정리',
+    `${targetLabel}에 한 템포 느리게 장면을 오래 붙잡고 싶다면 ${tags[0]} 쪽이 더 잘 맞고, 현장 에너지와 체험 밀도를 바로 끌어올리고 싶다면 ${tags[1]} 쪽이 만족도가 높아요.`,
+    `${vibeSummary[0]} ${vibeSummary[1]} 이동은 각각 ${accessSummary[0].replace(`${tags[0]}는 `, '')}, ${accessSummary[1].replace(`${tags[1]}는 `, '')} 쪽이라 동행자의 이동 성향까지 같이 보면 선택이 더 쉬워져요.`,
   ];
 
   if (tags[2]) {
-    lines.push(`온 가족의 에너지를 시원하게 풀고 싶다면 ${tags[2]}를 추천해요!`);
+    lines.push(`${staySummary[0]} ${staySummary[1]} ${staySummary[2]} 조용한 몰입은 ${tags[0]}, 체험 중심의 활기는 ${tags[1]}, 시원하게 에너지를 풀고 싶다면 ${tags[2]} 순으로 생각하면 결정이 빨라져요.`);
   } else {
-    lines.push(`동행 취향이 갈린다면 이동 편의가 더 좋은 쪽을 우선 선택해보세요.`);
+    lines.push(`${staySummary[0]} 반대로 ${staySummary[1].replace(`${tags[1]}는 `, '')} 일정이에요. 둘 다 끌린다면 오전에는 무드가 더 중요한지, 오후에는 이동 부담을 덜고 싶은지를 기준으로 고르면 훨씬 덜 아쉬운 선택이 됩니다.`);
   }
 
   return lines.join('\n\n');
@@ -533,8 +536,11 @@ function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
 
     return [
       sectionTitle,
+      '',
       eventHeading,
+      '',
       `![${candidate.title || '축제'} 현장 이미지](${bodyImage})`,
+      '',
       `- 📅 행사 기간: ${period}`,
       `- 📍 주소: ${addr}`,
       `- 📞 문의: ${tel}`,
@@ -543,12 +549,13 @@ function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
       '',
       paragraph2,
       '',
-      `👉 [카카오맵 바로가기](${mapLink})`,
+      `[카카오맵 바로가기](${mapLink})`,
     ].join('\n');
   });
 
   const detailLinks = [
     '### 🔎 구체적인 정보 더 보기',
+    '',
     ...candidates.map((candidate) => `- [${candidate.title}](/festival/${candidate.contentid})`),
   ].join('\n');
 
