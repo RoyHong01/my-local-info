@@ -296,6 +296,17 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
     2. `src/app/blog/[slug]/page.tsx::removeFirstDuplicateHeroImage` (렌더 측)
     3. `scripts/validate-choice-quality.js::validateManualSinglePickImagePosition` (검증 측)
   - Gemini 프롬프트 수정 시 단독 모드 [이미지 규칙]을 약화시키면 즉시 위 검증기에 걸리도록 두고, 검증기를 우회하지 않는다.
+21. **SSG 상한/색인 안정화 정책 (AdSense 충돌 방지 / 재발 방지)**:
+  - `src/app/incheon/[id]/page.tsx`, `src/app/subsidy/[id]/page.tsx`, `src/app/festival/[id]/page.tsx`의 `generateStaticParams`는 **Top ID 기준 SSG 상한**을 유지한다. (`getTopIncheon/getTopSubsidy/getTopFestival`)
+  - `scripts/generate-sitemap.js`, `src/app/rss.xml/route.ts`도 **Top ID 기준 URL 집합**과 동일하게 맞춘다. (SSG 범위를 초과한 전체 상세 URL 확장은 금지)
+  - 위 상한을 임의 해제하면 빌드 페이지 수 급증(예: 1,582 -> 8,495)으로 AdSense Low Value/크롤링 품질 리스크가 커질 수 있으므로, **사용자 명시 승인 없이 해제 금지**.
+  - 대량 404 완화는 SSG 상한 해제가 아니라, 수집 스크립트에서 과거 데이터를 삭제하지 않고 `expired`로 보존하는 방식으로 처리한다.
+    - 대상: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`
+  - 변경 제안 시 반드시 아래 순서를 지킨다:
+    1. 예상 빌드 페이지 수 증감 제시
+    2. AdSense/색인 영향 비교안 제시
+    3. 영향 파일 목록 제시
+    4. 사용자 승인 후 적용
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
 

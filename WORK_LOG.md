@@ -29,6 +29,24 @@
 
 ---
 
+## 2026-05-18 (색인 안정화 정책 박제: SSG Top ID 유지 + 과거 데이터 보존 원칙)
+
+- **수정 파일**:
+  - `.github/copilot-instructions.md`
+  - `WORK_LOG.md`
+  - `PROJECT_MEMORY.md`
+  - `COPILOT_MEMORY.md`
+- **배경**:
+  - 색인 제외(404) 완화를 위해 SSG 상한을 해제하면 AdSense Low Value 대응 정책과 충돌할 수 있어, 운영 원칙을 문서에 고정할 필요가 있었음.
+- **원인(RCA)**:
+  - 과거 대응 이력(2026-05-01)에서는 Top ID 기준 SSG/RSS/sitemap 정합을 유지했는데, 404 완화 과정에서 상한 해제와 데이터 보존이 혼재되며 정책 경계가 흐려질 위험이 있었음.
+- **조치**:
+  1. `.github/copilot-instructions.md`에 `SSG 상한/색인 안정화 정책`을 신규 규칙으로 추가.
+  2. `generateStaticParams`/`sitemap`/`RSS`는 Top ID 기준 유지, 상한 해제는 사용자 명시 승인 필수로 고정.
+  3. 404 완화의 기본 해법을 수집 스크립트의 과거 데이터 보존(`expired` 마킹)으로 명시.
+- **검증**:
+  - 운영 정책 문서와 메모리 파일 간 동일 원칙 반영 여부 확인.
+
 ## 2026-05-18 (festival-versus 카카오맵 간격 및 한 줄 정리 품질 보강)
 
 - **수정 파일**:
