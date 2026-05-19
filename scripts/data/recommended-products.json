@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-19T00:00:00+09:00",
+  "updatedAtKst": "2026-05-20T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2012,6 +2012,63 @@
       "sourceId": "manual-choice-living-2026-05-19",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-05-20",
+      "productId": "8965495882",
+      "productName": "SMTONE 슬림 주방 선반 틈새 서랍형 11.5cm/18.5cm 자석걸이+도마걸이 탄소강 수납함 조미료 컵 정리 양념통선반 영양제보관함 다용도 슬라이딩 정리함, 1개, 화이트",
+      "brand": "SMTONE",
+      "productGroupTokens": [
+        "슬림",
+        "주방",
+        "선반",
+        "틈새",
+        "서랍형",
+        "5cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-20-choice-kitchen-2026-05-20.md",
+      "sourceId": "manual-choice-kitchen-2026-05-20",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-05-20",
+      "productId": "7992071845",
+      "productName": "OMBRY 1+1 주방 확장형 후라이팬 정리대 간격 조절 접시 그릇 수납 선반",
+      "brand": "OMBRY",
+      "productGroupTokens": [
+        "주방",
+        "확장형",
+        "후라이팬",
+        "정리대",
+        "간격",
+        "조절"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-20-choice-kitchen-2026-05-20.md",
+      "sourceId": "manual-choice-kitchen-2026-05-20",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-05-20",
+      "productId": "9360575489",
+      "productName": "아싸레 대나무 원목 2단 주방 수납 선반",
+      "brand": "아싸레",
+      "productGroupTokens": [
+        "대나무",
+        "원목",
+        "2단",
+        "주방",
+        "수납",
+        "선반"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-20-choice-kitchen-2026-05-20.md",
+      "sourceId": "manual-choice-kitchen-2026-05-20",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
