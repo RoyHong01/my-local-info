@@ -173,55 +173,55 @@ function isFranchise(name, categoryName = '') {
 
 const REGION_QUERY_MAP = {
   'incheon': [
-    { query: '송도 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
-    { query: '송도 오마카세', scenarioHint: '기념일 저녁 약속', vibeHint: '집중도 높은 다이닝', cuisineHint: '오마카세' },
-    { query: '청라 브런치 맛집', scenarioHint: '주말 브런치 약속', vibeHint: '여유로운 신도시 브런치', cuisineHint: '브런치' },
+    { query: '인천 브런치 카페', scenarioHint: '주말 브런치 약속', vibeHint: '채광 좋은 브런치 무드', cuisineHint: '브런치' },
+    { query: '인천 오마카세', scenarioHint: '기념일 저녁 약속', vibeHint: '집중도 높은 다이닝', cuisineHint: '오마카세' },
+    { query: '인천 브런치 맛집', scenarioHint: '주말 브런치 약속', vibeHint: '여유로운 신도시 브런치', cuisineHint: '브런치' },
     { query: '인천 퓨전 한식 맛집', scenarioHint: '한식인데 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 다이닝', cuisineHint: '퓨전 한식' },
     { query: '인천 화덕피자 맛집', scenarioHint: '캐주얼하지만 무드 있는 저녁', vibeHint: '따뜻한 오븐 무드', cuisineHint: '화덕피자' },
-    { query: '청라 분위기 술집', scenarioHint: '퇴근 후 하이볼 한잔', vibeHint: '조도 낮은 저녁 약속', cuisineHint: '주점' },
-    { query: '구월동 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
-    { query: '부평 웨이팅 맛집', scenarioHint: '기다려서라도 가는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
+    { query: '인천 분위기 술집', scenarioHint: '퇴근 후 하이볼 한잔', vibeHint: '조도 낮은 저녁 약속', cuisineHint: '주점' },
+    { query: '인천 사진 잘 나오는 식당', scenarioHint: '사진 남기고 싶은 약속', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
+    { query: '인천 웨이팅 맛집', scenarioHint: '기다려서라도 가는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
     { query: '인천 내추럴 와인바', scenarioHint: '친구와 느슨한 저녁 모임', vibeHint: '와인바 감도', cuisineHint: '와인바' },
-    { query: '영종도 바다뷰 카페', scenarioHint: '드라이브 후 카페 타임', vibeHint: '바다뷰 감성 카페', cuisineHint: '카페' },
+    { query: '인천 바다뷰 카페', scenarioHint: '드라이브 후 카페 타임', vibeHint: '바다뷰 감성 카페', cuisineHint: '카페' },
     { query: '인천 스테이크 맛집', scenarioHint: '특별한 날 고기 한 판', vibeHint: '스테이크 다이닝', cuisineHint: '스테이크' },
-    { query: '주안 맛집', scenarioHint: '동네 숨은 맛집 탐방', vibeHint: '로컬 핫플', cuisineHint: '한식' },
+    { query: '인천 로컬 맛집', scenarioHint: '동네 숨은 맛집 탐방', vibeHint: '로컬 핫플', cuisineHint: '한식' },
     { query: '인천 일식 오마카세', scenarioHint: '일식 코스가 땡기는 날', vibeHint: '정갈한 일식 다이닝', cuisineHint: '일식' },
-    { query: '동인천 노포 맛집', scenarioHint: '클래식한 한 끼가 당기는 날', vibeHint: '오래된 로컬 노포 감성', cuisineHint: '한식' },
+    { query: '인천 노포 맛집', scenarioHint: '클래식한 한 끼가 당기는 날', vibeHint: '오래된 로컬 노포 감성', cuisineHint: '한식' },
     { query: '인천 태국음식 맛집', scenarioHint: '이국적인 한 끼', vibeHint: '동남아 무드', cuisineHint: '태국음식' },
   ],
   'seoul': [
-    { query: '성수동 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '성수 핫플 동선', cuisineHint: '다이닝' },
-    { query: '성수 오마카세', scenarioHint: '분위기 잡는 저녁 약속', vibeHint: '긴장감 있는 코스 다이닝', cuisineHint: '오마카세' },
-    { query: '성수 파스타 맛집', scenarioHint: '저장해둔 데이트 코스', vibeHint: '힙한 파스타 스팟', cuisineHint: '파스타' },
-    { query: '연남동 퓨전 한식', scenarioHint: '익숙한 메뉴를 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 감도', cuisineHint: '퓨전 한식' },
+    { query: '서울 팝업 근처 맛집', scenarioHint: '팝업 보고 바로 이어지는 식사', vibeHint: '도심 핫플 동선', cuisineHint: '다이닝' },
+    { query: '서울 오마카세', scenarioHint: '분위기 잡는 저녁 약속', vibeHint: '긴장감 있는 코스 다이닝', cuisineHint: '오마카세' },
+    { query: '서울 파스타 맛집', scenarioHint: '저장해둔 데이트 코스', vibeHint: '힙한 파스타 스팟', cuisineHint: '파스타' },
+    { query: '서울 퓨전 한식', scenarioHint: '익숙한 메뉴를 새롭게 먹고 싶은 날', vibeHint: '트렌디 한식 감도', cuisineHint: '퓨전 한식' },
     { query: '서울 화덕피자 맛집', scenarioHint: '캐주얼 데이트 저녁', vibeHint: '바삭한 피자 무드', cuisineHint: '화덕피자' },
-    { query: '연남동 웨이팅 맛집', scenarioHint: '줄 서도 납득되는 한 끼', vibeHint: '연남 웨이팅 핫플', cuisineHint: '핫플 맛집' },
-    { query: '연남동 내추럴 와인바', scenarioHint: '2차까지 예쁘게 이어가는 밤', vibeHint: '와인바 무드', cuisineHint: '와인바' },
-    { query: '강남역 사진 잘 나오는 식당', scenarioHint: '사진 남기는 모임', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
-    { query: '잠실 브런치 카페', scenarioHint: '주말 낮 약속', vibeHint: '브런치 카페', cuisineHint: '브런치' },
-    { query: '성수 에스프레소 바', scenarioHint: '짧지만 강한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
-    { query: '홍대 맛집', scenarioHint: '약속 동선 짜기 편한 홍대', vibeHint: '핫플 밀집 지역', cuisineHint: '다이닝' },
-    { query: '을지로 힙플레이스 맛집', scenarioHint: '을지로 감성 식사', vibeHint: '레트로 감성 맛집', cuisineHint: '한식' },
-    { query: '이태원 브런치 맛집', scenarioHint: '주말 이태원 코스', vibeHint: '이국적 브런치', cuisineHint: '브런치' },
+    { query: '서울 웨이팅 맛집', scenarioHint: '줄 서도 납득되는 한 끼', vibeHint: '웨이팅 핫플', cuisineHint: '핫플 맛집' },
+    { query: '서울 내추럴 와인바', scenarioHint: '2차까지 예쁘게 이어가는 밤', vibeHint: '와인바 무드', cuisineHint: '와인바' },
+    { query: '서울 사진 잘 나오는 식당', scenarioHint: '사진 남기는 모임', vibeHint: '포토제닉 다이닝', cuisineHint: '다이닝' },
+    { query: '서울 브런치 카페', scenarioHint: '주말 낮 약속', vibeHint: '브런치 카페', cuisineHint: '브런치' },
+    { query: '서울 에스프레소 바', scenarioHint: '짧지만 강한 카페 타임', vibeHint: '에스프레소 바', cuisineHint: '카페' },
+    { query: '서울 로컬 맛집', scenarioHint: '약속 동선 짜기 편한 도심 약속', vibeHint: '핫플 밀집 지역', cuisineHint: '다이닝' },
+    { query: '서울 힙플레이스 맛집', scenarioHint: '레트로 감성 식사', vibeHint: '레트로 감성 맛집', cuisineHint: '한식' },
+    { query: '서울 이국적 브런치 맛집', scenarioHint: '주말 브런치 코스', vibeHint: '이국적 브런치', cuisineHint: '브런치' },
     { query: '서울 스테이크 맛집', scenarioHint: '특별한 저녁 고기 다이닝', vibeHint: '스테이크 하우스', cuisineHint: '스테이크' },
-    { query: '망원동 디저트 카페', scenarioHint: '카페 호핑 코스', vibeHint: '감성 디저트', cuisineHint: '디저트' },
+    { query: '서울 디저트 카페', scenarioHint: '카페 호핑 코스', vibeHint: '감성 디저트', cuisineHint: '디저트' },
   ],
   'gyeonggi': [
-    { query: '판교 데이트 맛집', scenarioHint: '퇴근 후 데이트', vibeHint: '깔끔한 데이트 스팟', cuisineHint: '다이닝' },
-    { query: '하남 미사 브런치 맛집', scenarioHint: '주말 드라이브 후 브런치', vibeHint: '채광 좋은 브런치 카페', cuisineHint: '브런치' },
-    { query: '광교 파스타 맛집', scenarioHint: '광교 주말 데이트', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
-    { query: '수원 행궁동 분위기 술집', scenarioHint: '행궁동 저녁 코스', vibeHint: '감도 높은 주점', cuisineHint: '주점' },
-    { query: '부천 데이트 맛집', scenarioHint: '분위기 챙기는 데이트', vibeHint: '데이트 스팟', cuisineHint: '다이닝' },
-    { query: '김포 파스타 맛집', scenarioHint: '가볍지 않게 식사하고 싶은 날', vibeHint: '클래식 양식 무드', cuisineHint: '파스타' },
-    { query: '분당 서현역 맛집', scenarioHint: '분당 저녁 약속', vibeHint: '접근성 좋은 핫플', cuisineHint: '다이닝' },
-    { query: '일산 라페스타 맛집', scenarioHint: '일산 주말 데이트', vibeHint: '라페스타 동선 맛집', cuisineHint: '다이닝' },
-    { query: '동탄 카페 맛집', scenarioHint: '신도시 카페 투어', vibeHint: '넓고 쾌적한 카페', cuisineHint: '카페' },
-    { query: '위례 브런치 맛집', scenarioHint: '위례 주말 나들이', vibeHint: '힙한 신도시 브런치', cuisineHint: '브런치' },
-    { query: '용인 수지 파스타', scenarioHint: '드라이브 후 양식 한 끼', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
-    { query: '고양 화정 맛집', scenarioHint: '화정역 근처 약속', vibeHint: '동네 핫플 탐방', cuisineHint: '한식' },
-    { query: '안양 범계 맛집', scenarioHint: '범계역 저녁 약속', vibeHint: '접근성 좋은 맛집', cuisineHint: '다이닝' },
-    { query: '하남 스타필드 근처 맛집', scenarioHint: '쇼핑 후 식사 코스', vibeHint: '스타필드 연계 동선', cuisineHint: '다이닝' },
-    { query: '판교 카페 맛집', scenarioHint: '판교 주말 감성 카페', vibeHint: '테크밸리 감성 카페', cuisineHint: '카페' },
+    { query: '경기 데이트 맛집', scenarioHint: '퇴근 후 데이트', vibeHint: '깔끔한 데이트 스팟', cuisineHint: '다이닝' },
+    { query: '경기 브런치 맛집', scenarioHint: '주말 드라이브 후 브런치', vibeHint: '채광 좋은 브런치 카페', cuisineHint: '브런치' },
+    { query: '경기 파스타 맛집', scenarioHint: '주말 데이트', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
+    { query: '경기 분위기 술집', scenarioHint: '저녁 코스', vibeHint: '감도 높은 주점', cuisineHint: '주점' },
+    { query: '경기 로컬 데이트 맛집', scenarioHint: '분위기 챙기는 데이트', vibeHint: '데이트 스팟', cuisineHint: '다이닝' },
+    { query: '경기 클래식 양식 맛집', scenarioHint: '가볍지 않게 식사하고 싶은 날', vibeHint: '클래식 양식 무드', cuisineHint: '파스타' },
+    { query: '경기 역세권 맛집', scenarioHint: '저녁 약속', vibeHint: '접근성 좋은 핫플', cuisineHint: '다이닝' },
+    { query: '경기 주말 나들이 맛집', scenarioHint: '주말 데이트', vibeHint: '나들이 동선 맛집', cuisineHint: '다이닝' },
+    { query: '경기 카페 맛집', scenarioHint: '신도시 카페 투어', vibeHint: '넓고 쾌적한 카페', cuisineHint: '카페' },
+    { query: '경기 신도시 브런치 맛집', scenarioHint: '주말 나들이', vibeHint: '힙한 신도시 브런치', cuisineHint: '브런치' },
+    { query: '경기 드라이브 파스타 맛집', scenarioHint: '드라이브 후 양식 한 끼', vibeHint: '깔끔한 양식 스팟', cuisineHint: '파스타' },
+    { query: '경기 한식 로컬 맛집', scenarioHint: '동네 핫플 탐방', vibeHint: '로컬 감성', cuisineHint: '한식' },
+    { query: '경기 접근성 좋은 맛집', scenarioHint: '저녁 약속', vibeHint: '접근성 좋은 맛집', cuisineHint: '다이닝' },
+    { query: '경기 쇼핑몰 근처 맛집', scenarioHint: '쇼핑 후 식사 코스', vibeHint: '쇼핑 동선 연계', cuisineHint: '다이닝' },
+    { query: '경기 감성 카페', scenarioHint: '주말 감성 카페', vibeHint: '테크밸리 감성 카페', cuisineHint: '카페' },
   ],
 };
 
@@ -230,6 +230,111 @@ const REGION_LABEL = {
   'seoul': '서울',
   'gyeonggi': '경기',
 };
+
+function extractSubregionFromAddress(address, region) {
+  const tokens = String(address || '').trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return '';
+
+  if (region === 'seoul' || region === 'incheon') {
+    const gu = tokens.find((token) => /구$/.test(token));
+    if (gu) return gu;
+  }
+
+  if (region === 'gyeonggi') {
+    const city = tokens.find((token) => /시$/.test(token));
+    if (city) return city;
+  }
+
+  return tokens[1] || tokens[0] || '';
+}
+
+function extractSubregionFromSourceQuery(query, region) {
+  const text = String(query || '');
+  if (!text) return '';
+
+  if (region === 'incheon') {
+    if (/송도/.test(text)) return '연수구';
+    if (/청라/.test(text)) return '서구';
+    if (/영종/.test(text)) return '중구';
+    if (/구월/.test(text)) return '남동구';
+    if (/부평/.test(text)) return '부평구';
+  }
+
+  if (region === 'seoul') {
+    if (/성수/.test(text)) return '성동구';
+    if (/연남|홍대/.test(text)) return '마포구';
+    if (/강남/.test(text)) return '강남구';
+    if (/잠실/.test(text)) return '송파구';
+    if (/을지로/.test(text)) return '중구';
+    if (/이태원/.test(text)) return '용산구';
+    if (/망원/.test(text)) return '마포구';
+  }
+
+  if (region === 'gyeonggi') {
+    if (/판교|분당/.test(text)) return '성남시';
+    if (/하남|미사|위례/.test(text)) return '하남시';
+    if (/광교|수원|행궁/.test(text)) return '수원시';
+    if (/부천/.test(text)) return '부천시';
+    if (/김포/.test(text)) return '김포시';
+    if (/일산|고양|화정|라페스타/.test(text)) return '고양시';
+    if (/동탄/.test(text)) return '화성시';
+    if (/용인|수지/.test(text)) return '용인시';
+    if (/안양|범계/.test(text)) return '안양시';
+  }
+
+  return '';
+}
+
+function getSubregionKey(item, region) {
+  return extractSubregionFromAddress(item?.address, region)
+    || extractSubregionFromSourceQuery(item?.sourceQuery, region)
+    || String(item?.sourceQuery || '기타');
+}
+
+function rebalanceBySubregion(items, region, limit) {
+  const queueBySubregion = new Map();
+  for (const item of items) {
+    const subregion = getSubregionKey(item, region);
+    if (!queueBySubregion.has(subregion)) {
+      queueBySubregion.set(subregion, []);
+    }
+    queueBySubregion.get(subregion).push(item);
+  }
+
+  const buckets = Array.from(queueBySubregion.entries())
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([subregion, queue]) => ({ subregion, queue }));
+
+  const selected = [];
+  while (selected.length < limit) {
+    let progressed = false;
+    for (const bucket of buckets) {
+      if (bucket.queue.length === 0) continue;
+      selected.push(bucket.queue.shift());
+      progressed = true;
+      if (selected.length >= limit) break;
+    }
+    if (!progressed) break;
+  }
+
+  return selected;
+}
+
+function logSourceQueryDistribution(region, items, label) {
+  const queryCounts = new Map();
+  for (const item of items) {
+    const key = String(item?.sourceQuery || 'unknown').trim() || 'unknown';
+    queryCounts.set(key, Number(queryCounts.get(key) || 0) + 1);
+  }
+
+  const topSummary = Array.from(queryCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([query, count]) => `${query}:${count}`)
+    .join(' | ');
+
+  console.log(`  [${region}] sourceQuery 분포(${label}): ${topSummary || '데이터 없음'}`);
+}
 
 function loadLocalEnvFiles() {
   const envFiles = [
@@ -955,7 +1060,9 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상, 리뷰 ${GOOGLE_PLACES_MIN_REVIEW_COUNT}개 이상)`);
   const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient, naverClientId, naverClientSecret);
-  const items = googleFiltered.slice(0, MAX_ITEMS_PER_REGION);
+  logSourceQueryDistribution(region, googleFiltered, 'Google 필터 통과 원본');
+  const items = rebalanceBySubregion(googleFiltered, region, MAX_ITEMS_PER_REGION);
+  logSourceQueryDistribution(region, items, '소지역 재분배 후 선택');
   if (items.length === 0) {
     console.warn(`  [${region}] Google 평점 필터 후 후보 없음`);
     return {
