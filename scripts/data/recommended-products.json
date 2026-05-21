@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-21T00:00:00+09:00",
+  "updatedAtKst": "2026-05-22T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2126,6 +2126,63 @@
       "sourceId": "manual-choice-digital-2026-05-21",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-05-22",
+      "productId": "8321608024",
+      "productName": "하웃 강아지 두꺼운 배변패드 71g, 25개입, 1개",
+      "brand": "하웃",
+      "productGroupTokens": [
+        "강아지",
+        "두꺼운",
+        "배변패드",
+        "71g",
+        "25개입",
+        "pet"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-22-choice-pet-life-2026-05-22.md",
+      "sourceId": "manual-choice-pet-life-2026-05-22",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-22",
+      "productId": "7707021433",
+      "productName": "메디펫 응고형 매직 고양이 두부모래 가는입자, 10L, 5개, 무향",
+      "brand": "메디펫",
+      "productGroupTokens": [
+        "응고형",
+        "매직",
+        "고양이",
+        "두부모래",
+        "가는입자",
+        "10l"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-22-choice-pet-life-2026-05-22.md",
+      "sourceId": "manual-choice-pet-life-2026-05-22",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-22",
+      "productId": "108459480",
+      "productName": "페페로니 강아지 진짜 오메가3 져키",
+      "brand": "페페로니",
+      "productGroupTokens": [
+        "강아지",
+        "진짜",
+        "오메가3",
+        "져키",
+        "pet",
+        "life"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-22-choice-pet-life-2026-05-22.md",
+      "sourceId": "manual-choice-pet-life-2026-05-22",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
