@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-22T00:00:00+09:00",
+  "updatedAtKst": "2026-05-23T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2183,6 +2183,62 @@
       "sourceId": "manual-choice-pet-life-2026-05-22",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-23",
+      "productId": "7166913299",
+      "productName": "더마팩토리 나이아신아마이드 20% 세럼, 80ml, 1개",
+      "brand": "더마팩토리",
+      "productGroupTokens": [
+        "나이아신아마이드",
+        "세럼",
+        "80ml",
+        "beauty",
+        "fashion"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-23",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-23",
+      "productId": "8639489736",
+      "productName": "에뛰드 클라우드 필터 쿠션 파운데이션 15g + 미니 쿠션 세트, 21호 아이보리, 1개",
+      "brand": "에뛰드",
+      "productGroupTokens": [
+        "클라우드",
+        "필터",
+        "쿠션",
+        "파운데이션",
+        "15g",
+        "21호"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-23",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-23",
+      "productId": "2197659275",
+      "productName": "아리얼 스트레스 릴리빙 립앤아이 리무버 패드 30p, 55g, 3개",
+      "brand": "아리얼",
+      "productGroupTokens": [
+        "스트레스",
+        "릴리빙",
+        "립앤아이",
+        "리무버",
+        "패드",
+        "30p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-23",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
