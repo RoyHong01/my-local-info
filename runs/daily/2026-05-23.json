@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-23",
+  "generatedAtUtc": "2026-05-22T20:46:05.369Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26310361273",
+    "runNumber": 806,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26310361273",
+    "runStartedAtUtc": "2026-05-22T20:27:59Z",
+    "headSha": "1873097dc35c021cd0f2a975e43c71840c05a6b4"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://dfeb9be9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 346건",
+        "subsidy": "신규 0건, 총 618건",
+        "festival": "신규 7건, 업데이트 189건, 총 218건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://025b86d6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://0de79275.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "6f4e6cc951652cdfd7b60ace2eab76996748b26f",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-22",
+      "authoredAt": "2026-05-22T20:46:04Z",
+      "files": [
+        "src/content/life/2026-05-23-gyeonggi-restaurant-241464816.md",
+        "src/content/life/2026-05-23-incheon-restaurant-1849914946.md",
+        "src/content/life/2026-05-23-seoul-restaurant-12684084.md"
+      ]
+    },
+    {
+      "sha": "1d98ac0aac58318dc1938b855406c0440f23f209",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-22",
+      "authoredAt": "2026-05-22T20:41:06Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md"
+      ]
+    },
+    {
+      "sha": "f500a025cdb59842b55009443d98d51a3e57e670",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-22",
+      "authoredAt": "2026-05-22T20:40:55Z",
+      "files": [
+        "src/content/posts/2026-05-22-ansan-seongho-festival.md",
+        "src/content/posts/2026-05-22-incheon-scholarship.md",
+        "src/content/posts/2026-05-22-seogu-school-uniform-support.md",
+        "src/content/posts/2026-05-22-single-parent-support.md",
+        "src/content/posts/2026-05-23-curation-subsidy.md",
+        "src/content/posts/2026-05-23-festival-versus-yeongju-sobaeksan-ssokssokdeuli.md"
+      ]
+    },
+    {
+      "sha": "3105918443db97cc856914011356fc6802de7a82",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-22",
+      "authoredAt": "2026-05-22T20:29:22Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-22-ansan-seongho-festival.md",
+      "src/content/posts/2026-05-22-incheon-scholarship.md",
+      "src/content/posts/2026-05-22-seogu-school-uniform-support.md",
+      "src/content/posts/2026-05-22-single-parent-support.md",
+      "src/content/posts/2026-05-23-curation-subsidy.md",
+      "src/content/posts/2026-05-23-festival-versus-yeongju-sobaeksan-ssokssokdeuli.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md",
+      "src/content/life/2026-05-23-gyeonggi-restaurant-241464816.md",
+      "src/content/life/2026-05-23-incheon-restaurant-1849914946.md",
+      "src/content/life/2026-05-23-seoul-restaurant-12684084.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-23-gyeonggi-restaurant-241464816.md",
+      "src/content/life/2026-05-23-incheon-restaurant-1849914946.md",
+      "src/content/life/2026-05-23-seoul-restaurant-12684084.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-23-choice-beauty-fashion-2026-05-23.md",
+      "src/content/life/2026-05-23-gyeonggi-restaurant-241464816.md",
+      "src/content/life/2026-05-23-incheon-restaurant-1849914946.md",
+      "src/content/life/2026-05-23-seoul-restaurant-12684084.md",
+      "src/content/posts/2026-05-22-ansan-seongho-festival.md",
+      "src/content/posts/2026-05-22-incheon-scholarship.md",
+      "src/content/posts/2026-05-22-seogu-school-uniform-support.md",
+      "src/content/posts/2026-05-22-single-parent-support.md",
+      "src/content/posts/2026-05-23-curation-subsidy.md",
+      "src/content/posts/2026-05-23-festival-versus-yeongju-sobaeksan-ssokssokdeuli.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.87,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 346건",
+      "validation": "ok",
+      "anthropicUsage": "1316/961",
+      "markdown": {
+        "generated": 2,
+        "pending": 202,
+        "titles": [
+          "부평구민 유료기획공연 감면",
+          "인천공항 내 유모차 대여 서비스 제공"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 618건",
+      "validation": "ok",
+      "anthropicUsage": "4408/2969",
+      "markdown": {
+        "generated": 5,
+        "pending": 446,
+        "titles": [
+          "임산부 및 영유아 영양플러스",
+          "구직자 취업역량강화 프로그램",
+          "자산형성지원사업(희망저축Ⅰ)",
+          "광주상생카드 지원",
+          "고위험 임산부 의료비 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 189건, 총 218건",
+      "validation": "ok",
+      "anthropicUsage": "1576/1061",
+      "markdown": {
+        "generated": 2,
+        "pending": 174,
+        "titles": [
+          "2026 하영 빛나는 서귀포",
+          "단양 소백산 철쭉제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
