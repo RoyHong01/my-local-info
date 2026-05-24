@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-24T00:00:00+09:00",
+  "updatedAtKst": "2026-05-25T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2296,6 +2296,58 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-05-24",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-25",
+      "productId": "9414532440",
+      "productName": "DCN 퍼펙트 비타민C 1000, 1개, 180정",
+      "brand": "DCN",
+      "productGroupTokens": [
+        "퍼펙트",
+        "비타민c",
+        "180정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-25-choice-health-2026-05-25.md",
+      "sourceId": "manual-choice-health-2026-05-25",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-25",
+      "productId": "7062943887",
+      "productName": "주식회사힐링 영국산 비타민C 3000, 303.1g, 1개",
+      "brand": "주식회사힐링",
+      "productGroupTokens": [
+        "영국산",
+        "비타민c",
+        "1g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-25-choice-health-2026-05-25.md",
+      "sourceId": "manual-choice-health-2026-05-25",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-05-25",
+      "productId": "1388355334",
+      "productName": "순수식품 rTG 오메가3 비타민D 1000mg",
+      "brand": "순수식품",
+      "productGroupTokens": [
+        "rtg",
+        "오메가3",
+        "비타민d",
+        "1000mg",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-25-choice-health-2026-05-25.md",
+      "sourceId": "manual-choice-health-2026-05-25",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
