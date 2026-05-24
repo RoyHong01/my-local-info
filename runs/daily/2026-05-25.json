@@ -1,0 +1,255 @@
+{
+  "reportDateKst": "2026-05-25",
+  "generatedAtUtc": "2026-05-24T20:14:00.761Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26371305622",
+    "runNumber": 808,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26371305622",
+    "runStartedAtUtc": "2026-05-24T19:59:36Z",
+    "headSha": "662a07069a452f6342367b2bf3f4379d803b68ac"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://1b80506a.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 347건",
+        "subsidy": "신규 0건, 총 616건",
+        "festival": "신규 0건, 업데이트 193건, 총 218건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://eff07a55.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://9c03033d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "6ede9ff225adc5a90f3e7c9fe5db2eb8a4fcd651",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-24",
+      "authoredAt": "2026-05-24T20:13:59Z",
+      "files": [
+        "src/content/life/2026-05-25-gyeonggi-restaurant-385852739.md",
+        "src/content/life/2026-05-25-incheon-restaurant-847828290.md",
+        "src/content/life/2026-05-25-seoul-restaurant-1654396478.md"
+      ]
+    },
+    {
+      "sha": "8fb7aae2cae0874c34decc8220cec9e5e87b82d7",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-24",
+      "authoredAt": "2026-05-24T20:10:30Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-25-choice-health-2026-05-25.md"
+      ]
+    },
+    {
+      "sha": "9fb5e1e0ee07310ce835d5becaf3af63987d9c30",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-24",
+      "authoredAt": "2026-05-24T20:10:19Z",
+      "files": [
+        "src/content/posts/2026-05-24-JeonjuNightTrip.md",
+        "src/content/posts/2026-05-24-eumseong-interview-support.md",
+        "src/content/posts/2026-05-24-incheon-veterans-support.md",
+        "src/content/posts/2026-05-24-job-wing-service.md",
+        "src/content/posts/2026-05-25-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "7c025c365f619de60f29ab121f9ca3b292252d20",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-24",
+      "authoredAt": "2026-05-24T20:02:15Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-24-eumseong-interview-support.md",
+      "src/content/posts/2026-05-24-incheon-veterans-support.md",
+      "src/content/posts/2026-05-24-JeonjuNightTrip.md",
+      "src/content/posts/2026-05-24-job-wing-service.md",
+      "src/content/posts/2026-05-25-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-25-choice-health-2026-05-25.md",
+      "src/content/life/2026-05-25-gyeonggi-restaurant-385852739.md",
+      "src/content/life/2026-05-25-incheon-restaurant-847828290.md",
+      "src/content/life/2026-05-25-seoul-restaurant-1654396478.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-25-choice-health-2026-05-25.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-25-gyeonggi-restaurant-385852739.md",
+      "src/content/life/2026-05-25-incheon-restaurant-847828290.md",
+      "src/content/life/2026-05-25-seoul-restaurant-1654396478.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-25-choice-health-2026-05-25.md",
+      "src/content/life/2026-05-25-gyeonggi-restaurant-385852739.md",
+      "src/content/life/2026-05-25-incheon-restaurant-847828290.md",
+      "src/content/life/2026-05-25-seoul-restaurant-1654396478.md",
+      "src/content/posts/2026-05-24-eumseong-interview-support.md",
+      "src/content/posts/2026-05-24-incheon-veterans-support.md",
+      "src/content/posts/2026-05-24-JeonjuNightTrip.md",
+      "src/content/posts/2026-05-24-job-wing-service.md",
+      "src/content/posts/2026-05-25-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 15.47,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 347건",
+      "validation": "warning: 인천 지역 정보 API 조회 결과가 기존 데이터(347건)의 절반 미만입니다.",
+      "anthropicUsage": "1307/1075",
+      "markdown": {
+        "generated": 2,
+        "pending": 199,
+        "titles": [
+          "기존주택 임대주택 지원(매입)",
+          "저소득층자녀 영어교육 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 616건",
+      "validation": "ok",
+      "anthropicUsage": "5234/2964",
+      "markdown": {
+        "generated": 5,
+        "pending": 436,
+        "titles": [
+          "자산형성지원사업(희망저축Ⅱ)",
+          "경기도 청년 면접수당",
+          "희귀질환자 의료비 지원사업",
+          "대구형 산모 건강관리사 지원",
+          "장애인구강진료센터를 설치 운영하여 장애인에 대한 치과 의료서비스 제공"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 193건, 총 218건",
+      "validation": "ok",
+      "anthropicUsage": "1588/927",
+      "markdown": {
+        "generated": 2,
+        "pending": 170,
+        "titles": [
+          "수라간 시식공감",
+          "빵터지는 강릉 빵 페스타"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
