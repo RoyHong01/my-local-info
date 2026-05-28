@@ -1,0 +1,68 @@
+---
+title: "햇살 가득한 오후의 여유, 토지베이커리브런치카페"
+date: 2026-05-29
+summary: "주말 드라이브 끝에 만나는 채광 맛집, 토지베이커리브런치카페예요. 여유로운 브런치를 즐기며 기분 전환하기 좋은 이곳에서 평온한 시간을 기록해 보세요."
+description: "구글 평점 4.4가 증명하는 경기 브런치 명소예요. 채광 좋은 공간에서 즐기는 브런치가 매력적인 토지베이커리브런치카페를 지금 바로 확인해 보세요."
+category: 픽앤조이 맛집 탐방
+published_by: "auto" 
+tags: [맛집탐방, 경기, 경기, 브런치, 채광 좋은 브런치 카페, 카카오맵]
+image: "https://places.googleapis.com/v1/places/ChIJT661GgA7ezURy6ALDyUzcrs/photos/Ab43m-tAAj7glVcf6RQQxfULdJvmCw4n03B-cDhhNyQZNcrjvBKMVco3iqlbovOw0z5bWUZ6HIXlSgWdmYTTh93KiyA9u5HUDT4l0H8K6yhfCk5Kh91-qlU8oyWbGGcB4Y7k8GH4GxXkjZx8ha-5l-IfBzfaikbfkC3le3zvQLMMfirioL3ZdY0EKfW7xEp6hcZqsGWJ4cuKE1CUge7ic4Tylq_QSAmYD4lvYaqDNwFPluEsV2wk9QB9ySeUljyX7V-ZDpPsm-X8toOel_5rniOBGRaRx2UYTvnW7aj5BphO9xWjZhj_1mUKJEgNlGtPihEZVl_l1s2nSLBwYntnnNcPChjPNPrh9OrhFRs_9vfzWkvCDUOPGc3XU1D3hl45IiCAp5QI1re2M6YMucXna-S-98-Kp2U7Qx04E3sxbeOF33Ap9l-Fir2WZkWn5DasM8lS/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+source_id: "159073512"
+slug: "gyeonggi-restaurant-159073512"
+place_name: "토지베이커리브런치카페"
+place_address: "경기 평택시 칠괴길 118-16"
+place_locality: "경기"
+place_region: "KR"
+place_phone: "전화번호 정보 없음"
+place_url: "http://place.map.kakao.com/159073512"
+parking_info: "확인 필요"
+rating_value: "4.4"
+review_count: "119"
+---
+
+
+## 나른한 오후의 채광이 머무는 창가 자리로 초대해요
+
+주말이면 일상에서 벗어나 조금은 느긋한 시간을 보내고 싶어지곤 해요. 경기 근교로 드라이브를 떠나다 보면 문득 따스한 햇살이 그리워지는 순간이 찾아오죠.
+
+그럴 때 떠오르는 공간이 있어요. 창문을 통해 쏟아지는 채광이 공간 전체를 부드럽게 감싸는 곳이라, 앉아 있는 것만으로도 차분해지는 기분이 들더라고요.
+
+이곳의 브런치는 바쁜 일상을 잠시 멈추고 온전한 쉼을 누리기에 충분해요. 고소한 빵 냄새와 함께 여유를 즐길 수 있는 이 카페에서의 기록을 담아볼게요.
+
+
+### 햇살이 조명처럼 스며드는 공간의 미학
+
+
+주말 드라이브를 즐기다 보면 자연스럽게 브런치 카페를 찾게 되잖아요. 창밖의 풍경을 바라보며 느긋하게 식사를 즐길 수 있는 이곳은 채광이 좋아 낮 시간의 여유를 만끽하기 딱 좋아요.
+
+테이블 위로 내려앉은 햇살 덕분에 어떤 메뉴를 주문해도 따뜻한 색감으로 사진 속에 남더라고요. 공간이 주는 평온함 덕분에 복잡했던 마음이 조금씩 정리되는 느낌이에요.
+
+### 오감을 자극하는 브런치의 풍미
+
+
+이곳의 브런치는 입안 가득 퍼지는 고소함과 신선함이 특징이에요. 갓 구운 빵의 따뜻한 온도와 채소의 아삭한 식감이 어우러져 한 접시를 비우는 시간이 무척 즐겁더라고요.
+
+커피 한 잔을 곁들이면 브런치의 맛이 더욱 선명하게 느껴져요. 입안에서 느껴지는 풍부한 맛의 조화는 평범한 오후를 특별한 기억으로 바꿔놓곤 하죠.
+
+### 머무는 것만으로도 기분 전환이 되는 곳
+
+
+창가에 앉아 커피를 한 모금 마시면, 이곳을 찾아오길 잘했다는 생각이 들어요. 거창한 계획 없이 그저 이 공간에 머무는 것만으로도 충분한 위로를 받는 기분이에요.
+
+일상의 분주함을 잠시 잊고 싶을 때, 따스한 빛이 가득한 이곳에서 나만의 시간을 보내보는 건 어떨까요.
+
+
+
+![토지베이커리브런치카페](https://places.googleapis.com/v1/places/ChIJT661GgA7ezURy6ALDyUzcrs/photos/Ab43m-tAAj7glVcf6RQQxfULdJvmCw4n03B-cDhhNyQZNcrjvBKMVco3iqlbovOw0z5bWUZ6HIXlSgWdmYTTh93KiyA9u5HUDT4l0H8K6yhfCk5Kh91-qlU8oyWbGGcB4Y7k8GH4GxXkjZx8ha-5l-IfBzfaikbfkC3le3zvQLMMfirioL3ZdY0EKfW7xEp6hcZqsGWJ4cuKE1CUge7ic4Tylq_QSAmYD4lvYaqDNwFPluEsV2wk9QB9ySeUljyX7V-ZDpPsm-X8toOel_5rniOBGRaRx2UYTvnW7aj5BphO9xWjZhj_1mUKJEgNlGtPihEZVl_l1s2nSLBwYntnnNcPChjPNPrh9OrhFRs_9vfzWkvCDUOPGc3XU1D3hl45IiCAp5QI1re2M6YMucXna-S-98-Kp2U7Qx04E3sxbeOF33Ap9l-Fir2WZkWn5DasM8lS/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o)
+
+## 방문 정보 한눈에
+
+- 상호명: [토지베이커리브런치카페](http://place.map.kakao.com/159073512)
+- 주소: 경기 평택시 칠괴길 118-16
+- 전화번호: 전화번호 정보 없음
+- 주차: 확인 필요
+- 이럴 때 체크하면 좋아요: 주말 드라이브 후 여유로운 브런치를 즐기고 싶을 때
+
+- **에디터 한줄 평**: 채광이 좋은 실내 덕분에 낮 시간에 방문하면 특유의 나른하고 평온한 분위기를 온전히 느낄 수 있어요. 빵과 브런치 메뉴의 구성이 조화로워 가벼운 식사를 즐기기에 적합해요.
+
+이런 분께 강추: 평택 근교로 드라이브를 나온 연인들이 오붓하게 시간을 보내기에 좋아요. 창가 자리에 앉아 조용히 대화를 나누고 싶은 분들에게 이곳의 차분한 분위기를 권해드려요.
