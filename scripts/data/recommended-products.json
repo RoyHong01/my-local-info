@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-25T00:00:00+09:00",
+  "updatedAtKst": "2026-05-29T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2348,6 +2348,63 @@
       "sourceId": "manual-choice-health-2026-05-25",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-05-29",
+      "productId": "9540538394",
+      "productName": "멍식이네 펫케어 반려동물 강아지 고양이 발바닥 바리깡 클리퍼",
+      "brand": "멍식이네",
+      "productGroupTokens": [
+        "펫케어",
+        "반려동물",
+        "강아지",
+        "고양이",
+        "발바닥",
+        "바리깡"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-29-choice-pet-life-2026-05-29.md",
+      "sourceId": "manual-choice-pet-life-2026-05-29",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-29",
+      "productId": "8449727200",
+      "productName": "강아지 배변패드 올펫 (대형2팩 70매) 대형(57g) 60x76 Cm, 2개, 35개입",
+      "brand": "강아지",
+      "productGroupTokens": [
+        "배변패드",
+        "올펫",
+        "대형2팩",
+        "70매",
+        "대형",
+        "57g"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-29-choice-pet-life-2026-05-29.md",
+      "sourceId": "manual-choice-pet-life-2026-05-29",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-29",
+      "productId": "7885056670",
+      "productName": "내꼬냥 고양이 프리미엄 두부벤토 모래 6in1 MAXMI6, 2.5kg, 6개, 무향",
+      "brand": "내꼬냥",
+      "productGroupTokens": [
+        "고양이",
+        "두부벤토",
+        "모래",
+        "6in1",
+        "maxmi6",
+        "5kg"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-29-choice-pet-life-2026-05-29.md",
+      "sourceId": "manual-choice-pet-life-2026-05-29",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
