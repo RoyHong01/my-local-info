@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-29T00:00:00+09:00",
+  "updatedAtKst": "2026-05-30T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2405,6 +2405,63 @@
       "sourceId": "manual-choice-pet-life-2026-05-29",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-05-30",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 17C 포슬린, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-30",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-30",
+      "productId": "6565517135",
+      "productName": "은율 콜라겐 스페셜 프로그램 5종세트 + 쇼핑백, 1세트",
+      "brand": "은율",
+      "productGroupTokens": [
+        "콜라겐",
+        "스페셜",
+        "프로그램",
+        "5종세트",
+        "쇼핑백",
+        "beauty"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-30",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-30",
+      "productId": "2472152",
+      "productName": "코스알엑스 알로에 수딩 선 크림 SPF50+ PA+++, 50ml, 6개",
+      "brand": "코스알엑스",
+      "productGroupTokens": [
+        "알로에",
+        "수딩",
+        "크림",
+        "spf50",
+        "pa",
+        "50ml"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-05-30",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
