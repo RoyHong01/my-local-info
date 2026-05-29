@@ -1,0 +1,258 @@
+{
+  "reportDateKst": "2026-05-30",
+  "generatedAtUtc": "2026-05-29T21:19:52.418Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26662152558",
+    "runNumber": 813,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26662152558",
+    "runStartedAtUtc": "2026-05-29T21:05:12Z",
+    "headSha": "ee902b97bc0eb6a3e455d4c3092f107c46d14c7d"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://12ee4ce8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 347건",
+        "subsidy": "신규 1건, 총 617건",
+        "festival": "신규 6건, 업데이트 178건, 총 231건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d29b0da0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://f3da1e27.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "9340cf0e101a17d3c6fc5a03f1cc53ba4d9349eb",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-29",
+      "authoredAt": "2026-05-29T21:19:51Z",
+      "files": [
+        "src/content/life/2026-05-30-bupyeong-restaurant-1880935285.md",
+        "src/content/life/2026-05-30-gyeonggi-restaurant-125356592.md",
+        "src/content/life/2026-05-30-seoul-restaurant-630064388.md"
+      ]
+    },
+    {
+      "sha": "80d9671e2b32195fff55ac3ca0820a410edb06c8",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-29",
+      "authoredAt": "2026-05-29T21:14:42Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md"
+      ]
+    },
+    {
+      "sha": "79231d9cf91c83f8f930555199a3c7f1b09556a5",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-29",
+      "authoredAt": "2026-05-29T21:14:31Z",
+      "files": [
+        "src/content/posts/2026-05-29-gimpo-youth-mentoring.md",
+        "src/content/posts/2026-05-29-incheon-jeonse-support.md",
+        "src/content/posts/2026-05-29-seodaemun-pregnancy-support.md",
+        "src/content/posts/2026-05-29-seongbuk-nurimasil.md",
+        "src/content/posts/2026-05-30-curation-subsidy.md",
+        "src/content/posts/2026-05-30-festival-versus-ansan-seongho-cheongju-pet.md"
+      ]
+    },
+    {
+      "sha": "46a1268334b303c4a8f16ab4a1ced3b77f3857f2",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-29",
+      "authoredAt": "2026-05-29T21:06:40Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-29-gimpo-youth-mentoring.md",
+      "src/content/posts/2026-05-29-incheon-jeonse-support.md",
+      "src/content/posts/2026-05-29-seodaemun-pregnancy-support.md",
+      "src/content/posts/2026-05-29-seongbuk-nurimasil.md",
+      "src/content/posts/2026-05-30-curation-subsidy.md",
+      "src/content/posts/2026-05-30-festival-versus-ansan-seongho-cheongju-pet.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-05-30-bupyeong-restaurant-1880935285.md",
+      "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md",
+      "src/content/life/2026-05-30-gyeonggi-restaurant-125356592.md",
+      "src/content/life/2026-05-30-seoul-restaurant-630064388.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-05-30-bupyeong-restaurant-1880935285.md",
+      "src/content/life/2026-05-30-gyeonggi-restaurant-125356592.md",
+      "src/content/life/2026-05-30-seoul-restaurant-630064388.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-05-30-bupyeong-restaurant-1880935285.md",
+      "src/content/life/2026-05-30-choice-beauty-fashion-2026-05-30.md",
+      "src/content/life/2026-05-30-gyeonggi-restaurant-125356592.md",
+      "src/content/life/2026-05-30-seoul-restaurant-630064388.md",
+      "src/content/posts/2026-05-29-gimpo-youth-mentoring.md",
+      "src/content/posts/2026-05-29-incheon-jeonse-support.md",
+      "src/content/posts/2026-05-29-seodaemun-pregnancy-support.md",
+      "src/content/posts/2026-05-29-seongbuk-nurimasil.md",
+      "src/content/posts/2026-05-30-curation-subsidy.md",
+      "src/content/posts/2026-05-30-festival-versus-ansan-seongho-cheongju-pet.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.75,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 347건",
+      "validation": "ok",
+      "anthropicUsage": "1290/1006",
+      "markdown": {
+        "generated": 2,
+        "pending": 195,
+        "titles": [
+          "신재생에너지 설비 지원",
+          "강화군 섬 주민 정주생활지원금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 617건",
+      "validation": "ok",
+      "anthropicUsage": "4716/2573",
+      "markdown": {
+        "generated": 5,
+        "pending": 430,
+        "titles": [
+          "경주시 청년 주택구입 대출이자 지원",
+          "의료급여 틀니·치과임플란트 지원",
+          "국가·지방자치단체 관리 지정문화유산 및 천연기념물 등의 관람료 감면",
+          "저소득시민 부가급여 지원",
+          "청년희망적금"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 6건, 업데이트 178건, 총 231건",
+      "validation": "ok",
+      "anthropicUsage": "1510/911",
+      "markdown": {
+        "generated": 2,
+        "pending": 180,
+        "titles": [
+          "제22회 대한민국청소년박람회",
+          "곡성세계장미축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
