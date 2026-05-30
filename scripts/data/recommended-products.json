@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-30T00:00:00+09:00",
+  "updatedAtKst": "2026-05-31T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2462,6 +2462,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-05-30",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-05-31",
+      "productId": "9320611149",
+      "productName": "학생 기숙사 작은 전기 가전 샤브샤브 전기 냄비 찜기 미니 인스턴트 요리 라면 냄비",
+      "brand": "학생",
+      "productGroupTokens": [
+        "기숙사",
+        "작은",
+        "전기",
+        "가전",
+        "샤브샤브",
+        "냄비"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-31-choice-home-appliance-furniture-2026-05-31.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-31",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-31",
+      "productId": "9106894951",
+      "productName": "소형 미니 팬 블레이드 고풍력 소형 헤어 드라이기 가전 모터 장착 바람개비 날개",
+      "brand": "소형",
+      "productGroupTokens": [
+        "블레이드",
+        "고풍력",
+        "헤어",
+        "드라이기",
+        "가전",
+        "모터"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-31-choice-home-appliance-furniture-2026-05-31.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-31",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-05-31",
+      "productId": "9192498833",
+      "productName": "울트라랙 가로 1500 블랙 선반 철제선반 무볼트 조립식 앵글 베란다 펜트리 선반장 창고 수납 다용도 스텐드 벽선반 가구",
+      "brand": "울트라랙",
+      "productGroupTokens": [
+        "가로",
+        "선반",
+        "철제선반",
+        "무볼트",
+        "조립식",
+        "앵글"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-05-31-choice-home-appliance-furniture-2026-05-31.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-05-31",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
