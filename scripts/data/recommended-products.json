@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-05-31T00:00:00+09:00",
+  "updatedAtKst": "2026-06-01T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2519,6 +2519,58 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-05-31",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-01",
+      "productId": "8501177126",
+      "productName": "헬로바이오 루테인 지아잔틴 미니 2.7273g",
+      "brand": "헬로바이오",
+      "productGroupTokens": [
+        "루테인",
+        "지아잔틴",
+        "7273g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-01-choice-health-2026-06-01.md",
+      "sourceId": "manual-choice-health-2026-06-01",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-01",
+      "productId": "7576128309",
+      "productName": "뉴트리디데이 시그니처 콜라겐 비오틴, 60정, 1개",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "시그니처",
+        "콜라겐",
+        "비오틴",
+        "60정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-01-choice-health-2026-06-01.md",
+      "sourceId": "manual-choice-health-2026-06-01",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-01",
+      "productId": "9414532440",
+      "productName": "DCN 퍼펙트 비타민C 1000, 1개, 180정",
+      "brand": "DCN",
+      "productGroupTokens": [
+        "퍼펙트",
+        "비타민c",
+        "180정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-01-choice-health-2026-06-01.md",
+      "sourceId": "manual-choice-health-2026-06-01",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
