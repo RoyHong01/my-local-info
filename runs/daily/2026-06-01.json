@@ -1,0 +1,255 @@
+{
+  "reportDateKst": "2026-06-01",
+  "generatedAtUtc": "2026-05-31T20:13:49.512Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26722979928",
+    "runNumber": 815,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26722979928",
+    "runStartedAtUtc": "2026-05-31T20:00:43Z",
+    "headSha": "9206f81b076d9cd00e5ceeb10b77fdcad93e47d1"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://090b18ee.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 347건",
+        "subsidy": "신규 0건, 총 615건",
+        "festival": "신규 0건, 업데이트 181건, 총 231건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://75dc9c3c.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://c827a97b.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "668b0368d78d499e6844b1060964d2f0afe2c5ab",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-05-31",
+      "authoredAt": "2026-05-31T20:13:48Z",
+      "files": [
+        "src/content/life/2026-06-01-gyeonggi-restaurant-798964486.md",
+        "src/content/life/2026-06-01-incheon-restaurant-1083309826.md",
+        "src/content/life/2026-06-01-seoul-restaurant-1393061473.md"
+      ]
+    },
+    {
+      "sha": "dd2143cefdec0304b4e1c06c1ed625d53b8d425c",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-05-31",
+      "authoredAt": "2026-05-31T20:10:16Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-01-choice-health-2026-06-01.md"
+      ]
+    },
+    {
+      "sha": "0d6d37dae52fc928f089b1a8081a4e7c04506669",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-05-31",
+      "authoredAt": "2026-05-31T20:10:04Z",
+      "files": [
+        "src/content/posts/2026-05-31-Goseong-Eco-Rice-Subsidy.md",
+        "src/content/posts/2026-05-31-gangbuk-holiday-support.md",
+        "src/content/posts/2026-05-31-incheon-subway-store-rental.md",
+        "src/content/posts/2026-05-31-staynight-yeongdeok.md",
+        "src/content/posts/2026-06-01-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "6fd965ad31450776e3c87562860c5200fef9b1a6",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-05-31",
+      "authoredAt": "2026-05-31T20:02:13Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-31-gangbuk-holiday-support.md",
+      "src/content/posts/2026-05-31-Goseong-Eco-Rice-Subsidy.md",
+      "src/content/posts/2026-05-31-incheon-subway-store-rental.md",
+      "src/content/posts/2026-05-31-staynight-yeongdeok.md",
+      "src/content/posts/2026-06-01-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-01-choice-health-2026-06-01.md",
+      "src/content/life/2026-06-01-gyeonggi-restaurant-798964486.md",
+      "src/content/life/2026-06-01-incheon-restaurant-1083309826.md",
+      "src/content/life/2026-06-01-seoul-restaurant-1393061473.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-01-choice-health-2026-06-01.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-01-gyeonggi-restaurant-798964486.md",
+      "src/content/life/2026-06-01-incheon-restaurant-1083309826.md",
+      "src/content/life/2026-06-01-seoul-restaurant-1393061473.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-06-01-choice-health-2026-06-01.md",
+      "src/content/life/2026-06-01-gyeonggi-restaurant-798964486.md",
+      "src/content/life/2026-06-01-incheon-restaurant-1083309826.md",
+      "src/content/life/2026-06-01-seoul-restaurant-1393061473.md",
+      "src/content/posts/2026-05-31-gangbuk-holiday-support.md",
+      "src/content/posts/2026-05-31-Goseong-Eco-Rice-Subsidy.md",
+      "src/content/posts/2026-05-31-incheon-subway-store-rental.md",
+      "src/content/posts/2026-05-31-staynight-yeongdeok.md",
+      "src/content/posts/2026-06-01-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 11.74,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 347건",
+      "validation": "ok",
+      "anthropicUsage": "1341/938",
+      "markdown": {
+        "generated": 2,
+        "pending": 191,
+        "titles": [
+          "교통약자 이동지원",
+          "초·중·고·특수학생 교과용도서 무상지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 615건",
+      "validation": "ok",
+      "anthropicUsage": "4310/2931",
+      "markdown": {
+        "generated": 5,
+        "pending": 420,
+        "titles": [
+          "산림재난대응단(산림병해충예찰방제단) 일자리 제공",
+          "노인 무릎인공관절 수술 지원",
+          "전세보증금반환보증 보증료 지원",
+          "보조공학기기 지원",
+          "기본형 공익직접지불금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 181건, 총 231건",
+      "validation": "ok",
+      "anthropicUsage": "1630/1065",
+      "markdown": {
+        "generated": 2,
+        "pending": 176,
+        "titles": [
+          "임실N장미축제",
+          "원주청소년축제 꽃이피다"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
