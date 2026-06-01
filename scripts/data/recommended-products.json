@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-01T00:00:00+09:00",
+  "updatedAtKst": "2026-06-02T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2571,6 +2571,63 @@
       "sourceId": "manual-choice-health-2026-06-01",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-06-02",
+      "productId": "9283321961",
+      "productName": "로렌드 초강력 흡착식 무타공 욕실선반, 1개, 다크 그레이",
+      "brand": "로렌드",
+      "productGroupTokens": [
+        "초강력",
+        "흡착식",
+        "무타공",
+        "욕실선반",
+        "다크",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-02-choice-living-2026-06-02.md",
+      "sourceId": "manual-choice-living-2026-06-02",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-02",
+      "productId": "9307205794",
+      "productName": "아쿠아픽 구강세정기 클리닝정, 12개, 0.5g, AQ-10",
+      "brand": "아쿠아픽",
+      "productGroupTokens": [
+        "구강세정기",
+        "클리닝정",
+        "12개",
+        "5g",
+        "aq",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-02-choice-living-2026-06-02.md",
+      "sourceId": "manual-choice-living-2026-06-02",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-02",
+      "productId": "9354362095",
+      "productName": "퍼실 딥클린 초미세세탁 라벤더젤 맥스 일반용 액체세제 본품, 2.5L, 1개",
+      "brand": "퍼실",
+      "productGroupTokens": [
+        "딥클린",
+        "초미세세탁",
+        "라벤더젤",
+        "맥스",
+        "일반용",
+        "액체세제"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-02-choice-living-2026-06-02.md",
+      "sourceId": "manual-choice-living-2026-06-02",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
