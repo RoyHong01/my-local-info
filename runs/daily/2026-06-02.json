@@ -1,0 +1,246 @@
+{
+  "reportDateKst": "2026-06-02",
+  "generatedAtUtc": "2026-06-01T22:10:14.883Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "26784494688",
+    "runNumber": 816,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/26784494688",
+    "runStartedAtUtc": "2026-06-01T21:56:53Z",
+    "headSha": "5a30070be82908cfb00477f513cd516e5fabdd85"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://df4a3243.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 347건",
+        "subsidy": "",
+        "festival": "신규 2건, 업데이트 173건, 총 233건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://55f198ac.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://cf37e691.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "39487f607fc2d1622c69c3e40983f41a00dc78f0",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-01",
+      "authoredAt": "2026-06-01T22:10:13Z",
+      "files": [
+        "src/content/life/2026-06-02-gangnam-restaurant-179244712.md",
+        "src/content/life/2026-06-02-gyeonggi-restaurant-825685640.md",
+        "src/content/life/2026-06-02-incheon-restaurant-263288179.md"
+      ]
+    },
+    {
+      "sha": "a4a1f0831dde0965cd4033348873f60e17dfbe64",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-01",
+      "authoredAt": "2026-06-01T22:06:24Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-02-choice-living-2026-06-02.md"
+      ]
+    },
+    {
+      "sha": "b5e9d3fa74e219b7c95855c6e6e205b62d6ed883",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-01",
+      "authoredAt": "2026-06-01T22:06:13Z",
+      "files": [
+        "src/content/posts/2026-06-01-SeoulPhilharmonicRiverConcert.md",
+        "src/content/posts/2026-06-01-gwangyang-bookstart.md",
+        "src/content/posts/2026-06-01-incheon-rabies-vaccination.md",
+        "src/content/posts/2026-06-01-seongbuk-veterans-support.md",
+        "src/content/posts/2026-06-02-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "60677e78f1a4aae1ffe21a9ad1c2a5a983413ae6",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-01",
+      "authoredAt": "2026-06-01T21:57:54Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-01-gwangyang-bookstart.md",
+      "src/content/posts/2026-06-01-incheon-rabies-vaccination.md",
+      "src/content/posts/2026-06-01-seongbuk-veterans-support.md",
+      "src/content/posts/2026-06-01-SeoulPhilharmonicRiverConcert.md",
+      "src/content/posts/2026-06-02-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-02-choice-living-2026-06-02.md",
+      "src/content/life/2026-06-02-gangnam-restaurant-179244712.md",
+      "src/content/life/2026-06-02-gyeonggi-restaurant-825685640.md",
+      "src/content/life/2026-06-02-incheon-restaurant-263288179.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-02-choice-living-2026-06-02.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-02-gangnam-restaurant-179244712.md",
+      "src/content/life/2026-06-02-gyeonggi-restaurant-825685640.md",
+      "src/content/life/2026-06-02-incheon-restaurant-263288179.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-06-02-choice-living-2026-06-02.md",
+      "src/content/life/2026-06-02-gangnam-restaurant-179244712.md",
+      "src/content/life/2026-06-02-gyeonggi-restaurant-825685640.md",
+      "src/content/life/2026-06-02-incheon-restaurant-263288179.md",
+      "src/content/posts/2026-06-01-gwangyang-bookstart.md",
+      "src/content/posts/2026-06-01-incheon-rabies-vaccination.md",
+      "src/content/posts/2026-06-01-seongbuk-veterans-support.md",
+      "src/content/posts/2026-06-01-SeoulPhilharmonicRiverConcert.md",
+      "src/content/posts/2026-06-02-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.1,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 347건",
+      "validation": "ok",
+      "anthropicUsage": "1270/918",
+      "markdown": {
+        "generated": 2,
+        "pending": 189,
+        "titles": [
+          "강화군급식카드",
+          "공연티켓할인(장애인,국가유공자)"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "",
+      "validation": "",
+      "anthropicUsage": "",
+      "markdown": {
+        "generated": 0,
+        "pending": 0,
+        "titles": []
+      }
+    },
+    "festival": {
+      "summary": "신규 2건, 업데이트 173건, 총 233건",
+      "validation": "ok",
+      "anthropicUsage": "1586/993",
+      "markdown": {
+        "generated": 2,
+        "pending": 176,
+        "titles": [
+          "전주국가유산야행",
+          "청백리의 집, 오늘을 비추다"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
