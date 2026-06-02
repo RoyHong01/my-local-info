@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-02T00:00:00+09:00",
+  "updatedAtKst": "2026-06-03T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2628,6 +2628,62 @@
       "sourceId": "manual-choice-living-2026-06-02",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-06-03",
+      "productId": "8799727393",
+      "productName": "Shipshape 주방 304 스텐 자동 물빠짐 수저꽂이 수저통 식기 보관 3구",
+      "brand": "Shipshape",
+      "productGroupTokens": [
+        "주방",
+        "스텐",
+        "자동",
+        "물빠짐",
+        "수저꽂이",
+        "수저통"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-03-choice-kitchen-2026-06-03.md",
+      "sourceId": "manual-choice-kitchen-2026-06-03",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-03",
+      "productId": "8565679029",
+      "productName": "말랑핏 휘어지는 냉동실 정리용기 250ml x 4p + 600ml x 2p +1300ml x 2p +2000ml x 2p 세트, 1세트",
+      "brand": "말랑핏",
+      "productGroupTokens": [
+        "휘어지는",
+        "냉동실",
+        "정리용기",
+        "250ml",
+        "4p",
+        "600ml"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-03-choice-kitchen-2026-06-03.md",
+      "sourceId": "manual-choice-kitchen-2026-06-03",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-03",
+      "productId": "8222210263",
+      "productName": "필립스 2000 시리즈 에어프라이어 4.2L, NA229/00, 블랙",
+      "brand": "필립스",
+      "productGroupTokens": [
+        "시리즈",
+        "에어프라이어",
+        "2l",
+        "na229",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-03-choice-kitchen-2026-06-03.md",
+      "sourceId": "manual-choice-kitchen-2026-06-03",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
