@@ -1,7 +1,7 @@
 # 픽앤조이 (pick-n-joy.com) — Copilot 프로젝트 가이드
 
 > GitHub Copilot이 이 프로젝트 작업 시 항상 먼저 읽어야 할 파일입니다.
-> Copilot 작업은 이 파일과 `COPILOT_MEMORY.md`, `WORK_LOG.md`를 기준으로 운영합니다.
+> Copilot 작업은 이 파일과 `AGENTS.md`, `COPILOT_MEMORY.md`, `WORK_LOG.md`를 기준으로 운영합니다.
 
 ## ⛔ 수정 범위 최우선 규칙 (모든 규칙보다 먼저 적용)
 
@@ -198,7 +198,7 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ```
 
 ## 작업 규칙
-1. 작업 전 이 파일과 `COPILOT_MEMORY.md`를 먼저 확인
+1. 작업 전 이 파일과 `AGENTS.md`, `COPILOT_MEMORY.md`를 먼저 확인
 2. 세부 작업 이력은 `WORK_LOG.md`에 기록
 3. Copilot 운영 문서는 `.github/copilot-instructions.md`와 `COPILOT_MEMORY.md`를 기준으로 유지
 4. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
