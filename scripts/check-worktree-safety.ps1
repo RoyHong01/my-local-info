@@ -129,7 +129,7 @@ function Validate-PushCommitGuards {
                 continue
             }
 
-            if ($content -notmatch '(?m)^coupang_link:\s*".+"\s*$') {
+            if ($content -notmatch '(?m)^\s*coupang_link:\s*"?.+"?\s*$') {
                 $violations += "[$commit] 초이스 포스트 frontmatter에 coupang_link 누락: $choicePost"
             }
 
