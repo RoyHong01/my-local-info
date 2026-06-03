@@ -250,6 +250,16 @@ if ($RequireScope) {
     }
 }
 
+$stagedChoiceInput = @($stagedFiles | Where-Object { $_ -eq 'scripts/choice-input.latest.json' })
+if ($stagedChoiceInput.Count -gt 0) {
+    $allowChoiceInputCommit = ("$($env:ALLOW_CHOICE_INPUT_COMMIT)".Trim().ToLower() -eq 'true')
+    if (-not $allowChoiceInputCommit) {
+        Write-Host "ERROR: scripts/choice-input.latest.json 스테이징은 기본 차단입니다."
+        Write-Host "       필요 시 ALLOW_CHOICE_INPUT_COMMIT=true 환경변수로 임시 허용하세요."
+        $shouldFail = $true
+    }
+}
+
 if ($zeroByteFiles.Count -gt 0) {
     Write-Host "ERROR: Zero-byte tracked files detected."
     $shouldFail = $true

@@ -14,6 +14,7 @@
     "generate:blog:latest": "node scripts/run-blog-latest.js",
     "generate:choice": "node scripts/generate-choice-post.js",
     "generate:choice:latest": "node scripts/run-choice-latest.js",
+    "generate:choice:request": "node scripts/run-choice-request.js",
     "generate:choice:auto": "node scripts/generate-choice-posts-auto.js",
     "check:choice-quality": "node scripts/validate-choice-quality.js",
     "test:choice-single-pick": "node scripts/test-choice-single-pick.js",

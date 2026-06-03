@@ -133,7 +133,7 @@ src/app/life/restaurant/data/
    - 3순위: 카테고리 기본 SVG — 1,2순위 없을 때만 사용
    - ※ **절대 사용 금지**: Unsplash 외부 이미지 (주제 무관 사진 나올 수 있음)
 10. **커밋/배포 완료 직후 자동 동기화**: 작업 완료 후 즉시 `WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)을 자동으로 업데이트한다. 사용자에게 별도 확인 질문을 하지 않는다.
-11. **단독 초이스 생성 경로 통일(필수)**: 사용자가 단독 초이스 포스트를 요청해도 본문을 직접 수동 작성하지 않고, `scripts/choice-input.latest.json` 작성 후 `npm run generate:choice:latest -> npm run check:choice-quality -> npm run build` 체인을 반드시 통과한다. 목적은 자동/단독 품질 편차 제거 및 동일 검증 체인 유지다.
+11. **단독 초이스 생성 경로 통일(필수)**: 사용자가 단독 초이스 포스트를 요청해도 본문을 직접 수동 작성하지 않고, 요청 입력을 `scripts/choice-input.<요청명>.json`에 작성한 뒤 `npm run generate:choice:request -- --input scripts/choice-input.<요청명>.json` 체인을 반드시 통과한다. 이 경로는 내부적으로 `generate:choice:latest -> check:choice-quality -> build`를 실행하고 `choice-input.latest.json`을 자동 원복한다. 목적은 자동/단독 품질 편차 제거 및 동일 검증 체인 유지다.
 
 ## 블로그 글 생성 스타일 가이드 (2026-03-29 고정)
 
