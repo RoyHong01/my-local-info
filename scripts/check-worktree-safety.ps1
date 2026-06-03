@@ -46,6 +46,112 @@ function Test-PathMatchesScope {
     return $false
 }
 
+function Get-CommitsForPushValidation {
+    $upstream = git rev-parse --abbrev-ref --symbolic-full-name "@{u}" 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $upstream) {
+        return @("HEAD")
+    }
+
+    $commits = @(git rev-list "$upstream..HEAD")
+    if (-not $commits -or $commits.Count -eq 0) {
+        return @()
+    }
+
+    return $commits
+}
+
+function Test-IsDocsOnlyPath {
+    param([string]$Path)
+
+    if (-not $Path) { return $false }
+
+    $docsPatterns = @(
+        '*.md',
+        '*.MD',
+        '.github/*',
+        '.github/**',
+        'docs/*',
+        'docs/**',
+        'README',
+        'README.*',
+        'SECURITY',
+        'SECURITY.*',
+        'LICENSE',
+        'LICENSE.*'
+    )
+
+    return Test-PathMatchesScope -Path $Path -Patterns $docsPatterns
+}
+
+function Get-CommitFileList {
+    param([string]$Commit)
+
+    return @(git diff-tree --no-commit-id --name-only -r $Commit)
+}
+
+function Test-BlobExistsInCommit {
+    param(
+        [string]$Commit,
+        [string]$Path
+    )
+
+    git cat-file -e "$Commit`:$Path" 2>$null
+    return ($LASTEXITCODE -eq 0)
+}
+
+function Validate-PushCommitGuards {
+    param([string[]]$Commits)
+
+    $violations = @()
+    $allowChoiceInputCommit = ("$($env:ALLOW_CHOICE_INPUT_COMMIT)".Trim().ToLower() -eq 'true')
+
+    foreach ($commit in $Commits) {
+        $subject = (git log -1 --pretty=%s $commit)
+        $files = Get-CommitFileList -Commit $commit
+        $docsLikeCommit = $subject -match '^(docs|docs\(|chore\(docs\))\s*:'
+
+        if ($docsLikeCommit) {
+            $nonDocsFiles = @($files | Where-Object { -not (Test-IsDocsOnlyPath -Path $_) })
+            if ($nonDocsFiles.Count -gt 0) {
+                $violations += "[$commit] docs 커밋에 비문서 파일 포함: $($nonDocsFiles -join ', ')"
+            }
+        }
+
+        if ((@($files | Where-Object { $_ -eq 'scripts/choice-input.latest.json' }).Count -gt 0) -and -not $allowChoiceInputCommit) {
+            $violations += "[$commit] scripts/choice-input.latest.json 커밋은 기본 차단입니다. 필요 시 ALLOW_CHOICE_INPUT_COMMIT=true로 허용하세요."
+        }
+
+        $choicePostFiles = @($files | Where-Object { $_ -like 'src/content/life/*-choice-*.md' })
+        foreach ($choicePost in $choicePostFiles) {
+            $content = git show "$commit`:$choicePost" 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not $content) {
+                $violations += "[$commit] 초이스 포스트 검증 실패(파일 읽기 불가): $choicePost"
+                continue
+            }
+
+            if ($content -notmatch '(?m)^coupang_link:\s*".+"\s*$') {
+                $violations += "[$commit] 초이스 포스트 frontmatter에 coupang_link 누락: $choicePost"
+            }
+
+            $imageMatches = [regex]::Matches($content, '!\[[^\]]*\]\((/images/choice/[^)\s]+)\)')
+            if ($imageMatches.Count -eq 0) {
+                $violations += "[$commit] 초이스 포스트 본문에 /images/choice 기반 이미지 누락: $choicePost"
+                continue
+            }
+
+            $imagePaths = @($imageMatches | ForEach-Object { $_.Groups[1].Value.Trim() } | Select-Object -Unique)
+            foreach ($imagePath in $imagePaths) {
+                $repoPath = "public$imagePath"
+                if (-not (Test-BlobExistsInCommit -Commit $commit -Path $repoPath)) {
+                    $violations += "[$commit] 초이스 포스트 이미지 파일 없음: $repoPath (포스트: $choicePost)"
+                }
+            }
+        }
+    }
+
+    return $violations
+}
+
 Write-Section "Git safety preflight"
 
 $statusLines = git status --porcelain
@@ -156,6 +262,24 @@ if ($changedCount -gt $MaxChanged) {
 if ($FailOnDirty -and $changedCount -gt 0) {
     Write-Host "ERROR: Working tree is dirty and -FailOnDirty is set."
     $shouldFail = $true
+}
+
+if ($FailOnDirty) {
+    Write-Section "Push commit guards"
+
+    $commitsForGuard = Get-CommitsForPushValidation
+    if ($commitsForGuard.Count -eq 0) {
+        Write-Host "No new commits to validate against upstream."
+    } else {
+        $guardViolations = Validate-PushCommitGuards -Commits $commitsForGuard
+        if ($guardViolations.Count -gt 0) {
+            Write-Host "ERROR: Push commit guard violation(s) detected."
+            $guardViolations | ForEach-Object { Write-Host "  $_" }
+            $shouldFail = $true
+        } else {
+            Write-Host "Push commit guards passed."
+        }
+    }
 }
 
 if ($hookInvalid) {
