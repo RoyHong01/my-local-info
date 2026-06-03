@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-03T00:00:00+09:00",
+  "updatedAtKst": "2026-06-04T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2684,6 +2684,63 @@
       "sourceId": "manual-choice-kitchen-2026-06-03",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-06-04",
+      "productId": "9568681083",
+      "productName": "독일 스마트 줌 실시간 AI 통역 안경 ai 통역 블루투스 안경 스마트 안경",
+      "brand": "독일",
+      "productGroupTokens": [
+        "실시간",
+        "ai",
+        "통역",
+        "안경",
+        "블루투스",
+        "digital"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-04-choice-digital-2026-06-04.md",
+      "sourceId": "manual-choice-digital-2026-06-04",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-04",
+      "productId": "9296139964",
+      "productName": "샤오미 레드미 버즈 8 라이트 블루투스 이어폰, M2539E1, 화이트, 36시간, 액티브노이즈캔슬링(ANC), M2539E1, 화이트",
+      "brand": "샤오미",
+      "productGroupTokens": [
+        "레드미",
+        "버즈",
+        "라이트",
+        "블루투스",
+        "이어폰",
+        "m2539e1"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-04-choice-digital-2026-06-04.md",
+      "sourceId": "manual-choice-digital-2026-06-04",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-04",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 보조배터리 맥세이프 무선충전 고속충전 qi2 기내용 아이폰 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "보조배터리",
+        "맥세이프"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-04-choice-digital-2026-06-04.md",
+      "sourceId": "manual-choice-digital-2026-06-04",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
