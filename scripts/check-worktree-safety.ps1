@@ -123,7 +123,8 @@ function Validate-PushCommitGuards {
 
         $choicePostFiles = @($files | Where-Object { $_ -like 'src/content/life/*-choice-*.md' })
         foreach ($choicePost in $choicePostFiles) {
-            $content = git show "$commit`:$choicePost" 2>$null
+            $contentLines = @(git show "$commit`:$choicePost" 2>$null)
+            $content = ($contentLines -join "`n")
             if ($LASTEXITCODE -ne 0 -or -not $content) {
                 $violations += "[$commit] 초이스 포스트 검증 실패(파일 읽기 불가): $choicePost"
                 continue
