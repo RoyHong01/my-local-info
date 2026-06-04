@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-04T00:00:00+09:00",
+  "updatedAtKst": "2026-06-05T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2741,6 +2741,62 @@
       "sourceId": "manual-choice-digital-2026-06-04",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-05",
+      "productId": "9579553191",
+      "productName": "다이아큐브 구글 픽셀10 프로 AF 지문방지 저반사 무광코팅 PET EPU 풀커버 항균 액정보호필름 3P, 자동먼지제거 쉽고 빠른 부착",
+      "brand": "다이아큐브",
+      "productGroupTokens": [
+        "구글",
+        "픽셀10",
+        "프로",
+        "af",
+        "지문방지",
+        "저반사"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-05-choice-pet-life-2026-06-05.md",
+      "sourceId": "manual-choice-pet-life-2026-06-05",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-05",
+      "productId": "9540538394",
+      "productName": "멍식이네 펫케어 반려동물 강아지 고양이 발바닥 바리깡 클리퍼",
+      "brand": "멍식이네",
+      "productGroupTokens": [
+        "펫케어",
+        "반려동물",
+        "강아지",
+        "고양이",
+        "발바닥",
+        "바리깡"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-05-choice-pet-life-2026-06-05.md",
+      "sourceId": "manual-choice-pet-life-2026-06-05",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-05",
+      "productId": "9496158857",
+      "productName": "활성탄 애견 배변패드, 1세트, 50개입",
+      "brand": "활성탄",
+      "productGroupTokens": [
+        "애견",
+        "배변패드",
+        "50개입",
+        "pet",
+        "life"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-05-choice-pet-life-2026-06-05.md",
+      "sourceId": "manual-choice-pet-life-2026-06-05",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
