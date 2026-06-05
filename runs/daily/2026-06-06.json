@@ -1,0 +1,196 @@
+{
+  "reportDateKst": "2026-06-06",
+  "generatedAtUtc": "2026-06-05T20:57:23.162Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "27039176711",
+    "runNumber": 827,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/27039176711",
+    "runStartedAtUtc": "2026-06-05T20:45:17Z",
+    "headSha": "4e9848c8e886f4d6f720c88091fd14f1c34d4630"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://3f6a1362.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 347건",
+        "subsidy": "신규 1건, 총 614건",
+        "festival": "신규 11건, 업데이트 182건, 총 253건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://2fe2e5bb.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "failure",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://d5b67a22.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "468fb700122ae3889351327192b432e006b4b53a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-05",
+      "authoredAt": "2026-06-05T20:54:18Z",
+      "files": [
+        "src/content/posts/2026-06-06-festival-versus-weekend-selection.md"
+      ]
+    },
+    {
+      "sha": "c5899024febb8c67929ab48b6b977782cb0358c5",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-05",
+      "authoredAt": "2026-06-05T20:46:25Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 4,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-06-festival-versus-weekend-selection.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-06-06-festival-versus-weekend-selection.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 1,
+      "manual": 0,
+      "unknown": 0,
+      "total": 1
+    },
+    "byType": {
+      "blog": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 0,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "Gemini 호출 재시도 2/3: Gemini API 오류 429: {   \"error\": {     \"code\": 429,     \"message\": \"Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.google.dev/gemini-api/docs/billing#prepay. \",     \"status\": \"RESOURCE_EXHAUSTED\"   } }  Gemini 호출 재시도 3/3: Gemini API 오류 429: {   \"error\": {     \"code\": 429,     \"message\": \"Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projec...",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 347건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 181,
+        "titles": []
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 614건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 403,
+        "titles": []
+      }
+    },
+    "festival": {
+      "summary": "신규 11건, 업데이트 182건, 총 253건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 188,
+        "titles": []
+      },
+      "photoFallback": 0
+    }
+  }
+}
