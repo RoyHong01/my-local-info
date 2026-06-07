@@ -9,6 +9,9 @@ const requestedGeminiModel = String(process.env.GEMINI_MODEL || DEFAULT_GEMINI_M
 const ALLOWED_GEMINI_MODELS = new Set([DEFAULT_GEMINI_MODEL, 'gemini-2.5-flash-lite']);
 const GEMINI_MODEL = requestedGeminiModel || DEFAULT_GEMINI_MODEL;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
+const DESCRIPTION_MARKDOWN_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_DELAY_MS || '15000', 10));
+const DESCRIPTION_MARKDOWN_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_RETRY_COUNT || '4', 10));
+const DESCRIPTION_MARKDOWN_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_RETRY_DELAY_MS || '20000', 10));
 if (/\bpro\b/i.test(requestedGeminiModel)) {
   throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다.');
 }
@@ -30,6 +33,10 @@ const INCHEON_LANDMARK_KEYWORDS = [
   '인천대교',
   '을왕리',
 ];
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function decodeHtmlEntities(text) {
   return String(text || '')
@@ -366,31 +373,46 @@ ${JSON.stringify(item, null, 2)}`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
 
-  let res;
+  let data;
   try {
-    res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.3,
-          topP: 0.9,
-          maxOutputTokens: 1200,
-        },
-      }),
-    });
+    for (let attempt = 1; attempt <= DESCRIPTION_MARKDOWN_RETRY_COUNT; attempt++) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.3,
+            topP: 0.9,
+            maxOutputTokens: 1200,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        data = await res.json();
+        break;
+      }
+
+      const errText = await res.text();
+      const isRetryable = res.status === 429 || res.status >= 500;
+      if (!isRetryable || attempt >= DESCRIPTION_MARKDOWN_RETRY_COUNT) {
+        throw new Error(`Gemini API 오류: ${res.status} ${errText}`);
+      }
+
+      const retryDelay = DESCRIPTION_MARKDOWN_RETRY_DELAY_MS * attempt;
+      console.warn(`Gemini rate-limit 감지(인천) ${attempt}/${DESCRIPTION_MARKDOWN_RETRY_COUNT}: ${res.status} -> ${retryDelay}ms 대기 후 재시도`);
+      await sleep(retryDelay);
+    }
   } finally {
     clearTimeout(timer);
   }
 
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Gemini API 오류: ${res.status} ${errText}`);
+  if (!data) {
+    throw new Error('Gemini 응답이 비어 있습니다.');
   }
 
-  const data = await res.json();
   const candidate = data?.candidates?.[0] || {};
   const markdown = (candidate?.content?.parts?.[0]?.text || '').trim();
   const usageMeta = data?.usageMetadata || {};
@@ -614,6 +636,10 @@ async function run() {
       } catch {
         markdownFailed++;
         console.error(`description_markdown 생성 실패: ${item['서비스명'] || item.name || item.title || item['서비스ID'] || item.id}`);
+      }
+
+      if (DESCRIPTION_MARKDOWN_DELAY_MS > 0) {
+        await sleep(DESCRIPTION_MARKDOWN_DELAY_MS);
       }
     }
 
