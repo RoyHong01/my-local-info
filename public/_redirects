@@ -17,6 +17,16 @@
 /festival/727285/ /festival/ 301
 /festival/141759 /festival/ 301
 /festival/141759/ /festival/ 301
+# Dynamic detail fallback (존재하지 않는 상세 URL은 목록으로 정리)
+# 정적 파일이 존재하면 해당 파일이 우선 제공되고, 미존재 URL만 아래 규칙에 걸린다.
+/blog/:slug /blog/ 301
+/blog/:slug/ /blog/ 301
+/festival/:id /festival/ 301
+/festival/:id/ /festival/ 301
+/incheon/:id /incheon/ 301
+/incheon/:id/ /incheon/ 301
+/subsidy/:id /subsidy/ 301
+/subsidy/:id/ /subsidy/ 301
 # Catch-all for non-existent item pages → category list (trailing slash variant for trailingSlash:true)
 # www. → apex redirect (force: applies even if asset exists)
 https://my-local-info-2gs.pages.dev/* https://pick-n-joy.com/:splat 301!
