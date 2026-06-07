@@ -303,6 +303,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - `src/app/incheon/[id]/page.tsx`, `src/app/subsidy/[id]/page.tsx`, `src/app/festival/[id]/page.tsx`의 `generateStaticParams`는 **Top ID 기준 SSG 상한**을 유지한다. (`getTopIncheon/getTopSubsidy/getTopFestival`)
   - `scripts/generate-sitemap.js`, `src/app/rss.xml/route.ts`도 **Top ID 기준 URL 집합**과 동일하게 맞춘다. (SSG 범위를 초과한 전체 상세 URL 확장은 금지)
   - 위 상한을 임의 해제하면 빌드 페이지 수 급증(예: 1,582 -> 8,495)으로 AdSense Low Value/크롤링 품질 리스크가 커질 수 있으므로, **사용자 명시 승인 없이 해제 금지**.
+  - **동적 상세 fallback 리다이렉트 금지(정책 고정)**: `/blog/:slug`, `/festival/:id`, `/incheon/:id`, `/subsidy/:id` 형태의 광역 fallback 301은 운영 기본값으로 사용하지 않는다.
+    - 직접 원인: 과거 GSC 리다이렉트 오류 대응에서 운영/배포 산출물(`out/_redirects`) 문제와 결합되어 품질 이슈가 발생했음.
+    - 정책 원칙: AdSense 리스크와 충돌하지 않도록 `SSG 상한 유지 + expired 보존` 방향을 기본 전략으로 고정한다.
+    - 허용 예외: 만료/삭제가 확인된 **개별 ID 단위 301**만 제한적으로 추가한다.
   - 대량 404 완화는 SSG 상한 해제가 아니라, 수집 스크립트에서 과거 데이터를 삭제하지 않고 `expired`로 보존하는 방식으로 처리한다.
     - 대상: `scripts/collect-incheon.js`, `scripts/collect-subsidy.js`, `scripts/collect-festival.js`
   - 변경 제안 시 반드시 아래 순서를 지킨다:
@@ -310,6 +314,12 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
     2. AdSense/색인 영향 비교안 제시
     3. 영향 파일 목록 제시
     4. 사용자 승인 후 적용
+    - **리다이렉트 운영 절차(재발 방지, 필수 5항목)**:
+      1. **생성 도구 고정**: 개별 ID 리다이렉트는 `scripts/generate-missing-id-redirects.js`만 사용한다.
+      2. **입력/검증 순서 고정**: GSC 404 CSV URL(또는 내부 참조 URL)에서 후보를 추출한 뒤, `public/data/incheon.json`/`public/data/subsidy.json`/`public/data/festival.json`과 대조해 **데이터에 없는 ID만** 추가한다.
+      3. **상한 고정**: 1회 실행에서 추가 가능한 ID는 최대 300개로 제한한다. (라인 기준 600줄)
+      4. **삽입 위치 고정**: 생성된 개별 ID 301은 `public/_redirects`의 `# Catch-all for non-existent item pages` 블록 직전에만 삽입한다.
+      5. **금지 항목 고정**: 수동 대량 붙여넣기, `*` 기반 광역 패턴 복구, `/blog/:slug`·`/festival/:id`·`/incheon/:id`·`/subsidy/:id` 형태의 광역 fallback 301 재도입을 금지한다.
 
 ## 맛집 포스트 생성 및 톤앤매너 규칙 (재발 방지)
 
