@@ -1,0 +1,185 @@
+{
+  "reportDateKst": "2026-06-09",
+  "generatedAtUtc": "2026-06-08T21:27:39.483Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "27167126271",
+    "runNumber": 838,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/27167126271",
+    "runStartedAtUtc": "2026-06-08T21:09:56Z",
+    "headSha": "d7f333994af70bcad68b687477b47a81ab5dbc0c"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://208eec15.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 348건",
+        "subsidy": "신규 0건, 총 615건",
+        "festival": "신규 3건, 업데이트 182건, 총 256건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d5636bd8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "skipped",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "8afd7b18207dde0142042a3c13b0f90b40ae19d0",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-08",
+      "authoredAt": "2026-06-08T21:16:19Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 3,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 0,
+      "manual": 0,
+      "unknown": 0,
+      "total": 0
+    },
+    "byType": {
+      "blog": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 0,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 348건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 183,
+        "titles": []
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 615건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 408,
+        "titles": []
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 182건, 총 256건",
+      "validation": "ok",
+      "anthropicUsage": "0/0",
+      "markdown": {
+        "generated": 0,
+        "pending": 193,
+        "titles": []
+      },
+      "photoFallback": 0
+    }
+  }
+}
