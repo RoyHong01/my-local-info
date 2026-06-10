@@ -13,7 +13,7 @@ const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 't
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
 // Gemini 3.1 Flash-Lite Preview를 기본 모델로 사용하고, 필요 시 env로 2.5 Flash-Lite를 지정해 내려갈 수 있다.
 // CI에서는 RESTAURANT_GEMINI_MODEL env가 우선 주입되며, 아래 값은 로컬 미설정 시에만 사용된다.
-const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-3.1-flash-lite-preview';
+const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-3.1-flash-lite';
 
 const supabaseWarnState = {
   cacheReadFailure: 0,
