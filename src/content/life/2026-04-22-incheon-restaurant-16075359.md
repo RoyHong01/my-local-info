@@ -6,7 +6,7 @@ description: "평점 4.3이 증명하는 인천 주안의 숨은 국수 맛집 '
 category: 픽앤조이 맛집 탐방
 published_by: "auto"
 tags: [맛집탐방, 인천, 주안, 한식, 로컬 핫플, 카카오맵]
-image: "https://places.googleapis.com/v1/places/ChIJGxAehGl5ezURztUy1eTqhBE/photos/AU_ZVEHLwcTtIptKa6i2u4OPfc0aKlbPEQsHaYop7MZc-uiTZ7DyLS3ppHcEh-P5e5-PsP117tU9YtUODRZGqoAJWRZXIdhtk9Mph5FOy-q5ONIQZCjh94ugGh20T2UCgs3p4Ci8Vycf6u3Sxojdt5qIVsB_8eFlN1oT_O0JRoleK-1Kqrf_E6On9cHxZpp6XJI2zY9up4xpdMlRGfFS7XedFcsxWswCbMBoErqLOfAUGC4gaULuU1Yqe77X-or6SHzDb9Rss_1kBSRbHrwv4ROqO7xteHgaTJ9z9oEeN_XTfRsYrLykD4KtS23tkGOY2aArNfFivJ7ANeRURzAS7LUz01CJ1DEAQUiZ2YhK8Rjz2EawnS819348kPRISbx7uUIFoq8Aqy27rc4ZNhJQcOdy1vQgM46kebp_VpLrUbmj_Zs/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+image: "/images/default-restaurant.svg"
 source_id: "16075359"
 slug: "incheon-restaurant-16075359"
 place_name: "청실홍실 주안직영점"

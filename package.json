@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run check:choice-quality && npm run test:choice-single-pick && next build",
+    "build": "npm run check:no-exposed-keys && npm run check:choice-quality && npm run test:choice-single-pick && next build",
     "prebuild": "npm run clean:build && node scripts/build-search-index.js",
     "clean:build": "node -e \"const fs=require('fs'); for (const dir of ['.next','out']) fs.rmSync(dir,{ recursive:true, force:true });\"",
     "verify:data": "node scripts/verify-data-json.js",
@@ -19,6 +19,7 @@
     "generate:choice:request": "node scripts/run-choice-request.js",
     "generate:choice:auto": "node scripts/generate-choice-posts-auto.js",
     "check:choice-quality": "node scripts/validate-choice-quality.js",
+    "check:no-exposed-keys": "node scripts/validate-no-exposed-keys.js",
     "test:choice-single-pick": "node scripts/test-choice-single-pick.js",
     "collect:subsidy": "node scripts/collect-subsidy.js",
     "collect:life-restaurants": "node scripts/collect-life-restaurants.mjs",

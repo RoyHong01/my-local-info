@@ -6,7 +6,7 @@ description: "평점 4.6이 증명하는 찐맛집, 인천 청라의 감성 가�
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 인천, 인천, 브런치, 여유로운 신도시 브런치, 카카오맵]
-image: "https://places.googleapis.com/v1/places/ChIJr7FnoRJ_ezUR51SsH1mNJK8/photos/Ab43m-uek8IObDOhkzsIFETIDCsC-2JtS4ql2taSGcvoWB-Hvw3Kkow-_Gpyc2nqJVjcHKKECfBmyOK9vkeaGrED-CsdEjSA2SI-uguIWvq5bALKHtCw5aZJuSYBktmQkRLui8PrpXqegUkZeVIAc8uSaZ1O0JfFy2o_lfN1HsnXlkssSmu7DEtsU80dvVOzWVqx5aC4hzYOt6h1i7PvE5tSBGx8rYuslJSU7TdBGrAFw91AMuPG1-ByOy9p7itMNF-twHTz9wMI0dzvPT9mAfCIqcK1zKE3IEWhsaKGZZ9yP6GtoKQkCQSXnFxyWngGYUInwrJaXH2hg42PnE6PhnIUpd40P6u1Vsj3PIZ0D63uG6eZzxOLmRuBjsdguUqPnkHJugqP-BYB3E4fUs200CFLOQfQ7ouRypmEzqjpGMMOg7ASxR92/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+image: "/images/default-restaurant.svg"
 source_id: "421122003"
 slug: "cheongna-restaurant-421122003"
 place_name: "피츠로스브런치카페"

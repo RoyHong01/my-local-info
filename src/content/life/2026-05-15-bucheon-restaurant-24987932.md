@@ -6,7 +6,7 @@ description: "구글 평점 4.5가 증명하는 부천의 숨은 일식 다이�
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 경기, 경기, 다이닝, 데이트 스팟, 카카오맵]
-image: "https://places.googleapis.com/v1/places/ChIJj3voWDF9ezURb4Vfp_qqFKI/photos/Ab43m-tGTiVCBLSr0zm94-ZMYkpzyk1RYANJgmaHnFTXBq9zY5BggGOzJE4zpmBtNCiZWiYnVONTJ-9naVMCEKNhzxp62sw3NmgGgcyT1Tz5455nRvwYrOqZdkBTcXxrKuOketvO7FVHauoBWGySYIIJyotlTGNkWauqT8MNDWUfsSy7VE61MgKo-XarjS-lbD3bGDsOAZPBVOskAkW7SiyLOrAUvyt9US_MGxT3jFL3Nl1q9zxdyayAOHziWN3-uFMcRK99y6IfdfwtSGG9CxkZkQgzDek-7VpnhINwiHf9btzGHuhBDxDG0iADtwwaTC7NHVXpJlfSza6jfd2m8lZ_z8bn48SinjH6PApNQDRW9TEQiLaTM-dq3xJMbcjZ3G02zJTTDatlwCvB1T1kuZ_Jkkw4foB27JEN6570sbDR96NBJA/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+image: "/images/default-restaurant.svg"
 source_id: "24987932"
 slug: "bucheon-restaurant-24987932"
 place_name: "스시하마"

@@ -6,7 +6,7 @@ description: "구글 평점 4.4가 증명하는 경기 브런치 명소예요. �
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 경기, 경기, 브런치, 채광 좋은 브런치 카페, 카카오맵]
-image: "https://places.googleapis.com/v1/places/ChIJT661GgA7ezURy6ALDyUzcrs/photos/Ab43m-tAAj7glVcf6RQQxfULdJvmCw4n03B-cDhhNyQZNcrjvBKMVco3iqlbovOw0z5bWUZ6HIXlSgWdmYTTh93KiyA9u5HUDT4l0H8K6yhfCk5Kh91-qlU8oyWbGGcB4Y7k8GH4GxXkjZx8ha-5l-IfBzfaikbfkC3le3zvQLMMfirioL3ZdY0EKfW7xEp6hcZqsGWJ4cuKE1CUge7ic4Tylq_QSAmYD4lvYaqDNwFPluEsV2wk9QB9ySeUljyX7V-ZDpPsm-X8toOel_5rniOBGRaRx2UYTvnW7aj5BphO9xWjZhj_1mUKJEgNlGtPihEZVl_l1s2nSLBwYntnnNcPChjPNPrh9OrhFRs_9vfzWkvCDUOPGc3XU1D3hl45IiCAp5QI1re2M6YMucXna-S-98-Kp2U7Qx04E3sxbeOF33Ap9l-Fir2WZkWn5DasM8lS/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+image: "/images/default-restaurant.svg"
 source_id: "159073512"
 slug: "gyeonggi-restaurant-159073512"
 place_name: "토지베이커리브런치카페"
@@ -53,7 +53,7 @@ review_count: "119"
 
 
 
-![토지베이커리브런치카페](https://places.googleapis.com/v1/places/ChIJT661GgA7ezURy6ALDyUzcrs/photos/Ab43m-tAAj7glVcf6RQQxfULdJvmCw4n03B-cDhhNyQZNcrjvBKMVco3iqlbovOw0z5bWUZ6HIXlSgWdmYTTh93KiyA9u5HUDT4l0H8K6yhfCk5Kh91-qlU8oyWbGGcB4Y7k8GH4GxXkjZx8ha-5l-IfBzfaikbfkC3le3zvQLMMfirioL3ZdY0EKfW7xEp6hcZqsGWJ4cuKE1CUge7ic4Tylq_QSAmYD4lvYaqDNwFPluEsV2wk9QB9ySeUljyX7V-ZDpPsm-X8toOel_5rniOBGRaRx2UYTvnW7aj5BphO9xWjZhj_1mUKJEgNlGtPihEZVl_l1s2nSLBwYntnnNcPChjPNPrh9OrhFRs_9vfzWkvCDUOPGc3XU1D3hl45IiCAp5QI1re2M6YMucXna-S-98-Kp2U7Qx04E3sxbeOF33Ap9l-Fir2WZkWn5DasM8lS/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o)
+![토지베이커리브런치카페](/images/default-restaurant.svg)
 
 ## 방문 정보 한눈에
 

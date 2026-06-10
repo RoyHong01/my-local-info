@@ -29,6 +29,61 @@
 
 ---
 
+## 2026-07-06 (Google Places 키 노출 정리 + 빌드 차단 가드 추가)
+
+- **수정 파일**:
+  - `AI_WEBSITE_BLUEPRINT.md`
+  - `package.json`
+  - `scripts/sanitize-exposed-places-urls.js`
+  - `scripts/validate-no-exposed-keys.js`
+  - `src/app/life/restaurant/data/restaurants.json`
+  - `src/content/life/2026-04-21-incheon-restaurant-588890379.md`
+  - `src/content/life/2026-04-21-seongsu-restaurant-1272791908.md`
+  - `src/content/life/2026-04-21-suwon-restaurant-1550048150.md`
+  - `src/content/life/2026-04-22-incheon-restaurant-16075359.md`
+  - `src/content/life/2026-04-22-seongsu-restaurant-1349429702.md`
+  - `src/content/life/2026-04-22-suwon-restaurant-1847035906.md`
+  - `src/content/life/2026-04-23-incheon-restaurant-8914792.md`
+  - `src/content/life/2026-04-23-seongsu-restaurant-1057053940.md`
+  - `src/content/life/2026-04-23-suwon-restaurant-1000889516.md`
+  - `src/content/life/2026-05-06-cheongna-restaurant-421122003.md`
+  - `src/content/life/2026-05-09-suwon-restaurant-1532895684.md`
+  - `src/content/life/2026-05-11-gyeonggi-restaurant-1530058124.md`
+  - `src/content/life/2026-05-15-bucheon-restaurant-24987932.md`
+  - `src/content/life/2026-05-16-incheon-restaurant-2034938843.md`
+  - `src/content/life/2026-05-18-seongsu-restaurant-1079903424.md`
+  - `src/content/life/2026-05-19-seongsu-restaurant-1362579800.md`
+  - `src/content/life/2026-05-21-incheon-restaurant-564683615.md`
+  - `src/content/life/2026-05-22-seoul-restaurant-747417275.md`
+  - `src/content/life/2026-05-23-seoul-restaurant-12684084.md`
+  - `src/content/life/2026-05-24-incheon-restaurant-1911898300.md`
+  - `src/content/life/2026-05-25-incheon-restaurant-847828290.md`
+  - `src/content/life/2026-05-29-gyeonggi-restaurant-159073512.md`
+  - `src/content/life/2026-05-29-seoul-restaurant-651364551.md`
+  - `src/content/life/2026-05-31-seoul-restaurant-19392595.md`
+  - `src/content/life/2026-06-01-incheon-restaurant-1083309826.md`
+  - `src/content/life/2026-06-03-incheon-restaurant-1357349826.md`
+  - `src/content/life/2026-06-05-bupyeong-restaurant-1442069711.md`
+  - `src/content/life/2026-06-05-gyeonggi-restaurant-2066444716.md`
+  - `src/content/life/2026-06-05-seoul-restaurant-21404892.md`
+  - `WORK_LOG.md`
+  - `COPILOT_MEMORY.md`
+  - `PROJECT_MEMORY.md`
+- **배경**:
+  - Google Places API 키 노출 이슈 재발을 막기 위해 과거 콘텐츠/데이터 정리와 빌드 단계 차단 검증을 동시에 적용해야 했음.
+- **원인(RCA)**:
+  - 이전 생성 산출물 일부에 `places.googleapis.com ... key=` 형태 URL과 `AIza...` 패턴이 남아 있었고, 빌드 파이프라인에 이를 차단하는 검증 단계가 없었음.
+- **조치**:
+  1. `scripts/sanitize-exposed-places-urls.js`로 콘텐츠/데이터 내 노출 URL을 안전 경로로 치환.
+  2. `scripts/validate-no-exposed-keys.js`를 추가해 키 패턴(`places ... key=`, `AIza...`) 발견 시 비정상 종료하도록 구현.
+  3. `package.json` 빌드 체인에 `check:no-exposed-keys`를 선행 연결.
+  4. `AI_WEBSITE_BLUEPRINT.md`의 예시 키 표기를 마스킹 형식으로 정리.
+- **검증**:
+  - `node scripts/sanitize-exposed-places-urls.js` 실행(`changed_files=1`, `replaced_urls=86`) 확인.
+  - `npm run check:no-exposed-keys` 통과 확인.
+  - `rg -n "https://places.googleapis.com/v1/.+key=|AIza[0-9A-Za-z_-]{20,}" src/content src/app/life/restaurant/data/restaurants.json` 재검사.
+  - `npm run build` 실행 예정(커밋 직전 최종 검증).
+
 ## 2026-05-18 (색인 안정화 정책 박제: SSG Top ID 유지 + 과거 데이터 보존 원칙)
 
 - **수정 파일**:

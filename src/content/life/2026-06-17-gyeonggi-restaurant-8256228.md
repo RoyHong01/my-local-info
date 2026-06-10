@@ -53,7 +53,7 @@ review_count: "416"
 
 
 
-![돈파스타](https://places.googleapis.com/v1/places/ChIJJ6A4-QJYezURRrnTekOTlsk/photos/AaVGc3mc3SfhCHP5HK5L0kL4wuYrBbNTZir8l0jrxQsF7NJZ61XGvVmP728GVGzfZaa6pKkOenlAIS_ukujcPXAlMvdGuEcWa6Uj-NCfUvSFyOJGSe7b-2ZeK0Uhnn5zG3TH5LMocMWiEmsbXipP-Ygj4Vn8SxJVWamhzSUS46s1yl2af5uT7bD0KjbkBao0Wjk8JZOdumVnpNSHaA7p9UIBhQWbzXTVbItqeB-tY3WnFETHok6eYAZidlwJGTa4HqQNyFaOzX-i56shBQ8AXRGoR7z2hfFLp3WDm4pnJz5gyIbf9UayJCw7CWy6v94AkoVIxuw0s2dPP764wrJX_1eTeAjhPwR2bTK9UJrQ0gn0At8DAurxW02B-75xwFOh70itPqMwAlf9Cc1nkki0cnAdfmkwnS8FUO44wgE7lAgVSDkrYU6-ThZox_U99d5QPwEe/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o)
+![돈파스타](/images/default-restaurant.svg)
 
 ## 방문 정보 한눈에
 

@@ -5,6 +5,18 @@
 - WORK_LOG.md와 같은 순서로 기록한다: `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증`.
 - 새 항목도 기존 항목도 같은 제목/항목 형식을 유지한다.
 
+## 최근 작업 (2026-07-06) — Google Places 키 노출 정리 + 빌드 차단 가드
+
+- 증상:
+  - 과거 맛집 콘텐츠/데이터에 `places.googleapis.com ... key=` 및 `AIza...` 패턴이 잔존.
+- 조치:
+  - `scripts/sanitize-exposed-places-urls.js` 추가 후 노출 URL 정리(`replaced_urls=86`).
+  - `scripts/validate-no-exposed-keys.js` 추가: `places ... key=` / `AIza...` 패턴 발견 시 즉시 실패.
+  - `package.json` `build` 앞단에 `check:no-exposed-keys`를 선행 연결.
+- 운영 포인트:
+  - 공개 산출물 경로(`src/content`, `src/app/life/restaurant/data`)는 항상 빌드 전 키 패턴 검사를 강제.
+  - 키 교체만으로 종료하지 않고, 노출 흔적 제거 + CI 차단 가드까지 함께 적용.
+
 ## 최근 작업 (2026-05-18) — 색인 안정화 정책 박제
 
 - 핵심 결론:

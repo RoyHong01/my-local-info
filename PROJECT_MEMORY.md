@@ -5,6 +5,20 @@
 - WORK_LOG.md와 같은 순서로 기록한다: `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증`.
 - 새 항목도 기존 항목도 같은 제목/항목 형식을 유지한다.
 
+## 최근 마일스톤 (2026-07-06, Google Places 키 노출 대응)
+
+- 배경: 공개 콘텐츠/데이터에 포함된 Places key URL 잔존 가능성으로 비용/보안 리스크가 발생.
+- 원인:
+  - 과거 산출물에 `places.googleapis.com ... key=` URL이 남아 있었고, 빌드 단계에서 이를 차단하는 검증이 부재.
+- 조치:
+  - `scripts/sanitize-exposed-places-urls.js` 도입 후 노출 URL 일괄 치환.
+  - `scripts/validate-no-exposed-keys.js` 도입 후 키 패턴 발견 시 빌드 실패 처리.
+  - `package.json`에 `check:no-exposed-keys` 추가 및 `build` 선행 검증 연결.
+- 검증:
+  - sanitize 실행 결과(`changed_files=1`, `replaced_urls=86`) 확인.
+  - `npm run check:no-exposed-keys` 통과.
+  - 배포 전 `npm run build` 최종 검증.
+
 ## 최근 마일스톤 (2026-05-18, 색인 안정화 정책 박제)
 
 - 배경: 색인 제외(404) 개선 과정에서 SSG 상한 해제와 AdSense Low Value 대응 정책이 충돌할 수 있어 운영 원칙을 고정해야 했음.

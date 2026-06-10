@@ -6,7 +6,7 @@ description: "'평점 4.2가 증명하는 찐맛집' '도시락김밥 본점'에
 category: 픽앤조이 맛집 탐방
 published_by: "auto"
 tags: [맛집탐방, 인천, 주안, 한식, 로컬 핫플, 카카오맵, 분식]
-image: "https://places.googleapis.com/v1/places/ChIJZSeh52l5ezURp2AmNfRP_bg/photos/AU_ZVEFd9JpTlOMLlG1Z3PfVsCIOFi0nvntxHbtMRvfPvpmVc8BguuWc9k8UjWVxC7SAwihsjHaYOJ8KVOpHswRdaKG0fScxUTZ_PfcrdpINwpRw0gq4XqiaBoniFMlzgq8mV5Id-TemwrEh96c69AbE5VHVWUERpOUBnSqnZQOtYcgTN24RTPt007B8uQ9tRu7TDbAQEswi5fpxt0NoIQh2U1xo_Xk21n9lNpp1gFp8p_YVViOvNDW08az2-DEi0cywcESZCJksfKZnW-geP-wotLnrfVgQ94_uZPjqB2cRUkTG4kAV2maKrKOJtFvVzAFOQG8HkuwWR648ku5mdPE8yDfws4usJQy-O64AcKerekEYs096-GUFIRiYNatR2ZPntQKmdLhYO2iYn9UNji4a8qN3qM8mokJUyhcu0jlaA9qRsw/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o"
+image: "/images/default-restaurant.svg"
 source_id: "8914792"
 slug: "incheon-restaurant-8914792"
 place_name: "도시락김밥 본점"

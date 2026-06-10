@@ -53,7 +53,7 @@ review_count: "367"
 
 
 
-![카페갈릴리](https://places.googleapis.com/v1/places/ChIJ125gVDGGezURmDJi15W2kbo/photos/AaVGc3kyNp-dQ8yC3ZilbjJShTFBITpAOF_stASSy7VaHzkbNaGRj1on9Qr009r55mTAvZE4V6_ZQ_Au9ywSWbmpaOUPdo-nQgFEeEu1PgZloPs3DHJC834JtXGwNA6yIvZvD6lnlNqLhr-4qSaH3Y59goqAArEQAkVnM7NEQEO4eeAOqf_57mj4Dq5oj_p4w5yIv70Ri1uYYewzPCCGkGmCkMQxbrK8cjzROJSh6wBUAeYrtjFxmQ4ginE9WvR4muFDjhLmgaKdJIochPP81-NXMS-2xjWTD6iuS97HofpH_gCp3V2_Oq__DDxb6jwWgCT_nvVTs1x59hD2wANaco0ToMpRdKpmsBLw_EC6XjxwO6svsIAd67aCbUKtsjFmnrInN9PRLImqV_We3-6DCxSyIoyScAKZMKbqjTwQuaFYcGSjwUod/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o)
+![카페갈릴리](/images/default-restaurant.svg)
 
 ## 방문 정보 한눈에
 
