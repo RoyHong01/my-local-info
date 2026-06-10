@@ -1,0 +1,250 @@
+{
+  "reportDateKst": "2026-06-11",
+  "generatedAtUtc": "2026-06-10T21:41:39.808Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "27307195553",
+    "runNumber": 842,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/27307195553",
+    "runStartedAtUtc": "2026-06-10T21:22:14Z",
+    "headSha": "411d8abbf10a1cb764666c989d1feeec83b513e9"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://19b5b10c.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 348건",
+        "subsidy": "신규 0건, 총 617건",
+        "festival": "신규 1건, 업데이트 189건, 총 260건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://0c8c66e6.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://f28b0c68.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "3dc060e09ba6e281681af7475ec301bee4b0567f",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-10",
+      "authoredAt": "2026-06-10T21:41:38Z",
+      "files": [
+        "src/content/life/2026-06-11-gyeonggi-restaurant-1651030568.md",
+        "src/content/life/2026-06-11-incheon-restaurant-341506592.md",
+        "src/content/life/2026-06-11-seoul-restaurant-320882660.md"
+      ]
+    },
+    {
+      "sha": "765fd45ba1400fcf6e10fff95263139cf45199ea",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-10",
+      "authoredAt": "2026-06-10T21:37:17Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-11-choice-digital-2026-06-11.md"
+      ]
+    },
+    {
+      "sha": "de6d205173890fc1978b84be11bf0a923526b6d2",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-10",
+      "authoredAt": "2026-06-10T21:35:56Z",
+      "files": [
+        "src/content/posts/2026-06-10-Gwanak-Entrance-Support.md",
+        "src/content/posts/2026-06-10-hwasun-housing-extension.md",
+        "src/content/posts/2026-06-10-incheon-sports-discount.md",
+        "src/content/posts/2026-06-10-seoul-gugak-festival.md",
+        "src/content/posts/2026-06-11-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "d429b9fb78589f2c41ce36690eba6bd33b728647",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-10",
+      "authoredAt": "2026-06-10T21:24:46Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-10-Gwanak-Entrance-Support.md",
+      "src/content/posts/2026-06-10-hwasun-housing-extension.md",
+      "src/content/posts/2026-06-10-incheon-sports-discount.md",
+      "src/content/posts/2026-06-10-seoul-gugak-festival.md",
+      "src/content/posts/2026-06-11-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-11-choice-digital-2026-06-11.md",
+      "src/content/life/2026-06-11-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-06-11-incheon-restaurant-341506592.md",
+      "src/content/life/2026-06-11-seoul-restaurant-320882660.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-11-choice-digital-2026-06-11.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-11-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-06-11-incheon-restaurant-341506592.md",
+      "src/content/life/2026-06-11-seoul-restaurant-320882660.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-06-11-choice-digital-2026-06-11.md",
+      "src/content/life/2026-06-11-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-06-11-incheon-restaurant-341506592.md",
+      "src/content/life/2026-06-11-seoul-restaurant-320882660.md",
+      "src/content/posts/2026-06-10-Gwanak-Entrance-Support.md",
+      "src/content/posts/2026-06-10-hwasun-housing-extension.md",
+      "src/content/posts/2026-06-10-incheon-sports-discount.md",
+      "src/content/posts/2026-06-10-seoul-gugak-festival.md",
+      "src/content/posts/2026-06-11-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 348건",
+      "validation": "ok",
+      "anthropicUsage": "2652/662",
+      "markdown": {
+        "generated": 1,
+        "pending": 184,
+        "titles": [
+          "2025년 천사지원금 지급(2026년 천사지원금 지급 페이지에서 신청해 주시기 바랍니다)"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 617건",
+      "validation": "ok",
+      "anthropicUsage": "1472/1023",
+      "markdown": {
+        "generated": 2,
+        "pending": 409,
+        "titles": [
+          "화순군 만원임대주택 계약 연장",
+          "대구광역시 다자녀가정 상수도요금 감면"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 1건, 업데이트 189건, 총 260건",
+      "validation": "ok",
+      "anthropicUsage": "898/465",
+      "markdown": {
+        "generated": 1,
+        "pending": 197,
+        "titles": [
+          "실향민문화축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
