@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-05T00:00:00+09:00",
+  "updatedAtKst": "2026-06-11T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2797,6 +2797,63 @@
       "sourceId": "manual-choice-pet-life-2026-06-05",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-11",
+      "productId": "9568681083",
+      "productName": "독일 스마트 줌 실시간 AI 통역 안경 ai 통역 블루투스 안경 스마트 안경",
+      "brand": "독일",
+      "productGroupTokens": [
+        "실시간",
+        "ai",
+        "통역",
+        "안경",
+        "블루투스",
+        "digital"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-11-choice-digital-2026-06-11.md",
+      "sourceId": "manual-choice-digital-2026-06-11",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-11",
+      "productId": "7852115665",
+      "productName": "홈플래닛 탁상용 접이식 스마트폰 거치대  6.5x11x12.5~16.5 cm",
+      "brand": "홈플래닛",
+      "productGroupTokens": [
+        "탁상용",
+        "접이식",
+        "스마트폰",
+        "거치대",
+        "5x11x12",
+        "cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-11-choice-digital-2026-06-11.md",
+      "sourceId": "manual-choice-digital-2026-06-11",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-11",
+      "productId": "9296139964",
+      "productName": "샤오미 레드미 버즈 8 라이트 블루투스 이어폰, M2539E1, 화이트, 36시간, 액티브노이즈캔슬링(ANC), M2539E1, 화이트",
+      "brand": "샤오미",
+      "productGroupTokens": [
+        "레드미",
+        "버즈",
+        "라이트",
+        "블루투스",
+        "이어폰",
+        "m2539e1"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-11-choice-digital-2026-06-11.md",
+      "sourceId": "manual-choice-digital-2026-06-11",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
