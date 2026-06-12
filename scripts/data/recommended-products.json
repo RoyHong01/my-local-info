@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-12T00:00:00+09:00",
+  "updatedAtKst": "2026-06-13T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2911,6 +2911,63 @@
       "sourceId": "manual-choice-pet-life-2026-06-12",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-13",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 17C 포슬린, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-13",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-13",
+      "productId": "9568403096",
+      "productName": "대라 24시간 모공 커버 지속 포어 블러 워터프루프 스킨케어링 쿠션 12g SPF 50+ PA++++ 본품 리필 세트, 1개, 페어P (18~19호 추천)",
+      "brand": "대라",
+      "productGroupTokens": [
+        "24시간",
+        "모공",
+        "커버",
+        "지속",
+        "포어",
+        "블러"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-13",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-13",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-13",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
