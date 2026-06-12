@@ -1,0 +1,253 @@
+{
+  "reportDateKst": "2026-06-13",
+  "generatedAtUtc": "2026-06-12T21:18:25.882Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "27442688137",
+    "runNumber": 844,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/27442688137",
+    "runStartedAtUtc": "2026-06-12T20:59:00Z",
+    "headSha": "5602627d3db745419c806a984efdbcc99b68cb39"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://9c734f44.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 349건",
+        "subsidy": "신규 2건, 총 619건",
+        "festival": "신규 8건, 업데이트 187건, 총 268건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://5227730d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://bf0a8e60.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "eba99c41de82daa784a15a84ff576e07067ffe78",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-12",
+      "authoredAt": "2026-06-12T21:18:24Z",
+      "files": [
+        "src/content/life/2026-06-13-gyeonggi-restaurant-913357829.md",
+        "src/content/life/2026-06-13-incheon-restaurant-17481841.md",
+        "src/content/life/2026-06-13-seoul-restaurant-1926044933.md"
+      ]
+    },
+    {
+      "sha": "e0884b334ade993e872b29edb075b5b427dc85f8",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-12",
+      "authoredAt": "2026-06-12T21:14:13Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md"
+      ]
+    },
+    {
+      "sha": "44cbc3bde2919e1a2f41ed3a96179e3c5d948177",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-12",
+      "authoredAt": "2026-06-12T21:13:03Z",
+      "files": [
+        "src/content/posts/2026-06-12-GwangjinSeniorCard.md",
+        "src/content/posts/2026-06-12-choansan-hydrangea-festival.md",
+        "src/content/posts/2026-06-12-incheon-home-repair.md",
+        "src/content/posts/2026-06-12-siheung-student-subsidy.md",
+        "src/content/posts/2026-06-13-curation-subsidy.md",
+        "src/content/posts/2026-06-13-festival-versus-sejong-dano-gimje-music.md"
+      ]
+    },
+    {
+      "sha": "bb64c0e7b8ae9f8560bb7d3be6d115cabe31b095",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-12",
+      "authoredAt": "2026-06-12T21:02:40Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-12-choansan-hydrangea-festival.md",
+      "src/content/posts/2026-06-12-GwangjinSeniorCard.md",
+      "src/content/posts/2026-06-12-incheon-home-repair.md",
+      "src/content/posts/2026-06-12-siheung-student-subsidy.md",
+      "src/content/posts/2026-06-13-curation-subsidy.md",
+      "src/content/posts/2026-06-13-festival-versus-sejong-dano-gimje-music.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md",
+      "src/content/life/2026-06-13-gyeonggi-restaurant-913357829.md",
+      "src/content/life/2026-06-13-incheon-restaurant-17481841.md",
+      "src/content/life/2026-06-13-seoul-restaurant-1926044933.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-13-gyeonggi-restaurant-913357829.md",
+      "src/content/life/2026-06-13-incheon-restaurant-17481841.md",
+      "src/content/life/2026-06-13-seoul-restaurant-1926044933.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-06-13-choice-beauty-fashion-2026-06-13.md",
+      "src/content/life/2026-06-13-gyeonggi-restaurant-913357829.md",
+      "src/content/life/2026-06-13-incheon-restaurant-17481841.md",
+      "src/content/life/2026-06-13-seoul-restaurant-1926044933.md",
+      "src/content/posts/2026-06-12-choansan-hydrangea-festival.md",
+      "src/content/posts/2026-06-12-GwangjinSeniorCard.md",
+      "src/content/posts/2026-06-12-incheon-home-repair.md",
+      "src/content/posts/2026-06-12-siheung-student-subsidy.md",
+      "src/content/posts/2026-06-13-curation-subsidy.md",
+      "src/content/posts/2026-06-13-festival-versus-sejong-dano-gimje-music.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.55,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "1607/654",
+      "markdown": {
+        "generated": 1,
+        "pending": 184,
+        "titles": [
+          "인천 전세보증금반환보증 보증료 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 2건, 총 619건",
+      "validation": "ok",
+      "anthropicUsage": "2128/1432",
+      "markdown": {
+        "generated": 2,
+        "pending": 407,
+        "titles": [
+          "시흥시 관내 대학생 지원금",
+          "부산형 산후조리비 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 8건, 업데이트 187건, 총 268건",
+      "validation": "ok",
+      "anthropicUsage": "710/468",
+      "markdown": {
+        "generated": 1,
+        "pending": 203,
+        "titles": [
+          "2026 글로벌 크리에이터 아트페어"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
