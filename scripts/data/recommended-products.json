@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-13T00:00:00+09:00",
+  "updatedAtKst": "2026-06-14T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -2968,6 +2968,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-06-13",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-14",
+      "productId": "9359067629",
+      "productName": "언케니 브랜드 위키드 2쿼트 슬로우 쿠커 - 소형 주방 가전",
+      "brand": "언케니",
+      "productGroupTokens": [
+        "위키드",
+        "2쿼트",
+        "슬로우",
+        "쿠커",
+        "소형",
+        "주방"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-14-choice-home-appliance-furniture-2026-06-14.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-14",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-14",
+      "productId": "8853619237",
+      "productName": "가구 책상 서랍 수납장 2단 볼레일 2개 1조",
+      "brand": "가구",
+      "productGroupTokens": [
+        "책상",
+        "서랍",
+        "수납장",
+        "2단",
+        "볼레일",
+        "1조"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-14-choice-home-appliance-furniture-2026-06-14.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-14",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-14",
+      "productId": "9410051068",
+      "productName": "초소형 전자레인지 원룸 미니 소형 레트로 전자렌지 15L 사무실 편의점 소형 가전",
+      "brand": "초소형",
+      "productGroupTokens": [
+        "전자레인지",
+        "원룸",
+        "소형",
+        "레트로",
+        "전자렌지",
+        "15l"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-14-choice-home-appliance-furniture-2026-06-14.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-14",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
