@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-14T00:00:00+09:00",
+  "updatedAtKst": "2026-06-15T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3025,6 +3025,59 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-06-14",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-15",
+      "productId": "8288780037",
+      "productName": "trunature Vision Complex Lutein & Zeaxanthin 140정",
+      "brand": "trunature",
+      "productGroupTokens": [
+        "vision",
+        "complex",
+        "lutein",
+        "zeaxanthin",
+        "140정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-15-choice-health-2026-06-15.md",
+      "sourceId": "manual-choice-health-2026-06-15",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-15",
+      "productId": "7062943887",
+      "productName": "아임힐링 영국산 비타민C 3000 100포, 303.1g, 3개",
+      "brand": "아임힐링",
+      "productGroupTokens": [
+        "영국산",
+        "비타민c",
+        "100포",
+        "1g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-15-choice-health-2026-06-15.md",
+      "sourceId": "manual-choice-health-2026-06-15",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-15",
+      "productId": "9334963084",
+      "productName": "고려은단 비타민C 1000 + 쇼핑백",
+      "brand": "고려은단",
+      "productGroupTokens": [
+        "비타민c",
+        "쇼핑백",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-15-choice-health-2026-06-15.md",
+      "sourceId": "manual-choice-health-2026-06-15",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
