@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-15T00:00:00+09:00",
+  "updatedAtKst": "2026-06-16T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3078,6 +3078,63 @@
       "sourceId": "manual-choice-health-2026-06-15",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-06-16",
+      "productId": "8657884598",
+      "productName": "인슈퍼 큰이불 대형 빨래 건조대 세탁 무타공 3.7m~, ~5.2m, 스테인리스 스틸",
+      "brand": "인슈퍼",
+      "productGroupTokens": [
+        "큰이불",
+        "대형",
+        "빨래",
+        "건조대",
+        "세탁",
+        "무타공"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-16-choice-living-2026-06-16.md",
+      "sourceId": "manual-choice-living-2026-06-16",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-16",
+      "productId": "9503541461",
+      "productName": "올해브 물빠짐 3단 4단 욕실수납 선반 정리대, 화이트, 1개",
+      "brand": "올해브",
+      "productGroupTokens": [
+        "물빠짐",
+        "3단",
+        "4단",
+        "욕실수납",
+        "선반",
+        "정리대"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-16-choice-living-2026-06-16.md",
+      "sourceId": "manual-choice-living-2026-06-16",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-16",
+      "productId": "8687771994",
+      "productName": "허글리 8IN1 딥 클린 초고농축 캡슐 세탁세제 코튼캔디 향, 1개, 100개입",
+      "brand": "허글리",
+      "productGroupTokens": [
+        "8in1",
+        "클린",
+        "초고농축",
+        "캡슐",
+        "세탁세제",
+        "코튼캔디"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-16-choice-living-2026-06-16.md",
+      "sourceId": "manual-choice-living-2026-06-16",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
