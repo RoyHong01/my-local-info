@@ -1,0 +1,68 @@
+---
+title: "햇살 아래 머무는 이탈리안의 온도, 돈파스타"
+date: 2026-06-17
+summary: 분당에서 파스타가 생각나는 날, 깔끔한 양식 스팟을 찾는 분들을 위한 공간이에요. 데이트하기 좋은 분위기 속에서 취향이 담긴 한 접시를 마주하며 차분한 시간을 보내고 싶을 때 방문하기 좋아요.
+description: "평점 4.4가 증명하는 깔끔한 양식 스팟, 돈파스타에서 보내는 특별한 하루. 데이트하기 좋은 분위기와 정성스러운 파스타의 조화를 직접 경험해 보세요."
+category: 픽앤조이 맛집 탐방
+published_by: "auto" 
+tags: [맛집탐방, 경기, 경기, 파스타, 깔끔한 양식 스팟, 카카오맵]
+image: "https://i.pinimg.com/originals/c2/ae/19/c2ae19a81464867297bb9ff5dae431ce.jpg"
+source_id: "8256228"
+slug: "gyeonggi-restaurant-8256228"
+place_name: "돈파스타"
+place_address: "경기 성남시 분당구 황새울로342번길 11"
+place_locality: "경기"
+place_region: "KR"
+place_phone: "031-701-2155"
+place_url: "http://place.map.kakao.com/8256228"
+parking_info: "확인 필요"
+rating_value: "4.4"
+review_count: "416"
+---
+
+
+## 햇살 아래 머무는 이탈리안의 온도, 돈파스타
+
+분당의 거리를 걷다 보면 문득 정갈한 파스타 한 접시가 간절해지는 순간이 있어요. 화려함보다는 본연의 맛에 집중하며 차분한 대화를 나누기 좋은 곳을 찾고 계셨다면 이곳을 눈여겨보세요.
+
+깔끔한 양식 스팟으로 알려진 이곳은 들어서는 순간부터 편안한 분위기가 마음을 차분하게 만들어줘요. 복잡한 일상에서 잠시 벗어나 소중한 사람과 함께하기 좋은 공간으로 기억될 거예요.
+
+주말 데이트를 계획하고 있다면 이곳의 차분한 분위기가 더욱 빛을 발해요. 조명과 테이블 배치가 주는 안정감 덕분에 서로에게 온전히 집중하며 대화를 나누기에 적합하거든요.
+
+
+### 미각의 변주가 시작되는 곳
+
+
+이곳에서 마주하는 파스타는 재료 본연의 향을 살리는 데 집중해요. 한 입 머금었을 때 느껴지는 적당한 온도감과 깔끔한 풍미는 왜 많은 이들이 이곳을 다시 찾는지 짐작하게 해주죠.
+
+면의 익힘 정도 또한 세심하게 조절되어 입안에서 기분 좋게 맴돌아요. 소스와 면이 조화롭게 어우러지는 순간, 비로소 이곳만의 미학이 완성되는 기분이 들더라고요.
+
+### 취향이 머무는 가장 완벽한 한 점
+
+
+이곳의 진짜 매력은 정제된 분위기 속에서 즐기는 느긋한 식사 시간이에요. 바쁜 일상 속에서 잠시 멈춰 서서 맛의 결을 음미하는 것만으로도 충분한 휴식이 되어주죠.
+
+단순히 배를 채우는 시간을 넘어, 공간이 주는 온도와 맛이 어우러져 기억에 남는 한 페이지를 만들어내요. 계절의 변화를 담아낸 듯한 파스타 한 그릇이 주는 위로를 이곳에서 경험해보셨으면 해요.
+
+### 여운이 남는 마무리 한 접시
+
+
+식사를 마친 후에도 입안에 은은하게 남는 여운은 다음 방문을 기약하게 만들어요. 부담스럽지 않으면서도 깊이 있는 맛의 여정은 이곳을 다시 찾게 되는 가장 큰 이유 중 하나예요.
+
+분당에서 보낸 오늘 하루가 이곳의 파스타와 함께 조금 더 특별해졌기를 바라요. 온전히 나만의 취향으로 채워진 식탁에서 평온한 시간을 누려보세요.
+
+
+
+![돈파스타](https://places.googleapis.com/v1/places/ChIJJ6A4-QJYezURRrnTekOTlsk/photos/AaVGc3mc3SfhCHP5HK5L0kL4wuYrBbNTZir8l0jrxQsF7NJZ61XGvVmP728GVGzfZaa6pKkOenlAIS_ukujcPXAlMvdGuEcWa6Uj-NCfUvSFyOJGSe7b-2ZeK0Uhnn5zG3TH5LMocMWiEmsbXipP-Ygj4Vn8SxJVWamhzSUS46s1yl2af5uT7bD0KjbkBao0Wjk8JZOdumVnpNSHaA7p9UIBhQWbzXTVbItqeB-tY3WnFETHok6eYAZidlwJGTa4HqQNyFaOzX-i56shBQ8AXRGoR7z2hfFLp3WDm4pnJz5gyIbf9UayJCw7CWy6v94AkoVIxuw0s2dPP764wrJX_1eTeAjhPwR2bTK9UJrQ0gn0At8DAurxW02B-75xwFOh70itPqMwAlf9Cc1nkki0cnAdfmkwnS8FUO44wgE7lAgVSDkrYU6-ThZox_U99d5QPwEe/media?maxWidthPx=800&key=AIzaSyAupkJG-ky_zYK1QZ4niRgfT-eA-mfnr9o)
+
+## 방문 정보 한눈에
+
+- **상호명**: [돈파스타](http://place.map.kakao.com/8256228)
+- **주소**: 경기 성남시 분당구 황새울로342번길 11
+- **전화번호**: 031-701-2155
+- **주차**: 확인 필요
+- **이럴 때 체크하면 좋아요**: 주말 데이트를 위해 차분한 양식 스팟을 찾고 있을 때
+
+방문 전 체크: 인기 있는 시간대에는 대기 시간이 발생할 수 있으니 방문 전 예약 가능 여부를 확인하는 것이 좋아요. 주차 공간은 상황에 따라 변동될 수 있으니 대중교통 이용을 고려하거나 미리 주변 공영 주차장을 확인해보세요.
+
+- **에디터 한줄 평**: 재료의 본연의 맛을 살린 깔끔한 파스타를 맛볼 수 있는 곳이에요. 차분하고 정갈한 분위기 덕분에 주말 데이트 장소로 선택하기에 적절한 선택지가 되어줄 거예요.
