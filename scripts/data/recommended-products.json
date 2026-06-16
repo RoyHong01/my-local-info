@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-16T00:00:00+09:00",
+  "updatedAtKst": "2026-06-17T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3135,6 +3135,62 @@
       "sourceId": "manual-choice-living-2026-06-16",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-06-17",
+      "productId": "6273473241",
+      "productName": "키친아트 진공 포장기 KAJP-3030NK + 롤팩 15cm x 3m + 25cm x 3m 세트, KAJP-3030NK",
+      "brand": "키친아트",
+      "productGroupTokens": [
+        "진공",
+        "포장기",
+        "kajp",
+        "3030nk",
+        "롤팩",
+        "15cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-17-choice-kitchen-2026-06-17.md",
+      "sourceId": "manual-choice-kitchen-2026-06-17",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-17",
+      "productId": "8222210264",
+      "productName": "필립스 2000 시리즈 보이는 에어프라이어 4.2L, NA220/00, 블랙",
+      "brand": "필립스",
+      "productGroupTokens": [
+        "시리즈",
+        "보이는",
+        "에어프라이어",
+        "2l",
+        "na220",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-17-choice-kitchen-2026-06-17.md",
+      "sourceId": "manual-choice-kitchen-2026-06-17",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-17",
+      "productId": "8653399396",
+      "productName": "OYEAH 저소음 에어프라이어 5.0L 시각화 대용량, 블랙",
+      "brand": "OYEAH",
+      "productGroupTokens": [
+        "저소음",
+        "에어프라이어",
+        "0l",
+        "시각화",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-17-choice-kitchen-2026-06-17.md",
+      "sourceId": "manual-choice-kitchen-2026-06-17",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
