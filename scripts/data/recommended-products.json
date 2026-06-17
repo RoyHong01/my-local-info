@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-17T00:00:00+09:00",
+  "updatedAtKst": "2026-06-18T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3191,6 +3191,63 @@
       "sourceId": "manual-choice-kitchen-2026-06-17",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-06-18",
+      "productId": "9517050490",
+      "productName": "드라이비아 무선 리시버 2.4GHz 동글 블루투스 겸용 듀얼 마우스 2 in 1 DPI 스크롤 속도 변환 초경량 무소음 USB 충전식 에어 스마트 폰 아이패드, 스페이스실버, RGB DRMA1",
+      "brand": "드라이비아",
+      "productGroupTokens": [
+        "리시버",
+        "4ghz",
+        "동글",
+        "블루투스",
+        "겸용",
+        "듀얼"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-18-choice-digital-2026-06-18.md",
+      "sourceId": "manual-choice-digital-2026-06-18",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-18",
+      "productId": "7265236509",
+      "productName": "홈플래닛 탁상용 접이식 스마트폰 거치대  6.5x11x12.5~16.5 cm",
+      "brand": "홈플래닛",
+      "productGroupTokens": [
+        "탁상용",
+        "접이식",
+        "스마트폰",
+        "거치대",
+        "5x11x12",
+        "cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-18-choice-digital-2026-06-18.md",
+      "sourceId": "manual-choice-digital-2026-06-18",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-18",
+      "productId": "8123989532",
+      "productName": "팬웨스트 멀티 페어링 2.4, BT3.0, BT5.0 블루투스 무선 텐키리스 키보드 + 키스킨, 스틸 블루, BK384",
+      "brand": "팬웨스트",
+      "productGroupTokens": [
+        "멀티",
+        "페어링",
+        "bt3",
+        "bt5",
+        "블루투스",
+        "텐키리스"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-18-choice-digital-2026-06-18.md",
+      "sourceId": "manual-choice-digital-2026-06-18",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
