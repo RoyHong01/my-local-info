@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-18T00:00:00+09:00",
+  "updatedAtKst": "2026-06-20T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3248,6 +3248,63 @@
       "sourceId": "manual-choice-digital-2026-06-18",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-20",
+      "productId": "9187340574",
+      "productName": "2+1 출시하자마자 1위 퓨어그램 모공이별 딥클렌징폼 제주 그린티 저자극 폼클렌징 120ml, 3개, 120ml",
+      "brand": "21",
+      "productGroupTokens": [
+        "출시하자마자",
+        "1위",
+        "퓨어그램",
+        "모공이별",
+        "딥클렌징폼",
+        "제주"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-20-choice-beauty-fashion-2026-06-20.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-20",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-20",
+      "productId": "8302099604",
+      "productName": "셀리맥스 더 비타 A 레티날 샷 타이트닝 부스터, 15ml, 1개",
+      "brand": "셀리맥스",
+      "productGroupTokens": [
+        "비타",
+        "레티날",
+        "타이트닝",
+        "부스터",
+        "15ml",
+        "beauty"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-20-choice-beauty-fashion-2026-06-20.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-20",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-20",
+      "productId": "7839467659",
+      "productName": "미쟝센 살롱10 단백질 에센스 헤어팩 손상 모발용, 990ml, 1개",
+      "brand": "미쟝센",
+      "productGroupTokens": [
+        "살롱10",
+        "단백질",
+        "에센스",
+        "헤어팩",
+        "손상",
+        "모발용"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-20-choice-beauty-fashion-2026-06-20.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-20",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
