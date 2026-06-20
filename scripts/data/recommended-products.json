@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-20T00:00:00+09:00",
+  "updatedAtKst": "2026-06-21T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3305,6 +3305,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-06-20",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-21",
+      "productId": "8853619237",
+      "productName": "가구 책상 서랍 수납장 2단 볼레일 2개 1조",
+      "brand": "가구",
+      "productGroupTokens": [
+        "책상",
+        "서랍",
+        "수납장",
+        "2단",
+        "볼레일",
+        "1조"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-21-choice-home-appliance-furniture-2026-06-21.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-21",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-21",
+      "productId": "9454706722",
+      "productName": "채움가구 국내제작 LPM E0 핏인 슬라이딩 주방 슬림 틈새 수납장 150 그레이 방문설치, 그레이",
+      "brand": "채움가구",
+      "productGroupTokens": [
+        "국내제작",
+        "lpm",
+        "e0",
+        "핏인",
+        "슬라이딩",
+        "주방"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-21-choice-home-appliance-furniture-2026-06-21.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-21",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-21",
+      "productId": "8279485618",
+      "productName": "세스코 워터 스마트핏 미니 정수기 방문설치, EW-210",
+      "brand": "세스코",
+      "productGroupTokens": [
+        "워터",
+        "스마트핏",
+        "정수기",
+        "방문설치",
+        "ew",
+        "home"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-21-choice-home-appliance-furniture-2026-06-21.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-21",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
