@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-21T00:00:00+09:00",
+  "updatedAtKst": "2026-06-22T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3362,6 +3362,63 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-06-21",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-22",
+      "productId": "8288780037",
+      "productName": "trunature Vision Complex Lutein & Zeaxanthin 140정",
+      "brand": "trunature",
+      "productGroupTokens": [
+        "vision",
+        "complex",
+        "lutein",
+        "zeaxanthin",
+        "140정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-22-choice-health-2026-06-22.md",
+      "sourceId": "manual-choice-health-2026-06-22",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-22",
+      "productId": "6453435866",
+      "productName": "Nutricost Zeaxanthin with Lutein 뉴트리코스트 지아잔틴 루테인 카르티노이드 120캡슐 3통, 120정, 3개",
+      "brand": "Nutricost",
+      "productGroupTokens": [
+        "zeaxanthin",
+        "with",
+        "lutein",
+        "뉴트리코스트",
+        "지아잔틴",
+        "루테인"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-22-choice-health-2026-06-22.md",
+      "sourceId": "manual-choice-health-2026-06-22",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-22",
+      "productId": "9599229597",
+      "productName": "뉴트리하루 퍼스트픽 데일리 멀티비타민 14in1 올인원 영양제 식약청 인증, 1개, 300정",
+      "brand": "뉴트리하루",
+      "productGroupTokens": [
+        "퍼스트픽",
+        "멀티비타민",
+        "14in1",
+        "올인원",
+        "영양제",
+        "식약청"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-22-choice-health-2026-06-22.md",
+      "sourceId": "manual-choice-health-2026-06-22",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
