@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-22T00:00:00+09:00",
+  "updatedAtKst": "2026-06-23T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3419,6 +3419,62 @@
       "sourceId": "manual-choice-health-2026-06-22",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-06-23",
+      "productId": "9546495464",
+      "productName": "클린생활 욕실 화장실 청소도구 7종",
+      "brand": "클린생활",
+      "productGroupTokens": [
+        "욕실",
+        "화장실",
+        "청소도구",
+        "7종",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-23-choice-living-2026-06-23.md",
+      "sourceId": "manual-choice-living-2026-06-23",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-23",
+      "productId": "9535410575",
+      "productName": "뉴하 스테이모어 무타공 접착식 화장실 욕실선반 정리대, 2개, 블랙",
+      "brand": "뉴하",
+      "productGroupTokens": [
+        "스테이모어",
+        "무타공",
+        "접착식",
+        "화장실",
+        "욕실선반",
+        "정리대"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-23-choice-living-2026-06-23.md",
+      "sourceId": "manual-choice-living-2026-06-23",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-23",
+      "productId": "8687771994",
+      "productName": "허글리 8IN1 딥 클린 초고농축 캡슐 세탁세제 코튼캔디 향, 1개, 100개입",
+      "brand": "허글리",
+      "productGroupTokens": [
+        "8in1",
+        "클린",
+        "초고농축",
+        "캡슐",
+        "세탁세제",
+        "코튼캔디"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-23-choice-living-2026-06-23.md",
+      "sourceId": "manual-choice-living-2026-06-23",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
