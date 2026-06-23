@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-23T00:00:00+09:00",
+  "updatedAtKst": "2026-06-24T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3475,6 +3475,60 @@
       "sourceId": "manual-choice-living-2026-06-23",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-06-24",
+      "productId": "6273473241",
+      "productName": "키친아트 진공 포장기 KAJP-3030NK + 롤팩 15cm x 3m + 25cm x 3m 세트, KAJP-3030NK",
+      "brand": "키친아트",
+      "productGroupTokens": [
+        "진공",
+        "포장기",
+        "kajp",
+        "3030nk",
+        "롤팩",
+        "15cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md",
+      "sourceId": "manual-choice-kitchen-2026-06-24",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-24",
+      "productId": "8616394050",
+      "productName": "Fanood 316스텐 프라이팬, 1개, 28cm",
+      "brand": "Fanood",
+      "productGroupTokens": [
+        "316스텐",
+        "프라이팬",
+        "28cm",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md",
+      "sourceId": "manual-choice-kitchen-2026-06-24",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-06-24",
+      "productId": "8188003115",
+      "productName": "대웅모닝컴 에어프라이어 3.5리터 DWAF-9135B, DWAF-9135B, 블랙",
+      "brand": "대웅모닝컴",
+      "productGroupTokens": [
+        "에어프라이어",
+        "5리터",
+        "dwaf",
+        "9135b",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md",
+      "sourceId": "manual-choice-kitchen-2026-06-24",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
