@@ -1,0 +1,253 @@
+{
+  "reportDateKst": "2026-06-24",
+  "generatedAtUtc": "2026-06-23T21:58:55.874Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28056580297",
+    "runNumber": 855,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28056580297",
+    "runStartedAtUtc": "2026-06-23T20:57:59Z",
+    "headSha": "d76d1bc00732d12c240406ed2b504bae51b73b55"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://ae6a9a00.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 349건",
+        "subsidy": "신규 1건, 총 617건",
+        "festival": "신규 3건, 업데이트 159건, 총 289건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://e96289f0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://715633c4.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "592ef98fcd4a304be5cf82a6a2ffddb1ef086d23",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-23",
+      "authoredAt": "2026-06-23T21:58:54Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-06-24-bucheon-restaurant-1399350742.md",
+        "src/content/life/2026-06-24-seoul-restaurant-90725902.md",
+        "src/content/life/2026-06-24-seoul-restaurant-977993220.md"
+      ]
+    },
+    {
+      "sha": "c1aee4cb3a5f0040f47644b52909c10033de11ee",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-23",
+      "authoredAt": "2026-06-23T21:12:41Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md"
+      ]
+    },
+    {
+      "sha": "86570578f0c1d1bb97c6ba5071aad3c8b6f27df1",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-23",
+      "authoredAt": "2026-06-23T21:11:30Z",
+      "files": [
+        "src/content/posts/2026-06-23-ClimateCard.md",
+        "src/content/posts/2026-06-23-gangneung-beach-beer-festival.md",
+        "src/content/posts/2026-06-23-incheon-renewable-energy.md",
+        "src/content/posts/2026-06-23-sejong-intern.md",
+        "src/content/posts/2026-06-24-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "e9cd0a91ae715dce5e71db2ee70021a385bee567",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-23",
+      "authoredAt": "2026-06-23T21:00:42Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-23-ClimateCard.md",
+      "src/content/posts/2026-06-23-gangneung-beach-beer-festival.md",
+      "src/content/posts/2026-06-23-incheon-renewable-energy.md",
+      "src/content/posts/2026-06-23-sejong-intern.md",
+      "src/content/posts/2026-06-24-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-24-bucheon-restaurant-1399350742.md",
+      "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md",
+      "src/content/life/2026-06-24-seoul-restaurant-90725902.md",
+      "src/content/life/2026-06-24-seoul-restaurant-977993220.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-24-bucheon-restaurant-1399350742.md",
+      "src/content/life/2026-06-24-seoul-restaurant-90725902.md",
+      "src/content/life/2026-06-24-seoul-restaurant-977993220.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-06-24-bucheon-restaurant-1399350742.md",
+      "src/content/life/2026-06-24-choice-kitchen-2026-06-24.md",
+      "src/content/life/2026-06-24-seoul-restaurant-90725902.md",
+      "src/content/life/2026-06-24-seoul-restaurant-977993220.md",
+      "src/content/posts/2026-06-23-ClimateCard.md",
+      "src/content/posts/2026-06-23-gangneung-beach-beer-festival.md",
+      "src/content/posts/2026-06-23-incheon-renewable-energy.md",
+      "src/content/posts/2026-06-23-sejong-intern.md",
+      "src/content/posts/2026-06-24-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.99,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "1958/663",
+      "markdown": {
+        "generated": 1,
+        "pending": 173,
+        "titles": [
+          "미추홀구 공영주차장 이용요금 감면"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 617건",
+      "validation": "ok",
+      "anthropicUsage": "2253/990",
+      "markdown": {
+        "generated": 2,
+        "pending": 389,
+        "titles": [
+          "세종시 청년 행정인턴",
+          "남구 입학준비금(교복구입비) 지원 사업"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 159건, 총 289건",
+      "validation": "ok",
+      "anthropicUsage": "879/473",
+      "markdown": {
+        "generated": 1,
+        "pending": 214,
+        "titles": [
+          "마토예술제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
