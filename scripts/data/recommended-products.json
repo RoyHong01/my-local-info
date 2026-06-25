@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-25T00:00:00+09:00",
+  "updatedAtKst": "2026-06-26T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3586,6 +3586,63 @@
       "sourceId": "manual-choice-digital-2026-06-25",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-06-26",
+      "productId": "9597348454",
+      "productName": "파미나 N&D 엔세스트럴 DOG 닭고기&석류 2.5kg MINI 알갱이 + 닭츄 간식 시리즈 1P(랜덤)",
+      "brand": "파미나",
+      "productGroupTokens": [
+        "엔세스트럴",
+        "dog",
+        "닭고기",
+        "석류",
+        "5kg",
+        "mini"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-26-choice-pet-life-2026-06-26.md",
+      "sourceId": "manual-choice-pet-life-2026-06-26",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-26",
+      "productId": "8129382339",
+      "productName": "졸리마켓 강아지 대용량 육포, 오리우유껌, 1kg, 1개",
+      "brand": "졸리마켓",
+      "productGroupTokens": [
+        "강아지",
+        "육포",
+        "오리우유껌",
+        "1kg",
+        "pet",
+        "life"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-26-choice-pet-life-2026-06-26.md",
+      "sourceId": "manual-choice-pet-life-2026-06-26",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-26",
+      "productId": "9262913671",
+      "productName": "MOMOPET 강아지 코끼리 배변패드 레몬향, 1개, 200개입",
+      "brand": "MOMOPET",
+      "productGroupTokens": [
+        "강아지",
+        "코끼리",
+        "배변패드",
+        "레몬향",
+        "200개입",
+        "pet"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-26-choice-pet-life-2026-06-26.md",
+      "sourceId": "manual-choice-pet-life-2026-06-26",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
