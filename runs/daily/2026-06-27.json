@@ -1,0 +1,256 @@
+{
+  "reportDateKst": "2026-06-27",
+  "generatedAtUtc": "2026-06-26T21:28:02.756Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28263395958",
+    "runNumber": 858,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28263395958",
+    "runStartedAtUtc": "2026-06-26T20:27:06Z",
+    "headSha": "8998a55a3163c1c260dcfe716468227abda5cf2e"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0b0eba1a.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 349건",
+        "subsidy": "신규 0건, 총 617건",
+        "festival": "신규 1건, 업데이트 163건, 총 294건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d2883a00.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://919e9f52.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "06351c9fadc051d66bd36fec105719d593e96019",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-26",
+      "authoredAt": "2026-06-26T21:28:01Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-06-27-seoul-restaurant-1426286680.md",
+        "src/content/life/2026-06-27-seoul-restaurant-1492992408.md",
+        "src/content/life/2026-06-27-seoul-restaurant-722179655.md"
+      ]
+    },
+    {
+      "sha": "6ff68fbd186c5562da472f3c3461d8348ea5cc87",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-26",
+      "authoredAt": "2026-06-26T20:41:36Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md"
+      ]
+    },
+    {
+      "sha": "bb8ad9f82e8f5c696f6e1450e4dca10290662808",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-26",
+      "authoredAt": "2026-06-26T20:40:24Z",
+      "files": [
+        "src/content/posts/2026-06-26-busannamgu-book-support.md",
+        "src/content/posts/2026-06-26-daegu-chimac-festival.md",
+        "src/content/posts/2026-06-26-gwangjin-legal-consulting.md",
+        "src/content/posts/2026-06-26-incheon-english-support.md",
+        "src/content/posts/2026-06-27-curation-subsidy.md",
+        "src/content/posts/2026-06-27-festival-versus-gyeongsan-cafe-jeju-forest.md"
+      ]
+    },
+    {
+      "sha": "5eb5b30d85e0740a20d55c16020f2f707553cd23",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-26",
+      "authoredAt": "2026-06-26T20:29:28Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 15,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-26-busannamgu-book-support.md",
+      "src/content/posts/2026-06-26-daegu-chimac-festival.md",
+      "src/content/posts/2026-06-26-gwangjin-legal-consulting.md",
+      "src/content/posts/2026-06-26-incheon-english-support.md",
+      "src/content/posts/2026-06-27-curation-subsidy.md",
+      "src/content/posts/2026-06-27-festival-versus-gyeongsan-cafe-jeju-forest.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md",
+      "src/content/life/2026-06-27-seoul-restaurant-1426286680.md",
+      "src/content/life/2026-06-27-seoul-restaurant-1492992408.md",
+      "src/content/life/2026-06-27-seoul-restaurant-722179655.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-27-seoul-restaurant-1426286680.md",
+      "src/content/life/2026-06-27-seoul-restaurant-1492992408.md",
+      "src/content/life/2026-06-27-seoul-restaurant-722179655.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md",
+      "src/content/life/2026-06-27-seoul-restaurant-1426286680.md",
+      "src/content/life/2026-06-27-seoul-restaurant-1492992408.md",
+      "src/content/life/2026-06-27-seoul-restaurant-722179655.md",
+      "src/content/posts/2026-06-26-busannamgu-book-support.md",
+      "src/content/posts/2026-06-26-daegu-chimac-festival.md",
+      "src/content/posts/2026-06-26-gwangjin-legal-consulting.md",
+      "src/content/posts/2026-06-26-incheon-english-support.md",
+      "src/content/posts/2026-06-27-curation-subsidy.md",
+      "src/content/posts/2026-06-27-festival-versus-gyeongsan-cafe-jeju-forest.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.74,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "1438/766",
+      "markdown": {
+        "generated": 1,
+        "pending": 170,
+        "titles": [
+          "영종·용유·북도면 지역주민 영종·인천대교 통행료 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 617건",
+      "validation": "ok",
+      "anthropicUsage": "2331/1268",
+      "markdown": {
+        "generated": 2,
+        "pending": 383,
+        "titles": [
+          "양주시 초등학생 입학축하금 지원",
+          "충주시 다자녀 가정 입학지원금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 1건, 업데이트 163건, 총 294건",
+      "validation": "ok",
+      "anthropicUsage": "828/448",
+      "markdown": {
+        "generated": 1,
+        "pending": 216,
+        "titles": [
+          "숲으로 오라"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
