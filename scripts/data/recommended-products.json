@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-26T00:00:00+09:00",
+  "updatedAtKst": "2026-06-27T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3643,6 +3643,63 @@
       "sourceId": "manual-choice-pet-life-2026-06-26",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-06-27",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 17C 포슬린, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-27",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-27",
+      "productId": "9442036464",
+      "productName": "[홈쇼핑완판템] 전인화의 비오진 알부민 멜라 리셋 톤업 선 크림 SPF50+ PA++++, 2개, 50ml",
+      "brand": "전인화의",
+      "productGroupTokens": [
+        "홈쇼핑완판템",
+        "비오진",
+        "알부민",
+        "멜라",
+        "리셋",
+        "톤업"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-27",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-27",
+      "productId": "8059631632",
+      "productName": "지베르니 밀착 커버 쿠션 파운데이션 본품 12g + 리필 12g 세트, 21호 라이트 베이지, 1개",
+      "brand": "지베르니",
+      "productGroupTokens": [
+        "밀착",
+        "커버",
+        "쿠션",
+        "파운데이션",
+        "12g",
+        "21호"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-27-choice-beauty-fashion-2026-06-27.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-06-27",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
