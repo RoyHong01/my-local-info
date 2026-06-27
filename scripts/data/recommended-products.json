@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-27T00:00:00+09:00",
+  "updatedAtKst": "2026-06-28T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3700,6 +3700,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-06-27",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-06-28",
+      "productId": "9302089291",
+      "productName": "모듈 가구 미드센추리 거실 침실 수납장 협탁, 1개, 흰색",
+      "brand": "모듈",
+      "productGroupTokens": [
+        "가구",
+        "미드센추리",
+        "거실",
+        "침실",
+        "수납장",
+        "협탁"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-28-choice-home-appliance-furniture-2026-06-28.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-28",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-28",
+      "productId": "8853619237",
+      "productName": "가구 책상 서랍 수납장 2단 볼레일 2개 1조",
+      "brand": "가구",
+      "productGroupTokens": [
+        "책상",
+        "서랍",
+        "수납장",
+        "2단",
+        "볼레일",
+        "1조"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-28-choice-home-appliance-furniture-2026-06-28.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-28",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-28",
+      "productId": "8530585752",
+      "productName": "마루오피스_ 소품 장식물 가구 가전제품 미끄러짐 긁힘 소음방지 충격흡수 1cm/2cm/2.7cm EVA 진동방지 패드",
+      "brand": "마루오피스",
+      "productGroupTokens": [
+        "소품",
+        "장식물",
+        "가구",
+        "가전제품",
+        "미끄러짐",
+        "긁힘"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-28-choice-home-appliance-furniture-2026-06-28.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-06-28",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
