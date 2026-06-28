@@ -1,0 +1,245 @@
+{
+  "reportDateKst": "2026-06-29",
+  "generatedAtUtc": "2026-06-28T21:03:54.449Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28334399335",
+    "runNumber": 860,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28334399335",
+    "runStartedAtUtc": "2026-06-28T20:06:05Z",
+    "headSha": "c5802ad4471ac8e77aab7e944a2fb874fc7aa466"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://3f251add.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 349건",
+        "subsidy": "신규 0건, 총 616건",
+        "festival": "신규 0건, 업데이트 162건, 총 294건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://8080f8d8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://a8de0344.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "0f1256c2e704472c43e8116978eaca8ff95a13f9",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-28",
+      "authoredAt": "2026-06-28T21:03:53Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-06-29-seoul-restaurant-1040119941.md"
+      ]
+    },
+    {
+      "sha": "a9f72c720853f5cb901274135df1fbb0105d5e95",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-28",
+      "authoredAt": "2026-06-28T20:20:14Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-06-29-choice-health-2026-06-29.md"
+      ]
+    },
+    {
+      "sha": "7036421eec0e38ec5a753f75891891fc60b4102a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-28",
+      "authoredAt": "2026-06-28T20:19:03Z",
+      "files": [
+        "src/content/posts/2026-06-28-Nseoultower-nightwalk.md",
+        "src/content/posts/2026-06-28-geumjeong-uniform-support.md",
+        "src/content/posts/2026-06-28-gwangjin-welfare-support.md",
+        "src/content/posts/2026-06-28-incheon-transport-support.md",
+        "src/content/posts/2026-06-29-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "05e628a992bb1c95f423a6bf95127b2a3a036f36",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-28",
+      "authoredAt": "2026-06-28T20:08:11Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-28-geumjeong-uniform-support.md",
+      "src/content/posts/2026-06-28-gwangjin-welfare-support.md",
+      "src/content/posts/2026-06-28-incheon-transport-support.md",
+      "src/content/posts/2026-06-28-Nseoultower-nightwalk.md",
+      "src/content/posts/2026-06-29-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-06-29-choice-health-2026-06-29.md",
+      "src/content/life/2026-06-29-seoul-restaurant-1040119941.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-06-29-choice-health-2026-06-29.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-06-29-seoul-restaurant-1040119941.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-06-29-choice-health-2026-06-29.md",
+      "src/content/life/2026-06-29-seoul-restaurant-1040119941.md",
+      "src/content/posts/2026-06-28-geumjeong-uniform-support.md",
+      "src/content/posts/2026-06-28-gwangjin-welfare-support.md",
+      "src/content/posts/2026-06-28-incheon-transport-support.md",
+      "src/content/posts/2026-06-28-Nseoultower-nightwalk.md",
+      "src/content/posts/2026-06-29-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.76,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "544/489",
+      "markdown": {
+        "generated": 1,
+        "pending": 168,
+        "titles": [
+          "안심폰 지원사업"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 616건",
+      "validation": "ok",
+      "anthropicUsage": "1957/1318",
+      "markdown": {
+        "generated": 2,
+        "pending": 379,
+        "titles": [
+          "미래두배 청년통장",
+          "임신축하금 지원/출산지원금 지원(만안구)"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 162건, 총 294건",
+      "validation": "ok",
+      "anthropicUsage": "778/496",
+      "markdown": {
+        "generated": 1,
+        "pending": 214,
+        "titles": [
+          "강진수국길축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
