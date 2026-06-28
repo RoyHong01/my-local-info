@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-28T00:00:00+09:00",
+  "updatedAtKst": "2026-06-29T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3757,6 +3757,61 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-06-28",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-06-29",
+      "productId": "6714237457",
+      "productName": "Now Foods - Lutein & Zeaxanthin 나우푸드 루테인 앤 제아잔틴 60소프트젤 2팩",
+      "brand": "Now",
+      "productGroupTokens": [
+        "foods",
+        "lutein",
+        "zeaxanthin",
+        "나우푸드",
+        "루테인",
+        "제아잔틴"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-29-choice-health-2026-06-29.md",
+      "sourceId": "manual-choice-health-2026-06-29",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-29",
+      "productId": "7311465993",
+      "productName": "뉴트리디데이 프리미엄 멀티비타민 골드, 90정, 2개",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "멀티비타민",
+        "골드",
+        "90정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-29-choice-health-2026-06-29.md",
+      "sourceId": "manual-choice-health-2026-06-29",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-06-29",
+      "productId": "7863647494",
+      "productName": "경남제약 퓨어 비타민C 3000 고함량 90포, 270g, 3개",
+      "brand": "경남제약",
+      "productGroupTokens": [
+        "퓨어",
+        "비타민c",
+        "고함량",
+        "90포",
+        "270g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-29-choice-health-2026-06-29.md",
+      "sourceId": "manual-choice-health-2026-06-29",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
