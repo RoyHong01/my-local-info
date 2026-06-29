@@ -1,6 +1,49 @@
 {
   "reports": [
     {
+      "date": "2026-06-30",
+      "runId": "28401554843",
+      "runNumber": 861,
+      "runAttempt": 1,
+      "eventName": "schedule",
+      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28401554843",
+      "stageStatuses": [
+        {
+          "key": "stage1-data",
+          "status": "success"
+        },
+        {
+          "key": "stage2-blog",
+          "status": "success"
+        },
+        {
+          "key": "stage3-life",
+          "status": "success"
+        }
+      ],
+      "generatedBlogCount": 5,
+      "generatedLifeCount": 4,
+      "generatedChoiceCount": 1,
+      "generatedRestaurantCount": 3,
+      "publishedByAutoCount": 9,
+      "publishedByManualCount": 0,
+      "publishedByUnknownCount": 0,
+      "choiceRelaxedFallbackAppliedCount": 0,
+      "choiceAppliedMinRating": 4.5,
+      "restaurantRecollectPerformed": true,
+      "restaurantCacheHit": 0,
+      "restaurantCacheMiss": 150,
+      "restaurantGoogleCalled": 150,
+      "totalChangedFiles": 14,
+      "blogBudgetEnabled": true,
+      "blogBudgetStopped": false,
+      "blogBudgetLimitKrw": 500,
+      "blogEstimatedCostKrw": 9.85,
+      "midImageInsertedCount": 1,
+      "midImageOmittedCount": 0,
+      "generatedAtUtc": "2026-06-29T21:48:39.180Z"
+    },
+    {
       "date": "2026-06-29",
       "runId": "28334399335",
       "runNumber": 860,
@@ -3712,36 +3755,6 @@
       "blogBudgetLimitKrw": 500,
       "blogEstimatedCostKrw": 8.22,
       "generatedAtUtc": "2026-04-02T00:01:28.130Z"
-    },
-    {
-      "date": "2026-04-02",
-      "runId": "23855469636",
-      "runNumber": 309,
-      "runAttempt": 1,
-      "eventName": "workflow_dispatch",
-      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/23855469636",
-      "stageStatuses": [
-        {
-          "key": "stage1-data",
-          "status": "success"
-        },
-        {
-          "key": "stage2-blog",
-          "status": "skipped"
-        },
-        {
-          "key": "stage3-life",
-          "status": "skipped"
-        }
-      ],
-      "generatedBlogCount": 0,
-      "generatedLifeCount": 0,
-      "totalChangedFiles": 0,
-      "blogBudgetEnabled": false,
-      "blogBudgetStopped": false,
-      "blogBudgetLimitKrw": 0,
-      "blogEstimatedCostKrw": 0,
-      "generatedAtUtc": "2026-04-01T15:04:37.491Z"
     }
   ]
 }
