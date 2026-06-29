@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-29T00:00:00+09:00",
+  "updatedAtKst": "2026-06-30T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3812,6 +3812,62 @@
       "sourceId": "manual-choice-health-2026-06-29",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-06-30",
+      "productId": "9605724776",
+      "productName": "베이제 간편 탈부착 자동 클립형 평판걸레 일회용 세안타월 호환 청소도구 LTB-01",
+      "brand": "베이제",
+      "productGroupTokens": [
+        "간편",
+        "탈부착",
+        "자동",
+        "클립형",
+        "평판걸레",
+        "일회용"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-30-choice-living-2026-06-30.md",
+      "sourceId": "manual-choice-living-2026-06-30",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-30",
+      "productId": "9560864708",
+      "productName": "온버터 다용도 욕실 수납 정리함, 10개, 반투명",
+      "brand": "온버터",
+      "productGroupTokens": [
+        "다용도",
+        "욕실",
+        "수납",
+        "정리함",
+        "10개",
+        "반투명"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-30-choice-living-2026-06-30.md",
+      "sourceId": "manual-choice-living-2026-06-30",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-06-30",
+      "productId": "9307205794",
+      "productName": "아쿠아픽 구강세정기 클리닝정, 36개, AQ-10",
+      "brand": "아쿠아픽",
+      "productGroupTokens": [
+        "구강세정기",
+        "클리닝정",
+        "36개",
+        "aq",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-06-30-choice-living-2026-06-30.md",
+      "sourceId": "manual-choice-living-2026-06-30",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
