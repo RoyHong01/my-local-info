@@ -1,0 +1,245 @@
+{
+  "reportDateKst": "2026-07-01",
+  "generatedAtUtc": "2026-06-30T21:50:33.925Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28475012010",
+    "runNumber": 862,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28475012010",
+    "runStartedAtUtc": "2026-06-30T20:51:13Z",
+    "headSha": "fe978104b02ca34311b1b20e414eac0a5876eef9"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://af6d4061.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 349건",
+        "subsidy": "신규 0건, 총 616건",
+        "festival": "신규 4건, 업데이트 159건, 총 299건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://649b032d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://b6704edd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "a9b3086d6d37b05af38fd4cdf4083a75a1987843",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-06-30",
+      "authoredAt": "2026-06-30T21:50:32Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-01-bucheon-restaurant-647670913.md"
+      ]
+    },
+    {
+      "sha": "709a768184d549fe062b4454cd617806618add6f",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-06-30",
+      "authoredAt": "2026-06-30T21:06:26Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md"
+      ]
+    },
+    {
+      "sha": "d51ae43287235f62d687da9b9b617df1ec1eda23",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-06-30",
+      "authoredAt": "2026-06-30T21:05:15Z",
+      "files": [
+        "src/content/posts/2026-06-30-SeochoMentalHealth.md",
+        "src/content/posts/2026-06-30-busanbrandfesta.md",
+        "src/content/posts/2026-06-30-emergency-safety-service.md",
+        "src/content/posts/2026-06-30-suyeong-youth-mileage.md",
+        "src/content/posts/2026-07-01-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "85d8854c81c4266302e762f750e4815b846b3f5d",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-06-30",
+      "authoredAt": "2026-06-30T20:53:45Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-06-30-emergency-safety-service.md",
+      "src/content/posts/2026-06-30-SeochoMentalHealth.md",
+      "src/content/posts/2026-06-30-suyeong-youth-mileage.md",
+      "src/content/posts/2026-07-01-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-01-bucheon-restaurant-647670913.md",
+      "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-01-bucheon-restaurant-647670913.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-01-bucheon-restaurant-647670913.md",
+      "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md",
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-06-30-emergency-safety-service.md",
+      "src/content/posts/2026-06-30-SeochoMentalHealth.md",
+      "src/content/posts/2026-06-30-suyeong-youth-mileage.md",
+      "src/content/posts/2026-07-01-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.51,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "764/535",
+      "markdown": {
+        "generated": 1,
+        "pending": 166,
+        "titles": [
+          "미추홀구 65세 이상 어르신 대상포진 예방접종 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 616건",
+      "validation": "ok",
+      "anthropicUsage": "2198/1058",
+      "markdown": {
+        "generated": 2,
+        "pending": 377,
+        "titles": [
+          "초·중·고 신입생 입학준비금 지원",
+          "서민층 가스시설 개선"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 159건, 총 299건",
+      "validation": "ok",
+      "anthropicUsage": "837/515",
+      "markdown": {
+        "generated": 1,
+        "pending": 219,
+        "titles": [
+          "강주해바라기 축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
