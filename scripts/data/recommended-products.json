@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-06-30T00:00:00+09:00",
+  "updatedAtKst": "2026-07-01T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3868,6 +3868,63 @@
       "sourceId": "manual-choice-living-2026-06-30",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-07-01",
+      "productId": "8820731803",
+      "productName": "5단 전자레인지 선반 주방 수납 선반 철제 수납장 스테인리스 랙, 백색",
+      "brand": "5단",
+      "productGroupTokens": [
+        "전자레인지",
+        "선반",
+        "주방",
+        "수납",
+        "철제",
+        "수납장"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md",
+      "sourceId": "manual-choice-kitchen-2026-07-01",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-01",
+      "productId": "9237250868",
+      "productName": "리빙픽 철제 이동식 트롤리 주방 정리대 수납 카트 회전 수납 선반",
+      "brand": "리빙픽",
+      "productGroupTokens": [
+        "철제",
+        "이동식",
+        "트롤리",
+        "주방",
+        "정리대",
+        "수납"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md",
+      "sourceId": "manual-choice-kitchen-2026-07-01",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-01",
+      "productId": "6273473241",
+      "productName": "키친아트 진공 포장기 KAJP-3030NK + 롤팩 15cm x 3m + 25cm x 3m 세트, KAJP-3030NK",
+      "brand": "키친아트",
+      "productGroupTokens": [
+        "진공",
+        "포장기",
+        "kajp",
+        "3030nk",
+        "롤팩",
+        "15cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-01-choice-kitchen-2026-07-01.md",
+      "sourceId": "manual-choice-kitchen-2026-07-01",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
