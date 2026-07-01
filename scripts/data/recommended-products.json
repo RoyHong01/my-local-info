@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-01T00:00:00+09:00",
+  "updatedAtKst": "2026-07-02T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3925,6 +3925,63 @@
       "sourceId": "manual-choice-kitchen-2026-07-01",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-07-02",
+      "productId": "9517050490",
+      "productName": "드라이비아 무선 리시버 2.4GHz 동글 블루투스 겸용 듀얼 마우스 2 in 1 DPI 스크롤 속도 변환 초경량 무소음 USB 충전식 에어 스마트 폰 아이패드, 그레이, RGB DRMA1",
+      "brand": "드라이비아",
+      "productGroupTokens": [
+        "리시버",
+        "4ghz",
+        "동글",
+        "블루투스",
+        "겸용",
+        "듀얼"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-02-choice-digital-2026-07-02.md",
+      "sourceId": "manual-choice-digital-2026-07-02",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-02",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 보조배터리 맥세이프 무선충전 고속충전 qi2 기내용 아이폰 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "보조배터리",
+        "맥세이프"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-02-choice-digital-2026-07-02.md",
+      "sourceId": "manual-choice-digital-2026-07-02",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-02",
+      "productId": "8618993204",
+      "productName": "NICESUN 미니 블루투스 휴대폰 삼각대, 스마트폰/카메라/고프로 삼각대 셀카봉, 71cm, P06, p06, 블랙, 1개",
+      "brand": "NICESUN",
+      "productGroupTokens": [
+        "블루투스",
+        "휴대폰",
+        "삼각대",
+        "스마트폰",
+        "카메라",
+        "고프로"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-02-choice-digital-2026-07-02.md",
+      "sourceId": "manual-choice-digital-2026-07-02",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
