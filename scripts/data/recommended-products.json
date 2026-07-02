@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-02T00:00:00+09:00",
+  "updatedAtKst": "2026-07-03T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -3982,6 +3982,63 @@
       "sourceId": "manual-choice-digital-2026-07-02",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-03",
+      "productId": "9597348454",
+      "productName": "파미나 N&D 엔세스트럴 DOG 닭고기&석류 2.5kg MINI 알갱이 + 닭츄 간식 시리즈 1P(랜덤)",
+      "brand": "파미나",
+      "productGroupTokens": [
+        "엔세스트럴",
+        "dog",
+        "닭고기",
+        "석류",
+        "5kg",
+        "mini"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-03-choice-pet-life-2026-07-03.md",
+      "sourceId": "manual-choice-pet-life-2026-07-03",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-03",
+      "productId": "7885056670",
+      "productName": "내꼬냥 고양이 프리미엄 두부벤토 모래 6in1 MAXMI6, 2.5kg, 6개, 무향",
+      "brand": "내꼬냥",
+      "productGroupTokens": [
+        "고양이",
+        "두부벤토",
+        "모래",
+        "6in1",
+        "maxmi6",
+        "5kg"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-03-choice-pet-life-2026-07-03.md",
+      "sourceId": "manual-choice-pet-life-2026-07-03",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-03",
+      "productId": "9288725043",
+      "productName": "구구펫 고양이 마일드 벤토나이트 모래, 6kg, 3개, 베이비파우더향",
+      "brand": "구구펫",
+      "productGroupTokens": [
+        "고양이",
+        "마일드",
+        "벤토나이트",
+        "모래",
+        "6kg",
+        "베이비파우더향"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-03-choice-pet-life-2026-07-03.md",
+      "sourceId": "manual-choice-pet-life-2026-07-03",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
