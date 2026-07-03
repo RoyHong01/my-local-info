@@ -1,0 +1,248 @@
+{
+  "reportDateKst": "2026-07-04",
+  "generatedAtUtc": "2026-07-03T21:09:07.702Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28681371066",
+    "runNumber": 865,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28681371066",
+    "runStartedAtUtc": "2026-07-03T20:10:05Z",
+    "headSha": "4724c82e7cea2b38b415d68c39ab9c8d0176f89f"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://b3492161.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 2건, 총 351건",
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 5건, 업데이트 168건, 총 312건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://9cbd063e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://415f390d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "77acd7a6dff8174e595e1cd103ef219ce732d059",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-03",
+      "authoredAt": "2026-07-03T21:09:06Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-04-bupyeong-restaurant-1450525833.md"
+      ]
+    },
+    {
+      "sha": "c001bb5979e519148df064476f65aa52309c6c94",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-03",
+      "authoredAt": "2026-07-03T20:25:05Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md"
+      ]
+    },
+    {
+      "sha": "4cb28063499ff5de5e726c666bc871f05b3c2264",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-03",
+      "authoredAt": "2026-07-03T20:23:54Z",
+      "files": [
+        "src/content/posts/2026-07-03-IncheonYouthFacility.md",
+        "src/content/posts/2026-07-03-busan-jeonse-support.md",
+        "src/content/posts/2026-07-03-geumsansamgyetangfestival.md",
+        "src/content/posts/2026-07-03-nowonsarang-gift-certificate.md",
+        "src/content/posts/2026-07-04-curation-subsidy.md",
+        "src/content/posts/2026-07-04-festival-versus-daegu-yangpyeong.md"
+      ]
+    },
+    {
+      "sha": "ef9121d097301a42bda8ec5d5da3b3aaa3d5c253",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-03",
+      "authoredAt": "2026-07-03T20:12:47Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-03-busan-jeonse-support.md",
+      "src/content/posts/2026-07-03-geumsansamgyetangfestival.md",
+      "src/content/posts/2026-07-03-IncheonYouthFacility.md",
+      "src/content/posts/2026-07-03-nowonsarang-gift-certificate.md",
+      "src/content/posts/2026-07-04-curation-subsidy.md",
+      "src/content/posts/2026-07-04-festival-versus-daegu-yangpyeong.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-04-bupyeong-restaurant-1450525833.md",
+      "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-04-bupyeong-restaurant-1450525833.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-04-bupyeong-restaurant-1450525833.md",
+      "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md",
+      "src/content/posts/2026-07-03-busan-jeonse-support.md",
+      "src/content/posts/2026-07-03-geumsansamgyetangfestival.md",
+      "src/content/posts/2026-07-03-IncheonYouthFacility.md",
+      "src/content/posts/2026-07-03-nowonsarang-gift-certificate.md",
+      "src/content/posts/2026-07-04-curation-subsidy.md",
+      "src/content/posts/2026-07-04-festival-versus-daegu-yangpyeong.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 8,
+      "manual": 0,
+      "unknown": 0,
+      "total": 8
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.96,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 2건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "4093/794",
+      "markdown": {
+        "generated": 1,
+        "pending": 184,
+        "titles": [
+          "맘편한 산후조리비 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 611건",
+      "validation": "ok",
+      "anthropicUsage": "3028/1325",
+      "markdown": {
+        "generated": 2,
+        "pending": 373,
+        "titles": [
+          "(2026) 부산광역시 평생함께 청년모두가 주거비 지원(기존 공공임대주택 입주자 대상)",
+          "저소득 한부모가정 생활안정 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 5건, 업데이트 168건, 총 312건",
+      "validation": "ok",
+      "anthropicUsage": "916/491",
+      "markdown": {
+        "generated": 1,
+        "pending": 229,
+        "titles": [
+          "부여서동연꽃축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
