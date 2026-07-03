@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-03T00:00:00+09:00",
+  "updatedAtKst": "2026-07-04T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4039,6 +4039,63 @@
       "sourceId": "manual-choice-pet-life-2026-07-03",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-04",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 21N 아이보리, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-04",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-04",
+      "productId": "9187340574",
+      "productName": "2+1 출시하자마자 1위 퓨어그램 모공이별 딥클렌징폼 제주 그린티 저자극 폼클렌징 120ml, 3개, 120ml",
+      "brand": "21",
+      "productGroupTokens": [
+        "출시하자마자",
+        "1위",
+        "퓨어그램",
+        "모공이별",
+        "딥클렌징폼",
+        "제주"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-04",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-04",
+      "productId": "4583248357",
+      "productName": "본트리 베리 에센스 선블럭 SPF50+ PA++++, 50ml, 2개",
+      "brand": "본트리",
+      "productGroupTokens": [
+        "베리",
+        "에센스",
+        "선블럭",
+        "spf50",
+        "pa",
+        "50ml"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-04-choice-beauty-fashion-2026-07-04.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-04",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
