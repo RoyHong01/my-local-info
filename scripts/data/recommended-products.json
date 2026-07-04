@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-04T00:00:00+09:00",
+  "updatedAtKst": "2026-07-05T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4096,6 +4096,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-07-04",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-05",
+      "productId": "8491924728",
+      "productName": "원형 라디오 고무발 / 가구 미끄럼 방지 전화 라디오 스피커 가전 다리 고무받침 소품 소가구 미끌림",
+      "brand": "원형",
+      "productGroupTokens": [
+        "라디오",
+        "고무발",
+        "가구",
+        "미끄럼",
+        "방지",
+        "전화"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-05-choice-home-appliance-furniture-2026-07-05.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-05",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-05",
+      "productId": "8596259224",
+      "productName": "Themoreshop 가전 전원 코드 전선 케이블 걸이 정리 홀더 거치대",
+      "brand": "Themoreshop",
+      "productGroupTokens": [
+        "가전",
+        "전원",
+        "코드",
+        "전선",
+        "케이블",
+        "걸이"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-05-choice-home-appliance-furniture-2026-07-05.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-05",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-05",
+      "productId": "6810256256",
+      "productName": "델피 엔틱 장식장 원목 유리 수납장 거실 진열장 양주 술 위스키 장식장 가구 양문, 브라운",
+      "brand": "델피",
+      "productGroupTokens": [
+        "엔틱",
+        "장식장",
+        "원목",
+        "유리",
+        "수납장",
+        "거실"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-05-choice-home-appliance-furniture-2026-07-05.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-05",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
