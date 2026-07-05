@@ -1,0 +1,253 @@
+{
+  "reportDateKst": "2026-07-06",
+  "generatedAtUtc": "2026-07-05T21:06:08.780Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28753264735",
+    "runNumber": 867,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28753264735",
+    "runStartedAtUtc": "2026-07-05T20:05:45Z",
+    "headSha": "dd1dd792c34f3b9593ce682d05e40f468b29fc8f"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://3d63f519.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 351건",
+        "subsidy": "신규 0건, 총 610건",
+        "festival": "신규 0건, 업데이트 173건, 총 312건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://acac8379.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://4af88ada.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "7d6732c226b2df9a703c230baeb408ed8b41b3fd",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-05",
+      "authoredAt": "2026-07-05T21:06:07Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-06-seoul-restaurant-1628562923.md",
+        "src/content/life/2026-07-06-seoul-restaurant-400281849.md",
+        "src/content/life/2026-07-06-seoul-restaurant-561010883.md"
+      ]
+    },
+    {
+      "sha": "f0f4af85f75a291d239f6ce50c7b7e0a9c3a3228",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-05",
+      "authoredAt": "2026-07-05T20:20:27Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-06-choice-health-2026-07-06.md"
+      ]
+    },
+    {
+      "sha": "3f012fb9f26b849538be7f8067340bd917fab78d",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-05",
+      "authoredAt": "2026-07-05T20:19:16Z",
+      "files": [
+        "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+        "src/content/posts/2026-07-05-dongjak-startup-center.md",
+        "src/content/posts/2026-07-05-gumi-marriage-support.md",
+        "src/content/posts/2026-07-05-incheon-scholarship.md",
+        "src/content/posts/2026-07-06-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "23ae9bcb3bad710cd56bfd12094e9d30dab9a9de",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-05",
+      "authoredAt": "2026-07-05T20:08:06Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-05-dongjak-startup-center.md",
+      "src/content/posts/2026-07-05-gumi-marriage-support.md",
+      "src/content/posts/2026-07-05-incheon-scholarship.md",
+      "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+      "src/content/posts/2026-07-06-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-06-choice-health-2026-07-06.md",
+      "src/content/life/2026-07-06-seoul-restaurant-1628562923.md",
+      "src/content/life/2026-07-06-seoul-restaurant-400281849.md",
+      "src/content/life/2026-07-06-seoul-restaurant-561010883.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-06-choice-health-2026-07-06.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-06-seoul-restaurant-1628562923.md",
+      "src/content/life/2026-07-06-seoul-restaurant-400281849.md",
+      "src/content/life/2026-07-06-seoul-restaurant-561010883.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-06-choice-health-2026-07-06.md",
+      "src/content/life/2026-07-06-seoul-restaurant-1628562923.md",
+      "src/content/life/2026-07-06-seoul-restaurant-400281849.md",
+      "src/content/life/2026-07-06-seoul-restaurant-561010883.md",
+      "src/content/posts/2026-07-05-dongjak-startup-center.md",
+      "src/content/posts/2026-07-05-gumi-marriage-support.md",
+      "src/content/posts/2026-07-05-incheon-scholarship.md",
+      "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+      "src/content/posts/2026-07-06-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.11,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "1349/557",
+      "markdown": {
+        "generated": 1,
+        "pending": 182,
+        "titles": [
+          "출산 장려 활성화 서비스"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 610건",
+      "validation": "ok",
+      "anthropicUsage": "1161/952",
+      "markdown": {
+        "generated": 2,
+        "pending": 369,
+        "titles": [
+          "글로벌 광고인재 육성",
+          "지역사랑상품권(서산사랑상품권)"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 173건, 총 312건",
+      "validation": "ok",
+      "anthropicUsage": "709/438",
+      "markdown": {
+        "generated": 1,
+        "pending": 227,
+        "titles": [
+          "문구전 2026 여름"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
