@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-05T00:00:00+09:00",
+  "updatedAtKst": "2026-07-06T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4153,6 +4153,61 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-07-05",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-06",
+      "productId": "9341816129",
+      "productName": "나우케어 비전스타 루테인 지아잔틴 5:1 아스타잔틴 12mg 눈 건강 영양제, 6개, 30정",
+      "brand": "나우케어",
+      "productGroupTokens": [
+        "비전스타",
+        "루테인",
+        "지아잔틴",
+        "아스타잔틴",
+        "12mg",
+        "건강"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-06-choice-health-2026-07-06.md",
+      "sourceId": "manual-choice-health-2026-07-06",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-06",
+      "productId": "7062943887",
+      "productName": "아임힐링 영국산 비타민C 3000 100포, 303.1g, 3개",
+      "brand": "아임힐링",
+      "productGroupTokens": [
+        "영국산",
+        "비타민c",
+        "100포",
+        "1g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-06-choice-health-2026-07-06.md",
+      "sourceId": "manual-choice-health-2026-07-06",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-06",
+      "productId": "9568936089",
+      "productName": "닥터리치 비타민C 3000mg 90포, 3개, 270g",
+      "brand": "닥터리치",
+      "productGroupTokens": [
+        "비타민c",
+        "3000mg",
+        "90포",
+        "270g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-06-choice-health-2026-07-06.md",
+      "sourceId": "manual-choice-health-2026-07-06",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
