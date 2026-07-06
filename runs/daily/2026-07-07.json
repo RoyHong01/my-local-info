@@ -1,0 +1,230 @@
+{
+  "reportDateKst": "2026-07-07",
+  "generatedAtUtc": "2026-07-06T21:48:45.207Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "28822122723",
+    "runNumber": 869,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28822122723",
+    "runStartedAtUtc": "2026-07-06T20:46:22Z",
+    "headSha": "bfd92bb04e082f417a1b1f7266b5c65c7fce0531"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://49d63048.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 351건",
+        "subsidy": "신규 1건, 총 610건",
+        "festival": "신규 2건, 업데이트 167건, 총 314건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://56ab4148.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "failure",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "b446c1a15a2b79e2aa94d8e2520cec0d8a3e0044",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-06",
+      "authoredAt": "2026-07-06T21:05:52Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-07-choice-living-2026-07-07.md"
+      ]
+    },
+    {
+      "sha": "13b1e1573c74086efe6db87b1daf470ab8409990",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-06",
+      "authoredAt": "2026-07-06T21:04:42Z",
+      "files": [
+        "src/content/posts/2026-07-06-daegu-jeonse-support.md",
+        "src/content/posts/2026-07-06-dongjak-maternity-support.md",
+        "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+        "src/content/posts/2026-07-06-incheon-student-loan-support.md",
+        "src/content/posts/2026-07-07-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "6914cf8bc6ef2296fb2e2c6fad9f5a1a6d348516",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-06",
+      "authoredAt": "2026-07-06T20:49:07Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-06-daegu-jeonse-support.md",
+      "src/content/posts/2026-07-06-dongjak-maternity-support.md",
+      "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+      "src/content/posts/2026-07-06-incheon-student-loan-support.md",
+      "src/content/posts/2026-07-07-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-07-choice-living-2026-07-07.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-07-choice-living-2026-07-07.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-07-choice-living-2026-07-07.md",
+      "src/content/posts/2026-07-06-daegu-jeonse-support.md",
+      "src/content/posts/2026-07-06-dongjak-maternity-support.md",
+      "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+      "src/content/posts/2026-07-06-incheon-student-loan-support.md",
+      "src/content/posts/2026-07-07-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 6,
+      "manual": 0,
+      "unknown": 0,
+      "total": 6
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.93,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "2380/707",
+      "markdown": {
+        "generated": 1,
+        "pending": 183,
+        "titles": [
+          "아이 꿈 수당 지급"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 610건",
+      "validation": "ok",
+      "anthropicUsage": "1439/1104",
+      "markdown": {
+        "generated": 2,
+        "pending": 367,
+        "titles": [
+          "취약계층 지원",
+          "LPG용기 사용가구 시설개선 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 2건, 업데이트 167건, 총 314건",
+      "validation": "ok",
+      "anthropicUsage": "804/532",
+      "markdown": {
+        "generated": 1,
+        "pending": 228,
+        "titles": [
+          "제20회 대구국제뮤지컬페스티벌"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
