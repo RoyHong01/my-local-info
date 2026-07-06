@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-06T00:00:00+09:00",
+  "updatedAtKst": "2026-07-07T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4208,6 +4208,63 @@
       "sourceId": "manual-choice-health-2026-07-06",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-07-07",
+      "productId": "8678475945",
+      "productName": "아이리스 BL시리즈 하이엔드 버클 리빙박스 1.5L",
+      "brand": "아이리스",
+      "productGroupTokens": [
+        "bl시리즈",
+        "하이엔드",
+        "버클",
+        "리빙박스",
+        "5l",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-07-choice-living-2026-07-07.md",
+      "sourceId": "manual-choice-living-2026-07-07",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-07",
+      "productId": "9513550091",
+      "productName": "세이로 다용도 욕실 수납 정리함, 반투명, 10개",
+      "brand": "세이로",
+      "productGroupTokens": [
+        "다용도",
+        "욕실",
+        "수납",
+        "정리함",
+        "반투명",
+        "10개"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-07-choice-living-2026-07-07.md",
+      "sourceId": "manual-choice-living-2026-07-07",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-07",
+      "productId": "8687771994",
+      "productName": "허글리 8IN1 딥 클린 초고농축 캡슐 세탁세제 코튼캔디 향, 1개, 100개입",
+      "brand": "허글리",
+      "productGroupTokens": [
+        "8in1",
+        "클린",
+        "초고농축",
+        "캡슐",
+        "세탁세제",
+        "코튼캔디"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-07-choice-living-2026-07-07.md",
+      "sourceId": "manual-choice-living-2026-07-07",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
