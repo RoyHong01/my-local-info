@@ -5,6 +5,17 @@
 - WORK_LOG.md와 같은 순서로 기록한다: `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증`.
 - 새 항목도 기존 항목도 같은 제목/항목 형식을 유지한다.
 
+## 최근 작업 (2026-07-07) — 맛집 자동화 key-free 전환
+
+- 배경:
+  - Stage 3 실패 원인을 후보군 부족이 아닌 `build 가드 vs key 포함 이미지 URL` 충돌로 확인.
+- 조치:
+  - `scripts/collect-life-restaurants.mjs`: Places media URL 생성 시 `key` 미포함 URL만 저장.
+  - `scripts/generate-life-restaurant-posts.mjs`: hero/본문/JSON->markdown 변환 전 `stripPlacesKeyFromUrl()` 강제 적용.
+  - `scripts/sanitize-exposed-places-urls.js`: 전체 치환이 아닌 key 파라미터 제거 방식으로 개선.
+- 운영 규칙:
+  - 공개 산출물(`src/content`, `restaurants.json`)에는 Places key가 포함된 URL을 절대 저장하지 않는다.
+
 ## 최근 작업 (2026-07-06) — Google Places 키 노출 정리 + 빌드 차단 가드
 
 - 증상:

@@ -8,6 +8,21 @@ const targets = [
 
 const placesKeyUrlPattern = /https:\/\/places\.googleapis\.com\/v1\/[^\s"')]*key=[^\s"')]+/g;
 
+function stripPlacesKeyFromUrl(url) {
+  try {
+    const parsed = new URL(url);
+    if (!/places\.googleapis\.com$/i.test(parsed.hostname)) return url;
+    parsed.searchParams.delete('key');
+    return parsed.toString();
+  } catch {
+    return url.replace(/([?&])key=[^&"')]+(&)?/gi, (match, prefix, hasTrailing) => {
+      if (prefix === '?' && hasTrailing) return '?';
+      if (prefix === '&' && hasTrailing) return '&';
+      return '';
+    }).replace(/\?&/, '?').replace(/[?&]$/, '');
+  }
+}
+
 function walkFiles(entryPath, out = []) {
   const stat = fs.statSync(entryPath);
   if (stat.isFile()) {
@@ -34,7 +49,7 @@ for (const target of targets) {
     const matches = original.match(placesKeyUrlPattern) || [];
     if (matches.length === 0) continue;
 
-    const sanitized = original.replace(placesKeyUrlPattern, '/images/default-restaurant.svg');
+    const sanitized = original.replace(placesKeyUrlPattern, (matchedUrl) => stripPlacesKeyFromUrl(matchedUrl));
     fs.writeFileSync(filePath, sanitized, 'utf8');
     changedFiles += 1;
     replacedUrls += matches.length;

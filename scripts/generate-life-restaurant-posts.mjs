@@ -379,8 +379,27 @@ function isLikelyRestaurantImageUrl(url) {
   return !blockedPatterns.some((pattern) => pattern.test(value));
 }
 
+function stripPlacesKeyFromUrl(url) {
+  const value = String(url || '').trim();
+  if (!value) return value;
+
+  try {
+    const parsed = new URL(value);
+    if (!/places\.googleapis\.com$/i.test(parsed.hostname)) return value;
+    parsed.searchParams.delete('key');
+    return parsed.toString();
+  } catch {
+    return value.replace(/([?&])key=[^&"')]+(&)?/gi, (match, prefix, hasTrailing) => {
+      if (prefix === '?' && hasTrailing) return '?';
+      if (prefix === '&' && hasTrailing) return '&';
+      return '';
+    }).replace(/\?&/, '?').replace(/[?&]$/, '');
+  }
+}
+
 async function resolveSafeHeroImage(item, defaultImage) {
   const candidates = [item?.naverPhotoUrl, item?.naverPhotoUrl2, item?.googlePhotoUrl]
+    .map((value) => stripPlacesKeyFromUrl(value))
     .map((value) => String(value || '').trim())
     .filter(Boolean);
 
@@ -403,6 +422,7 @@ async function resolveSafeHeroImage(item, defaultImage) {
 
 async function resolveSafeRestaurantInlineImage(item) {
   const candidates = [item?.naverPhotoUrl2, item?.googlePhotoUrl, item?.naverPhotoUrl]
+    .map((value) => stripPlacesKeyFromUrl(value))
     .map((value) => String(value || '').trim())
     .filter(Boolean);
 
@@ -744,7 +764,7 @@ function tryConvertJsonResponseToMarkdown(text) {
     const description = String(parsed.description || '').trim();
     const category = String(parsed.category || '픽앤조이 맛집 탐방').trim();
     const tags = Array.isArray(parsed.tags) ? parsed.tags : [];
-    const image = String(parsed.image || '/images/default-restaurant.svg').trim();
+    const image = stripPlacesKeyFromUrl(String(parsed.image || '/images/default-restaurant.svg').trim());
     const sourceId = String(parsed.source_id || parsed.sourceId || '').trim();
     const slug = String(parsed.slug || '').trim();
     const placeName = String(parsed.place_name || parsed.placeName || '').trim();
@@ -823,6 +843,11 @@ async function normalizeGeneratedMarkdown(generatedText, fileStem, candidate) {
   else if (finalContent.startsWith('```')) finalContent = finalContent.substring(3);
   if (finalContent.endsWith('```')) finalContent = finalContent.slice(0, -3);
   finalContent = finalContent.trim();
+
+  finalContent = finalContent.replace(
+    /https:\/\/places\.googleapis\.com\/v1\/[^\s"')]*key=[^\s"')]+/g,
+    (matchedUrl) => stripPlacesKeyFromUrl(matchedUrl)
+  );
 
   finalContent = finalContent.replace(/^(title:\s*)(.+)$/m, (match, prefix, value) => {
     if (value.includes(':') && !value.startsWith('"') && !value.startsWith("'")) {

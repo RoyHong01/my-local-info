@@ -29,6 +29,25 @@
 
 ---
 
+## 2026-07-07 (맛집 자동화 key-free 전환: 생성 시 Places key 제거)
+
+- **수정 파일**:
+  - `scripts/collect-life-restaurants.mjs`
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `scripts/sanitize-exposed-places-urls.js`
+- **배경**:
+  - 맛집 자동화 3단계에서 빌드 가드가 `places ... key=` 패턴을 탐지해 실패가 발생함.
+- **원인(RCA)**:
+  - 맛집 후보 수집/포스트 생성 로직이 Google Places 이미지 URL에 `key`를 포함한 채 데이터/본문에 저장하고 있었음.
+- **조치**:
+  1. 수집 스크립트에서 Google Places 이미지 URL 생성 시 `key`를 붙이지 않도록 변경.
+  2. 생성 스크립트에 `stripPlacesKeyFromUrl()`를 추가해 hero/본문/변환 마크다운에서 key 파라미터를 강제 제거.
+  3. 정리 스크립트를 전체 URL 치환 방식에서 `key 파라미터 제거` 방식으로 개선.
+- **검증**:
+  - `rg -n "https://places.googleapis.com/v1/.+key=|AIza[0-9A-Za-z_-]{20,}" src/content src/app/life/restaurant/data/restaurants.json` 결과 없음.
+  - `npm run check:no-exposed-keys` 통과.
+  - `npm run build` 성공.
+
 ## 2026-07-06 (Google Places 키 노출 정리 + 빌드 차단 가드 추가)
 
 - **수정 파일**:

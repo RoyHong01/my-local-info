@@ -5,6 +5,20 @@
 - WORK_LOG.md와 같은 순서로 기록한다: `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증`.
 - 새 항목도 기존 항목도 같은 제목/항목 형식을 유지한다.
 
+## 최근 마일스톤 (2026-07-07, 맛집 자동화 key-free 전환)
+
+- 배경:
+  - 3단계(맛집) 실패는 후보군 고갈이 아니라 `check:no-exposed-keys`가 key 포함 Places URL을 차단한 이슈.
+- 원인:
+  - 수집/생성 파이프라인이 `.../media?...&key=...` URL을 공개 파일에 기록.
+- 조치:
+  - 수집 단계: Places 이미지 URL 생성을 key-free로 변경.
+  - 생성 단계: frontmatter/본문 이미지 URL에 key 제거 강제 처리.
+  - 정리 스크립트: 기존 URL을 fallback으로 바꾸지 않고 key 파라미터만 제거.
+- 검증:
+  - 노출 키 패턴 스캔 결과 없음.
+  - `npm run check:no-exposed-keys` + `npm run build` 통과.
+
 ## 최근 마일스톤 (2026-07-06, Google Places 키 노출 대응)
 
 - 배경: 공개 콘텐츠/데이터에 포함된 Places key URL 잔존 가능성으로 비용/보안 리스크가 발생.

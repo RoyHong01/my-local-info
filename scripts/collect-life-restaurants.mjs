@@ -546,20 +546,24 @@ async function fetchGooglePlaceDetails(name, address, apiKey) {
   }
   const place = data?.places?.[0];
   if (!place) return null;
+
+  const toPublicPlacesMediaUrl = (photoName) => {
+    if (!photoName) return null;
+    return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800`;
+  };
+
   const photos = place.photos || [];
   // Prefer landscape photos (widthPx >= heightPx) — food/interior shots tend to be landscape.
   // Portrait-oriented photos are more likely to be receipts, menus, stairways, etc.
   const bestPhoto = photos.find(p => p.widthPx && p.heightPx && p.widthPx >= p.heightPx)
     || photos[0];
   const photoName = bestPhoto?.name;
-  const photoUrl = photoName
-    ? `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`
-    : null;
+  const photoUrl = toPublicPlacesMediaUrl(photoName);
   // Also store up to 3 candidate URLs for future use
   const photoUrls = photos
     .filter(p => p.name)
     .slice(0, 3)
-    .map(p => `https://places.googleapis.com/v1/${p.name}/media?maxWidthPx=800&key=${apiKey}`);
+    .map(p => toPublicPlacesMediaUrl(p.name));
   return {
     placeId: place.id || '',
     rating: typeof place.rating === 'number' ? place.rating : null,
@@ -586,9 +590,27 @@ async function fetchGooglePlacePhotoById(placeId, apiKey) {
       || photos[0];
     const photoName = bestPhoto?.name;
     if (!photoName) return null;
-    return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${apiKey}`;
+    return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800`;
   } catch {
     return null;
+  }
+}
+
+function stripPlacesKeyFromUrl(url) {
+  const value = String(url || '').trim();
+  if (!value) return value;
+
+  try {
+    const parsed = new URL(value);
+    if (!/places\.googleapis\.com$/i.test(parsed.hostname)) return value;
+    parsed.searchParams.delete('key');
+    return parsed.toString();
+  } catch {
+    return value.replace(/([?&])key=[^&"')]+(&)?/gi, (match, prefix, hasTrailing) => {
+      if (prefix === '?' && hasTrailing) return '?';
+      if (prefix === '&' && hasTrailing) return '&';
+      return '';
+    }).replace(/\?&/, '?').replace(/[?&]$/, '');
   }
 }
 
@@ -717,7 +739,12 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCac
 
     for (const item of items) {
       const existingPhotoUrl = String(item?.googlePhotoUrl || '').trim();
-      if (existingPhotoUrl) continue;
+      const sanitizedExistingPhotoUrl = stripPlacesKeyFromUrl(existingPhotoUrl);
+      if (sanitizedExistingPhotoUrl !== existingPhotoUrl) {
+        item.googlePhotoUrl = sanitizedExistingPhotoUrl;
+        updatedCount += 1;
+      }
+      if (String(item?.googlePhotoUrl || '').trim()) continue;
 
       let placeId = String(item?.googlePlaceId || '').trim();
       let rating = item?.googleRating ?? null;
