@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-07T00:00:00+09:00",
+  "updatedAtKst": "2026-07-08T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4265,6 +4265,63 @@
       "sourceId": "manual-choice-living-2026-07-07",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-07-08",
+      "productId": "9492936638",
+      "productName": "와이앤코 주방 2단 양념통 정리 선반, 1개, 블랙",
+      "brand": "와이앤코",
+      "productGroupTokens": [
+        "주방",
+        "2단",
+        "양념통",
+        "정리",
+        "선반",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-08-choice-kitchen-2026-07-08.md",
+      "sourceId": "manual-choice-kitchen-2026-07-08",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-08",
+      "productId": "9040217221",
+      "productName": "비로르 무타공 주방 선반 키친타올 걸이",
+      "brand": "비로르",
+      "productGroupTokens": [
+        "무타공",
+        "주방",
+        "선반",
+        "키친타올",
+        "걸이",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-08-choice-kitchen-2026-07-08.md",
+      "sourceId": "manual-choice-kitchen-2026-07-08",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-08",
+      "productId": "8222210264",
+      "productName": "필립스 2000 시리즈 보이는 에어프라이어 4.2L, NA220/00, 블랙",
+      "brand": "필립스",
+      "productGroupTokens": [
+        "시리즈",
+        "보이는",
+        "에어프라이어",
+        "2l",
+        "na220",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-08-choice-kitchen-2026-07-08.md",
+      "sourceId": "manual-choice-kitchen-2026-07-08",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
