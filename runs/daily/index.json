@@ -1,6 +1,49 @@
 {
   "reports": [
     {
+      "date": "2026-07-09",
+      "runId": "28972690924",
+      "runNumber": 872,
+      "runAttempt": 1,
+      "eventName": "schedule",
+      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/28972690924",
+      "stageStatuses": [
+        {
+          "key": "stage1-data",
+          "status": "success"
+        },
+        {
+          "key": "stage2-blog",
+          "status": "success"
+        },
+        {
+          "key": "stage3-life",
+          "status": "success"
+        }
+      ],
+      "generatedBlogCount": 5,
+      "generatedLifeCount": 3,
+      "generatedChoiceCount": 1,
+      "generatedRestaurantCount": 2,
+      "publishedByAutoCount": 8,
+      "publishedByManualCount": 0,
+      "publishedByUnknownCount": 0,
+      "choiceRelaxedFallbackAppliedCount": 0,
+      "choiceAppliedMinRating": 4.5,
+      "restaurantRecollectPerformed": true,
+      "restaurantCacheHit": 0,
+      "restaurantCacheMiss": 150,
+      "restaurantGoogleCalled": 150,
+      "totalChangedFiles": 13,
+      "blogBudgetEnabled": true,
+      "blogBudgetStopped": false,
+      "blogBudgetLimitKrw": 500,
+      "blogEstimatedCostKrw": 9.27,
+      "midImageInsertedCount": 1,
+      "midImageOmittedCount": 0,
+      "generatedAtUtc": "2026-07-08T21:18:26.848Z"
+    },
+    {
       "date": "2026-07-08",
       "runId": "28897401115",
       "runNumber": 871,
@@ -3805,42 +3848,6 @@
       "midImageInsertedCount": 1,
       "midImageOmittedCount": 0,
       "generatedAtUtc": "2026-04-10T21:08:09.569Z"
-    },
-    {
-      "date": "2026-04-10",
-      "runId": "24214483367",
-      "runNumber": 428,
-      "runAttempt": 1,
-      "eventName": "schedule",
-      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/24214483367",
-      "stageStatuses": [
-        {
-          "key": "stage1-data",
-          "status": "success"
-        },
-        {
-          "key": "stage2-blog",
-          "status": "success"
-        },
-        {
-          "key": "stage3-life",
-          "status": "failure"
-        }
-      ],
-      "generatedBlogCount": 3,
-      "generatedLifeCount": 0,
-      "restaurantRecollectPerformed": false,
-      "restaurantCacheHit": 0,
-      "restaurantCacheMiss": 0,
-      "restaurantGoogleCalled": 0,
-      "totalChangedFiles": 4,
-      "blogBudgetEnabled": true,
-      "blogBudgetStopped": false,
-      "blogBudgetLimitKrw": 500,
-      "blogEstimatedCostKrw": 11.15,
-      "midImageInsertedCount": 1,
-      "midImageOmittedCount": 0,
-      "generatedAtUtc": "2026-04-09T21:39:41.806Z"
     }
   ]
 }
