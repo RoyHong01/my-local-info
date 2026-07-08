@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-08T00:00:00+09:00",
+  "updatedAtKst": "2026-07-09T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4322,6 +4322,63 @@
       "sourceId": "manual-choice-kitchen-2026-07-08",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-07-09",
+      "productId": "8631601073",
+      "productName": "앤커 맥고 파워뱅크 10000mAh 30W 보조배터리 맥세이프 무선충전 고속충전 qi2 기내용 아이폰 A1664, 블랙, A1664",
+      "brand": "앤커",
+      "productGroupTokens": [
+        "맥고",
+        "파워뱅크",
+        "10000mah",
+        "30w",
+        "보조배터리",
+        "맥세이프"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-09-choice-digital-2026-07-09.md",
+      "sourceId": "manual-choice-digital-2026-07-09",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-09",
+      "productId": "8618993204",
+      "productName": "NICESUN 미니 블루투스 휴대폰 삼각대, 스마트폰/카메라/고프로 삼각대 셀카봉, 71cm, P06, p06, 블랙, 1개",
+      "brand": "NICESUN",
+      "productGroupTokens": [
+        "블루투스",
+        "휴대폰",
+        "삼각대",
+        "스마트폰",
+        "카메라",
+        "고프로"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-09-choice-digital-2026-07-09.md",
+      "sourceId": "manual-choice-digital-2026-07-09",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-09",
+      "productId": "8019765127",
+      "productName": "바우아토 포켓쉴 고속 입출력 케이블 일체형 미니 대용량 난연 보조배터리 20000mAh C타입 애플8핀 PD 22.5W, 단일상품, 아이보리",
+      "brand": "바우아토",
+      "productGroupTokens": [
+        "포켓쉴",
+        "고속",
+        "입출력",
+        "케이블",
+        "일체형",
+        "난연"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-09-choice-digital-2026-07-09.md",
+      "sourceId": "manual-choice-digital-2026-07-09",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
