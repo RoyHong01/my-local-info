@@ -835,14 +835,21 @@ function buildRelatedFestivalsSection(candidate, allFestivals, festivalSlugMap) 
       : '';
     const dateStr = startDate ? ` (${startDate}~)` : '';
 
-    // blog post가 있으면 /blog/[slug], 없으면 /festival/[id] 상세 페이지로 링크
-    if (festivalSlugMap && festivalSlugMap.has(contentId)) {
-      const info = festivalSlugMap.get(contentId);
-      return `- [${title}](/blog/${info.slug})${dateStr}`;
-    } else {
-      return `- [${title}](/festival/${contentId})${dateStr}`;
+    // 실존 블로그 slug가 있는 항목만 내부 링크로 노출 (미존재 시 제외)
+    if (!festivalSlugMap || !festivalSlugMap.has(contentId)) {
+      return '';
     }
-  });
+
+    const info = festivalSlugMap.get(contentId);
+    const slug = String(info?.slug || '').trim();
+    if (!slug) {
+      return '';
+    }
+
+    return `- [${title}](/blog/${slug}/)${dateStr}`;
+  }).filter(Boolean);
+
+  if (lines.length === 0) return '';
 
   return `\n\n---\n\n### 🎪 같은 지역 다른 축제\n\n${lines.join('\n')}`;
 }
