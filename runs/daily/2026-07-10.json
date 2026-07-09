@@ -1,0 +1,192 @@
+{
+  "reportDateKst": "2026-07-10",
+  "generatedAtUtc": "2026-07-09T20:52:51.720Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29048788403",
+    "runNumber": 877,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29048788403",
+    "runStartedAtUtc": "2026-07-09T20:41:45Z",
+    "headSha": "e6feba1229aba8db2f67eb370acfcbfdef4be0e8"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://1c2b8f5f.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 351건",
+        "subsidy": "신규 3건, 총 611건",
+        "festival": "신규 4건, 업데이트 174건, 총 324건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "skipped",
+        "build": "failure",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "22f9139ff4844f545a4f68e30f82fbe39bf2e806",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-09",
+      "authoredAt": "2026-07-09T20:43:51Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 3,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 0,
+      "manual": 0,
+      "unknown": 0,
+      "total": 0
+    },
+    "byType": {
+      "blog": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.43,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "1316/514",
+      "markdown": {
+        "generated": 1,
+        "pending": 182,
+        "titles": [
+          "A인천서해구)산모신생아 건강관리 본인부담금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 3건, 총 611건",
+      "validation": "ok",
+      "anthropicUsage": "2630/1249",
+      "markdown": {
+        "generated": 2,
+        "pending": 363,
+        "titles": [
+          "오산시 초등학교 입학축하금 지원",
+          "분만취약지 임산부 교통비 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 174건, 총 324건",
+      "validation": "ok",
+      "anthropicUsage": "822/519",
+      "markdown": {
+        "generated": 1,
+        "pending": 235,
+        "titles": [
+          "그루브 인 관악"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
