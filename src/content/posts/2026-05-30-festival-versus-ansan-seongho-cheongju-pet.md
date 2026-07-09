@@ -77,5 +77,5 @@ source_ids: "1810345,4065251"
 
 ### 🔎 구체적인 정보 더 보기
 
-- [안산 성호문화제](/festival/1810345)
-- [청주시 반려동물 문화행사](/festival/4065251)
+- [안산 성호문화제](/blog/2026-05-22-ansan-seongho-festival/)
+- [청주시 반려동물 문화행사](/blog/2026-05-18-cheongju-pet-festival/)

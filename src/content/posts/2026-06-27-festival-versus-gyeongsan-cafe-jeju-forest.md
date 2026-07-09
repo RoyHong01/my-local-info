@@ -77,5 +77,5 @@ source_ids: "3497502,3495841"
 
 ### 🔎 구체적인 정보 더 보기
 
-- [경산카페축제](/festival/3497502)
-- [숲으로 오라](/festival/3495841)
+- [경산카페축제](/blog/2026-06-20-GyeongsanCafeFestival/)
+- [숲으로 오라](/blog/2026-06-16-forest-jeju/)
