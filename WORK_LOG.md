@@ -29,6 +29,27 @@
 
 ---
 
+## 2026-07-09 (링크 잔여 6건 정리 + sitemap Top 필터 보강)
+
+- **수정 파일**:
+  - `scripts/generate-sitemap.js`
+  - `src/content/posts/2026-07-08-curation-subsidy.md`
+  - `src/content/posts/2026-07-09-curation-festival.md`
+  - `WORK_LOG.md`
+- **배경**:
+  - trailing-slash/no-slash 잔여 링크와 sitemap Top 필터 정합 이슈를 기존 정리 흐름(3be1b53, ea8212e, f4e8059, 4e1d284)에 이어 마무리할 필요가 있었음.
+- **원인(RCA)**:
+  - curation 포스트 2건에 절대 URL no-slash 링크 6건이 남아 있었고, sitemap 생성 필터가 ID 형식(문자열 정규화)과 `expired` 상태를 이중 보장하지 않아 재발 여지가 있었음.
+- **조치**:
+  1. `scripts/generate-sitemap.js`에 ID 문자열 정규화(`trim`) 및 Top Set 정규화 로직을 추가.
+  2. 인천/보조금/축제 상세 URL 수집 시 `expired` 항목을 한 번 더 제외하도록 필터를 보강.
+  3. `2026-07-08-curation-subsidy.md` 1건, `2026-07-09-curation-festival.md` 5건 링크를 상대경로 + trailing slash로 통일.
+  4. 연속 정리 커밋 체인을 기준으로 최종 잔여 정리 완료: `3be1b53 -> ea8212e -> f4e8059 -> 4e1d284 -> (이번 수정)`.
+- **검증**:
+  - `git grep -nP 'https://pick-n-joy.com/(subsidy|festival|incheon)/[^/)]+\)' -- src/content` 결과 0건.
+  - `node scripts/generate-sitemap.js` 실행 후 `subsidy/627000000759` 미포함 확인.
+  - `npm run build` 성공.
+
 ## 2026-07-07 (맛집 자동화 key-free 전환: 생성 시 Places key 제거)
 
 - **수정 파일**:
