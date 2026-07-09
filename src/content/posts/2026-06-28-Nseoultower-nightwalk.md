@@ -79,5 +79,5 @@ source_title: "2026 N서울타워 글로벌 나이트워크"
 ### 🎪 같은 지역 다른 축제
 
 - [페인터즈](/festival/3481597/) (2022.11.01-)
-- [서울 왕궁수문장 교대의식](/blog/2026-03-27-seoul-royal-guard-ceremony) (2026.01.01-)
-- [2026 숭례문 파수의식](/blog/2026-04-18-2026-sungnyemun-pasu-uisik) (2026.01.01-)
+- [서울 왕궁수문장 교대의식](/blog/2026-03-27-seoul-royal-guard-ceremony/) (2026.01.01-)
+- [2026 숭례문 파수의식](/blog/2026-04-18-2026-sungnyemun-pasu-uisik/) (2026.01.01-)

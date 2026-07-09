@@ -1,0 +1,6 @@
+{
+  "sitemap_path_exceptions": [
+    "/rss.xml"
+  ],
+  "internal_link_exceptions": []
+}
