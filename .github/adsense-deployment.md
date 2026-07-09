@@ -1,1 +1,0 @@
-# AdSense verification completed
