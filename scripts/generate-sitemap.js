@@ -54,6 +54,15 @@ function readJsonArray(fileName) {
   }
 }
 
+function normalizeId(value) {
+  if (value === undefined || value === null) return '';
+  return String(value).trim();
+}
+
+function normalizeIdSet(values) {
+  return new Set(Array.from(values || []).map((value) => normalizeId(value)).filter(Boolean));
+}
+
 function xmlEscape(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -102,7 +111,8 @@ function collectMarkdownPages() {
 
 function collectIncheonPages(topIds) {
   return readJsonArray('incheon.json')
-    .map((item) => item['서비스ID'] || item.id)
+    .filter((item) => !item.expired)
+    .map((item) => normalizeId(item['서비스ID'] || item.id))
     .filter(Boolean)
     .filter((id) => topIds.has(id))
     .map((id) => buildPage(`/incheon/${encodeURIComponent(String(id))}/`, '0.7', 'weekly'));
@@ -110,7 +120,8 @@ function collectIncheonPages(topIds) {
 
 function collectSubsidyPages(topIds) {
   return readJsonArray('subsidy.json')
-    .map((item) => item['서비스ID'] || item.id)
+    .filter((item) => !item.expired)
+    .map((item) => normalizeId(item['서비스ID'] || item.id))
     .filter(Boolean)
     .filter((id) => topIds.has(id))
     .map((id) => buildPage(`/subsidy/${encodeURIComponent(String(id))}/`, '0.7', 'weekly'));
@@ -118,15 +129,21 @@ function collectSubsidyPages(topIds) {
 
 function collectFestivalPages(topIds) {
   return readJsonArray('festival.json')
+    .filter((item) => !item.expired)
     .map((item) => ({
-      id: item.contentid || item.id,
+      id: normalizeId(item.contentid || item.id),
       lastmod: item.description_markdown_updated_at || item.collectedAt || item.modifiedtime,
     }))
-    .filter((item) => item.id && topIds.has(String(item.id)))
+    .filter((item) => item.id && topIds.has(item.id))
     .map((item) => buildPage(`/festival/${encodeURIComponent(String(item.id))}/`, '0.7', 'weekly', item.lastmod));
 }
 
-const topIds = getAllTopIds();
+const topIdsRaw = getAllTopIds();
+const topIds = {
+  incheon: normalizeIdSet(topIdsRaw.incheon),
+  subsidy: normalizeIdSet(topIdsRaw.subsidy),
+  festival: normalizeIdSet(topIdsRaw.festival),
+};
 
 const allPages = [
   ...staticPages.map((page) => buildPage(page.url, page.priority, page.changefreq, today)),
