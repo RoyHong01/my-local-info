@@ -1,0 +1,252 @@
+{
+  "reportDateKst": "2026-07-11",
+  "generatedAtUtc": "2026-07-10T21:15:15.832Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29120686916",
+    "runNumber": 880,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29120686916",
+    "runStartedAtUtc": "2026-07-10T20:14:00Z",
+    "headSha": "f200b98259230f548c973202e6c9d261e1a18695"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0f2c0d82.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 351건",
+        "subsidy": "신규 1건, 총 612건",
+        "festival": "신규 2건, 업데이트 174건, 총 326건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://ff2a2220.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://ef418c45.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "5cb342b632d1f200282e149a1026a940155a31ba",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-10",
+      "authoredAt": "2026-07-10T21:15:14Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-11-seoul-restaurant-1045225278.md",
+        "src/content/life/2026-07-11-seoul-restaurant-19923406.md"
+      ]
+    },
+    {
+      "sha": "91441f5e414474fcc0e9c66aa36490a3aafd4b5a",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-10",
+      "authoredAt": "2026-07-10T20:29:19Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md"
+      ]
+    },
+    {
+      "sha": "655879969c6309af963b47872fa7d941b49d6722",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-10",
+      "authoredAt": "2026-07-10T20:28:08Z",
+      "files": [
+        "src/content/posts/2026-07-10-ComicWorldSummer.md",
+        "src/content/posts/2026-07-10-GwangjinYouthVoucher.md",
+        "src/content/posts/2026-07-10-donggu-youth-support.md",
+        "src/content/posts/2026-07-10-incheon-youth-support.md",
+        "src/content/posts/2026-07-11-curation-subsidy.md",
+        "src/content/posts/2026-07-11-festival-versus-groove-in-gwanak-chilgok-honey-beer.md"
+      ]
+    },
+    {
+      "sha": "5e03cd12dede0ed6b243ef2ff3b5efad0f3d4d4b",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-10",
+      "authoredAt": "2026-07-10T20:16:29Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-10-ComicWorldSummer.md",
+      "src/content/posts/2026-07-10-donggu-youth-support.md",
+      "src/content/posts/2026-07-10-GwangjinYouthVoucher.md",
+      "src/content/posts/2026-07-10-incheon-youth-support.md",
+      "src/content/posts/2026-07-11-curation-subsidy.md",
+      "src/content/posts/2026-07-11-festival-versus-groove-in-gwanak-chilgok-honey-beer.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md",
+      "src/content/life/2026-07-11-seoul-restaurant-1045225278.md",
+      "src/content/life/2026-07-11-seoul-restaurant-19923406.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-11-seoul-restaurant-1045225278.md",
+      "src/content/life/2026-07-11-seoul-restaurant-19923406.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md",
+      "src/content/life/2026-07-11-seoul-restaurant-1045225278.md",
+      "src/content/life/2026-07-11-seoul-restaurant-19923406.md",
+      "src/content/posts/2026-07-10-ComicWorldSummer.md",
+      "src/content/posts/2026-07-10-donggu-youth-support.md",
+      "src/content/posts/2026-07-10-GwangjinYouthVoucher.md",
+      "src/content/posts/2026-07-10-incheon-youth-support.md",
+      "src/content/posts/2026-07-11-curation-subsidy.md",
+      "src/content/posts/2026-07-11-festival-versus-groove-in-gwanak-chilgok-honey-beer.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 2,
+        "manual": 0,
+        "unknown": 0,
+        "total": 2
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.8,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "1390/661",
+      "markdown": {
+        "generated": 1,
+        "pending": 181,
+        "titles": [
+          "소상공인 특례협약보증 이차보전"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 612건",
+      "validation": "ok",
+      "anthropicUsage": "1824/1101",
+      "markdown": {
+        "generated": 2,
+        "pending": 362,
+        "titles": [
+          "2026년 광진구 청년을 위한 청년문화생활 바우처 지원사업 신청",
+          "충북행복결혼공제"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 2건, 업데이트 174건, 총 326건",
+      "validation": "ok",
+      "anthropicUsage": "806/503",
+      "markdown": {
+        "generated": 1,
+        "pending": 236,
+        "titles": [
+          "금산삼계탕축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
