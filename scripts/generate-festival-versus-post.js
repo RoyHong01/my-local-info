@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const { getAllTopIds } = require('./lib/priority-calculator');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
@@ -359,6 +360,37 @@ function buildKakaoMapSearchLink(candidate) {
   return `https://map.kakao.com/link/search/${encodeURIComponent(title || '축제')}`;
 }
 
+function getFestivalDetailPath(candidate) {
+  const id = String(candidate?.contentid || '').trim();
+  if (!id) return '';
+  return `/festival/${encodeURIComponent(id)}/`;
+}
+
+function getFestivalOfficialLink(candidate) {
+  return String(candidate?.상세조회URL || candidate?.homepage || candidate?.link || '').trim();
+}
+
+function getFestivalDetailUrl(candidate, topFestivalIds) {
+  const id = String(candidate?.contentid || '').trim();
+  const internalPath = getFestivalDetailPath(candidate);
+  if (id && internalPath && topFestivalIds.has(id)) {
+    return internalPath;
+  }
+  return getFestivalOfficialLink(candidate);
+}
+
+function normalizeInternalLinksInMarkdown(markdown) {
+  let text = String(markdown || '');
+
+  // 절대 내부 URL은 상대경로로 통일
+  text = text.replace(/https:\/\/pick-n-joy\.com(\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+\/?)/g, '$1');
+
+  // 내부 상세/블로그 링크 trailing slash 강제
+  text = text.replace(/\]\((\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+)(?<!\/)\)/g, ']($1/)');
+
+  return text;
+}
+
 function deriveVibe(candidate) {
   const text = `${candidate.title || ''} ${candidate.overview || ''}`;
   if (/전통|제례|문화재|고궁/.test(text)) return '웅장하고 정갈한 전통 무드';
@@ -508,7 +540,7 @@ function buildFinalGuide(mode, candidates) {
   return lines.join('\n\n');
 }
 
-function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
+function buildVersusBody({ mode, candidates, heroImage, bodyImages, topFestivalIds }) {
   const comparisonHeading = buildComparisonHeading(mode, candidates);
   const columnEmojis = ['🏛️', '🎨', '🔥'];
   const safeCell = (value) => String(value || '').replace(/\|/g, '/').trim();
@@ -553,20 +585,28 @@ function buildVersusBody({ mode, candidates, heroImage, bodyImages }) {
     ].join('\n');
   });
 
+  const detailLinkItems = candidates
+    .map((candidate) => {
+      const url = getFestivalDetailUrl(candidate, topFestivalIds);
+      if (!url) return '';
+      return `- [${candidate.title}](${url})`;
+    })
+    .filter(Boolean);
+
   const detailLinks = [
     '### 🔎 구체적인 정보 더 보기',
     '',
-    ...candidates.map((candidate) => `- [${candidate.title}](/festival/${candidate.contentid})`),
+    ...detailLinkItems,
   ].join('\n');
 
-  return [
+  return normalizeInternalLinksInMarkdown([
     buildIntro(mode, candidates),
     `### ${comparisonHeading}`,
     comparisonTable,
     ...detailSections,
     buildFinalGuide(mode, candidates),
     detailLinks,
-  ].join('\n\n').replace(/\n{3,}/g, '\n\n').trim();
+  ].join('\n\n').replace(/\n{3,}/g, '\n\n').trim());
 }
 
 function buildGeminiFrontmatterPrompt({ mode, todayIso, candidates }) {
@@ -709,6 +749,7 @@ async function run() {
   const sourceIds = candidates.map((item) => String(item.contentid || '').trim()).filter(Boolean);
   const versusKey = buildVersusKey(mode, sourceIds);
   const existingKeys = await getExistingVersusKeys(postsDir);
+  const topFestivalIds = getAllTopIds().festival;
 
   if (existingKeys.has(versusKey)) {
     console.log(`동일 후보 조합의 festival-versus 이미 존재: ${versusKey}`);
@@ -751,7 +792,7 @@ async function run() {
   }
   if (!filename.endsWith('.md')) filename += '.md';
 
-  const structuredBody = buildVersusBody({ mode, candidates, heroImage, bodyImages });
+  const structuredBody = buildVersusBody({ mode, candidates, heroImage, bodyImages, topFestivalIds });
 
   const fmTitle = extractFrontmatterValue(baseFrontmatter, 'title') || defaultTitle;
   const fmSummary = extractFrontmatterValue(baseFrontmatter, 'summary') || defaultSummary;
