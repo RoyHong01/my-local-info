@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-09T00:00:00+09:00",
+  "updatedAtKst": "2026-07-11T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4379,6 +4379,63 @@
       "sourceId": "manual-choice-digital-2026-07-09",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-11",
+      "productId": "9187340574",
+      "productName": "2+1 출시하자마자 1위 퓨어그램 모공이별 딥클렌징폼 제주 그린티 저자극 폼클렌징 120ml, 3개, 120ml",
+      "brand": "21",
+      "productGroupTokens": [
+        "출시하자마자",
+        "1위",
+        "퓨어그램",
+        "모공이별",
+        "딥클렌징폼",
+        "제주"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-11",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-11",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 21N 아이보리, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-11",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-11",
+      "productId": "7839467659",
+      "productName": "미쟝센 살롱10 단백질 에센스 헤어팩 손상 모발용, 990ml, 1개",
+      "brand": "미쟝센",
+      "productGroupTokens": [
+        "살롱10",
+        "단백질",
+        "에센스",
+        "헤어팩",
+        "손상",
+        "모발용"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-11-choice-beauty-fashion-2026-07-11.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-11",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
