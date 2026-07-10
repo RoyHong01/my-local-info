@@ -243,15 +243,15 @@ function getSsgEligibleIds(items, category) {
 function getDetailPath(category, item) {
   if (category === 'subsidy') {
     const id = getField(item, ['서비스ID', 'id']);
-    return id ? `/subsidy/${encodeURIComponent(id)}` : null;
+    return id ? `/subsidy/${encodeURIComponent(id)}/` : null;
   }
   if (category === 'incheon') {
     const id = getField(item, ['서비스ID', 'id']);
-    return id ? `/incheon/${encodeURIComponent(id)}` : null;
+    return id ? `/incheon/${encodeURIComponent(id)}/` : null;
   }
   if (category === 'festival') {
     const id = getField(item, ['contentid', 'id']);
-    return id ? `/festival/${encodeURIComponent(id)}` : null;
+    return id ? `/festival/${encodeURIComponent(id)}/` : null;
   }
   return null;
 }
@@ -264,11 +264,23 @@ function getBestDetailUrl(category, item, ssgEligibleIds) {
   // 내부 상세 페이지가 실제 정적 생성 대상이면 우리 페이지를 우선 사용한다.
   // (사용자 친화적으로 가공된 본문 제공)
   if (itemId && path && ssgEligibleIds.has(itemId)) {
-    return `https://pick-n-joy.com${path}`;
+    return path;
   }
 
-  // 내부 상세 페이지가 없으면 원문 링크로 보낸다.
-  return officialUrl || (path ? `https://pick-n-joy.com${path}` : '');
+  // 내부 상세 페이지가 Top 집합 밖이면 원문 링크만 사용한다.
+  return officialUrl || '';
+}
+
+function normalizeInternalLinksInMarkdown(markdown) {
+  let text = String(markdown || '');
+
+  // 절대 내부 URL은 상대경로로 통일
+  text = text.replace(/https:\/\/pick-n-joy\.com(\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+\/?)/g, '$1');
+
+  // 내부 상세/블로그 링크 trailing slash 강제
+  text = text.replace(/\]\((\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+)(?<!\/)\)/g, ']($1/)');
+
+  return text;
 }
 
 // 항목 마감일 추출
@@ -828,6 +840,7 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   body = buildStructuredSections(body, topItems, category);
   // 모든 큐레이션: 마지막 [자세히 보기]와 클로징 문단 사이 시각적 여백 추가
   body = addClosingGapAfterLastDetailLink(body);
+  body = normalizeInternalLinksInMarkdown(body);
 
   // 히어로 이미지 선택
   const heroImage = selectHeroImage(topItems, todayISO);
