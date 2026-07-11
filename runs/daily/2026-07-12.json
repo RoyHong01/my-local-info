@@ -1,0 +1,192 @@
+{
+  "reportDateKst": "2026-07-12",
+  "generatedAtUtc": "2026-07-11T20:01:08.185Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29166204892",
+    "runNumber": 881,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29166204892",
+    "runStartedAtUtc": "2026-07-11T19:58:59Z",
+    "headSha": "c1db09e4ad045887f25443fd9272731cfd1974ba"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "failure",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 351건",
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 0건, 업데이트 176건, 총 326건"
+      },
+      "status": "failure"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateBlog": "skipped",
+        "generateFestivalVersus": "skipped",
+        "generateChoice": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "skipped",
+        "e2e": "skipped",
+        "deploy": "skipped"
+      },
+      "status": "skipped"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "d66003d792d33f4c516ae9b046eca820f2804e2f",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-11",
+      "authoredAt": "2026-07-11T20:01:03Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 3,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 0,
+      "manual": 0,
+      "unknown": 0,
+      "total": 0
+    },
+    "byType": {
+      "blog": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": false,
+    "limitKrw": 0,
+    "estimatedCostKrw": 0,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 351건",
+      "validation": "ok",
+      "anthropicUsage": "3064/744",
+      "markdown": {
+        "generated": 1,
+        "pending": 180,
+        "titles": [
+          "영종·용유·북도면 지역주민 영종·인천대교 통행료 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 611건",
+      "validation": "warning: 전국 보조금·복지 정책 API 조회 결과가 기존 데이터(7560건)의 절반 미만입니다.",
+      "anthropicUsage": "2251/1244",
+      "markdown": {
+        "generated": 2,
+        "pending": 360,
+        "titles": [
+          "저소득층 금연치료 지원",
+          "한국형 상병수당 시범사업"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 176건, 총 326건",
+      "validation": "ok",
+      "anthropicUsage": "763/452",
+      "markdown": {
+        "generated": 1,
+        "pending": 235,
+        "titles": [
+          "2026 부산브랜드페스타"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
