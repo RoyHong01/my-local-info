@@ -109,12 +109,17 @@ jobs:
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/cleanup-expired.js
 
+      - name: '[1단계] non-Top 내부 링크 정리'
+        id: cleanup_nontop_links
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: node scripts/cleanup-nontop-links.js
+
       - name: '[1단계] 변경사항 커밋 & 푸시 (공공데이터)'
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/data scripts/cleanup-expired.js
+          git add public/data src/content/posts scripts/cleanup-expired.js
           if ! git diff --cached --quiet; then
             git commit -m "자동 업데이트(1단계): 공공데이터 동기화 $(date +'%Y-%m-%d')"
             git push
