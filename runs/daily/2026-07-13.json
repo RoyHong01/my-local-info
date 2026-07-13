@@ -1,71 +1,103 @@
 {
   "reportDateKst": "2026-07-13",
-  "generatedAtUtc": "2026-07-12T20:04:06.143Z",
+  "generatedAtUtc": "2026-07-13T03:39:08.237Z",
   "workflow": {
     "name": "Daily Update & Deploy",
     "repository": "RoyHong01/my-local-info",
-    "runId": "29206908812",
-    "runNumber": 882,
+    "runId": "29219879855",
+    "runNumber": 884,
     "runAttempt": 1,
-    "eventName": "schedule",
-    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29206908812",
-    "runStartedAtUtc": "2026-07-12T20:01:43Z",
-    "headSha": "b96e0316ca269ad7234d30dba774d7d48c007541"
+    "eventName": "workflow_dispatch",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29219879855",
+    "runStartedAtUtc": "2026-07-13T02:37:17Z",
+    "headSha": "c362079bf2660dd63f15981248692de39c164b7c"
   },
   "stages": [
     {
       "key": "stage1-data",
       "title": "1단계: 공공데이터 수집/만료처리",
-      "deployUrl": "",
+      "deployUrl": "https://922f2b76.my-local-info-2gs.pages.dev",
       "steps": {
         "collectIncheon": "success",
         "collectSubsidy": "success",
         "collectFestival": "success",
         "cleanupExpired": "success",
-        "build": "failure",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
       "collectSummary": {
         "incheon": "신규 0건, 총 351건",
-        "subsidy": "신규 1건, 총 611건",
-        "festival": "신규 0건, 업데이트 174건, 총 326건"
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 0건, 업데이트 169건, 총 326건"
       },
-      "status": "failure"
+      "status": "success"
     },
     {
       "key": "stage2-blog",
       "title": "2단계: AI 블로그 생성",
-      "deployUrl": "",
+      "deployUrl": "https://dd192c87.my-local-info-2gs.pages.dev",
       "steps": {
-        "generateBlog": "skipped",
-        "generateFestivalVersus": "skipped",
-        "generateChoice": "skipped",
-        "build": "skipped",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
-      "status": "skipped"
+      "status": "success"
     },
     {
       "key": "stage3-life",
       "title": "3단계: 일상의 즐거움 맛집",
-      "deployUrl": "",
+      "deployUrl": "https://721f0f4e.my-local-info-2gs.pages.dev",
       "steps": {
-        "collectRestaurants": "skipped",
-        "generateRestaurantPosts": "skipped",
-        "build": "skipped",
-        "e2e": "skipped",
-        "deploy": "skipped"
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
       },
-      "status": "skipped"
+      "status": "success"
     }
   ],
   "commits": [
     {
-      "sha": "3e8594be4a4927d97f57a6932a88f2f76ce0bb2c",
-      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-12",
-      "authoredAt": "2026-07-12T20:04:00Z",
+      "sha": "2982e30ff1fabe0d48ba45a1acef800aadba66f3",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-13",
+      "authoredAt": "2026-07-13T03:39:06Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-13-seoul-restaurant-1246652450.md",
+        "src/content/life/2026-07-13-seoul-restaurant-16050660.md",
+        "src/content/life/2026-07-13-seoul-restaurant-636848732.md"
+      ]
+    },
+    {
+      "sha": "6340c314a220749c8566aa6661a7cc8521e28600",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-13",
+      "authoredAt": "2026-07-13T02:52:37Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-13-choice-health-2026-07-13.md"
+      ]
+    },
+    {
+      "sha": "4884955eed2a06f6c36aa2e6219e73fdba20dfd7",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-13",
+      "authoredAt": "2026-07-13T02:51:24Z",
+      "files": [
+        "src/content/posts/2026-07-13-GyeonggiPuppetFestival.md",
+        "src/content/posts/2026-07-13-curation-subsidy.md",
+        "src/content/posts/2026-07-13-dongdaemun-safety-insurance.md",
+        "src/content/posts/2026-07-13-farm-machinery-support.md",
+        "src/content/posts/2026-07-13-incheon-student-discount.md"
+      ]
+    },
+    {
+      "sha": "b8ccac42c736ed70bedf399fd20350a61c1ae8ca",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-13",
+      "authoredAt": "2026-07-13T02:39:53Z",
       "files": [
         "public/data/festival.json",
         "public/data/incheon.json",
@@ -74,47 +106,76 @@
     }
   ],
   "changes": {
-    "totalChangedFiles": 3,
+    "totalChangedFiles": 14,
     "dataChangedFiles": [
       "public/data/festival.json",
       "public/data/incheon.json",
-      "public/data/subsidy.json"
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
     ],
-    "generatedBlogPosts": [],
-    "generatedLifePosts": [],
-    "generatedChoicePosts": [],
-    "generatedRestaurantPosts": [],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-13-curation-subsidy.md",
+      "src/content/posts/2026-07-13-dongdaemun-safety-insurance.md",
+      "src/content/posts/2026-07-13-farm-machinery-support.md",
+      "src/content/posts/2026-07-13-GyeonggiPuppetFestival.md",
+      "src/content/posts/2026-07-13-incheon-student-discount.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-13-choice-health-2026-07-13.md",
+      "src/content/life/2026-07-13-seoul-restaurant-1246652450.md",
+      "src/content/life/2026-07-13-seoul-restaurant-16050660.md",
+      "src/content/life/2026-07-13-seoul-restaurant-636848732.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-13-choice-health-2026-07-13.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-13-seoul-restaurant-1246652450.md",
+      "src/content/life/2026-07-13-seoul-restaurant-16050660.md",
+      "src/content/life/2026-07-13-seoul-restaurant-636848732.md"
+    ],
     "allChangedFiles": [
       "public/data/festival.json",
       "public/data/incheon.json",
-      "public/data/subsidy.json"
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-13-choice-health-2026-07-13.md",
+      "src/content/life/2026-07-13-seoul-restaurant-1246652450.md",
+      "src/content/life/2026-07-13-seoul-restaurant-16050660.md",
+      "src/content/life/2026-07-13-seoul-restaurant-636848732.md",
+      "src/content/posts/2026-07-13-curation-subsidy.md",
+      "src/content/posts/2026-07-13-dongdaemun-safety-insurance.md",
+      "src/content/posts/2026-07-13-farm-machinery-support.md",
+      "src/content/posts/2026-07-13-GyeonggiPuppetFestival.md",
+      "src/content/posts/2026-07-13-incheon-student-discount.md"
     ]
   },
   "publicationStats": {
     "totals": {
-      "auto": 0,
+      "auto": 9,
       "manual": 0,
       "unknown": 0,
-      "total": 0
+      "total": 9
     },
     "byType": {
       "blog": {
-        "auto": 0,
+        "auto": 5,
         "manual": 0,
         "unknown": 0,
-        "total": 0
+        "total": 5
       },
       "choice": {
-        "auto": 0,
+        "auto": 1,
         "manual": 0,
         "unknown": 0,
-        "total": 0
+        "total": 1
       },
       "restaurant": {
-        "auto": 0,
+        "auto": 3,
         "manual": 0,
         "unknown": 0,
-        "total": 0
+        "total": 3
       }
     }
   },
@@ -124,21 +185,21 @@
     "relaxedAppliedCount": 0
   },
   "budget": {
-    "enabled": false,
-    "limitKrw": 0,
-    "estimatedCostKrw": 0,
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.6,
     "stopped": false,
     "stopReason": ""
   },
   "imagePolicy": {
-    "midImageInsertedCount": 0,
+    "midImageInsertedCount": 1,
     "midImageOmittedCount": 0
   },
   "restaurantCache": {
-    "recollectPerformed": false,
+    "recollectPerformed": true,
     "cacheHit": 0,
-    "cacheMiss": 0,
-    "googleCalled": 0
+    "cacheMiss": 150,
+    "googleCalled": 150
   },
   "failureReasons": {
     "generateChoice": "",
@@ -148,12 +209,12 @@
     "incheon": {
       "summary": "신규 0건, 총 351건",
       "validation": "ok",
-      "anthropicUsage": "718/448",
+      "anthropicUsage": "629/491",
       "markdown": {
         "generated": 1,
-        "pending": 179,
+        "pending": 178,
         "titles": [
-          "노인여가복지서비스"
+          "소상공인 점프업 아카데미"
         ]
       },
       "photoApi": {
@@ -163,27 +224,27 @@
       }
     },
     "subsidy": {
-      "summary": "신규 1건, 총 611건",
+      "summary": "신규 0건, 총 611건",
       "validation": "ok",
-      "anthropicUsage": "2039/1254",
+      "anthropicUsage": "2116/1430",
       "markdown": {
         "generated": 2,
-        "pending": 358,
+        "pending": 356,
         "titles": [
-          "고용안정장려금지원(정규직전환지원)",
-          "대전 전세사기피해자 지원사업 신청"
+          "성인병질환 및 전립선암 검진 지원",
+          "다자녀 양육바우처 지원"
         ]
       }
     },
     "festival": {
-      "summary": "신규 0건, 업데이트 174건, 총 326건",
+      "summary": "신규 0건, 업데이트 169건, 총 326건",
       "validation": "ok",
-      "anthropicUsage": "802/495",
+      "anthropicUsage": "813/513",
       "markdown": {
         "generated": 1,
-        "pending": 234,
+        "pending": 233,
         "titles": [
-          "칠곡 꿀맥 페스티벌"
+          "청년축제 달성워터스플래시"
         ]
       },
       "photoFallback": 0
