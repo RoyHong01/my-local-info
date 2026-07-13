@@ -77,5 +77,5 @@ source_ids: "2826964,3487396"
 
 ### 🔎 구체적인 정보 더 보기
 
-- [그루브 인 관악](/festival/2826964/)
-- [칠곡 꿀맥 페스티벌](/festival/3487396/)
+- [그루브 인 관악](/blog/2026-07-01-groovein-gwanak/)
+- [칠곡 꿀맥 페스티벌](/blog/2026-06-29-ChilgokHoneyBeerFestival/)

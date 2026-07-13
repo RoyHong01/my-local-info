@@ -29,6 +29,36 @@
 
 ---
 
+## 2026-07-13 (NON_TOP_DETAIL_LINK 시간 드리프트 대응: 자동 정리 단계 신설 + 기존 위반 12건 해소)
+
+- **수정 파일**:
+  - `scripts/cleanup-nontop-links.js`
+  - `.github/workflows/deploy.yml`
+  - `src/content/posts/2026-06-17-craftweek.md`
+  - `src/content/posts/2026-06-20-GyeongsanCafeFestival.md`
+  - `src/content/posts/2026-06-22-BuyeoLotusFestival.md`
+  - `src/content/posts/2026-06-29-ChilgokHoneyBeerFestival.md`
+  - `src/content/posts/2026-06-30-curation-festival.md`
+  - `src/content/posts/2026-07-02-curation-festival.md`
+  - `src/content/posts/2026-07-11-festival-versus-groove-in-gwanak-chilgok-honey-beer.md`
+  - `public/data/search-index.json`
+  - `WORK_LOG.md`
+- **배경**:
+  - 2026-07-10에는 링크 정책 위반으로 2단계 build 실패, 2026-07-11에는 사용자 별도 패치 후 성공했으나, 2026-07-12~13에 1단계 build가 `NON_TOP_DETAIL_LINK`로 재실패함.
+- **원인(RCA)**:
+  - 링크 포맷(상대경로/trailing slash) 자체는 정리됐지만, 검증기(`check:content-links`)가 실행 시점의 Top 집합(`getAllTopIds`)을 기준으로 검사하면서 기존 글의 축제 상세 링크가 non-Top으로 이동해 시간 드리프트 실패가 발생.
+- **조치**:
+  1. `scripts/cleanup-nontop-links.js` 신설: `validate-content-links.js`와 같은 remark AST 링크 파싱으로 non-Top 상세 링크를 탐지하고, `getAllTopIds()`를 직접 사용해 Top 판정.
+  2. 변환 규칙 적용: 해당 `category/id`에 대응하는 블로그 `source_id -> slug`가 있으면 `/blog/{slug}/`로 교체, 없으면 링크 해제(텍스트 유지).
+  3. `.github/workflows/deploy.yml` 1단계에 `cleanup-expired` 직후 `cleanup-nontop-links` 실행 단계를 추가하고, 1단계 자동 커밋 대상에 `src/content/posts`를 포함.
+  4. 스크립트 1회 실행으로 위반 12건을 즉시 정리(`changed_files=7`, `to_blog=9`, `unlinked=3`).
+  5. 7/10~7/11 사용자 별도 수정 이력 보강: `e6efa0f`(curation), `f200b98`(festival-versus) 적용 이후 7/11 스케줄 런(`run_id=29120686916`) 1~3단계 성공 확인.
+- **검증**:
+  - `node scripts/cleanup-nontop-links.js` 실행.
+  - `npm run check:content-links` 통과 (`violations: 0`).
+  - `npm run build` 성공.
+  - `Sitemap subset check passed (observation mode)` 확인.
+
 ## 2026-07-09 (링크 잔여 6건 정리 + sitemap Top 필터 보강)
 
 - **수정 파일**:
