@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-11T00:00:00+09:00",
+  "updatedAtKst": "2026-07-13T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4436,6 +4436,59 @@
       "sourceId": "manual-choice-beauty-fashion-2026-07-11",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-13",
+      "productId": "9568936089",
+      "productName": "닥터리치 비타민C 3000mg 90포, 3개, 270g",
+      "brand": "닥터리치",
+      "productGroupTokens": [
+        "비타민c",
+        "3000mg",
+        "90포",
+        "270g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-13-choice-health-2026-07-13.md",
+      "sourceId": "manual-choice-health-2026-07-13",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-13",
+      "productId": "7311465993",
+      "productName": "뉴트리디데이 프리미엄 멀티비타민 골드, 90정, 4세트",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "멀티비타민",
+        "골드",
+        "90정",
+        "4세트",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-13-choice-health-2026-07-13.md",
+      "sourceId": "manual-choice-health-2026-07-13",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-13",
+      "productId": "7497623760",
+      "productName": "뉴트리디데이 프리미엄 루테인 골드, 90정, 3개",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "루테인",
+        "골드",
+        "90정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-13-choice-health-2026-07-13.md",
+      "sourceId": "manual-choice-health-2026-07-13",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
