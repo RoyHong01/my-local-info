@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-13T00:00:00+09:00",
+  "updatedAtKst": "2026-07-14T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4489,6 +4489,60 @@
       "sourceId": "manual-choice-health-2026-07-13",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-07-14",
+      "productId": "4791947716",
+      "productName": "버블싹 폼 클리너, 500ml, 1개",
+      "brand": "버블싹",
+      "productGroupTokens": [
+        "클리너",
+        "500ml",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-14-choice-living-2026-07-14.md",
+      "sourceId": "manual-choice-living-2026-07-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-14",
+      "productId": "8535285630",
+      "productName": "CLUBUNI 욕실 화장실 코너 선반 정리대 3단, 4단, 투명",
+      "brand": "CLUBUNI",
+      "productGroupTokens": [
+        "욕실",
+        "화장실",
+        "코너",
+        "선반",
+        "정리대",
+        "3단"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-14-choice-living-2026-07-14.md",
+      "sourceId": "manual-choice-living-2026-07-14",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-14",
+      "productId": "9563089206",
+      "productName": "Veralool 대용량 옷정리 이불 수납함 패브릭 리빙박스 고급 린넨 접이식 옷 보관박스 정리함 Live02",
+      "brand": "Veralool",
+      "productGroupTokens": [
+        "옷정리",
+        "이불",
+        "수납함",
+        "패브릭",
+        "리빙박스",
+        "고급"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-14-choice-living-2026-07-14.md",
+      "sourceId": "manual-choice-living-2026-07-14",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
