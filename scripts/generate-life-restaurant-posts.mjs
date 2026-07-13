@@ -30,6 +30,7 @@ function loadLocalEnvFiles() {
 loadLocalEnvFiles();
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
 const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
 if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
@@ -77,6 +78,8 @@ if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && !ALLOW_EXISTING_POST_DELETION) {
 }
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const postsDir = path.join(process.cwd(), 'src', 'content', 'life');
+const restaurantImageDir = path.join(process.cwd(), 'public', 'images', 'restaurants');
+const restaurantImagePublicPath = '/images/restaurants';
 const existingPostDirs = [
   path.join(process.cwd(), 'src', 'content', 'posts'),
   path.join(process.cwd(), 'src', 'content', 'life'),
@@ -351,6 +354,90 @@ async function canEmbedImageUrl(url) {
   }
 }
 
+function buildPlacesAuthorizedUrl(url) {
+  const raw = String(url || '').trim();
+  if (!raw) return raw;
+
+  try {
+    const parsed = new URL(raw);
+    if (!/places\.googleapis\.com$/i.test(parsed.hostname)) return raw;
+    if (parsed.searchParams.has('key')) return parsed.toString();
+    if (!GOOGLE_PLACES_API_KEY) return raw;
+    parsed.searchParams.set('key', GOOGLE_PLACES_API_KEY);
+    return parsed.toString();
+  } catch {
+    return raw;
+  }
+}
+
+function getImageExtensionFromUrlOrType(url, contentType) {
+  const type = String(contentType || '').toLowerCase();
+  if (type.includes('image/jpeg') || type.includes('image/jpg')) return '.jpg';
+  if (type.includes('image/png')) return '.png';
+  if (type.includes('image/webp')) return '.webp';
+  if (type.includes('image/gif')) return '.gif';
+
+  const value = String(url || '').trim();
+  try {
+    const parsed = new URL(value);
+    const ext = path.extname(parsed.pathname || '').toLowerCase();
+    if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
+      return ext === '.jpeg' ? '.jpg' : ext;
+    }
+  } catch {
+    // noop
+  }
+  return '.jpg';
+}
+
+async function mirrorImageAsLocalAsset(url, sourceId, kind) {
+  const raw = String(url || '').trim();
+  if (!/^https?:\/\//i.test(raw)) return null;
+
+  const fetchTargetUrl = buildPlacesAuthorizedUrl(raw);
+  const safeLogUrl = stripPlacesKeyFromUrl(raw);
+  try {
+    const response = await fetch(fetchTargetUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'image/*,*/*;q=0.8',
+      },
+      redirect: 'follow',
+    });
+
+    if (!response.ok) {
+      console.warn(`⚠️ 로컬 이미지 미러링 실패(status=${response.status}): ${safeLogUrl}`);
+      return null;
+    }
+
+    const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+    if (contentType && !contentType.startsWith('image/')) {
+      console.warn(`⚠️ 로컬 이미지 미러링 실패(비이미지 응답): ${safeLogUrl}`);
+      return null;
+    }
+
+    const bytes = Buffer.from(await response.arrayBuffer());
+    if (bytes.length < 128) {
+      console.warn(`⚠️ 로컬 이미지 미러링 실패(응답 크기 비정상): ${safeLogUrl}`);
+      return null;
+    }
+
+    const ext = getImageExtensionFromUrlOrType(raw, contentType);
+    const fileName = `${getTodayKST()}-${String(sourceId || 'unknown')}-${kind}${ext}`;
+    const diskPath = path.join(restaurantImageDir, fileName);
+
+    await fs.mkdir(restaurantImageDir, { recursive: true });
+    await fs.writeFile(diskPath, bytes);
+
+    const publicUrl = `${restaurantImagePublicPath}/${fileName}`;
+    console.log(`🖼️ 로컬 이미지 미러링 성공: ${publicUrl}`);
+    return publicUrl;
+  } catch (error) {
+    console.warn(`⚠️ 로컬 이미지 미러링 예외: ${safeLogUrl} (${error?.message || error})`);
+    return null;
+  }
+}
+
 function isLikelyRestaurantImageUrl(url) {
   const value = String(url || '').trim();
   if (!/^https?:\/\//i.test(value)) return false;
@@ -399,11 +486,11 @@ function stripPlacesKeyFromUrl(url) {
 
 async function resolveSafeHeroImage(item, defaultImage) {
   const candidates = [item?.naverPhotoUrl, item?.naverPhotoUrl2, item?.googlePhotoUrl]
-    .map((value) => stripPlacesKeyFromUrl(value))
     .map((value) => String(value || '').trim())
     .filter(Boolean);
 
-  for (const candidateUrl of candidates) {
+  for (const rawCandidateUrl of candidates) {
+    const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
     if (!isLikelyRestaurantImageUrl(candidateUrl)) {
       console.warn(`⚠️ 히어로 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
       continue;
@@ -414,6 +501,10 @@ async function resolveSafeHeroImage(item, defaultImage) {
     if (await canEmbedImageUrl(candidateUrl)) {
       return candidateUrl;
     }
+
+    const mirroredLocal = await mirrorImageAsLocalAsset(rawCandidateUrl, item?.id, 'hero');
+    if (mirroredLocal) return mirroredLocal;
+
     console.warn(`⚠️ 히어로 이미지 제외(임베드 불가): ${candidateUrl}`);
   }
 
@@ -422,11 +513,11 @@ async function resolveSafeHeroImage(item, defaultImage) {
 
 async function resolveSafeRestaurantInlineImage(item) {
   const candidates = [item?.naverPhotoUrl2, item?.googlePhotoUrl, item?.naverPhotoUrl]
-    .map((value) => stripPlacesKeyFromUrl(value))
     .map((value) => String(value || '').trim())
     .filter(Boolean);
 
-  for (const candidateUrl of candidates) {
+  for (const rawCandidateUrl of candidates) {
+    const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
     if (!isLikelyRestaurantImageUrl(candidateUrl)) {
       console.warn(`⚠️ 본문 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
       continue;
@@ -435,6 +526,10 @@ async function resolveSafeRestaurantInlineImage(item) {
     if (await canEmbedImageUrl(candidateUrl)) {
       return candidateUrl;
     }
+
+    const mirroredLocal = await mirrorImageAsLocalAsset(rawCandidateUrl, item?.id, 'inline');
+    if (mirroredLocal) return mirroredLocal;
+
     console.warn(`⚠️ 본문 이미지 제외(임베드 불가): ${candidateUrl}`);
   }
 
