@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-16T00:00:00+09:00",
+  "updatedAtKst": "2026-07-17T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4657,6 +4657,63 @@
       "sourceId": "manual-choice-digital-2026-07-16",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-17",
+      "productId": "6502423166",
+      "productName": "삼성 정품 블루스카이 5000 펫케어 57 집진 탈취 필터 CFX-D140D AX57A5550WFD AX57T5420WFD",
+      "brand": "삼성",
+      "productGroupTokens": [
+        "블루스카이",
+        "펫케어",
+        "집진",
+        "탈취",
+        "필터",
+        "cfx"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md",
+      "sourceId": "manual-choice-pet-life-2026-07-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-17",
+      "productId": "6728583769",
+      "productName": "쿤달 네이처 마일드 퍼퓸 애견 샴푸 화이트런더리향, 500ml, 1개입, 1개",
+      "brand": "쿤달",
+      "productGroupTokens": [
+        "네이처",
+        "마일드",
+        "퍼퓸",
+        "애견",
+        "샴푸",
+        "화이트런더리향"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md",
+      "sourceId": "manual-choice-pet-life-2026-07-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-17",
+      "productId": "7885056670",
+      "productName": "내꼬냥 고양이 프리미엄 두부벤토 모래 6in1 MAXMI6, 2.5kg, 6개, 무향",
+      "brand": "내꼬냥",
+      "productGroupTokens": [
+        "고양이",
+        "두부벤토",
+        "모래",
+        "6in1",
+        "maxmi6",
+        "5kg"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md",
+      "sourceId": "manual-choice-pet-life-2026-07-17",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
