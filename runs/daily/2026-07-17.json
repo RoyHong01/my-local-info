@@ -1,0 +1,253 @@
+{
+  "reportDateKst": "2026-07-17",
+  "generatedAtUtc": "2026-07-16T20:57:37.199Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29529953607",
+    "runNumber": 889,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29529953607",
+    "runStartedAtUtc": "2026-07-16T19:56:11Z",
+    "headSha": "caaa8798381d43299e6a46203639c66be2be06f1"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://c34d5384.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 610건",
+        "festival": "신규 2건, 업데이트 183건, 총 342건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://709e8d03.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://c4900408.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "14c16d97796eb27ee30dc54e34eb5dec47e447a6",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-16",
+      "authoredAt": "2026-07-16T20:57:35Z",
+      "files": [
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-17-gyeonggi-restaurant-918726041.md",
+        "src/content/life/2026-07-17-seoul-restaurant-27416360.md",
+        "src/content/life/2026-07-17-seoul-restaurant-8997244.md"
+      ]
+    },
+    {
+      "sha": "3b4e02f43827b0d5d61207b3aa20c03866ade35f",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-16",
+      "authoredAt": "2026-07-16T20:11:45Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md"
+      ]
+    },
+    {
+      "sha": "e2a03370c41961c5464e618cc61dc168f7c592eb",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-16",
+      "authoredAt": "2026-07-16T20:10:34Z",
+      "files": [
+        "src/content/posts/2026-07-16-JejuAgriExpo.md",
+        "src/content/posts/2026-07-16-gimhae-remodeling-support.md",
+        "src/content/posts/2026-07-16-incheon-disability-support.md",
+        "src/content/posts/2026-07-16-seoul-youth-culture-pass.md",
+        "src/content/posts/2026-07-17-curation-incheon.md"
+      ]
+    },
+    {
+      "sha": "5a5afb121a5da16c99c71c7fbaef8ce3d75e90bf",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-16",
+      "authoredAt": "2026-07-16T19:58:27Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-16-gimhae-remodeling-support.md",
+      "src/content/posts/2026-07-16-incheon-disability-support.md",
+      "src/content/posts/2026-07-16-JejuAgriExpo.md",
+      "src/content/posts/2026-07-16-seoul-youth-culture-pass.md",
+      "src/content/posts/2026-07-17-curation-incheon.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md",
+      "src/content/life/2026-07-17-gyeonggi-restaurant-918726041.md",
+      "src/content/life/2026-07-17-seoul-restaurant-27416360.md",
+      "src/content/life/2026-07-17-seoul-restaurant-8997244.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-17-gyeonggi-restaurant-918726041.md",
+      "src/content/life/2026-07-17-seoul-restaurant-27416360.md",
+      "src/content/life/2026-07-17-seoul-restaurant-8997244.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-17-choice-pet-life-2026-07-17.md",
+      "src/content/life/2026-07-17-gyeonggi-restaurant-918726041.md",
+      "src/content/life/2026-07-17-seoul-restaurant-27416360.md",
+      "src/content/life/2026-07-17-seoul-restaurant-8997244.md",
+      "src/content/posts/2026-07-16-gimhae-remodeling-support.md",
+      "src/content/posts/2026-07-16-incheon-disability-support.md",
+      "src/content/posts/2026-07-16-JejuAgriExpo.md",
+      "src/content/posts/2026-07-16-seoul-youth-culture-pass.md",
+      "src/content/posts/2026-07-17-curation-incheon.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.94,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 0,
+    "cacheMiss": 150,
+    "googleCalled": 150
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "735/562",
+      "markdown": {
+        "generated": 1,
+        "pending": 176,
+        "titles": [
+          "가스안전 취약계층 가스안전장치(타이머콕) 보급 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 610건",
+      "validation": "ok",
+      "anthropicUsage": "2400/1206",
+      "markdown": {
+        "generated": 2,
+        "pending": 350,
+        "titles": [
+          "신용보증지원",
+          "발달장애인 주간활동서비스"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 2건, 업데이트 183건, 총 342건",
+      "validation": "ok",
+      "anthropicUsage": "908/524",
+      "markdown": {
+        "generated": 1,
+        "pending": 245,
+        "titles": [
+          "인생독서X인생서점 북페어"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
