@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-17T00:00:00+09:00",
+  "updatedAtKst": "2026-07-18T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4714,6 +4714,63 @@
       "sourceId": "manual-choice-pet-life-2026-07-17",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-18",
+      "productId": "9187340574",
+      "productName": "2+1 출시하자마자 1위 퓨어그램 모공이별 딥클렌징폼 제주 그린티 저자극 폼클렌징 120ml, 3개, 120ml",
+      "brand": "21",
+      "productGroupTokens": [
+        "출시하자마자",
+        "1위",
+        "퓨어그램",
+        "모공이별",
+        "딥클렌징폼",
+        "제주"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-18-choice-beauty-fashion-2026-07-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-18",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 21N 아이보리, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-18-choice-beauty-fashion-2026-07-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-18",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-18-choice-beauty-fashion-2026-07-18.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-18",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
