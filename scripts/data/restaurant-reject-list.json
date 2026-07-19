@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "updatedAt": "",
+  "policy": {
+    "allowLowRatingReevaluation": false,
+    "lowRatingReevaluationDays": 180
+  },
+  "items": {}
+}
