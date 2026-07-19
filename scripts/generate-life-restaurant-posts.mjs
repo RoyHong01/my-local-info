@@ -41,6 +41,7 @@ const TARGET_POSTS_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_POSTS_PER_BUC
 const INTER_REQUEST_DELAY_MS = Number(process.env.INTER_REQUEST_DELAY_MS || '1000');
 const BOOTSTRAP_MIN_PER_BUCKET = Number(process.env.LIFE_RESTAURANT_BOOTSTRAP_MIN_PER_BUCKET || '0');
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
+const ALLOW_GENERATE_RECOLLECT = process.env.RESTAURANT_ALLOW_GENERATE_RECOLLECT !== 'false';
 const LIFE_RESTAURANT_PUBLISHED_BY = String(process.env.LIFE_RESTAURANT_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const ALLOW_EXISTING_POST_DELETION = process.env.ALLOW_EXISTING_POST_DELETION === 'true';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
@@ -1519,7 +1520,7 @@ async function run() {
   const emptyBuckets = findEmptyBuckets(candidates);
   const needsRecollectByCount = candidates.length < MIN_UNUSED_CANDIDATES;
   const needsRecollectByBucket = emptyBuckets.length > 0;
-  const shouldRecollect = FORCE_RESTAURANT_SOURCE_IDS.size === 0 && (needsRecollectByCount || needsRecollectByBucket);
+  const shouldRecollect = ALLOW_GENERATE_RECOLLECT && FORCE_RESTAURANT_SOURCE_IDS.size === 0 && (needsRecollectByCount || needsRecollectByBucket);
 
   if (shouldRecollect) {
     const reason = needsRecollectByCount

@@ -18,6 +18,21 @@
   - 실행한 검증 2
 ---
 2026-07-19: `check:sitemap-subset`를 최근 자동화 런 5회 위반 0건 확인 후 강제 모드(exit 1)로 전환하고, non-top 링크 2건 정리 후 `npm run build` 통과.
+2026-07-19: 맛집 Places 비용 절감을 위해 Supabase 캐시를 `scripts/data/google-ratings-cache.json` 로컬 캐시(90일 TTL)로 전환하고, ensure 재수집 7일 쿨다운 + 3단계 generate 재수집 비활성 정책을 적용한 뒤 수집 2회 검증에서 2회차 `google_called=0` 확인.
+
+## 2026-06 소급 기록 (맛집 파이프라인 변경 이력 보강)
+
+- **근거 범위**:
+  - `git log --oneline --since=2026-06-10 --until=2026-06-30 -- scripts/collect-life-restaurants.mjs scripts/ensure-life-restaurant-candidates.mjs .github/workflows/deploy.yml`
+- **확인된 커밋(해당 범위 내)**:
+  1. `f7dd82b` (2026-06-10) — `.github/workflows/deploy.yml`의 자동 커밋 조건을 staged diff 기준으로 보정(3단계 재수집 조건/빈도 변경 없음).
+  2. `411d8ab` (2026-06-10) — Gemini 모델 기본값을 `gemini-3.1-flash-lite`로 전환(`collect-life-restaurants.mjs` 1줄 + workflow env 정리, 재수집 조건 변경 없음).
+- **ensure 재수집 로직 도입 커밋(참고, 6월 범위 외)**:
+  1. `c3b4070` (2026-04-08) — `scripts/ensure-life-restaurant-candidates.mjs` 신규 도입 + 3단계 수집 진입점을 `ensure`로 전환.
+  2. `2079853` (2026-04-08) — `unused 후보 < 10` 임계치(`MIN_UNUSED_RESTAURANT_CANDIDATES`) 조건 추가.
+- **6/21 전후 판정**:
+  - `2026-06-19 ~ 2026-06-23` 구간에 위 3개 파일 대상 커밋 없음.
+  - 따라서 3단계 실행 빈도/재수집 조건의 변경은 6/21 전후가 아니라 4/8 도입 시점에 발생한 것으로 판정.
 
 ## 2026-07-13 (NON_TOP_DETAIL_LINK 시간 드리프트 대응: 자동 정리 단계 신설 + 기존 위반 12건 해소)
 

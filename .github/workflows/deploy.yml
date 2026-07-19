@@ -360,6 +360,7 @@ jobs:
           GEMINI_MODEL: 'gemini-3.1-flash-lite'
           RESTAURANT_GEMINI_MODEL: 'gemini-3.1-flash-lite'
           INTER_REQUEST_DELAY_MS: '15000'
+          RESTAURANT_RECOLLECT_COOLDOWN_DAYS: '7'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
@@ -373,6 +374,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: 'gemini-3.1-flash-lite'
           INTER_REQUEST_DELAY_MS: '15000'
+          RESTAURANT_ALLOW_GENERATE_RECOLLECT: 'false'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}

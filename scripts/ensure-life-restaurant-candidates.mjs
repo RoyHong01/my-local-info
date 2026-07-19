@@ -6,7 +6,9 @@ import { execFileSync } from 'child_process';
 
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
+const RECOLLECT_COOLDOWN_DAYS = Number(process.env.RESTAURANT_RECOLLECT_COOLDOWN_DAYS || '7');
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
+const ratingsCachePath = path.join(process.cwd(), 'scripts', 'data', 'google-ratings-cache.json');
 const existingPostDirs = [
   path.join(process.cwd(), 'src', 'content', 'posts'),
   path.join(process.cwd(), 'src', 'content', 'life'),
@@ -82,6 +84,29 @@ async function readSnapshot() {
   }
 }
 
+async function readRatingsCacheMeta() {
+  try {
+    const raw = await fs.readFile(ratingsCachePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    const meta = parsed?.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
+    return {
+      lastRecollectAt: String(meta.lastRecollectAt || ''),
+    };
+  } catch {
+    return {
+      lastRecollectAt: '',
+    };
+  }
+}
+
+function isCooldownActive(lastRecollectAt) {
+  if (!lastRecollectAt) return false;
+  const parsed = new Date(lastRecollectAt);
+  if (Number.isNaN(parsed.getTime())) return false;
+  const elapsedDays = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
+  return elapsedDays < RECOLLECT_COOLDOWN_DAYS;
+}
+
 function buildFilteredCandidates(snapshot, existingIds) {
   const rawCandidates = buildRoundRobinCandidates(snapshot?.regions || {});
   return rawCandidates
@@ -128,6 +153,7 @@ function emitMetrics(snapshot, recollectPerformed) {
 
 async function main() {
   const snapshot = await readSnapshot();
+  const ratingsCacheMeta = await readRatingsCacheMeta();
   const existingIds = await getExistingRestaurantIds();
   const candidates = snapshot ? buildFilteredCandidates(snapshot, existingIds) : [];
   const emptyBuckets = findEmptyBuckets(candidates);
@@ -146,6 +172,18 @@ async function main() {
     : !hasEnoughCandidates
       ? `unused 후보 ${candidates.length}건 (기준 ${MIN_UNUSED_CANDIDATES}건 미만)`
       : `필수 버킷 후보 부족 (${emptyBuckets.join(', ')})`;
+
+  const shouldApplyCooldown = Boolean(snapshot) && (!hasEnoughCandidates || !hasAllTargetBuckets);
+  if (shouldApplyCooldown && isCooldownActive(ratingsCacheMeta.lastRecollectAt)) {
+    console.log(`⏸️ 재수집 쿨다운 적용: 마지막 재수집 ${ratingsCacheMeta.lastRecollectAt} (쿨다운 ${RECOLLECT_COOLDOWN_DAYS}일)`);
+    console.log(`↪ 재수집 스킵: ${recollectReason}`);
+    appendGithubOutput('recollect_performed', 'false');
+    appendGithubOutput('recollect_skipped_by_cooldown', 'true');
+    emitMetrics(snapshot, false);
+    return;
+  }
+
+  appendGithubOutput('recollect_skipped_by_cooldown', 'false');
 
   console.log(`🔄 맛집 후보 재수집 필요: ${recollectReason}`);
 
