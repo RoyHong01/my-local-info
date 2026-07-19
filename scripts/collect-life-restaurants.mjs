@@ -1,13 +1,14 @@
 import fsSync from 'fs';
 import fs from 'fs/promises';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
+const GOOGLE_RATINGS_CACHE_PATH = path.join(process.cwd(), 'scripts', 'data', 'google-ratings-cache.json');
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const GOOGLE_PLACES_MIN_REVIEW_COUNT = Number(process.env.GOOGLE_PLACES_MIN_REVIEW_COUNT || 10); // 구글 리뷰 수 최소 기준
+const GOOGLE_RATING_CACHE_TTL_DAYS = Number(process.env.GOOGLE_RATING_CACHE_TTL_DAYS || 90);
 const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
 const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 'true';
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
@@ -15,107 +16,106 @@ const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 't
 // CI에서는 RESTAURANT_GEMINI_MODEL env가 우선 주입되며, 아래 값은 로컬 미설정 시에만 사용된다.
 const RESTAURANT_GEMINI_MODEL_FALLBACK = 'gemini-3.1-flash-lite';
 
-const supabaseWarnState = {
-  cacheReadFailure: 0,
-  cacheReadException: 0,
-  cacheUpsertFailure: 0,
-  cacheUpsertException: 0,
-};
-
-function warnSupabaseOnce(kind, message, detail) {
-  supabaseWarnState[kind] = Number(supabaseWarnState[kind] || 0) + 1;
-  if (supabaseWarnState[kind] !== 1) return;
-
-  console.warn(message, detail);
-  console.warn('[Supabase] 동일 유형 경고는 이번 실행에서 1회만 출력됩니다.');
+function createEmptyRatingsCache() {
+  return {
+    meta: {
+      updatedAt: '',
+      lastRecollectAt: '',
+      ttlDays: GOOGLE_RATING_CACHE_TTL_DAYS,
+    },
+    items: {},
+  };
 }
 
-function createSupabaseCacheClient() {
-  const supabaseUrl = process.env.PICKNJOY_SUPABASE_URL;
-  const supabaseSecret = process.env.PICKNJOY_SUPABASE_SECRET_KEY;
-  if (!supabaseUrl || !supabaseSecret) return null;
-
+async function readGoogleRatingsCache() {
   try {
-    return createClient(supabaseUrl, supabaseSecret, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
-  } catch (error) {
-    console.warn('[Supabase] 클라이언트 초기화 실패:', error?.message || error);
-    return null;
-  }
-}
-
-async function getCachedRestaurantRating(supabase, kakaoId) {
-  if (!supabase || !kakaoId) return null;
-
-  try {
-    const { data, error } = await supabase
-      .from('restaurants_cache')
-      .select('kakao_id, place_id, rating, user_rating_count')
-      .eq('kakao_id', String(kakaoId))
-      .maybeSingle();
-
-    if (error) {
-      warnSupabaseOnce(
-        'cacheReadFailure',
-        `[Supabase] 캐시 조회 실패(${kakaoId}):`,
-        error.message || error,
-      );
-      return null;
-    }
-
-    const placeId = String(data?.place_id || '').trim();
-    const rating = typeof data?.rating === 'number' ? data.rating : Number(data?.rating);
-    const ratingCount = typeof data?.user_rating_count === 'number'
-      ? data.user_rating_count
-      : Number(data?.user_rating_count);
-
-    if (!placeId || Number.isNaN(rating)) return null;
-
+    const raw = await fs.readFile(GOOGLE_RATINGS_CACHE_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    const items = parsed?.items && typeof parsed.items === 'object' ? parsed.items : {};
+    const meta = parsed?.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
     return {
-      placeId,
-      rating,
-      ratingCount: Number.isNaN(ratingCount) ? null : ratingCount,
+      meta: {
+        updatedAt: String(meta.updatedAt || ''),
+        lastRecollectAt: String(meta.lastRecollectAt || ''),
+        ttlDays: Number(meta.ttlDays || GOOGLE_RATING_CACHE_TTL_DAYS),
+      },
+      items,
     };
-  } catch (error) {
-    warnSupabaseOnce(
-      'cacheReadException',
-      `[Supabase] 캐시 조회 예외(${kakaoId}):`,
-      error?.message || error,
-    );
-    return null;
+  } catch {
+    return createEmptyRatingsCache();
   }
 }
 
-async function upsertRestaurantRatingCache(supabase, item, googleResult) {
-  if (!supabase || !item?.id || !googleResult?.placeId || typeof googleResult?.rating !== 'number') {
+async function writeGoogleRatingsCache(cache) {
+  const next = cache && typeof cache === 'object' ? cache : createEmptyRatingsCache();
+  next.meta = next.meta && typeof next.meta === 'object' ? next.meta : {};
+  next.items = next.items && typeof next.items === 'object' ? next.items : {};
+  next.meta.updatedAt = new Date().toISOString();
+  next.meta.ttlDays = GOOGLE_RATING_CACHE_TTL_DAYS;
+
+  await fs.mkdir(path.dirname(GOOGLE_RATINGS_CACHE_PATH), { recursive: true });
+  await fs.writeFile(GOOGLE_RATINGS_CACHE_PATH, JSON.stringify(next, null, 2), 'utf-8');
+}
+
+function getCachedRestaurantRating(cache, kakaoId) {
+  if (!cache || !kakaoId) return null;
+
+  const key = String(kakaoId).trim();
+  if (!key) return null;
+
+  const entry = cache.items?.[key];
+  if (!entry || typeof entry !== 'object') return null;
+
+  const 조회일 = String(entry.조회일 || '');
+  const rawRating = entry.rating;
+  const rating = typeof rawRating === 'number' ? rawRating : Number(rawRating);
+  const userRatingCount = typeof entry.userRatingCount === 'number'
+    ? entry.userRatingCount
+    : Number(entry.userRatingCount);
+
+  if (!조회일) return null;
+
+  const checkedAt = new Date(조회일);
+  if (Number.isNaN(checkedAt.getTime())) return null;
+
+  const elapsedDays = (Date.now() - checkedAt.getTime()) / (1000 * 60 * 60 * 24);
+  if (elapsedDays > GOOGLE_RATING_CACHE_TTL_DAYS) {
+    return null;
+  }
+
+  const hasRating = rawRating !== null && rawRating !== undefined && !Number.isNaN(rating);
+
+  return {
+    placeId: String(entry.placeId || '').trim(),
+    rating: hasRating ? rating : null,
+    ratingCount: Number.isNaN(userRatingCount) ? null : userRatingCount,
+    checkedAt: 조회일,
+  };
+}
+
+function upsertRestaurantRatingCache(cache, item, googleResult) {
+  if (!cache || !item?.id) {
     return;
   }
 
-  try {
-    const { error } = await supabase
-      .from('restaurants_cache')
-      .upsert({
-        kakao_id: String(item.id),
-        place_id: String(googleResult.placeId),
-        rating: googleResult.rating,
-        user_rating_count: googleResult.userRatingCount ?? null,
-      }, { onConflict: 'kakao_id' });
+  const key = String(item.id).trim();
+  if (!key) return;
 
-    if (error) {
-      warnSupabaseOnce(
-        'cacheUpsertFailure',
-        `[Supabase] 캐시 upsert 실패(${item.id}):`,
-        error.message || error,
-      );
-    }
-  } catch (error) {
-    warnSupabaseOnce(
-      'cacheUpsertException',
-      `[Supabase] 캐시 upsert 예외(${item.id}):`,
-      error?.message || error,
-    );
-  }
+  cache.items = cache.items && typeof cache.items === 'object' ? cache.items : {};
+  const rating = typeof googleResult?.rating === 'number' ? googleResult.rating : null;
+  const ratingCount = typeof googleResult?.userRatingCount === 'number' ? googleResult.userRatingCount : null;
+  cache.items[key] = {
+    rating,
+    userRatingCount: ratingCount,
+    조회일: new Date().toISOString(),
+    placeId: String(googleResult?.placeId || '').trim(),
+  };
+}
+
+function markRecollectAt(cache) {
+  if (!cache || typeof cache !== 'object') return;
+  cache.meta = cache.meta && typeof cache.meta === 'object' ? cache.meta : {};
+  cache.meta.lastRecollectAt = new Date().toISOString();
 }
 
 function mergeCacheMetrics(base, addition) {
@@ -725,7 +725,7 @@ async function fetchNaverRestaurantPhoto(name, address, clientId, clientSecret, 
   return null;
 }
 
-async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCacheClient) {
+async function enrichExistingRestaurantPhotos(payload, googleApiKey, ratingsCache) {
   const regions = payload?.regions && typeof payload.regions === 'object' ? payload.regions : {};
   const metrics = {
     cacheHit: 0,
@@ -752,7 +752,7 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCac
       let photoUrl = null;
 
       if (!placeId) {
-        const cached = await getCachedRestaurantRating(supabaseCacheClient, item?.id);
+        const cached = getCachedRestaurantRating(ratingsCache, item?.id);
         if (cached?.placeId) {
           metrics.cacheHit += 1;
           placeId = cached.placeId;
@@ -776,7 +776,7 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCac
             if (rating == null) rating = googleResult.rating ?? null;
             if (ratingCount == null) ratingCount = googleResult.userRatingCount ?? null;
             photoUrl = googleResult.photoUrl || null;
-            await upsertRestaurantRatingCache(supabaseCacheClient, item, googleResult);
+            upsertRestaurantRatingCache(ratingsCache, item, googleResult);
           }
         }
       } catch (error) {
@@ -807,7 +807,7 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, supabaseCac
   return { payload, metrics, updatedCount };
 }
 
-async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient, naverClientId, naverClientSecret) {
+async function filterByGoogleRating(items, googleApiKey, ratingsCache, naverClientId, naverClientSecret) {
   const metrics = {
     cacheHit: 0,
     cacheMiss: 0,
@@ -838,7 +838,7 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient, na
     let rating = null;
     let ratingCount = null;
 
-    const cached = await getCachedRestaurantRating(supabaseCacheClient, item.id);
+    const cached = getCachedRestaurantRating(ratingsCache, item.id);
     if (cached) {
       usedCache = true;
       metrics.cacheHit += 1;
@@ -859,17 +859,17 @@ async function filterByGoogleRating(items, googleApiKey, supabaseCacheClient, na
         rating = googleResult?.rating ?? null;
         ratingCount = googleResult?.userRatingCount ?? null;
         photoUrl = googleResult?.photoUrl || null;
-      } else if (placeId) {
-        // 캐시 hit: photo만 별도 취득
-        photoUrl = await fetchGooglePlacePhotoById(placeId, googleApiKey);
-        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
     }
 
-    if (!usedCache && googleResult) {
-      await upsertRestaurantRatingCache(supabaseCacheClient, item, googleResult);
+    if (!usedCache) {
+      upsertRestaurantRatingCache(ratingsCache, item, googleResult || {
+        placeId: placeId || '',
+        rating: rating ?? null,
+        userRatingCount: ratingCount ?? null,
+      });
     }
 
     if (rating === null) {
@@ -1048,7 +1048,7 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
   return map;
 }
 
-async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCacheClient, naverClientId, naverClientSecret) {
+async function collectRegion(region, kakaoKey, geminiKey, googleKey, ratingsCache, naverClientId, naverClientSecret) {
   const queries = REGION_QUERY_MAP[region];
   const results = [];
   for (const meta of queries) {
@@ -1086,7 +1086,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, supabaseCac
   }
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상, 리뷰 ${GOOGLE_PLACES_MIN_REVIEW_COUNT}개 이상)`);
-  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, supabaseCacheClient, naverClientId, naverClientSecret);
+  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, ratingsCache, naverClientId, naverClientSecret);
   logSourceQueryDistribution(region, googleFiltered, 'Google 필터 통과 원본');
   const items = rebalanceBySubregion(googleFiltered, region, MAX_ITEMS_PER_REGION);
   logSourceQueryDistribution(region, items, '소지역 재분배 후 선택');
@@ -1125,7 +1125,7 @@ async function run() {
   const googleKey = process.env.GOOGLE_PLACES_API_KEY;
   const naverClientId = process.env.NAVER_CLIENT_ID;
   const naverClientSecret = process.env.NAVER_CLIENT_SECRET;
-  const supabaseCacheClient = createSupabaseCacheClient();
+  const ratingsCache = await readGoogleRatingsCache();
   const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
 
   if (!googleKey) {
@@ -1139,10 +1139,10 @@ async function run() {
     }
 
     console.log('🖼️  기존 restaurants.json 대상 Google 사진 보강 시작');
-    console.log(`🗄️  Supabase 캐시 사용: ${supabaseCacheClient ? 'ON' : 'OFF'}`);
+    console.log(`🗄️  로컬 평점 캐시 사용: ${GOOGLE_RATINGS_CACHE_PATH}`);
 
     const payload = await readExistingRestaurantsPayload();
-    const { payload: enrichedPayload, metrics, updatedCount } = await enrichExistingRestaurantPhotos(payload, googleKey, supabaseCacheClient);
+    const { payload: enrichedPayload, metrics, updatedCount } = await enrichExistingRestaurantPhotos(payload, googleKey, ratingsCache);
 
     enrichedPayload.updatedAt = new Date().toISOString();
     enrichedPayload.source = String(enrichedPayload.source || 'kakao+google+gemini');
@@ -1155,6 +1155,7 @@ async function run() {
 
     await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
     await fs.writeFile(OUTPUT_PATH, JSON.stringify(enrichedPayload, null, 2), 'utf-8');
+    await writeGoogleRatingsCache(ratingsCache);
 
     console.log(`✅ 기존 사진 보강 완료: ${OUTPUT_PATH}`);
     console.log(`   - 사진 보강 건수: ${updatedCount}`);
@@ -1192,7 +1193,7 @@ async function run() {
   if (geminiKey) {
     console.log(`🤖 맛집 요약 Gemini 모델: ${restaurantGeminiModel}`);
   }
-  console.log(`🗄️  Supabase 캐시 사용: ${supabaseCacheClient ? 'ON' : 'OFF'}`);
+  console.log(`🗄️  로컬 평점 캐시 사용: ${GOOGLE_RATINGS_CACHE_PATH} (TTL ${GOOGLE_RATING_CACHE_TTL_DAYS}일)`);
 
   const regions = {};
   let totalCacheMetrics = { cacheHit: 0, cacheMiss: 0, googleCalled: 0 };
@@ -1202,7 +1203,7 @@ async function run() {
       kakaoKey,
       geminiKey,
       googleKey,
-      supabaseCacheClient,
+      ratingsCache,
       naverClientId,
       naverClientSecret,
     );
@@ -1228,8 +1229,11 @@ async function run() {
     regions,
   };
 
+  markRecollectAt(ratingsCache);
+
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await fs.writeFile(OUTPUT_PATH, JSON.stringify(payload, null, 2), 'utf-8');
+  await writeGoogleRatingsCache(ratingsCache);
 
   console.log(`✅ 저장 완료: ${OUTPUT_PATH}`);
   for (const [key, items] of Object.entries(regions)) {

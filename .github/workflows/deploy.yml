@@ -363,8 +363,6 @@ jobs:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-          PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
-          PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
 
       - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
         id: generate_restaurant_posts
@@ -378,8 +376,6 @@ jobs:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-          PICKNJOY_SUPABASE_URL: ${{ secrets.PICKNJOY_SUPABASE_URL }}
-          PICKNJOY_SUPABASE_SECRET_KEY: ${{ secrets.PICKNJOY_SUPABASE_SECRET_KEY }}
           LIFE_RESTAURANT_POSTS_PER_RUN: '3'
           LIFE_RESTAURANT_POSTS_PER_BUCKET: '1'
 
@@ -436,7 +432,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/app/life/restaurant/data/restaurants.json src/content/life
+          git add src/app/life/restaurant/data/restaurants.json scripts/data/google-ratings-cache.json src/content/life
           if ! git diff --cached --quiet; then
 
             git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
