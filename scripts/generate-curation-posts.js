@@ -17,6 +17,11 @@
 const fs = require('fs/promises');
 const fsSync = require('fs');
 const path = require('path');
+const {
+  loadTopIdSets,
+  buildPolicySafeDetailUrl,
+  normalizeInternalLinksInMarkdown,
+} = require('./lib/internal-link-builder');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
@@ -30,11 +35,6 @@ const CURATION_TOPIC = (process.env.CURATION_TOPIC || 'auto').toLowerCase();
 const CURATION_TOP_N = Math.max(3, Math.min(10, Number(process.env.CURATION_TOP_N || 5)));
 const ALLOW_EXISTING_OVERWRITE = process.env.ALLOW_EXISTING_OVERWRITE === 'true';
 const GEMINI_TIMEOUT_MS = 120000;
-const SSG_LIMITS = {
-  incheon: 500,
-  subsidy: 800,
-  festival: 300,
-};
 
 if (!GEMINI_API_KEY) {
   console.error('GEMINI_API_KEY가 없습니다.');
@@ -144,145 +144,6 @@ async function getRecentlyUsedCurationIds(category, postsDir, lookbackDays = 30)
   return usedIds;
 }
 
-function getTopIncheonSsgItems(items = [], limit = SSG_LIMITS.incheon) {
-  if (!Array.isArray(items)) return [];
-
-  const active = items.filter(item => !item.expired);
-  const sorted = active.sort((a, b) => {
-    const scoreA = ((b.조회수) || 0) * 1000 +
-      (b.등록일시 ? parseInt(String(b.등록일시).substring(0, 8), 10) : 0);
-    const scoreB = ((a.조회수) || 0) * 1000 +
-      (a.등록일시 ? parseInt(String(a.등록일시).substring(0, 8), 10) : 0);
-    return scoreA - scoreB;
-  });
-
-  return sorted.slice(0, limit);
-}
-
-function getTopSubsidySsgItems(items = [], limit = SSG_LIMITS.subsidy) {
-  if (!Array.isArray(items)) return [];
-
-  const today = getKstToday().replace(/-/g, '');
-  const active = items.filter(item => !item.expired);
-  const hasDeadline = [];
-  const noDeadline = [];
-
-  for (const item of active) {
-    const deadline = item.신청기한;
-    if (
-      deadline &&
-      !String(deadline).includes('신청불필요') &&
-      !String(deadline).includes('상시신청') &&
-      !String(deadline).includes('모집시기별 상이') &&
-      String(deadline).match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)
-    ) {
-      hasDeadline.push(item);
-    } else {
-      noDeadline.push(item);
-    }
-  }
-
-  hasDeadline.sort((a, b) => {
-    const deadlineA = String(a.신청기한 || '').match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)?.[0] || '';
-    const deadlineB = String(b.신청기한 || '').match(/\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}/)?.[0] || '';
-    const normA = deadlineA.replace(/[.\/-]/g, '');
-    const normB = deadlineB.replace(/[.\/-]/g, '');
-
-    if (normA === normB) return 0;
-    if (normA < today) return 1;
-    if (normB < today) return -1;
-    return normA.localeCompare(normB);
-  });
-
-  noDeadline.sort((a, b) => {
-    const scoreA = ((b.조회수) || 0) * 1000 +
-      (b.등록일시 ? parseInt(String(b.등록일시).substring(0, 8), 10) : 0);
-    const scoreB = ((a.조회수) || 0) * 1000 +
-      (a.등록일시 ? parseInt(String(a.등록일시).substring(0, 8), 10) : 0);
-    return scoreA - scoreB;
-  });
-
-  const deadlineTopN = Math.floor(limit * 0.4);
-  const noDeadlineTopN = limit - deadlineTopN;
-  return [
-    ...hasDeadline.slice(0, deadlineTopN),
-    ...noDeadline.slice(0, noDeadlineTopN),
-  ];
-}
-
-function getTopFestivalSsgItems(items = [], limit = SSG_LIMITS.festival) {
-  if (!Array.isArray(items)) return [];
-
-  const todayStr = getKstToday().replace(/-/g, '');
-  const active = items.filter(item => {
-    if (item.expired) return false;
-    const eventEnd = item.eventenddate ? String(item.eventenddate).substring(0, 8) : '';
-    return eventEnd >= todayStr;
-  });
-
-  active.sort((a, b) => {
-    const startA = a.eventstartdate ? String(a.eventstartdate).substring(0, 8) : '99999999';
-    const startB = b.eventstartdate ? String(b.eventstartdate).substring(0, 8) : '99999999';
-    return startA.localeCompare(startB);
-  });
-
-  return active.slice(0, limit);
-}
-
-function getSsgEligibleIds(items, category) {
-  const topItems = category === 'subsidy'
-    ? getTopSubsidySsgItems(items, SSG_LIMITS.subsidy)
-    : category === 'festival'
-      ? getTopFestivalSsgItems(items, SSG_LIMITS.festival)
-      : getTopIncheonSsgItems(items, SSG_LIMITS.incheon);
-
-  return new Set(topItems.map(item => getItemId(item, category)).filter(Boolean));
-}
-
-// 상세 페이지 URL path 생성
-function getDetailPath(category, item) {
-  if (category === 'subsidy') {
-    const id = getField(item, ['서비스ID', 'id']);
-    return id ? `/subsidy/${encodeURIComponent(id)}/` : null;
-  }
-  if (category === 'incheon') {
-    const id = getField(item, ['서비스ID', 'id']);
-    return id ? `/incheon/${encodeURIComponent(id)}/` : null;
-  }
-  if (category === 'festival') {
-    const id = getField(item, ['contentid', 'id']);
-    return id ? `/festival/${encodeURIComponent(id)}/` : null;
-  }
-  return null;
-}
-
-function getBestDetailUrl(category, item, ssgEligibleIds) {
-  const officialUrl = getField(item, ['상세조회URL', 'homepage', 'link']);
-  const itemId = getItemId(item, category);
-  const path = getDetailPath(category, item);
-
-  // 내부 상세 페이지가 실제 정적 생성 대상이면 우리 페이지를 우선 사용한다.
-  // (사용자 친화적으로 가공된 본문 제공)
-  if (itemId && path && ssgEligibleIds.has(itemId)) {
-    return path;
-  }
-
-  // 내부 상세 페이지가 Top 집합 밖이면 원문 링크만 사용한다.
-  return officialUrl || '';
-}
-
-function normalizeInternalLinksInMarkdown(markdown) {
-  let text = String(markdown || '');
-
-  // 절대 내부 URL은 상대경로로 통일
-  text = text.replace(/https:\/\/pick-n-joy\.com(\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+\/?)/g, '$1');
-
-  // 내부 상세/블로그 링크 trailing slash 강제
-  text = text.replace(/\]\((\/(?:blog|festival|incheon|subsidy)\/[^)\s?#]+)(?<!\/)\)/g, ']($1/)');
-
-  return text;
-}
-
 // 항목 마감일 추출
 function getDeadline(item, category) {
   if (category === 'subsidy' || category === 'incheon') {
@@ -332,7 +193,7 @@ function summarizeItem(item, category, index, ssgEligibleIds) {
   const deadline = getDeadline(item, category);
   const startDate = getStartDate(item);
   const location = getField(item, ['addr1', 'location', '접수기관명', '소관기관명']);
-  const detailUrl = getBestDetailUrl(category, item, ssgEligibleIds);
+  const detailUrl = buildPolicySafeDetailUrl(category, item, { [category]: ssgEligibleIds });
 
   let summary = `${index + 1}. **${name}**`;
   if (category === 'festival') {
@@ -770,7 +631,8 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   if (!file) throw new Error(`알 수 없는 카테고리: ${category}`);
 
   const all = await readJson(file);
-  const ssgEligibleIds = getSsgEligibleIds(all, category);
+  const topIdSets = loadTopIdSets();
+  const ssgEligibleIds = topIdSets[category] || new Set();
   const sorted = sortItems(all, category, todayISO);
 
   // 최근 사용 항목 제외 (중복 방지)
