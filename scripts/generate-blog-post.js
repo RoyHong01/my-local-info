@@ -2,6 +2,7 @@ const fs = require('fs/promises');
 const fsSync = require('fs');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
+const { buildBlogPath } = require('./lib/internal-link-builder');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -846,7 +847,8 @@ function buildRelatedFestivalsSection(candidate, allFestivals, festivalSlugMap) 
       return '';
     }
 
-    return `- [${title}](/blog/${slug}/)${dateStr}`;
+    const blogPath = buildBlogPath(slug);
+    return blogPath ? `- [${title}](${blogPath})${dateStr}` : '';
   }).filter(Boolean);
 
   if (lines.length === 0) return '';
