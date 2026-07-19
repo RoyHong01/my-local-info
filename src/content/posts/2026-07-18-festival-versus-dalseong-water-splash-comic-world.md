@@ -78,4 +78,4 @@ source_ids: "4079965,3352452"
 ### 🔎 구체적인 정보 더 보기
 
 - [청년축제 달성워터스플래시](/blog/2026-07-04-DalseongWaterSplash/)
-- [코믹월드 SUMMER 2026](/festival/3352452/)
+- [코믹월드 SUMMER 2026](/blog/2026-07-10-ComicWorldSummer/)
