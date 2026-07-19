@@ -1,0 +1,251 @@
+{
+  "reportDateKst": "2026-07-20",
+  "generatedAtUtc": "2026-07-19T20:20:17.788Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29701744393",
+    "runNumber": 898,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29701744393",
+    "runStartedAtUtc": "2026-07-19T20:02:18Z",
+    "headSha": "de08b7b32112f727592bc7fa33f48141bc869764"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://1681db0d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 0건, 업데이트 182건, 총 342건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://9c8f1eba.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://aa1f77bb.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "c709141ffcb60a201e26aecaf8116276bbc2f362",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-19",
+      "authoredAt": "2026-07-19T20:17:17Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-20-choice-health-2026-07-20.md"
+      ]
+    },
+    {
+      "sha": "ac7fd1e34b906b1d972ebbb18f7c00e5b8fcf8ea",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-19",
+      "authoredAt": "2026-07-19T20:16:06Z",
+      "files": [
+        "src/content/posts/2026-07-19-gwanak-legal-counseling.md",
+        "src/content/posts/2026-07-19-michuhol-vaccination.md",
+        "src/content/posts/2026-07-19-nightrace-busan.md",
+        "src/content/posts/2026-07-19-ulsan-pertussis-vaccine.md",
+        "src/content/posts/2026-07-20-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "1cdaa09202c86486d099ee43e0dc2796244c3890",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-19",
+      "authoredAt": "2026-07-19T20:04:33Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-06-21-gangju-sunflower-festival.md",
+        "src/content/posts/2026-07-02-curation-festival.md",
+        "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+        "src/content/posts/2026-07-07-curation-festival.md",
+        "src/content/posts/2026-07-18-festival-versus-dalseong-water-splash-comic-world.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 15,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-21-gangju-sunflower-festival.md",
+      "src/content/posts/2026-07-02-curation-festival.md",
+      "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+      "src/content/posts/2026-07-07-curation-festival.md",
+      "src/content/posts/2026-07-18-festival-versus-dalseong-water-splash-comic-world.md",
+      "src/content/posts/2026-07-19-gwanak-legal-counseling.md",
+      "src/content/posts/2026-07-19-michuhol-vaccination.md",
+      "src/content/posts/2026-07-19-nightrace-busan.md",
+      "src/content/posts/2026-07-19-ulsan-pertussis-vaccine.md",
+      "src/content/posts/2026-07-20-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-20-choice-health-2026-07-20.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-20-choice-health-2026-07-20.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-20-choice-health-2026-07-20.md",
+      "src/content/posts/2026-06-21-gangju-sunflower-festival.md",
+      "src/content/posts/2026-07-02-curation-festival.md",
+      "src/content/posts/2026-07-05-JeonjuChaekKhae.md",
+      "src/content/posts/2026-07-07-curation-festival.md",
+      "src/content/posts/2026-07-18-festival-versus-dalseong-water-splash-comic-world.md",
+      "src/content/posts/2026-07-19-gwanak-legal-counseling.md",
+      "src/content/posts/2026-07-19-michuhol-vaccination.md",
+      "src/content/posts/2026-07-19-nightrace-busan.md",
+      "src/content/posts/2026-07-19-ulsan-pertussis-vaccine.md",
+      "src/content/posts/2026-07-20-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 11,
+      "manual": 0,
+      "unknown": 0,
+      "total": 11
+    },
+    "byType": {
+      "blog": {
+        "auto": 10,
+        "manual": 0,
+        "unknown": 0,
+        "total": 10
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.68,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "1763/638",
+      "markdown": {
+        "generated": 1,
+        "pending": 173,
+        "titles": [
+          "중소기업 및 소상공인 특례보증 지원사업"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 611건",
+      "validation": "ok",
+      "anthropicUsage": "1889/1248",
+      "markdown": {
+        "generated": 2,
+        "pending": 347,
+        "titles": [
+          "강남구 산후건강관리비용 지원사업(본인부담금 환급)",
+          "(경상남도 진주시) 난임부부 시술비 본인부담금 전액 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 182건, 총 342건",
+      "validation": "ok",
+      "anthropicUsage": "791/465",
+      "markdown": {
+        "generated": 1,
+        "pending": 242,
+        "titles": [
+          "제18회 통영연극예술축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  }
+}
