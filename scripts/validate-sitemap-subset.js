@@ -71,7 +71,7 @@ function collectSitemapPaths() {
       const parsed = new URL(urlValue);
       paths.add(normalizePathname(decodeURIComponent(parsed.pathname)));
     } catch {
-      // Ignore malformed URL rows; build should not fail in observation mode for malformed loc entries.
+      // Ignore malformed <loc> rows.
     }
   }
 
@@ -80,12 +80,12 @@ function collectSitemapPaths() {
 
 function main() {
   if (!fs.existsSync(OUT_DIR)) {
-    console.warn(`Sitemap subset check skipped (observation mode): out directory not found: ${OUT_DIR}`);
+    console.warn(`Sitemap subset check skipped: out directory not found: ${OUT_DIR}`);
     return;
   }
 
   if (!fs.existsSync(SITEMAP_PATH)) {
-    console.warn(`Sitemap subset check skipped (observation mode): sitemap not found: ${SITEMAP_PATH}`);
+    console.warn(`Sitemap subset check skipped: sitemap not found: ${SITEMAP_PATH}`);
     return;
   }
 
@@ -104,18 +104,17 @@ function main() {
   }
 
   if (violations.length > 0) {
-    console.warn(`Sitemap subset check (observation mode): ${violations.length} path(s) missing in out pages.`);
+    console.error(`Sitemap subset check failed: ${violations.length} path(s) missing in out pages.`);
     for (const item of violations.slice(0, 200)) {
-      console.warn(`- ${item}`);
+      console.error(`- ${item}`);
     }
     if (violations.length > 200) {
-      console.warn(`... and ${violations.length - 200} more`);
+      console.error(`... and ${violations.length - 200} more`);
     }
-    console.warn('Observation mode is active: exiting with code 0.');
-    return;
+    process.exit(1);
   }
 
-  console.log(`Sitemap subset check passed (observation mode). sitemap=${sitemapPaths.size}, outPages=${outPages.size}, violations=0`);
+  console.log(`Sitemap subset check passed. sitemap=${sitemapPaths.size}, outPages=${outPages.size}, violations=0`);
 }
 
 try {
