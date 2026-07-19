@@ -45,3 +45,7 @@ next-env.d.ts
 
 # Claude agent internal data
 .claude/
+
+# local temporary artifacts
+.chat-import/
+.tmp-run-*.log
