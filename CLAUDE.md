@@ -134,6 +134,7 @@ src/app/life/restaurant/data/
    - ※ **절대 사용 금지**: Unsplash 외부 이미지 (주제 무관 사진 나올 수 있음)
 10. **커밋/배포 완료 직후 자동 동기화**: 작업 완료 후 즉시 `WORK_LOG.md`와 메모리 파일(`COPILOT_MEMORY.md`, `PROJECT_MEMORY.md`)을 자동으로 업데이트한다. 사용자에게 별도 확인 질문을 하지 않는다.
 11. **단독 초이스 생성 경로 통일(필수)**: 사용자가 단독 초이스 포스트를 요청해도 본문을 직접 수동 작성하지 않고, `scripts/choice-input.latest.json` 작성 후 `npm run generate:choice:latest -> npm run check:choice-quality -> npm run build` 체인을 반드시 통과한다. 목적은 자동/단독 품질 편차 제거 및 동일 검증 체인 유지다.
+12. **과금 API 실호출 금지 규칙(상시)**: 과금 API(Google Places 등) 실호출은 검증·테스트 목적 사용 금지. 검증은 mock/시드 캐시/정기 런 리포트 수치로 대체한다. 실호출이 불가피한 경우 사전에 사용자 승인 필수.
 
 ## 블로그 글 생성 스타일 가이드 (2026-03-29 고정)
 
