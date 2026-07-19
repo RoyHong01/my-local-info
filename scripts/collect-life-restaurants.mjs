@@ -4,11 +4,17 @@ import path from 'path';
 
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const GOOGLE_RATINGS_CACHE_PATH = path.join(process.cwd(), 'scripts', 'data', 'google-ratings-cache.json');
+const QUERY_MATRIX_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-query-matrix.json');
+const QUERY_ROTATION_STATE_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-query-rotation-state.json');
+const REJECT_LIST_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-reject-list.json');
 const MAX_ITEMS_PER_REGION = 30;
 const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const GOOGLE_PLACES_MIN_REVIEW_COUNT = Number(process.env.GOOGLE_PLACES_MIN_REVIEW_COUNT || 10); // 구글 리뷰 수 최소 기준
 const GOOGLE_RATING_CACHE_TTL_DAYS = Number(process.env.GOOGLE_RATING_CACHE_TTL_DAYS || 90);
+const GOOGLE_CALLS_PER_RUN_MAX = Number(process.env.GOOGLE_CALLS_PER_RUN_MAX || 50);
+const QUERY_ROTATION_PER_REGION = Number(process.env.QUERY_ROTATION_PER_REGION || 8);
+const QUERY_ROTATION_RECENT_RUNS = 3;
 const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
 const BACKFILL_NAVER_PHOTOS_ONLY = process.env.BACKFILL_NAVER_PHOTOS_ONLY === 'true';
 // 수집 단계 전용 모델 fallback: 카카오 후보 검토·요약 목적 (글 생성 없음) → 1.5-flash로 충분.
@@ -123,6 +129,9 @@ function mergeCacheMetrics(base, addition) {
     cacheHit: Number(base?.cacheHit || 0) + Number(addition?.cacheHit || 0),
     cacheMiss: Number(base?.cacheMiss || 0) + Number(addition?.cacheMiss || 0),
     googleCalled: Number(base?.googleCalled || 0) + Number(addition?.googleCalled || 0),
+    googleCallCapReached: Boolean(base?.googleCallCapReached || addition?.googleCallCapReached),
+    googleCallsBlockedByCap: Number(base?.googleCallsBlockedByCap || 0) + Number(addition?.googleCallsBlockedByCap || 0),
+    googleCallCapLimit: Number(addition?.googleCallCapLimit || base?.googleCallCapLimit || GOOGLE_CALLS_PER_RUN_MAX),
   };
 }
 
@@ -165,10 +174,15 @@ function normalizeFranchiseText(value) {
 
 const FRANCHISE_BLACKLIST_NORMALIZED = FRANCHISE_BLACKLIST.map((kw) => normalizeFranchiseText(kw));
 
-function isFranchise(name, categoryName = '') {
+function getFranchiseMatchKeyword(name, categoryName = '') {
   const source = `${name || ''} ${categoryName || ''}`;
   const normalizedSource = normalizeFranchiseText(source);
-  return FRANCHISE_BLACKLIST_NORMALIZED.some((kw) => normalizedSource.includes(kw));
+  const found = FRANCHISE_BLACKLIST_NORMALIZED.find((kw) => normalizedSource.includes(kw));
+  return found || '';
+}
+
+function isFranchise(name, categoryName = '') {
+  return Boolean(getFranchiseMatchKeyword(name, categoryName));
 }
 
 const REGION_QUERY_MAP = {
@@ -224,6 +238,303 @@ const REGION_QUERY_MAP = {
     { query: '경기 감성 카페', scenarioHint: '주말 감성 카페', vibeHint: '테크밸리 감성 카페', cuisineHint: '카페' },
   ],
 };
+
+function normalizeQueryText(value) {
+  return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+function buildLegacyQueryCombos() {
+  const combos = [];
+  for (const [region, queries] of Object.entries(REGION_QUERY_MAP)) {
+    if (!Array.isArray(queries)) continue;
+    queries.forEach((meta, index) => {
+      combos.push({
+        id: `${region}-${String(index + 1).padStart(2, '0')}`,
+        region,
+        query: String(meta?.query || '').trim(),
+        scenarioHint: String(meta?.scenarioHint || '').trim(),
+        vibeHint: String(meta?.vibeHint || '').trim(),
+        cuisineHint: String(meta?.cuisineHint || '').trim(),
+        category: String(meta?.cuisineHint || '다이닝').trim(),
+        subregionHint: '',
+        legacy: true,
+      });
+    });
+  }
+  return combos;
+}
+
+async function readQueryMatrix() {
+  const fallback = {
+    version: 1,
+    updatedAt: '',
+    description: 'fallback-from-legacy-map',
+    defaultSelectionPerRegion: QUERY_ROTATION_PER_REGION,
+    combos: buildLegacyQueryCombos(),
+  };
+
+  try {
+    const raw = await fs.readFile(QUERY_MATRIX_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed?.combos)) return fallback;
+
+    const combos = parsed.combos
+      .map((combo) => ({
+        id: String(combo?.id || '').trim(),
+        region: String(combo?.region || '').trim(),
+        query: String(combo?.query || '').trim(),
+        scenarioHint: String(combo?.scenarioHint || '').trim(),
+        vibeHint: String(combo?.vibeHint || '').trim(),
+        cuisineHint: String(combo?.cuisineHint || '').trim(),
+        category: String(combo?.category || combo?.cuisineHint || '다이닝').trim(),
+        subregionHint: String(combo?.subregionHint || '').trim(),
+        legacy: Boolean(combo?.legacy),
+      }))
+      .filter((combo) => combo.id && combo.region && combo.query);
+
+    if (combos.length === 0) return fallback;
+
+    return {
+      version: Number(parsed?.version || 1),
+      updatedAt: String(parsed?.updatedAt || ''),
+      description: String(parsed?.description || ''),
+      defaultSelectionPerRegion: Number(parsed?.defaultSelectionPerRegion || QUERY_ROTATION_PER_REGION),
+      combos,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function verifyLegacyQueriesIncluded(queryMatrix) {
+  const legacyQueries = new Set(buildLegacyQueryCombos().map((combo) => normalizeQueryText(combo.query)));
+  const matrixQueries = new Set((queryMatrix?.combos || []).map((combo) => normalizeQueryText(combo.query)));
+  const missingLegacyQueries = [];
+
+  for (const query of legacyQueries) {
+    if (!matrixQueries.has(query)) {
+      missingLegacyQueries.push(query);
+    }
+  }
+
+  return {
+    legacyCount: legacyQueries.size,
+    matrixCount: matrixQueries.size,
+    missingLegacyQueries,
+    absorbed: missingLegacyQueries.length === 0,
+  };
+}
+
+async function readRotationState() {
+  const fallback = {
+    version: 1,
+    updatedAt: '',
+    recentRuns: [],
+    records: {},
+  };
+
+  try {
+    const raw = await fs.readFile(QUERY_ROTATION_STATE_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    return {
+      version: Number(parsed?.version || 1),
+      updatedAt: String(parsed?.updatedAt || ''),
+      recentRuns: Array.isArray(parsed?.recentRuns) ? parsed.recentRuns : [],
+      records: parsed?.records && typeof parsed.records === 'object' ? parsed.records : {},
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+async function writeRotationState(state) {
+  const next = state && typeof state === 'object' ? state : {};
+  next.version = Number(next.version || 1);
+  next.updatedAt = new Date().toISOString();
+  next.recentRuns = Array.isArray(next.recentRuns) ? next.recentRuns.slice(0, QUERY_ROTATION_RECENT_RUNS) : [];
+  next.records = next.records && typeof next.records === 'object' ? next.records : {};
+
+  await fs.mkdir(path.dirname(QUERY_ROTATION_STATE_PATH), { recursive: true });
+  await fs.writeFile(QUERY_ROTATION_STATE_PATH, `${JSON.stringify(next, null, 2)}\n`, 'utf-8');
+}
+
+function pickRotatedQueriesForRegion(region, queryMatrix, rotationState) {
+  const matrixCombos = Array.isArray(queryMatrix?.combos) ? queryMatrix.combos : [];
+  const regionCombos = matrixCombos.filter((combo) => combo.region === region && combo.query);
+  if (regionCombos.length === 0) return [];
+
+  const recordMap = rotationState?.records && typeof rotationState.records === 'object' ? rotationState.records : {};
+  const recentRuns = Array.isArray(rotationState?.recentRuns) ? rotationState.recentRuns : [];
+  const recentComboIds = new Set(
+    recentRuns
+      .slice(0, QUERY_ROTATION_RECENT_RUNS)
+      .flatMap((run) => (Array.isArray(run?.comboIds) ? run.comboIds : []))
+      .map((id) => String(id || '').trim())
+      .filter(Boolean),
+  );
+
+  const toScore = (combo) => {
+    const record = recordMap[combo.id] || {};
+    const lastUsedAt = String(record.lastUsedAt || '');
+    const usedCount = Number(record.usedCount || 0);
+    const lastTs = lastUsedAt ? new Date(lastUsedAt).getTime() : 0;
+    const isRecent = recentComboIds.has(combo.id) ? 1 : 0;
+    return {
+      combo,
+      isRecent,
+      lastTs: Number.isFinite(lastTs) ? lastTs : 0,
+      usedCount,
+      subregion: combo.subregionHint || extractSubregionFromSourceQuery(combo.query, region) || '기타',
+    };
+  };
+
+  const ranked = regionCombos
+    .map(toScore)
+    .sort((a, b) => {
+      if (a.isRecent !== b.isRecent) return a.isRecent - b.isRecent;
+      if (a.lastTs !== b.lastTs) return a.lastTs - b.lastTs;
+      if (a.usedCount !== b.usedCount) return a.usedCount - b.usedCount;
+      return a.combo.id.localeCompare(b.combo.id);
+    });
+
+  const targetCount = Math.max(1, QUERY_ROTATION_PER_REGION);
+  const selected = [];
+  const subregionCount = new Map();
+  for (const candidate of ranked) {
+    if (selected.length >= targetCount) break;
+    const count = Number(subregionCount.get(candidate.subregion) || 0);
+    if (count >= 2) continue;
+    selected.push(candidate.combo);
+    subregionCount.set(candidate.subregion, count + 1);
+  }
+
+  if (selected.length < targetCount) {
+    for (const candidate of ranked) {
+      if (selected.length >= targetCount) break;
+      if (selected.some((combo) => combo.id === candidate.combo.id)) continue;
+      selected.push(candidate.combo);
+    }
+  }
+
+  return selected;
+}
+
+function updateRotationStateAfterSelection(rotationState, selectedCombos) {
+  const next = rotationState && typeof rotationState === 'object'
+    ? rotationState
+    : { version: 1, updatedAt: '', recentRuns: [], records: {} };
+
+  next.records = next.records && typeof next.records === 'object' ? next.records : {};
+  next.recentRuns = Array.isArray(next.recentRuns) ? next.recentRuns : [];
+
+  const now = new Date().toISOString();
+  const comboIds = [];
+  for (const combo of selectedCombos) {
+    if (!combo?.id) continue;
+    comboIds.push(combo.id);
+    const prev = next.records[combo.id] && typeof next.records[combo.id] === 'object' ? next.records[combo.id] : {};
+    next.records[combo.id] = {
+      ...prev,
+      lastUsedAt: now,
+      usedCount: Number(prev.usedCount || 0) + 1,
+      region: combo.region,
+      query: combo.query,
+      category: combo.category || combo.cuisineHint || '',
+      subregionHint: combo.subregionHint || '',
+      legacy: Boolean(combo.legacy),
+    };
+  }
+
+  next.recentRuns.unshift({ at: now, comboIds });
+  next.recentRuns = next.recentRuns.slice(0, QUERY_ROTATION_RECENT_RUNS);
+  return next;
+}
+
+async function readRejectList() {
+  const fallback = {
+    version: 1,
+    updatedAt: '',
+    policy: {
+      allowLowRatingReevaluation: false,
+      lowRatingReevaluationDays: 180,
+    },
+    items: {},
+  };
+
+  try {
+    const raw = await fs.readFile(REJECT_LIST_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    return {
+      version: Number(parsed?.version || 1),
+      updatedAt: String(parsed?.updatedAt || ''),
+      policy: {
+        allowLowRatingReevaluation: Boolean(parsed?.policy?.allowLowRatingReevaluation),
+        lowRatingReevaluationDays: Number(parsed?.policy?.lowRatingReevaluationDays || 180),
+      },
+      items: parsed?.items && typeof parsed.items === 'object' ? parsed.items : {},
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+async function writeRejectList(rejectList) {
+  const next = rejectList && typeof rejectList === 'object' ? rejectList : {};
+  next.version = Number(next.version || 1);
+  next.updatedAt = new Date().toISOString();
+  if (!next.policy || typeof next.policy !== 'object') {
+    next.policy = {
+      allowLowRatingReevaluation: false,
+      lowRatingReevaluationDays: 180,
+    };
+  }
+  next.items = next.items && typeof next.items === 'object' ? next.items : {};
+
+  await fs.mkdir(path.dirname(REJECT_LIST_PATH), { recursive: true });
+  await fs.writeFile(REJECT_LIST_PATH, `${JSON.stringify(next, null, 2)}\n`, 'utf-8');
+}
+
+function upsertRejectListItem(rejectList, kakaoId, payload) {
+  const key = String(kakaoId || '').trim();
+  if (!key) return;
+  rejectList.items = rejectList.items && typeof rejectList.items === 'object' ? rejectList.items : {};
+  const prev = rejectList.items[key] && typeof rejectList.items[key] === 'object' ? rejectList.items[key] : {};
+  const now = new Date().toISOString();
+  rejectList.items[key] = {
+    ...prev,
+    ...payload,
+    kakaoId: key,
+    firstSeenAt: String(prev.firstSeenAt || now),
+    lastSeenAt: now,
+  };
+}
+
+function shouldSkipByRejectList(rejectList, kakaoId) {
+  const key = String(kakaoId || '').trim();
+  if (!key) return { skip: false, reason: '' };
+  const item = rejectList?.items?.[key];
+  if (!item || typeof item !== 'object') return { skip: false, reason: '' };
+
+  const reason = String(item.reason || '').trim();
+  if (reason === 'franchise') {
+    return { skip: true, reason };
+  }
+
+  if (reason === 'low_rating') {
+    const allowReevaluation = Boolean(rejectList?.policy?.allowLowRatingReevaluation);
+    if (!allowReevaluation) return { skip: true, reason };
+
+    const days = Number(rejectList?.policy?.lowRatingReevaluationDays || 180);
+    const lastSeenAt = new Date(String(item.lastSeenAt || ''));
+    if (Number.isNaN(lastSeenAt.getTime())) return { skip: false, reason: '' };
+    const elapsedDays = (Date.now() - lastSeenAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (elapsedDays < days) {
+      return { skip: true, reason: 'low_rating_cooldown' };
+    }
+  }
+
+  return { skip: false, reason: '' };
+}
 
 const REGION_LABEL = {
   'incheon': '인천',
@@ -807,11 +1118,15 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, ratingsCach
   return { payload, metrics, updatedCount };
 }
 
-async function filterByGoogleRating(items, googleApiKey, ratingsCache, naverClientId, naverClientSecret) {
+async function filterByGoogleRating(items, googleApiKey, ratingsCache, rejectList, naverClientId, naverClientSecret) {
   const metrics = {
     cacheHit: 0,
     cacheMiss: 0,
     googleCalled: 0,
+    googleCallCapReached: false,
+    googleCallsBlockedByCap: 0,
+    googleCallCapLimit: GOOGLE_CALLS_PER_RUN_MAX,
+    rejectSkipped: 0,
   };
 
   if (!googleApiKey) {
@@ -833,6 +1148,13 @@ async function filterByGoogleRating(items, googleApiKey, ratingsCache, naverClie
 
   const filtered = [];
   for (const item of items) {
+    const rejectCheck = shouldSkipByRejectList(rejectList, item.id);
+    if (rejectCheck.skip) {
+      metrics.rejectSkipped += 1;
+      console.log(`  🚫 탈락 명부 스킵: ${item.name} (${rejectCheck.reason})`);
+      continue;
+    }
+
     let usedCache = false;
     let placeId = '';
     let rating = null;
@@ -853,12 +1175,18 @@ async function filterByGoogleRating(items, googleApiKey, ratingsCache, naverClie
     let photoUrl = null;
     try {
       if (!usedCache) {
-        metrics.googleCalled += 1;
-        googleResult = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
-        placeId = googleResult?.placeId || '';
-        rating = googleResult?.rating ?? null;
-        ratingCount = googleResult?.userRatingCount ?? null;
-        photoUrl = googleResult?.photoUrl || null;
+        if (metrics.googleCalled >= GOOGLE_CALLS_PER_RUN_MAX) {
+          metrics.googleCallCapReached = true;
+          metrics.googleCallsBlockedByCap += 1;
+          console.warn(`  ⚠️ Google 호출 상한 도달(${GOOGLE_CALLS_PER_RUN_MAX}) - 신규 조회 중단: ${item.name}`);
+        } else {
+          metrics.googleCalled += 1;
+          googleResult = await fetchGooglePlaceDetails(item.name, item.address, googleApiKey);
+          placeId = googleResult?.placeId || '';
+          rating = googleResult?.rating ?? null;
+          ratingCount = googleResult?.userRatingCount ?? null;
+          photoUrl = googleResult?.photoUrl || null;
+        }
       }
     } catch (error) {
       console.warn(`  [Google Places] ${item.name} 조회 오류, 통과 처리:`, error?.message || error);
@@ -879,6 +1207,12 @@ async function filterByGoogleRating(items, googleApiKey, ratingsCache, naverClie
 
     if (rating < GOOGLE_PLACES_MIN_RATING) {
       console.log(`  ❌ 평점 미달 제외: ${item.name} (${rating}점)`);
+      upsertRejectListItem(rejectList, item.id, {
+        reason: 'low_rating',
+        rating,
+        reviewCount: ratingCount,
+        checkedAt: new Date().toISOString(),
+      });
     } else if (!Number.isFinite(Number(ratingCount)) || Number(ratingCount) < GOOGLE_PLACES_MIN_REVIEW_COUNT) {
       console.log(`  ❌ 리뷰 수 미달 제외: ${item.name} (${rating}점, ${ratingCount ?? '?'}개 리뷰)`);
     } else {
@@ -1048,8 +1382,8 @@ async function summarizeWithGemini(regionLabel, items, geminiKey) {
   return map;
 }
 
-async function collectRegion(region, kakaoKey, geminiKey, googleKey, ratingsCache, naverClientId, naverClientSecret) {
-  const queries = REGION_QUERY_MAP[region];
+async function collectRegion(region, selectedQueries, kakaoKey, geminiKey, googleKey, ratingsCache, rejectList, naverClientId, naverClientSecret) {
+  const queries = Array.isArray(selectedQueries) ? selectedQueries : [];
   const results = [];
   for (const meta of queries) {
     const places = await fetchKakaoByKeyword(meta.query, kakaoKey);
@@ -1061,7 +1395,14 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, ratingsCach
     for (const row of places) {
       if (!row.id) continue;
       const item = toRestaurantItem(row, meta);
-      if (isFranchise(item.name, item.categoryName)) {
+      const franchiseKeyword = getFranchiseMatchKeyword(item.name, item.categoryName);
+      if (franchiseKeyword) {
+        upsertRejectListItem(rejectList, item.id, {
+          reason: 'franchise',
+          matchedKeyword: franchiseKeyword,
+          placeName: item.name,
+          categoryName: item.categoryName || '',
+        });
         console.log(`  [${region}] 프렌차이즈 제외: ${item.name}`);
         continue;
       }
@@ -1086,7 +1427,7 @@ async function collectRegion(region, kakaoKey, geminiKey, googleKey, ratingsCach
   }
 
   console.log(`  [${region}] Google Places 평점 필터 (${preFilterItems.length}건 → 기준: ${GOOGLE_PLACES_MIN_RATING}점 이상, 리뷰 ${GOOGLE_PLACES_MIN_REVIEW_COUNT}개 이상)`);
-  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, ratingsCache, naverClientId, naverClientSecret);
+  const { filtered: googleFiltered, metrics: cacheMetrics } = await filterByGoogleRating(preFilterItems, googleKey, ratingsCache, rejectList, naverClientId, naverClientSecret);
   logSourceQueryDistribution(region, googleFiltered, 'Google 필터 통과 원본');
   const items = rebalanceBySubregion(googleFiltered, region, MAX_ITEMS_PER_REGION);
   logSourceQueryDistribution(region, items, '소지역 재분배 후 선택');
@@ -1126,7 +1467,17 @@ async function run() {
   const naverClientId = process.env.NAVER_CLIENT_ID;
   const naverClientSecret = process.env.NAVER_CLIENT_SECRET;
   const ratingsCache = await readGoogleRatingsCache();
+  const rejectList = await readRejectList();
+  const queryMatrix = await readQueryMatrix();
+  const rotationState = await readRotationState();
   const restaurantGeminiModel = process.env.RESTAURANT_GEMINI_MODEL || process.env.GEMINI_MODEL || RESTAURANT_GEMINI_MODEL_FALLBACK;
+  const legacyCoverage = verifyLegacyQueriesIncluded(queryMatrix);
+
+  if (!legacyCoverage.absorbed) {
+    throw new Error(`쿼리 매트릭스에 legacy 45개 쿼리 누락: ${legacyCoverage.missingLegacyQueries.join(' | ')}`);
+  }
+
+  console.log(`🧩 쿼리 매트릭스 로드: combos=${queryMatrix.combos.length}, legacy흡수=${legacyCoverage.legacyCount}/${legacyCoverage.legacyCount}`);
 
   if (!googleKey) {
     console.warn('⚠️  GOOGLE_PLACES_API_KEY 없음 — 구글 평점 필터 건너뜀');
@@ -1193,17 +1544,45 @@ async function run() {
   if (geminiKey) {
     console.log(`🤖 맛집 요약 Gemini 모델: ${restaurantGeminiModel}`);
   }
+  console.log(`🎚️ Google 신규조회 상한: ${GOOGLE_CALLS_PER_RUN_MAX}/run`);
   console.log(`🗄️  로컬 평점 캐시 사용: ${GOOGLE_RATINGS_CACHE_PATH} (TTL ${GOOGLE_RATING_CACHE_TTL_DAYS}일)`);
+  console.log(`🧾 탈락 명부 사용: ${REJECT_LIST_PATH} (low_rating 재평가=${rejectList.policy?.allowLowRatingReevaluation ? 'on' : 'off'}, days=${rejectList.policy?.lowRatingReevaluationDays || 180})`);
 
   const regions = {};
-  let totalCacheMetrics = { cacheHit: 0, cacheMiss: 0, googleCalled: 0 };
-  for (const regionKey of Object.keys(REGION_QUERY_MAP)) {
+  let totalCacheMetrics = {
+    cacheHit: 0,
+    cacheMiss: 0,
+    googleCalled: 0,
+    googleCallCapReached: false,
+    googleCallsBlockedByCap: 0,
+    googleCallCapLimit: GOOGLE_CALLS_PER_RUN_MAX,
+  };
+  const selectedCombosAll = [];
+  const regionQuerySelection = {};
+  const regionKeys = Object.keys(REGION_QUERY_MAP);
+  for (const regionKey of regionKeys) {
+    const selectedQueries = pickRotatedQueriesForRegion(regionKey, queryMatrix, rotationState);
+    if (selectedQueries.length === 0) {
+      regionQuerySelection[regionKey] = buildLegacyQueryCombos().filter((combo) => combo.region === regionKey).slice(0, QUERY_ROTATION_PER_REGION);
+    } else {
+      regionQuerySelection[regionKey] = selectedQueries;
+    }
+    selectedCombosAll.push(...regionQuerySelection[regionKey]);
+
+    const queryNames = regionQuerySelection[regionKey].map((combo) => combo.query).join(' | ');
+    console.log(`🧭 [${regionKey}] 로테이션 쿼리 ${regionQuerySelection[regionKey].length}개 선택`);
+    console.log(`   ${queryNames}`);
+  }
+
+  for (const regionKey of regionKeys) {
     const { items, cacheMetrics } = await collectRegion(
       regionKey,
+      regionQuerySelection[regionKey],
       kakaoKey,
       geminiKey,
       googleKey,
       ratingsCache,
+      rejectList,
       naverClientId,
       naverClientSecret,
     );
@@ -1214,9 +1593,22 @@ async function run() {
   }
 
   console.log(`📊 맛집 캐시 지표 합계: cache_hit=${totalCacheMetrics.cacheHit}, cache_miss=${totalCacheMetrics.cacheMiss}, google_called=${totalCacheMetrics.googleCalled}`);
+  if (totalCacheMetrics.googleCallCapReached) {
+    console.warn(`⚠️ Google 신규조회 상한 도달: ${totalCacheMetrics.googleCallCapLimit} (차단 ${totalCacheMetrics.googleCallsBlockedByCap}건)`);
+  }
   appendGithubOutput('cache_hit', totalCacheMetrics.cacheHit);
   appendGithubOutput('cache_miss', totalCacheMetrics.cacheMiss);
   appendGithubOutput('google_called', totalCacheMetrics.googleCalled);
+  appendGithubOutput('google_call_cap_reached', totalCacheMetrics.googleCallCapReached ? 'true' : 'false');
+  appendGithubOutput('google_call_cap_limit', totalCacheMetrics.googleCallCapLimit);
+  appendGithubOutput('google_calls_blocked_by_cap', totalCacheMetrics.googleCallsBlockedByCap);
+  appendGithubOutput('query_rotation_per_region', QUERY_ROTATION_PER_REGION);
+  appendGithubOutput('query_rotation_total_used', selectedCombosAll.length);
+  appendGithubOutput('query_legacy_absorbed', legacyCoverage.absorbed ? 'true' : 'false');
+  appendGithubOutput(
+    'collect_summary',
+    `rotation ${selectedCombosAll.length} combos / google ${totalCacheMetrics.googleCalled} calls / cap ${totalCacheMetrics.googleCallCapReached ? 'reached' : 'not-reached'}`,
+  );
 
   const payload = {
     updatedAt: new Date().toISOString(),
@@ -1225,15 +1617,24 @@ async function run() {
       cache_hit: totalCacheMetrics.cacheHit,
       cache_miss: totalCacheMetrics.cacheMiss,
       google_called: totalCacheMetrics.googleCalled,
+      google_call_cap_reached: totalCacheMetrics.googleCallCapReached,
+      google_call_cap_limit: totalCacheMetrics.googleCallCapLimit,
+      google_calls_blocked_by_cap: totalCacheMetrics.googleCallsBlockedByCap,
+      query_rotation_per_region: QUERY_ROTATION_PER_REGION,
+      query_rotation_total_used: selectedCombosAll.length,
+      query_matrix_legacy_absorbed: legacyCoverage.absorbed,
     },
     regions,
   };
 
   markRecollectAt(ratingsCache);
+  const nextRotationState = updateRotationStateAfterSelection(rotationState, selectedCombosAll);
 
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
   await fs.writeFile(OUTPUT_PATH, JSON.stringify(payload, null, 2), 'utf-8');
   await writeGoogleRatingsCache(ratingsCache);
+  await writeRotationState(nextRotationState);
+  await writeRejectList(rejectList);
 
   console.log(`✅ 저장 완료: ${OUTPUT_PATH}`);
   for (const [key, items] of Object.entries(regions)) {
