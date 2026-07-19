@@ -144,11 +144,23 @@ function emitMetrics(snapshot, recollectPerformed) {
   const cacheHit = recollectPerformed ? Number(metrics.cache_hit || 0) : 0;
   const cacheMiss = recollectPerformed ? Number(metrics.cache_miss || 0) : 0;
   const googleCalled = recollectPerformed ? Number(metrics.google_called || 0) : 0;
+  const googleCallCapReached = recollectPerformed ? Boolean(metrics.google_call_cap_reached) : false;
+  const googleCallCapLimit = recollectPerformed ? Number(metrics.google_call_cap_limit || 0) : 0;
+  const googleCallsBlockedByCap = recollectPerformed ? Number(metrics.google_calls_blocked_by_cap || 0) : 0;
+  const queryRotationTotalUsed = recollectPerformed ? Number(metrics.query_rotation_total_used || 0) : 0;
+  const queryRotationPerRegion = recollectPerformed ? Number(metrics.query_rotation_per_region || 0) : 0;
+  const queryLegacyAbsorbed = recollectPerformed ? Boolean(metrics.query_matrix_legacy_absorbed) : false;
 
   appendGithubOutput('recollect_performed', recollectPerformed ? 'true' : 'false');
   appendGithubOutput('cache_hit', cacheHit);
   appendGithubOutput('cache_miss', cacheMiss);
   appendGithubOutput('google_called', googleCalled);
+  appendGithubOutput('google_call_cap_reached', googleCallCapReached ? 'true' : 'false');
+  appendGithubOutput('google_call_cap_limit', googleCallCapLimit);
+  appendGithubOutput('google_calls_blocked_by_cap', googleCallsBlockedByCap);
+  appendGithubOutput('query_rotation_total_used', queryRotationTotalUsed);
+  appendGithubOutput('query_rotation_per_region', queryRotationPerRegion);
+  appendGithubOutput('query_legacy_absorbed', queryLegacyAbsorbed ? 'true' : 'false');
 }
 
 async function main() {

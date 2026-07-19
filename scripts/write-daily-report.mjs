@@ -308,6 +308,9 @@ function toMarkdown(report) {
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles}개 |`);
   lines.push(`| 맛집 후보 재수집 | ${report.restaurantCache?.recollectPerformed ? '실행' : '생략'} |`);
   lines.push(`| 맛집 캐시(hit/miss/called) | ${Number(report.restaurantCache?.cacheHit || 0)} / ${Number(report.restaurantCache?.cacheMiss || 0)} / ${Number(report.restaurantCache?.googleCalled || 0)} |`);
+  lines.push(`| 쿼리 로테이션(총/지역당) | ${Number(report.restaurantCache?.queryRotationTotalUsed || 0)} / ${Number(report.restaurantCache?.queryRotationPerRegion || 0)} |`);
+  lines.push(`| legacy 45개 흡수 | ${report.restaurantCache?.queryLegacyAbsorbed ? 'yes' : 'no'} |`);
+  lines.push(`| Google 상한 도달 | ${report.restaurantCache?.googleCallCapReached ? `yes (limit ${Number(report.restaurantCache?.googleCallCapLimit || 0)}, blocked ${Number(report.restaurantCache?.googleCallsBlockedByCap || 0)})` : 'no'} |`);
   lines.push(`| 최종 배포 URL | ${latestDeployUrl || '-'} |`);
   if (report.imagePolicy) {
     lines.push(`| 축제 중간 이미지(삽입/생략) | ${Number(report.imagePolicy.midImageInsertedCount || 0)} / ${Number(report.imagePolicy.midImageOmittedCount || 0)} |`);
@@ -362,6 +365,9 @@ function toMarkdown(report) {
   lines.push('');
   lines.push(`- 초이스 fallback 완화 발동 횟수: ${Number(report.choiceFallback?.relaxedAppliedCount || 0)}회`);
   lines.push(`- 초이스 적용 평점 하한: ${report.choiceFallback?.appliedMinRating || '-'} (기본 ${report.choiceFallback?.defaultMinRating || '-'})`);
+  if (report.restaurantCache?.googleCallCapReached) {
+    lines.push(`- ⚠️ Google 신규조회 상한 도달: limit=${Number(report.restaurantCache?.googleCallCapLimit || 0)}, blocked=${Number(report.restaurantCache?.googleCallsBlockedByCap || 0)}`);
+  }
   lines.push('');
 
   if (report.budget?.enabled) {
@@ -500,6 +506,12 @@ async function updateIndex(indexPath, report) {
     restaurantCacheHit: Number(report.restaurantCache?.cacheHit || 0),
     restaurantCacheMiss: Number(report.restaurantCache?.cacheMiss || 0),
     restaurantGoogleCalled: Number(report.restaurantCache?.googleCalled || 0),
+    restaurantGoogleCallCapReached: !!report.restaurantCache?.googleCallCapReached,
+    restaurantGoogleCallCapLimit: Number(report.restaurantCache?.googleCallCapLimit || 0),
+    restaurantGoogleCallsBlockedByCap: Number(report.restaurantCache?.googleCallsBlockedByCap || 0),
+    restaurantQueryRotationTotalUsed: Number(report.restaurantCache?.queryRotationTotalUsed || 0),
+    restaurantQueryRotationPerRegion: Number(report.restaurantCache?.queryRotationPerRegion || 0),
+    restaurantQueryLegacyAbsorbed: !!report.restaurantCache?.queryLegacyAbsorbed,
     totalChangedFiles: report.changes.totalChangedFiles,
     blogBudgetEnabled: !!report.budget?.enabled,
     blogBudgetStopped: !!report.budget?.stopped,
@@ -580,6 +592,12 @@ async function main() {
       cacheHit: Number(process.env.RESTAURANT_CACHE_HIT || 0),
       cacheMiss: Number(process.env.RESTAURANT_CACHE_MISS || 0),
       googleCalled: Number(process.env.RESTAURANT_GOOGLE_CALLED || 0),
+      googleCallCapReached: normalizeBoolean(process.env.RESTAURANT_GOOGLE_CALL_CAP_REACHED),
+      googleCallCapLimit: Number(process.env.RESTAURANT_GOOGLE_CALL_CAP_LIMIT || 0),
+      googleCallsBlockedByCap: Number(process.env.RESTAURANT_GOOGLE_CALLS_BLOCKED_BY_CAP || 0),
+      queryRotationTotalUsed: Number(process.env.RESTAURANT_QUERY_ROTATION_TOTAL_USED || 0),
+      queryRotationPerRegion: Number(process.env.RESTAURANT_QUERY_ROTATION_PER_REGION || 0),
+      queryLegacyAbsorbed: normalizeBoolean(process.env.RESTAURANT_QUERY_LEGACY_ABSORBED),
     },
     failureReasons: {
       generateChoice: process.env.GENERATE_CHOICE_FAILURE_REASON || '',

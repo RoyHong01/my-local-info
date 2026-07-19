@@ -127,6 +127,12 @@ async function buildMessage(report) {
   const cacheHit = Number(restaurantCache.cacheHit || 0);
   const cacheMiss = Number(restaurantCache.cacheMiss || 0);
   const googleCalled = Number(restaurantCache.googleCalled || 0);
+  const googleCapReached = !!restaurantCache.googleCallCapReached;
+  const googleCapLimit = Number(restaurantCache.googleCallCapLimit || 0);
+  const googleBlockedByCap = Number(restaurantCache.googleCallsBlockedByCap || 0);
+  const queryRotationTotalUsed = Number(restaurantCache.queryRotationTotalUsed || 0);
+  const queryRotationPerRegion = Number(restaurantCache.queryRotationPerRegion || 0);
+  const queryLegacyAbsorbed = !!restaurantCache.queryLegacyAbsorbed;
   const choiceFallback = report.choiceFallback || {};
   const relaxedFallbackCount = Number(choiceFallback.relaxedAppliedCount || 0);
   const appliedMinRating = Number(choiceFallback.appliedMinRating || 0);
@@ -232,6 +238,8 @@ async function buildMessage(report) {
     `♻️ 맛집 후보 재수집: ${recollectPerformed ? '실행' : '생략'}`,
     `🖼️ 축제 중간 이미지: 삽입 ${midImageInsertedCount}건 / 생략 ${midImageOmittedCount}건`,
     `🗄️ 맛집 캐시: hit ${cacheHit} / miss ${cacheMiss} / google ${googleCalled}`,
+    `🧭 쿼리 로테이션: 총 ${queryRotationTotalUsed} / 지역당 ${queryRotationPerRegion} (legacy45 흡수=${queryLegacyAbsorbed ? 'yes' : 'no'})`,
+    googleCapReached ? `⚠️ Google 신규조회 상한 도달: limit ${googleCapLimit}, blocked ${googleBlockedByCap}` : '✅ Google 신규조회 상한 미도달',
     `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
     budgetLine,
   ];
