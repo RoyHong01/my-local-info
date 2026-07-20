@@ -1,0 +1,270 @@
+{
+  "reportDateKst": "2026-07-21",
+  "generatedAtUtc": "2026-07-20T20:37:23.014Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29775361554",
+    "runNumber": 900,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29775361554",
+    "runStartedAtUtc": "2026-07-20T20:15:29Z",
+    "headSha": "00aed6a03131cf4ea13981a6b92ea0a634fab9ad"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://86653074.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 7건, 업데이트 178건, 총 349건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://acee9798.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://fe186de5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "3cbd18de125092e9b24df9d93d2f6a5e296f3937",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-20",
+      "authoredAt": "2026-07-20T20:37:21Z",
+      "files": [
+        "scripts/data/google-ratings-cache.json",
+        "scripts/data/restaurant-query-rotation-state.json",
+        "scripts/data/restaurant-reject-list.json",
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-07-21-incheon-cafe.md",
+        "src/content/life/2026-07-21-seoul-restaurant-1599653080.md",
+        "src/content/life/2026-07-21-seoul-restaurant-1862163744.md"
+      ]
+    },
+    {
+      "sha": "a3fe1bace749c8d2fe1187ecc9087deeaf64ceaa",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-20",
+      "authoredAt": "2026-07-20T20:31:09Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-21-choice-living-2026-07-21.md"
+      ]
+    },
+    {
+      "sha": "c9b5bfb9d6964549d893d12db82dcca0fbece539",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-20",
+      "authoredAt": "2026-07-20T20:29:58Z",
+      "files": [
+        "src/content/posts/2026-07-20-GeomundoSilverSeaFestival.md",
+        "src/content/posts/2026-07-20-incheon-gas-safety.md",
+        "src/content/posts/2026-07-20-pet-medical-support.md",
+        "src/content/posts/2026-07-20-young-farmer-cheongju.md",
+        "src/content/posts/2026-07-21-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "6a8dbfa9fcfe70827c845e436e1c7a85aa6412a9",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-20",
+      "authoredAt": "2026-07-20T20:18:02Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 17,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-20-GeomundoSilverSeaFestival.md",
+      "src/content/posts/2026-07-20-incheon-gas-safety.md",
+      "src/content/posts/2026-07-20-pet-medical-support.md",
+      "src/content/posts/2026-07-20-young-farmer-cheongju.md",
+      "src/content/posts/2026-07-21-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-21-choice-living-2026-07-21.md",
+      "src/content/life/2026-07-21-incheon-cafe.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1599653080.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1862163744.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-21-choice-living-2026-07-21.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-21-incheon-cafe.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1599653080.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1862163744.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/google-ratings-cache.json",
+      "scripts/data/recommended-products.json",
+      "scripts/data/restaurant-query-rotation-state.json",
+      "scripts/data/restaurant-reject-list.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-07-21-choice-living-2026-07-21.md",
+      "src/content/life/2026-07-21-incheon-cafe.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1599653080.md",
+      "src/content/life/2026-07-21-seoul-restaurant-1862163744.md",
+      "src/content/posts/2026-07-20-GeomundoSilverSeaFestival.md",
+      "src/content/posts/2026-07-20-incheon-gas-safety.md",
+      "src/content/posts/2026-07-20-pet-medical-support.md",
+      "src/content/posts/2026-07-20-young-farmer-cheongju.md",
+      "src/content/posts/2026-07-21-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.04,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 111,
+    "cacheMiss": 33,
+    "googleCalled": 33,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 50,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 24,
+    "queryRotationPerRegion": 8,
+    "queryLegacyAbsorbed": true
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "2188/605",
+      "markdown": {
+        "generated": 1,
+        "pending": 172,
+        "titles": [
+          "신재생에너지 주택지원사업"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 611건",
+      "validation": "ok",
+      "anthropicUsage": "1417/1051",
+      "markdown": {
+        "generated": 2,
+        "pending": 345,
+        "titles": [
+          "K-패스",
+          "지역화폐(양주사랑카드)"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 7건, 업데이트 178건, 총 349건",
+      "validation": "ok",
+      "anthropicUsage": "698/451",
+      "markdown": {
+        "generated": 1,
+        "pending": 248,
+        "titles": [
+          "2026 경기인형극제 in 수원"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
