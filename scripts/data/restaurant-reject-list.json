@@ -1,9 +1,271 @@
 {
   "version": 1,
-  "updatedAt": "",
+  "updatedAt": "2026-07-20T20:32:33.809Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
   },
-  "items": {}
+  "items": {
+    "10463591": {
+      "reason": "low_rating",
+      "rating": 3.7,
+      "reviewCount": 23,
+      "checkedAt": "2026-07-20T20:31:38.747Z",
+      "kakaoId": "10463591",
+      "firstSeenAt": "2026-07-20T20:31:38.747Z",
+      "lastSeenAt": "2026-07-20T20:31:38.747Z"
+    },
+    "19032013": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 984,
+      "checkedAt": "2026-07-20T20:31:51.369Z",
+      "kakaoId": "19032013",
+      "firstSeenAt": "2026-07-20T20:31:51.369Z",
+      "lastSeenAt": "2026-07-20T20:31:51.369Z"
+    },
+    "24063108": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 75,
+      "checkedAt": "2026-07-20T20:31:56.723Z",
+      "kakaoId": "24063108",
+      "firstSeenAt": "2026-07-20T20:31:56.723Z",
+      "lastSeenAt": "2026-07-20T20:31:56.723Z"
+    },
+    "26869543": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 138,
+      "checkedAt": "2026-07-20T20:31:16.910Z",
+      "kakaoId": "26869543",
+      "firstSeenAt": "2026-07-20T20:31:16.910Z",
+      "lastSeenAt": "2026-07-20T20:31:16.910Z"
+    },
+    "27467246": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-20T20:31:39.214Z",
+      "kakaoId": "27467246",
+      "firstSeenAt": "2026-07-20T20:31:39.214Z",
+      "lastSeenAt": "2026-07-20T20:31:39.214Z"
+    },
+    "173009195": {
+      "reason": "low_rating",
+      "rating": 3.3,
+      "reviewCount": 6,
+      "checkedAt": "2026-07-20T20:31:51.570Z",
+      "kakaoId": "173009195",
+      "firstSeenAt": "2026-07-20T20:31:51.570Z",
+      "lastSeenAt": "2026-07-20T20:31:51.570Z"
+    },
+    "354755930": {
+      "reason": "low_rating",
+      "rating": 3.7,
+      "reviewCount": 179,
+      "checkedAt": "2026-07-20T20:31:51.570Z",
+      "kakaoId": "354755930",
+      "firstSeenAt": "2026-07-20T20:31:51.570Z",
+      "lastSeenAt": "2026-07-20T20:31:51.570Z"
+    },
+    "412368591": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-20T20:32:28.727Z",
+      "kakaoId": "412368591",
+      "firstSeenAt": "2026-07-20T20:32:28.727Z",
+      "lastSeenAt": "2026-07-20T20:32:28.727Z"
+    },
+    "434665271": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 17,
+      "checkedAt": "2026-07-20T20:31:24.591Z",
+      "kakaoId": "434665271",
+      "firstSeenAt": "2026-07-20T20:31:24.591Z",
+      "lastSeenAt": "2026-07-20T20:31:24.591Z"
+    },
+    "526971723": {
+      "reason": "low_rating",
+      "rating": 3.7,
+      "reviewCount": 11,
+      "checkedAt": "2026-07-20T20:32:21.169Z",
+      "kakaoId": "526971723",
+      "firstSeenAt": "2026-07-20T20:32:21.169Z",
+      "lastSeenAt": "2026-07-20T20:32:21.169Z"
+    },
+    "582379341": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 24,
+      "checkedAt": "2026-07-20T20:32:21.795Z",
+      "kakaoId": "582379341",
+      "firstSeenAt": "2026-07-20T20:32:21.795Z",
+      "lastSeenAt": "2026-07-20T20:32:21.795Z"
+    },
+    "637387810": {
+      "reason": "low_rating",
+      "rating": 3.7,
+      "reviewCount": 84,
+      "checkedAt": "2026-07-20T20:31:38.273Z",
+      "kakaoId": "637387810",
+      "firstSeenAt": "2026-07-20T20:31:38.273Z",
+      "lastSeenAt": "2026-07-20T20:31:38.273Z"
+    },
+    "704583232": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 29,
+      "checkedAt": "2026-07-20T20:31:58.254Z",
+      "kakaoId": "704583232",
+      "firstSeenAt": "2026-07-20T20:31:58.254Z",
+      "lastSeenAt": "2026-07-20T20:31:58.254Z"
+    },
+    "804507799": {
+      "reason": "low_rating",
+      "rating": 1,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-20T20:32:06.837Z",
+      "kakaoId": "804507799",
+      "firstSeenAt": "2026-07-20T20:32:06.837Z",
+      "lastSeenAt": "2026-07-20T20:32:06.837Z"
+    },
+    "864693294": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 116,
+      "checkedAt": "2026-07-20T20:31:51.570Z",
+      "kakaoId": "864693294",
+      "firstSeenAt": "2026-07-20T20:31:51.570Z",
+      "lastSeenAt": "2026-07-20T20:31:51.570Z"
+    },
+    "899761938": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 6,
+      "checkedAt": "2026-07-20T20:32:21.499Z",
+      "kakaoId": "899761938",
+      "firstSeenAt": "2026-07-20T20:32:21.499Z",
+      "lastSeenAt": "2026-07-20T20:32:21.499Z"
+    },
+    "944143868": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 35,
+      "checkedAt": "2026-07-20T20:32:21.169Z",
+      "kakaoId": "944143868",
+      "firstSeenAt": "2026-07-20T20:32:21.169Z",
+      "lastSeenAt": "2026-07-20T20:32:21.169Z"
+    },
+    "1088662289": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-20T20:31:58.620Z",
+      "kakaoId": "1088662289",
+      "firstSeenAt": "2026-07-20T20:31:58.620Z",
+      "lastSeenAt": "2026-07-20T20:31:58.620Z"
+    },
+    "1169568551": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 281,
+      "checkedAt": "2026-07-20T20:31:18.181Z",
+      "kakaoId": "1169568551",
+      "firstSeenAt": "2026-07-20T20:31:18.181Z",
+      "lastSeenAt": "2026-07-20T20:31:18.181Z"
+    },
+    "1196620579": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 13,
+      "checkedAt": "2026-07-20T20:31:18.181Z",
+      "kakaoId": "1196620579",
+      "firstSeenAt": "2026-07-20T20:31:18.181Z",
+      "lastSeenAt": "2026-07-20T20:31:18.181Z"
+    },
+    "1370232169": {
+      "reason": "low_rating",
+      "rating": 1,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-20T20:31:27.510Z",
+      "kakaoId": "1370232169",
+      "firstSeenAt": "2026-07-20T20:31:27.510Z",
+      "lastSeenAt": "2026-07-20T20:31:27.510Z"
+    },
+    "1440400381": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 2,
+      "checkedAt": "2026-07-20T20:32:19.913Z",
+      "kakaoId": "1440400381",
+      "firstSeenAt": "2026-07-20T20:32:19.913Z",
+      "lastSeenAt": "2026-07-20T20:32:19.913Z"
+    },
+    "1503793880": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 28,
+      "checkedAt": "2026-07-20T20:32:26.466Z",
+      "kakaoId": "1503793880",
+      "firstSeenAt": "2026-07-20T20:32:26.466Z",
+      "lastSeenAt": "2026-07-20T20:32:26.466Z"
+    },
+    "1568148864": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 15,
+      "checkedAt": "2026-07-20T20:31:19.677Z",
+      "kakaoId": "1568148864",
+      "firstSeenAt": "2026-07-20T20:31:19.677Z",
+      "lastSeenAt": "2026-07-20T20:31:19.677Z"
+    },
+    "1798330241": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 4,
+      "checkedAt": "2026-07-20T20:31:58.620Z",
+      "kakaoId": "1798330241",
+      "firstSeenAt": "2026-07-20T20:31:58.620Z",
+      "lastSeenAt": "2026-07-20T20:31:58.620Z"
+    },
+    "1917389932": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 54,
+      "checkedAt": "2026-07-20T20:32:26.147Z",
+      "kakaoId": "1917389932",
+      "firstSeenAt": "2026-07-20T20:32:26.147Z",
+      "lastSeenAt": "2026-07-20T20:32:26.147Z"
+    },
+    "1989455679": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 63,
+      "checkedAt": "2026-07-20T20:32:21.169Z",
+      "kakaoId": "1989455679",
+      "firstSeenAt": "2026-07-20T20:32:21.169Z",
+      "lastSeenAt": "2026-07-20T20:32:21.169Z"
+    },
+    "2111998910": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 18,
+      "checkedAt": "2026-07-20T20:32:21.795Z",
+      "kakaoId": "2111998910",
+      "firstSeenAt": "2026-07-20T20:32:21.795Z",
+      "lastSeenAt": "2026-07-20T20:32:21.795Z"
+    },
+    "2134411175": {
+      "reason": "low_rating",
+      "rating": 2.6,
+      "reviewCount": 16,
+      "checkedAt": "2026-07-20T20:31:58.620Z",
+      "kakaoId": "2134411175",
+      "firstSeenAt": "2026-07-20T20:31:58.620Z",
+      "lastSeenAt": "2026-07-20T20:31:58.620Z"
+    }
+  }
 }
