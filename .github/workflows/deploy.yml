@@ -361,6 +361,7 @@ jobs:
           RESTAURANT_GEMINI_MODEL: 'gemini-3.1-flash-lite'
           INTER_REQUEST_DELAY_MS: '15000'
           RESTAURANT_RECOLLECT_COOLDOWN_DAYS: '7'
+          RESTAURANT_FORCE_RECOLLECT: 'once'
           GOOGLE_CALLS_PER_RUN_MAX: '50'
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}

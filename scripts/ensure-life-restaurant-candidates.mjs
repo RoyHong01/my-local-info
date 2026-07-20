@@ -7,6 +7,7 @@ import { execFileSync } from 'child_process';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
 const RECOLLECT_COOLDOWN_DAYS = Number(process.env.RESTAURANT_RECOLLECT_COOLDOWN_DAYS || '7');
+const FORCE_RECOLLECT_MODE = String(process.env.RESTAURANT_FORCE_RECOLLECT || '').trim().toLowerCase();
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const ratingsCachePath = path.join(process.cwd(), 'scripts', 'data', 'google-ratings-cache.json');
 const existingPostDirs = [
@@ -91,12 +92,31 @@ async function readRatingsCacheMeta() {
     const meta = parsed?.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
     return {
       lastRecollectAt: String(meta.lastRecollectAt || ''),
+      forceRecollectOnceConsumedAt: String(meta.forceRecollectOnceConsumedAt || ''),
     };
   } catch {
     return {
       lastRecollectAt: '',
+      forceRecollectOnceConsumedAt: '',
     };
   }
+}
+
+async function markForceRecollectConsumed() {
+  let parsed = { meta: {}, items: {} };
+  try {
+    const raw = await fs.readFile(ratingsCachePath, 'utf-8');
+    parsed = JSON.parse(raw);
+  } catch {
+    // keep fallback object
+  }
+
+  parsed.meta = parsed?.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
+  parsed.items = parsed?.items && typeof parsed.items === 'object' ? parsed.items : {};
+  parsed.meta.forceRecollectOnceConsumedAt = new Date().toISOString();
+
+  await fs.mkdir(path.dirname(ratingsCachePath), { recursive: true });
+  await fs.writeFile(ratingsCachePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
 }
 
 function isCooldownActive(lastRecollectAt) {
@@ -166,12 +186,24 @@ function emitMetrics(snapshot, recollectPerformed) {
 async function main() {
   const snapshot = await readSnapshot();
   const ratingsCacheMeta = await readRatingsCacheMeta();
+  const forceRecollectRequested = FORCE_RECOLLECT_MODE === 'once';
+  const forceRecollectConsumed = Boolean(ratingsCacheMeta.forceRecollectOnceConsumedAt);
+  const forceRecollectActive = forceRecollectRequested && !forceRecollectConsumed;
+
+  appendGithubOutput('force_recollect_mode', FORCE_RECOLLECT_MODE || 'off');
+  appendGithubOutput('force_recollect_active', forceRecollectActive ? 'true' : 'false');
+  appendGithubOutput('force_recollect_consumed', forceRecollectConsumed ? 'true' : 'false');
+
+  if (forceRecollectRequested && forceRecollectConsumed) {
+    console.log(`ℹ️ 1회성 강제 재수집 플래그는 이미 소비됨: ${ratingsCacheMeta.forceRecollectOnceConsumedAt}`);
+  }
+
   const existingIds = await getExistingRestaurantIds();
   const candidates = snapshot ? buildFilteredCandidates(snapshot, existingIds) : [];
   const emptyBuckets = findEmptyBuckets(candidates);
   const hasEnoughCandidates = candidates.length >= MIN_UNUSED_CANDIDATES;
   const hasAllTargetBuckets = emptyBuckets.length === 0;
-  const needsRecollect = !snapshot || !hasEnoughCandidates || !hasAllTargetBuckets;
+  const needsRecollect = forceRecollectActive || !snapshot || !hasEnoughCandidates || !hasAllTargetBuckets;
 
   if (!needsRecollect) {
     console.log(`✅ 후보가 충분합니다. 수집을 건너뜁니다. (unused ${candidates.length}건, 기준 ${MIN_UNUSED_CANDIDATES}건)`);
@@ -179,13 +211,15 @@ async function main() {
     return;
   }
 
-  const recollectReason = !snapshot
+  const recollectReason = forceRecollectActive
+    ? '1회성 강제 재수집 플래그 활성화'
+    : !snapshot
     ? '스냅샷 없음'
     : !hasEnoughCandidates
       ? `unused 후보 ${candidates.length}건 (기준 ${MIN_UNUSED_CANDIDATES}건 미만)`
       : `필수 버킷 후보 부족 (${emptyBuckets.join(', ')})`;
 
-  const shouldApplyCooldown = Boolean(snapshot) && (!hasEnoughCandidates || !hasAllTargetBuckets);
+  const shouldApplyCooldown = !forceRecollectActive && Boolean(snapshot) && (!hasEnoughCandidates || !hasAllTargetBuckets);
   if (shouldApplyCooldown && isCooldownActive(ratingsCacheMeta.lastRecollectAt)) {
     console.log(`⏸️ 재수집 쿨다운 적용: 마지막 재수집 ${ratingsCacheMeta.lastRecollectAt} (쿨다운 ${RECOLLECT_COOLDOWN_DAYS}일)`);
     console.log(`↪ 재수집 스킵: ${recollectReason}`);
@@ -204,6 +238,11 @@ async function main() {
     stdio: 'inherit',
     env: process.env,
   });
+
+  if (forceRecollectActive) {
+    await markForceRecollectConsumed();
+    console.log('✅ 1회성 강제 재수집 플래그를 소비 처리했습니다.');
+  }
 
   const refreshedSnapshot = await readSnapshot();
   emitMetrics(refreshedSnapshot, true);
