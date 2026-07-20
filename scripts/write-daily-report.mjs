@@ -47,6 +47,45 @@ function classifyStageStatus(stage) {
   return 'unknown';
 }
 
+function deriveOverallStatus(reportLike) {
+  const stages = Array.isArray(reportLike?.stages) ? reportLike.stages : [];
+  const hasFailure = stages.some((stage) => stage.status === 'failure');
+  if (hasFailure) {
+    return {
+      level: 'failure',
+      code: 'failure',
+      label: '일부 단계 실패',
+    };
+  }
+
+  const stage3 = stages.find((stage) => stage.key === 'stage3-life');
+  const restaurantCount = Number(reportLike?.changes?.generatedRestaurantPosts?.length || 0);
+  const collectRestaurants = normalizeOutcome(stage3?.steps?.collectRestaurants);
+  const generateRestaurantPosts = normalizeOutcome(stage3?.steps?.generateRestaurantPosts);
+  const recollectPerformed = Boolean(reportLike?.restaurantCache?.recollectPerformed);
+  const candidateShortageWarning = Boolean(
+    stage3
+    && restaurantCount === 0
+    && collectRestaurants === 'success'
+    && generateRestaurantPosts === 'success'
+    && !recollectPerformed
+  );
+
+  if (candidateShortageWarning) {
+    return {
+      level: 'warning',
+      code: 'warning_restaurant_candidate_shortage',
+      label: '완료(맛집 미발행: 후보 부족)',
+    };
+  }
+
+  return {
+    level: 'success',
+    code: 'success',
+    label: '전체 정상 완료',
+  };
+}
+
 function uniqueSorted(arr) {
   return Array.from(new Set(arr)).sort((a, b) => a.localeCompare(b));
 }
@@ -288,6 +327,7 @@ function toMarkdown(report) {
   const lines = [];
   lines.push(`# 📘 Daily Update Report — ${report.reportDateKst}`);
   lines.push('');
+  lines.push(`- 전체 판정: ${report.overall?.level === 'failure' ? '❌' : report.overall?.level === 'warning' ? '⚠️' : '✅'} ${report.overall?.label || '전체 정상 완료'}`);
   lines.push(`- 워크플로우: ${report.workflow.name}`);
   lines.push(`- 실행 번호: #${report.workflow.runNumber} (시도 ${report.workflow.runAttempt})`);
   lines.push(`- 실행 타입: ${report.workflow.eventName}`);
@@ -299,6 +339,7 @@ function toMarkdown(report) {
   lines.push('');
   lines.push('| 항목 | 값 |');
   lines.push('|---|---|');
+  lines.push(`| 전체 판정 | ${report.overall?.level === 'failure' ? '❌' : report.overall?.level === 'warning' ? '⚠️' : '✅'} ${report.overall?.label || '전체 정상 완료'} |`);
   lines.push(`| 단계 성공 수 | ${report.stages.filter((stage) => stage.status === 'success').length} / ${report.stages.length} |`);
   lines.push(`| 생성된 블로그 글 | ${report.changes.generatedBlogPosts.length}건 |`);
   lines.push(`| 생성된 초이스 글 | ${report.changes.generatedChoicePosts.length}건 |`);
@@ -642,6 +683,8 @@ async function main() {
       },
     },
   };
+
+  report.overall = deriveOverallStatus(report);
 
   if (dryRun) {
     console.log(JSON.stringify(report, null, 2));

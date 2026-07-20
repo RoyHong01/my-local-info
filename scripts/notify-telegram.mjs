@@ -110,6 +110,8 @@ async function buildMessage(report) {
   }
 
   const hasFailed = report.stages?.some((s) => s.status === 'failure');
+  const overallLevel = String(report.overall?.level || '').trim().toLowerCase();
+  const overallLabel = String(report.overall?.label || '').trim();
   const generatedBlogPosts = report.changes?.generatedBlogPosts || [];
   const generatedChoicePosts = report.changes?.generatedChoicePosts || [];
   const generatedRestaurantPosts = report.changes?.generatedRestaurantPosts || report.changes?.generatedLifePosts || [];
@@ -137,8 +139,8 @@ async function buildMessage(report) {
   const relaxedFallbackCount = Number(choiceFallback.relaxedAppliedCount || 0);
   const appliedMinRating = Number(choiceFallback.appliedMinRating || 0);
 
-  const statusIcon = hasFailed ? '⚠️' : '✅';
-  const statusText = hasFailed ? '일부 단계 실패' : '전체 정상 완료';
+  const statusIcon = overallLevel === 'failure' ? '❌' : overallLevel === 'warning' ? '⚠️' : hasFailed ? '⚠️' : '✅';
+  const statusText = overallLabel || (hasFailed ? '일부 단계 실패' : '전체 정상 완료');
   const failedStages = formatFailedStages(report.stages || []);
 
   // 1단계 데이터 수집 결과 추출
