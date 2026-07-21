@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-21T00:00:00+09:00",
+  "updatedAtKst": "2026-07-22T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4937,6 +4937,63 @@
       "sourceId": "manual-choice-living-2026-07-21",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-07-22",
+      "productId": "9281480313",
+      "productName": "이놀 투명창 에어프라이어 2L 1인용 소형 미니 프리미엄 에어프라이기 air fryer",
+      "brand": "이놀",
+      "productGroupTokens": [
+        "투명창",
+        "에어프라이어",
+        "2l",
+        "1인용",
+        "소형",
+        "에어프라이기"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-22-choice-kitchen-2026-07-22.md",
+      "sourceId": "manual-choice-kitchen-2026-07-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-22",
+      "productId": "8965495882",
+      "productName": "SMTONE 슬림 주방 선반 틈새 서랍형 11.5cm/18.5cm 자석걸이+도마걸이 탄소강 수납함 조미료 컵 정리 양념통선반 영양제보관함 다용도 슬라이딩 정리함, 1개, 화이트",
+      "brand": "SMTONE",
+      "productGroupTokens": [
+        "슬림",
+        "주방",
+        "선반",
+        "틈새",
+        "서랍형",
+        "5cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-22-choice-kitchen-2026-07-22.md",
+      "sourceId": "manual-choice-kitchen-2026-07-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-22",
+      "productId": "8506885626",
+      "productName": "주방수납장 주방 수납장 조립식 진열장, 3단, 블랙",
+      "brand": "주방수납장",
+      "productGroupTokens": [
+        "주방",
+        "수납장",
+        "조립식",
+        "진열장",
+        "3단",
+        "kitchen"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-22-choice-kitchen-2026-07-22.md",
+      "sourceId": "manual-choice-kitchen-2026-07-22",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
