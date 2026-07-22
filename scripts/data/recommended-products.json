@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-22T00:00:00+09:00",
+  "updatedAtKst": "2026-07-23T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -4994,6 +4994,63 @@
       "sourceId": "manual-choice-kitchen-2026-07-22",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-07-23",
+      "productId": "9517050490",
+      "productName": "드라이비아 무선 리시버 2.4GHz 동글 블루투스 겸용 듀얼 마우스 2 in 1 DPI 스크롤 속도 변환 초경량 무소음 USB 충전식 에어 스마트 폰 아이패드, 메튜블랙, RGB DRMA1",
+      "brand": "드라이비아",
+      "productGroupTokens": [
+        "리시버",
+        "4ghz",
+        "동글",
+        "블루투스",
+        "겸용",
+        "듀얼"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-23-choice-digital-2026-07-23.md",
+      "sourceId": "manual-choice-digital-2026-07-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-23",
+      "productId": "8369793508",
+      "productName": "고속충전 대용량 보조배터리 30000mAh PD 22.5W QC3.0 잔량표시 멀티단자 + 20W C타입 케이블, 블랙-30000mAh, P1",
+      "brand": "고속충전",
+      "productGroupTokens": [
+        "보조배터리",
+        "30000mah",
+        "pd",
+        "5w",
+        "qc3",
+        "잔량표시"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-23-choice-digital-2026-07-23.md",
+      "sourceId": "manual-choice-digital-2026-07-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-23",
+      "productId": "8421629273",
+      "productName": "UOOFON  일체형 보조배터리 고속충전 30000mAh 대용량 PD 22.5W QC3.0 잔량표시+ 4개 케이블 멀티단자",
+      "brand": "UOOFON",
+      "productGroupTokens": [
+        "일체형",
+        "보조배터리",
+        "고속충전",
+        "30000mah",
+        "pd",
+        "5w"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-23-choice-digital-2026-07-23.md",
+      "sourceId": "manual-choice-digital-2026-07-23",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
