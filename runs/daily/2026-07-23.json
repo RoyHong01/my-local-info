@@ -1,0 +1,264 @@
+{
+  "reportDateKst": "2026-07-23",
+  "generatedAtUtc": "2026-07-22T20:29:09.296Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "29953751842",
+    "runNumber": 902,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/29953751842",
+    "runStartedAtUtc": "2026-07-22T20:06:32Z",
+    "headSha": "2ff0ba1c5a4d740d56e8ba43cc98b8d481a6b10d"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://f4794c05.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 611건",
+        "festival": "신규 4건, 업데이트 189건, 총 363건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://d6fe98a8.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://601097db.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "9050ad9f70445a23c854b52b47faf7fa08058ab1",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-22",
+      "authoredAt": "2026-07-22T20:29:08Z",
+      "files": [
+        "src/content/life/2026-07-23-incheon-restaurant-22809521.md",
+        "src/content/life/2026-07-23-seoul-restaurant-1427881249.md",
+        "src/content/life/2026-07-23-seoul-restaurant-1642777762.md"
+      ]
+    },
+    {
+      "sha": "40bbb548ec210d070f2b93dab539c397e8a02d1b",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-22",
+      "authoredAt": "2026-07-22T20:23:52Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-23-choice-digital-2026-07-23.md"
+      ]
+    },
+    {
+      "sha": "ae58e624a658f81a20bf397c007be876b878497e",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-22",
+      "authoredAt": "2026-07-22T20:22:40Z",
+      "files": [
+        "src/content/posts/2026-07-22-JangheungWaterFestival.md",
+        "src/content/posts/2026-07-22-emergency-welfare-support.md",
+        "src/content/posts/2026-07-22-eunpyeong-pregnancy-support.md",
+        "src/content/posts/2026-07-22-incheon-ansimphone.md",
+        "src/content/posts/2026-07-23-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "9c608a3a28f03f8766c27828c591479f276e6b3a",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-22",
+      "authoredAt": "2026-07-22T20:08:58Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-07-07-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-07-curation-festival.md",
+      "src/content/posts/2026-07-22-emergency-welfare-support.md",
+      "src/content/posts/2026-07-22-eunpyeong-pregnancy-support.md",
+      "src/content/posts/2026-07-22-incheon-ansimphone.md",
+      "src/content/posts/2026-07-22-JangheungWaterFestival.md",
+      "src/content/posts/2026-07-23-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-23-choice-digital-2026-07-23.md",
+      "src/content/life/2026-07-23-incheon-restaurant-22809521.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1427881249.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1642777762.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-23-choice-digital-2026-07-23.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-23-incheon-restaurant-22809521.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1427881249.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1642777762.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-23-choice-digital-2026-07-23.md",
+      "src/content/life/2026-07-23-incheon-restaurant-22809521.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1427881249.md",
+      "src/content/life/2026-07-23-seoul-restaurant-1642777762.md",
+      "src/content/posts/2026-07-07-curation-festival.md",
+      "src/content/posts/2026-07-22-emergency-welfare-support.md",
+      "src/content/posts/2026-07-22-eunpyeong-pregnancy-support.md",
+      "src/content/posts/2026-07-22-incheon-ansimphone.md",
+      "src/content/posts/2026-07-22-JangheungWaterFestival.md",
+      "src/content/posts/2026-07-23-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 10.18,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "708/499",
+      "markdown": {
+        "generated": 1,
+        "pending": 170,
+        "titles": [
+          "장애인 자립생활 초기정착금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 611건",
+      "validation": "ok",
+      "anthropicUsage": "1261/1056",
+      "markdown": {
+        "generated": 2,
+        "pending": 341,
+        "titles": [
+          "산후조리비용 지원",
+          "공공산림관리단"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 189건, 총 363건",
+      "validation": "ok",
+      "anthropicUsage": "895/505",
+      "markdown": {
+        "generated": 1,
+        "pending": 260,
+        "titles": [
+          "피란수도 부산 국가유산 야행"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
