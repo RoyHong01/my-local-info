@@ -1,0 +1,261 @@
+{
+  "reportDateKst": "2026-07-24",
+  "generatedAtUtc": "2026-07-23T20:27:53.910Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30040771057",
+    "runNumber": 903,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30040771057",
+    "runStartedAtUtc": "2026-07-23T20:07:19Z",
+    "headSha": "4354cc20ae1892a10ab5634de88ea10c9fcd6c49"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://6e2674a4.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 2건, 총 613건",
+        "festival": "신규 3건, 업데이트 192건, 총 366건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://00513bdd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateBlog": "success",
+        "generateFestivalVersus": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://f86f5a72.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "9163f213da79643f02d4f57769a319223ab80fea",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-23",
+      "authoredAt": "2026-07-23T20:27:52Z",
+      "files": [
+        "src/content/life/2026-07-24-incheon-restaurant-1713925528.md",
+        "src/content/life/2026-07-24-seoul-restaurant-1642777762.md",
+        "src/content/life/2026-07-24-seoul-restaurant-168071197.md"
+      ]
+    },
+    {
+      "sha": "7031cbce74862113c6a8be34cdf0878f00433edb",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-23",
+      "authoredAt": "2026-07-23T20:23:04Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-24-choice-pet-life-2026-07-24.md"
+      ]
+    },
+    {
+      "sha": "d47f9a283e17b382dc73517ef2c640d04da96800",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-23",
+      "authoredAt": "2026-07-23T20:21:52Z",
+      "files": [
+        "src/content/posts/2026-07-23-Gwanak-Health-Insurance-Support.md",
+        "src/content/posts/2026-07-23-asan-dormitory-support.md",
+        "src/content/posts/2026-07-23-bonghwa-euneo-festival.md",
+        "src/content/posts/2026-07-23-incheon-subway-welfare.md",
+        "src/content/posts/2026-07-24-curation-incheon.md"
+      ]
+    },
+    {
+      "sha": "5418871fdba402784def0264966a1877c0add112",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-23",
+      "authoredAt": "2026-07-23T20:09:54Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 13,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-23-asan-dormitory-support.md",
+      "src/content/posts/2026-07-23-bonghwa-euneo-festival.md",
+      "src/content/posts/2026-07-23-Gwanak-Health-Insurance-Support.md",
+      "src/content/posts/2026-07-23-incheon-subway-welfare.md",
+      "src/content/posts/2026-07-24-curation-incheon.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-24-choice-pet-life-2026-07-24.md",
+      "src/content/life/2026-07-24-incheon-restaurant-1713925528.md",
+      "src/content/life/2026-07-24-seoul-restaurant-1642777762.md",
+      "src/content/life/2026-07-24-seoul-restaurant-168071197.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-24-choice-pet-life-2026-07-24.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-24-incheon-restaurant-1713925528.md",
+      "src/content/life/2026-07-24-seoul-restaurant-1642777762.md",
+      "src/content/life/2026-07-24-seoul-restaurant-168071197.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-24-choice-pet-life-2026-07-24.md",
+      "src/content/life/2026-07-24-incheon-restaurant-1713925528.md",
+      "src/content/life/2026-07-24-seoul-restaurant-1642777762.md",
+      "src/content/life/2026-07-24-seoul-restaurant-168071197.md",
+      "src/content/posts/2026-07-23-asan-dormitory-support.md",
+      "src/content/posts/2026-07-23-bonghwa-euneo-festival.md",
+      "src/content/posts/2026-07-23-Gwanak-Health-Insurance-Support.md",
+      "src/content/posts/2026-07-23-incheon-subway-welfare.md",
+      "src/content/posts/2026-07-24-curation-incheon.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "budget": {
+    "enabled": true,
+    "limitKrw": 500,
+    "estimatedCostKrw": 9.96,
+    "stopped": false,
+    "stopReason": ""
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "555/483",
+      "markdown": {
+        "generated": 1,
+        "pending": 169,
+        "titles": [
+          "특수교육대상자 통학비 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 2건, 총 613건",
+      "validation": "ok",
+      "anthropicUsage": "1898/1274",
+      "markdown": {
+        "generated": 2,
+        "pending": 340,
+        "titles": [
+          "아산시 관내 기업 기숙사 임차지원",
+          "진천군 어린이집 졸업앨범비 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 192건, 총 366건",
+      "validation": "ok",
+      "anthropicUsage": "996/549",
+      "markdown": {
+        "generated": 1,
+        "pending": 262,
+        "titles": [
+          "발코니 뮤직쇼 앤 스트릿 페스타"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
