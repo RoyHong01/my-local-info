@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-24T00:00:00+09:00",
+  "updatedAtKst": "2026-07-25T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5107,6 +5107,63 @@
       "sourceId": "manual-choice-pet-life-2026-07-24",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-25",
+      "productId": "9602926881",
+      "productName": "마미케어 홈쇼핑 방송 상품 오쏘타민 비타민C 기미 잡티 멜라닌 개선 앰플 쿠션 13g 본품, 1개, 21호",
+      "brand": "마미케어",
+      "productGroupTokens": [
+        "홈쇼핑",
+        "방송",
+        "오쏘타민",
+        "비타민c",
+        "기미",
+        "잡티"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-25-choice-beauty-fashion-2026-07-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-25",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-25-choice-beauty-fashion-2026-07-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-25",
+      "productId": "8059631632",
+      "productName": "지베르니 밀착 커버 쿠션 파운데이션 본품 12g + 리필 12g 세트, 21호 라이트 베이지, 1개",
+      "brand": "지베르니",
+      "productGroupTokens": [
+        "밀착",
+        "커버",
+        "쿠션",
+        "파운데이션",
+        "12g",
+        "21호"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-25-choice-beauty-fashion-2026-07-25.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-07-25",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
