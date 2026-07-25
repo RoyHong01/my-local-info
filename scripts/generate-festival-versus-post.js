@@ -5,6 +5,7 @@ const {
   buildPolicySafeDetailUrl,
   normalizeInternalLinksInMarkdown,
 } = require('./lib/internal-link-builder');
+const { promptHash } = require('./lib/anthropic-blog-batch');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
@@ -629,7 +630,14 @@ function splitMarkdownSections(markdown) {
   const normalized = String(markdown || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
   if (!normalized.startsWith('---\n')) return { frontmatter: '', body: normalized };
   const end = normalized.indexOf('\n---\n', 4);
-  if (end === -1) return { frontmatter: '', body: normalized };
+  if (end === -1) {
+    const eofEnd = normalized.endsWith('\n---') ? normalized.length - 4 : -1;
+    if (eofEnd === -1) return { frontmatter: '', body: normalized };
+    return {
+      frontmatter: normalized.slice(0, eofEnd + 4),
+      body: '',
+    };
+  }
   return {
     frontmatter: normalized.slice(0, end + 5),
     body: normalized.slice(end + 5).trim(),
@@ -656,7 +664,13 @@ function quoteYaml(value) {
 
 async function getExistingVersusKeys(postsDir) {
   const keys = new Set();
-  const files = await fs.readdir(postsDir);
+  let files;
+  try {
+    files = await fs.readdir(postsDir);
+  } catch (error) {
+    if (error?.code === 'ENOENT') return keys;
+    throw error;
+  }
 
   for (const file of files) {
     if (!file.endsWith('.md')) continue;
@@ -676,21 +690,7 @@ function buildVersusKey(mode, ids) {
   return `${mode}|${sorted.join(',')}`;
 }
 
-function buildFallbackFrontmatter({ title, todayIso, summary }) {
-  return [
-    '---',
-    `title: "${String(title || '').replace(/"/g, '\\"')}"`,
-    `date: ${todayIso}`,
-    `summary: "${String(summary || '').replace(/"/g, '\\"')}"`,
-    `description: "${String(summary || '').replace(/"/g, '\\"')}"`,
-    'category: 전국 축제·여행',
-    `published_by: ${BLOG_PUBLISHED_BY}`,
-    'tags: [전국 축제·여행, 비교 분석, 이번 주말]',
-    '---',
-  ].join('\n');
-}
-
-async function run() {
+async function prepareFestivalVersusRequests() {
   const todayIso = toKstDate();
   const holidaySet = await buildHolidaySet(todayIso);
   const mode = decideRunMode(todayIso, holidaySet);
@@ -699,7 +699,7 @@ async function run() {
 
   if (mode === 'skip') {
     console.log('금요일/연휴 전 조건 미충족: 생성 건너뜀');
-    return;
+    return [];
   }
 
   const festivalPath = path.join(process.cwd(), 'public', 'data', 'festival.json');
@@ -711,13 +711,12 @@ async function run() {
 
   if (baseCandidates.length < 2) {
     console.log(`비교형 생성 후보 부족: ${baseCandidates.length}건`);
-    return;
+    return [];
   }
 
   const candidates = await Promise.all(baseCandidates.map((candidate) => enrichCandidateImages(candidate)));
 
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
-  await fs.mkdir(postsDir, { recursive: true });
 
   const sourceIds = candidates.map((item) => String(item.contentid || '').trim()).filter(Boolean);
   const versusKey = buildVersusKey(mode, sourceIds);
@@ -726,7 +725,7 @@ async function run() {
 
   if (existingKeys.has(versusKey)) {
     console.log(`동일 후보 조합의 festival-versus 이미 존재: ${versusKey}`);
-    return;
+    return [];
   }
 
   const heroImage = selectHeroImage(candidates, todayIso);
@@ -737,7 +736,66 @@ async function run() {
   const defaultSummary = `${targetLabel} 일정에서 고민되는 ${candidates.map((c) => c.title).join(', ')}를 분위기·이동·체류시간 기준으로 비교해 지금 바로 선택할 수 있게 정리했어요.`;
 
   const prompt = buildGeminiFrontmatterPrompt({ mode, todayIso, candidates });
-  const generated = removeCodeFence(await callGemini(prompt));
+
+  return [{
+    customId: `festival-versus-${todayIso}-${mode}-${sourceIds.join('-') || 'selection'}`,
+    prompt,
+    promptHash: promptHash(prompt),
+    maxTokens: 2048,
+    generator: 'festival-versus',
+    context: {
+      mode,
+      todayIso,
+      candidates,
+      postsDir,
+      sourceIds,
+      versusKey,
+      topFestivalIds,
+      heroImage,
+      bodyImages,
+      targetLabel,
+      defaultTitle,
+      defaultSummary,
+    },
+  }];
+}
+
+async function finalizeFestivalVersusRequest(preparedRequest, modelResult) {
+  if (promptHash(preparedRequest.prompt) !== preparedRequest.promptHash) {
+    throw new Error(`festival-versus 프롬프트 해시 불일치: ${preparedRequest.customId}`);
+  }
+  if (!modelResult) {
+    console.warn(`⚠️ festival-versus 모델 결과 없음: ${preparedRequest.customId}`);
+    return false;
+  }
+  if (modelResult.status !== 'succeeded') {
+    console.warn(`⚠️ festival-versus 모델 요청 미성공(${modelResult.status || 'unknown'}): ${preparedRequest.customId}`);
+    return false;
+  }
+  if (modelResult.promptHash !== preparedRequest.promptHash) {
+    throw new Error(`festival-versus 모델 결과 해시 불일치: ${preparedRequest.customId}`);
+  }
+
+  const generated = removeCodeFence(modelResult.text || '');
+  if (!generated) {
+    console.warn(`⚠️ festival-versus 모델 결과가 비어 있음: ${preparedRequest.customId}`);
+    return false;
+  }
+
+  const {
+    mode,
+    todayIso,
+    candidates,
+    postsDir,
+    sourceIds,
+    versusKey,
+    topFestivalIds,
+    heroImage,
+    bodyImages,
+    targetLabel,
+    defaultTitle,
+    defaultSummary,
+  } = preparedRequest.context;
 
   let filename = '';
   const contentLines = [];
@@ -751,13 +809,13 @@ async function run() {
 
   const generatedMarkdown = contentLines.join('\n').trim();
   const parsed = splitMarkdownSections(generatedMarkdown);
-  const fallbackFrontmatter = buildFallbackFrontmatter({
-    title: defaultTitle,
-    todayIso,
-    summary: defaultSummary,
-  });
+  const generatedTitle = extractFrontmatterValue(parsed.frontmatter, 'title');
+  if (!parsed.frontmatter || !generatedTitle) {
+    console.warn(`⚠️ festival-versus 사용 가능한 frontmatter 없음: ${preparedRequest.customId}`);
+    return false;
+  }
 
-  const baseFrontmatter = parsed.frontmatter || fallbackFrontmatter;
+  const baseFrontmatter = parsed.frontmatter;
 
   if (!filename) {
     const modeLabel = mode === 'holiday' ? 'holiday' : 'weekend';
@@ -792,14 +850,48 @@ async function run() {
   const finalContent = `${normalizedFrontmatter}\n\n${structuredBody}`.replace(/\n{3,}/g, '\n\n').trim();
 
   const outputPath = path.join(postsDir, filename);
+  await fs.mkdir(postsDir, { recursive: true });
   await fs.writeFile(outputPath, finalContent, 'utf-8');
 
   console.log(`✅ festival-versus 생성 완료: ${filename}`);
   console.log(`   mode=${mode} / hero=${heroImage}`);
   console.log(`   candidates=${candidates.map((item) => item.title).join(' | ')}`);
+  return true;
 }
 
-run().catch((err) => {
-  console.error(err?.message || err);
-  process.exit(1);
-});
+async function run() {
+  if (!GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY가 없습니다.');
+  }
+
+  const preparedRequests = await prepareFestivalVersusRequests();
+  if (preparedRequests.length === 0) return false;
+
+  const preparedRequest = preparedRequests[0];
+  const text = await callGemini(preparedRequest.prompt);
+  if (!String(text || '').trim()) {
+    console.warn(`⚠️ festival-versus standalone 모델 결과가 비어 있어 게시하지 않음: ${preparedRequest.customId}`);
+    return false;
+  }
+
+  return finalizeFestivalVersusRequest(preparedRequest, {
+    status: 'succeeded',
+    text,
+    promptHash: preparedRequest.promptHash,
+    source: 'gemini-standalone',
+  });
+}
+
+if (require.main === module) {
+  run().catch((err) => {
+    console.error(err?.message || err);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  prepareFestivalVersusRequests,
+  finalizeFestivalVersusRequest,
+  run,
+  buildGeminiFrontmatterPrompt,
+};
