@@ -23,6 +23,7 @@
     "check:no-exposed-keys": "node scripts/validate-no-exposed-keys.js",
     "check:sitemap-subset": "node scripts/validate-sitemap-subset.js",
     "test:choice-single-pick": "node scripts/test-choice-single-pick.js",
+    "test:anthropic-blog-batch": "node scripts/test-anthropic-blog-batch.js",
     "collect:subsidy": "node scripts/collect-subsidy.js",
     "collect:life-restaurants": "node scripts/collect-life-restaurants.mjs",
     "generate:life-restaurant-posts": "node scripts/generate-life-restaurant-posts.mjs",
