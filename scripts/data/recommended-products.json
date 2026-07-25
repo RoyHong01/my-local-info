@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-25T00:00:00+09:00",
+  "updatedAtKst": "2026-07-26T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5164,6 +5164,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-07-25",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-07-26",
+      "productId": "8530585752",
+      "productName": "마루오피스_ 소품 장식물 가구 가전제품 미끄러짐 긁힘 소음방지 충격흡수 1cm/2cm/2.7cm EVA 진동방지 패드",
+      "brand": "마루오피스",
+      "productGroupTokens": [
+        "소품",
+        "장식물",
+        "가구",
+        "가전제품",
+        "미끄러짐",
+        "긁힘"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-26-choice-home-appliance-furniture-2026-07-26.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-26",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-26",
+      "productId": "6810256256",
+      "productName": "델피 엔틱 장식장 원목 유리 수납장 거실 진열장 양주 술 위스키 장식장 가구 양문, 브라운",
+      "brand": "델피",
+      "productGroupTokens": [
+        "엔틱",
+        "장식장",
+        "원목",
+        "유리",
+        "수납장",
+        "거실"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-26-choice-home-appliance-furniture-2026-07-26.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-26",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-26",
+      "productId": "8449936441",
+      "productName": "마루오피스_ 소품 장식물 가구 가전제품 미끄러짐 긁힘 소음방지 충격흡수 1cm/2cm/2.7cm EVA 진동방지 패드",
+      "brand": "마루오피스",
+      "productGroupTokens": [
+        "소품",
+        "장식물",
+        "가구",
+        "가전제품",
+        "미끄러짐",
+        "긁힘"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-26-choice-home-appliance-furniture-2026-07-26.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-07-26",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
