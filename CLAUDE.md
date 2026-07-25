@@ -12,7 +12,8 @@
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS
 - Claude API (claude-haiku-4-5) → 인천/보조금/축제 데이터 description 생성
-- Gemini API (gemini-2.5-pro) → 블로그 글 자동 생성 (MZ 감성 + 정보 완전성 규칙)
+- Anthropic API (`claude-sonnet-5`) → 일반 블로그/큐레이션/축제 비교 글 통합 Batch 생성
+- Gemini API → 초이스/맛집 콘텐츠 생성
 - 공공데이터포털 API + 한국관광공사 TourAPI → 데이터 수집
 - GitHub Actions → 매일 04:00 KST 자동 실행 (cron: `0 19 * * *`)
 - Cloudflare Pages (wrangler) → 빌드 후 자동 배포
@@ -20,8 +21,8 @@
 ## 환경변수 (.env.local)
 | 변수 | 용도 | 상태 |
 |------|------|------|
-| ANTHROPIC_API_KEY | Claude API 데이터 description 생성 | ✅ |
-| GEMINI_API_KEY | Gemini API 블로그 글 생성 | ✅ |
+| ANTHROPIC_API_KEY | 데이터 description + Sonnet 5 블로그 Batch 생성 | ✅ |
+| GEMINI_API_KEY | 초이스/맛집 콘텐츠 생성 | ✅ |
 | PUBLIC_DATA_API_KEY | 공공데이터포털 (보조금4, 인천) | ✅ |
 | TOUR_API_KEY | 한국관광공사 TourAPI | ✅ |
 | KAKAO_API_KEY | 카카오 로컬 API 호환용 | ✅ |
@@ -96,7 +97,11 @@ scripts/
   collect-festival.js   # 축제 데이터 수집 (overview 포함)
   collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집
   generate-life-restaurant-posts.mjs # 맛집 전용 블로그 포스트 생성
-  generate-blog-post.js # Claude API 블로그 자동 생성 (카테고리당 2편)
+  generate-blog-post.js # 일반 블로그 요청 준비/검증/저장
+  generate-curation-posts.js # 큐레이션 요청 준비/검증/저장
+  generate-festival-versus-post.js # 축제 비교 요청 준비/검증/저장
+  run-anthropic-blog-batch.js # 3종 요청의 단일 Anthropic Batch 실행
+  lib/anthropic-blog-batch.js # Batch/fallback/비용 가드 공통 모듈
   cleanup-expired.js    # 만료 콘텐츠 처리
   generate-sitemap.js   # sitemap.xml 생성 (postbuild)
 
@@ -157,6 +162,11 @@ src/app/life/restaurant/data/
 ## 최신 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 규칙/현행 상태 중심으로 유지한다.
+- 2026-07-24 핵심 반영:
+  - 일반 블로그/큐레이션/축제 비교 생성을 `claude-sonnet-5` 단일 Anthropic Batch로 통합.
+  - 20초 폴링, 30분 타임아웃, 부분 결과 회수, unresolved-only 동기 fallback 적용.
+  - 일일 1,500원/80% 경고 비용 가드를 적용하고, fallback 예상 비용 초과 시 호출 없이 `warning_budget_stop` 미발행 처리.
+  - 기존 프롬프트/검증 체인과 초이스·맛집 Gemini 경로는 유지.
 - 2026-04-19 핵심 반영:
   - **Reading Progress Bar 추가**: 모든 상세 페이지(blog/incheon/subsidy/festival 4곳) 헤더 바로 아래 고정, orange-500 색상
   - **Sticky Choice CTA 추가**: 초이스 카테고리 모바일 전용(md:hidden), 200px 스크롤 후 노출

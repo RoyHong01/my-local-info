@@ -121,8 +121,9 @@
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
 - 정적 HTML 배포 (`next.config.ts`의 `output: "export"`, `trailingSlash: true`)
-- Gemini API (gemini-2.5-pro) — 블로그 글 자동 생성
-- Claude API (claude-haiku-4-5) — 데이터 description_markdown 생성
+- Anthropic API (`claude-sonnet-5`) — 일반 블로그/큐레이션/축제 비교 글 통합 Batch 생성
+- Claude API (`claude-haiku-4-5`) — 데이터 description_markdown 생성
+- Gemini API — 초이스/맛집 콘텐츠 생성 및 맛집 후보 보조 처리
 - 공공데이터포털 API + 한국관광공사 TourAPI — 데이터 수집
 - GitHub Actions — 매일 04:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
@@ -130,8 +131,8 @@
 ## 환경변수 (.env.local)
 - **환경변수 운영 원칙**: 민감 키는 `.env.local`만 사용하고 `.env`는 사용/유지하지 않는다.
 - **우선순위 원칙**: 동일 키가 있으면 `.env.local` 값을 기준으로 적용한다.
-- ANTHROPIC_API_KEY: Claude API 데이터 본문(description_markdown) 생성
-- GEMINI_API_KEY: Gemini API 블로그 생성
+- ANTHROPIC_API_KEY: 데이터 본문(description_markdown) 및 Sonnet 5 블로그 Batch 생성
+- GEMINI_API_KEY: 초이스/맛집 콘텐츠 생성
 - PUBLIC_DATA_API_KEY: 공공데이터포털 (보조금24, 인천 데이터)
 - TOUR_API_KEY: 한국관광공사 TourAPI
 - KAKAO_API_KEY: 카카오 로컬 API 호환용
@@ -189,7 +190,11 @@ scripts/
   ensure-life-restaurant-candidates.mjs # 맛집 후보 충분 여부 점검 (guard 스크립트, GitHub Actions 진입점)
   collect-life-restaurants.mjs # 일상의 즐거움 맛집 스냅샷 수집 (guard에 의해 조건부 호출)
   generate-life-restaurant-posts.mjs # 맛집 전용 블로그 포스트 생성
-  generate-blog-post.js # Claude API 블로그 생성 (카테고리별 2편)
+  generate-blog-post.js # 일반 블로그 요청 준비/검증/저장
+  generate-curation-posts.js # 큐레이션 요청 준비/검증/저장
+  generate-festival-versus-post.js # 축제 비교 요청 준비/검증/저장
+  run-anthropic-blog-batch.js # 위 3종 요청의 단일 Anthropic Batch 실행 진입점
+  lib/anthropic-blog-batch.js # Batch/동기 fallback/비용 가드 공통 모듈
   cleanup-expired.js  # 만료 콘텐츠 처리
   generate-sitemap.js # sitemap.xml 생성 (postbuild)
 .github/workflows/
@@ -370,6 +375,12 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ## 최근 동기화 메모 (압축판)
 
 - 상세 이력은 `WORK_LOG.md`에 누적하고, 본 문서는 운영 규칙/현행 상태 위주로 유지한다.
+- 2026-07-24 핵심 반영(Sonnet 5 블로그 통합 Batch 전환):
+  - **대상**: 일반 블로그, 요일별 큐레이션, 축제 비교 포스트를 `claude-sonnet-5`로 통일하되 기존 프롬프트와 생성기별 검증/후처리는 유지.
+  - **실행 구조**: `scripts/run-anthropic-blog-batch.js`가 세 생성기의 초기 요청을 모아 Anthropic Batch 1건으로 제출. 20초 고정 폴링, 30분 타임아웃, 부분 결과 회수 후 unresolved 요청만 동기 fallback.
+  - **비용 가드**: 일일 1,500원, 80%(1,200원) 경고. fallback 예상 비용이 상한을 넘으면 API를 호출하지 않고 `warning_budget_stop` 미발행 처리.
+  - **관측성**: Batch ID/상태/소요시간/성공·실패, fallback, 미발행, 예상·실비용을 GitHub output → 일일 리포트 → 텔레그램으로 전달.
+  - **범위 분리**: 초이스/맛집 Gemini 경로와 editor_note 생성 경로는 변경하지 않음.
 - 2026-05-09 핵심 반영(pre-push auto-amend + Cloudflare catch-all 404 fix):
   - **pre-push 훅 auto-amend 로직**: postbuild 아티팩트(`public/data/search-index.json`, `public/sitemap.xml`) dirty 여부 감지 → 자동 `git add` + `git commit --amend --no-edit --no-verify --quiet`.
   - **PowerShell 헤어독 버그 수정**: `scripts/install-git-hooks.ps1`의 `@"..."@` → `@'...'@`(literal heredoc). `$(...)` 포함 shell 스크립트는 반드시 literal heredoc 사용.

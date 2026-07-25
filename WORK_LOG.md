@@ -17,6 +17,36 @@
   - 실행한 검증 1
   - 실행한 검증 2
 ---
+## 2026-07-24 (Sonnet 5 블로그 통합 Batch 전환)
+
+- **수정 파일**:
+  - `package.json`
+  - `scripts/lib/anthropic-blog-batch.js`
+  - `scripts/test-anthropic-blog-batch.js`
+  - `scripts/generate-blog-post.js`
+  - `scripts/generate-curation-posts.js`
+  - `scripts/generate-festival-versus-post.js`
+  - `scripts/run-anthropic-blog-batch.js`
+  - `.github/workflows/deploy.yml`
+  - `scripts/write-daily-report.mjs`
+  - `scripts/notify-telegram.mjs`
+  - 운영 가이드/메모 6종
+- **배경**:
+  - 블라인드 모델 비교 결과를 반영해 일반 블로그·큐레이션·축제 비교 생성 모델을 `claude-sonnet-5`로 통일하고, 비용과 실패를 하나의 경로에서 제어할 필요가 있었음.
+- **원인(RCA)**:
+  - 세 생성기의 독립 호출 구조에서는 Batch 할인, 부분 결과 회수, 공통 일일 예산 상한, 미발행 사유 관측을 일관되게 적용하기 어려웠음.
+- **조치**:
+  1. 공통 Anthropic Batch/비용 가드 모듈과 fake-client 회귀 테스트를 추가.
+  2. 기존 프롬프트·검증·후처리를 유지하며 세 생성기를 요청 준비와 응답 finalize 단계로 분리.
+  3. 공통 러너에서 초기 요청을 Batch 1건으로 제출하고 20초 폴링, 30분 타임아웃, 부분 결과 회수, unresolved-only 동기 fallback 적용.
+  4. 일일 1,500원/80% 경고 비용 가드를 적용하고, 예상 비용 초과 fallback은 호출 없이 `warning_budget_stop` 미발행 처리.
+  5. Batch/비용/fallback/미발행 지표를 GitHub output, 일일 리포트, 텔레그램에 연결. 초이스·맛집 Gemini 경로는 유지.
+- **검증**:
+  - `npm run test:anthropic-blog-batch` 통과.
+  - 세 생성기 프롬프트 SHA-256 고정값 일치 확인.
+  - 변경 JS/MJS 구문 검사, 에디터 진단, `git diff --check` 통과.
+  - `npm run build` 성공.
+
 2026-07-19: `check:sitemap-subset`를 최근 자동화 런 5회 위반 0건 확인 후 강제 모드(exit 1)로 전환하고, non-top 링크 2건 정리 후 `npm run build` 통과.
 2026-07-19: 맛집 Places 비용 절감을 위해 Supabase 캐시를 `scripts/data/google-ratings-cache.json` 로컬 캐시(90일 TTL)로 전환하고, ensure 재수집 7일 쿨다운 + 3단계 generate 재수집 비활성 정책을 적용한 뒤 수집 2회 검증에서 2회차 `google_called=0` 확인.
 

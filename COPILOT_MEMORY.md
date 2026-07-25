@@ -5,6 +5,20 @@
 - WORK_LOG.md와 같은 순서로 기록한다: `수정 파일 → 배경 → 원인(RCA) → 조치 → 검증`.
 - 새 항목도 기존 항목도 같은 제목/항목 형식을 유지한다.
 
+## 최근 작업 (2026-07-24) — Sonnet 5 블로그 통합 Batch 전환
+
+- 수정 파일:
+  - `scripts/lib/anthropic-blog-batch.js`, `scripts/run-anthropic-blog-batch.js`, 3개 블로그 생성기, `deploy.yml`, 리포트/텔레그램, fake-client 테스트.
+- 배경/원인:
+  - 일반 블로그·큐레이션·축제 비교가 독립 호출되어 비용과 실패 관측이 분산됨. 블라인드 A/B 결과에 따라 `claude-sonnet-5`를 채택.
+- 조치:
+  - 기존 프롬프트와 생성기별 검증/후처리를 보존한 채 prepare/finalize 구조로 분리하고, 초기 요청을 Anthropic Batch 1건으로 통합.
+  - 20초 폴링/30분 타임아웃, 부분 결과 회수, unresolved-only 동기 fallback 적용.
+  - 일일 1,500원/80% 경고 가드 적용. 예상 비용 초과 fallback은 호출하지 않고 `warning_budget_stop` 미발행 처리.
+  - Batch/비용/fallback/미발행 지표를 일일 리포트와 텔레그램에 연결. 초이스·맛집 Gemini 경로는 유지.
+- 검증:
+  - fake-client 테스트, 문법 검사, 프롬프트 SHA-256 3종 고정 확인, `npm run build` 성공.
+
 ## 최근 작업 (2026-07-07) — 맛집 자동화 key-free 전환
 
 - 배경:
