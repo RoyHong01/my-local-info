@@ -194,10 +194,17 @@ async function submitBatch({ client, requests, config = configFromEnv(), budgetG
     return { batch: null, accepted, budgetStopped };
   }
 
-  const batch = await client.messages.batches.create({
-    requests: accepted.map((request) => toBatchRequest(request, config)),
-  });
-  return { batch, accepted, budgetStopped };
+  try {
+    const batch = await client.messages.batches.create({
+      requests: accepted.map((request) => toBatchRequest(request, config)),
+    });
+    return { batch, accepted, budgetStopped };
+  } catch (error) {
+    if (budgetGuard) {
+      for (const request of accepted) budgetGuard.release(request.customId);
+    }
+    throw error;
+  }
 }
 
 async function pollBatch({
@@ -223,8 +230,7 @@ async function pollBatch({
   return { batch, timedOut: false, durationMs: now() - startedAtMs };
 }
 
-async function collectBatchResults({ client, batchId, requestsById, budgetGuard }) {
-  const results = new Map();
+async function collectBatchResults({ client, batchId, requestsById, budgetGuard, results = new Map() }) {
   for await (const item of await client.messages.batches.results(batchId)) {
     const customId = String(item.custom_id || '');
     const request = requestsById.get(customId);

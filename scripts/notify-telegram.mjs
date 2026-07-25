@@ -92,6 +92,15 @@ function formatFailedStages(stages) {
     .join('\n');
 }
 
+function formatDurationMs(value) {
+  const durationMs = Math.max(0, Number(value || 0));
+  if (durationMs < 1000) return `${durationMs}ms`;
+  const totalSeconds = Math.round(durationMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes > 0 ? `${minutes}분 ${seconds}초` : `${seconds}초`;
+}
+
 async function buildMessage(report) {
   const runUrl = GITHUB_RUN_ID && GITHUB_REPOSITORY
     ? `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`
@@ -120,7 +129,7 @@ async function buildMessage(report) {
   const choiceCount = generatedChoicePosts.length;
   const lifeCount = generatedRestaurantPosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
-  const budget = report.budget;
+  const anthropicGeneration = report.anthropicGeneration || {};
   const imagePolicy = report.imagePolicy || {};
   const restaurantCache = report.restaurantCache || {};
   const recollectPerformed = !!restaurantCache.recollectPerformed;
@@ -167,14 +176,18 @@ async function buildMessage(report) {
   const curationBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
   const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
-  let budgetLine = '';
-  if (budget?.enabled) {
-    const cost = Number(budget.estimatedCostKrw || 0).toFixed(1);
-    const limit = Number(budget.limitKrw || 0).toFixed(0);
-    budgetLine = budget.stopped
-      ? `⛔ Gemini 예산 초과 중단: ${cost}원 / ${limit}원`
-      : `💰 Gemini 비용: ${cost}원 / ${limit}원`;
-  }
+  const anthropicEstimatedCost = Number(anthropicGeneration.estimatedCostKrw || 0).toFixed(1);
+  const anthropicActualCost = Number(anthropicGeneration.actualCostKrw || 0).toFixed(1);
+  const anthropicBudgetLimit = Number(anthropicGeneration.budgetLimitKrw || 0).toFixed(0);
+  const anthropicCostLine = anthropicGeneration.budgetStopped
+    ? `⛔ Anthropic 예산 중단: 추정 ${anthropicEstimatedCost}원 / 실제 ${anthropicActualCost}원 / 한도 ${anthropicBudgetLimit}원`
+    : `💰 Anthropic 비용: 추정 ${anthropicEstimatedCost}원 / 실제 ${anthropicActualCost}원 / 한도 ${anthropicBudgetLimit}원`;
+  const anthropicBatchLine = `📦 Anthropic Batch: ${anthropicGeneration.batchStatus || '-'} / ${Number(anthropicGeneration.batchSuccessCount || 0)}/${Number(anthropicGeneration.batchRequestCount || 0)} 성공 / ${formatDurationMs(anthropicGeneration.batchDurationMs)}`;
+  const anthropicFallbackLine = `🔁 Anthropic fallback: 시도 ${Number(anthropicGeneration.fallbackAttemptedCount || 0)} / 성공 ${Number(anthropicGeneration.fallbackSuccessCount || 0)} / 실패 ${Number(anthropicGeneration.fallbackFailureCount || 0)}`;
+  const unpublishedReasons = Array.isArray(anthropicGeneration.unpublishedReasons)
+    ? anthropicGeneration.unpublishedReasons
+    : [];
+  const anthropicUnpublishedLine = `📭 Anthropic 미발행: ${Number(anthropicGeneration.unpublishedCount || 0)}건${unpublishedReasons.length > 0 ? ` (${unpublishedReasons.map((item) => `${item.customId}: ${item.reason}`).join(' / ')})` : ''}`;
 
   // 데이터 수집 결과 한 줄 포맷
   function stepIcon(outcome) {
@@ -243,7 +256,10 @@ async function buildMessage(report) {
     `🧭 쿼리 로테이션: 총 ${queryRotationTotalUsed} / 지역당 ${queryRotationPerRegion} (legacy45 흡수=${queryLegacyAbsorbed ? 'yes' : 'no'})`,
     googleCapReached ? `⚠️ Google 신규조회 상한 도달: limit ${googleCapLimit}, blocked ${googleBlockedByCap}` : '✅ Google 신규조회 상한 미도달',
     `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
-    budgetLine,
+    anthropicCostLine,
+    anthropicBatchLine,
+    anthropicFallbackLine,
+    anthropicUnpublishedLine,
   ];
 
   if (incheonBlogTitles.length > 0) {

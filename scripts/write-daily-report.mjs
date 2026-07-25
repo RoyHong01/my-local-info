@@ -58,6 +58,40 @@ function deriveOverallStatus(reportLike) {
     };
   }
 
+  const anthropic = reportLike?.anthropicGeneration || {};
+  if (anthropic.budgetStopped) {
+    return {
+      level: 'warning',
+      code: 'warning_budget_stop',
+      label: '완료(Anthropic 예산 상한 중단)',
+    };
+  }
+  if (Number(anthropic.unpublishedCount || 0) > 0) {
+    return {
+      level: 'warning',
+      code: 'warning_anthropic_unpublished',
+      label: `완료(Anthropic 미발행 ${Number(anthropic.unpublishedCount)}건)`,
+    };
+  }
+  if (anthropic.budgetWarning) {
+    return {
+      level: 'warning',
+      code: 'warning_anthropic_budget_threshold',
+      label: '완료(Anthropic 예산 경고 구간)',
+    };
+  }
+  const batchStatus = String(anthropic.batchStatus || '').trim().toLowerCase();
+  if (
+    Number(anthropic.batchFailureCount || 0) > 0
+    || (batchStatus && !['ended', 'no_requests'].includes(batchStatus))
+  ) {
+    return {
+      level: 'warning',
+      code: 'warning_anthropic_batch_degraded',
+      label: '완료(Anthropic Batch fallback 사용)',
+    };
+  }
+
   const stage3 = stages.find((stage) => stage.key === 'stage3-life');
   const restaurantCount = Number(reportLike?.changes?.generatedRestaurantPosts?.length || 0);
   const collectRestaurants = normalizeOutcome(stage3?.steps?.collectRestaurants);
@@ -96,6 +130,15 @@ function safeJsonParse(text, fallback) {
   } catch {
     return fallback;
   }
+}
+
+function formatDurationMs(value) {
+  const durationMs = Math.max(0, Number(value || 0));
+  if (durationMs < 1000) return `${durationMs}ms`;
+  const totalSeconds = Math.round(durationMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return minutes > 0 ? `${minutes}분 ${seconds}초` : `${seconds}초`;
 }
 
 function getGitLogSince(runStartedAtUtc) {
@@ -252,8 +295,7 @@ function buildStagesFromEnv(env) {
       title: '2단계: AI 블로그 생성',
       deployUrl: env.DEPLOY_STAGE2_URL || '',
       steps: {
-        generateBlog: normalizeOutcome(env.GENERATE_BLOG_OUTCOME),
-        generateFestivalVersus: normalizeOutcome(env.GENERATE_FESTIVAL_VERSUS_OUTCOME),
+        generateAnthropicBlog: normalizeOutcome(env.GENERATE_ANTHROPIC_BLOG_OUTCOME),
         generateChoice: normalizeOutcome(env.GENERATE_CHOICE_OUTCOME),
         build: normalizeOutcome(env.BUILD_STAGE2_OUTCOME),
         e2e: normalizeOutcome(env.E2E_STAGE2_OUTCOME),
@@ -292,8 +334,7 @@ function toMarkdown(report) {
       deploy: '배포',
     },
     stage2: {
-      generateBlog: 'AI 블로그 생성',
-      generateFestivalVersus: 'festival-versus 생성',
+      generateAnthropicBlog: 'Anthropic 통합 Batch 생성',
       generateChoice: '픽앤조이 초이스 자동 생성',
       build: '빌드',
       e2e: 'E2E 테스트',
@@ -389,9 +430,13 @@ function toMarkdown(report) {
       lines.push(`| 인천 사진 API 실패원인 | ${incheonPhotoApi.failureReason} |`);
     }
   }
-  if (report.budget?.enabled) {
-    lines.push(`| 블로그 예산 가드 | ${report.budget.stopped ? '중단됨' : '정상'} |`);
-    lines.push(`| 블로그 비용(추정) | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
+  if (report.anthropicGeneration) {
+    const anthropic = report.anthropicGeneration;
+    lines.push(`| Anthropic Batch | ${anthropic.batchStatus || '-'} / ${anthropic.batchSuccessCount}/${anthropic.batchRequestCount} 성공 |`);
+    lines.push(`| Anthropic Batch 소요 | ${formatDurationMs(anthropic.batchDurationMs)} |`);
+    lines.push(`| Anthropic fallback(시도/성공/실패) | ${anthropic.fallbackAttemptedCount} / ${anthropic.fallbackSuccessCount} / ${anthropic.fallbackFailureCount} |`);
+    lines.push(`| Anthropic 미발행 | ${anthropic.unpublishedCount}건 |`);
+    lines.push(`| Anthropic 비용(추정/실제) | ${Number(anthropic.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(anthropic.actualCostKrw || 0).toFixed(2)}원 |`);
   }
   lines.push('');
 
@@ -411,15 +456,25 @@ function toMarkdown(report) {
   }
   lines.push('');
 
-  if (report.budget?.enabled) {
-    lines.push('## 💸 블로그 예산 가드 상태');
+  if (report.anthropicGeneration) {
+    const anthropic = report.anthropicGeneration;
+    lines.push('## 💸 Anthropic 통합 생성 상태');
     lines.push('');
     lines.push('| 항목 | 값 |');
     lines.push('|---|---|');
-    lines.push(`| 상태 | ${report.budget.stopped ? '⛔ 중단됨' : '✅ 정상'} |`);
-    lines.push(`| 일일 한도 | ${Number(report.budget.limitKrw || 0).toFixed(0)}원 |`);
-    lines.push(`| 추정 비용 | ${Number(report.budget.estimatedCostKrw || 0).toFixed(2)}원 |`);
-    lines.push(`| 중단 사유 | ${report.budget.stopReason || '-'} |`);
+    lines.push(`| 모델 | ${anthropic.model || '-'} |`);
+    lines.push(`| Batch ID / 상태 | ${anthropic.batchId || '-'} / ${anthropic.batchStatus || '-'} |`);
+    lines.push(`| Batch 요청/성공/실패 | ${anthropic.batchRequestCount} / ${anthropic.batchSuccessCount} / ${anthropic.batchFailureCount} |`);
+    lines.push(`| Batch 소요시간 | ${formatDurationMs(anthropic.batchDurationMs)} |`);
+    lines.push(`| fallback 시도/성공/실패 | ${anthropic.fallbackAttemptedCount} / ${anthropic.fallbackSuccessCount} / ${anthropic.fallbackFailureCount} |`);
+    lines.push(`| 미발행 | ${anthropic.unpublishedCount}건 |`);
+    lines.push(`| 예산 상태 | ${anthropic.budgetStopped ? '⛔ 중단됨' : anthropic.budgetWarning ? '⚠️ 경고 구간' : '✅ 정상'} |`);
+    lines.push(`| 일일 한도 / 경고선 | ${Number(anthropic.budgetLimitKrw || 0).toFixed(0)}원 / ${Number(anthropic.budgetWarnThresholdKrw || 0).toFixed(0)}원 |`);
+    lines.push(`| 추정 / 실제 비용 | ${Number(anthropic.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(anthropic.actualCostKrw || 0).toFixed(2)}원 |`);
+    lines.push(`| 중단 사유 | ${anthropic.budgetStopReason || '-'} |`);
+    if (anthropic.unpublishedReasons.length > 0) {
+      lines.push(`| 미발행 사유 | ${anthropic.unpublishedReasons.map((item) => `${item.customId}: ${item.reason}`).join('<br>')} |`);
+    }
     lines.push('');
   }
 
@@ -554,10 +609,15 @@ async function updateIndex(indexPath, report) {
     restaurantQueryRotationPerRegion: Number(report.restaurantCache?.queryRotationPerRegion || 0),
     restaurantQueryLegacyAbsorbed: !!report.restaurantCache?.queryLegacyAbsorbed,
     totalChangedFiles: report.changes.totalChangedFiles,
-    blogBudgetEnabled: !!report.budget?.enabled,
-    blogBudgetStopped: !!report.budget?.stopped,
-    blogBudgetLimitKrw: Number(report.budget?.limitKrw || 0),
-    blogEstimatedCostKrw: Number(report.budget?.estimatedCostKrw || 0),
+    anthropicBatchStatus: report.anthropicGeneration?.batchStatus || '',
+    anthropicBatchDurationMs: Number(report.anthropicGeneration?.batchDurationMs || 0),
+    anthropicBatchRequestCount: Number(report.anthropicGeneration?.batchRequestCount || 0),
+    anthropicBatchSuccessCount: Number(report.anthropicGeneration?.batchSuccessCount || 0),
+    anthropicBatchFailureCount: Number(report.anthropicGeneration?.batchFailureCount || 0),
+    anthropicFallbackAttemptedCount: Number(report.anthropicGeneration?.fallbackAttemptedCount || 0),
+    anthropicUnpublishedCount: Number(report.anthropicGeneration?.unpublishedCount || 0),
+    anthropicBudgetStopped: !!report.anthropicGeneration?.budgetStopped,
+    anthropicActualCostKrw: Number(report.anthropicGeneration?.actualCostKrw || 0),
     midImageInsertedCount: Number(report.imagePolicy?.midImageInsertedCount || 0),
     midImageOmittedCount: Number(report.imagePolicy?.midImageOmittedCount || 0),
     generatedAtUtc: report.generatedAtUtc,
@@ -617,12 +677,27 @@ async function main() {
       appliedMinRating: Number(process.env.CHOICE_APPLIED_MIN_RATING || process.env.CHOICE_MIN_RATING || 4.5),
       relaxedAppliedCount: Number(process.env.CHOICE_RELAXED_FALLBACK_APPLIED_COUNT || 0),
     },
-    budget: {
-      enabled: normalizeBoolean(process.env.BLOG_BUDGET_ENABLED),
-      limitKrw: Number(process.env.BLOG_BUDGET_LIMIT_KRW || 0),
-      estimatedCostKrw: Number(process.env.BLOG_ESTIMATED_COST_KRW || 0),
-      stopped: normalizeBoolean(process.env.BLOG_BUDGET_STOPPED),
-      stopReason: process.env.BLOG_BUDGET_STOP_REASON || '',
+    anthropicGeneration: {
+      model: process.env.ANTHROPIC_GENERATION_MODEL || '',
+      batchId: process.env.ANTHROPIC_GENERATION_BATCH_ID || '',
+      batchStatus: process.env.ANTHROPIC_GENERATION_BATCH_STATUS || '',
+      batchDurationMs: Number(process.env.ANTHROPIC_GENERATION_BATCH_DURATION_MS || 0),
+      batchRequestCount: Number(process.env.ANTHROPIC_GENERATION_BATCH_REQUEST_COUNT || 0),
+      batchSuccessCount: Number(process.env.ANTHROPIC_GENERATION_BATCH_SUCCESS_COUNT || 0),
+      batchFailureCount: Number(process.env.ANTHROPIC_GENERATION_BATCH_FAILURE_COUNT || 0),
+      fallbackAttemptedCount: Number(process.env.ANTHROPIC_GENERATION_FALLBACK_ATTEMPTED_COUNT || 0),
+      fallbackSuccessCount: Number(process.env.ANTHROPIC_GENERATION_FALLBACK_SUCCESS_COUNT || 0),
+      fallbackFailureCount: Number(process.env.ANTHROPIC_GENERATION_FALLBACK_FAILURE_COUNT || 0),
+      unpublishedCount: Number(process.env.ANTHROPIC_GENERATION_UNPUBLISHED_COUNT || 0),
+      unpublishedReasons: safeJsonParse(process.env.ANTHROPIC_GENERATION_UNPUBLISHED_REASONS || '[]', []),
+      budgetEnabled: normalizeBoolean(process.env.ANTHROPIC_GENERATION_BUDGET_ENABLED),
+      budgetLimitKrw: Number(process.env.ANTHROPIC_GENERATION_BUDGET_LIMIT_KRW || 0),
+      budgetWarnThresholdKrw: Number(process.env.ANTHROPIC_GENERATION_BUDGET_WARN_THRESHOLD_KRW || 0),
+      estimatedCostKrw: Number(process.env.ANTHROPIC_GENERATION_ESTIMATED_COST_KRW || 0),
+      actualCostKrw: Number(process.env.ANTHROPIC_GENERATION_ACTUAL_COST_KRW || 0),
+      budgetWarning: normalizeBoolean(process.env.ANTHROPIC_GENERATION_BUDGET_WARNING),
+      budgetStopped: normalizeBoolean(process.env.ANTHROPIC_GENERATION_BUDGET_STOPPED),
+      budgetStopReason: process.env.ANTHROPIC_GENERATION_BUDGET_STOP_REASON || '',
     },
     imagePolicy: {
       midImageInsertedCount: Number(process.env.MID_IMAGE_INSERTED_COUNT || 0),

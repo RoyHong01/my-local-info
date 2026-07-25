@@ -1,6 +1,9 @@
 'use strict';
 
 const assert = require('assert');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const {
   AnthropicBudgetGuard,
   callSyncFallback,
@@ -10,6 +13,11 @@ const {
   promptHash,
   submitBatch,
 } = require('./lib/anthropic-blog-batch');
+const {
+  OUTPUT_KEYS,
+  publishGithubOutputs,
+  runAnthropicBlogBatch,
+} = require('./run-anthropic-blog-batch');
 
 function makeConfig(overrides = {}) {
   return {
@@ -40,6 +48,30 @@ function makeResult(customId, text = `result-${customId}`) {
         usage: { input_tokens: 20, output_tokens: 30 },
         content: [{ type: 'text', text }],
       },
+    },
+  };
+}
+
+function makeFailedResult(customId, message = 'batch request failed') {
+  return {
+    custom_id: customId,
+    result: {
+      type: 'errored',
+      error: { message },
+    },
+  };
+}
+
+function makeGenerator(requests, finalizedIds) {
+  return {
+    name: 'fake',
+    async prepare() {
+      return requests;
+    },
+    async finalize(request, result) {
+      assert.strictEqual(result.status, 'succeeded');
+      finalizedIds.push(request.customId);
+      return true;
     },
   };
 }
@@ -141,6 +173,238 @@ async function testBudgetWarningAndFallbackStop() {
   assert.match(stopGuard.stopReason, /warning_budget_stop/);
 }
 
+async function testSubmitFailureReleasesReservations() {
+  const requests = [makeRequest('submit-failure-1'), makeRequest('submit-failure-2')];
+  const budgetGuard = new AnthropicBudgetGuard(makeConfig());
+  const client = {
+    messages: {
+      batches: {
+        async create() {
+          throw new Error('submit failed');
+        },
+      },
+    },
+  };
+
+  await assert.rejects(
+    submitBatch({ client, requests, config: makeConfig(), budgetGuard }),
+    /submit failed/
+  );
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testPartialResultsRemainAvailableAfterStreamFailure() {
+  const request = makeRequest('partial-1');
+  const budgetGuard = new AnthropicBudgetGuard(makeConfig());
+  budgetGuard.reserve(request, true);
+  const results = new Map();
+  const client = {
+    messages: {
+      batches: {
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeResult('partial-1');
+            throw new Error('result stream failed');
+          }());
+        },
+      },
+    },
+  };
+
+  await assert.rejects(
+    collectBatchResults({
+      client,
+      batchId: 'batch-partial',
+      requestsById: new Map([[request.customId, request]]),
+      budgetGuard,
+      results,
+    }),
+    /result stream failed/
+  );
+  assert.strictEqual(results.get('partial-1').text, 'result-partial-1');
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved() {
+  const requests = [makeRequest('partial-success'), makeRequest('needs-fallback')];
+  const finalizedIds = [];
+  const sleepDurations = [];
+  let nowMs = 0;
+  let createBatchCalls = 0;
+  let cancelCalls = 0;
+  let syncCalls = 0;
+  const budgetGuard = new AnthropicBudgetGuard(makeConfig());
+  const client = {
+    messages: {
+      batches: {
+        async create() {
+          createBatchCalls++;
+          return { id: 'batch-timeout-partial', processing_status: 'in_progress' };
+        },
+        async retrieve() {
+          return { id: 'batch-timeout-partial', processing_status: 'in_progress' };
+        },
+        async cancel() {
+          cancelCalls++;
+          return { id: 'batch-timeout-partial', processing_status: 'canceling' };
+        },
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeResult('partial-success');
+          }());
+        },
+      },
+      async create() {
+        syncCalls++;
+        return makeResult('needs-fallback').result.message;
+      },
+    },
+  };
+
+  const outputs = await runAnthropicBlogBatch({
+    client,
+    config: makeConfig(),
+    budgetGuard,
+    generators: [makeGenerator(requests, finalizedIds)],
+    now: () => nowMs,
+    sleepFn: async (ms) => {
+      sleepDurations.push(ms);
+      nowMs += ms * 30;
+    },
+  });
+
+  assert.strictEqual(createBatchCalls, 1);
+  assert.strictEqual(cancelCalls, 1);
+  assert.strictEqual(syncCalls, 1);
+  assert.ok(sleepDurations.length > 0);
+  assert.ok(sleepDurations.every((ms) => ms === 20_000));
+  assert.strictEqual(outputs.batch_status, 'timed_out');
+  assert.strictEqual(outputs.batch_duration_ms, 1_800_000);
+  assert.strictEqual(outputs.batch_success_count, 1);
+  assert.strictEqual(outputs.batch_failure_count, 1);
+  assert.strictEqual(outputs.fallback_attempted_count, 1);
+  assert.strictEqual(outputs.fallback_success_count, 1);
+  assert.strictEqual(outputs.unpublished_count, 0);
+  assert.deepStrictEqual(finalizedIds.sort(), ['needs-fallback', 'partial-success']);
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testRunnerBudgetStopPreventsFallbackCall() {
+  const request = makeRequest('budget-stop-fallback', 'short prompt', 100);
+  const finalizedIds = [];
+  let syncCalls = 0;
+  const config = makeConfig({ dailyBudgetKrw: 1.5 });
+  const budgetGuard = new AnthropicBudgetGuard(config);
+  const client = {
+    messages: {
+      batches: {
+        async create() {
+          return { id: 'batch-budget-stop', processing_status: 'in_progress' };
+        },
+        async retrieve() {
+          return { id: 'batch-budget-stop', processing_status: 'ended' };
+        },
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeFailedResult(request.customId);
+          }());
+        },
+      },
+      async create() {
+        syncCalls++;
+        return makeResult(request.customId).result.message;
+      },
+    },
+  };
+
+  const outputs = await runAnthropicBlogBatch({
+    client,
+    config,
+    budgetGuard,
+    generators: [makeGenerator([request], finalizedIds)],
+  });
+
+  assert.strictEqual(syncCalls, 0);
+  assert.strictEqual(outputs.fallback_attempted_count, 0);
+  assert.strictEqual(outputs.fallback_success_count, 0);
+  assert.strictEqual(outputs.unpublished_count, 1);
+  assert.match(outputs.unpublished_reasons, /warning_budget_stop/);
+  assert.strictEqual(outputs.budget_stopped, true);
+  assert.deepStrictEqual(finalizedIds, []);
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testBlogQualityRetryUsesSameBudgetGuard() {
+  const request = {
+    ...makeRequest('blog-quality-retry', 'short prompt', 100),
+    generator: 'blog',
+    context: { candidate: { _category: '전국 보조금·복지 정책' } },
+  };
+  const config = makeConfig({ dailyBudgetKrw: 1.5 });
+  const budgetGuard = new AnthropicBudgetGuard(config);
+  let syncCalls = 0;
+  const client = {
+    messages: {
+      batches: {
+        async create() {
+          return { id: 'batch-quality-retry', processing_status: 'in_progress' };
+        },
+        async retrieve() {
+          return { id: 'batch-quality-retry', processing_status: 'ended' };
+        },
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeResult(request.customId);
+          }());
+        },
+      },
+      async create() {
+        syncCalls++;
+        return makeResult(request.customId).result.message;
+      },
+    },
+  };
+  const generator = {
+    name: 'blog',
+    async prepare() {
+      return [request];
+    },
+    async finalize(preparedRequest, modelResult, requestModel) {
+      assert.strictEqual(modelResult.status, 'succeeded');
+      await requestModel({
+        customId: preparedRequest.customId,
+        prompt: `${preparedRequest.prompt}\nquality retry`,
+        maxTokens: preparedRequest.maxTokens,
+        promptHash: promptHash(`${preparedRequest.prompt}\nquality retry`),
+      });
+      return true;
+    },
+  };
+
+  const outputs = await runAnthropicBlogBatch({ client, config, budgetGuard, generators: [generator] });
+
+  assert.strictEqual(syncCalls, 0);
+  assert.strictEqual(outputs.batch_success_count, 1);
+  assert.strictEqual(outputs.fallback_attempted_count, 0);
+  assert.strictEqual(outputs.unpublished_count, 1);
+  assert.match(outputs.unpublished_reasons, /warning_budget_stop/);
+  assert.strictEqual(outputs.budget_stopped, true);
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testRunnerPublishesEveryRequiredGithubOutput() {
+  const outputPath = path.join(os.tmpdir(), `anthropic-blog-output-${process.pid}-${Date.now()}.txt`);
+  const outputs = Object.fromEntries(OUTPUT_KEYS.map((key) => [key, key === 'budget_enabled']));
+  publishGithubOutputs(outputs, outputPath);
+  const lines = fs.readFileSync(outputPath, 'utf8').trim().split(/\r?\n/);
+  fs.unlinkSync(outputPath);
+
+  assert.deepStrictEqual(
+    lines.map((line) => line.slice(0, line.indexOf('='))),
+    OUTPUT_KEYS
+  );
+}
+
 async function testPromptHashIsStable() {
   const prompt = '프롬프트 텍스트는 변경하지 않습니다.\n동일 입력';
   assert.strictEqual(promptHash(prompt), promptHash(prompt));
@@ -151,6 +415,12 @@ async function run() {
   await testSingleBatchAndResultMapping();
   await testFixedPollingAndTimeout();
   await testBudgetWarningAndFallbackStop();
+  await testSubmitFailureReleasesReservations();
+  await testPartialResultsRemainAvailableAfterStreamFailure();
+  await testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved();
+  await testRunnerBudgetStopPreventsFallbackCall();
+  await testBlogQualityRetryUsesSameBudgetGuard();
+  await testRunnerPublishesEveryRequiredGithubOutput();
   await testPromptHashIsStable();
   console.log('anthropic-blog-batch fake client tests: PASS');
 }
