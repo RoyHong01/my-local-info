@@ -3,6 +3,7 @@ const fsSync = require('fs');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 const { buildBlogPath } = require('./lib/internal-link-builder');
+const { promptHash } = require('./lib/anthropic-blog-batch');
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -1408,8 +1409,8 @@ function postProcessGeneratedMarkdown(markdown, context) {
   };
 }
 
-// 블로그 글 1편 생성
-async function generatePost(candidate, postsDir) {
+// 블로그 글 1편 요청 준비
+async function prepareBlogRequest(candidate, postsDir) {
   const defaultImages = {
     '인천 지역 정보': 'https://pick-n-joy.com/images/default-incheon.svg',
     '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
@@ -1741,21 +1742,84 @@ ${subsidyAnalysisOverride}
 
 마지막 줄에 FILENAME: YYYY-MM-DD-영문키워드 형식으로 파일명 출력`;
 
-  let generatedText = '';
-  let lastFinishReason = '';
-  const maxAttempts = 3;
   const festivalConsistencyHint = isFestival
     ? `\n\n[정합성 필수 규칙]\n- 제목과 본문(훅 포함)은 반드시 행사명 "${itemName}"을 중심으로 작성하세요.\n- 다른 축제/행사명(예: 다른 도시의 축제명)으로 바꿔 쓰면 실패입니다.\n- 주소/문의/한눈에 보는 정보는 행사명 "${itemName}"과 동일한 항목으로 일치해야 합니다.`
     : '';
+
+  const requestPrompt = `${prompt}${festivalConsistencyHint}`;
+  const customId = `blog-${normalizeMatchText(candidate._category).slice(0, 12)}-${normalizeMatchText(sourceId || itemName).slice(0, 32)}`;
+  return {
+    customId,
+    prompt: requestPrompt,
+    promptHash: promptHash(requestPrompt),
+    maxTokens: 8192,
+    generator: 'blog',
+    context: {
+      candidate,
+      postsDir,
+      imageUrl,
+      midImageUrl,
+      itemName,
+      isSubsidy,
+      sourceId,
+      sourceTitle,
+      sourceStartDate,
+      sourceEndDate,
+      sourceAddr1,
+      sourceSnapshotKey,
+      today,
+      isFestival,
+    },
+  };
+}
+
+async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
+  if (promptHash(preparedRequest.prompt) !== preparedRequest.promptHash) {
+    throw new Error(`블로그 프롬프트 해시 불일치: ${preparedRequest.customId}`);
+  }
+
+  const {
+    candidate,
+    postsDir,
+    imageUrl,
+    midImageUrl,
+    itemName,
+    isSubsidy,
+    sourceId,
+    sourceTitle,
+    sourceStartDate,
+    sourceEndDate,
+    sourceAddr1,
+    sourceSnapshotKey,
+    today,
+    isFestival,
+  } = preparedRequest.context;
+  let generatedText = '';
+  let lastFinishReason = '';
+  const maxAttempts = 3;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const retryHint = attempt > 1
       ? `\n\n[재시도 지시]\n방금 응답은 중간에 끊겼어요. 처음부터 다시 완성본으로 작성하고, 마지막 줄 FILENAME까지 반드시 출력해줘.`
       : '';
 
-    let gemini;
+    let result;
     try {
-      gemini = await callGemini(`${prompt}${festivalConsistencyHint}${retryHint}`);
+      if (attempt === 1) {
+        result = modelResult;
+      } else {
+        if (typeof requestModel !== 'function') {
+          throw new Error('품질 재시도에 requestModel 함수가 필요합니다.');
+        }
+        const retryPrompt = `${preparedRequest.prompt}${retryHint}`;
+        result = await requestModel({
+          customId: preparedRequest.customId,
+          prompt: retryPrompt,
+          maxTokens: preparedRequest.maxTokens,
+          promptHash: promptHash(retryPrompt),
+          attempt,
+        });
+      }
     } catch (err) {
       if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
         throw err;
@@ -1768,8 +1832,8 @@ ${subsidyAnalysisOverride}
       throw err;
     }
 
-    generatedText = gemini.text || '';
-    lastFinishReason = gemini.finishReason || '';
+    generatedText = result?.text || '';
+    lastFinishReason = result?.finishReason || '';
 
     if (isFestival && hasFestivalLeadRepetitionInGeneratedText(generatedText)) {
       if (attempt < maxAttempts) {
@@ -1954,24 +2018,7 @@ ${subsidyAnalysisOverride}
   return true;
 }
 
-async function run() {
-  if (!GEMINI_API_KEY) {
-    console.error("Missing GEMINI_API_KEY");
-    publishBudgetOutputs();
-    return;
-  }
-
-  console.log(`GEMINI_MODEL: ${GEMINI_MODEL}`);
-  console.log(`GEMINI_MAX_OUTPUT_TOKENS: ${GEMINI_MAX_OUTPUT_TOKENS}`);
-  console.log(`BLOG_GEMINI_MIN_DELAY_MS: ${BLOG_GEMINI_MIN_DELAY_MS}`);
-  console.log(`BLOG_MAX_API_CALLS: ${BLOG_MAX_API_CALLS}`);
-  if (budgetEnabled) {
-    console.log(`BLOG_DAILY_BUDGET_KRW: ${BLOG_DAILY_BUDGET_KRW}`);
-    console.log(`GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS: ${GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS}`);
-  } else {
-    console.log('BLOG_DAILY_BUDGET_KRW: 비활성 (예산 제한 없음)');
-  }
-
+async function prepareBlogRequests() {
   const dataFiles = [
     { file: 'incheon.json', category: '인천 지역 정보' },
     { file: 'subsidy.json', category: '전국 보조금·복지 정책' },
@@ -1990,20 +2037,11 @@ async function run() {
   }
 
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
-  await fs.mkdir(postsDir, { recursive: true });
-
   const { serviceIds, filenameKeywords, titleKeys, sourceSnapshotKeys, festivalSlugMap } = await getExistingPosts(postsDir);
   console.log(`기존 블로그 글: source_id ${serviceIds.size}건, 파일명 키워드 ${filenameKeywords.length}건, 제목 키워드 ${titleKeys.length}건, 스냅샷키 ${sourceSnapshotKeys.size}건`);
-  const runStartedAt = Date.now();
-
-  let totalGenerated = 0;
+  const preparedRequests = [];
 
   for (const { file, category } of targetFiles) {
-    if (budgetStopped) {
-      console.log(`\n⛔ 예산 상한으로 블로그 생성 중단: ${budgetStopReason}`);
-      break;
-    }
-
     console.log(`\n📂 카테고리: ${category}`);
     const dataPath = path.join(process.cwd(), 'public', 'data', file);
     let items = [];
@@ -2153,61 +2191,92 @@ async function run() {
     const categoryTargetCount = getCategoryTargetCount(category);
     console.log(`  카테고리 목표 발행량: ${categoryTargetCount}건`);
 
-    // 카테고리별 목표 건수만큼 생성
-    let generated = 0;
-    let triedCandidates = 0;
-    for (const candidate of candidates) {
-      const elapsedSec = Math.floor((Date.now() - runStartedAt) / 1000);
-      if (elapsedSec >= BLOG_MAX_GENERATION_SECONDS) {
-        console.log(`  ⏱️ 전체 생성 시간 상한 도달(${BLOG_MAX_GENERATION_SECONDS}s): 생성 루프 종료`);
-        break;
-      }
+    const initialTargets = candidates.slice(0, categoryTargetCount);
+    for (const candidate of initialTargets) {
+      preparedRequests.push(await prepareBlogRequest(
+        category === '전국 축제·여행'
+          ? { ...candidate, _category: category, _allFestivals: items, _festivalSlugMap: festivalSlugMap }
+          : { ...candidate, _category: category },
+        postsDir
+      ));
+    }
 
-      if (budgetStopped) {
+    if (initialTargets.length === 0) {
+      console.log(`  ⚠️ 생성할 새 항목 없음`);
+    }
+  }
+
+  return preparedRequests;
+}
+
+async function run() {
+  if (!GEMINI_API_KEY) {
+    console.error("Missing GEMINI_API_KEY");
+    publishBudgetOutputs();
+    return;
+  }
+
+  console.log(`GEMINI_MODEL: ${GEMINI_MODEL}`);
+  console.log(`GEMINI_MAX_OUTPUT_TOKENS: ${GEMINI_MAX_OUTPUT_TOKENS}`);
+  console.log(`BLOG_GEMINI_MIN_DELAY_MS: ${BLOG_GEMINI_MIN_DELAY_MS}`);
+  console.log(`BLOG_MAX_API_CALLS: ${BLOG_MAX_API_CALLS}`);
+  if (budgetEnabled) {
+    console.log(`BLOG_DAILY_BUDGET_KRW: ${BLOG_DAILY_BUDGET_KRW}`);
+    console.log(`GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS: ${GEMINI_ESTIMATED_KRW_PER_1K_OUTPUT_TOKENS}`);
+  } else {
+    console.log('BLOG_DAILY_BUDGET_KRW: 비활성 (예산 제한 없음)');
+  }
+
+  const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
+  await fs.mkdir(postsDir, { recursive: true });
+  const preparedRequests = await prepareBlogRequests();
+  const runStartedAt = Date.now();
+  let totalGenerated = 0;
+  const generatedByCategory = new Map();
+
+  const requestModel = ({ prompt }) => callGemini(prompt);
+  for (const preparedRequest of preparedRequests) {
+    const elapsedSec = Math.floor((Date.now() - runStartedAt) / 1000);
+    if (elapsedSec >= BLOG_MAX_GENERATION_SECONDS) {
+      console.log(`  ⏱️ 전체 생성 시간 상한 도달(${BLOG_MAX_GENERATION_SECONDS}s): 생성 루프 종료`);
+      break;
+    }
+    if (budgetStopped) {
+      console.log(`  ⛔ 예산 상한 도달: ${budgetStopReason}`);
+      break;
+    }
+    if (geminiApiCallCount >= BLOG_MAX_API_CALLS) {
+      console.log(`  ⛔ Gemini API 호출 상한 도달(${BLOG_MAX_API_CALLS}회): 생성 루프 종료`);
+      break;
+    }
+
+    try {
+      const modelResult = await requestModel({
+        customId: preparedRequest.customId,
+        prompt: preparedRequest.prompt,
+        maxTokens: preparedRequest.maxTokens,
+        promptHash: preparedRequest.promptHash,
+        attempt: 1,
+      });
+      const ok = await finalizeBlogRequest(preparedRequest, modelResult, requestModel);
+      if (ok) {
+        totalGenerated++;
+        const category = preparedRequest.context.candidate._category;
+        const categoryGenerated = (generatedByCategory.get(category) || 0) + 1;
+        generatedByCategory.set(category, categoryGenerated);
+        if (categoryGenerated < 2) {
+          console.log('  ⏳ 5초 대기 중...');
+          await sleep(5000);
+        }
+      }
+    } catch (err) {
+      if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
+        budgetStopped = true;
+        budgetStopReason = String(err.message).replace(/^BLOG_BUDGET_STOP:/, '').trim();
         console.log(`  ⛔ 예산 상한 도달: ${budgetStopReason}`);
         break;
       }
-
-      if (geminiApiCallCount >= BLOG_MAX_API_CALLS) {
-        console.log(`  ⛔ Gemini API 호출 상한 도달(${BLOG_MAX_API_CALLS}회): 생성 루프 종료`);
-        break;
-      }
-
-      if (triedCandidates >= BLOG_MAX_CANDIDATES_PER_CATEGORY) {
-        console.log(`  ⏱️ 카테고리 후보 시도 상한 도달(${BLOG_MAX_CANDIDATES_PER_CATEGORY}건): 다음 카테고리로 이동`);
-        break;
-      }
-
-      if (generated >= categoryTargetCount) break;
-      triedCandidates++;
-      try {
-        const ok = await generatePost(
-          category === '전국 축제·여행'
-            ? { ...candidate, _category: category, _allFestivals: items, _festivalSlugMap: festivalSlugMap }
-            : { ...candidate, _category: category },
-          postsDir
-        );
-        if (ok) {
-          generated++;
-          totalGenerated++;
-          if (generated < 2) {
-            console.log('  ⏳ 5초 대기 중...');
-            await sleep(5000);
-          }
-        }
-      } catch (err) {
-        if (String(err?.message || '').startsWith('BLOG_BUDGET_STOP:')) {
-          budgetStopped = true;
-          budgetStopReason = String(err.message).replace(/^BLOG_BUDGET_STOP:/, '').trim();
-          console.log(`  ⛔ 예산 상한 도달: ${budgetStopReason}`);
-          break;
-        }
-        console.error(`  생성 오류: ${err.message}`);
-      }
-    }
-
-    if (generated === 0) {
-      console.log(`  ⚠️ 생성할 새 항목 없음`);
+      console.error(`  생성 오류: ${err.message}`);
     }
   }
 
@@ -2221,4 +2290,12 @@ async function run() {
   publishBudgetOutputs();
 }
 
-run();
+if (require.main === module) {
+  run();
+}
+
+module.exports = {
+  finalizeBlogRequest,
+  prepareBlogRequests,
+  run,
+};
