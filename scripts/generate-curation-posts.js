@@ -22,24 +22,15 @@ const {
   buildPolicySafeDetailUrl,
   normalizeInternalLinksInMarkdown,
 } = require('./lib/internal-link-builder');
+const { promptHash } = require('./lib/anthropic-blog-batch');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
-const ALLOW_GEMINI_PRO = process.env.ALLOW_GEMINI_PRO === 'true';
-if (/\bpro\b/i.test(GEMINI_MODEL) && !ALLOW_GEMINI_PRO) {
-  throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. ALLOW_GEMINI_PRO=true를 명시하세요.`);
-}
 
 const CURATION_COUNT = Math.max(1, Number(process.env.CURATION_COUNT || 1));
 const CURATION_TOPIC = (process.env.CURATION_TOPIC || 'auto').toLowerCase();
 const CURATION_TOP_N = Math.max(3, Math.min(10, Number(process.env.CURATION_TOP_N || 5)));
 const ALLOW_EXISTING_OVERWRITE = process.env.ALLOW_EXISTING_OVERWRITE === 'true';
 const GEMINI_TIMEOUT_MS = 120000;
-
-if (!GEMINI_API_KEY) {
-  console.error('GEMINI_API_KEY가 없습니다.');
-  process.exit(1);
-}
 
 function setGithubOutput(key, value) {
   const outputPath = process.env.GITHUB_OUTPUT;
@@ -284,7 +275,8 @@ function generateTitle(category, items, todayISO) {
 
 // Gemini 호출
 async function callGemini(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${GEMINI_API_KEY}`;
+  const apiKey = process.env.GEMINI_API_KEY;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${apiKey}`;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
 
@@ -317,7 +309,7 @@ async function callGemini(prompt) {
 
   const data = await res.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  return text.trim();
+  return { text: text.trim() };
 }
 
 // 큐레이션 포스트 프롬프트 생성
@@ -625,7 +617,7 @@ function buildFrontmatter({ title, date, slug, category, description, image = ''
   ].join('\n');
 }
 
-async function generateCurationPost(category, todayISO, postsDir, existingSlugs) {
+async function prepareCurationRequest(category, todayISO, postsDir, existingSlugs, requestIndex) {
   const fileMap = { subsidy: 'subsidy.json', festival: 'festival.json', incheon: 'incheon.json' };
   const file = fileMap[category];
   if (!file) throw new Error(`알 수 없는 카테고리: ${category}`);
@@ -680,14 +672,36 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   const itemSummaries = topItems.map((item, i) => summarizeItem(item, category, i, ssgEligibleIds));
   const prompt = buildPrompt(category, title, itemSummaries, todayISO);
 
-  console.log(`  🤖 Gemini 호출 중: "${title}"`);
-  let body;
-  try {
-    body = await callGemini(prompt);
-  } catch (err) {
-    console.error(`  ❌ Gemini 오류: ${err.message}`);
-    return false;
+  return {
+    customId: `curation-${todayISO}-${category}-${requestIndex + 1}`,
+    prompt,
+    promptHash: promptHash(prompt),
+    maxTokens: 4096,
+    generator: 'curation',
+    context: {
+      category,
+      todayISO,
+      postsDir,
+      title,
+      topItems,
+    },
+  };
+}
+
+async function finalizeCurationRequest(preparedRequest, modelResult, requestModel) {
+  void requestModel;
+  if (promptHash(preparedRequest.prompt) !== preparedRequest.promptHash) {
+    throw new Error(`큐레이션 프롬프트 해시 불일치: ${preparedRequest.customId}`);
   }
+
+  const {
+    category,
+    todayISO,
+    postsDir,
+    title,
+    topItems,
+  } = preparedRequest.context;
+  let body = typeof modelResult === 'string' ? modelResult : modelResult?.text || '';
 
   if (!body || body.length < 200) {
     console.error(`  ❌ 본문이 너무 짧음 (${body?.length || 0}자), 건너뜀`);
@@ -726,30 +740,23 @@ async function generateCurationPost(category, todayISO, postsDir, existingSlugs)
   return true;
 }
 
-async function run() {
+async function prepareCurationRequests() {
   const todayISO = getKstToday();
   const kstNow = getKstNow();
   const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
-
-  console.log(`\n🗓️ 큐레이션 포스트 생성 시작 (KST: ${todayISO})`);
-  console.log(`📦 모델: ${GEMINI_MODEL}, 목표 ${CURATION_COUNT}편, 항목 수 TOP ${CURATION_TOP_N}`);
 
   // 기존 포스트 슬러그 목록
   let existingSlugs = [];
   try {
     const files = await fs.readdir(postsDir);
     existingSlugs = files.filter(f => f.endsWith('.md')).map(f => f.replace(/\.md$/, ''));
-  } catch {
-    await fs.mkdir(postsDir, { recursive: true });
-  }
+  } catch { /* empty */ }
 
   // 오늘 이미 생성된 큐레이션 포스트 수 확인
   const todayCurationCount = existingSlugs.filter(s => s.startsWith(`${todayISO}-curation-`)).length;
   if (!ALLOW_EXISTING_OVERWRITE && todayCurationCount >= CURATION_COUNT) {
     console.log(`  ⏭️ 오늘 이미 ${todayCurationCount}편의 큐레이션 포스트가 있습니다. 건너뜁니다.`);
-    setGithubOutput('curation_generated', 0);
-    setGithubOutput('curation_skipped', todayCurationCount);
-    return;
+    return [];
   }
 
   // 토픽 결정
@@ -767,24 +774,76 @@ async function run() {
       })()
     : Array(CURATION_COUNT).fill(CURATION_TOPIC);
 
-  let generated = 0;
+  const preparedRequests = [];
   for (let i = 0; i < CURATION_COUNT; i++) {
-    if (generated >= CURATION_COUNT) break;
+    if (preparedRequests.length >= CURATION_COUNT) break;
     const topic = topicSequence[i] || 'subsidy';
     console.log(`\n[${i + 1}/${CURATION_COUNT}] 토픽: ${topic}`);
 
     try {
-      const ok = await generateCurationPost(topic, todayISO, postsDir, existingSlugs);
+      const preparedRequest = await prepareCurationRequest(topic, todayISO, postsDir, existingSlugs, i);
+      if (preparedRequest) {
+        preparedRequests.push(preparedRequest);
+        existingSlugs.push(makeSlug(topic, todayISO));
+      }
+    } catch (err) {
+      console.error(`  ❌ 준비 오류: ${err.message}`);
+    }
+  }
+
+  return preparedRequests;
+}
+
+async function getTodayCurationCount() {
+  const todayISO = getKstToday();
+  const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
+  try {
+    const files = await fs.readdir(postsDir);
+    return files.filter(file => file.startsWith(`${todayISO}-curation-`) && file.endsWith('.md')).length;
+  } catch {
+    return 0;
+  }
+}
+
+async function run() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.error('GEMINI_API_KEY가 없습니다.');
+    setGithubOutput('curation_generated', 0);
+    setGithubOutput('curation_skipped', await getTodayCurationCount());
+    throw new Error('GEMINI_API_KEY가 없습니다.');
+  }
+  if (/\bpro\b/i.test(GEMINI_MODEL) && process.env.ALLOW_GEMINI_PRO !== 'true') {
+    throw new Error(`안전장치: Pro 모델(${GEMINI_MODEL})은 차단됩니다. ALLOW_GEMINI_PRO=true를 명시하세요.`);
+  }
+
+  const todayISO = getKstToday();
+  const postsDir = path.join(process.cwd(), 'src', 'content', 'posts');
+  const todayCurationCount = await getTodayCurationCount();
+
+  console.log(`\n🗓️ 큐레이션 포스트 생성 시작 (KST: ${todayISO})`);
+  console.log(`📦 모델: ${GEMINI_MODEL}, 목표 ${CURATION_COUNT}편, 항목 수 TOP ${CURATION_TOP_N}`);
+
+  await fs.mkdir(postsDir, { recursive: true });
+  const preparedRequests = await prepareCurationRequests();
+  let generated = 0;
+  const requestModel = ({ prompt }) => callGemini(prompt);
+
+  for (let i = 0; i < preparedRequests.length; i++) {
+    const preparedRequest = preparedRequests[i];
+    console.log(`  🤖 Gemini 호출 중: "${preparedRequest.context.title}"`);
+    try {
+      const modelResult = await requestModel(preparedRequest);
+      const ok = await finalizeCurationRequest(preparedRequest, modelResult, requestModel);
       if (ok) {
         generated++;
-        existingSlugs.push(`${todayISO}-curation-`); // 중복 방지용 임시 마킹
-        if (i < CURATION_COUNT - 1) {
+        if (i < preparedRequests.length - 1) {
           console.log('  ⏳ 5초 대기...');
           await sleep(5000);
         }
       }
     } catch (err) {
-      console.error(`  ❌ 오류: ${err.message}`);
+      console.error(`  ❌ Gemini 오류: ${err.message}`);
     }
   }
 
@@ -793,7 +852,16 @@ async function run() {
   setGithubOutput('curation_skipped', todayCurationCount);
 }
 
-run().catch(err => {
-  console.error('큐레이션 생성 실패:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  run().catch(err => {
+    console.error('큐레이션 생성 실패:', err);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  prepareCurationRequests,
+  finalizeCurationRequest,
+  run,
+  buildPrompt,
+};
