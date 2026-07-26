@@ -6,7 +6,7 @@ description: "서울 강서구 전세사기 피해자라면 소송수행경비 1
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [강서구, 전세사기피해지원, 소송수행경비, 전세피해지원금, 서울복지정책]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "http://tong.visitkorea.or.kr/cms/resource/03/3092503_image2_1.jpg"
 source_id: "315000000271"
 slug: "2026-07-25-gangseo-jeonse-lawsuit-support"
 source_snapshot_key: "강서구전세피해지원금소송수행경비지원||2027-07-25|"

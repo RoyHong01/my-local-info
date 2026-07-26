@@ -1430,11 +1430,14 @@ async function prepareBlogRequest(candidate, postsDir) {
       const { extractMetroFromText, getRegionalLandmark, detectThemeFromText } = require('./lib/landmark-engine');
       const regionText = [
         candidate['소관기관명'],
+        candidate['접수기관'],
         candidate['접수기관명'],
         candidate['서비스명'],
         candidate.title,
         candidate.location,
         candidate.addr1,
+        candidate['지원대상'],
+        candidate['선정기준'],
       ].filter(Boolean).join(' ');
       // 광역(시·도) 단위만 사용. 구 단위는 노이즈 사진의 원인이라 제외.
       const metros = extractMetroFromText(regionText);
