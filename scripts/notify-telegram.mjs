@@ -130,6 +130,7 @@ async function buildMessage(report) {
   const lifeCount = generatedRestaurantPosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const anthropicGeneration = report.anthropicGeneration || {};
+  const legacyBudget = report.budget || {};
   const imagePolicy = report.imagePolicy || {};
   const restaurantCache = report.restaurantCache || {};
   const recollectPerformed = !!restaurantCache.recollectPerformed;
@@ -176,12 +177,22 @@ async function buildMessage(report) {
   const curationBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
   const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
-  const anthropicEstimatedCost = Number(anthropicGeneration.estimatedCostKrw || 0).toFixed(1);
-  const anthropicActualCost = Number(anthropicGeneration.actualCostKrw || 0).toFixed(1);
-  const anthropicBudgetLimit = Number(anthropicGeneration.budgetLimitKrw || 0).toFixed(0);
-  const anthropicCostLine = anthropicGeneration.budgetStopped
-    ? `⛔ Anthropic 예산 중단: 추정 ${anthropicEstimatedCost}원 / 실제 ${anthropicActualCost}원 / 한도 ${anthropicBudgetLimit}원`
-    : `💰 Anthropic 비용: 추정 ${anthropicEstimatedCost}원 / 실제 ${anthropicActualCost}원 / 한도 ${anthropicBudgetLimit}원`;
+  const hasAnthropicActualCost = Number.isFinite(Number(anthropicGeneration.actualCostKrw));
+  const resolvedEstimatedCost = Number(
+    anthropicGeneration.estimatedCostKrw ?? legacyBudget.estimatedCostKrw ?? 0
+  );
+  const resolvedActualCost = hasAnthropicActualCost ? Number(anthropicGeneration.actualCostKrw) : null;
+  const resolvedBudgetLimit = Number(
+    anthropicGeneration.budgetLimitKrw ?? legacyBudget.limitKrw ?? 0
+  );
+  const resolvedBudgetStopped = Boolean(anthropicGeneration.budgetStopped ?? legacyBudget.stopped);
+  const anthropicEstimatedCost = resolvedEstimatedCost.toFixed(1);
+  const anthropicBudgetLimit = resolvedBudgetLimit.toFixed(0);
+  const anthropicCostLine = resolvedActualCost !== null
+    ? (resolvedBudgetStopped
+      ? `⛔ Anthropic API 예산 중단: 추정 ${anthropicEstimatedCost}원 / 실제 ${resolvedActualCost.toFixed(1)}원 / 한도 ${anthropicBudgetLimit}원`
+      : `💰 Anthropic API 비용: 추정 ${anthropicEstimatedCost}원 / 실제 ${resolvedActualCost.toFixed(1)}원 / 한도 ${anthropicBudgetLimit}원`)
+    : `💰 Anthropic API 비용: ${anthropicEstimatedCost}원 / ${anthropicBudgetLimit}원`;
   const anthropicBatchLine = `📦 Anthropic Batch: ${anthropicGeneration.batchStatus || '-'} / ${Number(anthropicGeneration.batchSuccessCount || 0)}/${Number(anthropicGeneration.batchRequestCount || 0)} 성공 / ${formatDurationMs(anthropicGeneration.batchDurationMs)}`;
   const anthropicFallbackLine = `🔁 Anthropic fallback: 시도 ${Number(anthropicGeneration.fallbackAttemptedCount || 0)} / 성공 ${Number(anthropicGeneration.fallbackSuccessCount || 0)} / 실패 ${Number(anthropicGeneration.fallbackFailureCount || 0)}`;
   const unpublishedReasons = Array.isArray(anthropicGeneration.unpublishedReasons)
@@ -326,25 +337,49 @@ async function buildMessage(report) {
 
 async function sendTelegram(text) {
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-  const body = JSON.stringify({
+  const send = async (payload) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  };
+
+  const markdownPayload = {
     chat_id: CHAT_ID,
     text,
     parse_mode: 'Markdown',
     disable_web_page_preview: true,
-  });
+  };
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body,
-  });
+  const markdownResult = await send(markdownPayload);
+  if (markdownResult.ok) {
+    console.log('[notify-telegram] 전송 완료 ✅ message_id:', markdownResult.result?.message_id);
+    return;
+  }
 
-  const json = await res.json();
-  if (!json.ok) {
-    console.error('[notify-telegram] Telegram API 오류:', JSON.stringify(json));
+  const markdownError = String(markdownResult?.description || '');
+  if (/can't parse entities/i.test(markdownError)) {
+    console.warn('[notify-telegram] Markdown 파싱 실패로 plain text 재시도합니다.');
+
+    const plainPayload = {
+      chat_id: CHAT_ID,
+      text,
+      disable_web_page_preview: true,
+    };
+    const plainResult = await send(plainPayload);
+    if (plainResult.ok) {
+      console.log('[notify-telegram] plain text 전송 완료 ✅ message_id:', plainResult.result?.message_id);
+      return;
+    }
+
+    console.error('[notify-telegram] Telegram API 오류(plain 재시도 실패):', JSON.stringify(plainResult));
     process.exit(1);
   }
-  console.log('[notify-telegram] 전송 완료 ✅ message_id:', json.result?.message_id);
+
+  console.error('[notify-telegram] Telegram API 오류:', JSON.stringify(markdownResult));
+  process.exit(1);
 }
 
 const report = await loadReport();
