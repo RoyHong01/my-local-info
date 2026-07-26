@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-26T00:00:00+09:00",
+  "updatedAtKst": "2026-07-27T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5221,6 +5221,58 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-07-26",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-07-27",
+      "productId": "8519803198",
+      "productName": "크루거 비타민C 500 발포비타민 레몬맛 20정 고함량 비타민C 발포정",
+      "brand": "크루거",
+      "productGroupTokens": [
+        "비타민c",
+        "발포비타민",
+        "레몬맛",
+        "20정",
+        "고함량",
+        "발포정"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-27-choice-health-2026-07-27.md",
+      "sourceId": "manual-choice-health-2026-07-27",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-27",
+      "productId": "7311465993",
+      "productName": "뉴트리디데이 프리미엄 멀티비타민 골드, 90정, 3개",
+      "brand": "뉴트리디데이",
+      "productGroupTokens": [
+        "멀티비타민",
+        "골드",
+        "90정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-27-choice-health-2026-07-27.md",
+      "sourceId": "manual-choice-health-2026-07-27",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-07-27",
+      "productId": "6283668167",
+      "productName": "홀리데이즈 프리미엄 콜라겐 타블렛",
+      "brand": "홀리데이즈",
+      "productGroupTokens": [
+        "콜라겐",
+        "타블렛",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-27-choice-health-2026-07-27.md",
+      "sourceId": "manual-choice-health-2026-07-27",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
