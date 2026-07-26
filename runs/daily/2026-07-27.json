@@ -1,0 +1,278 @@
+{
+  "reportDateKst": "2026-07-27",
+  "generatedAtUtc": "2026-07-26T20:22:02.466Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30218183477",
+    "runNumber": 909,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30218183477",
+    "runStartedAtUtc": "2026-07-26T20:04:02Z",
+    "headSha": "2a0332177b705c8af88148a173d18be60ae22579"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://d0cc5165.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 617건",
+        "festival": "신규 0건, 업데이트 201건, 총 374건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://11b1f973.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://7de46e93.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "45e71af79d5efe97baed261d31cacd865c0bbfd8",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-26",
+      "authoredAt": "2026-07-26T20:18:39Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-27-choice-health-2026-07-27.md"
+      ]
+    },
+    {
+      "sha": "10efc50113c2c94a3bfd9da1df35c1c4419ef77c",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-26",
+      "authoredAt": "2026-07-26T20:17:29Z",
+      "files": [
+        "src/content/posts/2026-07-26-incheon-youth-safety-net.md",
+        "src/content/posts/2026-07-26-jeonse-loan-buttmok.md",
+        "src/content/posts/2026-07-26-yeongdeungpo-smoking-cessation.md",
+        "src/content/posts/2026-07-27-curation-subsidy.md"
+      ]
+    },
+    {
+      "sha": "6ed096b6b5193b824c8394bd6f49265cf1f78422",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-26",
+      "authoredAt": "2026-07-26T20:06:27Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-06-30-busanbrandfesta.md",
+        "src/content/posts/2026-07-02-ulsan119safetyfestival.md",
+        "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+        "src/content/posts/2026-07-09-curation-festival.md",
+        "src/content/posts/2026-07-14-curation-festival.md",
+        "src/content/posts/2026-07-16-curation-festival.md",
+        "src/content/posts/2026-07-25-festival-versus-geoje-daegu.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 16,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-07-02-ulsan119safetyfestival.md",
+      "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+      "src/content/posts/2026-07-09-curation-festival.md",
+      "src/content/posts/2026-07-14-curation-festival.md",
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-25-festival-versus-geoje-daegu.md",
+      "src/content/posts/2026-07-26-incheon-youth-safety-net.md",
+      "src/content/posts/2026-07-26-jeonse-loan-buttmok.md",
+      "src/content/posts/2026-07-26-yeongdeungpo-smoking-cessation.md",
+      "src/content/posts/2026-07-27-curation-subsidy.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-27-choice-health-2026-07-27.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-27-choice-health-2026-07-27.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-27-choice-health-2026-07-27.md",
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-07-02-ulsan119safetyfestival.md",
+      "src/content/posts/2026-07-06-hongcheon-corn-festival.md",
+      "src/content/posts/2026-07-09-curation-festival.md",
+      "src/content/posts/2026-07-14-curation-festival.md",
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-25-festival-versus-geoje-daegu.md",
+      "src/content/posts/2026-07-26-incheon-youth-safety-net.md",
+      "src/content/posts/2026-07-26-jeonse-loan-buttmok.md",
+      "src/content/posts/2026-07-26-yeongdeungpo-smoking-cessation.md",
+      "src/content/posts/2026-07-27-curation-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 12,
+      "manual": 0,
+      "unknown": 0,
+      "total": 12
+    },
+    "byType": {
+      "blog": {
+        "auto": 11,
+        "manual": 0,
+        "unknown": 0,
+        "total": 11
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "",
+    "batchStatus": "submit_or_poll_failed",
+    "batchDurationMs": 204,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 0,
+    "batchFailureCount": 5,
+    "fallbackAttemptedCount": 4,
+    "fallbackSuccessCount": 4,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 1,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-전국축제여행-2394558",
+        "reason": "warning_budget_stop"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 646.5185999999999,
+    "actualCostKrw": 277.61580000000004,
+    "budgetWarning": true,
+    "budgetStopped": true,
+    "budgetStopReason": "warning_budget_stop: fallback 예상 1868.21원 / 한도 1500원"
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "2054/638",
+      "markdown": {
+        "generated": 1,
+        "pending": 167,
+        "titles": [
+          "체육시설 이용요금 감면"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 617건",
+      "validation": "ok",
+      "anthropicUsage": "1866/1313",
+      "markdown": {
+        "generated": 2,
+        "pending": 340,
+        "titles": [
+          "강서구 전세피해지원금(보증료) 지원",
+          "강서구 전세피해지원금(이사비) 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 201건, 총 374건",
+      "validation": "ok",
+      "anthropicUsage": "777/469",
+      "markdown": {
+        "generated": 1,
+        "pending": 267,
+        "titles": [
+          "제8회 농촌융복합산업 제주국제박람회"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_budget_stop",
+    "label": "완료(Anthropic 예산 상한 중단)"
+  }
+}
