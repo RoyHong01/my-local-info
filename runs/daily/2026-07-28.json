@@ -1,0 +1,260 @@
+{
+  "reportDateKst": "2026-07-28",
+  "generatedAtUtc": "2026-07-27T20:29:27.487Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30301630461",
+    "runNumber": 910,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30301630461",
+    "runStartedAtUtc": "2026-07-27T20:13:10Z",
+    "headSha": "7cf18d15ff751030e66e36eefc04f1920a20b59a"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://20c45cd0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 3건, 총 618건",
+        "festival": "신규 5건, 업데이트 193건, 총 379건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://500d4c29.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://feed7377.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "118f499c4ea53327a5f4065609bed0aa36f39f65",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-27",
+      "authoredAt": "2026-07-27T20:26:11Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-28-choice-living-2026-07-28.md"
+      ]
+    },
+    {
+      "sha": "9500ce35355d40b7b613662f58f19f893dd6f5dc",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-27",
+      "authoredAt": "2026-07-27T20:25:00Z",
+      "files": [
+        "src/content/posts/2026-07-27-post-1785183705019.md"
+      ]
+    },
+    {
+      "sha": "4a159883b850d6f36dba35860bc1a4b59ada4335",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-27",
+      "authoredAt": "2026-07-27T20:15:34Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 6,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-27-post-1785183705019.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-28-choice-living-2026-07-28.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-28-choice-living-2026-07-28.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-28-choice-living-2026-07-28.md",
+      "src/content/posts/2026-07-27-post-1785183705019.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 2,
+      "manual": 0,
+      "unknown": 0,
+      "total": 2
+    },
+    "byType": {
+      "blog": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "",
+    "batchStatus": "submit_or_poll_failed",
+    "batchDurationMs": 197,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 0,
+    "batchFailureCount": 5,
+    "fallbackAttemptedCount": 4,
+    "fallbackSuccessCount": 1,
+    "fallbackFailureCount": 3,
+    "unpublishedCount": 4,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-전국보조금복지정책-315000000108",
+        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdTBfKkNgzV2VcbdKpWjT\"}"
+      },
+      {
+        "customId": "blog-전국보조금복지정책-161300000088",
+        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdTBfLhRaZ5ZDaayxVhFz\"}"
+      },
+      {
+        "customId": "blog-전국축제여행-2394558",
+        "reason": "warning_budget_stop"
+      },
+      {
+        "customId": "curation-2026-07-28-festival-1",
+        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdTBfMbW3EGj4TFXxsX7v\"}"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 646.1027999999999,
+    "actualCostKrw": 67.3176,
+    "budgetWarning": true,
+    "budgetStopped": true,
+    "budgetStopReason": "warning_budget_stop: fallback 예상 1726.45원 / 한도 1500원"
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "1340/608",
+      "markdown": {
+        "generated": 1,
+        "pending": 166,
+        "titles": [
+          "문화시설 이용요금 감면(인천북부교육문화센터)"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 3건, 총 618건",
+      "validation": "ok",
+      "anthropicUsage": "3830/1185",
+      "markdown": {
+        "generated": 2,
+        "pending": 341,
+        "titles": [
+          "서울시 임산부 교통비 지원",
+          "지역사랑상품권(울산페이)"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 5건, 업데이트 193건, 총 379건",
+      "validation": "ok",
+      "anthropicUsage": "840/450",
+      "markdown": {
+        "generated": 1,
+        "pending": 271,
+        "titles": [
+          "세계유산위원회 대한민국관(K-Heritage House)"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_budget_stop",
+    "label": "완료(Anthropic 예산 상한 중단)"
+  }
+}
