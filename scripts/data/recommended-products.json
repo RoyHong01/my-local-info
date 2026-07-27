@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-27T00:00:00+09:00",
+  "updatedAtKst": "2026-07-28T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5273,6 +5273,62 @@
       "sourceId": "manual-choice-health-2026-07-27",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-07-28",
+      "productId": "9118163329",
+      "productName": "고씨네 스마트 4in1 벽걸이형 변기솔 청소솔 브러쉬 세트, 화이트, 1세트",
+      "brand": "고씨네",
+      "productGroupTokens": [
+        "4in1",
+        "벽걸이형",
+        "변기솔",
+        "청소솔",
+        "브러쉬",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-28-choice-living-2026-07-28.md",
+      "sourceId": "manual-choice-living-2026-07-28",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-28",
+      "productId": "9531987165",
+      "productName": "24종 꿀템요정 옷정리 리빙박스, 1개, 투명",
+      "brand": "24종",
+      "productGroupTokens": [
+        "꿀템요정",
+        "옷정리",
+        "리빙박스",
+        "투명",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-28-choice-living-2026-07-28.md",
+      "sourceId": "manual-choice-living-2026-07-28",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-07-28",
+      "productId": "9496070500",
+      "productName": "올릭 3in1 롱 스탠드 욕실 스퀴지 모서리 바닥 화장실 청소솔, 색상_빈틈브러쉬, 1개",
+      "brand": "올릭",
+      "productGroupTokens": [
+        "3in1",
+        "스탠드",
+        "욕실",
+        "스퀴지",
+        "모서리",
+        "바닥"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-28-choice-living-2026-07-28.md",
+      "sourceId": "manual-choice-living-2026-07-28",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
