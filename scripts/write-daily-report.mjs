@@ -201,10 +201,20 @@ function summarizeChanges(commits) {
   const generatedChoicePosts = lifeFiles.filter((file) => /\/\d{4}-\d{2}-\d{2}-choice-/.test(file));
   const generatedRestaurantPosts = lifeFiles.filter((file) => !generatedChoicePosts.includes(file));
 
+  const filesCreated = uniqueSorted(commits
+    .filter((commit) => /자동 업데이트\(2단계\): 블로그/.test(String(commit.subject || '')))
+    .flatMap((commit) => commit.files || [])
+    .filter((file) => file.startsWith('src/content/posts/') && file.endsWith('.md')));
+
+  const generatedBlogPostsNew = uniqueSorted(blogFiles.filter((file) => filesCreated.includes(file)));
+  const generatedBlogPostsUpdated = uniqueSorted(blogFiles.filter((file) => !generatedBlogPostsNew.includes(file)));
+
   return {
     totalChangedFiles: allFiles.length,
     dataChangedFiles: dataFiles,
     generatedBlogPosts: blogFiles,
+    generatedBlogPostsNew,
+    generatedBlogPostsUpdated,
     generatedLifePosts: lifeFiles,
     generatedChoicePosts,
     generatedRestaurantPosts,
@@ -382,7 +392,8 @@ function toMarkdown(report) {
   lines.push('|---|---|');
   lines.push(`| 전체 판정 | ${report.overall?.level === 'failure' ? '❌' : report.overall?.level === 'warning' ? '⚠️' : '✅'} ${report.overall?.label || '전체 정상 완료'} |`);
   lines.push(`| 단계 성공 수 | ${report.stages.filter((stage) => stage.status === 'success').length} / ${report.stages.length} |`);
-  lines.push(`| 생성된 블로그 글 | ${report.changes.generatedBlogPosts.length}건 |`);
+  lines.push(`| 생성된 블로그 글(신규) | ${(report.changes.generatedBlogPostsNew || []).length}건 |`);
+  lines.push(`| 수정된 기존 블로그 글 | ${(report.changes.generatedBlogPostsUpdated || []).length}건 |`);
   lines.push(`| 생성된 초이스 글 | ${report.changes.generatedChoicePosts.length}건 |`);
   lines.push(`| 생성된 맛집 글 | ${report.changes.generatedRestaurantPosts.length}건 |`);
   lines.push(`| 발행 구분(auto/manual/unknown) | ${report.publicationStats?.totals?.auto || 0} / ${report.publicationStats?.totals?.manual || 0} / ${report.publicationStats?.totals?.unknown || 0} |`);
@@ -543,15 +554,23 @@ function toMarkdown(report) {
   lines.push('|---|---:|');
   lines.push(`| 총 변경 파일 | ${report.changes.totalChangedFiles} |`);
   lines.push(`| 데이터 파일 | ${report.changes.dataChangedFiles.length} |`);
-  lines.push(`| 블로그 생성 파일 | ${report.changes.generatedBlogPosts.length} |`);
+  lines.push(`| 블로그 신규 파일 | ${(report.changes.generatedBlogPostsNew || []).length} |`);
+  lines.push(`| 블로그 수정 파일 | ${(report.changes.generatedBlogPostsUpdated || []).length} |`);
   lines.push(`| 초이스 생성 파일 | ${report.changes.generatedChoicePosts.length} |`);
   lines.push(`| 맛집 생성 파일 | ${report.changes.generatedRestaurantPosts.length} |`);
   lines.push('');
 
-  if (report.changes.generatedBlogPosts.length > 0) {
-    lines.push('### 생성된 블로그 파일');
+  if ((report.changes.generatedBlogPostsNew || []).length > 0) {
+    lines.push('### 생성된 블로그 파일 (신규)');
     lines.push('');
-    report.changes.generatedBlogPosts.forEach((file) => lines.push(`- ${file}`));
+    report.changes.generatedBlogPostsNew.forEach((file) => lines.push(`- ${file}`));
+    lines.push('');
+  }
+
+  if ((report.changes.generatedBlogPostsUpdated || []).length > 0) {
+    lines.push('### 생성된 블로그 파일 (기존 수정)');
+    lines.push('');
+    report.changes.generatedBlogPostsUpdated.forEach((file) => lines.push(`- ${file}`));
     lines.push('');
   }
 
@@ -589,7 +608,8 @@ async function updateIndex(indexPath, report) {
     eventName: report.workflow.eventName,
     runUrl: report.workflow.runUrl,
     stageStatuses: report.stages.map((stage) => ({ key: stage.key, status: stage.status })),
-    generatedBlogCount: report.changes.generatedBlogPosts.length,
+    generatedBlogCount: (report.changes.generatedBlogPostsNew || []).length,
+    updatedBlogCount: (report.changes.generatedBlogPostsUpdated || []).length,
     generatedLifeCount: report.changes.generatedLifePosts.length,
     generatedChoiceCount: report.changes.generatedChoicePosts.length,
     generatedRestaurantCount: report.changes.generatedRestaurantPosts.length,
