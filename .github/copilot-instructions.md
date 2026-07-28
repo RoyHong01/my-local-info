@@ -275,6 +275,10 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
   - 커밋 전 자동 검증은 pre-commit 훅에서 `npm run check:worktree:commit`으로 실행한다.
   - pre-push 훅이 비어 있거나 없으면 `npm run hooks:install`로 복구한다.
   - push 전 자동 검증은 pre-push 훅에서 `npm run check:worktree:strict`로 강제한다.
+17-1. **다중 수정·커밋 안전 규칙**:
+  - 한 파일에 여러 수정을 적용할 때 str_replace를 겹쳐서 일괄 적용하지 않는다. 수정 1건마다 적용 → 문법 검증(해당 시) → `git diff --stat`으로 변경 규모 확인. 예상보다 큰 삭제 감지 시 즉시 중단하고 보고한다.
+  - assume-unchanged 등 git 감시 제외 플래그를 사용하지 않는다 (파일 손상이 status에 잡히지 않아 은폐되는 위험).
+  - 커밋 전 스테이징된 파일 목록을 사용자에게 제시하고 의도와 일치하는지 확인받은 뒤 커밋한다. `커밋 금지`로 지정된 산출물(테스트 샘플 등)이 섞이지 않았는지 검증한다.
 18. **단독 초이스 생성 경로 통일 규칙(필수)**:
   - 사용자가 "단독 초이스 포스트" 작성을 요청해도, 본문을 직접 수동 작성하지 않는다.
   - 요청 입력은 `scripts/choice-input.<요청명>.json`(예: `scripts/choice-input.request.json`)에 작성한다.
