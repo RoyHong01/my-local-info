@@ -101,6 +101,26 @@ function formatDurationMs(value) {
   return minutes > 0 ? `${minutes}분 ${seconds}초` : `${seconds}초`;
 }
 
+function getStage2BlogGeneratedFiles(report) {
+  const commits = Array.isArray(report?.commits) ? report.commits : [];
+  const files = new Set();
+
+  for (const commit of commits) {
+    const subject = String(commit?.subject || '');
+    const isStage2BlogCommit = subject.includes('2단계') && subject.includes('블로그') && subject.includes('생성');
+    if (!isStage2BlogCommit) continue;
+
+    for (const file of commit?.files || []) {
+      const filePath = String(file || '').trim();
+      if (filePath.startsWith('src/content/posts/') && filePath.endsWith('.md')) {
+        files.add(filePath);
+      }
+    }
+  }
+
+  return files;
+}
+
 async function buildMessage(report) {
   const runUrl = GITHUB_RUN_ID && GITHUB_REPOSITORY
     ? `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`
@@ -122,10 +142,15 @@ async function buildMessage(report) {
   const overallLevel = String(report.overall?.level || '').trim().toLowerCase();
   const overallLabel = String(report.overall?.label || '').trim();
   const generatedBlogPosts = report.changes?.generatedBlogPosts || [];
+  const stage2BlogGeneratedFiles = getStage2BlogGeneratedFiles(report);
+  const newlyGeneratedBlogPosts = generatedBlogPosts.filter((file) => stage2BlogGeneratedFiles.has(file));
+  const updatedExistingBlogPosts = generatedBlogPosts.filter((file) => !stage2BlogGeneratedFiles.has(file));
   const generatedChoicePosts = report.changes?.generatedChoicePosts || [];
   const generatedRestaurantPosts = report.changes?.generatedRestaurantPosts || report.changes?.generatedLifePosts || [];
   const generatedLifePosts = report.changes?.generatedLifePosts || [];
   const blogCount = generatedBlogPosts.length;
+  const newlyGeneratedBlogCount = newlyGeneratedBlogPosts.length;
+  const updatedExistingBlogCount = updatedExistingBlogPosts.length;
   const choiceCount = generatedChoicePosts.length;
   const lifeCount = generatedRestaurantPosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
@@ -160,22 +185,25 @@ async function buildMessage(report) {
   const incheonPhotoApi = report.dataValidation?.incheon?.photoApi || {};
 
   const blogMetas = await Promise.all(generatedBlogPosts.map((file) => readPostMeta(file)));
+  const newlyGeneratedBlogMetas = await Promise.all(newlyGeneratedBlogPosts.map((file) => readPostMeta(file)));
+  const updatedExistingBlogMetas = await Promise.all(updatedExistingBlogPosts.map((file) => readPostMeta(file)));
   const blogTitles = blogMetas.map((meta) => meta.title);
+  const updatedExistingBlogTitles = updatedExistingBlogMetas.map((meta) => meta.title).filter(Boolean);
   const choiceTitles = await Promise.all(generatedChoicePosts.map((file) => readPostMeta(file).then((meta) => meta.title)));
   const lifeTitles = await Promise.all(generatedRestaurantPosts.map((file) => readPostMeta(file).then((meta) => meta.title)));
 
-  const incheonBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'incheon').map((meta) => meta.title).filter(Boolean);
-  const subsidyBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'subsidy').map((meta) => meta.title).filter(Boolean);
-  const festivalVersusTitles = blogMetas
+  const incheonBlogTitles = newlyGeneratedBlogMetas.filter((meta) => meta.categoryKey === 'incheon').map((meta) => meta.title).filter(Boolean);
+  const subsidyBlogTitles = newlyGeneratedBlogMetas.filter((meta) => meta.categoryKey === 'subsidy').map((meta) => meta.title).filter(Boolean);
+  const festivalVersusTitles = newlyGeneratedBlogMetas
     .filter((meta) => meta.categoryKey === 'festival' && meta.contentType === 'festival-versus')
     .map((meta) => meta.title)
     .filter(Boolean);
-  const festivalBlogTitles = blogMetas
+  const festivalBlogTitles = newlyGeneratedBlogMetas
     .filter((meta) => meta.categoryKey === 'festival' && meta.contentType !== 'festival-versus')
     .map((meta) => meta.title)
     .filter(Boolean);
-  const curationBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
-  const otherBlogTitles = blogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
+  const curationBlogTitles = newlyGeneratedBlogMetas.filter((meta) => meta.categoryKey === 'curation').map((meta) => meta.title).filter(Boolean);
+  const otherBlogTitles = newlyGeneratedBlogMetas.filter((meta) => meta.categoryKey === 'other').map((meta) => meta.title).filter(Boolean);
 
   const hasAnthropicActualCost = Number.isFinite(Number(anthropicGeneration.actualCostKrw));
   const resolvedEstimatedCost = Number(
@@ -256,8 +284,9 @@ async function buildMessage(report) {
     festivalPhotoFallbackLine,
     incheonPhotoLine,
     incheonPhotoFailureLine,
-    `📝 블로그 생성: ${blogCount}건`,
-    `  └ 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건 | 축제비교 ${festivalVersusTitles.length}건${curationBlogTitles.length > 0 ? ` | 큐레이션 ${curationBlogTitles.length}건` : ''}${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
+    `📝 블로그 변경: ${blogCount}건`,
+    `  └ 신규 생성 ${newlyGeneratedBlogCount}건 | 기존 글 수정 ${updatedExistingBlogCount}건`,
+    `  └ 신규 기준: 인천 ${incheonBlogTitles.length}건 | 보조금 ${subsidyBlogTitles.length}건 | 축제 ${festivalBlogTitles.length}건 | 축제비교 ${festivalVersusTitles.length}건${curationBlogTitles.length > 0 ? ` | 큐레이션 ${curationBlogTitles.length}건` : ''}${otherBlogTitles.length > 0 ? ` | 기타 ${otherBlogTitles.length}건` : ''}`,
     `🛍️ 초이스 포스트: ${choiceCount}건`,
     `🍽️ 맛집 포스트: ${lifeCount}건`,
     `📁 변경 파일: ${totalFiles}개`,
@@ -301,6 +330,12 @@ async function buildMessage(report) {
     lines.push('');
     lines.push('*큐레이션 블로그:*');
     curationBlogTitles.forEach((title) => lines.push(`  • ${title}`));
+  }
+
+  if (updatedExistingBlogTitles.length > 0) {
+    lines.push('');
+    lines.push('*기존 글 수정:*');
+    updatedExistingBlogTitles.forEach((title) => lines.push(`  • ${title}`));
   }
 
   if (choiceTitles.filter(Boolean).length > 0) {
