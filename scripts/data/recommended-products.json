@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-28T00:00:00+09:00",
+  "updatedAtKst": "2026-07-29T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5329,6 +5329,63 @@
       "sourceId": "manual-choice-living-2026-07-28",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "9281480313",
+      "productName": "이놀 투명창 에어프라이어 2L 1인용 소형 미니 프리미엄 에어프라이기 air fryer",
+      "brand": "이놀",
+      "productGroupTokens": [
+        "투명창",
+        "에어프라이어",
+        "2l",
+        "1인용",
+        "소형",
+        "에어프라이기"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "9624537921",
+      "productName": "싱크대하부장정리함, 풀아웃 2단 수납 선반, L자형 슬라이드 선반, 주방 욕실 다용도 캐비닛 수납대, 욕실수납, 주방수납",
+      "brand": "싱크대하부장정리함",
+      "productGroupTokens": [
+        "풀아웃",
+        "2단",
+        "수납",
+        "선반",
+        "l자형",
+        "슬라이드"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "9459524029",
+      "productName": "coomin 시각화 에어프라이어 가정용 4L 에어프라이기 2-4인용 대용량 바스켓형 LED 조명등, 화이트, FY-3005-M-A",
+      "brand": "coomin",
+      "productGroupTokens": [
+        "시각화",
+        "에어프라이어",
+        "4l",
+        "에어프라이기",
+        "4인용",
+        "바스켓형"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
