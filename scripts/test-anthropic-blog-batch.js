@@ -9,6 +9,8 @@ const {
   callSyncFallback,
   collectBatchResults,
   configFromEnv,
+  estimateRequestCostKrw,
+  makeApiSafeCustomId,
   pollBatch,
   promptHash,
   submitBatch,
@@ -111,6 +113,30 @@ async function testSingleBatchAndResultMapping() {
   assert.ok(budgetGuard.actualCostKrw > 0);
 }
 
+async function testCustomIdNormalizationToAsciiForBatchApi() {
+  const rawCustomId = 'blog-전국보조금·복지 정책-강서구 전세피해지원금(이사비)-0728';
+  const request = makeRequest(rawCustomId, 'normalization-check', 100);
+  let capturedCustomId = '';
+  const client = {
+    messages: {
+      batches: {
+        async create(body) {
+          capturedCustomId = body.requests?.[0]?.custom_id || '';
+          return { id: 'batch-custom-id', processing_status: 'in_progress' };
+        },
+      },
+    },
+  };
+  const budgetGuard = new AnthropicBudgetGuard(makeConfig());
+  const submitted = await submitBatch({ client, requests: [request], config: makeConfig(), budgetGuard });
+
+  assert.ok(capturedCustomId.length > 0);
+  assert.match(capturedCustomId, /^[a-zA-Z0-9_-]{1,64}$/);
+  assert.strictEqual(/[가-힣]/.test(capturedCustomId), false);
+  assert.strictEqual(submitted.accepted[0].customId, capturedCustomId);
+  assert.strictEqual(makeApiSafeCustomId(rawCustomId), capturedCustomId);
+}
+
 async function testFixedPollingAndTimeout() {
   let nowMs = 0;
   let retrieveCalls = 0;
@@ -171,6 +197,24 @@ async function testBudgetWarningAndFallbackStop() {
   assert.strictEqual(syncCalls, 0);
   assert.strictEqual(stopGuard.stopped, true);
   assert.match(stopGuard.stopReason, /warning_budget_stop/);
+}
+
+async function testFallbackEstimateUsesLastUsageOrConservativeConstant() {
+  const config = makeConfig({ fallbackOutputTokensEstimate: 3000 });
+  const budgetGuard = new AnthropicBudgetGuard(config);
+  const request = makeRequest('fallback-estimate', 'x'.repeat(200), 8192);
+
+  const estimatedWithoutUsage = estimateRequestCostKrw(request, config, false, {
+    outputTokensEstimate: budgetGuard.estimateFallbackOutputTokens(request.maxTokens),
+  });
+  const estimatedWithMaxTokens = estimateRequestCostKrw(request, config, false);
+  assert.ok(estimatedWithoutUsage < estimatedWithMaxTokens);
+
+  budgetGuard.lastSuccessfulOutputTokens = 1200;
+  const estimatedWithLastUsage = estimateRequestCostKrw(request, config, false, {
+    outputTokensEstimate: budgetGuard.estimateFallbackOutputTokens(request.maxTokens),
+  });
+  assert.ok(estimatedWithLastUsage < estimatedWithoutUsage);
 }
 
 async function testSubmitFailureReleasesReservations() {
@@ -385,7 +429,7 @@ async function testBlogQualityRetryUsesSameBudgetGuard() {
 
   assert.strictEqual(syncCalls, 0);
   assert.strictEqual(outputs.batch_success_count, 1);
-  assert.strictEqual(outputs.fallback_attempted_count, 0);
+  assert.strictEqual(outputs.fallback_attempted_count, 1);
   assert.strictEqual(outputs.unpublished_count, 1);
   assert.match(outputs.unpublished_reasons, /warning_budget_stop/);
   assert.strictEqual(outputs.budget_stopped, true);
@@ -413,8 +457,10 @@ async function testPromptHashIsStable() {
 
 async function run() {
   await testSingleBatchAndResultMapping();
+  await testCustomIdNormalizationToAsciiForBatchApi();
   await testFixedPollingAndTimeout();
   await testBudgetWarningAndFallbackStop();
+  await testFallbackEstimateUsesLastUsageOrConservativeConstant();
   await testSubmitFailureReleasesReservations();
   await testPartialResultsRemainAvailableAfterStreamFailure();
   await testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved();

@@ -8,11 +8,12 @@ const DEFAULT_POLL_INTERVAL_MS = 20_000;
 const DEFAULT_TIMEOUT_MS = 30 * 60 * 1000;
 const DEFAULT_DAILY_BUDGET_KRW = 1500;
 const DEFAULT_WARN_RATIO = 0.8;
-const DEFAULT_USD_KRW = 1400;
+const DEFAULT_USD_KRW = 1467;
 const DEFAULT_INPUT_USD_PER_MILLION = 3;
 const DEFAULT_OUTPUT_USD_PER_MILLION = 15;
 const DEFAULT_BATCH_DISCOUNT = 0.5;
 const DEFAULT_CHARS_PER_TOKEN = 2;
+const DEFAULT_FALLBACK_OUTPUT_TOKENS_ESTIMATE = 3000;
 
 function numberFrom(value, fallback) {
   const parsed = Number(value);
@@ -31,6 +32,10 @@ function configFromEnv(env = process.env) {
     outputUsdPerMillion: numberFrom(env.ANTHROPIC_OUTPUT_USD_PER_MILLION, DEFAULT_OUTPUT_USD_PER_MILLION),
     batchDiscount: numberFrom(env.ANTHROPIC_BATCH_DISCOUNT, DEFAULT_BATCH_DISCOUNT),
     charsPerToken: Math.max(1, numberFrom(env.ANTHROPIC_ESTIMATE_CHARS_PER_TOKEN, DEFAULT_CHARS_PER_TOKEN)),
+    fallbackOutputTokensEstimate: Math.max(1, numberFrom(
+      env.ANTHROPIC_FALLBACK_OUTPUT_TOKENS_ESTIMATE,
+      DEFAULT_FALLBACK_OUTPUT_TOKENS_ESTIMATE
+    )),
   };
 }
 
@@ -44,6 +49,36 @@ function promptHash(prompt) {
 
 function estimateInputTokens(prompt, charsPerToken = DEFAULT_CHARS_PER_TOKEN) {
   return Math.max(1, Math.ceil(String(prompt || '').length / Math.max(1, charsPerToken)));
+}
+
+function makeApiSafeCustomId(customId, fallbackPrefix = 'req') {
+  const raw = String(customId || '').trim();
+  const hash = crypto.createHash('sha1').update(raw || fallbackPrefix, 'utf8').digest('hex').slice(0, 8);
+
+  let normalized = raw
+    .replace(/[^A-Za-z0-9_-]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/_{2,}/g, '_')
+    .replace(/^[-_]+|[-_]+$/g, '');
+
+  if (!normalized) {
+    normalized = `${fallbackPrefix}-${hash}`;
+  }
+
+  if (!/^[A-Za-z0-9]/.test(normalized)) {
+    normalized = `${fallbackPrefix}-${normalized}`;
+  }
+
+  if (normalized.length > 64) {
+    const headLength = 64 - 1 - hash.length;
+    normalized = `${normalized.slice(0, headLength)}-${hash}`;
+  }
+
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(normalized)) {
+    normalized = `${fallbackPrefix}-${hash}`;
+  }
+
+  return normalized;
 }
 
 function usageTokens(usage = {}) {
@@ -61,10 +96,15 @@ function calculateCostKrw({ inputTokens = 0, outputTokens = 0, isBatch = false }
   return (inputUsd + outputUsd) * config.usdKrw * discount;
 }
 
-function estimateRequestCostKrw(request, config = configFromEnv(), isBatch = true) {
+function estimateRequestCostKrw(request, config = configFromEnv(), isBatch = true, options = {}) {
+  const fallbackOutputTokens = Number(options.outputTokensEstimate || 0);
+  const boundedOutputTokens = fallbackOutputTokens > 0
+    ? Math.min(Number(request.maxTokens || 0), fallbackOutputTokens)
+    : Number(request.maxTokens || 0);
+
   return calculateCostKrw({
     inputTokens: estimateInputTokens(request.prompt, config.charsPerToken),
-    outputTokens: Number(request.maxTokens || 0),
+    outputTokens: boundedOutputTokens,
     isBatch,
   }, config);
 }
@@ -74,7 +114,7 @@ function normalizeRequest(request, config = configFromEnv()) {
     throw new Error('Anthropic batch request requires customId and prompt');
   }
   return {
-    customId: String(request.customId),
+    customId: makeApiSafeCustomId(request.customId, request.generator || 'req'),
     prompt: String(request.prompt),
     promptHash: request.promptHash || promptHash(request.prompt),
     maxTokens: Math.max(1, Number(request.maxTokens || 4096)),
@@ -107,6 +147,7 @@ class AnthropicBudgetGuard {
   constructor(config = configFromEnv()) {
     this.config = config;
     this.actualCostKrw = 0;
+    this.lastSuccessfulOutputTokens = 0;
     this.reservations = new Map();
     this.stopped = false;
     this.stopReason = '';
@@ -154,12 +195,22 @@ class AnthropicBudgetGuard {
   settle(customId, usage, isBatch) {
     this.release(customId);
     const tokens = usageTokens(usage);
+    if (tokens.outputTokens > 0) {
+      this.lastSuccessfulOutputTokens = tokens.outputTokens;
+    }
     const amount = calculateCostKrw({ ...tokens, isBatch }, this.config);
     this.actualCostKrw += amount;
     if (this.actualCostKrw >= this.config.dailyBudgetKrw) {
       this.stop(`warning_budget_stop: 실제 ${this.actualCostKrw.toFixed(2)}원 / 한도 ${this.config.dailyBudgetKrw}원`);
     }
     return amount;
+  }
+
+  estimateFallbackOutputTokens(maxTokens) {
+    const preferred = this.lastSuccessfulOutputTokens > 0
+      ? this.lastSuccessfulOutputTokens
+      : this.config.fallbackOutputTokensEstimate;
+    return Math.max(1, Math.min(Number(maxTokens || 0), Number(preferred || 1)));
   }
 
   snapshot() {
@@ -313,6 +364,7 @@ module.exports = {
   estimateInputTokens,
   estimateRequestCostKrw,
   extractMessageText,
+  makeApiSafeCustomId,
   normalizeRequest,
   pollBatch,
   promptHash,

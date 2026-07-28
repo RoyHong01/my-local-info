@@ -205,6 +205,22 @@ function normalizeMatchText(value) {
     .replace(/[^\p{L}\p{N}]/gu, '');
 }
 
+function toAsciiCategoryKey(category) {
+  const map = {
+    '인천 지역 정보': 'incheon',
+    '전국 보조금·복지 정책': 'subsidy',
+    '전국 축제·여행': 'festival',
+  };
+  return map[category] || 'misc';
+}
+
+function toAsciiAlphaNum(value) {
+  return String(value || '')
+    .replace(/[^A-Za-z0-9]+/g, '')
+    .slice(0, 32)
+    .toLowerCase();
+}
+
 function normalizeKeywordMatchMode(mode) {
   const value = String(mode || '').trim().toLowerCase();
   if (value === 'exact-first' || value === 'exact-only' || value === 'contains') return value;
@@ -1750,7 +1766,10 @@ ${subsidyAnalysisOverride}
     : '';
 
   const requestPrompt = `${prompt}${festivalConsistencyHint}`;
-  const customId = `blog-${normalizeMatchText(candidate._category).slice(0, 12)}-${normalizeMatchText(sourceId || itemName).slice(0, 32)}`;
+  const categoryKey = toAsciiCategoryKey(candidate._category);
+  const sourceKey = toAsciiAlphaNum(sourceId) || toAsciiAlphaNum(itemName) || 'item';
+  const dayStamp = today.replace(/-/g, '').slice(4);
+  const customId = `blog-${categoryKey}-${sourceKey}-${dayStamp}`;
   return {
     customId,
     prompt: requestPrompt,
