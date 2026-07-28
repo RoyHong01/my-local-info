@@ -246,7 +246,10 @@ async function runAnthropicBlogBatch(options = {}) {
 
   async function guardedSyncFallback(request) {
     budgetGuard.release(request.customId);
-    const estimatedCost = estimateRequestCostKrw(request, config, false);
+    const estimatedOutputTokens = budgetGuard.estimateFallbackOutputTokens(request.maxTokens);
+    const estimatedCost = estimateRequestCostKrw(request, config, false, {
+      outputTokensEstimate: estimatedOutputTokens,
+    });
     if (!budgetGuard.canSpend(estimatedCost)) {
       budgetGuard.stop(
         `warning_budget_stop: fallback 예상 ${Number(budgetGuard.projectedCostKrw + estimatedCost).toFixed(2)}원 / 한도 ${config.dailyBudgetKrw}원`
