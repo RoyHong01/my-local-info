@@ -49,3 +49,6 @@ next-env.d.ts
 # local temporary artifacts
 .chat-import/
 .tmp-run-*.log
+
+# local blind test artifacts (must not be tracked)
+tests/model-ab/
