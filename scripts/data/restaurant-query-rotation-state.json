@@ -1,7 +1,36 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-20T20:32:33.808Z",
+  "updatedAt": "2026-07-28T20:23:39.302Z",
   "recentRuns": [
+    {
+      "at": "2026-07-28T20:23:39.298Z",
+      "comboIds": [
+        "incheon-09",
+        "incheon-10",
+        "incheon-11",
+        "incheon-12",
+        "incheon-13",
+        "incheon-14",
+        "incheon-15",
+        "incheon-01",
+        "seoul-09",
+        "seoul-10",
+        "seoul-11",
+        "seoul-12",
+        "seoul-13",
+        "seoul-14",
+        "seoul-15",
+        "seoul-01",
+        "gyeonggi-09",
+        "gyeonggi-10",
+        "gyeonggi-11",
+        "gyeonggi-12",
+        "gyeonggi-13",
+        "gyeonggi-14",
+        "gyeonggi-15",
+        "gyeonggi-01"
+      ]
+    },
     {
       "at": "2026-07-20T20:32:33.805Z",
       "comboIds": [
@@ -34,8 +63,8 @@
   ],
   "records": {
     "incheon-01": {
-      "lastUsedAt": "2026-07-20T20:32:33.805Z",
-      "usedCount": 1,
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 2,
       "region": "incheon",
       "query": "인천 브런치 카페",
       "category": "브런치",
@@ -106,8 +135,8 @@
       "legacy": true
     },
     "seoul-01": {
-      "lastUsedAt": "2026-07-20T20:32:33.805Z",
-      "usedCount": 1,
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 2,
       "region": "seoul",
       "query": "서울 팝업 근처 맛집",
       "category": "다이닝",
@@ -178,8 +207,8 @@
       "legacy": true
     },
     "gyeonggi-01": {
-      "lastUsedAt": "2026-07-20T20:32:33.805Z",
-      "usedCount": 1,
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 2,
       "region": "gyeonggi",
       "query": "경기 데이트 맛집",
       "category": "다이닝",
@@ -246,6 +275,195 @@
       "region": "gyeonggi",
       "query": "경기 주말 나들이 맛집",
       "category": "다이닝",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-09": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 내추럴 와인바",
+      "category": "와인바",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-10": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 바다뷰 카페",
+      "category": "카페",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-11": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 스테이크 맛집",
+      "category": "스테이크",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-12": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 로컬 맛집",
+      "category": "한식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-13": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 일식 오마카세",
+      "category": "일식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-14": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 노포 맛집",
+      "category": "한식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "incheon-15": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "incheon",
+      "query": "인천 태국음식 맛집",
+      "category": "태국음식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-09": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 브런치 카페",
+      "category": "브런치",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-10": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 에스프레소 바",
+      "category": "카페",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-11": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 로컬 맛집",
+      "category": "다이닝",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-12": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 힙플레이스 맛집",
+      "category": "한식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-13": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 이국적 브런치 맛집",
+      "category": "브런치",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-14": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 스테이크 맛집",
+      "category": "스테이크",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "seoul-15": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "seoul",
+      "query": "서울 디저트 카페",
+      "category": "디저트",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-09": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 카페 맛집",
+      "category": "카페",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-10": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 신도시 브런치 맛집",
+      "category": "브런치",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-11": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 드라이브 파스타 맛집",
+      "category": "파스타",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-12": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 한식 로컬 맛집",
+      "category": "한식",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-13": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 접근성 좋은 맛집",
+      "category": "다이닝",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-14": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 쇼핑몰 근처 맛집",
+      "category": "다이닝",
+      "subregionHint": "",
+      "legacy": true
+    },
+    "gyeonggi-15": {
+      "lastUsedAt": "2026-07-28T20:23:39.298Z",
+      "usedCount": 1,
+      "region": "gyeonggi",
+      "query": "경기 감성 카페",
+      "category": "카페",
       "subregionHint": "",
       "legacy": true
     }
