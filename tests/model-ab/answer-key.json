@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-07-25T00:50:09.291Z",
+  "allowedCalls": 9,
+  "actualCalls": 9,
+  "labels": {
+    "A": {
+      "key": "claude-haiku",
+      "model": "claude-haiku-4-5",
+      "provider": "anthropic"
+    },
+    "B": {
+      "key": "claude-sonnet",
+      "model": "claude-sonnet-5",
+      "provider": "anthropic"
+    },
+    "C": {
+      "key": "gemini",
+      "model": "gemini-3.1-flash-lite",
+      "provider": "gemini"
+    }
+  },
+  "materials": {
+    "festival": {
+      "sourceId": "1307813",
+      "sourceName": "강동선사문화축제"
+    },
+    "subsidy": {
+      "sourceId": "000000465790",
+      "sourceName": "유아학비 (누리과정) 지원"
+    },
+    "curation": {
+      "sourceId": "subsidy-top3-fixed",
+      "sourceName": "전국 보조금·복지 정책 큐레이션"
+    }
+  },
+  "files": [
+    "sample-festival-A.md",
+    "sample-festival-B.md",
+    "sample-festival-C.md",
+    "sample-subsidy-A.md",
+    "sample-subsidy-B.md",
+    "sample-subsidy-C.md",
+    "sample-curation-A.md",
+    "sample-curation-B.md",
+    "sample-curation-C.md"
+  ]
+}
