@@ -5386,6 +5386,63 @@
       "sourceId": "manual-choice-kitchen-2026-07-29",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "7327976713",
+      "productName": "알텐바흐 하이퍼 엑시스 바닥 5중 스텐 프라이팬, 30cm, 1개",
+      "brand": "알텐바흐",
+      "productGroupTokens": [
+        "하이퍼",
+        "엑시스",
+        "바닥",
+        "5중",
+        "스텐",
+        "프라이팬"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "6593633116",
+      "productName": "해피콜 매시브 다이아몬드 IH 프라이팬 4종세트, 1개, 28cm",
+      "brand": "해피콜",
+      "productGroupTokens": [
+        "매시브",
+        "다이아몬드",
+        "ih",
+        "프라이팬",
+        "4종세트",
+        "28cm"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-07-29",
+      "productId": "8765366099",
+      "productName": "Sonipure 수납선반 전자레인지선반 주방선반 다용도 이동 금속 거치대, 흰색, 1개",
+      "brand": "Sonipure",
+      "productGroupTokens": [
+        "수납선반",
+        "전자레인지선반",
+        "주방선반",
+        "다용도",
+        "이동",
+        "금속"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
+      "sourceId": "manual-choice-kitchen-2026-07-29",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
