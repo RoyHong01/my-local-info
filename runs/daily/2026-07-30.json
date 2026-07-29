@@ -1,0 +1,301 @@
+{
+  "reportDateKst": "2026-07-30",
+  "generatedAtUtc": "2026-07-29T20:56:44.934Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30487234290",
+    "runNumber": 917,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30487234290",
+    "runStartedAtUtc": "2026-07-29T20:07:39Z",
+    "headSha": "9166a74e7ca14eaab79a499c2328efd913d73fcd"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://40eccedd.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 5건, 총 620건",
+        "festival": "신규 3건, 업데이트 203건, 총 389건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://2340f709.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://e4564a73.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "149e3cfdc66f71ea8afa74a0b45f027006ad4bc8",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-29",
+      "authoredAt": "2026-07-29T20:56:43Z",
+      "files": [
+        "src/content/life/2026-07-30-gyeonggi-restaurant-165425627.md",
+        "src/content/life/2026-07-30-incheon-restaurant-582450292.md",
+        "src/content/life/2026-07-30-seoul-restaurant-1041123432.md"
+      ]
+    },
+    {
+      "sha": "8234ac13dd1b890241b114c0fbf591f12dcb881e",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-29",
+      "authoredAt": "2026-07-29T20:51:42Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-07-30-choice-digital-2026-07-30.md"
+      ]
+    },
+    {
+      "sha": "e0d99ffdc640c71554db4fe49fc5beec53ba041a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-29",
+      "authoredAt": "2026-07-29T20:50:31Z",
+      "files": [
+        "src/content/posts/2026-07-29-incheon-jumpup-academy.md",
+        "src/content/posts/2026-07-30-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "0e15aef862156995210f31b40b4242cb2874150e",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-29",
+      "authoredAt": "2026-07-29T20:09:40Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-05-09-HaeundaeSandFestival.md",
+        "src/content/posts/2026-06-13-BusanMagicFestival.md",
+        "src/content/posts/2026-06-30-busanbrandfesta.md",
+        "src/content/posts/2026-07-16-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 14,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-05-09-HaeundaeSandFestival.md",
+      "src/content/posts/2026-06-13-BusanMagicFestival.md",
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-29-incheon-jumpup-academy.md",
+      "src/content/posts/2026-07-30-curation-festival.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-07-29-incheon-jumpup-academy.md",
+      "src/content/posts/2026-07-30-curation-festival.md"
+    ],
+    "generatedBlogPostsUpdated": [
+      "src/content/posts/2026-05-09-HaeundaeSandFestival.md",
+      "src/content/posts/2026-06-13-BusanMagicFestival.md",
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-07-16-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-07-30-choice-digital-2026-07-30.md",
+      "src/content/life/2026-07-30-gyeonggi-restaurant-165425627.md",
+      "src/content/life/2026-07-30-incheon-restaurant-582450292.md",
+      "src/content/life/2026-07-30-seoul-restaurant-1041123432.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-07-30-choice-digital-2026-07-30.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-07-30-gyeonggi-restaurant-165425627.md",
+      "src/content/life/2026-07-30-incheon-restaurant-582450292.md",
+      "src/content/life/2026-07-30-seoul-restaurant-1041123432.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-07-30-choice-digital-2026-07-30.md",
+      "src/content/life/2026-07-30-gyeonggi-restaurant-165425627.md",
+      "src/content/life/2026-07-30-incheon-restaurant-582450292.md",
+      "src/content/life/2026-07-30-seoul-restaurant-1041123432.md",
+      "src/content/posts/2026-05-09-HaeundaeSandFestival.md",
+      "src/content/posts/2026-06-13-BusanMagicFestival.md",
+      "src/content/posts/2026-06-30-busanbrandfesta.md",
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-29-incheon-jumpup-academy.md",
+      "src/content/posts/2026-07-30-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 10,
+      "manual": 0,
+      "unknown": 0,
+      "total": 10
+    },
+    "byType": {
+      "blog": {
+        "auto": 6,
+        "manual": 0,
+        "unknown": 0,
+        "total": 6
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01AjWNoyTS6QamCMcPqiHe6w",
+    "batchStatus": "timed_out",
+    "batchDurationMs": 1800102,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 0,
+    "batchFailureCount": 5,
+    "fallbackAttemptedCount": 6,
+    "fallbackSuccessCount": 3,
+    "fallbackFailureCount": 3,
+    "unpublishedCount": 3,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-subsidy-315000000108-0729",
+        "reason": "fallback_failed:529 {\"type\":\"error\",\"error\":{\"type\":\"overloaded_error\",\"message\":\"Overloaded\"},\"request_id\":\"req_011CdX17ugWM2zxf1gzazAy9\"}"
+      },
+      {
+        "customId": "blog-subsidy-401000000497-0729",
+        "reason": "finalize_error:529 {\"type\":\"error\",\"error\":{\"type\":\"overloaded_error\",\"message\":\"Overloaded\"},\"request_id\":\"req_011CdX1B58NGw9SWuk1hSx6w\"}"
+      },
+      {
+        "customId": "blog-festival-2557842-0729",
+        "reason": "warning_budget_stop"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 1633.3695360000002,
+    "actualCostKrw": 208.84945499999998,
+    "budgetWarning": true,
+    "budgetStopped": true,
+    "budgetStopReason": "warning_budget_stop: fallback 예상 1859.49원 / 한도 1500원"
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "1493/539",
+      "markdown": {
+        "generated": 1,
+        "pending": 165,
+        "titles": [
+          "아빠 육아휴직 장려금 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 5건, 총 620건",
+      "validation": "ok",
+      "anthropicUsage": "1239/1118",
+      "markdown": {
+        "generated": 2,
+        "pending": 341,
+        "titles": [
+          "시흥맞춤 명품점포 지원",
+          "소규모 점포 경영개선 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 203건, 총 389건",
+      "validation": "ok",
+      "anthropicUsage": "845/444",
+      "markdown": {
+        "generated": 1,
+        "pending": 278,
+        "titles": [
+          "2026 나이트레이스 인 부산"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_budget_stop",
+    "label": "완료(Anthropic 예산 상한 중단)"
+  }
+}
