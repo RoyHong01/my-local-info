@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-29T00:00:00+09:00",
+  "updatedAtKst": "2026-07-30T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5443,6 +5443,63 @@
       "sourceId": "manual-choice-kitchen-2026-07-29",
       "themeKey": "kitchen",
       "themeName": "주방"
+    },
+    {
+      "date": "2026-07-30",
+      "productId": "9517050490",
+      "productName": "드라이비아 무선 리시버 2.4GHz 동글 블루투스 겸용 듀얼 마우스 2 in 1 DPI 스크롤 속도 변환 초경량 무소음 USB 충전식 에어 스마트 폰 아이패드, 메튜블랙, RGB DRMA1",
+      "brand": "드라이비아",
+      "productGroupTokens": [
+        "리시버",
+        "4ghz",
+        "동글",
+        "블루투스",
+        "겸용",
+        "듀얼"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-30-choice-digital-2026-07-30.md",
+      "sourceId": "manual-choice-digital-2026-07-30",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-30",
+      "productId": "8369793508",
+      "productName": "고속충전 대용량 보조배터리 30000mAh PD 22.5W QC3.0 잔량표시 멀티단자 + 20W C타입 케이블, 블랙-30000mAh, P1",
+      "brand": "고속충전",
+      "productGroupTokens": [
+        "보조배터리",
+        "30000mah",
+        "pd",
+        "5w",
+        "qc3",
+        "잔량표시"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-30-choice-digital-2026-07-30.md",
+      "sourceId": "manual-choice-digital-2026-07-30",
+      "themeKey": "digital",
+      "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-30",
+      "productId": "8708449885",
+      "productName": "필립스 오픈타입 무선 5.4 이어커프 블루투스 이어폰, TAQ2000, 블랙, 28시간, TAQ2000, 블랙",
+      "brand": "필립스",
+      "productGroupTokens": [
+        "오픈타입",
+        "이어커프",
+        "블루투스",
+        "이어폰",
+        "taq2000",
+        "28시간"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-30-choice-digital-2026-07-30.md",
+      "sourceId": "manual-choice-digital-2026-07-30",
+      "themeKey": "digital",
+      "themeName": "디지털"
     }
   ]
 }
