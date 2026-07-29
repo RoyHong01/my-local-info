@@ -229,7 +229,10 @@ class AnthropicBudgetGuard {
 }
 
 async function submitBatch({ client, requests, config = configFromEnv(), budgetGuard }) {
-  const normalized = requests.map((request) => normalizeRequest(request, config));
+  const normalized = requests.map((request) => ({
+    ...request,
+    ...normalizeRequest(request, config),
+  }));
   const accepted = [];
   const budgetStopped = [];
 

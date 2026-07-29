@@ -436,6 +436,60 @@ async function testBlogQualityRetryUsesSameBudgetGuard() {
   assert.strictEqual(budgetGuard.reservedCostKrw, 0);
 }
 
+async function testPreparedContextIsDeliveredToFinalize() {
+  const request = {
+    ...makeRequest('context-pass-through', 'context pipeline check', 120),
+    generator: 'blog',
+    context: {
+      candidate: { _category: '전국 축제·여행', name: '테스트 축제' },
+      category: 'festival',
+      title: '컨텍스트 전달 검증',
+    },
+  };
+  const client = {
+    messages: {
+      batches: {
+        async create() {
+          return { id: 'batch-context', processing_status: 'in_progress' };
+        },
+        async retrieve() {
+          return { id: 'batch-context', processing_status: 'ended' };
+        },
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeResult('context-pass-through', 'context ok');
+          }());
+        },
+      },
+    },
+  };
+  const generator = {
+    name: 'blog',
+    async prepare() {
+      return [request];
+    },
+    async finalize(preparedRequest, modelResult) {
+      assert.strictEqual(modelResult.status, 'succeeded');
+      assert.ok(preparedRequest.context);
+      assert.strictEqual(preparedRequest.context.category, 'festival');
+      assert.strictEqual(preparedRequest.context.title, '컨텍스트 전달 검증');
+      assert.strictEqual(preparedRequest.context.candidate._category, '전국 축제·여행');
+      assert.strictEqual(preparedRequest.context.candidate.name, '테스트 축제');
+      return true;
+    },
+  };
+
+  const outputs = await runAnthropicBlogBatch({
+    client,
+    config: makeConfig(),
+    budgetGuard: new AnthropicBudgetGuard(makeConfig()),
+    generators: [generator],
+  });
+
+  assert.strictEqual(outputs.batch_success_count, 1);
+  assert.strictEqual(outputs.unpublished_count, 0);
+}
+
 async function testRunnerPublishesEveryRequiredGithubOutput() {
   const outputPath = path.join(os.tmpdir(), `anthropic-blog-output-${process.pid}-${Date.now()}.txt`);
   const outputs = Object.fromEntries(OUTPUT_KEYS.map((key) => [key, key === 'budget_enabled']));
@@ -466,6 +520,7 @@ async function run() {
   await testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved();
   await testRunnerBudgetStopPreventsFallbackCall();
   await testBlogQualityRetryUsesSameBudgetGuard();
+  await testPreparedContextIsDeliveredToFinalize();
   await testRunnerPublishesEveryRequiredGithubOutput();
   await testPromptHashIsStable();
   console.log('anthropic-blog-batch fake client tests: PASS');
