@@ -1,10 +1,23 @@
 {
   "meta": {
-    "updatedAt": "2026-07-28T20:23:39.300Z",
-    "lastRecollectAt": "2026-07-28T20:23:39.298Z",
-    "ttlDays": 90
+    "updatedAt": "2026-07-29T06:24:01.272Z",
+    "lastRecollectAt": "2026-07-29T06:24:01.270Z",
+    "ttlDays": 90,
+    "forceRecollectOnceConsumedAt": "2026-07-29T06:24:01.289Z"
   },
   "items": {
+    "7901138": {
+      "rating": 4.3,
+      "userRatingCount": 7,
+      "조회일": "2026-07-29T06:23:04.105Z",
+      "placeId": "ChIJf6o6EMd7ezURCfYCodgKZDQ"
+    },
+    "7901142": {
+      "rating": 3.8,
+      "userRatingCount": 83,
+      "조회일": "2026-07-29T06:23:04.560Z",
+      "placeId": "ChIJjVjpUuZ5ezURFDRqZe2DQ2U"
+    },
     "7948829": {
       "rating": 4.2,
       "userRatingCount": 327,
@@ -83,6 +96,12 @@
       "조회일": "2026-07-19T06:21:19.797Z",
       "placeId": ""
     },
+    "13034445": {
+      "rating": 3.5,
+      "userRatingCount": 4,
+      "조회일": "2026-07-29T06:23:06.861Z",
+      "placeId": "ChIJxag9ZI59ezURKZ7W95Az9iw"
+    },
     "13095795": {
       "rating": 4.3,
       "userRatingCount": 830,
@@ -100,6 +119,12 @@
       "userRatingCount": 118,
       "조회일": "2026-07-19T06:21:19.797Z",
       "placeId": ""
+    },
+    "15932681": {
+      "rating": 3.8,
+      "userRatingCount": 20,
+      "조회일": "2026-07-29T06:23:07.800Z",
+      "placeId": "ChIJHcnMjQd9ezUREXQUF4ZGaso"
     },
     "16050660": {
       "rating": 4.4,
@@ -119,11 +144,29 @@
       "조회일": "2026-07-19T06:21:19.797Z",
       "placeId": ""
     },
+    "16155149": {
+      "rating": 3.9,
+      "userRatingCount": 72,
+      "조회일": "2026-07-29T06:23:05.969Z",
+      "placeId": "ChIJK6RwwV15ezURmYBZ1JxHYlc"
+    },
+    "16568915": {
+      "rating": 4,
+      "userRatingCount": 27,
+      "조회일": "2026-07-29T06:23:03.646Z",
+      "placeId": "ChIJj4wrb454ezUR_myaO_hDrPU"
+    },
     "16577567": {
       "rating": 5,
       "userRatingCount": 1,
       "조회일": "2026-07-20T20:31:37.069Z",
       "placeId": "ChIJvWJ1AwCBfDURDGoWg00B-Nc"
+    },
+    "16969185": {
+      "rating": 3.4,
+      "userRatingCount": 32,
+      "조회일": "2026-07-29T06:23:07.332Z",
+      "placeId": "ChIJ7ZgGaeh7ezURqmjKfKVLoXs"
     },
     "17150937": {
       "rating": 4.2,
@@ -299,6 +342,12 @@
       "조회일": "2026-07-19T06:15:14.945Z",
       "placeId": "ChIJlw7JcNCYfDURAGaTo2fpgng"
     },
+    "24580752": {
+      "rating": 4.4,
+      "userRatingCount": 190,
+      "조회일": "2026-07-29T06:23:08.204Z",
+      "placeId": "ChIJy3TngtB7ezURJ9BK5B8BCN8"
+    },
     "24786161": {
       "rating": 4.6,
       "userRatingCount": 660,
@@ -377,6 +426,12 @@
       "조회일": "2026-07-19T06:15:12.997Z",
       "placeId": "ChIJDwEzUtCYfDURWFe9LyyXCp8"
     },
+    "27463884": {
+      "rating": 4.4,
+      "userRatingCount": 694,
+      "조회일": "2026-07-29T06:23:09.509Z",
+      "placeId": "ChIJxd7b96B3ezURlPSTt8adyis"
+    },
     "27467246": {
       "rating": 4,
       "userRatingCount": 1,
@@ -406,6 +461,12 @@
       "userRatingCount": 71,
       "조회일": "2026-07-28T20:23:01.480Z",
       "placeId": "ChIJraND3beZfDURLtk2IEj3DcI"
+    },
+    "37149601": {
+      "rating": 4.6,
+      "userRatingCount": 14,
+      "조회일": "2026-07-29T06:23:01.166Z",
+      "placeId": "ChIJ65SFegB3ezURcJpQwX2jcJ0"
     },
     "38432219": {
       "rating": 4.5,
@@ -755,6 +816,12 @@
       "조회일": "2026-07-19T06:15:33.591Z",
       "placeId": "ChIJO1opIKulfDURfJOlG9F3cRM"
     },
+    "378907987": {
+      "rating": 4,
+      "userRatingCount": 1,
+      "조회일": "2026-07-29T06:23:05.454Z",
+      "placeId": "ChIJqVREORx3ezURcTF2s3FzaA0"
+    },
     "381900374": {
       "rating": 4.8,
       "userRatingCount": 17,
@@ -838,6 +905,12 @@
       "userRatingCount": 2,
       "조회일": "2026-07-28T20:22:17.939Z",
       "placeId": "ChIJcY6MO0Z8ezURr0vVMLaS5Vw"
+    },
+    "444870666": {
+      "rating": 5,
+      "userRatingCount": 2,
+      "조회일": "2026-07-29T06:23:06.399Z",
+      "placeId": "ChIJJVbZXwCbezURStMSmKGndnI"
     },
     "445276408": {
       "rating": 4.3,
@@ -1229,6 +1302,12 @@
       "조회일": "2026-07-19T06:14:33.955Z",
       "placeId": "ChIJRdGWBQV7ezURIWB6jSnidx8"
     },
+    "828858958": {
+      "rating": 4.2,
+      "userRatingCount": 812,
+      "조회일": "2026-07-29T06:23:10.280Z",
+      "placeId": "ChIJd46U1sl7ezURvznAAQ-0LBA"
+    },
     "830578493": {
       "rating": 4.8,
       "userRatingCount": 15,
@@ -1348,6 +1427,18 @@
       "userRatingCount": 15,
       "조회일": "2026-07-19T06:16:00.335Z",
       "placeId": "ChIJEY1fh7pPYzUREN9SdGjSQ1Y"
+    },
+    "920751786": {
+      "rating": 4.6,
+      "userRatingCount": 7,
+      "조회일": "2026-07-29T06:23:50.301Z",
+      "placeId": "ChIJIXMnpI5bezURn22jmy1Nr48"
+    },
+    "922769591": {
+      "rating": 2.7,
+      "userRatingCount": 3,
+      "조회일": "2026-07-29T06:23:04.990Z",
+      "placeId": "ChIJ-2jFUoCCfDURpNmerQLTNlg"
     },
     "927730959": {
       "rating": 4.3,
@@ -1625,6 +1716,12 @@
       "조회일": "2026-07-19T06:15:42.866Z",
       "placeId": "ChIJ6VSeJDVDezURWh6X66P6zp4"
     },
+    "1240314468": {
+      "rating": 4.8,
+      "userRatingCount": 25,
+      "조회일": "2026-07-29T06:23:32.183Z",
+      "placeId": "ChIJfWwRSIOhfDURo2Med4FmhG8"
+    },
     "1244516032": {
       "rating": 4.6,
       "userRatingCount": 25,
@@ -1876,6 +1973,12 @@
       "userRatingCount": 216,
       "조회일": "2026-07-20T20:32:01.403Z",
       "placeId": "ChIJg5zT-xqlfDURda7QliuUd24"
+    },
+    "1455161506": {
+      "rating": 4.2,
+      "userRatingCount": 2002,
+      "조회일": "2026-07-29T06:23:54.512Z",
+      "placeId": "ChIJk0wE3vuNfDURIza4P3GKiWI"
     },
     "1459865625": {
       "rating": 4.5,
@@ -2134,6 +2237,12 @@
       "userRatingCount": 75,
       "조회일": "2026-07-28T20:22:19.585Z",
       "placeId": "ChIJQeUsiUR3ezUROeAb-qdarTU"
+    },
+    "1773519518": {
+      "rating": 4.7,
+      "userRatingCount": 12,
+      "조회일": "2026-07-29T06:23:11.004Z",
+      "placeId": "ChIJWbKwDAB_ezUR4eyWTFDcCno"
     },
     "1773829778": {
       "rating": 4.2,
@@ -2494,6 +2603,12 @@
       "userRatingCount": 774,
       "조회일": "2026-07-19T06:14:45.775Z",
       "placeId": "ChIJTfHCDbF3fDURn9a3bNJghl0"
+    },
+    "2084680187": {
+      "rating": null,
+      "userRatingCount": null,
+      "조회일": "2026-07-29T06:22:54.193Z",
+      "placeId": "ChIJt9BaEAB7ezURyfzlrxNX_lI"
     },
     "2090519049": {
       "rating": 4.2,

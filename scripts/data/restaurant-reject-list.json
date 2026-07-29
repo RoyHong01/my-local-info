@@ -1,11 +1,20 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-28T20:23:39.302Z",
+  "updatedAt": "2026-07-29T06:24:01.273Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
   },
   "items": {
+    "7901142": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 83,
+      "checkedAt": "2026-07-29T06:23:04.560Z",
+      "kakaoId": "7901142",
+      "firstSeenAt": "2026-07-29T06:23:04.560Z",
+      "lastSeenAt": "2026-07-29T06:23:04.560Z"
+    },
     "9175466": {
       "reason": "low_rating",
       "rating": 4,
@@ -32,6 +41,51 @@
       "kakaoId": "10681455",
       "firstSeenAt": "2026-07-28T20:22:17.470Z",
       "lastSeenAt": "2026-07-28T20:22:17.470Z"
+    },
+    "13034445": {
+      "reason": "low_rating",
+      "rating": 3.5,
+      "reviewCount": 4,
+      "checkedAt": "2026-07-29T06:23:06.861Z",
+      "kakaoId": "13034445",
+      "firstSeenAt": "2026-07-29T06:23:06.861Z",
+      "lastSeenAt": "2026-07-29T06:23:06.861Z"
+    },
+    "15932681": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 20,
+      "checkedAt": "2026-07-29T06:23:07.800Z",
+      "kakaoId": "15932681",
+      "firstSeenAt": "2026-07-29T06:23:07.800Z",
+      "lastSeenAt": "2026-07-29T06:23:07.800Z"
+    },
+    "16155149": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 72,
+      "checkedAt": "2026-07-29T06:23:05.969Z",
+      "kakaoId": "16155149",
+      "firstSeenAt": "2026-07-29T06:23:05.969Z",
+      "lastSeenAt": "2026-07-29T06:23:05.969Z"
+    },
+    "16568915": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 27,
+      "checkedAt": "2026-07-29T06:23:03.646Z",
+      "kakaoId": "16568915",
+      "firstSeenAt": "2026-07-29T06:23:03.647Z",
+      "lastSeenAt": "2026-07-29T06:23:03.647Z"
+    },
+    "16969185": {
+      "reason": "low_rating",
+      "rating": 3.4,
+      "reviewCount": 32,
+      "checkedAt": "2026-07-29T06:23:07.332Z",
+      "kakaoId": "16969185",
+      "firstSeenAt": "2026-07-29T06:23:07.332Z",
+      "lastSeenAt": "2026-07-29T06:23:07.332Z"
     },
     "17187804": {
       "reason": "low_rating",
@@ -158,6 +212,15 @@
       "kakaoId": "354755930",
       "firstSeenAt": "2026-07-20T20:31:51.570Z",
       "lastSeenAt": "2026-07-20T20:31:51.570Z"
+    },
+    "378907987": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-07-29T06:23:05.454Z",
+      "kakaoId": "378907987",
+      "firstSeenAt": "2026-07-29T06:23:05.454Z",
+      "lastSeenAt": "2026-07-29T06:23:05.454Z"
     },
     "412368591": {
       "reason": "low_rating",
@@ -293,6 +356,15 @@
       "kakaoId": "899761938",
       "firstSeenAt": "2026-07-20T20:32:21.499Z",
       "lastSeenAt": "2026-07-20T20:32:21.499Z"
+    },
+    "922769591": {
+      "reason": "low_rating",
+      "rating": 2.7,
+      "reviewCount": 3,
+      "checkedAt": "2026-07-29T06:23:04.990Z",
+      "kakaoId": "922769591",
+      "firstSeenAt": "2026-07-29T06:23:04.990Z",
+      "lastSeenAt": "2026-07-29T06:23:04.990Z"
     },
     "932122137": {
       "reason": "low_rating",
