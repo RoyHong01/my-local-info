@@ -1,22 +1,22 @@
 {
   "reportDateKst": "2026-07-29",
-  "generatedAtUtc": "2026-07-28T20:28:57.516Z",
+  "generatedAtUtc": "2026-07-29T06:29:13.337Z",
   "workflow": {
     "name": "Daily Update & Deploy",
     "repository": "RoyHong01/my-local-info",
-    "runId": "30395142437",
-    "runNumber": 914,
+    "runId": "30427157684",
+    "runNumber": 915,
     "runAttempt": 1,
-    "eventName": "schedule",
-    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30395142437",
-    "runStartedAtUtc": "2026-07-28T20:10:17Z",
-    "headSha": "97d28c4caa921f90fee1be1511d1f2115dc0561f"
+    "eventName": "workflow_dispatch",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30427157684",
+    "runStartedAtUtc": "2026-07-29T06:07:39Z",
+    "headSha": "dae86ff15aa64e2ac4d8580034de1f07076c1ce9"
   },
   "stages": [
     {
       "key": "stage1-data",
       "title": "1단계: 공공데이터 수집/만료처리",
-      "deployUrl": "https://6f72cdb8.my-local-info-2gs.pages.dev",
+      "deployUrl": "https://6b347d70.my-local-info-2gs.pages.dev",
       "steps": {
         "collectIncheon": "success",
         "collectSubsidy": "success",
@@ -28,15 +28,15 @@
       },
       "collectSummary": {
         "incheon": "신규 0건, 총 352건",
-        "subsidy": "신규 3건, 총 618건",
-        "festival": "신규 7건, 업데이트 196건, 총 386건"
+        "subsidy": "신규 0건, 총 618건",
+        "festival": "신규 0건, 업데이트 203건, 총 386건"
       },
       "status": "success"
     },
     {
       "key": "stage2-blog",
       "title": "2단계: AI 블로그 생성",
-      "deployUrl": "https://37289cb4.my-local-info-2gs.pages.dev",
+      "deployUrl": "https://dd4a6b9a.my-local-info-2gs.pages.dev",
       "steps": {
         "generateAnthropicBlog": "success",
         "generateChoice": "success",
@@ -49,7 +49,7 @@
     {
       "key": "stage3-life",
       "title": "3단계: 일상의 즐거움 맛집",
-      "deployUrl": "https://ffcf1d55.my-local-info-2gs.pages.dev",
+      "deployUrl": "https://b19d8f9b.my-local-info-2gs.pages.dev",
       "steps": {
         "collectRestaurants": "success",
         "generateRestaurantPosts": "success",
@@ -62,32 +62,32 @@
   ],
   "commits": [
     {
-      "sha": "60a42b0807e59280c1d9131834eb3fe622930017",
-      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-28",
-      "authoredAt": "2026-07-28T20:28:56Z",
+      "sha": "b757c62c716e79f973a22a69304a5f010e727837",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-29",
+      "authoredAt": "2026-07-29T06:29:12Z",
       "files": [
         "scripts/data/google-ratings-cache.json",
         "scripts/data/restaurant-query-rotation-state.json",
         "scripts/data/restaurant-reject-list.json",
         "src/app/life/restaurant/data/restaurants.json",
-        "src/content/life/2026-07-29-gangnam-restaurant-19232112.md",
-        "src/content/life/2026-07-29-gyeonggi-restaurant-2029508575.md",
-        "src/content/life/2026-07-29-incheon-restaurant-2001007653.md"
+        "src/content/life/2026-07-29-incheon-restaurant-24482432.md",
+        "src/content/life/2026-07-29-seoul-restaurant-1240314468.md",
+        "src/content/life/2026-07-29-suwon-restaurant-1382624826.md"
       ]
     },
     {
-      "sha": "026ce179c841140d7c5f5ae84e473a674f12ea36",
-      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-28",
-      "authoredAt": "2026-07-28T20:22:03Z",
+      "sha": "93569b9e402777c16e2aff874471c7f2b4b8cabb",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-29",
+      "authoredAt": "2026-07-29T06:22:46Z",
       "files": [
         "scripts/data/recommended-products.json",
         "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md"
       ]
     },
     {
-      "sha": "a40b7247a5eb34ef1a94e2cb1491bfcfd3879790",
-      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-28",
-      "authoredAt": "2026-07-28T20:12:39Z",
+      "sha": "2058118c8dac3e11eb5c105958d8c98ccec42d6b",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-29",
+      "authoredAt": "2026-07-29T06:10:23Z",
       "files": [
         "public/data/festival.json",
         "public/data/incheon.json",
@@ -108,17 +108,17 @@
     "generatedBlogPostsUpdated": [],
     "generatedLifePosts": [
       "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
-      "src/content/life/2026-07-29-gangnam-restaurant-19232112.md",
-      "src/content/life/2026-07-29-gyeonggi-restaurant-2029508575.md",
-      "src/content/life/2026-07-29-incheon-restaurant-2001007653.md"
+      "src/content/life/2026-07-29-incheon-restaurant-24482432.md",
+      "src/content/life/2026-07-29-seoul-restaurant-1240314468.md",
+      "src/content/life/2026-07-29-suwon-restaurant-1382624826.md"
     ],
     "generatedChoicePosts": [
       "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md"
     ],
     "generatedRestaurantPosts": [
-      "src/content/life/2026-07-29-gangnam-restaurant-19232112.md",
-      "src/content/life/2026-07-29-gyeonggi-restaurant-2029508575.md",
-      "src/content/life/2026-07-29-incheon-restaurant-2001007653.md"
+      "src/content/life/2026-07-29-incheon-restaurant-24482432.md",
+      "src/content/life/2026-07-29-seoul-restaurant-1240314468.md",
+      "src/content/life/2026-07-29-suwon-restaurant-1382624826.md"
     ],
     "allChangedFiles": [
       "public/data/festival.json",
@@ -130,9 +130,9 @@
       "scripts/data/restaurant-reject-list.json",
       "src/app/life/restaurant/data/restaurants.json",
       "src/content/life/2026-07-29-choice-kitchen-2026-07-29.md",
-      "src/content/life/2026-07-29-gangnam-restaurant-19232112.md",
-      "src/content/life/2026-07-29-gyeonggi-restaurant-2029508575.md",
-      "src/content/life/2026-07-29-incheon-restaurant-2001007653.md"
+      "src/content/life/2026-07-29-incheon-restaurant-24482432.md",
+      "src/content/life/2026-07-29-seoul-restaurant-1240314468.md",
+      "src/content/life/2026-07-29-suwon-restaurant-1382624826.md"
     ]
   },
   "publicationStats": {
@@ -170,46 +170,46 @@
   },
   "anthropicGeneration": {
     "model": "claude-sonnet-5",
-    "batchId": "",
-    "batchStatus": "submit_or_poll_failed",
-    "batchDurationMs": 301,
+    "batchId": "msgbatch_01SVBpj17wzZJpW2cWxwkR1B",
+    "batchStatus": "ended",
+    "batchDurationMs": 121293,
     "batchRequestCount": 5,
-    "batchSuccessCount": 0,
-    "batchFailureCount": 5,
-    "fallbackAttemptedCount": 4,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
     "fallbackSuccessCount": 0,
-    "fallbackFailureCount": 4,
+    "fallbackFailureCount": 0,
     "unpublishedCount": 5,
     "unpublishedReasons": [
       {
-        "customId": "blog-incheon-o00090500001-0728",
-        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdV58y5PMmVE1qhs6bdzA\"}"
+        "customId": "blog-incheon-o00090500001-0729",
+        "reason": "finalize_error:Cannot destructure property 'candidate' of 'preparedRequest.context' as it is undefined."
       },
       {
-        "customId": "blog-subsidy-315000000108-0728",
-        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdV58yZQbtBmjHbgmMpbE\"}"
+        "customId": "blog-subsidy-315000000108-0729",
+        "reason": "finalize_error:Cannot destructure property 'candidate' of 'preparedRequest.context' as it is undefined."
       },
       {
-        "customId": "blog-subsidy-161300000088-0728",
-        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdV58z4vNrkudNBac7X9J\"}"
+        "customId": "blog-subsidy-161300000088-0729",
+        "reason": "finalize_error:Cannot destructure property 'candidate' of 'preparedRequest.context' as it is undefined."
       },
       {
-        "customId": "blog-festival-2557842-0728",
-        "reason": "warning_budget_stop"
+        "customId": "blog-festival-2557842-0729",
+        "reason": "finalize_error:Cannot destructure property 'candidate' of 'preparedRequest.context' as it is undefined."
       },
       {
         "customId": "curation-2026-07-29-subsidy-1",
-        "reason": "fallback_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011CdV58zetfZHvECEfUkGFd\"}"
+        "reason": "finalize_error:Cannot destructure property 'category' of 'preparedRequest.context' as it is undefined."
       }
     ],
     "budgetEnabled": true,
     "budgetLimitKrw": 1500,
     "budgetWarnThresholdKrw": 1200,
-    "estimatedCostKrw": 309.29787899999997,
-    "actualCostKrw": 0,
+    "estimatedCostKrw": 1221.1586729999997,
+    "actualCostKrw": 1283.789304,
     "budgetWarning": true,
-    "budgetStopped": true,
-    "budgetStopReason": "warning_budget_stop: fallback 예상 1645.41원 / 한도 1500원"
+    "budgetStopped": false,
+    "budgetStopReason": ""
   },
   "imagePolicy": {
     "midImageInsertedCount": 0,
@@ -217,9 +217,9 @@
   },
   "restaurantCache": {
     "recollectPerformed": true,
-    "cacheHit": 62,
-    "cacheMiss": 78,
-    "googleCalled": 78,
+    "cacheHit": 104,
+    "cacheMiss": 19,
+    "googleCalled": 19,
     "googleCallCapReached": false,
     "googleCallCapLimit": 50,
     "googleCallsBlockedByCap": 0,
@@ -235,12 +235,12 @@
     "incheon": {
       "summary": "신규 0건, 총 352건",
       "validation": "ok",
-      "anthropicUsage": "868/670",
+      "anthropicUsage": "530/457",
       "markdown": {
         "generated": 1,
-        "pending": 166,
+        "pending": 165,
         "titles": [
-          "아이모아카드"
+          "중·고교신입생 무상교복 지원"
         ]
       },
       "photoApi": {
@@ -250,27 +250,27 @@
       }
     },
     "subsidy": {
-      "summary": "신규 3건, 총 618건",
+      "summary": "신규 0건, 총 618건",
       "validation": "ok",
-      "anthropicUsage": "3454/1151",
+      "anthropicUsage": "1641/1035",
       "markdown": {
         "generated": 2,
-        "pending": 341,
+        "pending": 339,
         "titles": [
-          "화순군 청년 자격증 응시료 지원사업",
-          "국가장학금 Ⅱ유형 (대학자체노력연계형)"
+          "청년 복지포인트",
+          "영유아 양육비 지원"
         ]
       }
     },
     "festival": {
-      "summary": "신규 7건, 업데이트 196건, 총 386건",
+      "summary": "신규 0건, 업데이트 203건, 총 386건",
       "validation": "ok",
-      "anthropicUsage": "862/513",
+      "anthropicUsage": "892/509",
       "markdown": {
         "generated": 1,
-        "pending": 277,
+        "pending": 276,
         "titles": [
-          "거문도백도 은빛바다체험행사"
+          "2026년 제26회 밀양공연예술축제"
         ]
       },
       "photoFallback": 0
@@ -278,7 +278,7 @@
   },
   "overall": {
     "level": "warning",
-    "code": "warning_budget_stop",
-    "label": "완료(Anthropic 예산 상한 중단)"
+    "code": "warning_anthropic_unpublished",
+    "label": "완료(Anthropic 미발행 5건)"
   }
 }
