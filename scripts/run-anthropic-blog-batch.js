@@ -14,8 +14,8 @@ const {
   submitBatch,
 } = require('./lib/anthropic-blog-batch');
 
-const FIXED_POLL_INTERVAL_MS = 20_000;
-const FIXED_TIMEOUT_MS = 1_800_000;
+const FIXED_POLL_INTERVAL_MS = 300_000;
+const FIXED_TIMEOUT_MS = 21_600_000;
 
 const OUTPUT_KEYS = [
   'model',

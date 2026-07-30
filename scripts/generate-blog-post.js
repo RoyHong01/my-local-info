@@ -1818,7 +1818,14 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
   } = preparedRequest.context;
   let generatedText = '';
   let lastFinishReason = '';
-  const maxAttempts = 3;
+  const maxAttempts = 2;
+
+  const isOverloadedError = (error) => {
+    const message = String(error?.message || error || '').toLowerCase();
+    return message.includes('529')
+      || message.includes('overloaded')
+      || message.includes('overload');
+  };
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const retryHint = attempt > 1
@@ -1847,8 +1854,13 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
         throw err;
       }
       if (attempt < maxAttempts) {
-        console.warn(`  ⚠️ Gemini 호출 실패(시도 ${attempt}/${maxAttempts}): ${err.message}`);
-        await sleep(2000);
+        if (isOverloadedError(err)) {
+          console.warn(`  ⚠️ Anthropic overloaded(529) 감지. 짧게 1회 재시도합니다 (${attempt}/${maxAttempts})`);
+          await sleep(1000);
+        } else {
+          console.warn(`  ⚠️ Gemini 호출 실패(시도 ${attempt}/${maxAttempts}): ${err.message}`);
+          await sleep(2000);
+        }
         continue;
       }
       throw err;

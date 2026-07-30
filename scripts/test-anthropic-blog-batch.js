@@ -16,6 +16,8 @@ const {
   submitBatch,
 } = require('./lib/anthropic-blog-batch');
 const {
+  FIXED_POLL_INTERVAL_MS,
+  FIXED_TIMEOUT_MS,
   OUTPUT_KEYS,
   publishGithubOutputs,
   runAnthropicBlogBatch,
@@ -385,7 +387,7 @@ async function testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved() {
     now: () => nowMs,
     sleepFn: async (ms) => {
       sleepDurations.push(ms);
-      nowMs += ms * 30;
+      nowMs += ms * 12;
     },
   });
 
@@ -393,9 +395,9 @@ async function testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved() {
   assert.strictEqual(cancelCalls, 1);
   assert.strictEqual(syncCalls, 1);
   assert.ok(sleepDurations.length > 0);
-  assert.ok(sleepDurations.every((ms) => ms === 20_000));
+  assert.ok(sleepDurations.every((ms) => ms === FIXED_POLL_INTERVAL_MS));
   assert.strictEqual(outputs.batch_status, 'timed_out');
-  assert.strictEqual(outputs.batch_duration_ms, 1_800_000);
+  assert.strictEqual(outputs.batch_duration_ms, FIXED_TIMEOUT_MS);
   assert.strictEqual(outputs.batch_success_count, 1);
   assert.strictEqual(outputs.batch_failure_count, 1);
   assert.strictEqual(outputs.fallback_attempted_count, 1);

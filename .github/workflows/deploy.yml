@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 19 * * *'
+    - cron: '0 16 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -44,7 +44,7 @@ jobs:
   update-and-deploy:
     if: ${{ github.event_name != 'push' || github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -194,14 +194,14 @@ jobs:
         id: generate_anthropic_blog
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: node scripts/run-anthropic-blog-batch.js
-        timeout-minutes: 45
+        timeout-minutes: 360
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_BLOG_MODEL: 'claude-sonnet-5'
           ANTHROPIC_DAILY_BUDGET_KRW: '1500'
           ANTHROPIC_BUDGET_WARN_RATIO: '0.8'
-          ANTHROPIC_BATCH_POLL_INTERVAL_MS: '20000'
-          ANTHROPIC_BATCH_TIMEOUT_MS: '1800000'
+          ANTHROPIC_BATCH_POLL_INTERVAL_MS: '300000'
+          ANTHROPIC_BATCH_TIMEOUT_MS: '21600000'
           CURATION_COUNT: '1'
           CURATION_TOP_N: '5'
           BLOG_MAX_GENERATION_SECONDS: '900'
