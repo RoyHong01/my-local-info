@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-30T00:00:00+09:00",
+  "updatedAtKst": "2026-07-31T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5500,6 +5500,63 @@
       "sourceId": "manual-choice-digital-2026-07-30",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-07-31",
+      "productId": "9664968723",
+      "productName": "[브티나는 생활] 풀패키지 패드 5팩+펫티슈 14종+체험키트 깔끔쟁이 브라이언의 선택 배변패드",
+      "brand": "풀패키지",
+      "productGroupTokens": [
+        "브티나는",
+        "생활",
+        "패드",
+        "5팩",
+        "펫티슈",
+        "14종"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-31-choice-pet-life-2026-07-31.md",
+      "sourceId": "manual-choice-pet-life-2026-07-31",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-31",
+      "productId": "7885056670",
+      "productName": "내꼬냥 고양이 프리미엄 두부벤토 모래 6in1 MAXMI6, 2.5kg, 6개, 무향",
+      "brand": "내꼬냥",
+      "productGroupTokens": [
+        "고양이",
+        "두부벤토",
+        "모래",
+        "6in1",
+        "maxmi6",
+        "5kg"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-31-choice-pet-life-2026-07-31.md",
+      "sourceId": "manual-choice-pet-life-2026-07-31",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-07-31",
+      "productId": "8129382339",
+      "productName": "졸리마켓 강아지 졸리의 행복한 간식 상점 껌, 오리우유껌, 1kg, 1개",
+      "brand": "졸리마켓",
+      "productGroupTokens": [
+        "강아지",
+        "졸리의",
+        "행복한",
+        "간식",
+        "상점",
+        "오리우유껌"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-07-31-choice-pet-life-2026-07-31.md",
+      "sourceId": "manual-choice-pet-life-2026-07-31",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
