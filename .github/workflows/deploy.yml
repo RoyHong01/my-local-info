@@ -449,6 +449,12 @@ jobs:
           DEPLOY_STAGE1_OUTCOME: ${{ steps.deploy_stage1.outcome }}
           DEPLOY_STAGE1_URL: ${{ steps.deploy_stage1.outputs.deploy_url }}
           GENERATE_ANTHROPIC_BLOG_OUTCOME: ${{ steps.generate_anthropic_blog.outcome }}
+          GENERATE_EDITOR_NOTES_OUTCOME: ${{ steps.generate_editor_notes.outcome }}
+          EDITOR_NOTES_GENERATED: ${{ steps.generate_editor_notes.outputs.editor_notes_generated }}
+          EDITOR_NOTES_ERRORS: ${{ steps.generate_editor_notes.outputs.editor_notes_errors }}
+          EDITOR_NOTES_INPUT_TOKENS: ${{ steps.generate_editor_notes.outputs.editor_notes_input_tokens }}
+          EDITOR_NOTES_OUTPUT_TOKENS: ${{ steps.generate_editor_notes.outputs.editor_notes_output_tokens }}
+          EDITOR_NOTES_COST_KRW: ${{ steps.generate_editor_notes.outputs.editor_notes_cost_krw }}
           GENERATE_CHOICE_OUTCOME: ${{ steps.generate_choice.outcome }}
           GENERATE_CHOICE_FAILURE_REASON: ${{ steps.generate_choice.outputs.failure_reason }}
           CHOICE_RELAXED_FALLBACK_APPLIED_COUNT: ${{ steps.generate_choice.outputs.relaxed_fallback_applied_count }}

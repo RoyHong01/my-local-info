@@ -449,6 +449,10 @@ function toMarkdown(report) {
     lines.push(`| Anthropic 미발행 | ${anthropic.unpublishedCount}건 |`);
     lines.push(`| Anthropic 비용(추정/실제) | ${Number(anthropic.estimatedCostKrw || 0).toFixed(2)}원 / ${Number(anthropic.actualCostKrw || 0).toFixed(2)}원 |`);
   }
+  if (report.anthropicHaikuData) {
+    const haiku = report.anthropicHaikuData;
+    lines.push(`| Anthropic Haiku(데이터작업) | ${Number(haiku.costKrw || 0).toFixed(2)}원 (${Number(haiku.inputTokens || 0)}/${Number(haiku.outputTokens || 0)} tokens) |`);
+  }
   lines.push('');
 
   lines.push('## 🧮 발행/Fallback 통계');
@@ -486,6 +490,19 @@ function toMarkdown(report) {
     if (anthropic.unpublishedReasons.length > 0) {
       lines.push(`| 미발행 사유 | ${anthropic.unpublishedReasons.map((item) => `${item.customId}: ${item.reason}`).join('<br>')} |`);
     }
+    lines.push('');
+  }
+
+  if (report.anthropicHaikuData) {
+    const haiku = report.anthropicHaikuData;
+    lines.push('## 🧪 Anthropic Haiku 데이터 작업 비용');
+    lines.push('');
+    lines.push('| 항목 | 값 |');
+    lines.push('|---|---|');
+    lines.push(`| 실행 결과 | ${statusEmoji(haiku.outcome)} ${toKoreanStatus(haiku.outcome)} |`);
+    lines.push(`| editor_note 생성/실패 | ${Number(haiku.generated || 0)} / ${Number(haiku.errors || 0)} |`);
+    lines.push(`| 입력/출력 토큰 | ${Number(haiku.inputTokens || 0)} / ${Number(haiku.outputTokens || 0)} |`);
+    lines.push(`| 추정 비용(KRW) | ${Number(haiku.costKrw || 0).toFixed(2)}원 |`);
     lines.push('');
   }
 
@@ -638,6 +655,7 @@ async function updateIndex(indexPath, report) {
     anthropicUnpublishedCount: Number(report.anthropicGeneration?.unpublishedCount || 0),
     anthropicBudgetStopped: !!report.anthropicGeneration?.budgetStopped,
     anthropicActualCostKrw: Number(report.anthropicGeneration?.actualCostKrw || 0),
+    anthropicHaikuDataCostKrw: Number(report.anthropicHaikuData?.costKrw || 0),
     midImageInsertedCount: Number(report.imagePolicy?.midImageInsertedCount || 0),
     midImageOmittedCount: Number(report.imagePolicy?.midImageOmittedCount || 0),
     generatedAtUtc: report.generatedAtUtc,
@@ -718,6 +736,14 @@ async function main() {
       budgetWarning: normalizeBoolean(process.env.ANTHROPIC_GENERATION_BUDGET_WARNING),
       budgetStopped: normalizeBoolean(process.env.ANTHROPIC_GENERATION_BUDGET_STOPPED),
       budgetStopReason: process.env.ANTHROPIC_GENERATION_BUDGET_STOP_REASON || '',
+    },
+    anthropicHaikuData: {
+      outcome: normalizeOutcome(process.env.GENERATE_EDITOR_NOTES_OUTCOME),
+      generated: Number(process.env.EDITOR_NOTES_GENERATED || 0),
+      errors: Number(process.env.EDITOR_NOTES_ERRORS || 0),
+      inputTokens: Number(process.env.EDITOR_NOTES_INPUT_TOKENS || 0),
+      outputTokens: Number(process.env.EDITOR_NOTES_OUTPUT_TOKENS || 0),
+      costKrw: Number(process.env.EDITOR_NOTES_COST_KRW || 0),
     },
     imagePolicy: {
       midImageInsertedCount: Number(process.env.MID_IMAGE_INSERTED_COUNT || 0),

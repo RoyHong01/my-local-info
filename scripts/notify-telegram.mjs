@@ -155,6 +155,7 @@ async function buildMessage(report) {
   const lifeCount = generatedRestaurantPosts.length;
   const totalFiles = report.changes?.totalChangedFiles ?? 0;
   const anthropicGeneration = report.anthropicGeneration || {};
+  const anthropicHaikuData = report.anthropicHaikuData || {};
   const legacyBudget = report.budget || {};
   const imagePolicy = report.imagePolicy || {};
   const restaurantCache = report.restaurantCache || {};
@@ -227,6 +228,7 @@ async function buildMessage(report) {
     ? anthropicGeneration.unpublishedReasons
     : [];
   const anthropicUnpublishedLine = `📭 Anthropic 미발행: ${Number(anthropicGeneration.unpublishedCount || 0)}건${unpublishedReasons.length > 0 ? ` (${unpublishedReasons.map((item) => `${item.customId}: ${item.reason}`).join(' / ')})` : ''}`;
+  const haikuCostLine = `🧪 Haiku 데이터작업 비용: ${Number(anthropicHaikuData.costKrw || 0).toFixed(1)}원 (tokens ${Number(anthropicHaikuData.inputTokens || 0)}/${Number(anthropicHaikuData.outputTokens || 0)})`;
 
   // 데이터 수집 결과 한 줄 포맷
   function stepIcon(outcome) {
@@ -297,6 +299,7 @@ async function buildMessage(report) {
     googleCapReached ? `⚠️ Google 신규조회 상한 도달: limit ${googleCapLimit}, blocked ${googleBlockedByCap}` : '✅ Google 신규조회 상한 미도달',
     `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
     anthropicCostLine,
+    haikuCostLine,
     anthropicBatchLine,
     anthropicFallbackLine,
     anthropicUnpublishedLine,

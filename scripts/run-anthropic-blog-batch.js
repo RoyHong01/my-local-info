@@ -244,11 +244,15 @@ async function runAnthropicBlogBatch(options = {}) {
   outputs.batch_success_count = [...batchResults.values()].filter((result) => result?.status === 'succeeded').length;
   outputs.batch_failure_count = Math.max(0, acceptedIds.size - outputs.batch_success_count);
 
-  async function guardedSyncFallback(request) {
+  async function guardedSyncFallback(request, previousUsage = {}) {
     budgetGuard.release(request.customId);
     const estimatedOutputTokens = budgetGuard.estimateFallbackOutputTokens(request.maxTokens);
+    const estimatedInputTokens = Number(previousUsage?.input_tokens || 0)
+      + Number(previousUsage?.cache_creation_input_tokens || 0)
+      + Number(previousUsage?.cache_read_input_tokens || 0);
     const estimatedCost = estimateRequestCostKrw(request, config, false, {
       outputTokensEstimate: estimatedOutputTokens,
+      inputTokensEstimate: estimatedInputTokens,
     });
     if (!budgetGuard.canSpend(estimatedCost)) {
       budgetGuard.stop(
@@ -283,7 +287,7 @@ async function runAnthropicBlogBatch(options = {}) {
   for (const request of accepted) {
     let modelResult = batchResults.get(request.customId);
     if (!modelResult || modelResult.status !== 'succeeded') {
-      modelResult = await guardedSyncFallback(request);
+      modelResult = await guardedSyncFallback(request, modelResult?.usage || {});
     }
 
     if (modelResult?.status === 'budget_stopped') {

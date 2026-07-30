@@ -54,14 +54,86 @@ function makeResult(customId, text = `result-${customId}`) {
   };
 }
 
-function makeFailedResult(customId, message = 'batch request failed') {
-  return {
+function makeFailedResult(customId, message = 'batch request failed', usage = null) {
+  const payload = {
     custom_id: customId,
     result: {
       type: 'errored',
       error: { message },
     },
   };
+  if (usage) payload.result.usage = usage;
+  return payload;
+}
+
+function expectedCostFromUsage(usage, isBatch = true, config = makeConfig()) {
+  const inputTokens = Number(usage.input_tokens || 0)
+    + Number(usage.cache_creation_input_tokens || 0)
+    + Number(usage.cache_read_input_tokens || 0);
+  const outputTokens = Number(usage.output_tokens || 0);
+  const inputUsd = (inputTokens / 1_000_000) * config.inputUsdPerMillion;
+  const outputUsd = (outputTokens / 1_000_000) * config.outputUsdPerMillion;
+  const discount = isBatch ? config.batchDiscount : 1;
+  return (inputUsd + outputUsd) * config.usdKrw * discount;
+}
+
+function assertClose(actual, expected, tolerance = 1e-9) {
+  assert.ok(Math.abs(actual - expected) <= tolerance, `expected ${expected}, got ${actual}`);
+}
+
+async function testFailedResultUsageCountsTowardActualCost() {
+  const request = makeRequest('failed-usage-1');
+  const budgetGuard = new AnthropicBudgetGuard(makeConfig());
+  budgetGuard.reserve(request, true);
+  const failedUsage = { input_tokens: 100, output_tokens: 50 };
+  const client = {
+    messages: {
+      batches: {
+        async results() {
+          return (async function* resultsIterator() {
+            yield makeFailedResult('failed-usage-1', 'overloaded', failedUsage);
+          }());
+        },
+      },
+    },
+  };
+
+  const results = await collectBatchResults({
+    client,
+    batchId: 'batch-failed-usage',
+    requestsById: new Map([[request.customId, request]]),
+    budgetGuard,
+    results: new Map(),
+  });
+
+  assert.strictEqual(results.get('failed-usage-1').status, 'errored');
+  assert.deepStrictEqual(results.get('failed-usage-1').usage, failedUsage);
+  assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+  const expected = expectedCostFromUsage(failedUsage, true, makeConfig());
+  assertClose(budgetGuard.actualCostKrw, expected);
+}
+
+async function testFailedSyncFallbackUsageCountsTowardActualCost() {
+  const config = makeConfig();
+  const budgetGuard = new AnthropicBudgetGuard(config);
+  const usage = { input_tokens: 120, output_tokens: 90 };
+  const client = {
+    messages: {
+      async create() {
+        const error = new Error('sync fallback failed');
+        error.response = { body: { usage } };
+        throw error;
+      },
+    },
+  };
+
+  await assert.rejects(
+    callSyncFallback({ client, request: makeRequest('sync-fail-usage', 'fallback prompt', 256), config, budgetGuard }),
+    /sync fallback failed/
+  );
+
+  const expected = expectedCostFromUsage(usage, false, config);
+  assertClose(budgetGuard.actualCostKrw, expected);
 }
 
 function makeGenerator(requests, finalizedIds) {
@@ -511,6 +583,8 @@ async function testPromptHashIsStable() {
 
 async function run() {
   await testSingleBatchAndResultMapping();
+  await testFailedResultUsageCountsTowardActualCost();
+  await testFailedSyncFallbackUsageCountsTowardActualCost();
   await testCustomIdNormalizationToAsciiForBatchApi();
   await testFixedPollingAndTimeout();
   await testBudgetWarningAndFallbackStop();

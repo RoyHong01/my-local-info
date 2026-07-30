@@ -34,6 +34,9 @@ const BATCH_SIZE = Number(process.env.EDITOR_NOTES_BATCH_SIZE || 10);
 const ONLY_FILE = (process.env.EDITOR_NOTES_ONLY_FILE || '').trim().toLowerCase();
 const DELAY_MS = Number(process.env.EDITOR_NOTES_DELAY_MS || 1000);
 const FORCE = process.env.EDITOR_NOTES_FORCE === 'true';
+const USD_KRW = Number(process.env.ANTHROPIC_USD_KRW || 1467);
+const HAIKU_INPUT_USD_PER_MILLION = Number(process.env.EDITOR_NOTES_INPUT_USD_PER_MILLION || 0.8);
+const HAIKU_OUTPUT_USD_PER_MILLION = Number(process.env.EDITOR_NOTES_OUTPUT_USD_PER_MILLION || 4);
 
 if (!ANTHROPIC_API_KEY) {
   console.error('❌ ANTHROPIC_API_KEY가 없습니다.');
@@ -58,6 +61,37 @@ function getField(item, keys) {
     if (item[key] && typeof item[key] === 'string') return String(item[key]).trim();
   }
   return '';
+}
+
+function usageTokens(usage = {}) {
+  const inputTokens = Number(usage.input_tokens || 0)
+    + Number(usage.cache_creation_input_tokens || 0)
+    + Number(usage.cache_read_input_tokens || 0);
+  const outputTokens = Number(usage.output_tokens || 0);
+  return { inputTokens, outputTokens };
+}
+
+function extractUsageFromError(error) {
+  const candidates = [
+    error?.usage,
+    error?.error?.usage,
+    error?.response?.usage,
+    error?.response?.error?.usage,
+    error?.response?.body?.usage,
+    error?.response?.body?.error?.usage,
+  ];
+
+  for (const usage of candidates) {
+    const { inputTokens, outputTokens } = usageTokens(usage || {});
+    if (inputTokens > 0 || outputTokens > 0) return usage;
+  }
+  return {};
+}
+
+function computeHaikuCostKrw(inputTokens, outputTokens) {
+  const inputUsd = (Number(inputTokens || 0) / 1_000_000) * HAIKU_INPUT_USD_PER_MILLION;
+  const outputUsd = (Number(outputTokens || 0) / 1_000_000) * HAIKU_OUTPUT_USD_PER_MILLION;
+  return (inputUsd + outputUsd) * USD_KRW;
 }
 
 function parseNotesFromModelText(rawText) {
@@ -201,16 +235,17 @@ ${context}
       throw lastError || new Error('사용 가능한 Anthropic 모델을 찾지 못했습니다.');
     }
 
+    const usage = response?.usage || {};
     const raw = response.content[0]?.text?.trim() || '';
     const parsedNotes = parseNotesFromModelText(raw);
     if (!parsedNotes) {
       console.warn('  ⚠️ JSON 파싱 실패:', raw.slice(0, 100));
-      return null;
+      return { note: null, usage, model: response?.model || '' };
     }
-    return parsedNotes;
+    return { note: parsedNotes, usage, model: response?.model || '' };
   } catch (err) {
     console.warn('  ⚠️ API 오류:', err.message?.slice(0, 100));
-    return null;
+    return { note: null, usage: extractUsageFromError(err), model: '' };
   }
 }
 
@@ -236,7 +271,7 @@ async function processFile({ file, type }) {
   const filePath = path.join(DATA_DIR, file);
   if (!fs.existsSync(filePath)) {
     console.log(`⏩ ${file} 없음, 건너뜀`);
-    return { generated: 0, skipped: 0, errors: 0 };
+    return { generated: 0, skipped: 0, errors: 0, inputTokens: 0, outputTokens: 0 };
   }
 
   let items;
@@ -244,7 +279,7 @@ async function processFile({ file, type }) {
     items = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   } catch (err) {
     console.error(`❌ ${file} 읽기 오류:`, err.message);
-    return { generated: 0, skipped: 0, errors: 1 };
+    return { generated: 0, skipped: 0, errors: 1, inputTokens: 0, outputTokens: 0 };
   }
 
   // 처리 대상: expired 제외, editor_note 없는 항목 (FORCE면 전체), 충분한 컨텍스트 있는 항목
@@ -268,22 +303,29 @@ async function processFile({ file, type }) {
 
   if (batch.length === 0) {
     console.log('  ✅ 처리할 항목 없음');
-    return { generated: 0, skipped: candidates.length, errors: 0 };
+    return { generated: 0, skipped: candidates.length, errors: 0, inputTokens: 0, outputTokens: 0 };
   }
 
   let generated = 0;
   let errors = 0;
+  let inputTokens = 0;
+  let outputTokens = 0;
 
   for (const item of batch) {
     const id = getItemId(item, type);
     const name = getField(item, ['서비스명', 'name', 'title']) || id;
     console.log(`  ⚙️ [${id}] ${name.slice(0, 30)}...`);
 
-    const note = await generateEditorNote(item, type);
-    if (note) {
-      item.editor_note = note;
+    const result = await generateEditorNote(item, type);
+    const usage = result?.usage || {};
+    const usageCount = usageTokens(usage);
+    inputTokens += usageCount.inputTokens;
+    outputTokens += usageCount.outputTokens;
+
+    if (result?.note) {
+      item.editor_note = result.note;
       generated++;
-      console.log(`    ✅ 생성 완료: ${note[0]?.slice(0, 40)}...`);
+      console.log(`    ✅ 생성 완료: ${result.note[0]?.slice(0, 40)}...`);
     } else {
       errors++;
       console.log('    ❌ 생성 실패');
@@ -304,7 +346,7 @@ async function processFile({ file, type }) {
     }
   }
 
-  return { generated, skipped: candidates.length - batch.length, errors };
+  return { generated, skipped: candidates.length - batch.length, errors, inputTokens, outputTokens };
 }
 
 async function main() {
@@ -322,14 +364,21 @@ async function main() {
 
   let totalGenerated = 0;
   let totalErrors = 0;
+  let totalInputTokens = 0;
+  let totalOutputTokens = 0;
 
   for (const target of targets) {
     const result = await processFile(target);
     totalGenerated += result.generated;
     totalErrors += result.errors;
+    totalInputTokens += Number(result.inputTokens || 0);
+    totalOutputTokens += Number(result.outputTokens || 0);
   }
 
+  const totalHaikuCostKrw = computeHaikuCostKrw(totalInputTokens, totalOutputTokens);
   console.log(`\n✅ 완료: ${totalGenerated}건 생성 / ${totalErrors}건 실패`);
+  console.log(`   사용 토큰(input/output): ${totalInputTokens}/${totalOutputTokens}`);
+  console.log(`   추정 비용(KRW): ${totalHaikuCostKrw.toFixed(3)}`);
 
   // GitHub Actions output
   const outputPath = process.env.GITHUB_OUTPUT;
@@ -337,6 +386,9 @@ async function main() {
     try {
       fs.appendFileSync(outputPath, `editor_notes_generated=${totalGenerated}\n`);
       fs.appendFileSync(outputPath, `editor_notes_errors=${totalErrors}\n`);
+      fs.appendFileSync(outputPath, `editor_notes_input_tokens=${totalInputTokens}\n`);
+      fs.appendFileSync(outputPath, `editor_notes_output_tokens=${totalOutputTokens}\n`);
+      fs.appendFileSync(outputPath, `editor_notes_cost_krw=${totalHaikuCostKrw}\n`);
     } catch { /* ignore */ }
   }
 }

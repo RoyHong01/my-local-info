@@ -89,6 +89,34 @@ function usageTokens(usage = {}) {
   return { inputTokens, outputTokens };
 }
 
+function hasBilledUsage(usage = {}) {
+  const { inputTokens, outputTokens } = usageTokens(usage);
+  return inputTokens > 0 || outputTokens > 0;
+}
+
+function extractUsageFromBatchItem(item = {}) {
+  if (item?.result?.message?.usage) return item.result.message.usage;
+  if (item?.result?.usage) return item.result.usage;
+  if (item?.result?.error?.usage) return item.result.error.usage;
+  return {};
+}
+
+function extractUsageFromError(error) {
+  const candidates = [
+    error?.usage,
+    error?.error?.usage,
+    error?.response?.usage,
+    error?.response?.error?.usage,
+    error?.response?.body?.usage,
+    error?.response?.body?.error?.usage,
+  ];
+
+  for (const usage of candidates) {
+    if (hasBilledUsage(usage || {})) return usage;
+  }
+  return {};
+}
+
 function calculateCostKrw({ inputTokens = 0, outputTokens = 0, isBatch = false }, config = configFromEnv()) {
   const inputUsd = (Number(inputTokens || 0) / 1_000_000) * config.inputUsdPerMillion;
   const outputUsd = (Number(outputTokens || 0) / 1_000_000) * config.outputUsdPerMillion;
@@ -98,12 +126,16 @@ function calculateCostKrw({ inputTokens = 0, outputTokens = 0, isBatch = false }
 
 function estimateRequestCostKrw(request, config = configFromEnv(), isBatch = true, options = {}) {
   const fallbackOutputTokens = Number(options.outputTokensEstimate || 0);
+  const fallbackInputTokens = Number(options.inputTokensEstimate || 0);
   const boundedOutputTokens = fallbackOutputTokens > 0
     ? Math.min(Number(request.maxTokens || 0), fallbackOutputTokens)
     : Number(request.maxTokens || 0);
+  const boundedInputTokens = fallbackInputTokens > 0
+    ? fallbackInputTokens
+    : estimateInputTokens(request.prompt, config.charsPerToken);
 
   return calculateCostKrw({
-    inputTokens: estimateInputTokens(request.prompt, config.charsPerToken),
+    inputTokens: boundedInputTokens,
     outputTokens: boundedOutputTokens,
     isBatch,
   }, config);
@@ -302,10 +334,15 @@ async function collectBatchResults({ client, batchId, requestsById, budgetGuard,
         source: 'batch',
       });
     } else {
-      if (budgetGuard) budgetGuard.release(customId);
+      const usage = extractUsageFromBatchItem(item);
+      if (budgetGuard) {
+        if (hasBilledUsage(usage)) budgetGuard.settle(customId, usage, true);
+        else budgetGuard.release(customId);
+      }
       results.set(customId, {
         status: item.result?.type || 'errored',
         error: item.result?.error?.message || item.result?.type || 'unknown batch error',
+        usage,
         promptHash: request.promptHash,
         source: 'batch',
       });
@@ -335,20 +372,28 @@ async function callSyncFallback({ client, request, config = configFromEnv(), bud
     };
   }
 
-  const message = await client.messages.create({
-    model: normalized.model,
-    max_tokens: normalized.maxTokens,
-    messages: [{ role: 'user', content: normalized.prompt }],
-  });
-  if (budgetGuard) budgetGuard.settle(normalized.customId, message?.usage || {}, false);
-  return {
-    status: 'succeeded',
-    text: extractMessageText(message),
-    finishReason: message?.stop_reason || '',
-    usage: message?.usage || {},
-    promptHash: normalized.promptHash,
-    source: 'sync-fallback',
-  };
+  try {
+    const message = await client.messages.create({
+      model: normalized.model,
+      max_tokens: normalized.maxTokens,
+      messages: [{ role: 'user', content: normalized.prompt }],
+    });
+    if (budgetGuard) budgetGuard.settle(normalized.customId, message?.usage || {}, false);
+    return {
+      status: 'succeeded',
+      text: extractMessageText(message),
+      finishReason: message?.stop_reason || '',
+      usage: message?.usage || {},
+      promptHash: normalized.promptHash,
+      source: 'sync-fallback',
+    };
+  } catch (error) {
+    const usage = extractUsageFromError(error);
+    if (budgetGuard && hasBilledUsage(usage)) {
+      budgetGuard.settle(normalized.customId, usage, false);
+    }
+    throw error;
+  }
 }
 
 function createAnthropicClient(apiKey = process.env.ANTHROPIC_API_KEY) {
@@ -373,5 +418,8 @@ module.exports = {
   promptHash,
   submitBatch,
   toBatchRequest,
+  extractUsageFromError,
+  extractUsageFromBatchItem,
+  hasBilledUsage,
   usageTokens,
 };
