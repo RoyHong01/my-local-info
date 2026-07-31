@@ -9,10 +9,12 @@ const {
   callSyncFallback,
   collectBatchResults,
   configFromEnv,
+  defaultPricingForModel,
   estimateRequestCostKrw,
   makeApiSafeCustomId,
   pollBatch,
   promptHash,
+  resolveReferenceKstDate,
   submitBatch,
 } = require('./lib/anthropic-blog-batch');
 const {
@@ -487,8 +489,11 @@ async function testBlogQualityRetryUsesSameBudgetGuard() {
     async prepare() {
       return [request];
     },
-    async finalize(preparedRequest, modelResult, requestModel) {
+    async finalize(preparedRequest, modelResult, requestModel, options = {}) {
       assert.strictEqual(modelResult.status, 'succeeded');
+      if (options.allowQualityRetry === false) {
+        return false;
+      }
       await requestModel({
         customId: preparedRequest.customId,
         prompt: `${preparedRequest.prompt}\nquality retry`,
@@ -503,11 +508,56 @@ async function testBlogQualityRetryUsesSameBudgetGuard() {
 
   assert.strictEqual(syncCalls, 0);
   assert.strictEqual(outputs.batch_success_count, 1);
-  assert.strictEqual(outputs.fallback_attempted_count, 1);
+  assert.strictEqual(outputs.fallback_attempted_count, 0);
+  assert.strictEqual(outputs.fallback_success_count, 0);
+  assert.strictEqual(outputs.fallback_failure_count, 0);
   assert.strictEqual(outputs.unpublished_count, 1);
-  assert.match(outputs.unpublished_reasons, /warning_budget_stop/);
-  assert.strictEqual(outputs.budget_stopped, true);
+  assert.match(outputs.unpublished_reasons, /finalize_rejected/);
+  assert.strictEqual(outputs.budget_stopped, false);
   assert.strictEqual(budgetGuard.reservedCostKrw, 0);
+}
+
+async function testSonnet5IntroPricingDefaultsByKstDate() {
+  const introConfig = configFromEnv({
+    ANTHROPIC_BLOG_MODEL: 'claude-sonnet-5',
+    ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-08-31',
+  });
+  assert.strictEqual(introConfig.inputUsdPerMillion, 2);
+  assert.strictEqual(introConfig.outputUsdPerMillion, 10);
+
+  const regularConfig = configFromEnv({
+    ANTHROPIC_BLOG_MODEL: 'claude-sonnet-5',
+    ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-09-01',
+  });
+  assert.strictEqual(regularConfig.inputUsdPerMillion, 3);
+  assert.strictEqual(regularConfig.outputUsdPerMillion, 15);
+
+  const explicitOverride = configFromEnv({
+    ANTHROPIC_BLOG_MODEL: 'claude-sonnet-5',
+    ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-08-15',
+    ANTHROPIC_INPUT_USD_PER_MILLION: '3',
+    ANTHROPIC_OUTPUT_USD_PER_MILLION: '15',
+  });
+  assert.strictEqual(explicitOverride.inputUsdPerMillion, 3);
+  assert.strictEqual(explicitOverride.outputUsdPerMillion, 15);
+
+  const introDefaults = defaultPricingForModel('claude-sonnet-5', {
+    ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-08-20',
+  });
+  assert.deepStrictEqual(introDefaults, {
+    inputUsdPerMillion: 2,
+    outputUsdPerMillion: 10,
+  });
+
+  const fallbackDefaults = defaultPricingForModel('claude-sonnet-5', {
+    ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-09-20',
+  });
+  assert.deepStrictEqual(fallbackDefaults, {
+    inputUsdPerMillion: 3,
+    outputUsdPerMillion: 15,
+  });
+
+  assert.strictEqual(resolveReferenceKstDate({ ANTHROPIC_PRICING_REFERENCE_DATE_KST: '2026-08-31' }), '2026-08-31');
 }
 
 async function testPreparedContextIsDeliveredToFinalize() {
@@ -596,6 +646,7 @@ async function run() {
   await testRunnerTimeoutUsesPartialResultsAndFallbacksOnlyUnresolved();
   await testRunnerBudgetStopPreventsFallbackCall();
   await testBlogQualityRetryUsesSameBudgetGuard();
+  await testSonnet5IntroPricingDefaultsByKstDate();
   await testPreparedContextIsDeliveredToFinalize();
   await testRunnerPublishesEveryRequiredGithubOutput();
   await testPromptHashIsStable();

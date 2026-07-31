@@ -16,6 +16,7 @@ const {
 
 const FIXED_POLL_INTERVAL_MS = 300_000;
 const FIXED_TIMEOUT_MS = 21_600_000;
+const DISABLE_FINALIZE_SYNC_RETRY = String(process.env.ANTHROPIC_DISABLE_FINALIZE_SYNC_RETRY || 'true').trim().toLowerCase() !== 'false';
 
 const OUTPUT_KEYS = [
   'model',
@@ -318,7 +319,10 @@ async function runAnthropicBlogBatch(options = {}) {
     };
 
     try {
-      const published = await owner.finalize(request, modelResult, retryWithGuard);
+      const finalizeOptions = request.generator === 'blog'
+        ? { allowQualityRetry: !DISABLE_FINALIZE_SYNC_RETRY }
+        : {};
+      const published = await owner.finalize(request, modelResult, retryWithGuard, finalizeOptions);
       if (!published) {
         unpublished.set(request.customId, 'finalize_rejected');
         continue;

@@ -8,28 +8,64 @@ const DEFAULT_POLL_INTERVAL_MS = 20_000;
 const DEFAULT_TIMEOUT_MS = 30 * 60 * 1000;
 const DEFAULT_DAILY_BUDGET_KRW = 1500;
 const DEFAULT_WARN_RATIO = 0.8;
-const DEFAULT_USD_KRW = 1467;
+const DEFAULT_USD_KRW = 1470;
 const DEFAULT_INPUT_USD_PER_MILLION = 3;
 const DEFAULT_OUTPUT_USD_PER_MILLION = 15;
 const DEFAULT_BATCH_DISCOUNT = 0.5;
 const DEFAULT_CHARS_PER_TOKEN = 2;
 const DEFAULT_FALLBACK_OUTPUT_TOKENS_ESTIMATE = 3000;
+const SONNET5_INTRO_INPUT_USD_PER_MILLION = 2;
+const SONNET5_INTRO_OUTPUT_USD_PER_MILLION = 10;
+const SONNET5_INTRO_END_DATE_KST = '2026-08-31';
 
 function numberFrom(value, fallback) {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
-function configFromEnv(env = process.env) {
+function toKstDate(date = new Date()) {
+  const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  const year = kst.getUTCFullYear();
+  const month = String(kst.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(kst.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function resolveReferenceKstDate(env = process.env) {
+  const raw = String(env.ANTHROPIC_PRICING_REFERENCE_DATE_KST || '').trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  return toKstDate();
+}
+
+function defaultPricingForModel(model, env = process.env) {
+  const normalizedModel = String(model || '').trim().toLowerCase();
+  const referenceDate = resolveReferenceKstDate(env);
+
+  if (normalizedModel === 'claude-sonnet-5' && referenceDate <= SONNET5_INTRO_END_DATE_KST) {
+    return {
+      inputUsdPerMillion: SONNET5_INTRO_INPUT_USD_PER_MILLION,
+      outputUsdPerMillion: SONNET5_INTRO_OUTPUT_USD_PER_MILLION,
+    };
+  }
+
   return {
-    model: env.ANTHROPIC_BLOG_MODEL || DEFAULT_MODEL,
+    inputUsdPerMillion: DEFAULT_INPUT_USD_PER_MILLION,
+    outputUsdPerMillion: DEFAULT_OUTPUT_USD_PER_MILLION,
+  };
+}
+
+function configFromEnv(env = process.env) {
+  const model = env.ANTHROPIC_BLOG_MODEL || DEFAULT_MODEL;
+  const pricingDefaults = defaultPricingForModel(model, env);
+  return {
+    model,
     pollIntervalMs: numberFrom(env.ANTHROPIC_BATCH_POLL_INTERVAL_MS, DEFAULT_POLL_INTERVAL_MS),
     timeoutMs: numberFrom(env.ANTHROPIC_BATCH_TIMEOUT_MS, DEFAULT_TIMEOUT_MS),
     dailyBudgetKrw: numberFrom(env.ANTHROPIC_DAILY_BUDGET_KRW, DEFAULT_DAILY_BUDGET_KRW),
     warnRatio: numberFrom(env.ANTHROPIC_BUDGET_WARN_RATIO, DEFAULT_WARN_RATIO),
     usdKrw: numberFrom(env.ANTHROPIC_USD_KRW, DEFAULT_USD_KRW),
-    inputUsdPerMillion: numberFrom(env.ANTHROPIC_INPUT_USD_PER_MILLION, DEFAULT_INPUT_USD_PER_MILLION),
-    outputUsdPerMillion: numberFrom(env.ANTHROPIC_OUTPUT_USD_PER_MILLION, DEFAULT_OUTPUT_USD_PER_MILLION),
+    inputUsdPerMillion: numberFrom(env.ANTHROPIC_INPUT_USD_PER_MILLION, pricingDefaults.inputUsdPerMillion),
+    outputUsdPerMillion: numberFrom(env.ANTHROPIC_OUTPUT_USD_PER_MILLION, pricingDefaults.outputUsdPerMillion),
     batchDiscount: numberFrom(env.ANTHROPIC_BATCH_DISCOUNT, DEFAULT_BATCH_DISCOUNT),
     charsPerToken: Math.max(1, numberFrom(env.ANTHROPIC_ESTIMATE_CHARS_PER_TOKEN, DEFAULT_CHARS_PER_TOKEN)),
     fallbackOutputTokensEstimate: Math.max(1, numberFrom(
@@ -422,4 +458,7 @@ module.exports = {
   extractUsageFromBatchItem,
   hasBilledUsage,
   usageTokens,
+  defaultPricingForModel,
+  resolveReferenceKstDate,
+  toKstDate,
 };

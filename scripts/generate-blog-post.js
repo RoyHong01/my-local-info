@@ -1795,7 +1795,7 @@ ${subsidyAnalysisOverride}
   };
 }
 
-async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
+async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, options = {}) {
   if (promptHash(preparedRequest.prompt) !== preparedRequest.promptHash) {
     throw new Error(`블로그 프롬프트 해시 불일치: ${preparedRequest.customId}`);
   }
@@ -1818,7 +1818,8 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
   } = preparedRequest.context;
   let generatedText = '';
   let lastFinishReason = '';
-  const maxAttempts = 2;
+  const allowQualityRetry = options.allowQualityRetry !== false;
+  const maxAttempts = allowQualityRetry ? 2 : 1;
 
   const isOverloadedError = (error) => {
     const message = String(error?.message || error || '').toLowerCase();
@@ -1903,6 +1904,10 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel) {
       console.warn(`  ⚠️ 응답 불완전 감지(finishReason=${lastFinishReason || 'N/A'}). 재시도 ${attempt + 1}/${maxAttempts}`);
       await sleep(2000);
     }
+  }
+
+  if (!allowQualityRetry) {
+    console.log('  ℹ️ 비용 우선 정책: 품질 재시도 비활성화(미발행 처리 가능)');
   }
 
   if (!generatedText || looksIncompleteGeminiOutput(generatedText)) {
