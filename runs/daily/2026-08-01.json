@@ -1,0 +1,296 @@
+{
+  "reportDateKst": "2026-08-01",
+  "generatedAtUtc": "2026-07-31T18:03:46.260Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30651897288",
+    "runNumber": 923,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30651897288",
+    "runStartedAtUtc": "2026-07-31T17:39:30Z",
+    "headSha": "98c8801d9f5b3271dbbdb3effe59ea259729e536"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://b00bf114.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 4건, 총 621건",
+        "festival": "신규 4건, 업데이트 205건, 총 393건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://5635cb9d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://107e7c40.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "fc0108d0e1fd62d7a1cb1d3f2d61ac15d1931e13",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-07-31",
+      "authoredAt": "2026-07-31T18:03:44Z",
+      "files": [
+        "src/content/life/2026-08-01-gyeonggi-535.md",
+        "src/content/life/2026-08-01-incheon-restaurant-381900374.md",
+        "src/content/life/2026-08-01-incheon-restaurant-828858958.md"
+      ]
+    },
+    {
+      "sha": "3feda1b0df09659326e2a2f026291875eb6f6f91",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-07-31",
+      "authoredAt": "2026-07-31T17:58:27Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md"
+      ]
+    },
+    {
+      "sha": "db1e82ce15e7fb79d93482da1a7dc7db43a59460",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-07-31",
+      "authoredAt": "2026-07-31T17:57:16Z",
+      "files": [
+        "src/content/posts/2026-07-31-incheon-gyeongro-mugyoshik.md",
+        "src/content/posts/2026-07-31-miryang-super-festival.md",
+        "src/content/posts/2026-08-01-curation-subsidy.md",
+        "src/content/posts/2026-08-01-festival-versus-hangang-samgilpo-woreo.md"
+      ]
+    },
+    {
+      "sha": "0af82ac2a66c1c65038b78917f4c59002f41ed96",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-07-31",
+      "authoredAt": "2026-07-31T17:42:44Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 12,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-31-incheon-gyeongro-mugyoshik.md",
+      "src/content/posts/2026-07-31-miryang-super-festival.md",
+      "src/content/posts/2026-08-01-curation-subsidy.md",
+      "src/content/posts/2026-08-01-festival-versus-hangang-samgilpo-woreo.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-07-31-incheon-gyeongro-mugyoshik.md",
+      "src/content/posts/2026-07-31-miryang-super-festival.md",
+      "src/content/posts/2026-08-01-curation-subsidy.md",
+      "src/content/posts/2026-08-01-festival-versus-hangang-samgilpo-woreo.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md",
+      "src/content/life/2026-08-01-gyeonggi-535.md",
+      "src/content/life/2026-08-01-incheon-restaurant-381900374.md",
+      "src/content/life/2026-08-01-incheon-restaurant-828858958.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-01-gyeonggi-535.md",
+      "src/content/life/2026-08-01-incheon-restaurant-381900374.md",
+      "src/content/life/2026-08-01-incheon-restaurant-828858958.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md",
+      "src/content/life/2026-08-01-gyeonggi-535.md",
+      "src/content/life/2026-08-01-incheon-restaurant-381900374.md",
+      "src/content/life/2026-08-01-incheon-restaurant-828858958.md",
+      "src/content/posts/2026-07-31-incheon-gyeongro-mugyoshik.md",
+      "src/content/posts/2026-07-31-miryang-super-festival.md",
+      "src/content/posts/2026-08-01-curation-subsidy.md",
+      "src/content/posts/2026-08-01-festival-versus-hangang-samgilpo-woreo.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 8,
+      "manual": 0,
+      "unknown": 0,
+      "total": 8
+    },
+    "byType": {
+      "blog": {
+        "auto": 4,
+        "manual": 0,
+        "unknown": 0,
+        "total": 4
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01Dk3KFbphHk95AZDRiXkCWR",
+    "batchStatus": "ended",
+    "batchDurationMs": 300360,
+    "batchRequestCount": 6,
+    "batchSuccessCount": 6,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 2,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-subsidy-315000000108-0731",
+        "reason": "finalize_rejected"
+      },
+      {
+        "customId": "blog-subsidy-401000000497-0731",
+        "reason": "finalize_rejected"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 841.47945,
+    "actualCostKrw": 876.76827,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 19,
+    "errors": 11,
+    "inputTokens": 32327,
+    "outputTokens": 7187,
+    "costKrw": 80.11228320000001
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "677/527",
+      "markdown": {
+        "generated": 1,
+        "pending": 163,
+        "titles": [
+          "생애주기별 맞춤형 구강보건 서비스"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 4건, 총 621건",
+      "validation": "ok",
+      "anthropicUsage": "2294/1133",
+      "markdown": {
+        "generated": 2,
+        "pending": 338,
+        "titles": [
+          "예방접종관리",
+          "격리대상 감염병환자 격리치료비 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 205건, 총 393건",
+      "validation": "ok",
+      "anthropicUsage": "785/532",
+      "markdown": {
+        "generated": 1,
+        "pending": 280,
+        "titles": [
+          "삼길포 우럭축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_anthropic_unpublished",
+    "label": "완료(Anthropic 미발행 2건)"
+  }
+}
