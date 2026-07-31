@@ -157,9 +157,40 @@ jobs:
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+          BACKOFFS=(10 30 60)
+          DEPLOY_OK=0
+          for idx in 0 1 2; do
+            ATTEMPT=$((idx + 1))
+            : > "$DEPLOY_LOG"
+            echo "Cloudflare deploy attempt ${ATTEMPT}/3"
+            npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+            DEPLOY_EXIT=${PIPESTATUS[0]}
+            if [ "$DEPLOY_EXIT" -eq 0 ]; then
+              DEPLOY_OK=1
+              break
+            fi
+
+            if grep -Eiq 'malformed response|-> 521|-> 522|\b521\b|\b522\b' "$DEPLOY_LOG"; then
+              if [ "$ATTEMPT" -lt 3 ]; then
+                SLEEP_SECONDS=${BACKOFFS[$idx]}
+                echo "Transient Cloudflare error detected (attempt ${ATTEMPT}/3). Retrying in ${SLEEP_SECONDS}s..."
+                sleep "$SLEEP_SECONDS"
+                continue
+              fi
+              echo "Transient Cloudflare error persisted after 3 attempts."
+              exit "$DEPLOY_EXIT"
+            fi
+
+            echo "Non-retryable Cloudflare deploy error detected on attempt ${ATTEMPT}."
+            exit "$DEPLOY_EXIT"
+          done
+
+          if [ "$DEPLOY_OK" -ne 1 ]; then
+            echo "Cloudflare deploy failed after retries."
+            exit 1
+          fi
+
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -245,9 +276,40 @@ jobs:
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+          BACKOFFS=(10 30 60)
+          DEPLOY_OK=0
+          for idx in 0 1 2; do
+            ATTEMPT=$((idx + 1))
+            : > "$DEPLOY_LOG"
+            echo "Cloudflare deploy attempt ${ATTEMPT}/3"
+            npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+            DEPLOY_EXIT=${PIPESTATUS[0]}
+            if [ "$DEPLOY_EXIT" -eq 0 ]; then
+              DEPLOY_OK=1
+              break
+            fi
+
+            if grep -Eiq 'malformed response|-> 521|-> 522|\b521\b|\b522\b' "$DEPLOY_LOG"; then
+              if [ "$ATTEMPT" -lt 3 ]; then
+                SLEEP_SECONDS=${BACKOFFS[$idx]}
+                echo "Transient Cloudflare error detected (attempt ${ATTEMPT}/3). Retrying in ${SLEEP_SECONDS}s..."
+                sleep "$SLEEP_SECONDS"
+                continue
+              fi
+              echo "Transient Cloudflare error persisted after 3 attempts."
+              exit "$DEPLOY_EXIT"
+            fi
+
+            echo "Non-retryable Cloudflare deploy error detected on attempt ${ATTEMPT}."
+            exit "$DEPLOY_EXIT"
+          done
+
+          if [ "$DEPLOY_OK" -ne 1 ]; then
+            echo "Cloudflare deploy failed after retries."
+            exit 1
+          fi
+
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -376,9 +438,40 @@ jobs:
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          set -eo pipefail
           DEPLOY_LOG=$(mktemp)
-          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+          BACKOFFS=(10 30 60)
+          DEPLOY_OK=0
+          for idx in 0 1 2; do
+            ATTEMPT=$((idx + 1))
+            : > "$DEPLOY_LOG"
+            echo "Cloudflare deploy attempt ${ATTEMPT}/3"
+            npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+            DEPLOY_EXIT=${PIPESTATUS[0]}
+            if [ "$DEPLOY_EXIT" -eq 0 ]; then
+              DEPLOY_OK=1
+              break
+            fi
+
+            if grep -Eiq 'malformed response|-> 521|-> 522|\b521\b|\b522\b' "$DEPLOY_LOG"; then
+              if [ "$ATTEMPT" -lt 3 ]; then
+                SLEEP_SECONDS=${BACKOFFS[$idx]}
+                echo "Transient Cloudflare error detected (attempt ${ATTEMPT}/3). Retrying in ${SLEEP_SECONDS}s..."
+                sleep "$SLEEP_SECONDS"
+                continue
+              fi
+              echo "Transient Cloudflare error persisted after 3 attempts."
+              exit "$DEPLOY_EXIT"
+            fi
+
+            echo "Non-retryable Cloudflare deploy error detected on attempt ${ATTEMPT}."
+            exit "$DEPLOY_EXIT"
+          done
+
+          if [ "$DEPLOY_OK" -ne 1 ]; then
+            echo "Cloudflare deploy failed after retries."
+            exit 1
+          fi
+
           DEPLOY_URL=$(grep -Eo 'https://[a-z0-9-]+\.my-local-info-2gs\.pages\.dev' "$DEPLOY_LOG" | tail -1 || true)
           echo "deploy_url=${DEPLOY_URL}" >> "$GITHUB_OUTPUT"
         env:
@@ -556,7 +649,32 @@ jobs:
             echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
             exit 0
           fi
-          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
+          DEPLOY_LOG=$(mktemp)
+          BACKOFFS=(10 30 60)
+          for idx in 0 1 2; do
+            ATTEMPT=$((idx + 1))
+            : > "$DEPLOY_LOG"
+            echo "Cloudflare deploy attempt ${ATTEMPT}/3"
+            npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+            DEPLOY_EXIT=${PIPESTATUS[0]}
+            if [ "$DEPLOY_EXIT" -eq 0 ]; then
+              break
+            fi
+
+            if grep -Eiq 'malformed response|-> 521|-> 522|\b521\b|\b522\b' "$DEPLOY_LOG"; then
+              if [ "$ATTEMPT" -lt 3 ]; then
+                SLEEP_SECONDS=${BACKOFFS[$idx]}
+                echo "Transient Cloudflare error detected (attempt ${ATTEMPT}/3). Retrying in ${SLEEP_SECONDS}s..."
+                sleep "$SLEEP_SECONDS"
+                continue
+              fi
+              echo "Transient Cloudflare error persisted after 3 attempts."
+              exit "$DEPLOY_EXIT"
+            fi
+
+            echo "Non-retryable Cloudflare deploy error detected on attempt ${ATTEMPT}."
+            exit "$DEPLOY_EXIT"
+          done
         env:
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -601,7 +719,32 @@ jobs:
             echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
             exit 0
           fi
-          npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}"
+          DEPLOY_LOG=$(mktemp)
+          BACKOFFS=(10 30 60)
+          for idx in 0 1 2; do
+            ATTEMPT=$((idx + 1))
+            : > "$DEPLOY_LOG"
+            echo "Cloudflare deploy attempt ${ATTEMPT}/3"
+            npx wrangler pages deploy out --project-name=my-local-info --branch=main --commit-hash="${GITHUB_SHA}" --commit-message="Automated deploy ${GITHUB_SHA}" 2>&1 | tee "$DEPLOY_LOG"
+            DEPLOY_EXIT=${PIPESTATUS[0]}
+            if [ "$DEPLOY_EXIT" -eq 0 ]; then
+              break
+            fi
+
+            if grep -Eiq 'malformed response|-> 521|-> 522|\b521\b|\b522\b' "$DEPLOY_LOG"; then
+              if [ "$ATTEMPT" -lt 3 ]; then
+                SLEEP_SECONDS=${BACKOFFS[$idx]}
+                echo "Transient Cloudflare error detected (attempt ${ATTEMPT}/3). Retrying in ${SLEEP_SECONDS}s..."
+                sleep "$SLEEP_SECONDS"
+                continue
+              fi
+              echo "Transient Cloudflare error persisted after 3 attempts."
+              exit "$DEPLOY_EXIT"
+            fi
+
+            echo "Non-retryable Cloudflare deploy error detected on attempt ${ATTEMPT}."
+            exit "$DEPLOY_EXIT"
+          done
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
