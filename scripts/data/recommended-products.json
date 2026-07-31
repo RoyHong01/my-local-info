@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-07-31T00:00:00+09:00",
+  "updatedAtKst": "2026-08-01T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5557,6 +5557,63 @@
       "sourceId": "manual-choice-pet-life-2026-07-31",
       "themeKey": "pet-life",
       "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-08-01",
+      "productId": "9523928845",
+      "productName": "티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 21N 아이보리, 1세트",
+      "brand": "티르티르",
+      "productGroupTokens": [
+        "마스크",
+        "레드",
+        "쿠션",
+        "18g",
+        "퍼프",
+        "2p"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-08-01",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-08-01",
+      "productId": "9088017324",
+      "productName": "비플레인 녹두 약산성 클렌징폼 120ml + 80ml 기획세트, 200ml, 1세트",
+      "brand": "비플레인",
+      "productGroupTokens": [
+        "녹두",
+        "약산성",
+        "클렌징폼",
+        "120ml",
+        "80ml",
+        "기획세트"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-08-01",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-08-01",
+      "productId": "7849328215",
+      "productName": "라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개",
+      "brand": "라입",
+      "productGroupTokens": [
+        "r2",
+        "노워시",
+        "케라틴",
+        "헤어",
+        "트리트먼트",
+        "러블리"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-01-choice-beauty-fashion-2026-08-01.md",
+      "sourceId": "manual-choice-beauty-fashion-2026-08-01",
+      "themeKey": "beauty-fashion",
+      "themeName": "뷰티/패션"
     }
   ]
 }
