@@ -6,7 +6,7 @@ description: "인천광역시 소상공인·예비창업자 대상 무료 경영
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천소상공인, 창업교육, 무료교육, 인천신용보증재단, 예비창업자]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
 source_id: "O00090500001"
 slug: "2026-07-29-incheon-jumpup-academy"
 source_snapshot_key: "소상공인점프업아카데미|||"

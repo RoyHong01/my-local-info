@@ -6,7 +6,7 @@ description: "인천 서구 청소년안전망은 만 9세~24세 위기 청소�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천서구, 청소년안전망, 청소년상담, 위기청소년지원, 인천청소년센터]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/49/3495049_image2_1.jpg"
 source_id: "O00027100001"
 slug: "2026-07-26-incheon-youth-safety-net"
 source_snapshot_key: "청소년통합지원체계청소년안전망|||"

@@ -6,7 +6,7 @@ description: "인천광역시 60세 이상 기초생활수급자·차상위 어�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천경로식당, 무료급식지원, 인천노인복지, 결식우려어르신, 인천시노인정책과]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "628000000131"
 slug: "2026-07-31-incheon-gyeongro-mugyoshik"
 source_snapshot_key: "경로식당무료급식지원|||"

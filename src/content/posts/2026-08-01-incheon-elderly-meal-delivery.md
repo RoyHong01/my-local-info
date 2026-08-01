@@ -6,7 +6,7 @@ description: "인천광역시가 거동불편 저소득 재가노인에게 도�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 재가노인, 도시락배달, 노인정책과, 저소득어르신]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/69/3552669_image2_1.jpg"
 source_id: "628000000127"
 slug: "2026-08-01-incheon-elderly-meal-delivery"
 source_snapshot_key: "거동불편저소득재가노인식사배달|||"

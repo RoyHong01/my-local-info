@@ -6,7 +6,7 @@ description: "인천 옹진군 출생장려금 지원, 출생·입양일 기준 
 category: 인천 지역 정보
 published_by: "auto"
 tags: [옹진군, 출생장려금, 인천출산지원금, 출산장려금, 입양지원]
-image: "https://pick-n-joy.com/images/default-incheon.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/60/3304260_image2_1.jpg"
 source_id: "358000000109"
 slug: "2026-07-30-ongjin-birth-grant"
 source_snapshot_key: "출생장려금지원|||"
