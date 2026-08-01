@@ -467,6 +467,17 @@ function isLikelyRestaurantImageUrl(url) {
   return !blockedPatterns.some((pattern) => pattern.test(value));
 }
 
+function isCafeOrCoffeeVenue(item) {
+  const text = [
+    item?.categoryName || '',
+    item?.sourceQuery || '',
+    item?.name || '',
+    item?.cuisineHint || '',
+  ].join(' ').toLowerCase();
+
+  return /카페|커피|coffee|cafe/.test(text);
+}
+
 function stripPlacesKeyFromUrl(url) {
   const value = String(url || '').trim();
   if (!value) return value;
@@ -486,11 +497,24 @@ function stripPlacesKeyFromUrl(url) {
 }
 
 async function resolveSafeHeroImage(item, defaultImage) {
-  const candidates = [item?.naverPhotoUrl, item?.naverPhotoUrl2, item?.googlePhotoUrl]
-    .map((value) => String(value || '').trim())
-    .filter(Boolean);
+  const isCafeVenue = isCafeOrCoffeeVenue(item);
+  const candidates = [
+    { url: item?.googlePhotoUrl, source: 'google' },
+    { url: item?.naverPhotoUrl, source: 'naver' },
+    { url: item?.naverPhotoUrl2, source: 'naver' },
+  ]
+    .map((entry) => ({
+      url: String(entry.url || '').trim(),
+      source: entry.source,
+    }))
+    .filter((entry) => entry.url);
 
-  for (const rawCandidateUrl of candidates) {
+  for (const { url: rawCandidateUrl, source } of candidates) {
+    if (isCafeVenue && source !== 'google') {
+      console.warn(`⚠️ 히어로 이미지 제외(카페는 Google Place 사진만 허용): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
+      continue;
+    }
+
     const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
     if (!isLikelyRestaurantImageUrl(candidateUrl)) {
       console.warn(`⚠️ 히어로 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
@@ -513,11 +537,24 @@ async function resolveSafeHeroImage(item, defaultImage) {
 }
 
 async function resolveSafeRestaurantInlineImage(item) {
-  const candidates = [item?.naverPhotoUrl2, item?.googlePhotoUrl, item?.naverPhotoUrl]
-    .map((value) => String(value || '').trim())
-    .filter(Boolean);
+  const isCafeVenue = isCafeOrCoffeeVenue(item);
+  const candidates = [
+    { url: item?.googlePhotoUrl, source: 'google' },
+    { url: item?.naverPhotoUrl2, source: 'naver' },
+    { url: item?.naverPhotoUrl, source: 'naver' },
+  ]
+    .map((entry) => ({
+      url: String(entry.url || '').trim(),
+      source: entry.source,
+    }))
+    .filter((entry) => entry.url);
 
-  for (const rawCandidateUrl of candidates) {
+  for (const { url: rawCandidateUrl, source } of candidates) {
+    if (isCafeVenue && source !== 'google') {
+      console.warn(`⚠️ 본문 이미지 제외(카페는 Google Place 사진만 허용): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
+      continue;
+    }
+
     const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
     if (!isLikelyRestaurantImageUrl(candidateUrl)) {
       console.warn(`⚠️ 본문 이미지 제외(비식당 이미지로 판단): ${candidateUrl}`);
