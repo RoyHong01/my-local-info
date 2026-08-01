@@ -112,6 +112,7 @@ function collectMarkdownPages() {
 function collectIncheonPages(topIds) {
   return readJsonArray('incheon.json')
     .filter((item) => !item.expired)
+    .filter((item) => String(item.description_markdown || '').trim().length > 0)
     .map((item) => normalizeId(item['서비스ID'] || item.id))
     .filter(Boolean)
     .filter((id) => topIds.has(id))
@@ -121,6 +122,7 @@ function collectIncheonPages(topIds) {
 function collectSubsidyPages(topIds) {
   return readJsonArray('subsidy.json')
     .filter((item) => !item.expired)
+    .filter((item) => String(item.description_markdown || '').trim().length > 0)
     .map((item) => normalizeId(item['서비스ID'] || item.id))
     .filter(Boolean)
     .filter((id) => topIds.has(id))
@@ -130,6 +132,7 @@ function collectSubsidyPages(topIds) {
 function collectFestivalPages(topIds) {
   return readJsonArray('festival.json')
     .filter((item) => !item.expired)
+    .filter((item) => String(item.description_markdown || '').trim().length > 0)
     .map((item) => ({
       id: normalizeId(item.contentid || item.id),
       lastmod: item.description_markdown_updated_at || item.collectedAt || item.modifiedtime,
