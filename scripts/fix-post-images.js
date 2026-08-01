@@ -32,6 +32,12 @@ const {
 const TOUR_API_KEY = process.env.TOUR_API_KEY || '';
 const FORCE_RECHECK = process.env.FORCE_RECHECK === '1' || process.env.FORCE_RECHECK === 'true';
 const FORCE_RECHECK_ALL = process.env.FORCE_RECHECK_ALL === '1' || process.env.FORCE_RECHECK_ALL === 'true';
+const TARGET_SOURCE_IDS = new Set(
+  String(process.env.TARGET_SOURCE_IDS || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+);
 const POSTS_DIR = path.join(process.cwd(), 'src', 'content', 'posts');
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
 
@@ -209,6 +215,12 @@ async function run() {
 
     const sourceId = fm.source_id || '';
     const category = fm.category || '';
+
+    if (TARGET_SOURCE_IDS.size > 0 && !TARGET_SOURCE_IDS.has(sourceId)) {
+      skipped++;
+      continue;
+    }
+
     const titleText = [fm.title || '', category, fm.tags || '', fm.summary || ''].join(' ');
     let newImage = '';
     let via = '';
