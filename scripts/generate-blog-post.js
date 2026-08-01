@@ -721,6 +721,31 @@ function hasSubsidyAnalysisStructure(markdown) {
   return requiredPatterns.every((pattern) => pattern.test(source));
 }
 
+const SUBSIDY_PREFILTER_REQUIRED_FIELDS = [
+  '서비스대상요약',
+  '선정기준',
+  '지원대상',
+  '지원내용',
+  '신청방법',
+];
+
+function hasNonEmptyFieldValue(value) {
+  return String(value ?? '').trim().length > 0;
+}
+
+function isEligibleSubsidyCandidate(item) {
+  if (!item || typeof item !== 'object') return false;
+
+  const descriptionLength = String(item.description_markdown || '').trim().length;
+  if (descriptionLength === 0) return false;
+
+  const allRequiredMissing = SUBSIDY_PREFILTER_REQUIRED_FIELDS.every((field) => {
+    return !hasNonEmptyFieldValue(item[field]);
+  });
+
+  return !allRequiredMissing;
+}
+
 function normalizeFestivalTitleDiversity(title, itemName) {
   if (!hasFestivalBannedLead(title)) return title;
   const base = String(itemName || title || '이번 주말 여행').trim();
@@ -2110,6 +2135,16 @@ async function prepareBlogRequests() {
     }
 
     const validItems = sortByPriority(keywordFiltered.items, category);
+    const subsidyPrefilteredItems = category === '전국 보조금·복지 정책'
+      ? validItems.filter((item) => isEligibleSubsidyCandidate(item))
+      : validItems;
+
+    if (category === '전국 보조금·복지 정책') {
+      const excludedCount = validItems.length - subsidyPrefilteredItems.length;
+      if (excludedCount > 0) {
+        console.log(`  🧹 subsidy 사전 제외: ${excludedCount}건 (description_markdown 결측 또는 본문 재료 필드 전부 결측)`);
+      }
+    }
 
     // [보조금 한정] 기존 포스트 source_id → 전화문의+서비스명 매칭용 Map
     // 동일 기관의 "유사 서비스"만 중복 방지 (범죄피해 구조금 vs 범죄피해자 경제적 지원 케이스)
@@ -2147,7 +2182,7 @@ async function prepareBlogRequests() {
     }
 
     // 중복 체크: source_id 정확 매칭 우선, 없으면 파일명 키워드 부분 매칭
-    let candidates = validItems.filter(item => {
+    let candidates = subsidyPrefilteredItems.filter(item => {
       const name = item['서비스명'] || item['title'] || item['name'] || '';
       const id = String(item['서비스ID'] || item['contentid'] || item['id'] || '');
       const startDate = item['eventstartdate'] || item['startDate'] || '';
@@ -2334,6 +2369,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  isEligibleSubsidyCandidate,
   finalizeBlogRequest,
   prepareBlogRequests,
   run,
