@@ -1499,8 +1499,34 @@ parking_info: "확인 필요"${ratingFrontmatter}
 
 function buildFilteredCandidates(snapshot, existingIds) {
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
+  const snapshotIdSet = new Set(
+    rawCandidates
+      .map(({ item }) => String(item?.id || '').trim())
+      .filter(Boolean)
+  );
+
   return rawCandidates
     .filter(({ item }) => item?.id && item?.name)
+    .filter(({ item }) => {
+      const sourceId = String(item?.id || '').trim();
+      if (!snapshotIdSet.has(sourceId)) {
+        console.log(`🚫 후보 제외(snapshot-missing): ${item?.name || sourceId} (${sourceId || 'unknown'})`);
+        return false;
+      }
+
+      const hasAnyPhotoSource = Boolean(
+        String(item?.googlePhotoUrl || '').trim()
+        || String(item?.naverPhotoUrl || '').trim()
+        || String(item?.naverPhotoUrl2 || '').trim()
+      );
+
+      if (!hasAnyPhotoSource) {
+        console.log(`🚫 후보 제외(no-photo-source): ${item?.name || sourceId} (${sourceId || 'unknown'})`);
+        return false;
+      }
+
+      return true;
+    })
     .filter(({ item }) => {
       if (isFranchiseCandidate(item)) {
         console.log(`🚫 프랜차이즈 후보 제외: ${item.name}`);
