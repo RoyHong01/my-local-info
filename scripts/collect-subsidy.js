@@ -312,7 +312,7 @@ async function run() {
   if (!GEMINI_API_KEY) {
     console.log('GEMINI_API_KEY 없음: description_markdown 생성 건너뜀');
   } else {
-    const markdownTargets = merged.filter((item) => {
+    const markdownTargetsAll = merged.filter((item) => {
       const id = String(item['서비스ID'] || item.id || item['서비스명'] || item.name || '');
       if (!topVisibleIds.has(id)) return false;
       const hash = sourceHash(item);
@@ -321,7 +321,7 @@ async function run() {
 
     // 우선순위 정렬: 마감 임박 > 조회수 상위 > 최근 수정
     const todayISO = new Date().toISOString().split('T')[0];
-    markdownTargets.sort((a, b) => {
+    const comparePriority = (a, b) => {
       const aEnd = a.endDate || '';
       const bEnd = b.endDate || '';
       const aHasDeadline = aEnd >= todayISO ? 1 : 0;
@@ -337,8 +337,21 @@ async function run() {
       const aMod = a['수정일시'] || '';
       const bMod = b['수정일시'] || '';
       return bMod.localeCompare(aMod);
-    });
-    console.log(`description_markdown 우선순위 정렬 완료: 마감임박 ${markdownTargets.filter(i => (i.endDate || '') >= todayISO).length}건, 전체 대기 ${markdownTargets.length}건`);
+    };
+
+    // 빈 본문을 우선 처리하고, 기존 본문이 있으나 source_hash만 어긋난 항목은 후순위 처리
+    const emptyDescriptionTargets = markdownTargetsAll.filter((item) => String(item.description_markdown || '').trim().length === 0);
+    const staleHashTargets = markdownTargetsAll.filter((item) => String(item.description_markdown || '').trim().length > 0);
+
+    emptyDescriptionTargets.sort(comparePriority);
+    staleHashTargets.sort(comparePriority);
+
+    const markdownTargets = [...emptyDescriptionTargets, ...staleHashTargets];
+
+    console.log(
+      `description_markdown 우선순위 정렬 완료: 빈본문 ${emptyDescriptionTargets.length}건, 해시불일치 ${staleHashTargets.length}건, ` +
+      `마감임박 ${markdownTargets.filter(i => (i.endDate || '') >= todayISO).length}건, 전체 대기 ${markdownTargets.length}건`
+    );
 
     const requestedLimit = DESCRIPTION_MARKDOWN_BATCH_LIMIT;
     const minLimit = Math.min(DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT, requestedLimit || DESCRIPTION_MARKDOWN_MIN_BATCH_LIMIT);
