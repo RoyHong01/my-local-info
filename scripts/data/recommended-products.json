@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-01T00:00:00+09:00",
+  "updatedAtKst": "2026-08-02T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5614,6 +5614,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-08-01",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-08-02",
+      "productId": "6936774462",
+      "productName": "울트라랙 3단 4단 5단 아이보리 무볼트 조립식 선반 가구 앵글 철제 베란다 펜트리 선반장 창고 수납 다용도",
+      "brand": "울트라랙",
+      "productGroupTokens": [
+        "3단",
+        "4단",
+        "5단",
+        "아이보리",
+        "무볼트",
+        "조립식"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-02",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-02",
+      "productId": "8449936441",
+      "productName": "마루오피스_ 소품 장식물 가구 가전제품 미끄러짐 긁힘 소음방지 충격흡수 1cm/2cm/2.7cm EVA 진동방지 패드",
+      "brand": "마루오피스",
+      "productGroupTokens": [
+        "소품",
+        "장식물",
+        "가구",
+        "가전제품",
+        "미끄러짐",
+        "긁힘"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-02",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-02",
+      "productId": "9675383260",
+      "productName": "Uncanny Brands Disney Mickey Mouse Quesadilla Maker -Small Kitchen Appliance",
+      "brand": "Uncanny",
+      "productGroupTokens": [
+        "brands",
+        "disney",
+        "mickey",
+        "mouse",
+        "quesadilla",
+        "maker"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-02",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
