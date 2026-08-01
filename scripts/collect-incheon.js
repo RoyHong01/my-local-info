@@ -593,12 +593,12 @@ async function run() {
   if (!GEMINI_API_KEY) {
     console.log('GEMINI_API_KEY 없음: description_markdown 생성 건너뜀');
   } else {
-    const markdownTargets = merged.filter((item) => {
+    const markdownTargetsAll = merged.filter((item) => {
       const hash = sourceHash(item);
       return !(item.description_markdown && item.description_markdown_source_hash === hash);
     });
     const todayISO = new Date().toISOString().split('T')[0];
-    markdownTargets.sort((a, b) => {
+    const comparePriority = (a, b) => {
       const aEnd = a.endDate || '';
       const bEnd = b.endDate || '';
       const aHasDeadline = aEnd >= todayISO ? 1 : 0;
@@ -610,7 +610,16 @@ async function run() {
       if (viewDiff !== 0) return viewDiff;
 
       return getIncheonModifiedRank(b).localeCompare(getIncheonModifiedRank(a));
-    });
+    };
+
+    const emptyDescriptionTargets = markdownTargetsAll.filter((item) => String(item.description_markdown || '').trim().length === 0);
+    const staleHashTargets = markdownTargetsAll.filter((item) => String(item.description_markdown || '').trim().length > 0);
+
+    emptyDescriptionTargets.sort(comparePriority);
+    staleHashTargets.sort(comparePriority);
+
+    const markdownTargets = [...emptyDescriptionTargets, ...staleHashTargets];
+    console.log(`description_markdown 우선순위 정렬 완료: 빈본문 ${emptyDescriptionTargets.length}건, 해시불일치 ${staleHashTargets.length}건, 전체 대기 ${markdownTargets.length}건`);
 
     const batchTargets = markdownTargets.slice(0, Math.max(0, DESCRIPTION_MARKDOWN_BATCH_LIMIT));
     console.log(`description_markdown 배치 처리: ${batchTargets.length}건 / 대기 ${Math.max(0, markdownTargets.length - batchTargets.length)}건`);
