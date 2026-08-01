@@ -17,6 +17,104 @@
   - 실행한 검증 1
   - 실행한 검증 2
 ---
+
+## 2026-08-02 (인천/보조금 블로그 이미지 회귀 근본 수정 + 운영 가이드 문서 신설)
+
+- **수정 파일**:
+  - `scripts/generate-blog-post.js`
+  - `scripts/test-blog-landmark-fallback.js` (신규)
+  - `scripts/fix-post-images.js`
+  - `scripts/data/landmark-image-history.json`
+  - `public/data/incheon.json`
+  - `src/content/posts/2026-07-26-incheon-youth-safety-net.md`
+  - `src/content/posts/2026-07-29-incheon-jumpup-academy.md`
+  - `src/content/posts/2026-07-30-ongjin-birth-grant.md`
+  - `src/content/posts/2026-07-31-incheon-gyeongro-mugyoshik.md`
+  - `src/content/posts/2026-08-01-incheon-elderly-meal-delivery.md`
+  - `PROJECT_CRITICAL_NOTES.md` (신규)
+  - `.github/copilot-instructions.md`
+- **배경**:
+  - 2026-07-26부터 인천/보조금 블로그의 hero 이미지가 default(`default-incheon.svg`)로 빠지는 회귀가 발생. 목록은 정상(통일용 배너)이나 본문 상세에서 지역 사진 대신 default가 노출됨.
+- **원인(RCA)**:
+  - 진짜 원인은 **2026-07-24 Sonnet 5 Batch 전환 시 도입한 prepare/finalize 분리 리팩터**였음. 분리 후 `generatePost._landmarkCache` 참조가 깨진 채 남아, `finalizeBlogRequest`의 landmark fallback 블록이 실행 중 에러로 `catch`에 빠져 default로 떨어졌음. 즉 firstimage가 없는 항목(대부분 복지 글)에서 landmark(한국관광공사 `tong.visitkorea`) fallback이 더 이상 발동하지 않았음.
+  - 진단 과정에서 두 차례 오진이 있었음: (1) "이미지 매칭 게이트(`isIncheonEventItem`)가 축제/문화만 통과시켜 복지 글 제외"라는 가설 -> 5월 복지 글이 이미지 정상이었던 반례로 폐기. (2) "원본 데이터에 firstimage가 있었다"는 추론 -> 인천/보조금은 원본에 이미지가 없고 `INCHEON_PHOTO_API`(API003)가 지역 키워드 검색으로 채운 것이라는 사실로 폐기. 7/22 글(firstimage 없이도 관광공사 fallback 이미지 정상)과 7/26 글(default)의 비교로 "7/25 코드 변경이 분기점"임을 확정.
+  - 맛집 finalize context 유실(`9166a74`)과 동일한 refactor에서 파생된 형제 버그였음.
+- **조치**:
+  1. `resolveLandmarkFallbackImage` 공용 resolver를 분리 도입해 prepare/finalize가 동일 규칙을 사용하도록 통일. `finalizeBlogRequest`에서 이미지가 default/empty일 때만 landmark fallback을 1회 재시도하도록 안전망 복구. 깨진 `generatePost._landmarkCache` 참조를 제거하고 모듈 상수 캐시로 통일. `isDefaultBlogImageUrl` 유틸로 non-default 이미지에는 재호출이 발생하지 않게 가드.
+  2. `test-blog-landmark-fallback.js` 회귀 테스트 신규 추가 — 실호출 없이 mock resolver 주입으로 "default 준비 요청은 finalize에서 fallback 1회 수행 / non-default는 미호출"을 검증해 동일 유실 재발을 차단.
+  3. 이미 default로 발행된 인천 5건을 `fix-post-images.js`의 `TARGET_SOURCE_IDS` 타겟 필터로 재소싱 백필. 5건 중 1건(청소년안전망)은 TourAPI(`KorService2`) 이미지, 나머지 4건은 landmark(관광공사) fallback 이미지로 복구됨. `landmark-image-history.json`에 사용 이력 반영.
+  4. `collect-incheon.js`의 이미지 매칭 게이트 확장 시도는 되돌림(원복). 게이트 확장은 collect 단계에서 API003을 우선시켜 finalize의 landmark(관광공사 대표 이미지) 개입 기회를 줄이므로, 일관성/재현성을 위해 finalize 중심 단일 규칙을 채택.
+  5. 운영 가이드 `PROJECT_CRITICAL_NOTES.md`를 신설(§2 알려진 함정에 이 회귀를 포함). `.github/copilot-instructions.md` 작업 규칙 최상단에 "작업/디버깅 전 PROJECT_CRITICAL_NOTES.md 필독, 진단이 과거 사실/사용자 반례와 충돌하면 폐기 후 재조사" 항목 추가.
+- **검증**:
+  - `node --check scripts/generate-blog-post.js` / `scripts/test-blog-landmark-fallback.js` 통과.
+  - `node scripts/test-blog-landmark-fallback.js` -> PASS.
+  - `npm run build` 성공.
+  - 실호출 없음(백필은 실서버 IP 등록 환경 기준, 로컬은 `UNREGISTERED_IP_ERROR`로 API003 차단됨).
+- **커밋**:
+  - `0d27045` fix(blog-image): restore finalize landmark fallback safety net
+  - `dfc7dd3` docs(copilot): require reading PROJECT_CRITICAL_NOTES before work
+  - (인천 백필 결과물 + 문서 + reject-list 확장은 이 항목과 함께 커밋 — 아래 커밋 묶음 계획 참조)
+- **후속/주의**:
+  - 이미 default였던 보조금 글 및 향후 firstimage 없는 복지 글은 다음 자동화부터 finalize landmark fallback으로 자동 복구됨(실서버는 API003 IP 등록됨).
+  - 인천 이미지 소싱은 "원본 firstimage 없음 -> API003 키워드 -> landmark(관광공사) -> default" 체인임을 반드시 기억(PROJECT_CRITICAL_NOTES §2-2).
+
+## 2026-08-02 (맛집 이미지: 사진 없는 식당 재생성 방지 + 기존 정리)
+
+- **수정 파일**:
+  - `scripts/generate-life-restaurant-posts.mjs`
+  - `scripts/data/restaurant-reject-list.json`
+  - `.github/workflows/deploy.yml`
+  - `src/content/life/*.md` (default/복구 대상 다수), `public/images/restaurants/*`
+- **배경**:
+  - 맛집 목록·본문에 default 이미지 또는 깨진 이미지가 노출되고, 사진 없는 식당이 매일 재생성되는 문제.
+- **원인(RCA)**:
+  - (1) 외부 URL 이미지(식신 siksinhot 등) 원본 소멸(403). HEAD 405/403은 상당수 오탐이며 GET(Range) 재검증 시 생존(네이버/카카오 CDN이 HEAD 거부). (2) 후보 필터가 사진 URL "문자열 유무"만 검사해 죽은 URL도 "사진 있음"으로 통과 -> 생성 시 미러링 실패 -> default. (3) `.md` 삭제와 후보 스냅샷(source_id)이 연동되지 않아, 삭제해도 다음 자동화에서 재생성.
+- **조치**:
+  1. 위험한 "전체 중단" 이미지 가드를 경고-only로 완화(이미지 1건 누락으로 하루 자동화 전체가 멈추지 않게).
+  2. 카페 네이버 이미지 금지 정책 완화(Google 없거나 실패 시 Naver 허용).
+  3. 살아있는 네이버 이미지 6건을 로컬 미러링해 hero 복구. 복구 불가(사진 소스 자체 없음) 14건 삭제(sitemap 1,511 -> 1,497).
+  4. `restaurant-reject-list.json`을 tombstone(영구 제외 명부)으로 확장(`reason`: `manual_delete`/`image_mirror_failed`/`no_live_image_source`). 후보 선정 시 제외 + 모든 이미지 미러링 실패 시 자동 등록(실패 학습). 삭제/복구불가 source_id를 tombstone 등록해 재생성 차단.
+- **검증**:
+  - GET(Range) 재검증으로 HEAD 405 오탐 17건 정상 확인, 실제 사망 2건만 확정.
+  - `npm run build` 성공, sitemap subset 검증 통과.
+- **커밋**:
+  - `71c971d` 이미지 가드 경고-only 완화
+  - `8337848` feat(restaurant): allow naver fallback for cafe images when google is unavailable
+  - `b642915` fix(life): restore six restaurant hero images from live naver sources
+  - `96d10e2` chore(life): remove 14 unrecoverable default-image restaurant posts
+  - `025cc17` feat(restaurants): add tombstones for unrecoverable sources
+  - `ba8b421` feat(restaurants): exclude reject-listed sources during generation
+  - (어제 삭제 14건 `manual_delete` tombstone 확장은 이 항목과 함께 커밋 — 커밋 묶음 계획 참조)
+
+## 2026-08-01~02 (색인 안정화: 미색인=빈 본문 페이지 규명 + sitemap 제외 + 빈 항목 채우기)
+
+- **수정 파일**:
+  - `scripts/generate-sitemap.js`
+  - `scripts/collect-subsidy.js`
+  - `scripts/collect-incheon.js`
+  - `scripts/collect-festival.js`
+  - `.github/workflows/deploy.yml`
+- **배경**:
+  - GSC "크롤링됨-현재 색인 생성되지 않음"이 800건대로 누적. AdSense 재신청 전 정리 필요.
+- **원인(RCA)**:
+  - 미색인 다수의 정체는 **description_markdown이 빈 Top 상세 페이지**. sitemap에 포함해 구글에 색인을 안내했으나 본문이 없어 색인 거부됨. 규모: subsidy 337 / incheon 140 / festival 195 = 약 672건(festival은 Top의 89%가 빈 본문). GSC URL 검사 샘플 5건 전부 "URL이 Google에 등록되어 있지 않음"으로 확인.
+  - "데이터 풀 부족"이 아니라 "항목은 넘치는데 본문 생성 속도가 못 따라감"이 본질(subsidy 7,000건+ 존재).
+- **조치**:
+  1. `generate-sitemap.js`에서 빈 description_markdown Top 항목(subsidy/incheon/festival)을 sitemap 제외(채워지면 자동 재포함). 빈 페이지 672건이 sitemap에서 빠짐.
+  2. 각 수집 스크립트에 "빈 description 우선 버킷"을 통일 적용(빈 항목부터 채우도록).
+  3. description_markdown 배치 한도를 인천 1->5 / 보조금 2->5 / 축제 1->5로 완만 상향. 블로그 신규분(약 5.7건/일)과 합쳐 sitemap 순증 약 1.37%/일로 급증 방지선(1.5%) 이내 확인. 건당 약 4.65원.
+- **검증**:
+  - sitemap 재생성 후 빈 항목 sitemap 포함 0건 확인.
+  - GSC 샘플 URL 5건이 미색인과 일치함을 대조 확인.
+  - `npm run build` 성공.
+- **커밋**:
+  - `6e107e3` sitemap 빈 본문 Top 제외(subsidy/incheon/festival)
+  - `8b720d3` collect-subsidy 빈 항목 우선 버킷
+  - `ac8f330` collect-incheon/festival 빈 항목 우선 버킷 통일
+  - `fe5645c` deploy.yml description 배치 한도 상향(1/2/1 -> 5/5/5)
+- **후속**:
+  - sitemap GSC 재제출 완료. 1~2주 미색인 감소 관찰 후 AdSense 재신청 예정.
+
 ## 2026-07-24 (Sonnet 5 블로그 통합 Batch 전환)
 
 - **수정 파일**:
