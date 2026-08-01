@@ -64,6 +64,66 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: '[사전차단] 맛집 이미지 참조 무결성 검사'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const dir = path.join(process.cwd(), 'src', 'content', 'life');
+          const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
+          const missHero = [];
+          const missInline = [];
+
+          for (const file of files) {
+            const fullPath = path.join(dir, file);
+            const text = fs.readFileSync(fullPath, 'utf8');
+
+            const heroMatch = text.match(/^image:\s*"([^"]+)"/m);
+            const hero = heroMatch ? heroMatch[1].trim() : '';
+            if (hero.startsWith('/images/restaurants/')) {
+              const diskPath = path.join(process.cwd(), 'public', hero.slice(1));
+              if (!fs.existsSync(diskPath)) {
+                missHero.push({ file, ref: hero });
+              }
+            }
+
+            const inlineRegex = /!\[[^\]]*\]\((\/images\/restaurants\/[^)]+)\)/g;
+            let match;
+            while ((match = inlineRegex.exec(text)) !== null) {
+              const ref = match[1];
+              const diskPath = path.join(process.cwd(), 'public', ref.slice(1));
+              if (!fs.existsSync(diskPath)) {
+                missInline.push({ file, ref });
+              }
+            }
+          }
+
+          console.log(`[image-guard] missHero=${missHero.length}, missInline=${missInline.length}`);
+
+          if (missHero.length > 0) {
+            console.error('[image-guard] Missing hero assets:');
+            for (const item of missHero) {
+              console.error(` - ${item.file} :: ${item.ref}`);
+            }
+          }
+
+          if (missInline.length > 0) {
+            console.error('[image-guard] Missing inline assets:');
+            for (const item of missInline) {
+              console.error(` - ${item.file} :: ${item.ref}`);
+            }
+          }
+
+          if (missHero.length > 0 || missInline.length > 0) {
+            console.error('[image-guard] FAIL: 글 생성 단계 이전에 무결성 검사에서 차단됩니다.');
+            process.exit(1);
+          }
+
+          console.log('[image-guard] PASS: local restaurant image references are valid.');
+          NODE
+
       - name: '[1단계] 인천 지역 정보 수집'
         id: collect_incheon
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
