@@ -1,0 +1,315 @@
+{
+  "reportDateKst": "2026-08-02",
+  "generatedAtUtc": "2026-08-01T17:23:22.683Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30709358780",
+    "runNumber": 936,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30709358780",
+    "runStartedAtUtc": "2026-08-01T17:00:03Z",
+    "headSha": "96d10e2d1a6fb2062f69cd29e1d30beaca143f84"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://cd241bb0.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 3건, 총 622건",
+        "festival": "신규 6건, 업데이트 206건, 총 399건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://13056cf5.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://77000372.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "b3ad0d25bdf7838010b3536af82d15216019fa52",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-08-01",
+      "authoredAt": "2026-08-01T17:23:21Z",
+      "files": [
+        "public/images/restaurants/2026-08-02-37149601-hero.jpg",
+        "public/images/restaurants/2026-08-02-37149601-inline.jpg",
+        "src/content/life/2026-08-02-gyeonggi-restaurant-1651030568.md",
+        "src/content/life/2026-08-02-incheon-restaurant-22809521.md",
+        "src/content/life/2026-08-02-incheon-restaurant-37149601.md"
+      ]
+    },
+    {
+      "sha": "9cab1f18941029cffa258b76d443c6516bf0ac2b",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-01",
+      "authoredAt": "2026-08-01T17:18:52Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md"
+      ]
+    },
+    {
+      "sha": "5948be493fb566ae6bcbc5f9ce830e2da27ae686",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-01",
+      "authoredAt": "2026-08-01T17:17:41Z",
+      "files": [
+        "src/content/posts/2026-08-01-incheon-elderly-meal-delivery.md",
+        "src/content/posts/2026-08-01-siheung-myeongpumjeompo-jiwon.md",
+        "src/content/posts/2026-08-01-siheung-sosangongin-jiwon.md",
+        "src/content/posts/2026-08-02-curation-incheon.md",
+        "src/content/posts/2026-08-07-busan-sea-festival-daedaepo.md"
+      ]
+    },
+    {
+      "sha": "3a14811886a2be4d0bda1fa6404bd5e78336aa67",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-01",
+      "authoredAt": "2026-08-01T17:04:16Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-07-16-curation-festival.md",
+        "src/content/posts/2026-07-21-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 17,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-21-curation-festival.md",
+      "src/content/posts/2026-08-01-incheon-elderly-meal-delivery.md",
+      "src/content/posts/2026-08-01-siheung-myeongpumjeompo-jiwon.md",
+      "src/content/posts/2026-08-01-siheung-sosangongin-jiwon.md",
+      "src/content/posts/2026-08-02-curation-incheon.md",
+      "src/content/posts/2026-08-07-busan-sea-festival-daedaepo.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-01-incheon-elderly-meal-delivery.md",
+      "src/content/posts/2026-08-01-siheung-myeongpumjeompo-jiwon.md",
+      "src/content/posts/2026-08-01-siheung-sosangongin-jiwon.md",
+      "src/content/posts/2026-08-02-curation-incheon.md",
+      "src/content/posts/2026-08-07-busan-sea-festival-daedaepo.md"
+    ],
+    "generatedBlogPostsUpdated": [
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-21-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md",
+      "src/content/life/2026-08-02-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-08-02-incheon-restaurant-22809521.md",
+      "src/content/life/2026-08-02-incheon-restaurant-37149601.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-02-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-08-02-incheon-restaurant-22809521.md",
+      "src/content/life/2026-08-02-incheon-restaurant-37149601.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "public/images/restaurants/2026-08-02-37149601-hero.jpg",
+      "public/images/restaurants/2026-08-02-37149601-inline.jpg",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-02-choice-home-appliance-furniture-2026-08-02.md",
+      "src/content/life/2026-08-02-gyeonggi-restaurant-1651030568.md",
+      "src/content/life/2026-08-02-incheon-restaurant-22809521.md",
+      "src/content/life/2026-08-02-incheon-restaurant-37149601.md",
+      "src/content/posts/2026-07-16-curation-festival.md",
+      "src/content/posts/2026-07-21-curation-festival.md",
+      "src/content/posts/2026-08-01-incheon-elderly-meal-delivery.md",
+      "src/content/posts/2026-08-01-siheung-myeongpumjeompo-jiwon.md",
+      "src/content/posts/2026-08-01-siheung-sosangongin-jiwon.md",
+      "src/content/posts/2026-08-02-curation-incheon.md",
+      "src/content/posts/2026-08-07-busan-sea-festival-daedaepo.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 11,
+      "manual": 0,
+      "unknown": 0,
+      "total": 11
+    },
+    "byType": {
+      "blog": {
+        "auto": 7,
+        "manual": 0,
+        "unknown": 0,
+        "total": 7
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_015PURxMA95oxmuEdGLNB3hm",
+    "batchStatus": "ended",
+    "batchDurationMs": 300439,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 838.24251,
+    "actualCostKrw": 895.4946,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 20,
+    "errors": 10,
+    "inputTokens": 32303,
+    "outputTokens": 7205,
+    "costKrw": 80.1897408
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "3902/2644",
+      "markdown": {
+        "generated": 5,
+        "pending": 161,
+        "titles": [
+          "도시철도 요금 면제(노인)",
+          "덕적면 주민장학금 지급",
+          "장애인 맞춤형 삶 서비스 지원",
+          "공영주차장 이용요금 감면",
+          "인천형 발달장애인 주간활동서비스 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 3건, 총 622건",
+      "validation": "ok",
+      "anthropicUsage": "3574/2855",
+      "markdown": {
+        "generated": 5,
+        "pending": 334,
+        "titles": [
+          "가정위탁아동 양육보조금 지원",
+          "산모·신생아 건강관리 서비스 본인부담금 지원(경기도 광주시)",
+          "으뜸관악 청년통장 지원",
+          "경기도 노동자 휴가비 지원",
+          "농식품분야 해외인턴십 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 6건, 업데이트 206건, 총 399건",
+      "validation": "ok",
+      "anthropicUsage": "4052/2356",
+      "markdown": {
+        "generated": 5,
+        "pending": 281,
+        "titles": [
+          "해양레저축제, 키마위크(KIMA WEEK)",
+          "봉화은어축제",
+          "안동 수(水)페스타",
+          "인천펜타포트 락 페스티벌",
+          "평창더위사냥축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
