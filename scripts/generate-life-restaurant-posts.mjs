@@ -44,6 +44,7 @@ const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATE
 const ALLOW_GENERATE_RECOLLECT = process.env.RESTAURANT_ALLOW_GENERATE_RECOLLECT !== 'false';
 const LIFE_RESTAURANT_PUBLISHED_BY = String(process.env.LIFE_RESTAURANT_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const ALLOW_EXISTING_POST_DELETION = process.env.ALLOW_EXISTING_POST_DELETION === 'true';
+const REJECT_LIST_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-reject-list.json');
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const FRANCHISE_BLACKLIST = [
   '이디야', '메가커피', '메가mgc', '메가mgc커피', 'mgc커피', 'mega mgc',
@@ -72,6 +73,70 @@ function isFranchiseCandidate(item) {
   const source = [item?.name || '', item?.categoryName || ''].join(' ');
   const normalizedSource = normalizeFranchiseText(source);
   return FRANCHISE_BLACKLIST_NORMALIZED.some((kw) => normalizedSource.includes(kw));
+}
+
+async function readRejectList() {
+  const fallback = {
+    version: 1,
+    updatedAt: '',
+    policy: {
+      allowLowRatingReevaluation: false,
+      lowRatingReevaluationDays: 180,
+    },
+    items: {},
+  };
+
+  try {
+    const raw = await fs.readFile(REJECT_LIST_PATH, 'utf-8');
+    const parsed = JSON.parse(raw);
+    return {
+      version: Number(parsed?.version || 1),
+      updatedAt: String(parsed?.updatedAt || ''),
+      policy: {
+        allowLowRatingReevaluation: Boolean(parsed?.policy?.allowLowRatingReevaluation),
+        lowRatingReevaluationDays: Number(parsed?.policy?.lowRatingReevaluationDays || 180),
+      },
+      items: parsed?.items && typeof parsed.items === 'object' ? parsed.items : {},
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+async function writeRejectList(rejectList) {
+  const next = rejectList && typeof rejectList === 'object' ? rejectList : {};
+  next.version = Number(next.version || 1);
+  next.updatedAt = new Date().toISOString();
+  if (!next.policy || typeof next.policy !== 'object') {
+    next.policy = {
+      allowLowRatingReevaluation: false,
+      lowRatingReevaluationDays: 180,
+    };
+  }
+  next.items = next.items && typeof next.items === 'object' ? next.items : {};
+
+  await fs.mkdir(path.dirname(REJECT_LIST_PATH), { recursive: true });
+  await fs.writeFile(REJECT_LIST_PATH, `${JSON.stringify(next, null, 2)}\n`, 'utf-8');
+}
+
+function upsertRejectListItem(rejectList, sourceId, payload) {
+  const key = String(sourceId || '').trim();
+  if (!key) return;
+
+  rejectList.items = rejectList.items && typeof rejectList.items === 'object' ? rejectList.items : {};
+  const prev = rejectList.items[key] && typeof rejectList.items[key] === 'object' ? rejectList.items[key] : {};
+  const now = new Date().toISOString();
+  rejectList.items[key] = {
+    ...prev,
+    ...payload,
+    kakaoId: key,
+    firstSeenAt: String(prev.firstSeenAt || now),
+    lastSeenAt: now,
+  };
+}
+
+function markRejectListReason(rejectList, sourceId, reason) {
+  upsertRejectListItem(rejectList, sourceId, { reason });
 }
 
 if (FORCE_RESTAURANT_SOURCE_IDS.size > 0 && !ALLOW_EXISTING_POST_DELETION) {
@@ -1315,7 +1380,7 @@ function buildRoundRobinCandidates(regions) {
   return out;
 }
 
-async function generateRestaurantPost(candidate) {
+async function generateRestaurantPost(candidate, rejectList) {
   const today = getTodayKST();
   const locality = inferLocality(candidate.item.address, candidate.regionLabel);
   const slugBase = buildRestaurantSlug(candidate, locality);
@@ -1324,6 +1389,13 @@ async function generateRestaurantPost(candidate) {
   const heroImage = await resolveSafeHeroImage(candidate.item, defaultImage);
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
   candidate.visitInfoVariant = pickVisitInfoVariantBySourceId(candidate.item.id);
+
+  if (heroImage === defaultImage) {
+    markRejectListReason(rejectList, candidate.item.id, 'image_mirror_failed');
+    await writeRejectList(rejectList);
+    console.log(`🚫 후보 제외(image_mirror_failed): ${candidate.item.name} (${candidate.item.id})`);
+    return;
+  }
 
   const ratingFrontmatter = candidate.item.googleRating != null
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
@@ -1497,13 +1569,14 @@ parking_info: "확인 필요"${ratingFrontmatter}
   console.log(`✅ 맛집 포스트 생성: ${filename} (${candidate.item.name})`);
 }
 
-function buildFilteredCandidates(snapshot, existingIds) {
+function buildFilteredCandidates(snapshot, existingIds, rejectList) {
   const rawCandidates = buildRoundRobinCandidates(snapshot.regions || {});
   const snapshotIdSet = new Set(
     rawCandidates
       .map(({ item }) => String(item?.id || '').trim())
       .filter(Boolean)
   );
+  const rejectItems = rejectList?.items && typeof rejectList.items === 'object' ? rejectList.items : {};
 
   return rawCandidates
     .filter(({ item }) => item?.id && item?.name)
@@ -1522,6 +1595,12 @@ function buildFilteredCandidates(snapshot, existingIds) {
 
       if (!hasAnyPhotoSource) {
         console.log(`🚫 후보 제외(no-photo-source): ${item?.name || sourceId} (${sourceId || 'unknown'})`);
+        return false;
+      }
+
+      const rejectReason = String(rejectItems?.[sourceId]?.reason || '').trim();
+      if (rejectReason) {
+        console.log(`🚫 후보 제외(reject-list:${rejectReason}): ${item?.name || sourceId} (${sourceId || 'unknown'})`);
         return false;
       }
 
@@ -1573,10 +1652,11 @@ async function run() {
   }
 
   let snapshot = await readSnapshot();
+  const rejectList = await readRejectList();
   const existing = await getExistingRestaurantStats();
   const existingIds = existing.ids;
 
-  let candidates = buildFilteredCandidates(snapshot, existingIds);
+  let candidates = buildFilteredCandidates(snapshot, existingIds, rejectList);
 
   const emptyBuckets = findEmptyBuckets(candidates);
   const needsRecollectByCount = candidates.length < MIN_UNUSED_CANDIDATES;
@@ -1591,7 +1671,7 @@ async function run() {
     try {
       recollectRestaurants();
       snapshot = await readSnapshot();
-      candidates = buildFilteredCandidates(snapshot, existingIds);
+      candidates = buildFilteredCandidates(snapshot, existingIds, rejectList);
       const stillEmpty = findEmptyBuckets(candidates);
       if (stillEmpty.length > 0) {
         console.warn(`⚠️ 재수집 후에도 ${stillEmpty.join(', ')} 버킷 후보 부족 — 다른 버킷에서 재분배합니다.`);
@@ -1639,7 +1719,7 @@ async function run() {
     let succeeded = false;
 
     try {
-      await generateRestaurantPost(candidate);
+      await generateRestaurantPost(candidate, rejectList);
       successCount += 1;
       succeeded = true;
     } catch (error) {
@@ -1653,7 +1733,7 @@ async function run() {
         console.log(`  ⏳ ${INTER_REQUEST_DELAY_MS}ms 대기 중...`);
         await sleep(INTER_REQUEST_DELAY_MS);
         try {
-          await generateRestaurantPost(backup);
+          await generateRestaurantPost(backup, rejectList);
           successCount += 1;
           succeeded = true;
           console.log(`✅ [${bucket}] 대체 후보 생성 성공: ${backup.item?.name}`);
