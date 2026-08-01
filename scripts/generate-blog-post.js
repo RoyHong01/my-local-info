@@ -31,6 +31,13 @@ const SHORT_MODE = process.env.SHORT_MODE === 'true';
 const KAKAO_REST_API_KEY = process.env.KAKAO_REST_API_KEY || '';
 // 축제 블로그에서 근처 맛집 섹션 자동 삽입 여부 (기본 활성화)
 const FESTIVAL_NEARBY_RESTAURANTS = process.env.FESTIVAL_NEARBY_RESTAURANTS !== 'false';
+const DEFAULT_IMAGE_BY_CATEGORY = {
+  '인천 지역 정보': 'https://pick-n-joy.com/images/default-incheon.svg',
+  '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
+  '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
+};
+const LANDMARK_NATIONAL_TOKEN_POOL = ['서울', '부산', '제주', '경주', '강릉', '전주', '여수'];
+const LANDMARK_CACHE = new Map();
 
 let geminiApiCallCount = 0;
 let lastGeminiCallAt = 0;
@@ -61,6 +68,86 @@ function publishBudgetOutputs() {
   setGithubOutput('budget_stop_reason', budgetStopReason || '');
   setGithubOutput('mid_image_inserted_count', midImageInsertedCount);
   setGithubOutput('mid_image_omitted_count', midImageOmittedCount);
+}
+
+function isDefaultBlogImageUrl(imageUrl = '') {
+  if (!imageUrl) return true;
+  if (Object.values(DEFAULT_IMAGE_BY_CATEGORY).includes(imageUrl)) return true;
+  return /\/images\/default-(?:incheon|subsidy|festival|og)\.svg$/i.test(String(imageUrl));
+}
+
+async function resolveLandmarkFallbackImage(candidate, itemContextLabel = '') {
+  if (!candidate || !process.env.TOUR_API_KEY) return '';
+
+  try {
+    const { extractMetroFromText, getRegionalLandmark, detectThemeFromText } = require('./lib/landmark-engine');
+    const regionText = [
+      candidate['소관기관명'],
+      candidate['접수기관'],
+      candidate['접수기관명'],
+      candidate['서비스명'],
+      candidate.title,
+      candidate.location,
+      candidate.addr1,
+      candidate['지원대상'],
+      candidate['선정기준'],
+    ].filter(Boolean).join(' ');
+
+    const metros = extractMetroFromText(regionText);
+    const themeText = [
+      candidate['서비스명'],
+      candidate.title,
+      candidate.summary,
+      candidate.description,
+      Array.isArray(candidate.tags) ? candidate.tags.join(' ') : (candidate.tags || ''),
+    ].filter(Boolean).join(' ');
+    const theme = detectThemeFromText(themeText);
+
+    const expandedTokens = [];
+    const seenTokens = new Set();
+    for (const token of metros) {
+      if (!seenTokens.has(token)) {
+        seenTokens.add(token);
+        expandedTokens.push(token);
+      }
+    }
+
+    if (expandedTokens.length === 0 && theme) {
+      expandedTokens.unshift('__THEME__');
+    }
+
+    if (expandedTokens.length === 0 || (expandedTokens.length === 1 && expandedTokens[0] === '__THEME__')) {
+      for (const nationalToken of LANDMARK_NATIONAL_TOKEN_POOL) {
+        if (!seenTokens.has(nationalToken)) {
+          seenTokens.add(nationalToken);
+          expandedTokens.push(nationalToken);
+        }
+      }
+    }
+
+    for (const token of expandedTokens) {
+      const result = await getRegionalLandmark({
+        regionName: token === '__THEME__' ? '' : token,
+        tourApiKey: process.env.TOUR_API_KEY,
+        cache: LANDMARK_CACHE,
+        numOfRows: 15,
+        theme: token === '__THEME__' ? theme : (token === expandedTokens[0] ? theme : undefined),
+        context: `${candidate._category || ''} | ${itemContextLabel}`,
+      });
+      if (result?.imageUrl) {
+        if (result.reused) {
+          console.warn('[blog-image][INFO] 랜드마크 재사용 (history pool 소진): ' + result.imageUrl);
+        }
+        return result.imageUrl;
+      }
+    }
+
+    console.warn('[blog-image][WARN] TourAPI 호출은 했지만 적합한 랜드마크 결과 없음. tokens=' + JSON.stringify(expandedTokens) + ' theme=' + (theme || '-') + ' (대상: ' + itemContextLabel + ')');
+    return '';
+  } catch (err) {
+    console.warn('[blog-image][ERROR] 랜드마크 조회 실패: ' + (err && err.message ? err.message : err));
+    return '';
+  }
 }
 
 // TourAPI detailImage2 호출: 특정 contentid의 갤러리 이미지 목록을 가져온다.
@@ -1452,12 +1539,6 @@ function postProcessGeneratedMarkdown(markdown, context) {
 
 // 블로그 글 1편 요청 준비
 async function prepareBlogRequest(candidate, postsDir) {
-  const defaultImages = {
-    '인천 지역 정보': 'https://pick-n-joy.com/images/default-incheon.svg',
-    '전국 보조금·복지 정책': 'https://pick-n-joy.com/images/default-subsidy.svg',
-    '전국 축제·여행': 'https://pick-n-joy.com/images/default-festival.svg',
-  };
-  const nationalTokenPool = ['서울', '부산', '제주', '경주', '강릉', '전주', '여수'];
   // NOTE: 사대궁/인천 가정의달/인천 봄꽃축제 등 사용자 큐레이션 이미지는
   // 특정 글 전용 자산이므로 자동 생성 글의 랜덤 fallback 풀로 절대 재사용하지 않는다.
   // (재발 방지: 2026-04-23 사대궁이 보조금 글에 잘못 붙는 회귀 발생)
@@ -1467,77 +1548,7 @@ async function prepareBlogRequest(candidate, postsDir) {
     console.warn('[blog-image][WARN] TOUR_API_KEY 미설정 → 랜드마크 자동 매칭이 동작하지 않습니다. (대상: ' + itemContextLabel + ')');
   }
   if (!imageUrl && process.env.TOUR_API_KEY) {
-    try {
-      const { extractMetroFromText, getRegionalLandmark, detectThemeFromText } = require('./lib/landmark-engine');
-      const regionText = [
-        candidate['소관기관명'],
-        candidate['접수기관'],
-        candidate['접수기관명'],
-        candidate['서비스명'],
-        candidate.title,
-        candidate.location,
-        candidate.addr1,
-        candidate['지원대상'],
-        candidate['선정기준'],
-      ].filter(Boolean).join(' ');
-      // 광역(시·도) 단위만 사용. 구 단위는 노이즈 사진의 원인이라 제외.
-      const metros = extractMetroFromText(regionText);
-      // 주제 풀 (예: 어선/수산 -> 바다 풀)
-      const themeText = [
-        candidate['서비스명'],
-        candidate.title,
-        candidate.summary,
-        candidate.description,
-        Array.isArray(candidate.tags) ? candidate.tags.join(' ') : (candidate.tags || ''),
-      ].filter(Boolean).join(' ');
-      const theme = detectThemeFromText(themeText);
-
-      const expandedTokens = [];
-      const seenTokens = new Set();
-      for (const token of metros) {
-        if (!seenTokens.has(token)) {
-          seenTokens.add(token);
-          expandedTokens.push(token);
-        }
-      }
-      // 광역 정보가 전혀 없고 theme이 있으면 theme-only 시도를 맨 앞에
-      if (expandedTokens.length === 0 && theme) {
-        expandedTokens.unshift('__THEME__');
-      }
-      // 광역 정보가 전혀 없을 때만 전국 대표 풀 폴백
-      if (expandedTokens.length === 0 || (expandedTokens.length === 1 && expandedTokens[0] === '__THEME__')) {
-        for (const nationalToken of nationalTokenPool) {
-          if (!seenTokens.has(nationalToken)) {
-            seenTokens.add(nationalToken);
-            expandedTokens.push(nationalToken);
-          }
-        }
-      }
-      if (!generatePost._landmarkCache) generatePost._landmarkCache = new Map();
-      const lmCache = generatePost._landmarkCache;
-      for (const token of expandedTokens) {
-        const result = await getRegionalLandmark({
-          regionName: token === '__THEME__' ? '' : token,
-          tourApiKey: process.env.TOUR_API_KEY,
-          cache: lmCache,
-          numOfRows: 15,
-          theme: token === '__THEME__' ? theme : (token === expandedTokens[0] ? theme : undefined),
-          context: `${candidate._category || ''} | ${itemContextLabel}`,
-        });
-        if (result?.imageUrl) {
-          imageUrl = result.imageUrl;
-          if (result.reused) {
-            console.warn('[blog-image][INFO] 랜드마크 재사용 (history pool 소진): ' + result.imageUrl);
-          }
-          break;
-        }
-      }
-      if (!imageUrl) {
-        console.warn('[blog-image][WARN] TourAPI 호출은 했지만 적합한 랜드마크 결과 없음. tokens=' + JSON.stringify(expandedTokens) + ' theme=' + (theme || '-') + ' (대상: ' + itemContextLabel + ')');
-      }
-    } catch (err) {
-      console.warn('[blog-image][ERROR] 랜드마크 조회 실패: ' + (err && err.message ? err.message : err));
-    }
+    imageUrl = await resolveLandmarkFallbackImage(candidate, itemContextLabel);
   }
   if (!imageUrl && candidate._category === '전국 보조금·복지 정책') {
     // 큐레이션 이미지 풀(사대궁 등) 재사용 금지 정책에 따라
@@ -1545,7 +1556,7 @@ async function prepareBlogRequest(candidate, postsDir) {
     console.warn('[blog-image][WARN] 보조금 TourAPI 결과 없음 → 카테고리 기본 이미지로 폴백 (대상: ' + itemContextLabel + ')');
   }
   if (!imageUrl) {
-    imageUrl = defaultImages[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
+    imageUrl = DEFAULT_IMAGE_BY_CATEGORY[candidate._category] || 'https://pick-n-joy.com/images/default-og.svg';
     console.warn('[blog-image][WARN] 최종 default 이미지 사용: ' + imageUrl + ' (대상: ' + itemContextLabel + ')');
   }
   // mid 이미지 결정 우선순위:
@@ -1843,8 +1854,22 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, o
   } = preparedRequest.context;
   let generatedText = '';
   let lastFinishReason = '';
+  let resolvedImageUrl = imageUrl;
   const allowQualityRetry = options.allowQualityRetry !== false;
   const maxAttempts = allowQualityRetry ? 2 : 1;
+
+  // prepare 단계에서 fallback을 못 찾고 default로 떨어진 경우를 대비해 finalize에서 1회 재시도한다.
+  if (isDefaultBlogImageUrl(resolvedImageUrl)) {
+    const itemContextLabel = candidate['서비스명'] || candidate.title || candidate.name || sourceId || 'unknown';
+    const landmarkResolver = typeof options.landmarkResolver === 'function'
+      ? options.landmarkResolver
+      : resolveLandmarkFallbackImage;
+    const recoveredImageUrl = await landmarkResolver(candidate, itemContextLabel);
+    if (recoveredImageUrl) {
+      resolvedImageUrl = recoveredImageUrl;
+      console.log('[blog-image][INFO] finalize fallback 복구 성공: ' + recoveredImageUrl + ' (대상: ' + itemContextLabel + ')');
+    }
+  }
 
   const isOverloadedError = (error) => {
     const message = String(error?.message || error || '').toLowerCase();
@@ -1971,9 +1996,9 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, o
 
   // image 필드 삽입 (이미 있으면 덮어쓰기, 없으면 tags 뒤에 삽입)
   if (/^image:/m.test(finalContent)) {
-    finalContent = finalContent.replace(/^image:.*$/m, `image: "${imageUrl}"`);
+    finalContent = finalContent.replace(/^image:.*$/m, `image: "${resolvedImageUrl}"`);
   } else {
-    finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${imageUrl}"`);
+    finalContent = finalContent.replace(/^(tags:\s*\[.*\])$/m, `$1\nimage: "${resolvedImageUrl}"`);
   }
 
   // source_id 반드시 삽입
@@ -2045,7 +2070,7 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, o
   const postProcessed = postProcessGeneratedMarkdown(finalContent, {
     itemName,
     category: candidate._category,
-    imageUrl,
+    imageUrl: resolvedImageUrl,
     midImageUrl,
     candidate,
     nearbyRestaurantsSection,
@@ -2370,6 +2395,8 @@ if (require.main === module) {
 
 module.exports = {
   isEligibleSubsidyCandidate,
+  isDefaultBlogImageUrl,
+  resolveLandmarkFallbackImage,
   finalizeBlogRequest,
   prepareBlogRequests,
   run,

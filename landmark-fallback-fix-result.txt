@@ -1,0 +1,29 @@
+랜드마크 fallback 복구 작업 결과 (prepare/finalize 분리 회귀)
+
+1) 수정 범위
+- scripts/generate-blog-post.js
+  - prepare 단계 랜드마크 fallback 로직을 resolveLandmarkFallbackImage()로 공용화
+  - finalizeBlogRequest()에 안전망 추가:
+    - imageUrl이 default/empty일 때만 랜드마크 1회 재시도
+    - 복구 성공 시 frontmatter image를 복구 URL로 저장
+  - 분리 후 남아있던 generatePost._landmarkCache 참조 제거
+- scripts/test-blog-landmark-fallback.js (신규)
+  - mock/fake 기반 회귀 테스트 2건 추가
+    - default 이미지로 준비된 요청 -> finalize에서 fallback 복구 수행 확인
+    - non-default 이미지로 준비된 요청 -> finalize에서 fallback 미호출 확인
+
+2) 실호출 정책
+- 회귀 테스트는 landmarkResolver mock 주입으로 실행
+- 외부 API 실호출 없이 검증 완료
+
+3) 검증 로그
+- node --check scripts/generate-blog-post.js 통과
+- node --check scripts/test-blog-landmark-fallback.js 통과
+- node scripts/test-blog-landmark-fallback.js 결과:
+  - PASS test-blog-landmark-fallback
+- npm run build 통과
+
+4) 기대 효과
+- prepare 단계에서 default로 떨어진 케이스도 finalize에서 1회 복구 기회를 가져
+  인천/보조금/축제 공통으로 image default 잔존 확률을 줄임
+- prepare/finalize 분리 이후 fallback 누락 회귀를 테스트로 고정
