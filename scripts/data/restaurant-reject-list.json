@@ -6,6 +6,20 @@
     "lowRatingReevaluationDays": 180
   },
   "items": {
+    "1651030568": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1651030568",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "22809521": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "22809521",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "7901142": {
       "reason": "low_rating",
       "rating": 3.8,
