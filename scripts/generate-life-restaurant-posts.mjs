@@ -511,8 +511,7 @@ async function resolveSafeHeroImage(item, defaultImage) {
 
   for (const { url: rawCandidateUrl, source } of candidates) {
     if (isCafeVenue && source !== 'google') {
-      console.warn(`⚠️ 히어로 이미지 제외(카페는 Google Place 사진만 허용): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
-      continue;
+      console.warn(`ℹ️ 카페 히어로 이미지 대체 시도(Google 미채택): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
     }
 
     const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
@@ -551,8 +550,7 @@ async function resolveSafeRestaurantInlineImage(item) {
 
   for (const { url: rawCandidateUrl, source } of candidates) {
     if (isCafeVenue && source !== 'google') {
-      console.warn(`⚠️ 본문 이미지 제외(카페는 Google Place 사진만 허용): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
-      continue;
+      console.warn(`ℹ️ 카페 본문 이미지 대체 시도(Google 미채택): ${stripPlacesKeyFromUrl(rawCandidateUrl)}`);
     }
 
     const candidateUrl = stripPlacesKeyFromUrl(rawCandidateUrl);
