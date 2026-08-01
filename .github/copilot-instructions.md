@@ -203,14 +203,15 @@ public/images/        # 기본 OG 이미지 4종 (SVG)
 ```
 
 ## 작업 규칙
-1. 작업 전 이 파일과 `AGENTS.md`, `COPILOT_MEMORY.md`를 먼저 확인
-2. 세부 작업 이력은 `WORK_LOG.md`에 기록
-3. Copilot 운영 문서는 `.github/copilot-instructions.md`와 `COPILOT_MEMORY.md`를 기준으로 유지
-4. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
-5. **과금 API 실호출 금지 규칙(상시)**: 과금 API(Google Places 등) 실호출은 검증·테스트 목적 사용 금지. 검증은 mock/시드 캐시/정기 런 리포트 수치로 대체한다. 실호출이 불가피한 경우 사전에 사용자 승인 필수.
-5. 빌드 성공 후 `git add . → git commit → git push` 순서로 배포
-6. 세션 종료 시 `WORK_LOG.md`, `COPILOT_MEMORY.md`, `.github/copilot-instructions.md` 업데이트
-7. **항상 적용할 종료 루틴(필수, 단일 호흡 배포)**
+1. **[필수] 작업/디버깅 시작 전 `PROJECT_CRITICAL_NOTES.md`를 먼저 읽는다. 특히 '알려진 함정(§2)'을 확인해 이미 규명된 원인을 처음부터 다시 추론하지 않는다. 진단이 과거 사실이나 사용자 반례와 충돌하면 그 진단을 폐기하고 재조사한다.**
+2. 작업 전 이 파일과 `AGENTS.md`, `COPILOT_MEMORY.md`를 먼저 확인
+3. 세부 작업 이력은 `WORK_LOG.md`에 기록
+4. Copilot 운영 문서는 `.github/copilot-instructions.md`와 `COPILOT_MEMORY.md`를 기준으로 유지
+5. `npm run build` 항상 마지막에 실행해서 빌드 오류 확인
+6. **과금 API 실호출 금지 규칙(상시)**: 과금 API(Google Places 등) 실호출은 검증·테스트 목적 사용 금지. 검증은 mock/시드 캐시/정기 런 리포트 수치로 대체한다. 실호출이 불가피한 경우 사전에 사용자 승인 필수.
+7. 빌드 성공 후 `git add . → git commit → git push` 순서로 배포
+8. 세션 종료 시 `WORK_LOG.md`, `COPILOT_MEMORY.md`, `.github/copilot-instructions.md` 업데이트
+9. **항상 적용할 종료 루틴(필수, 단일 호흡 배포)**
   - 한 작업 단위는 반드시 다음 순서를 **하나의 호흡으로** 끝낸다:
     1. 코드 수정
     2. `npm run build` 성공
