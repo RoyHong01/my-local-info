@@ -6,7 +6,7 @@ description: "구리에서 만나는 깔끔한 양식 스팟, 파스타아미고
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 경기, 경기, 파스타, 깔끔한 양식 스팟, 카카오맵]
-image: "/images/default-restaurant.svg"
+image: "/images/restaurants/2026-08-01-27529986-hero.webp"
 source_id: "27529986"
 slug: "gyeonggi-restaurant-27529986"
 place_name: "파스타아미고"
