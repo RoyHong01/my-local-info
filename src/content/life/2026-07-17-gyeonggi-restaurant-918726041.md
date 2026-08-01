@@ -6,7 +6,7 @@ description: "평점 4.6이 증명하는 찐맛집, 경기 양평에서 만나�
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 경기, 경기, 브런치, 채광 좋은 브런치 카페, 카카오맵]
-image: "/images/restaurants/2026-07-17-918726041-hero.jpg"
+image: "/images/default-restaurant.svg"
 source_id: "918726041"
 slug: "gyeonggi-restaurant-918726041"
 place_name: "엔젤브런치카페"
@@ -53,7 +53,7 @@ review_count: "15"
 
 
 
-![엔젤브런치카페](/images/restaurants/2026-07-17-918726041-inline.jpg)
+![엔젤브런치카페](/images/default-restaurant.svg)
 
 ## 방문 정보 한눈에
 

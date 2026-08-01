@@ -6,7 +6,7 @@ description: "평점 4.3이 증명하는 찐맛집, 인천에서 특별한 저�
 category: 픽앤조이 맛집 탐방
 published_by: "auto" 
 tags: [맛집탐방, 인천, 인천, 오마카세, 집중도 높은 다이닝, 카카오맵]
-image: "/images/restaurants/2026-07-23-22809521-hero.jpg"
+image: "/images/default-restaurant.svg"
 source_id: "22809521"
 slug: "incheon-restaurant-22809521"
 place_name: "필스시"
@@ -53,7 +53,7 @@ review_count: "24"
 
 
 
-![필스시](/images/restaurants/2026-07-23-22809521-inline.jpg)
+![필스시](/images/default-restaurant.svg)
 
 ## 방문 정보 한눈에
 
