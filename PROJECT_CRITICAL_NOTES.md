@@ -64,23 +64,37 @@
 - **착각 금지**: 이 증상을 "게이트 문제"나 "데이터 없음"으로 오진하기 쉽다(아래 2-2 참조).
   실제 분기점은 **7/25 코드 변경**이다.
 
-### 2-2. ⚠️ 인천/보조금 이미지는 "원본에 없다" — API가 키워드로 채운 것
+### 2-2. ⚠️ 인천/보조금 이미지는 "원본에 없다" — 한국관광공사 API가 사후에 채운 것
 
 - **사실**: 보조금·복지 정보는 **원본 데이터에 이미지가 없다(순수 텍스트)**.
   관공서 지원 정책에는 사진이 없다.
-- **어떻게 이미지가 붙나**: `INCHEON_PHOTO_API`(=API003, `collect-incheon.js`, 2026-04-14 연동)가
-  **지역명 키워드로 관광사진을 검색**해서 `firstimage`를 채운다.
-  - 예: `"월미도"` 검색 → **GS25 월미도 선착장점** 사진. `"송도"` → 송도컨벤시아. `"인천광역시"` → 인천시립박물관.
-  - **관공서 복지 글에 편의점(GS25) 사진이 붙는 이유가 이것** — 원본이 아니라 키워드 검색 결과다.
+- **현재 소싱 = 한국관광공사 TourAPI 단일 계열** (2026-08-02 확정):
+  - 수집: `collect-incheon.js:312 fetchTourFirstImageByKeyword` →
+    `apis.data.go.kr/B551011/KorService2/searchKeyword2`(`:315`).
+    `:547`에서 primary 호출, 캐시 태그 `'tourapi'`(`:550`).
+  - 생성 finalize: `generate-blog-post.js:129 getRegionalLandmark` →
+    `landmark-engine.js:321` 동일 `KorService2/searchKeyword2`.
+  - **최종 이미지 결정권은 finalize의 landmark(관광공사 tong.visitkorea)에 둔다.**
+    경로를 하나로 모아야 디버깅·재현이 단순해진다.
+- **API003(`INCHEON_PHOTO_API`, 인천이지)은 사실상 비활성**:
+  - 코드는 남아있으나(`collect-incheon.js:21~22`, `api.incheoneasy.com/api/tour/touristPhotoInfo`)
+    `:109`에서 토큰이 없으면 `missing_token`으로 즉시 리턴한다.
+  - **왜 뺐나**: ① "인천 관광지" 키워드 검색이라 복지 글에 GS25 월미도 선착장점 같은
+    엉뚱한 사진이 붙었다 ② `isIncheonEventItem` 게이트로 축제/문화 계열만 통과해
+    순수 복지 글(보육/고용/돌봄)은 애초에 이미지를 못 받았다 ③ 등록 IP에서만 동작
+    (로컬은 `UNREGISTERED_IP_ERROR`).
+  - **⛔ 2026-08-02에 API003 게이트 확장을 시도했다가 원복했다. 재시도 금지.**
+    collect에서 API003을 우선시키면 finalize landmark의 개입 기회가 줄어 GS25류
+    사진이 다시 붙는다. "복지 글에 이미지가 없으니 게이트를 넓히자"는 접근은 이미 폐기됐다.
 - **착각 금지**: 코드에서 `firstimage`가 채워진 걸 보고 **"원본에 이미지가 있었다"고
   추론하면 틀린다.** 전부 API가 사후에 채운 것이다.
-- **fallback 체인** (`generate-blog-post.js`):
-  `candidate.firstimage → landmark 검색(getRegionalLandmark, 관광공사 tong.visitkorea) → default-incheon.svg`
-  - 7/22까지는 firstimage 없어도 landmark가 관광공사 이미지를 채웠다(정상).
-  - 7/25 refactor가 이 landmark fallback을 finalize에서 끊음 → 7/26부터 default (§2-1).
-- **주의**: `COPILOT_MEMORY.md`의 "인천 이미지: 인천관광공사 API 비활성화, TourAPI 키워드
-  매칭 성공 시만 반영"이라는 메모가 있으나, 실제로는 API003이 이미지 소싱의 핵심이다.
-  이 메모 문구가 혼란의 원인이 될 수 있으니 코드(`collect-incheon.js`)를 진실로 삼는다.
+- **fallback 체인**:
+  `candidate.firstimage(관광공사 KorService2) → landmark 검색(getRegionalLandmark, 관광공사)
+   → default-incheon.svg`
+  - 7/22까지 정상 → 7/25 refactor가 finalize landmark를 끊음 → 7/26부터 default(§2-1)
+    → 8/2 `0d27045`로 복구, 인천 default 5건 백필(landmark 4건 / TourAPI 1건).
+- `COPILOT_MEMORY.md`의 "인천관광공사 API 비활성화, TourAPI 키워드 매칭 성공 시만 반영"
+  메모는 **현재 사실과 일치한다.** (과거 한때 이 메모가 틀린 것으로 오해된 적이 있으니 주의)
 
 ### 2-3. ⚠️ 미색인(GSC "크롤링됨-미색인")의 정체 = 본문 빈 페이지
 
@@ -167,7 +181,7 @@
 ### 4-1. 카테고리별 이미지 출처
 | 카테고리 | hero 이미지 출처 | 비고 |
 |---|---|---|
-| 인천 | API003(INCHEON_PHOTO_API) 키워드 검색 → landmark(관광공사) → default | **원본에 이미지 없음.** API가 채움 (§2-2) |
+| 인천 | 관광공사 `KorService2` 키워드 검색(collect) → landmark(관광공사, finalize) → default | **원본에 이미지 없음.** API가 사후 채움. API003(인천이지)은 비활성 (§2-2) |
 | 보조금 | (인천과 동일 generate-blog-post 경로) → landmark → default | 원본 텍스트, 이미지 없음 |
 | 축제 | TourAPI `firstimage` | 원본 이미지 있음 |
 | 맛집 | 구글 플레이스(로컬 저장) → 네이버 → default. 카페는 네이버 fallback 허용 | 후보 수집 때 로컬 미러링 |
@@ -226,8 +240,9 @@
 - 색인 문제(404/리디렉션/미색인) 사실상 정리 완결, 구글 반영 대기.
 - 빈 본문 채우기 하루 15건 자동 가동.
 - 맛집 이미지: reject-list tombstone으로 재생성 방지 완료.
-- **인천/보조금 이미지 회귀(§2-1, §2-2): 7/25 refactor의 finalize landmark fallback 복구 진행 중.**
-  실서버(GitHub Actions)는 API003 IP 등록됨 → 백필 가능. VS Code 로컬은 UNREGISTERED_IP_ERROR로 막힘.
+- **인천/보조금 이미지 회귀(§2-1, §2-2): 2026-08-02 복구 완료(`0d27045`).**
+  finalize landmark 안전망 복구 + 인천 default 5건 백필(landmark 4 / TourAPI 1).
+  이미지 소싱은 한국관광공사 TourAPI 단일 계열로 통일, API003(인천이지)은 비활성 유지.
 - 모델(Sonnet vs Gemini): AdSense 통과 후 결정 보류.
 
 ---
