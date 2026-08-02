@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-02T00:00:00+09:00",
+  "updatedAtKst": "2026-08-03T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5671,6 +5671,60 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-08-02",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-03",
+      "productId": "9185019536",
+      "productName": "닥터스베스트 마그네슘 Magnesium Lysinate Glycinate 120정, 120정, 1개",
+      "brand": "닥터스베스트",
+      "productGroupTokens": [
+        "마그네슘",
+        "magnesium",
+        "lysinate",
+        "glycinate",
+        "120정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-03-choice-health-2026-08-03.md",
+      "sourceId": "manual-choice-health-2026-08-03",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-08-03",
+      "productId": "9568936089",
+      "productName": "닥터리치 비타민C 3000mg 90포, 3개, 270g",
+      "brand": "닥터리치",
+      "productGroupTokens": [
+        "비타민c",
+        "3000mg",
+        "90포",
+        "270g",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-03-choice-health-2026-08-03.md",
+      "sourceId": "manual-choice-health-2026-08-03",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-08-03",
+      "productId": "9405085004",
+      "productName": "얼라이브 원스데일리 포 맨 멀티비타민, 80정, 1개",
+      "brand": "얼라이브",
+      "productGroupTokens": [
+        "원스데일리",
+        "멀티비타민",
+        "80정",
+        "health"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-03-choice-health-2026-08-03.md",
+      "sourceId": "manual-choice-health-2026-08-03",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
