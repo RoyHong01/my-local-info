@@ -432,7 +432,7 @@ jobs:
           git add src/content/life scripts/data/recommended-products.json
           if ! git diff --cached --quiet; then
 
-            git commit -m "자동 업데이트(2.5단계): 초이스 1건 생성 $(date +'%Y-%m-%d')"
+            git commit -m "자동 업데이트(2.5단계): 초이스 1건 생성 $(TZ=Asia/Seoul date +'%Y-%m-%d')"
             git push
           else
             echo "변경사항 없음"
@@ -558,7 +558,7 @@ jobs:
           git add src/app/life/restaurant/data/restaurants.json scripts/data/google-ratings-cache.json scripts/data/restaurant-query-rotation-state.json scripts/data/restaurant-reject-list.json src/content/life public/images/restaurants
           if ! git diff --cached --quiet; then
 
-            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(date +'%Y-%m-%d')"
+            git commit -m "자동 업데이트(3단계): 맛집 3건 생성 $(TZ=Asia/Seoul date +'%Y-%m-%d')"
             git push
           else
             echo "변경사항 없음"
