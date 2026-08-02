@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
 import type { Metadata } from 'next';
-import ScrollRestorer from '@/components/ScrollRestorer';
 import FestivalCardList from '@/components/FestivalCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
 import CoupangBanner from '@/components/CoupangBanner';
@@ -59,7 +58,6 @@ export default async function FestivalPage() {
               <p className="text-xs text-stone-400 mt-1">총 {items.length}건</p>
             </div>
 
-            <ScrollRestorer storageKey="festivalScrollY" />
             {items.length === 0 ? (
               <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
             ) : (
