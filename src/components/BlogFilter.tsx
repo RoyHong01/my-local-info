@@ -1,9 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { PostData } from '@/lib/posts';
+import useClientPagination from '@/components/pagination/useClientPagination';
 
 const CATEGORIES = [
   { label: '전체', value: '' },
@@ -128,6 +130,14 @@ const REVERSE_MAP: Record<string, string> = {
   '전국 축제·여행': '축제',
 };
 
+const PAGE_SIZE = 30;
+
+declare global {
+  interface Window {
+    __blogEnsureVisible?: (indexOrCount: number) => void;
+  }
+}
+
 export default function BlogFilter({ posts }: { posts: PostData[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -143,14 +153,65 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
     }
   };
 
-  const handleCardClick = () => {
-    sessionStorage.setItem('blogScrollY', String(window.scrollY));
-    sessionStorage.setItem('blogCategory', activeCategoryParam);
-  };
-
   const filtered = activeCategory
     ? posts.filter((p) => p.category === activeCategory)
     : posts;
+
+  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
+    items: filtered,
+    pageSize: PAGE_SIZE,
+    scopeKey: activeCategoryParam || 'all',
+  });
+
+  useEffect(() => {
+    const handleEnsureVisibleRequest = (event: Event) => {
+      const customEvent = event as CustomEvent<{ count?: number }>;
+      const requestedCount = Number(customEvent.detail?.count || 0);
+      if (Number.isFinite(requestedCount) && requestedCount > 0) {
+        setTimeout(() => ensureVisible(requestedCount), 0);
+        sessionStorage.removeItem('blogPendingVisibleCount');
+      }
+    };
+
+    window.__blogEnsureVisible = ensureVisible;
+    window.addEventListener('blog:ensure-visible', handleEnsureVisibleRequest as EventListener);
+
+    return () => {
+      window.removeEventListener('blog:ensure-visible', handleEnsureVisibleRequest as EventListener);
+      if (window.__blogEnsureVisible === ensureVisible) {
+        delete window.__blogEnsureVisible;
+      }
+    };
+  }, [ensureVisible]);
+
+  useEffect(() => {
+    const consumePendingVisibleCount = () => {
+      const pendingRaw = sessionStorage.getItem('blogPendingVisibleCount')
+        ?? sessionStorage.getItem('blogVisibleCount')
+        ?? '0';
+      const pendingVisibleCount = Number(pendingRaw);
+      if (Number.isFinite(pendingVisibleCount) && pendingVisibleCount > 0) {
+        setTimeout(() => ensureVisible(pendingVisibleCount), 0);
+        sessionStorage.removeItem('blogPendingVisibleCount');
+        sessionStorage.removeItem('blogVisibleCount');
+      }
+    };
+
+    consumePendingVisibleCount();
+    const retryA = window.setTimeout(consumePendingVisibleCount, 60);
+    const retryB = window.setTimeout(consumePendingVisibleCount, 180);
+
+    return () => {
+      window.clearTimeout(retryA);
+      window.clearTimeout(retryB);
+    };
+  }, [ensureVisible, activeCategoryParam]);
+
+  const handleCardClick = () => {
+    sessionStorage.setItem('blogScrollY', String(window.scrollY));
+    sessionStorage.setItem('blogCategory', activeCategoryParam);
+    sessionStorage.setItem('blogVisibleCount', String(visibleCount));
+  };
 
   return (
     <div>
@@ -178,58 +239,74 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
           아직 작성된 글이 없습니다.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              onClick={handleCardClick}
-              data-testid={`blog-card-${post.slug}`}
-            >
-              <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
-                {/* 썸네일 영역 */}
-                <div className="relative h-20 w-full flex-shrink-0">
-                  {(() => {
-                    const thumb = getCardThumbnail(post);
-                    return thumb ? (
-                    <Image
-                      src={thumb}
-                      alt={post.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    ) : (
-                      <CategoryThumbnail category={post.category} />
-                    );
-                  })()}
-                </div>
-
-                {/* 텍스트 영역 */}
-                <div className="p-4 flex flex-col gap-1.5 flex-grow">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getCategoryBadge(post.category)}`}>
-                      {getCategoryLabel(post.category)}
-                    </span>
-                    <span className="menu-card-icon text-xs text-stone-400">{post.date}</span>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {visibleItems.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                onClick={handleCardClick}
+                data-testid={`blog-card-${post.slug}`}
+              >
+                <div className="menu-card bg-white rounded-xl border border-stone-100 hover:shadow-md hover:-translate-y-1 transition-all duration-200 overflow-hidden flex flex-col h-full">
+                  {/* 썸네일 영역 */}
+                  <div className="relative h-20 w-full flex-shrink-0">
+                    {(() => {
+                      const thumb = getCardThumbnail(post);
+                      return thumb ? (
+                      <Image
+                        src={thumb}
+                        alt={post.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      ) : (
+                        <CategoryThumbnail category={post.category} />
+                      );
+                    })()}
                   </div>
-                  <h2
-                    className="text-base font-bold text-stone-800 hover:text-orange-500 transition-colors leading-snug"
-                    style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-                  >
-                    {post.title}
-                  </h2>
-                  <p
-                    className="text-sm text-stone-500 leading-relaxed flex-grow"
-                    style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
-                  >
-                    {post.summary}
-                  </p>
+
+                  {/* 텍스트 영역 */}
+                  <div className="p-4 flex flex-col gap-1.5 flex-grow">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getCategoryBadge(post.category)}`}>
+                        {getCategoryLabel(post.category)}
+                      </span>
+                      <span className="menu-card-icon text-xs text-stone-400">{post.date}</span>
+                    </div>
+                    <h2
+                      className="text-base font-bold text-stone-800 hover:text-orange-500 transition-colors leading-snug"
+                      style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                    >
+                      {post.title}
+                    </h2>
+                    <p
+                      className="text-sm text-stone-500 leading-relaxed flex-grow"
+                      style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                    >
+                      {post.summary}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-6 flex items-center justify-between gap-3">
+            <p className="text-xs text-stone-400">{visibleCount} / {filtered.length}편 표시 중</p>
+            {hasMore && (
+              <button
+                type="button"
+                onClick={loadMore}
+                data-testid="blog-load-more"
+                className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
+              >
+                더보기 (+{Math.min(PAGE_SIZE, filtered.length - visibleCount)})
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
