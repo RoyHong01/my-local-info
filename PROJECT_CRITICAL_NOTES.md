@@ -145,7 +145,7 @@
 - **한 번에 한 파일만 수정.** 여러 파일 동시 str_replace는 파일 손상을 반복 유발한다
   (모델 무관: GPT-5.3-Codex, Sonnet, Fable 5 등에서 모두 발생). 각 파일:
   수정 → `node --check` → `git diff --stat`(대량 삭제 감지 시 중단) → 다음 파일.
-- **커밋도 파일별/논리단위 분리.**
+- **커밋 정책**: 수정은 한 파일씩 순차 진행하되, **커밋·push는 한 작업 단위에 1회로 묶는다**(코드 + 문서 단일 커밋). 연속 push 시 GitHub Actions가 이전 run을 자동 취소해 CI 이력이 오염되기 때문. 논리적으로 무관한 작업이 섞일 때만 커밋을 분리한다. (`copilot-instructions.md` 작업 규칙 8 참조)
 - **`node -e` / PowerShell 인라인 실행 금지** — 프롬프트 문자열이 셸 파싱에서 깨진다.
   임시 `.cjs` 파일을 만들어 실행.
 - 0바이트/대량 변경 감지 시 즉시 중단, `git restore --source` 또는 `git checkout <commit> --`로 복구.
