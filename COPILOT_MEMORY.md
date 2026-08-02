@@ -322,8 +322,13 @@ Copilot 기준 문서는 `.github/copilot-instructions.md`와 `WORK_LOG.md`를 �
 - 범위: 인천/보조금/축제 상세 페이지 본문 (블로그 메뉴 아님)
 - 렌더 우선순위: `description_markdown || generatedMarkdown`
 - fallback: `src/lib/incheon-markdown.ts`, `src/lib/subsidy-markdown.ts`, `src/lib/festival-markdown.ts`
-- markdown 배치량: 인천 2 / 축제 2 / 보조금 5
-- 인천 이미지: 인천관광공사 API 비활성화, TourAPI 키워드 매칭 성공 시만 반영
+- markdown 배치량: **평시 인천 2 / 축제 2 / 보조금 5** <- 기본값이자 원복 대상.
+  - ⏳ **2026-08-02 ~ 2026-09-05경 한시 상향: 인천 5 / 축제 5 / 보조금 5 (빈 항목 우선 버킷)**
+    - 사유: 본문 빈 Top 페이지 약 672건(subsidy 337 / incheon 140 / festival 195) 소진. 하루 15건 x 약 45일.
+    - **원복 조건**: 빈 본문 backfill 소진 확인 시 평시값(2/2/5) 복귀. 예정된 원복이므로 별도 승인 불필요.
+    - 소진 여부는 날짜가 아니라 **실제 빈 항목 잔여 수**로 판단. 9/5는 예상 시점일 뿐.
+    - 상세: `PROJECT_CRITICAL_NOTES.md` §2-3
+- 인천 이미지: 인천관광공사 API(API003, `api.incheoneasy.com`) 비활성화 유지. 한국관광공사 TourAPI `KorService2/searchKeyword2` 단일 계열만 사용 — 수집 `collect-incheon.js:312`, 생성 finalize `landmark-engine.js:321`. 최종 결정권은 finalize landmark. *(2026-08-02 확정, 상세는 `PROJECT_CRITICAL_NOTES.md` §2-2)*
 - 축제 최근수정 tie-break: `modifiedtime -> 수정일시 -> updatedAt`
 - **AI 재가공 필드 보존 메커니즘**: `description_markdown` 등 AI 생성 필드는 매일 수집 머지 시 `{...(prev || {}), ...item}` 패턴으로 보존됨
   - `prev`에 있고 API `item`에 없는 필드(description_markdown, editor_note 등)는 자동으로 유지
@@ -423,6 +428,7 @@ Copilot 기준 문서는 `.github/copilot-instructions.md`와 `WORK_LOG.md`를 �
   - **이미지 자산 반영**: `public/images/choice/shafran-hero.png`, `public/images/choice/shafran-middle.png` 추가.
   - **쿠팡 태그 연동**: 제공된 제휴 링크/배너 이미지/alt를 frontmatter에 반영하고 본문 CTA 연결.
 - 2026-04-14 핵심 반영(추가):
+  - ⛔ **아래 API003 항목은 2026-08-02 기준 비활성 이력이다.** 현재 인천 이미지는 한국관광공사 TourAPI 단일 계열. 게이트 확장 재시도 금지(`PROJECT_CRITICAL_NOTES.md` §2-2).
   - **인천 관광사진 API003 연동**: `collect-incheon.js`에서 행사/축제 항목에 대해 `accessToken + trrsrtNm` 검색으로 `firstimage`를 자동 매칭.
   - **fallback 정책**: 특정 행사 검색 실패 시 인천 랜드마크 키워드 풀에서 랜덤 사진으로 보강.
   - **출처 표기**: `image_source_note`를 블로그 상세 상단 이미지 하단에 표시.
