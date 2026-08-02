@@ -18,6 +18,80 @@
   - 실행한 검증 2
 ---
 
+## 2026-08-02 (목록 페이지네이션 전면 적용 + 이미지 없는 맛집 2건 정리 + 운영 문서 정합화)
+
+### 수정 파일
+- `src/hooks/pagination-core.js` / `pagination-core.ts` (신규)
+- `src/app/blog/`, `subsidy/`, `incheon/`, `life-restaurant/`, `life/`, `festival/` 목록 컴포넌트
+- `restaurant-reject-list.json`
+- `PROJECT_CRITICAL_NOTES.md`, `.github/copilot-instructions.md`, `COPILOT_MEMORY.md`
+
+### 배경
+1. blog 목록에서 필터/탭이 먹통이 되는 하이드레이션 지연이 아침에 1회 발생.
+2. 이미지 없는 맛집 2건이 목록에 계속 노출됨.
+3. 운영 문서 3종의 기재 사실이 서로 어긋나 있음(배포 시각, 커밋 정책, 인천 이미지 소싱).
+
+### 원인(RCA)
+1. blog `index.html`이 3.7MB. 565편 전체가 RSC/Flight payload에 실림. 카드 표시에 불필요한
+   `content`/`place`/`rating` 등 상세 전용 필드까지 전부 포함. 초기 DOM 노드 수와 payload
+   파싱량이 동시에 과다. VS Code가 dev 서버로 재현하려다 오진한 이력 있음 — 판단 기준은
+   정적 `out/` 산출물 크기.
+2. `.md` 삭제만으로는 스냅샷 `source_id`가 남아 재생성됨(§2-4).
+3. 문서 간 불일치 3건:
+   - 배포 시각: 04:00 KST(구) vs 01:00 KST(현행). 2026-07-24 Anthropic Batch 도입 시 변경됐으나
+     `copilot-instructions.md` 규칙 19가 04:00으로 남아 있었음.
+   - 커밋 정책: "파일별 분리"(CRITICAL_NOTES §3-3) vs "단일 커밋 필수"(규칙 8)가 정면 충돌.
+   - 인천 이미지: §2-2가 API003을 소싱 핵심으로 단정했으나, 실제는 한국관광공사 TourAPI 단일 계열.
+
+### 조치
+- **페이지네이션**: 공통 훅 `useClientPagination` 신설 후 blog/subsidy/incheon/life-restaurant/
+  life/festival 6개 영역에 적용. 더보기 30→60→90, 필터·탭 전환 시 리셋, 스크롤 위치 +
+  visibleCount 복원. `life/choice`는 `getChoiceArticles(4)`로 이미 제한되어 제외.
+  → 초기 DOM은 30개로 축소됐으나 **payload 크기는 미개선**. 재발 시 대응(B→A→C)은
+  `PROJECT_CRITICAL_NOTES.md` §2-7에 신설 기록.
+- **맛집 2건 삭제**: 필스시(22809521), 수수카페(1651030568). `.md` 삭제 + reject-list tombstone
+  등록 + 목록 필터 연결까지 3단으로 처리해 재생성 차단.
+- **문서 정합화**: 배포 시각 01:00 KST 통일, 커밋 정책을 "수정은 한 파일씩 / 커밋·push는 1회"로
+  양 문서 합의, 인천 이미지 소싱을 한국관광공사 TourAPI 단일 계열로 정정(API003 비활성 명시 +
+  게이트 확장 재시도 금지 경고). markdown 배치량 5/5/5는 빈 본문 672건 소진용 **한시 조치**임을
+  명시하고 원복 조건(잔여 수 기준, 예상 9/5경)을 함께 기록.
+
+### 검증
+- 6개 영역 페이지네이션 동작 스크린샷 확인(더보기·필터 리셋·스크롤 복원).
+- 삭제 2건이 실사이트 목록에서 사라진 것 확인.
+- 문서 수정은 건별 `git diff --stat` 검증(삽입/삭제 수치 사전 지정값과 일치), §2-7 삽입은 deletion 0 확인.
+- 인천 이미지 경로는 코드 인용으로 확정: `collect-incheon.js:312/315/547`, `landmark-engine.js:321`
+  (모두 `KorService2/searchKeyword2`), `collect-incheon.js:109` API003 토큰 없으면 즉시 리턴.
+
+### 커밋
+- `ece6e18` feat(pagination): add reusable client pagination hook
+- `44cdb02` feat(blog): apply client pagination with load-more
+- `05f3200` fix(blog): restore visible count before scroll recovery
+- `15f8087` test(blog): add static pagination verification scripts
+- `5fba376` feat(subsidy) / `fc4e5f7` feat(incheon) / `7795f16` feat(life-restaurant)
+  / `5913ab9` feat(life) / `e2374f8` feat(festival) — 각 목록 페이지네이션
+- `df80f76` test(subsidy): align static scroll-restore assertion
+- `d50012e` chore(life): delete two image-missing restaurant posts
+- `20b0c2b` chore(restaurants): reinforce reject tombstones for two image-missing ids
+- `d400bbf` fix(life): hide rejected restaurant ids from snapshot lists
+- `ff0e739` docs: 배포 스케줄 01:00 KST 정정 + 커밋 정책 규칙 정합화
+- `0fae2e0` docs: 인천 이미지 소싱 실태 반영(관광공사 TourAPI 단일 계열, API003 비활성)
+- `43acc65` docs: markdown 배치량 5/5/5 한시 조치 명시 + 원복 조건 추가
+- `7213a50` docs: 인천 이미지 소싱 현행화 + markdown 배치량 한시 조치 명시
+- `bb71f77` docs: §2-7 blog 하이드레이션 payload 함정 추가
+
+### 후속/주의
+- **본 항목 이전에 기록된 "2026-08-02 인천/보조금 이미지 회귀" 항목의 후속/주의에
+  "API003 키워드 → landmark" 체인이라고 적혀 있으나, 이는 같은 날 조사로 폐기됐다.**
+  현행 체인은 `관광공사 KorService2(collect) → landmark(관광공사, finalize) → default`이며
+  API003은 비활성. 최종 결정권은 finalize landmark. (`PROJECT_CRITICAL_NOTES.md` §2-2)
+- 페이지네이션은 payload 문제를 해결하지 않았다. 재발 시 §2-7의 B → A → C 순서로 대응.
+- markdown 배치량 5/5/5는 한시값. 빈 본문 소진 시 평시 2/2/5로 복귀(날짜 아닌 잔여 수로 판단).
+- CI 커밋 메시지 날짜 UTC → KST 수정 별도 진행. `generate-blog-post.js:1603/1711/2034`의
+  `toISOString()` 기반 파일명·frontmatter date는 **미수정 상태**이며, 8/3 자동화 결과 확인 후
+  별도 작업으로 처리 예정(소급 적용 없음, 신규 생성분만).
+
+
 ## 2026-08-02 (인천/보조금 블로그 이미지 회귀 근본 수정 + 운영 가이드 문서 신설)
 
 - **수정 파일**:
