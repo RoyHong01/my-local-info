@@ -1,8 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import useClientPagination from '@/components/pagination/useClientPagination';
 
 export interface LifePageItem {
   type: 'restaurant' | 'choice';
@@ -23,6 +25,8 @@ const TABS = [
   { label: '서울·인천·경기 맛집 탐방', value: 'restaurant' },
   { label: '픽앤조이 초이스', value: 'choice' },
 ] as const;
+
+const PAGE_SIZE = 30;
 
 const RESTAURANT_THUMBNAIL_IMAGES: Record<string, string> = {
   '인천 맛집': '/images/restaurant-incheon-thumbnail.png',
@@ -100,6 +104,10 @@ function LifeCard({ item, activeTab }: { item: LifePageItem; activeTab: string }
   const handleInternalCardClick = () => {
     sessionStorage.setItem('lifeScrollY', String(window.scrollY));
     sessionStorage.setItem('lifeTab', activeTab);
+    const currentVisible = window.sessionStorage.getItem('lifeCurrentVisibleCount');
+    if (currentVisible) {
+      sessionStorage.setItem('lifeVisibleCount', currentVisible);
+    }
   };
 
   const returnHref = buildLifeReturnHref(activeTab);
@@ -163,14 +171,14 @@ function LifeCard({ item, activeTab }: { item: LifePageItem; activeTab: string }
 
   if (item.external) {
     return (
-      <a href={item.href} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={item.href} target="_blank" rel="noopener noreferrer" className="block" data-testid={`life-card-${item.type}-${item.id}`}>
         {inner}
       </a>
     );
   }
 
   return (
-    <Link href={internalHref} className="block" onClick={handleInternalCardClick}>
+    <Link href={internalHref} className="block" onClick={handleInternalCardClick} data-testid={`life-card-${item.type}-${item.id}`}>
       {inner}
     </Link>
   );
@@ -208,6 +216,41 @@ export default function LifeFilterClient({
             return b.date.localeCompare(a.date);
           });
 
+  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
+    items,
+    pageSize: PAGE_SIZE,
+    scopeKey: activeTab || 'all',
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('lifeCurrentVisibleCount', String(visibleCount));
+  }, [visibleCount]);
+
+  useEffect(() => {
+    const savedVisibleCount = Number(sessionStorage.getItem('lifeVisibleCount') || 0);
+    if (Number.isFinite(savedVisibleCount) && savedVisibleCount > 0) {
+      ensureVisible(savedVisibleCount);
+    }
+
+    const savedY = sessionStorage.getItem('lifeScrollY');
+    if (savedY) {
+      const y = Number(savedY);
+      if (Number.isFinite(y) && y >= 0) {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: y, behavior: 'instant' });
+            });
+          });
+        }, 160);
+      }
+    }
+
+    sessionStorage.removeItem('lifeTab');
+    sessionStorage.removeItem('lifeVisibleCount');
+    sessionStorage.removeItem('lifeScrollY');
+  }, [ensureVisible, activeTab]);
+
   return (
     <div>
       {/* 탭 필터 */}
@@ -232,11 +275,27 @@ export default function LifeFilterClient({
       {items.length === 0 ? (
         <div className="text-center py-16 text-stone-400 text-sm">아직 콘텐츠가 없습니다.</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.map((item) => (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {visibleItems.map((item) => (
             <LifeCard key={`${item.type}-${item.id}`} item={item} activeTab={activeTab} />
           ))}
-        </div>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between gap-3">
+            <p className="text-xs text-stone-400">{visibleCount} / {items.length}편 표시 중</p>
+            {hasMore && (
+              <button
+                type="button"
+                onClick={loadMore}
+                data-testid="life-load-more"
+                className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
+              >
+                더보기 (+{Math.min(PAGE_SIZE, items.length - visibleCount)})
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

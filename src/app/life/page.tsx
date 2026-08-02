@@ -3,7 +3,6 @@ import { getRestaurantsByRegion } from '@/lib/life-restaurants';
 import { getChoiceArticles } from '@/lib/life-choice';
 import { getSortedPostsData } from '@/lib/posts';
 import LifeFilterClient, { type LifePageItem } from '@/components/LifeFilterClient';
-import ScrollRestorer from '@/components/ScrollRestorer';
 
 export default async function LifePage() {
   const [incheon, seoul, gyeonggi] = await Promise.all([
@@ -92,8 +91,6 @@ export default async function LifePage() {
 
   return (
     <div>
-      <ScrollRestorer storageKey="lifeScrollY" />
-
       <div className="mb-8">
         <h1 className="text-2xl font-extrabold flex items-center gap-2 mb-1">
           <span className="text-3xl">🌟</span> 일상의 즐거움
