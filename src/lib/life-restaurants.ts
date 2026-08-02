@@ -76,6 +76,7 @@ const REGION_QUERY_MAP: Record<LifeRegionTab, RegionQueryMeta[]> = {
 };
 
 const SNAPSHOT_PATH = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
+const REJECT_LIST_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-reject-list.json');
 const MAX_ITEMS_PER_REGION = 30;
 
 const REGION_FALLBACK: Record<LifeRegionTab, RestaurantItem[]> = {
@@ -126,8 +127,25 @@ interface RestaurantSnapshotData {
   regions: Partial<Record<LifeRegionTab, RestaurantItem[]>>;
 }
 
+interface RestaurantRejectListData {
+  items?: Record<string, { reason?: string }>;
+  rejectedIds?: Record<string, { reason?: string }>;
+}
+
+async function readRejectedRestaurantIds(): Promise<Set<string>> {
+  try {
+    const raw = await fs.readFile(REJECT_LIST_PATH, 'utf-8');
+    const parsed = JSON.parse(raw) as RestaurantRejectListData;
+    const rejectedIds = parsed?.items || parsed?.rejectedIds || {};
+    return new Set(Object.keys(rejectedIds));
+  } catch {
+    return new Set();
+  }
+}
+
 async function readSnapshotRegion(region: LifeRegionTab): Promise<RestaurantItem[] | null> {
   try {
+    const rejectedIds = await readRejectedRestaurantIds();
     const raw = await fs.readFile(SNAPSHOT_PATH, 'utf-8');
     const parsed = JSON.parse(raw) as RestaurantSnapshotData;
     const items = parsed?.regions?.[region];
@@ -136,6 +154,7 @@ async function readSnapshotRegion(region: LifeRegionTab): Promise<RestaurantItem
     }
     return items
       .filter((item) => item?.id && item?.name && item?.address && item?.mapUrl)
+      .filter((item) => !rejectedIds.has(String(item.id)))
       .map((item) => ({
         ...item,
         summary: getRestaurantSummary(item),
