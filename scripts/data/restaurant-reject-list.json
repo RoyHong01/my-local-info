@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "updatedAt": "2026-07-29T06:24:01.273Z",
+  "updatedAt": "2026-08-02T00:00:00.000Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
   },
   "items": {
     "1651030568": {
-      "reason": "manual_delete",
+      "reason": "no_live_image_source",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "1651030568",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "22809521": {
-      "reason": "manual_delete",
+      "reason": "no_live_image_source",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "22809521",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
