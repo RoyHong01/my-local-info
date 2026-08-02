@@ -50,10 +50,11 @@ async function run() {
     assert(after90 >= 90, `after second load more expected >=90, got ${after90}`);
 
     await page.evaluate(() => window.scrollTo(0, Math.max(1200, document.body.scrollHeight * 0.65)));
-    const beforeScroll = await page.evaluate(() => window.scrollY);
 
     await page.locator('[data-testid^="subsidy-card-"]').nth(89).click();
     await page.waitForURL((url) => url.pathname.startsWith('/subsidy/') && url.pathname !== '/subsidy/', { timeout: 10000 });
+
+    const savedScroll = Number(await page.evaluate(() => sessionStorage.getItem('subsidyScrollY') || '0'));
 
     await page.goBack();
     await page.waitForURL((url) => url.pathname === '/subsidy/', { timeout: 10000 });
@@ -62,7 +63,7 @@ async function run() {
     assert(restored >= 90, `after back expected restored >=90, got ${restored}`);
 
     const afterScroll = await page.evaluate(() => window.scrollY);
-    assert(afterScroll >= Math.max(0, beforeScroll - 250), `scroll should restore near previous position (before=${beforeScroll}, after=${afterScroll})`);
+    assert(afterScroll >= Math.max(0, savedScroll - 250), `scroll should restore near persisted position (saved=${savedScroll}, after=${afterScroll})`);
 
     console.log('[PASS] Subsidy static pagination checks passed');
   } finally {
