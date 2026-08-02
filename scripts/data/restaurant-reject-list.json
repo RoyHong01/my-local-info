@@ -1,109 +1,11 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-02T00:00:00.000Z",
+  "updatedAt": "2026-08-02T17:20:26.472Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
   },
   "items": {
-    "1651030568": {
-      "reason": "no_live_image_source",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "1651030568",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "22809521": {
-      "reason": "no_live_image_source",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "22809521",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "1083309826": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "1083309826",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "1442069711": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "1442069711",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "2066444716": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "2066444716",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "1953580516": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "1953580516",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "1386327715": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "1386327715",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "26966842": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "26966842",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "931881312": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "931881312",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "647670913": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "647670913",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "14565564": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "14565564",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "918726041": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "918726041",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "8256083": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "8256083",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
-    "582450292": {
-      "reason": "manual_delete",
-      "checkedAt": "2026-08-02T00:00:00.000Z",
-      "kakaoId": "582450292",
-      "firstSeenAt": "2026-08-02T00:00:00.000Z",
-      "lastSeenAt": "2026-08-02T00:00:00.000Z"
-    },
     "7901142": {
       "reason": "low_rating",
       "rating": 3.8,
@@ -112,6 +14,13 @@
       "kakaoId": "7901142",
       "firstSeenAt": "2026-07-29T06:23:04.560Z",
       "lastSeenAt": "2026-07-29T06:23:04.560Z"
+    },
+    "8256083": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "8256083",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "9175466": {
       "reason": "low_rating",
@@ -148,6 +57,13 @@
       "kakaoId": "13034445",
       "firstSeenAt": "2026-07-29T06:23:06.861Z",
       "lastSeenAt": "2026-07-29T06:23:06.861Z"
+    },
+    "14565564": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "14565564",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "15932681": {
       "reason": "low_rating",
@@ -212,6 +128,13 @@
       "firstSeenAt": "2026-07-28T20:23:12.510Z",
       "lastSeenAt": "2026-07-28T20:23:12.510Z"
     },
+    "22809521": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "22809521",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "24063108": {
       "reason": "low_rating",
       "rating": 4,
@@ -238,6 +161,13 @@
       "kakaoId": "26869543",
       "firstSeenAt": "2026-07-20T20:31:16.910Z",
       "lastSeenAt": "2026-07-20T20:31:16.910Z"
+    },
+    "26966842": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "26966842",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "27189345": {
       "reason": "low_rating",
@@ -356,6 +286,13 @@
       "firstSeenAt": "2026-07-20T20:32:21.795Z",
       "lastSeenAt": "2026-07-20T20:32:21.795Z"
     },
+    "582450292": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "582450292",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "630938170": {
       "reason": "franchise",
       "matchedKeyword": "메가mgc",
@@ -373,6 +310,13 @@
       "kakaoId": "637387810",
       "firstSeenAt": "2026-07-20T20:31:38.273Z",
       "lastSeenAt": "2026-07-20T20:31:38.273Z"
+    },
+    "647670913": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "647670913",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "670999989": {
       "reason": "low_rating",
@@ -419,6 +363,12 @@
       "firstSeenAt": "2026-07-20T20:32:06.837Z",
       "lastSeenAt": "2026-07-20T20:32:06.837Z"
     },
+    "850275015": {
+      "reason": "image_mirror_failed",
+      "kakaoId": "850275015",
+      "firstSeenAt": "2026-08-02T17:20:26.472Z",
+      "lastSeenAt": "2026-08-02T17:20:26.472Z"
+    },
     "864693294": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -455,6 +405,13 @@
       "firstSeenAt": "2026-07-20T20:32:21.499Z",
       "lastSeenAt": "2026-07-20T20:32:21.499Z"
     },
+    "918726041": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "918726041",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "922769591": {
       "reason": "low_rating",
       "rating": 2.7,
@@ -463,6 +420,13 @@
       "kakaoId": "922769591",
       "firstSeenAt": "2026-07-29T06:23:04.990Z",
       "lastSeenAt": "2026-07-29T06:23:04.990Z"
+    },
+    "931881312": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "931881312",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "932122137": {
       "reason": "low_rating",
@@ -490,6 +454,13 @@
       "kakaoId": "953953519",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-07-28T20:23:11.261Z"
+    },
+    "1083309826": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1083309826",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "1088662289": {
       "reason": "low_rating",
@@ -563,6 +534,13 @@
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-07-28T20:23:11.261Z"
     },
+    "1386327715": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1386327715",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "1440400381": {
       "reason": "low_rating",
       "rating": 3,
@@ -571,6 +549,13 @@
       "kakaoId": "1440400381",
       "firstSeenAt": "2026-07-20T20:32:19.913Z",
       "lastSeenAt": "2026-07-20T20:32:19.913Z"
+    },
+    "1442069711": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1442069711",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "1487172876": {
       "reason": "low_rating",
@@ -608,6 +593,13 @@
       "firstSeenAt": "2026-07-20T20:31:19.677Z",
       "lastSeenAt": "2026-07-20T20:31:19.677Z"
     },
+    "1651030568": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1651030568",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "1711178713": {
       "reason": "low_rating",
       "rating": 3.8,
@@ -644,6 +636,13 @@
       "firstSeenAt": "2026-07-20T20:32:26.147Z",
       "lastSeenAt": "2026-07-20T20:32:26.147Z"
     },
+    "1953580516": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "1953580516",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
     "1979843999": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -661,6 +660,13 @@
       "kakaoId": "1989455679",
       "firstSeenAt": "2026-07-20T20:32:21.169Z",
       "lastSeenAt": "2026-07-20T20:32:21.169Z"
+    },
+    "2066444716": {
+      "reason": "manual_delete",
+      "checkedAt": "2026-08-02T00:00:00.000Z",
+      "kakaoId": "2066444716",
+      "firstSeenAt": "2026-08-02T00:00:00.000Z",
+      "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
     "2068907399": {
       "reason": "low_rating",
