@@ -130,6 +130,7 @@
   - (인천 백필 결과물 + 문서 + reject-list 확장은 이 항목과 함께 커밋 — 아래 커밋 묶음 계획 참조)
 - **후속/주의**:
   - 이미 default였던 보조금 글 및 향후 firstimage 없는 복지 글은 다음 자동화부터 finalize landmark fallback으로 자동 복구됨(실서버는 API003 IP 등록됨).
+  - ⛔ **[2026-08-03 정정] 위 문장은 틀렸다.** finalize fallback은 신규 생성분에만 동작하며 기존 발행분은 자동 복구되지 않는다. 실제로 보조금 4건(161300000076 / 318000000121 / 401000000497 / 401000000496)이 default로 남아 있었고, `fix-post-images.js` 백필로 별도 복구했다(`0135eee`). 상세는 `PROJECT_CRITICAL_NOTES.md` §2-1.
   - 인천 이미지 소싱은 "원본 firstimage 없음 -> API003 키워드 -> landmark(관광공사) -> default" 체인임을 반드시 기억(PROJECT_CRITICAL_NOTES §2-2).
 
 ## 2026-08-02 (맛집 이미지: 사진 없는 식당 재생성 방지 + 기존 정리)
