@@ -1600,7 +1600,9 @@ async function prepareBlogRequest(candidate, postsDir) {
     endDate: sourceEndDate,
     addr1: sourceAddr1,
   });
-  const today = new Date().toISOString().split('T')[0];
+  // KST(UTC+9) 기준. UTC 사용 시 01:00 KST 실행에서 전날 날짜가 되어
+  // 파일명 slug / frontmatter date / dayStamp 가 하루 밀린다.
+  const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0];
 
   // 전국 축제·여행 전용 스타일 오버라이드
   const isFestival = candidate._category === '전국 축제·여행';
