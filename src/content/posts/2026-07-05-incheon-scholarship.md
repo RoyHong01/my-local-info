@@ -6,7 +6,7 @@ description: "인천 소재 고등학교를 졸업하고 타지에서 대학 생
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천장학금, 대학생지원, 거주비지원, 인천인재평생교육진흥원, 자취생꿀팁]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg"
 source_id: "O00091000001"
 slug: "2026-07-05-incheon-scholarship"
 source_snapshot_key: "관외대학거주비지원장학금|||"

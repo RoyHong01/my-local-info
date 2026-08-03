@@ -6,7 +6,7 @@ description: "동대문구 거주 19~39세 미취업 청년이라면 자격증 �
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [동대문구청년지원, 자격증응시료지원, 미취업청년지원, 서울청년정책, 취업준비비용]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/45/4082845_image2_1.jpg"
 source_id: "305000000119"
 slug: "2026-05-30-dongdaemun-youth-support"
 source_snapshot_key: "동대문구미취업청년자격취득활동비지원|||"

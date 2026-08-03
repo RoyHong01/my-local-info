@@ -6,7 +6,7 @@ description: "광진구민이라면 누구나 누릴 수 있는 EM 발효액 무
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [광진구, EM발효액, 친환경생활, 생활꿀팁, 악취제거]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource_photo/99/3580599_image2_1.jpg"
 source_id: "304000000180"
 slug: "2026-07-18-EM-Supply-Gwangjin"
 source_snapshot_key: "em발효액무상제공|||"

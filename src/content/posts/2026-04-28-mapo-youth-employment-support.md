@@ -6,7 +6,7 @@ description: "마포구 거주 19~39세 미취업 청년이라면 주목! 2026�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [마포구, 청년지원, 취업준비, 지원금, 정부24]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/47/2031847_image2_1.jpg"
 source_id: "313000000127"
 slug: "2026-04-28-mapo-youth-employment-support"
 source_snapshot_key: "청년취업준비비용지원사업||2026-12-11|"

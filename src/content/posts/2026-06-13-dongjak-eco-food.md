@@ -6,7 +6,7 @@ description: "동작구에 거주하는 2025년 이후 출산 산모 및 임신�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [동작구임산부지원, 친환경농산물꾸러미, 임신출산혜택, 동작구복지, 건강한먹거리]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/03/3393103_image2_1.JPG"
 source_id: "319000000145"
 slug: "2026-06-13-dongjak-eco-food"
 source_snapshot_key: "임산부친환경농산물꾸러미지원|||"

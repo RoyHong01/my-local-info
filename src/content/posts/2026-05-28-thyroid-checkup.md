@@ -6,7 +6,7 @@ description: "광진구보건소에서 19세 이상 성인을 대상으로 갑�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [갑상선검사, 광진구보건소, 건강검진, 보건의료서비스, 성인건강관리]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource_photo/90/3525890_image2_1.JPG"
 source_id: "304000000172"
 slug: "2026-05-28-thyroid-checkup"
 source_snapshot_key: "갑상선기능검사서비스|||"

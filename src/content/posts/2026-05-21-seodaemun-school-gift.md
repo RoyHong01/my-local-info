@@ -6,7 +6,7 @@ description: "서대문구에 거주하는 다자녀 가정을 위해 둘째아 
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [서대문구, 다자녀지원, 초등학교입학, 입학축하금, 서대문사랑상품권]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/44/3584644_image2_1.jpg"
 source_id: "312000000107"
 slug: "2026-05-21-seodaemun-school-gift"
 source_snapshot_key: "다자녀가족둘째아이상초등학교입학축하상품권지원|||"

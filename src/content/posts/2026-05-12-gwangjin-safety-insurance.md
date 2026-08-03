@@ -6,7 +6,7 @@ description: "광진구에 거주하는 모든 구민과 등록외국인을 위�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [광진구, 생활안전보험, 구민혜택, 안전사고, 복지정책]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource_photo/09/3511909_image2_1.jpg"
 source_id: "304000000154"
 slug: "2026-05-12-gwangjin-safety-insurance"
 source_snapshot_key: "광진구민생활안전보험지원|||"

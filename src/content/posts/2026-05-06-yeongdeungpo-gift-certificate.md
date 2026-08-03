@@ -6,7 +6,7 @@ description: "영등포사랑상품권으로 구매 시 5% 내외 할인과 연�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [영등포사랑상품권, 영등포구, 지역화폐, 알뜰소비, 소득공제]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "http://tong.visitkorea.or.kr/cms/resource/50/2658350_image2_1.jpg"
 source_id: "318000000109"
 slug: "2026-05-06-yeongdeungpo-gift-certificate"
 source_snapshot_key: "영등포사랑상품권|||"

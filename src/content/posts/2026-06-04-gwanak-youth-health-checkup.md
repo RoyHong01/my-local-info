@@ -6,7 +6,7 @@ description: "관악구 거주 19~39세 1인 가구 청년이라면 누구나 �
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [관악구청년, 1인가구건강검진, 관악구보건소, 청년복지, 무료건강검진]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/06/3454106_image2_1.jpg"
 source_id: "320000000124"
 slug: "2026-06-04-gwanak-youth-health-checkup"
 source_snapshot_key: "관악청년1인가구무료건강검진|||"

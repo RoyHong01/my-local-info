@@ -6,7 +6,7 @@ description: "광진구청에서 제공하는 무료 법률상담 서비스를 �
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [광진구법률상담, 무료법률지원, 생활법률, 광진구청, 법률상담]
-image: "https://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/34/3412234_image2_1.JPG"
 source_id: "304000000183"
 slug: "2026-06-26-gwangjin-legal-consulting"
 source_snapshot_key: "법률상담무료지원|||"

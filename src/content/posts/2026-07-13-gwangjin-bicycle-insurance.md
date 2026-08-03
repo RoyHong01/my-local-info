@@ -6,7 +6,7 @@ description: "광진구민 자전거 및 개인형 이동장치(PM) 사고 보�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [광진구, 자전거보험, PM보험, 광진구민혜택, 안전사고지원]
-image: "http://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/19/4064219_image2_1.jpg"
 source_id: "304000000153"
 slug: "2026-07-13-gwangjin-bicycle-insurance"
 source_snapshot_key: "광진구민자전거및개인형이동장치pm사고보험료지원|||"

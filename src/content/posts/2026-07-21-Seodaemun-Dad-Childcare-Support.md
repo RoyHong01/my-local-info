@@ -6,7 +6,7 @@ description: "서대문구에 1년 이상 거주한 아빠라면 주목하세요
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [서대문구, 육아휴직, 아빠육아휴직장려금, 육아지원금, 서대문구청]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/61/4092661_image2_1.jpg"
 source_id: "312000000315"
 slug: "2026-07-21-Seodaemun-Dad-Childcare-Support"
 source_snapshot_key: "서대문구아빠육아휴직장려금|||"

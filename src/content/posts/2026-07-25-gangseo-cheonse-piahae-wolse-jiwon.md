@@ -6,7 +6,7 @@ description: "서울 강서구 전세사기 피해 청년 대상 월세 지원�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [강서구청년월세, 전세피해지원금, 청년월세지원, 전세사기피해자지원, 정부24신청]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource_photo/34/3538134_image2_1.jpg"
 source_id: "315000000269"
 slug: "2026-07-25-gangseo-cheonse-piahae-wolse-jiwon"
 source_snapshot_key: "강서구전세피해지원금청년월세지원||2027-07-25|"

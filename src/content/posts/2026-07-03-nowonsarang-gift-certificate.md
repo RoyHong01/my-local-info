@@ -6,7 +6,7 @@ description: "노원사랑상품권 발행 및 판매 정보를 확인하세요.
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [노원사랑상품권, 노원구복지, 지역화폐, 알뜰생활, 노원구경제]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/09/4093809_image2_1.jpg"
 source_id: "310000000102"
 slug: "2026-07-03-nowonsarang-gift-certificate"
 source_snapshot_key: "노원사랑상품권발행및판매|||"

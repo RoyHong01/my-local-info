@@ -6,7 +6,7 @@ description: "서울특별시 양천구에서 기초생활수급자 및 차상�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [양천구, 취약계층, 세탁서비스, 복지정책, 생활안정]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/85/1568385_image2_1.jpg"
 source_id: "314000000258"
 slug: "2026-04-30-yangcheon-laundry-support"
 source_snapshot_key: "취약계층세탁서비스지원사업||2026-12-31|"

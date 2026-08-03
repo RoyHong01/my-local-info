@@ -6,7 +6,7 @@ description: "서울 강동구에서 100세 이상 직계존속과 함께 거주
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [강동구, 효행장려금, 어르신복지, 복지정책, 현금지원]
-image: "http://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG"
+image: "http://tong.visitkorea.or.kr/cms/resource/78/3384878_image2_1.JPG"
 source_id: "324000000116"
 slug: "2026-04-25-gangdong-hyo-benefit"
 source_snapshot_key: "효행장려금지급||2026-09-22|"

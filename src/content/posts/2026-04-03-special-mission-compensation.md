@@ -5,7 +5,7 @@ summary: "국방부 특수임무수행자보상지원단은 특수임무수행�
 description: "국방부 특수임무수행자보상지원단은 특수임무수행자와 유족에게 보상금, 특별위로금, 특별공로금을 지급해요. 2025년 4월 1일부터 2026년 3월 31일까지 신청 가능하며, 자세한 내용은 국방부 특수임무수행자 보상심의위원회에 문의하세요."
 category: 전국 보조금·복지 정책
 tags: [특수임무수행자, 유족보상, 국방부, 보상금, 복지정책]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/72/3069472_image2_1.JPG"
 source_id: "129000000008"
 slug: "2026-04-03-special-mission-compensation"
 source_snapshot_key: "특수임무수행자와그유족에대한보상|||"

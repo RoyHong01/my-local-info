@@ -6,7 +6,7 @@ description: "관악구 무료법률상담은 법적 문제로 어려움을 겪�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [관악구법률상담, 무료법률상담, 관악구복지, 법률지원, 생활법률]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/71/3531571_image2_1.jpg"
 source_id: "320000000114"
 slug: "2026-07-19-gwanak-legal-counseling"
 source_snapshot_key: "관악구무료법률상담|||"

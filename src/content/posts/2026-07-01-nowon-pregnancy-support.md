@@ -6,7 +6,7 @@ description: "노원구 거주 임산부라면 놓치지 마세요. 임신 초�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [노원구임신지원, 임신초기검사, 기형아검사, 임산부혜택, 노원구보건소]
-image: "http://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource_photo/23/3539123_image2_1.jpg"
 source_id: "310000000122"
 slug: "2026-07-01-nowon-pregnancy-support"
 source_snapshot_key: "임신초기검사및기형아검사지원|||"

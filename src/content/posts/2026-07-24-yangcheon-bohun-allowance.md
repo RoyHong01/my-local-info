@@ -6,7 +6,7 @@ description: "양천구에 거주하는 국가보훈대상자라면 매월 7만 
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [양천구, 보훈예우수당, 국가보훈대상자, 복지혜택, 정부24]
-image: "http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG"
+image: "https://tong.visitkorea.or.kr/cms/resource/06/3564006_image2_1.jpg"
 source_id: "314000000115"
 slug: "2026-07-24-yangcheon-bohun-allowance"
 source_snapshot_key: "양천구보훈예우수당|||"

@@ -6,7 +6,7 @@ description: "송파사랑상품권과 송파땡겨요상품권으로 송파구 
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [송파사랑상품권, 송파땡겨요상품권, 서울페이, 지역화폐, 송파구복지]
-image: "https://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/35/3582335_image2_1.jpg"
 source_id: "323000000112"
 slug: "2026-07-14-songpa-gift-certificate"
 source_snapshot_key: "지역화폐송파사랑상품권송파땡겨요상품권|||"

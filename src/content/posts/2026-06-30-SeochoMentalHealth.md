@@ -6,7 +6,7 @@ description: "서초구 마음건강검진 및 상담지원사업을 통해 만 
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [서초구, 정신건강, 상담지원, 보건의료, 마음건강]
-image: "http://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/23/4078223_image2_1.jpg"
 source_id: "321000000117"
 slug: "2026-06-30-SeochoMentalHealth"
 source_snapshot_key: "서초구마음건강검진및상담지원사업|||"
