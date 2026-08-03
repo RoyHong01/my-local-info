@@ -1,0 +1,282 @@
+{
+  "reportDateKst": "2026-08-04",
+  "generatedAtUtc": "2026-08-03T18:20:00.041Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30838628673",
+    "runNumber": 963,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30838628673",
+    "runStartedAtUtc": "2026-08-03T17:51:39Z",
+    "headSha": "bf6d4b32117824bb71e0f9ae51e4a6aab24aef5a"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0caa37d4.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 622건",
+        "festival": "신규 0건, 업데이트 196건, 총 399건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://6543e37f.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://528cd422.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "e0124e6b4e0568ec9f0b8d493725457799abb22a",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-04",
+      "authoredAt": "2026-08-03T18:16:31Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-04-choice-living-2026-08-04.md"
+      ]
+    },
+    {
+      "sha": "917909ba5dfdf2620932f1f359631fba87bc9579",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-04",
+      "authoredAt": "2026-08-03T18:15:20Z",
+      "files": [
+        "src/content/posts/2026-08-04-curation-festival.md",
+        "src/content/posts/2026-08-04-energy-efficiency-lowincome-heating-support.md",
+        "src/content/posts/2026-08-04-hongseong-heritage-night.md",
+        "src/content/posts/2026-08-04-incheon-yeongjong-caring-plug.md",
+        "src/content/posts/2026-08-04-yeongcheon-foster-care-subsidy.md"
+      ]
+    },
+    {
+      "sha": "746914f2cae197f219735812e000d69a9a0d6ca6",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-04",
+      "authoredAt": "2026-08-03T17:56:05Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-04-energy-efficiency-lowincome-heating-support.md",
+      "src/content/posts/2026-08-04-hongseong-heritage-night.md",
+      "src/content/posts/2026-08-04-incheon-yeongjong-caring-plug.md",
+      "src/content/posts/2026-08-04-yeongcheon-foster-care-subsidy.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-04-energy-efficiency-lowincome-heating-support.md",
+      "src/content/posts/2026-08-04-hongseong-heritage-night.md",
+      "src/content/posts/2026-08-04-incheon-yeongjong-caring-plug.md",
+      "src/content/posts/2026-08-04-yeongcheon-foster-care-subsidy.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-04-choice-living-2026-08-04.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-04-choice-living-2026-08-04.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-04-choice-living-2026-08-04.md",
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-04-energy-efficiency-lowincome-heating-support.md",
+      "src/content/posts/2026-08-04-hongseong-heritage-night.md",
+      "src/content/posts/2026-08-04-incheon-yeongjong-caring-plug.md",
+      "src/content/posts/2026-08-04-yeongcheon-foster-care-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 6,
+      "manual": 0,
+      "unknown": 0,
+      "total": 6
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01VTPea3QmtMvZpSw7qSdVgz",
+    "batchStatus": "ended",
+    "batchDurationMs": 600661,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 850.3670699999999,
+    "actualCostKrw": 918.9587399999999,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 18,
+    "errors": 12,
+    "inputTokens": 32256,
+    "outputTokens": 7169,
+    "costKrw": 79.9233336
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 1
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "2954/2398",
+      "markdown": {
+        "generated": 5,
+        "pending": 151,
+        "titles": [
+          "특수교육대상자 방과후활동 지원",
+          "재활용품수집 노인 및 장애인 안전장비 지원",
+          "자원봉사 병간호비 지원",
+          "가정위탁아동 양육비 지원",
+          "농업재해보험 가입지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 622건",
+      "validation": "ok",
+      "anthropicUsage": "4251/2935",
+      "markdown": {
+        "generated": 5,
+        "pending": 324,
+        "titles": [
+          "지역화폐(광양사랑상품권)",
+          "산후조리비 지원",
+          "야생동물 피해예방시설 설치 지원",
+          "농업인 경영부담 완화를 위한 농기계 임대료 감면",
+          "유연근무제 장려금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 196건, 총 399건",
+      "validation": "warning: 전국 축제·여행 정보 API 조회 결과가 기존 데이터(399건)의 절반 미만입니다.",
+      "anthropicUsage": "4295/2764",
+      "markdown": {
+        "generated": 5,
+        "pending": 271,
+        "titles": [
+          "경포 썸머 페스티벌",
+          "아시아프 (ASYAAF 100)",
+          "전주 가맥축제",
+          "밀양 수퍼 페스티벌",
+          "성북문화바캉스"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_restaurant_candidate_shortage",
+    "label": "완료(맛집 미발행: 후보 부족)"
+  }
+}
