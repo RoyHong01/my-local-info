@@ -105,7 +105,15 @@ async function resolveLandmarkFallbackImage(candidate, itemContextLabel = '') {
 
     const expandedTokens = [];
     const seenTokens = new Set();
-    for (const token of metros) {
+    // 광역(시/도) 토큰을 먼저 시도한다.
+    // 자치구명(예: 영등포구)을 먼저 검색하면 TourAPI가 관광지가 아닌
+    // 상업시설을 반환해 hero 품질이 떨어진다. REGION_LANDMARKS 큐레이션 풀은
+    // 광역 키(서울/부산/경기...)로만 조회되므로 광역이 앞에 와야 풀을 탄다.
+    const metroFirst = [
+      ...metros.filter((t) => /(특별시|광역시|특별자치시|특별자치도|도)$/.test(t)),
+      ...metros.filter((t) => !/(특별시|광역시|특별자치시|특별자치도|도)$/.test(t)),
+    ];
+    for (const token of metroFirst) {
       if (!seenTokens.has(token)) {
         seenTokens.add(token);
         expandedTokens.push(token);

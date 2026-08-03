@@ -66,6 +66,16 @@ function uniq(values) {
 const METRO_SHORT_NAMES = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '제주'];
 const PROVINCE_SHORT_NAMES = ['경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남'];
 
+// 품질 미달로 영구 차단된 이미지 URL (관광지가 아닌 상업시설 등).
+// TourAPI가 자치구명 검색에서 반복 반환하는 사진들. 2026-08-03 등록.
+// 신규 발견 시 이 목록에 추가한다.
+const BLOCKED_IMAGE_URLS = new Set([
+  'http://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG',
+  'https://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG',
+  'https://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg',
+  'http://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg',
+]);
+
 // 광역별 큐레이션된 랜드마크 키워드 풀.
 // TourAPI(searchKeyword2)에서 실제 검색 가능한 "장소명"이며,
 // 단순 지역명 검색이 가져오는 노이즈 사진(둘레길 표지판, 이름표 등)을 막기 위한 것.
@@ -356,6 +366,7 @@ async function getRegionalLandmark(options) {
   const recentlyUsed = getRecentlyUsedImageUrls(historyDays, historyPath);
   const excludeSet = new Set(recentlyUsed);
   if (Array.isArray(excludeUrls)) excludeUrls.forEach((u) => u && excludeSet.add(u));
+  BLOCKED_IMAGE_URLS.forEach((u) => excludeSet.add(u));
 
   // 1순위: theme 풀 (예: 어선/수산 → 바다 풀)
   // 2순위: REGION_LANDMARKS[광역] 큐레이션 풀
@@ -393,6 +404,9 @@ async function getRegionalLandmark(options) {
         const filtered = candidates.filter((c) => c.matchedAddr && c.matchedAddr.includes(addressFilter));
         if (filtered.length > 0) candidates = filtered;
       }
+      const nonBlocked = candidates.filter((c) => !BLOCKED_IMAGE_URLS.has(c.imageUrl));
+      if (nonBlocked.length === 0) continue;
+      candidates = nonBlocked;
       if (pass === 1 && excludeSet.size > 0) {
         const fresh = candidates.filter((c) => !excludeSet.has(c.imageUrl));
         if (fresh.length === 0) continue;
