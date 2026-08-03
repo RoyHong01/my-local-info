@@ -80,6 +80,42 @@ const BLOCKED_IMAGE_URLS = new Set([
   'https://tong.visitkorea.or.kr/cms/resource/06/2945806_image2_1.jpg',
 ]);
 
+// 사용자가 직접 검토·승인한 지역별 hero 이미지 목록 (2026-08-03).
+// TourAPI searchKeyword2는 키워드 문자열 매칭이라 지역 필터가 없다.
+// 예: '차이나타운' 검색 시 대림동(서울)·부산 차이나타운이 섞여 나온다.
+// 또한 등록 사진 품질 편차가 커서 상가 내부·전선 가림 등 hero 부적합 사진이 많다.
+// 이 목록은 그런 오배정·저품질을 원천 차단하기 위한 화이트리스트다.
+// 신규 추가 시 반드시 실제 이미지를 눈으로 확인한 뒤 등록한다.
+const CURATED_REGION_IMAGES = {
+  인천: [
+    'http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG',
+    'https://tong.visitkorea.or.kr/cms/resource/60/3304260_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/94/3518594_image2_1.jpg',
+    'http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/82/2791282_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/65/4039065_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/69/3552669_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/06/3000906_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/92/3522592_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/25/4056225_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/53/4061653_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/56/3015056_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/85/4061685_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/48/3527648_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/03/3518103_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/32/3501132_image2_1.png',
+    'https://tong.visitkorea.or.kr/cms/resource/78/3518478_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/63/3053063_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/23/3001823_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource/48/2791248_image2_1.JPG',
+    'http://tong.visitkorea.or.kr/cms/resource/39/3044339_image2_1.jpg',
+    'https://tong.visitkorea.or.kr/cms/resource_photo/20/3581320_image2_1.jpg',
+    'http://tong.visitkorea.or.kr/cms/resource/65/3043565_image2_1.jpg',
+    'http://tong.visitkorea.or.kr/cms/resource/85/3393585_image2_1.JPG',
+    'http://tong.visitkorea.or.kr/cms/resource/32/3043432_image2_1.jpg',
+  ],
+};
+
 // 광역별 큐레이션된 랜드마크 키워드 풀.
 // TourAPI(searchKeyword2)에서 실제 검색 가능한 "장소명"이며,
 // 단순 지역명 검색이 가져오는 노이즈 사진(둘레길 표지판, 이름표 등)을 막기 위한 것.
@@ -382,6 +418,27 @@ async function getRegionalLandmark(options) {
   }
 
   const regionShort = stripAdministrativeSuffix(normalizeSpace(regionName).split(/\s+/)[0]);
+  const curatedImages = regionShort ? CURATED_REGION_IMAGES[regionShort] : null;
+  if (Array.isArray(curatedImages) && curatedImages.length > 0) {
+    const freshCurated = curatedImages.filter((url) => !excludeSet.has(url));
+    if (freshCurated.length > 0) {
+      const pickedCuratedUrl = pickRandom(freshCurated);
+      if (pickedCuratedUrl) {
+        if (recordHistory) {
+          recordImageUsage(pickedCuratedUrl, { historyDays, historyPath, context });
+        }
+        return {
+          imageUrl: pickedCuratedUrl,
+          matchedName: `${regionShort} curated`,
+          matchedAddr: '',
+          keyword: `curated:${regionShort}`,
+          imageSource: '사용자 검수 큐레이션 이미지',
+          imageSourceApi: 'curated-region-images',
+          reused: false,
+        };
+      }
+    }
+  }
   if (regionShort && REGION_LANDMARKS[regionShort]) {
     keywordVariants.push(...shuffle(REGION_LANDMARKS[regionShort]));
   }
