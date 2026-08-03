@@ -6,7 +6,7 @@ description: "경기도 시흥시가 관내 6개월 이상 영업 중인 소상�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [소상공인지원, 시흥시, 점포개선, 경영개선지원금, 소상공인정책]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/87/3563987_image2_1.jpg"
 source_id: "401000000496"
 slug: "2026-08-01-siheung-sosangongin-jiwon"
 source_snapshot_key: "소규모점포경영개선지원||2026-08-18|"

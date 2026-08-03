@@ -6,7 +6,7 @@ description: "버팀목전세자금대출은 무주택 세대주 대상 전세�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [버팀목전세자금대출, 전세자금대출, 주택도시기금, 무주택세대주, 신혼부부대출]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/31/4093331_image2_1.jpg"
 source_id: "161300000076"
 slug: "2026-07-26-jeonse-loan-buttmok"
 source_snapshot_key: "버팀목전세자금대출|||"

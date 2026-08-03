@@ -6,7 +6,7 @@ description: "경기도 시흥시가 시루 가맹점이면서 관내 5년 이�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [시흥시소상공인, 점포시설개선지원, 시흥맞춤명품점포, 소상공인지원금, 경기도소상공인정책]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/36/3500936_image2_1.jpg"
 source_id: "401000000497"
 slug: "2026-08-01-siheung-myeongpumjeompo-jiwon"
 source_snapshot_key: "시흥맞춤명품점포지원||2026-08-07|"
