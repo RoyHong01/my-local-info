@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-03T00:00:00+09:00",
+  "updatedAtKst": "2026-08-04T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5725,6 +5725,60 @@
       "sourceId": "manual-choice-health-2026-08-03",
       "themeKey": "health",
       "themeName": "건강"
+    },
+    {
+      "date": "2026-08-04",
+      "productId": "4791947716",
+      "productName": "버블싹 폼 클리너, 500ml, 1개",
+      "brand": "버블싹",
+      "productGroupTokens": [
+        "클리너",
+        "500ml",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-04-choice-living-2026-08-04.md",
+      "sourceId": "manual-choice-living-2026-08-04",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-08-04",
+      "productId": "9118163329",
+      "productName": "고씨네 스마트 4in1 벽걸이형 변기솔 청소솔 브러쉬 세트, 화이트, 1세트",
+      "brand": "고씨네",
+      "productGroupTokens": [
+        "4in1",
+        "벽걸이형",
+        "변기솔",
+        "청소솔",
+        "브러쉬",
+        "living"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-04-choice-living-2026-08-04.md",
+      "sourceId": "manual-choice-living-2026-08-04",
+      "themeKey": "living",
+      "themeName": "생활"
+    },
+    {
+      "date": "2026-08-04",
+      "productId": "8837247802",
+      "productName": "Kipnos 폴딩 대용량 리빙박스 수납장 대용량 수납 정리함 접이식 보관함 다용도 수납함 플라스틱 수납함 사물함 정리함 리빙박 스수납박스 대형가정용 장난감 수납장 옷정리함, 화이트, 4개",
+      "brand": "Kipnos",
+      "productGroupTokens": [
+        "폴딩",
+        "리빙박스",
+        "수납장",
+        "수납",
+        "정리함",
+        "접이식"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-04-choice-living-2026-08-04.md",
+      "sourceId": "manual-choice-living-2026-08-04",
+      "themeKey": "living",
+      "themeName": "생활"
     }
   ]
 }
