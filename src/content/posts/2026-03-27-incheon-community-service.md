@@ -6,7 +6,7 @@ summary: "인천 중구에서 기준 중위소득 140% 이하 가정에 치매�
 description: "인천 중구에서 기준 중위소득 140% 이하 가정에 치매예방·아동청소년 심리지원·시각장애인 안마 등 11개 맞춤형 사회서비스를 바우처로 지원합니다. 방문 신청 하나로 가족 모두의 건강을 챙기세요."
 category: "인천 지역 정보"
 tags: [지역사회서비스, 인천중구복지, 치매예방, 아동심리지원, 바우처지원]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/48/3527648_image2_1.jpg"
 source_id: "349000000103"
 ---
 

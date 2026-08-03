@@ -6,7 +6,7 @@ summary: "인천 중구에 사는 65세 이상 노인·장애인·한부모 가�
 description: "인천 중구에 사는 65세 이상 노인·장애인·한부모 가정이라면 국민건강보험료와 노인장기요양보험료를 지원받을 수 있어요. 신청도 필요 없는 자동 지원, 지금 바로 확인하세요."
 category: "인천 지역 정보"
 tags: [건강보험료지원, 인천중구복지, 저소득층지원, 노인지원, 한부모가정]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/85/3393585_image2_1.JPG"
 source_id: "349000000101"
 ---
 

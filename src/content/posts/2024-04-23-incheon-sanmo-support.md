@@ -5,7 +5,7 @@ summary: 인천 연수구에서 산모·신생아 건강관리 서비스 본인�
 description: 인천 연수구에서 산모·신생아 건강관리 서비스 본인부담금을 지원합니다. 셋째 아이 이상은 2주간 전액 지원, 중위소득 150% 이하 출산가정 대상. 상시신청 가능하며 정부24 또는 방문신청으로 신청할 수 있습니다.
 category: 인천 지역 정보
 tags: [인천연수구, 산모신생아건강관리, 본인부담금지원, 출산지원, 정부복지]
-image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/48/2791248_image2_1.JPG"
 source_id: "352000000119"
 slug: "2024-04-23-incheon-sanmo-support"
 ---
