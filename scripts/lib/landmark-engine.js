@@ -74,6 +74,8 @@ const BLOCKED_IMAGE_URLS = new Set([
   'https://tong.visitkorea.or.kr/cms/resource/91/3384991_image2_1.JPG',
   'https://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg',
   'http://tong.visitkorea.or.kr/cms/resource/98/3582598_image2_1.jpg',
+  'http://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG',
+  'https://tong.visitkorea.or.kr/cms/resource/80/3553780_image2_1.JPG',
 ]);
 
 // 광역별 큐레이션된 랜드마크 키워드 풀.
