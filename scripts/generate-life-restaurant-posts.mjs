@@ -1355,6 +1355,67 @@ async function getExistingRestaurantStats() {
   return { ids, bucketCounts };
 }
 
+async function buildRecentRestaurantTitleBlock(limit = 20) {
+  try {
+    const rows = [];
+
+    for (const dir of existingPostDirs) {
+      let files = [];
+      try {
+        files = await fs.readdir(dir);
+      } catch {
+        continue;
+      }
+
+      for (const file of files) {
+        if (!file.endsWith('.md')) continue;
+        const fullPath = path.join(dir, file);
+
+        try {
+          const raw = await fs.readFile(fullPath, 'utf-8');
+          const parsed = matter(raw);
+          if (parsed.data.category !== '픽앤조이 맛집 탐방') continue;
+
+          const title = String(parsed.data.title || '').trim();
+          if (!title) continue;
+
+          const dateValue = String(parsed.data.date || '').trim();
+          const parsedDate = Date.parse(dateValue);
+          let ts = Number.isFinite(parsedDate) ? parsedDate : 0;
+
+          if (!ts) {
+            try {
+              const st = await fs.stat(fullPath);
+              ts = Number(st.mtimeMs || 0);
+            } catch {
+              ts = 0;
+            }
+          }
+
+          rows.push({ title, ts });
+        } catch {
+          continue;
+        }
+      }
+    }
+
+    if (rows.length === 0) return '';
+
+    const seen = new Set();
+    const uniqueRows = [];
+    for (const row of rows.sort((a, b) => b.ts - a.ts)) {
+      if (seen.has(row.title)) continue;
+      seen.add(row.title);
+      uniqueRows.push(row);
+      if (uniqueRows.length >= limit) break;
+    }
+
+    return uniqueRows.map((row) => `  - ${row.title}`).join('\n');
+  } catch {
+    return '';
+  }
+}
+
 async function readSnapshot() {
   const raw = await fs.readFile(snapshotPath, 'utf-8');
   return JSON.parse(raw);
@@ -1389,6 +1450,10 @@ async function generateRestaurantPost(candidate, rejectList) {
   const heroImage = await resolveSafeHeroImage(candidate.item, defaultImage);
   const selectedStyle = pickStyleBySourceId(candidate.item.id);
   candidate.visitInfoVariant = pickVisitInfoVariantBySourceId(candidate.item.id);
+  const TITLE_ANGLES = ['질문형', '장면형', '메뉴 직격형', '정보형', '반전형'];
+  // 후보 id 해시로 배정해 같은 배치 안에서도 유형이 분산되게 한다.
+  const angleHash = String(candidate.item.id || '').split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const titleAngle = TITLE_ANGLES[angleHash % TITLE_ANGLES.length];
 
   if (heroImage === defaultImage) {
     markRejectListReason(rejectList, candidate.item.id, 'image_mirror_failed');
@@ -1400,6 +1465,7 @@ async function generateRestaurantPost(candidate, rejectList) {
   const ratingFrontmatter = candidate.item.googleRating != null
     ? `\nrating_value: "${candidate.item.googleRating}"\nreview_count: "${candidate.item.googleRatingCount ?? ''}"`
     : '';
+  const recentTitleBlock = await buildRecentRestaurantTitleBlock(20);
 
   const prompt = `아래 맛집 데이터를 바탕으로 '2030이 저장해두고 싶은 핫플 큐레이션 글'을 작성해줘.
 
@@ -1432,7 +1498,18 @@ parking_info: "확인 필요"${ratingFrontmatter}
 - 단순 정보 전달을 넘어, 독자의 상황에 공감하고 "여긴 진짜 가보고 싶다"는 감정을 만들 것.
 
 [필수]
-- 제목 규칙: [감성 훅], [상호명] 형식으로 작성. 끝에 반드시 쉼표 + 상호명(아래 place_name 값)을 붙여야 한다. 예: "창가로 스며드는 햇살의 온기, 부빵 곽지원빵공방 2호점". 상호명: "${candidate.item.name.replace(/"/g, '\\"')}"
+- 제목 규칙: 끝에 반드시 쉼표 + 상호명을 붙인다. 상호명: "${candidate.item.name.replace(/"/g, '\\"')}"
+- **제목 앞부분은 아래 5가지 유형 중 이번 글에 배정된 유형으로 작성한다: ${titleAngle}**
+  1) 질문형 — 독자에게 묻는 형태. 예: "주말 브런치, 아직도 헤매고 계세요?, ○○"
+  2) 장면형 — 구체적 순간을 묘사. 예: "퇴근길에 들른 골목 끝 2층, ○○"
+  3) 메뉴 직격형 — 대표 메뉴를 앞세움. 예: "숯불 향이 밴 목살 한 점, ○○"
+  4) 정보형 — 실용 정보 제시. 예: "예약 없이 갈 수 있는 평일 저녁, ○○"
+  5) 반전형 — 예상 밖 포인트. 예: "간판도 없는데 늘 만석인 이유, ○○"
+- **⛔ 위 예시 문장을 그대로 쓰거나 단어를 바꿔 흉내 내지 말 것.** 예시는 유형 설명일 뿐이다.
+- **⛔ 다음 표현은 제목에 사용 금지: "온기", "미학", "기록", "오감", "여운", "정취", "쉼표", "○○의 온도".**
+  이 단어들은 과거 생성물에서 과도하게 반복됐다.
+- **⛔ 최근 발행된 아래 제목들과 앞부분 골격이 겹치면 안 된다:**
+${recentTitleBlock}
 - 제목에는 반드시 음식 장르(한식/양식/일식/카페/브런치 등) 또는 대표 메뉴(파스타/오마카세/국밥 등)를 포함.
 - slug는 이미 정해져 있으니 절대 변경하지 마.
 - 본문 첫 줄은 반드시 ## HOOK 헤딩으로 시작. 독자의 결핍/불안을 전제로 하지 말고 감각, 발견, 취향 제안, 미학 중심으로 작성.
