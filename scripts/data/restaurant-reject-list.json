@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-02T17:20:26.472Z",
+  "updatedAt": "2026-08-04T00:00:00Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
@@ -703,6 +703,13 @@
       "kakaoId": "2134411175",
       "firstSeenAt": "2026-07-20T20:31:58.620Z",
       "lastSeenAt": "2026-07-20T20:31:58.620Z"
+    },
+    "381900374": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-04T00:00:00Z",
+      "kakaoId": "381900374",
+      "firstSeenAt": "2026-08-04T00:00:00Z",
+      "lastSeenAt": "2026-08-04T00:00:00Z"
     }
   }
 }
