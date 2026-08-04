@@ -328,7 +328,7 @@ Copilot 기준 문서는 `.github/copilot-instructions.md`와 `WORK_LOG.md`를 �
     - **원복 조건**: 빈 본문 backfill 소진 확인 시 평시값(2/2/5) 복귀. 예정된 원복이므로 별도 승인 불필요.
     - 소진 여부는 날짜가 아니라 **실제 빈 항목 잔여 수**로 판단. 9/5는 예상 시점일 뿐.
     - 상세: `PROJECT_CRITICAL_NOTES.md` §2-3
-- 인천 이미지: 인천관광공사 API(API003, `api.incheoneasy.com`) 비활성화 유지. 한국관광공사 TourAPI `KorService2/searchKeyword2` 단일 계열만 사용 — 수집 `collect-incheon.js:312`, 생성 finalize `landmark-engine.js:321`. 최종 결정권은 finalize landmark. *(2026-08-02 확정, 상세는 `PROJECT_CRITICAL_NOTES.md` §2-2)*
+- 인천 이미지: 인천관광공사 API(API003, `api.incheoneasy.com`) 비활성화 유지. 한국관광공사 TourAPI `KorService2/searchKeyword2` 단일 계열만 사용 — 수집 `collect-incheon.js:312`, 생성 finalize `landmark-engine.js:321`. 최종 결정권은 finalize landmark. *(2026-08-02 확정, 상세는 `PROJECT_CRITICAL_NOTES.md` §2-2)* **2026-08-03부터 `CURATED_REGION_IMAGES` 화이트리스트가 1순위**(인천 25장 승인). 상세 §2-9.
 - 축제 최근수정 tie-break: `modifiedtime -> 수정일시 -> updatedAt`
 - **AI 재가공 필드 보존 메커니즘**: `description_markdown` 등 AI 생성 필드는 매일 수집 머지 시 `{...(prev || {}), ...item}` 패턴으로 보존됨
   - `prev`에 있고 API `item`에 없는 필드(description_markdown, editor_note 등)는 자동으로 유지
