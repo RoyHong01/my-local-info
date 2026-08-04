@@ -1,0 +1,282 @@
+{
+  "reportDateKst": "2026-08-05",
+  "generatedAtUtc": "2026-08-04T18:12:59.552Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "30935652340",
+    "runNumber": 971,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/30935652340",
+    "runStartedAtUtc": "2026-08-04T17:49:14Z",
+    "headSha": "78b047054f37a0e186792da33fdb9996204ff99a"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://37083007.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 1건, 총 622건",
+        "festival": "신규 6건, 업데이트 196건, 총 405건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://a7be8f4a.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://3e5a9d15.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "c04a89542815f45258870f30d39f19ab1c7aee6f",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-05",
+      "authoredAt": "2026-08-04T18:09:20Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md"
+      ]
+    },
+    {
+      "sha": "9975e8b0cad574e7cf4dc195b1dbfababdabeec5",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-05",
+      "authoredAt": "2026-08-04T18:08:09Z",
+      "files": [
+        "src/content/posts/2026-08-05-curation-subsidy.md",
+        "src/content/posts/2026-08-05-ganghwa-hyohaeng-allowance.md",
+        "src/content/posts/2026-08-05-manwon-happiness-insurance.md",
+        "src/content/posts/2026-08-05-shared-mortgage-loan.md",
+        "src/content/posts/2026-08-05-songdo-beach-festival.md"
+      ]
+    },
+    {
+      "sha": "51976e1a386d4fa87293e3f6f762f2f809176517",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-05",
+      "authoredAt": "2026-08-04T17:53:21Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-05-curation-subsidy.md",
+      "src/content/posts/2026-08-05-ganghwa-hyohaeng-allowance.md",
+      "src/content/posts/2026-08-05-manwon-happiness-insurance.md",
+      "src/content/posts/2026-08-05-shared-mortgage-loan.md",
+      "src/content/posts/2026-08-05-songdo-beach-festival.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-05-curation-subsidy.md",
+      "src/content/posts/2026-08-05-ganghwa-hyohaeng-allowance.md",
+      "src/content/posts/2026-08-05-manwon-happiness-insurance.md",
+      "src/content/posts/2026-08-05-shared-mortgage-loan.md",
+      "src/content/posts/2026-08-05-songdo-beach-festival.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md"
+    ],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md",
+      "src/content/posts/2026-08-05-curation-subsidy.md",
+      "src/content/posts/2026-08-05-ganghwa-hyohaeng-allowance.md",
+      "src/content/posts/2026-08-05-manwon-happiness-insurance.md",
+      "src/content/posts/2026-08-05-shared-mortgage-loan.md",
+      "src/content/posts/2026-08-05-songdo-beach-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 6,
+      "manual": 0,
+      "unknown": 0,
+      "total": 6
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01QH8yPkrMhnphh5s3ZzFXwS",
+    "batchStatus": "ended",
+    "batchDurationMs": 300753,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 862.6709699999999,
+    "actualCostKrw": 938.31864,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 20,
+    "errors": 10,
+    "inputTokens": 32266,
+    "outputTokens": 7182,
+    "costKrw": 80.0113536
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 1
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "3419/2593",
+      "markdown": {
+        "generated": 5,
+        "pending": 146,
+        "titles": [
+          "졸업앨범비 지원",
+          "저소득층 학생 체험학습비 지원",
+          "노인사회활동지원서비스",
+          "저소득 취약계층 의치보철임플란트 지원",
+          "의사상자 수당"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 1건, 총 622건",
+      "validation": "ok",
+      "anthropicUsage": "3758/2796",
+      "markdown": {
+        "generated": 5,
+        "pending": 318,
+        "titles": [
+          "소상공인 재기지원",
+          "명절(추석,설) 맞이 효도수당 지원",
+          "동작 청년내일근속지원",
+          "화성시 무상교통",
+          "산재근로자 직업훈련"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 6건, 업데이트 196건, 총 405건",
+      "validation": "ok",
+      "anthropicUsage": "3940/2407",
+      "markdown": {
+        "generated": 5,
+        "pending": 272,
+        "titles": [
+          "홍천강 별빛음악 맥주축제",
+          "서울썸머비치",
+          "제7회 섬의 날",
+          "2026 부산국제불교박람회",
+          "안동 국가유산 야행 \"월영야행\""
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_restaurant_candidate_shortage",
+    "label": "완료(맛집 미발행: 후보 부족)"
+  }
+}
