@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-04T00:00:00+09:00",
+  "updatedAtKst": "2026-08-05T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5779,6 +5779,63 @@
       "sourceId": "manual-choice-living-2026-08-04",
       "themeKey": "living",
       "themeName": "생활"
+    },
+    {
+      "date": "2026-08-05",
+      "productId": "9281480313",
+      "productName": "이놀 투명창 에어프라이어 2L 1인용 소형 미니 프리미엄 에어프라이기 air fryer",
+      "brand": "이놀",
+      "productGroupTokens": [
+        "투명창",
+        "에어프라이어",
+        "2l",
+        "1인용",
+        "소형",
+        "에어프라이기"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md",
+      "sourceId": "manual-choice-kitchen-2026-08-05",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-08-05",
+      "productId": "9611538690",
+      "productName": "주방 양념통 정리선반 원목 다용도 수납장, 1개, 화이트우드",
+      "brand": "주방",
+      "productGroupTokens": [
+        "양념통",
+        "정리선반",
+        "원목",
+        "다용도",
+        "수납장",
+        "화이트우드"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md",
+      "sourceId": "manual-choice-kitchen-2026-08-05",
+      "themeKey": "kitchen",
+      "themeName": "주방"
+    },
+    {
+      "date": "2026-08-05",
+      "productId": "9624537921",
+      "productName": "싱크대하부장정리함, 풀아웃 2단 수납 선반, L자형 슬라이드 선반, 주방 욕실 다용도 캐비닛 수납대, 욕실수납, 주방수납",
+      "brand": "싱크대하부장정리함",
+      "productGroupTokens": [
+        "풀아웃",
+        "2단",
+        "수납",
+        "선반",
+        "l자형",
+        "슬라이드"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-05-choice-kitchen-2026-08-05.md",
+      "sourceId": "manual-choice-kitchen-2026-08-05",
+      "themeKey": "kitchen",
+      "themeName": "주방"
     }
   ]
 }
