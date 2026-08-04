@@ -13,6 +13,10 @@ const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const GOOGLE_PLACES_MIN_REVIEW_COUNT = Number(process.env.GOOGLE_PLACES_MIN_REVIEW_COUNT || 10); // 구글 리뷰 수 최소 기준
 const GOOGLE_RATING_CACHE_TTL_DAYS = Number(process.env.GOOGLE_RATING_CACHE_TTL_DAYS || 90);
 const GOOGLE_CALLS_PER_RUN_MAX = Number(process.env.GOOGLE_CALLS_PER_RUN_MAX || 50);
+const PUBLISHED_IDS = new Set(
+  String(process.env.RESTAURANT_PUBLISHED_IDS || '')
+    .split(',').map((s) => s.trim()).filter(Boolean)
+);
 const QUERY_ROTATION_PER_REGION = Number(process.env.QUERY_ROTATION_PER_REGION || 8);
 const QUERY_ROTATION_RECENT_RUNS = 3;
 const BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY = process.env.BACKFILL_EXISTING_GOOGLE_PHOTOS_ONLY === 'true';
@@ -1394,6 +1398,8 @@ async function collectRegion(region, selectedQueries, kakaoKey, geminiKey, googl
   for (const { meta, places } of results) {
     for (const row of places) {
       if (!row.id) continue;
+      // 이미 발행된 식당은 구글 호출 전에 제외한다(중복 후보 방지 + Places 비용 절감).
+      if (PUBLISHED_IDS.has(String(row.id))) continue;
       const item = toRestaurantItem(row, meta);
       const franchiseKeyword = getFranchiseMatchKeyword(item.name, item.categoryName);
       if (franchiseKeyword) {

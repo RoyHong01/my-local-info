@@ -236,7 +236,10 @@ async function main() {
   const collectScript = path.join(process.cwd(), 'scripts', 'collect-life-restaurants.mjs');
   execFileSync(process.execPath, [collectScript], {
     stdio: 'inherit',
-    env: process.env,
+    // 수집 단계에서 이미 발행된 식당을 미리 제외하기 위해 발행 이력 id를 전달한다.
+    // 전달하지 않으면 수집분의 다수가 기존 발행분과 중복돼 유효 후보가 급감한다
+    // (2026-07-29 수집 82건 중 61건이 수집 시점에 이미 발행된 상태였음).
+    env: { ...process.env, RESTAURANT_PUBLISHED_IDS: Array.from(existingIds).join(',') },
   });
 
   if (forceRecollectActive) {
