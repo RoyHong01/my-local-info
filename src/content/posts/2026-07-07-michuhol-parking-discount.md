@@ -6,7 +6,7 @@ description: "인천 미추홀구 공영주차장 이용 시 최대 100%까지 �
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천주차장, 미추홀구주차, 공영주차장할인, 주차요금감면, 인천생활정보]
-image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
 source_id: "O00027000002"
 slug: "2026-07-07-michuhol-parking-discount"
 source_snapshot_key: "미추홀구공영주차장이용요금감면|||"

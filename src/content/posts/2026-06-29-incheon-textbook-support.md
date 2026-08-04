@@ -6,7 +6,7 @@ description: "인천광역시교육청에서 제공하는 초·중·고·특수�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천교육청, 교과서무상지원, 학생복지, 인천학부모, 교육정보]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg"
 source_id: "731000000005"
 slug: "2026-06-29-incheon-textbook-support"
 source_snapshot_key: "초중고특수학생교과용도서무상지원|||"

@@ -6,7 +6,7 @@ description: "인천 강화군 출산지원금 및 양육비 지원 정보를 �
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천출산지원금, 강화군육아지원, 출산혜택, 강화군가족복지과, 양육비지원]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/94/3518594_image2_1.jpg"
 source_id: "357000000119"
 slug: "2026-05-21-ganghwa-childbirth-support"
 source_snapshot_key: "출산지원금등지원|||"

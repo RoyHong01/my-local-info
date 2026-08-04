@@ -5,7 +5,7 @@ summary: "인천 남동구에서 산모·신생아 건강관리서비스 본인�
 description: "인천 남동구에서 산모·신생아 건강관리서비스 본인부담금 지원 사업을 상시 신청 받고 있어요. 기초생활보장수급자, 차상위계층, 기준중위소득 150% 이하 출산가정 및 예외지원 대상 산모가 지원받을 수 있으며, 정부24 온라인 또는 남동구보건소 방문 신청 가능해요."
 category: 인천 지역 정보
 tags: [인천, 남동구, 산모, 신생아, 건강관리, 출산지원, 본인부담금지원, 정부24]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/92/3522592_image2_1.jpg"
 source_id: "353000000191"
 slug: "2026-04-11-incheon-namdong-maternity-support"
 source_snapshot_key: "남동구산모신생아건강관리서비스본인부담금지원|||"

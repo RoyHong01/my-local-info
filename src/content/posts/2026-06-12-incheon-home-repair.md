@@ -6,7 +6,7 @@ description: "인천 거주 만 65세 이상 어르신을 위한 고령친화 �
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 고령친화집수리, 인천도시공사, 어르신지원, 주거복지]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
 source_id: "O00026200004"
 slug: "2026-06-12-incheon-home-repair"
 source_snapshot_key: "고령친화맞춤형집수리지원|||"

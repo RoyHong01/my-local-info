@@ -5,7 +5,7 @@ summary: "인천 부평구에서는 생계·의료급여 수급자를 대상으�
 description: "인천 부평구에서는 생계·의료급여 수급자를 대상으로 쓰레기봉투와 음식물쓰레기 납부필증을 월 1인당 각각 20리터, 10리터씩 지원합니다. 별도 신청 없이 자동 지급되니, 해당되시면 꼭 챙기세요. 자세한 문의는 사회보장과(032-509-6464)로 하세요."
 category: 인천 지역 정보
 tags: [인천, 부평구, 기초생활수급자, 쓰레기처리비지원, 생활안정]
-image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/65/4039065_image2_1.jpg"
 source_id: "354000000103"
 slug: "2026-04-03-incheon-garbage-support"
 source_snapshot_key: "기초생활수급자쓰레기처리지원|||"

@@ -6,7 +6,7 @@ description: "인천 남동구 소기업·소공인이라면 주목! 담보 부�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천남동구, 소상공인, 소기업, 소공인, 특례보증, 정책자금, 금융지원]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "353000000117"
 slug: "2026-04-14-incheon-namdong-special-guarantee"
 source_snapshot_key: "소기업소공인특례보증|||"

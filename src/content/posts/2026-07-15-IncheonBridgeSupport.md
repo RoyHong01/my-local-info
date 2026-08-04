@@ -6,7 +6,7 @@ description: "영종·용유·북도면 주민을 위한 영종대교 및 인천
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천정보, 영종도통행료, 인천대교, 영종대교, 생활꿀팁]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/60/3304260_image2_1.jpg"
 source_id: "628000000177"
 slug: "2026-07-15-IncheonBridgeSupport"
 source_snapshot_key: "영종용유북도면지역주민영종인천대교통행료지원|||"

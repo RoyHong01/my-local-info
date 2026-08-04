@@ -6,7 +6,7 @@ description: "인천 옹진군 기초수급자 및 차상위계층을 위한 동
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 옹진군, 난방비지원, 저소득층지원, 겨울나기]
-image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
 source_id: "358000000106"
 slug: "2026-06-25-ongjin-heating-support"
 source_snapshot_key: "저소득층특별지원|||"

@@ -6,7 +6,7 @@ description: "강화군 거주 저소득·다문화·다자녀 가정 청소년�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [강화군, 청소년교통비, 교통비지원, 인천복지, 교육복지]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "357000000106"
 slug: "2026-06-21-ganghwa-youth-transportation-support"
 source_snapshot_key: "저소득등청소년교통비지원|||"

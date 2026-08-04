@@ -6,7 +6,7 @@ description: "인천 서구 저소득 복지대상자라면 주목하세요. 출
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천서구, 출산지원금, 저소득층지원, 서로e음, 육아정보]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/92/3522592_image2_1.jpg"
 source_id: "356000000113"
 slug: "2026-07-13-incheon-seogu-childbirth-support"
 source_snapshot_key: "저소득복지대상자출산축하용품비지원|||"

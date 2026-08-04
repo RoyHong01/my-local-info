@@ -6,7 +6,7 @@ description: "인천광역시에서 제공하는 최중증장애인 활동지원
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 장애인활동지원, 24시간돌봄, 인천광역시, 복지서비스]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/65/4039065_image2_1.jpg"
 source_id: "628000000154"
 slug: "2026-07-16-incheon-disability-support"
 source_snapshot_key: "최중중장애인활동지원24시간지원|||"

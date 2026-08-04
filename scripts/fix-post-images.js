@@ -42,7 +42,9 @@ const POSTS_DIR = path.join(process.cwd(), 'src', 'content', 'posts');
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
 
 const DEFAULT_SVG_PATTERN = /https:\/\/pick-n-joy\.com\/images\/default-[^"'\s]+\.svg/;
-const TOURAPI_IMAGE_PATTERN = /tong\.visitkorea\.or\.kr/;
+// API003(인천이지)는 비활성이며 해당 도메인 이미지는 전량 교체 대상이다.
+// 원본 서버가 내려가면 깨지고, 관광지가 아닌 상업시설 사진(GS25 등)이 다수다.
+const TOURAPI_IMAGE_PATTERN = /tong\.visitkorea\.or\.kr|data\.incheoneasy\.com/;
 
 const LEGACY_FALLBACK_IMAGES = [
   'https://pick-n-joy.com/images/gyeongbokgung-hero.png',

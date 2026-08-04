@@ -6,7 +6,7 @@ description: "인천 청년도전지원사업으로 최대 250만 원 수당과 
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천청년, 청년도전지원사업, 취업지원, 인천테크노파크, 청년수당]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "628000000749"
 slug: "2026-07-10-incheon-youth-support"
 source_snapshot_key: "청년도전지원사업|||"

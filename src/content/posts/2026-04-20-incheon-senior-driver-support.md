@@ -6,7 +6,7 @@ description: "인천시 거주 만 65세 이상 고령운전자라면 운전면�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천, 고령운전자, 운전면허반납, 인천e음카드, 교통안전]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/62/3393362_image2_1.JPG"
 source_id: "628000000160"
 slug: "2026-04-20-incheon-senior-driver-support"
 source_snapshot_key: "고령운전자운전면허자진반납지원||2026-12-31|"

@@ -6,7 +6,7 @@ description: "인천광역시가 임산부와 만 2세 미만 영유아 가정�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천육아, 임산부지원, 영유아건강, 인천광역시, 방문건강관리]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/65/4039065_image2_1.jpg"
 source_id: "628000000140"
 slug: "2026-05-14-incheon-imom-care"
 source_snapshot_key: "imom방문건강관리지원|||"

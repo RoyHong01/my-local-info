@@ -5,7 +5,7 @@ summary: "인천 계양구에서 둘째 이상 자녀에게 월 10만원씩 양�
 description: "인천 계양구에서 둘째 이상 자녀에게 월 10만원씩 양육비를 지원합니다. 2024년 12월 31일까지 출생한 만 6세 미만 자녀가 대상이며, 부모 중 한 분이 계양구에 1년 이상 거주해야 합니다. 신청은 상시 방문 접수 가능하며, 문의는 여성보육과(032-450-5983)로 하세요."
 category: 인천 지역 정보
 tags: [인천, 계양구, 다자녀, 양육비, 지원금, 보육, 육아]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/06/3000906_image2_1.jpg"
 source_id: "355000000103"
 slug: "2026-04-07-incheon-gyeyang-childcare-support"
 source_snapshot_key: "다자녀가정양육비지원|||"

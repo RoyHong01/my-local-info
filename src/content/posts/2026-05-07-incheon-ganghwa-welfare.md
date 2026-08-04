@@ -6,7 +6,7 @@ description: "인천 강화군에서 저소득 한부모가정을 위해 명절 
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 강화군지원, 한부모가정, 명절위문금, 생활정보]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/94/3518594_image2_1.jpg"
 source_id: "357000000108"
 slug: "2026-05-07-incheon-ganghwa-welfare"
 source_snapshot_key: "한부모가정명절위문|||"

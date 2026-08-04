@@ -6,7 +6,7 @@ description: "인천광역시에서 반려견 광견병 예방접종비 50%를 �
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천반려동물, 광견병예방접종, 인천시지원사업, 반려견건강, 인천농축산과]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/60/3304260_image2_1.jpg"
 source_id: "628000000156"
 slug: "2026-06-01-incheon-rabies-vaccination"
 source_snapshot_key: "광견병예방접종비지원|||"

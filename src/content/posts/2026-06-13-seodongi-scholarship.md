@@ -6,7 +6,7 @@ description: "인천 서구 거주 학생을 위한 서동이장학회 장학금
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천서구, 서동이장학회, 장학금신청, 인천교육, 지역인재육성]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg"
 source_id: "O00091900001"
 slug: "2026-06-13-seodongi-scholarship"
 source_snapshot_key: "서동이장학회장학금|||"

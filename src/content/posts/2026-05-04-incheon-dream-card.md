@@ -6,7 +6,7 @@ description: "인천 거주 미취업 청년에게 최대 300만 원의 취업�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천청년, 드림체크카드, 취업지원금, 인천광역시, 구직활동]
-image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
 source_id: "628000000129"
 slug: "2026-05-04-incheon-dream-card"
 source_snapshot_key: "구직청년드림체크카드지원|||"

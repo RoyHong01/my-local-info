@@ -6,7 +6,7 @@ description: "인천시 SOS 긴급복지 지원은 갑작스러운 소득 상실
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천복지, 긴급복지, 생활안정, 인천시지원, 복지정보]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/55/3499155_image2_1.jpg"
 source_id: "628000000123"
 slug: "2026-05-03-incheon-sos-welfare"
 source_snapshot_key: "sos긴급복지지원|||"

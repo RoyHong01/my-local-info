@@ -6,7 +6,7 @@ description: "인천 제물포구 소상공인·중소기업 특례보증 지원
 category: 인천 지역 정보
 published_by: "auto"
 tags: [제물포구, 소상공인지원, 중소기업육성자금, 신용보증재단, 특례보증]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg"
 source_id: "350000000115"
 slug: "2026-08-02-jemulpo-tukryebojung"
 source_snapshot_key: "중소기업및소상공인특례보증지원사업|||"

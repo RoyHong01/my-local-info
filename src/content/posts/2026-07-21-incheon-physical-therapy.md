@@ -6,7 +6,7 @@ description: "인천광역시 동구 보건행정과에서 10세 이상 주민�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천건강, 동구보건소, 물리치료, 지역보건서비스, 건강관리]
-image: "https://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
 source_id: "350000000103"
 slug: "2026-07-21-incheon-physical-therapy"
 source_snapshot_key: "물리치료지원|||"

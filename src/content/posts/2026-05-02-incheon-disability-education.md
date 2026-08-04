@@ -6,7 +6,7 @@ description: "인천시가 19세 이상 등록 장애인을 위해 연 1회 35�
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천장애인복지, 평생교육이용권, 인천시교육지원, 장애인평생교육, 정부24]
-image: "http://tong.visitkorea.or.kr/cms/resource/68/3001268_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/92/3522592_image2_1.jpg"
 source_id: "628000000758"
 slug: "2026-05-02-incheon-disability-education"
 source_snapshot_key: "인천장애인평생교육이용권지원|||"

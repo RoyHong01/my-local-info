@@ -6,7 +6,7 @@ description: "인천시에 거주하는 국가보훈대상자분들을 위해 �
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천시, 국가보훈대상자, 위문금, 보훈정책, 생활안정]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "https://tong.visitkorea.or.kr/cms/resource/92/3522592_image2_1.jpg"
 source_id: "628000000133"
 slug: "2026-05-24-incheon-veterans-support"
 source_snapshot_key: "국가보훈대상자위문금지원|||"

@@ -6,7 +6,7 @@ description: "인천 소상공인이라면 놓치지 마세요. 연 매출 3억 
 category: 인천 지역 정보
 published_by: "auto"
 tags: [인천소상공인, 노란우산공제, 가입장려금, 인천시지원사업, 소상공인정책]
-image: "http://tong.visitkorea.or.kr/cms/resource/92/3526892_image2_1.jpg"
+image: "http://tong.visitkorea.or.kr/cms/resource/58/3381758_image2_1.jpg"
 source_id: "628000000170"
 slug: "2026-05-11-incheon-yellowumbrella"
 source_snapshot_key: "소상공인전용노란우산공제가입장려금지원|||"
