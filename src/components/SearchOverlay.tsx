@@ -115,9 +115,9 @@ export default function SearchOverlay({ isOpen, onClose }: { isOpen: boolean; on
             placeholder="보조금, 축제, 맛집 등 검색어를 입력하세요"
             className="flex-1 text-base sm:text-lg text-stone-800 placeholder:text-stone-400 outline-none bg-transparent"
           />
-          <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 text-xs font-medium text-stone-400 bg-stone-100 rounded">
+          <button type="button" onClick={onClose} aria-label="검색 닫기" className="hidden sm:inline-flex items-center px-2 py-0.5 text-xs font-medium text-stone-400 bg-stone-100 rounded cursor-pointer">
             ESC
-          </kbd>
+          </button>
         </div>
 
         {/* Results */}
