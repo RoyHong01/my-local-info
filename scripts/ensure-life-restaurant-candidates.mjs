@@ -223,7 +223,10 @@ async function main() {
   // 기존 조건은 "후보 부족일 때 쿨다운 적용"이라, 정작 수집이 필요한 순간에 막혔다.
   // (2026-08-04~05 맛집 2일 연속 미발행: 유효 후보 0인데 쿨다운으로 재수집 생략)
   // 비용 폭주는 collect 측 GOOGLE_CALLS_PER_RUN_MAX(기본 50) 하드캡이 막는다.
-  const candidatesExhausted = candidates.length === 0;
+  // 후보가 임계 미만이면 쿨다운을 무시하고 재수집한다(운영 정책: 5개 미만).
+  // 0까지 기다리면 소진 당일 미발행이 발생하므로 여유를 두고 채운다.
+  const CRITICAL_CANDIDATE_THRESHOLD = Number(process.env.RESTAURANT_CRITICAL_CANDIDATES || '5');
+  const candidatesExhausted = candidates.length < CRITICAL_CANDIDATE_THRESHOLD;
   const shouldApplyCooldown = !forceRecollectActive && Boolean(snapshot) && !candidatesExhausted && (!hasEnoughCandidates || !hasAllTargetBuckets);
   if (shouldApplyCooldown && isCooldownActive(ratingsCacheMeta.lastRecollectAt)) {
     console.log(`⏸️ 재수집 쿨다운 적용: 마지막 재수집 ${ratingsCacheMeta.lastRecollectAt} (쿨다운 ${RECOLLECT_COOLDOWN_DAYS}일)`);
