@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-04T00:00:00Z",
+  "updatedAt": "2026-08-05T18:00:28.967Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
@@ -15,12 +15,30 @@
       "firstSeenAt": "2026-07-29T06:23:04.560Z",
       "lastSeenAt": "2026-07-29T06:23:04.560Z"
     },
+    "8081757": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1209,
+      "checkedAt": "2026-08-05T17:59:18.922Z",
+      "kakaoId": "8081757",
+      "firstSeenAt": "2026-08-05T17:59:18.922Z",
+      "lastSeenAt": "2026-08-05T17:59:18.922Z"
+    },
     "8256083": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "8256083",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "8441290": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1173,
+      "checkedAt": "2026-08-05T17:59:23.376Z",
+      "kakaoId": "8441290",
+      "firstSeenAt": "2026-08-05T17:59:23.376Z",
+      "lastSeenAt": "2026-08-05T17:59:23.376Z"
     },
     "9175466": {
       "reason": "low_rating",
@@ -30,6 +48,24 @@
       "kakaoId": "9175466",
       "firstSeenAt": "2026-07-28T20:22:16.965Z",
       "lastSeenAt": "2026-07-28T20:22:16.965Z"
+    },
+    "10180951": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 891,
+      "checkedAt": "2026-08-05T17:59:22.891Z",
+      "kakaoId": "10180951",
+      "firstSeenAt": "2026-08-05T17:59:22.891Z",
+      "lastSeenAt": "2026-08-05T17:59:22.891Z"
+    },
+    "10393075": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 1587,
+      "checkedAt": "2026-08-05T17:59:22.434Z",
+      "kakaoId": "10393075",
+      "firstSeenAt": "2026-08-05T17:59:22.434Z",
+      "lastSeenAt": "2026-08-05T17:59:22.434Z"
     },
     "10463591": {
       "reason": "low_rating",
@@ -48,6 +84,15 @@
       "kakaoId": "10681455",
       "firstSeenAt": "2026-07-28T20:22:17.470Z",
       "lastSeenAt": "2026-07-28T20:22:17.470Z"
+    },
+    "11057071": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 1486,
+      "checkedAt": "2026-08-05T17:59:15.976Z",
+      "kakaoId": "11057071",
+      "firstSeenAt": "2026-08-05T17:59:15.976Z",
+      "lastSeenAt": "2026-08-05T17:59:15.976Z"
     },
     "13034445": {
       "reason": "low_rating",
@@ -91,6 +136,15 @@
       "kakaoId": "16568915",
       "firstSeenAt": "2026-07-29T06:23:03.647Z",
       "lastSeenAt": "2026-07-29T06:23:03.647Z"
+    },
+    "16830810": {
+      "reason": "low_rating",
+      "rating": 3.5,
+      "reviewCount": 13,
+      "checkedAt": "2026-08-05T17:59:20.076Z",
+      "kakaoId": "16830810",
+      "firstSeenAt": "2026-08-05T17:59:20.076Z",
+      "lastSeenAt": "2026-08-05T17:59:20.076Z"
     },
     "16969185": {
       "reason": "low_rating",
@@ -169,6 +223,15 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "26972264": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 1482,
+      "checkedAt": "2026-08-05T17:59:15.543Z",
+      "kakaoId": "26972264",
+      "firstSeenAt": "2026-08-05T17:59:15.543Z",
+      "lastSeenAt": "2026-08-05T17:59:15.543Z"
+    },
     "27189345": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -196,6 +259,15 @@
       "firstSeenAt": "2026-07-28T20:23:01.480Z",
       "lastSeenAt": "2026-07-28T20:23:01.480Z"
     },
+    "47880106": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 795,
+      "checkedAt": "2026-08-05T17:59:20.531Z",
+      "kakaoId": "47880106",
+      "firstSeenAt": "2026-08-05T17:59:20.531Z",
+      "lastSeenAt": "2026-08-05T17:59:20.531Z"
+    },
     "173009195": {
       "reason": "low_rating",
       "rating": 3.3,
@@ -213,6 +285,15 @@
       "kakaoId": "179244712",
       "firstSeenAt": "2026-07-28T20:22:36.039Z",
       "lastSeenAt": "2026-07-28T20:22:36.039Z"
+    },
+    "220076114": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 468,
+      "checkedAt": "2026-08-05T18:00:22.462Z",
+      "kakaoId": "220076114",
+      "firstSeenAt": "2026-08-05T18:00:22.462Z",
+      "lastSeenAt": "2026-08-05T18:00:22.462Z"
     },
     "225834573": {
       "reason": "low_rating",
@@ -241,6 +322,15 @@
       "firstSeenAt": "2026-07-20T20:31:51.570Z",
       "lastSeenAt": "2026-07-20T20:31:51.570Z"
     },
+    "372744977": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 운정가람마을점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "372744977",
+      "firstSeenAt": "2026-08-05T18:00:07.397Z",
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
+    },
     "378907987": {
       "reason": "low_rating",
       "rating": 4,
@@ -249,6 +339,22 @@
       "kakaoId": "378907987",
       "firstSeenAt": "2026-07-29T06:23:05.454Z",
       "lastSeenAt": "2026-07-29T06:23:05.454Z"
+    },
+    "381900374": {
+      "reason": "no_live_image_source",
+      "checkedAt": "2026-08-04T00:00:00Z",
+      "kakaoId": "381900374",
+      "firstSeenAt": "2026-08-04T00:00:00Z",
+      "lastSeenAt": "2026-08-04T00:00:00Z"
+    },
+    "411194709": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-08-05T17:59:56.507Z",
+      "kakaoId": "411194709",
+      "firstSeenAt": "2026-08-05T17:59:56.507Z",
+      "lastSeenAt": "2026-08-05T17:59:56.507Z"
     },
     "412368591": {
       "reason": "low_rating",
@@ -276,6 +382,15 @@
       "kakaoId": "526971723",
       "firstSeenAt": "2026-07-20T20:32:21.169Z",
       "lastSeenAt": "2026-07-20T20:32:21.169Z"
+    },
+    "537284654": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 6596,
+      "checkedAt": "2026-08-05T18:00:21.548Z",
+      "kakaoId": "537284654",
+      "firstSeenAt": "2026-08-05T18:00:21.548Z",
+      "lastSeenAt": "2026-08-05T18:00:21.548Z"
     },
     "582379341": {
       "reason": "low_rating",
@@ -345,6 +460,15 @@
       "firstSeenAt": "2026-07-28T20:23:32.106Z",
       "lastSeenAt": "2026-07-28T20:23:32.106Z"
     },
+    "744785569": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 424,
+      "checkedAt": "2026-08-05T18:00:21.967Z",
+      "kakaoId": "744785569",
+      "firstSeenAt": "2026-08-05T18:00:21.967Z",
+      "lastSeenAt": "2026-08-05T18:00:21.967Z"
+    },
     "772655535": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -385,7 +509,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "870307905",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "887251319": {
       "reason": "franchise",
@@ -394,7 +518,7 @@
       "categoryName": "음식점 > 패스트푸드 > 샌드위치 > 써브웨이",
       "kakaoId": "887251319",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "899761938": {
       "reason": "low_rating",
@@ -453,7 +577,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 이디야커피",
       "kakaoId": "953953519",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "1083309826": {
       "reason": "manual_delete",
@@ -478,7 +602,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "1115412148",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "1169568551": {
       "reason": "low_rating",
@@ -489,6 +613,24 @@
       "firstSeenAt": "2026-07-20T20:31:18.181Z",
       "lastSeenAt": "2026-07-20T20:31:18.181Z"
     },
+    "1179394238": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-05T17:59:52.280Z",
+      "kakaoId": "1179394238",
+      "firstSeenAt": "2026-08-05T17:59:52.280Z",
+      "lastSeenAt": "2026-08-05T17:59:52.280Z"
+    },
+    "1194423092": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 6807,
+      "checkedAt": "2026-08-05T17:59:13.972Z",
+      "kakaoId": "1194423092",
+      "firstSeenAt": "2026-08-05T17:59:13.972Z",
+      "lastSeenAt": "2026-08-05T17:59:13.972Z"
+    },
     "1196620579": {
       "reason": "low_rating",
       "rating": 3.8,
@@ -497,6 +639,15 @@
       "kakaoId": "1196620579",
       "firstSeenAt": "2026-07-20T20:31:18.181Z",
       "lastSeenAt": "2026-07-20T20:31:18.181Z"
+    },
+    "1255877549": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-05T17:59:12.688Z",
+      "kakaoId": "1255877549",
+      "firstSeenAt": "2026-08-05T17:59:12.688Z",
+      "lastSeenAt": "2026-08-05T17:59:12.688Z"
     },
     "1313445681": {
       "reason": "low_rating",
@@ -514,7 +665,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "1326173242",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "1370232169": {
       "reason": "low_rating",
@@ -532,7 +683,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "1381896896",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "1386327715": {
       "reason": "manual_delete",
@@ -582,7 +733,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "1527543396",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "1568148864": {
       "reason": "low_rating",
@@ -600,6 +751,15 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "1690972003": {
+      "reason": "low_rating",
+      "rating": 2,
+      "reviewCount": 2,
+      "checkedAt": "2026-08-05T18:00:17.875Z",
+      "kakaoId": "1690972003",
+      "firstSeenAt": "2026-08-05T18:00:17.875Z",
+      "lastSeenAt": "2026-08-05T18:00:17.875Z"
+    },
     "1711178713": {
       "reason": "low_rating",
       "rating": 3.8,
@@ -608,6 +768,15 @@
       "kakaoId": "1711178713",
       "firstSeenAt": "2026-07-28T20:22:11.010Z",
       "lastSeenAt": "2026-07-28T20:22:11.010Z"
+    },
+    "1751927951": {
+      "reason": "low_rating",
+      "rating": 3.2,
+      "reviewCount": 5,
+      "checkedAt": "2026-08-05T18:00:20.424Z",
+      "kakaoId": "1751927951",
+      "firstSeenAt": "2026-08-05T18:00:20.424Z",
+      "lastSeenAt": "2026-08-05T18:00:20.424Z"
     },
     "1798330241": {
       "reason": "low_rating",
@@ -661,6 +830,24 @@
       "firstSeenAt": "2026-07-20T20:32:21.169Z",
       "lastSeenAt": "2026-07-20T20:32:21.169Z"
     },
+    "2031492787": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 6596,
+      "checkedAt": "2026-08-05T18:00:19.987Z",
+      "kakaoId": "2031492787",
+      "firstSeenAt": "2026-08-05T18:00:19.987Z",
+      "lastSeenAt": "2026-08-05T18:00:19.987Z"
+    },
+    "2063968687": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 167,
+      "checkedAt": "2026-08-05T18:00:16.591Z",
+      "kakaoId": "2063968687",
+      "firstSeenAt": "2026-08-05T18:00:16.591Z",
+      "lastSeenAt": "2026-08-05T18:00:16.591Z"
+    },
     "2066444716": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
@@ -693,7 +880,7 @@
       "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
       "kakaoId": "2112562440",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
-      "lastSeenAt": "2026-07-28T20:23:11.261Z"
+      "lastSeenAt": "2026-08-05T18:00:07.397Z"
     },
     "2134411175": {
       "reason": "low_rating",
@@ -703,13 +890,6 @@
       "kakaoId": "2134411175",
       "firstSeenAt": "2026-07-20T20:31:58.620Z",
       "lastSeenAt": "2026-07-20T20:31:58.620Z"
-    },
-    "381900374": {
-      "reason": "no_live_image_source",
-      "checkedAt": "2026-08-04T00:00:00Z",
-      "kakaoId": "381900374",
-      "firstSeenAt": "2026-08-04T00:00:00Z",
-      "lastSeenAt": "2026-08-04T00:00:00Z"
     }
   }
 }
