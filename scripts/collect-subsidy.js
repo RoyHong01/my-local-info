@@ -7,12 +7,18 @@ const requestedGeminiModel = String(process.env.GEMINI_MODEL || DEFAULT_GEMINI_M
 const ALLOWED_GEMINI_MODELS = new Set([DEFAULT_GEMINI_MODEL, 'gemini-2.5-flash-lite']);
 const GEMINI_MODEL = requestedGeminiModel || DEFAULT_GEMINI_MODEL;
 const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
+// 공공데이터 API 접속 재시도 (2026-08-06 apis.data.go.kr ConnectTimeout으로 축제 수집 전체 실패한 사례)
+const SUBSIDY_FETCH_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.SUBSIDY_FETCH_RETRY_COUNT || '3', 10));
+const SUBSIDY_FETCH_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.SUBSIDY_FETCH_RETRY_DELAY_MS || '5000', 10));
+const SUBSIDY_FETCH_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.SUBSIDY_FETCH_TIMEOUT_MS || '20000', 10));
 if (/\bpro\b/i.test(requestedGeminiModel)) {
   throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다.');
 }
 if (!ALLOWED_GEMINI_MODELS.has(GEMINI_MODEL)) {
   throw new Error(`허용되지 않은 GEMINI_MODEL: ${GEMINI_MODEL}. 허용값: ${Array.from(ALLOWED_GEMINI_MODELS).join(', ')}`);
 }
+
+function delay(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
 function sourceHash(item) {
   return [
@@ -122,13 +128,31 @@ async function fetchSubsidyPages(apiKey, { perPage = 100, maxPages = 80 } = {}) 
     });
 
     const endpoint = `https://api.odcloud.kr/api/gov24/v3/serviceList?${params.toString()}`;
-    const response = await fetch(endpoint, {
-      headers: { Authorization: `Infuser ${apiKey}` },
-    });
+    let response;
+    let lastError;
+    for (let attempt = 1; attempt <= SUBSIDY_FETCH_RETRY_COUNT; attempt++) {
+      try {
+        response = await fetch(endpoint, {
+          headers: { Authorization: `Infuser ${apiKey}` },
+          signal: AbortSignal.timeout(SUBSIDY_FETCH_TIMEOUT_MS),
+        });
 
-    if (!response.ok) {
-      throw new Error(`subsidy page ${page} fetch failed: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`subsidy page ${page} fetch failed: ${response.status}`);
+        }
+
+        lastError = null;
+        break;
+      } catch (err) {
+        lastError = err;
+        if (attempt >= SUBSIDY_FETCH_RETRY_COUNT) break;
+        const wait = SUBSIDY_FETCH_RETRY_DELAY_MS * attempt;
+        console.warn(`subsidy API 접속 실패 ${attempt}/${SUBSIDY_FETCH_RETRY_COUNT} (page ${page}): ${err.message} -> ${wait}ms 후 재시도`);
+        await delay(wait);
+      }
     }
+
+    if (lastError) throw lastError;
 
     const data = await response.json();
     const pageItems = data.data || data.items || [];
