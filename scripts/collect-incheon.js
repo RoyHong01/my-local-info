@@ -336,7 +336,20 @@ async function fetchTourFirstImageByKeyword(keyword, apiKey) {
   const encodedKeyword = encodeURIComponent(keyword);
   const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchKeyword2?serviceKey=${apiKey}&MobileOS=ETC&MobileApp=pick-n-joy&_type=json&keyword=${encodedKeyword}&numOfRows=10&pageNo=1`;
   try {
-    const response = await fetch(endpoint);
+    let response = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        response = await fetch(endpoint, { signal: AbortSignal.timeout(10000) });
+        break;
+      } catch (err) {
+        if (attempt >= 2) {
+          console.warn(`이미지 조회 실패(${keyword}): ${err.message}`);
+          return '';
+        }
+        await sleep(2000);
+      }
+    }
+    if (!response) return '';
     if (!response.ok) return '';
     const data = await response.json();
     const items = data?.response?.body?.items?.item || [];
@@ -361,7 +374,20 @@ async function fetchPhotoGalleryImageByKeyword(keyword, apiKey) {
     `&keyword=${encodeURIComponent(keyword)}`;
 
   try {
-    const response = await fetch(endpoint);
+    let response = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        response = await fetch(endpoint, { signal: AbortSignal.timeout(10000) });
+        break;
+      } catch (err) {
+        if (attempt >= 2) {
+          console.warn(`이미지 조회 실패(${keyword}): ${err.message}`);
+          return '';
+        }
+        await sleep(2000);
+      }
+    }
+    if (!response) return '';
     if (!response.ok) return '';
     const data = await response.json();
     const items = data?.response?.body?.items?.item || [];
@@ -567,14 +593,11 @@ async function run() {
 
       if (!imageCache.has(keyword)) {
         const primary = await fetchTourFirstImageByKeyword(keyword, TOUR_API_KEY);
-        if (primary) {
-          imageCache.set(keyword, primary);
-          imageSourceCache.set(keyword, 'tourapi');
-        } else {
-          const fallback = await fetchPhotoGalleryImageByKeyword(keyword, TOUR_API_KEY);
-          imageCache.set(keyword, fallback || '');
-          imageSourceCache.set(keyword, fallback ? 'photo-gallery' : '');
-        }
+        // primary가 있으면 PhotoGallery를 호출하지 않는다(중복 호출 방지).
+        // 기존 코드는 primary를 조회해놓고 fallback만 캐시에 저장해 결과가 버려졌다.
+        const fallback = primary ? '' : await fetchPhotoGalleryImageByKeyword(keyword, TOUR_API_KEY);
+        imageCache.set(keyword, primary || fallback || '');
+        imageSourceCache.set(keyword, primary ? 'tourapi' : (fallback ? 'photo-gallery' : ''));
       }
 
       const imageUrl = imageCache.get(keyword) || '';
