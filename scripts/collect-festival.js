@@ -10,6 +10,10 @@ const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS || 120000);
 const DESCRIPTION_MARKDOWN_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_DELAY_MS || '15000', 10));
 const DESCRIPTION_MARKDOWN_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_RETRY_COUNT || '4', 10));
 const DESCRIPTION_MARKDOWN_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_RETRY_DELAY_MS || '20000', 10));
+// TourAPI 접속 재시도 (2026-08-06 apis.data.go.kr ConnectTimeout으로 축제 수집 전체 실패)
+const FESTIVAL_FETCH_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_COUNT || '3', 10));
+const FESTIVAL_FETCH_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_DELAY_MS || '5000', 10));
+const FESTIVAL_FETCH_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.FESTIVAL_FETCH_TIMEOUT_MS || '20000', 10));
 if (/\bpro\b/i.test(requestedGeminiModel)) {
   throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다.');
 }
@@ -128,10 +132,25 @@ function getFestivalModifiedRank(item) {
 
 async function fetchFestivalPage({ apiKey, startDate, endDate, pageNo, numOfRows }) {
   const endpoint = `https://apis.data.go.kr/B551011/KorService2/searchFestival2?serviceKey=${apiKey}&numOfRows=${numOfRows}&pageNo=${pageNo}&MobileOS=ETC&MobileApp=PicknJoy&_type=json&eventStartDate=${startDate}&eventEndDate=${endDate}`;
-  const response = await fetch(endpoint);
-  if (!response.ok) {
-    throw new Error(`searchFestival2 failed: ${response.status}`);
+  let response;
+  let lastError;
+  for (let attempt = 1; attempt <= FESTIVAL_FETCH_RETRY_COUNT; attempt++) {
+    try {
+      response = await fetch(endpoint, { signal: AbortSignal.timeout(FESTIVAL_FETCH_TIMEOUT_MS) });
+      if (!response.ok) {
+        throw new Error(`searchFestival2 failed: ${response.status}`);
+      }
+      lastError = null;
+      break;
+    } catch (err) {
+      lastError = err;
+      if (attempt >= FESTIVAL_FETCH_RETRY_COUNT) break;
+      const wait = FESTIVAL_FETCH_RETRY_DELAY_MS * attempt;
+      console.warn(`searchFestival2 접속 실패 ${attempt}/${FESTIVAL_FETCH_RETRY_COUNT} (page ${pageNo}): ${err.message} -> ${wait}ms 후 재시도`);
+      await delay(wait);
+    }
   }
+  if (lastError) throw lastError;
   const data = await response.json();
   const body = data?.response?.body || {};
   let pageItems = body?.items?.item || [];
