@@ -7,6 +7,11 @@ import { execFileSync } from 'child_process';
 const TARGET_BUCKETS = ['seoul', 'incheon', 'gyeonggi'];
 const MIN_UNUSED_CANDIDATES = Number(process.env.MIN_UNUSED_RESTAURANT_CANDIDATES || '10');
 const RECOLLECT_COOLDOWN_DAYS = Number(process.env.RESTAURANT_RECOLLECT_COOLDOWN_DAYS || '7');
+// 재수집이 매일 반복되는 것을 막는 가드 (2026-08-06~07 이틀 연속 재수집 사례).
+// 쿨다운 무시 조건(후보 임계 미만)이 켜져 있어도 하루 1회를 넘지 않는다.
+const MAX_RECOLLECT_PER_DAY = Math.max(1, Number.parseInt(process.env.RESTAURANT_MAX_RECOLLECT_PER_DAY || '1', 10));
+// 연속 재수집에도 후보가 늘지 않으면 경고를 남긴다(쿼리 소진 신호).
+const FAILED_RECOLLECT_WARN_THRESHOLD = Math.max(1, Number.parseInt(process.env.RESTAURANT_FAILED_RECOLLECT_WARN || '2', 10));
 const FORCE_RECOLLECT_MODE = String(process.env.RESTAURANT_FORCE_RECOLLECT || '').trim().toLowerCase();
 const snapshotPath = path.join(process.cwd(), 'src', 'app', 'life', 'restaurant', 'data', 'restaurants.json');
 const ratingsCachePath = path.join(process.cwd(), 'scripts', 'data', 'google-ratings-cache.json');
@@ -92,11 +97,17 @@ async function readRatingsCacheMeta() {
     const meta = parsed?.meta && typeof parsed.meta === 'object' ? parsed.meta : {};
     return {
       lastRecollectAt: String(meta.lastRecollectAt || ''),
+      recollectCountToday: Number(meta.recollectCountToday || 0),
+      recollectCountDate: String(meta.recollectCountDate || ''),
+      consecutiveFailedRecollects: Number(meta.consecutiveFailedRecollects || 0),
       forceRecollectOnceConsumedAt: String(meta.forceRecollectOnceConsumedAt || ''),
     };
   } catch {
     return {
       lastRecollectAt: '',
+      recollectCountToday: 0,
+      recollectCountDate: '',
+      consecutiveFailedRecollects: 0,
       forceRecollectOnceConsumedAt: '',
     };
   }
@@ -117,6 +128,16 @@ async function markForceRecollectConsumed() {
 
   await fs.mkdir(path.dirname(ratingsCachePath), { recursive: true });
   await fs.writeFile(ratingsCachePath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf-8');
+}
+
+async function updateRecollectStats({ date, count, consecutiveFailed }) {
+  const raw = await fs.readFile(ratingsCachePath, 'utf-8');
+  const parsed = JSON.parse(raw);
+  parsed.meta = parsed.meta || {};
+  parsed.meta.recollectCountDate = date;
+  parsed.meta.recollectCountToday = count;
+  parsed.meta.consecutiveFailedRecollects = consecutiveFailed;
+  await fs.writeFile(ratingsCachePath, JSON.stringify(parsed, null, 2), 'utf-8');
 }
 
 function isCooldownActive(lastRecollectAt) {
@@ -228,6 +249,20 @@ async function main() {
   const CRITICAL_CANDIDATE_THRESHOLD = Number(process.env.RESTAURANT_CRITICAL_CANDIDATES || '5');
   const candidatesExhausted = candidates.length < CRITICAL_CANDIDATE_THRESHOLD;
   const shouldApplyCooldown = !forceRecollectActive && Boolean(snapshot) && !candidatesExhausted && (!hasEnoughCandidates || !hasAllTargetBuckets);
+
+  // 하루 재수집 횟수 상한 (쿨다운 무시 조건보다 우선한다)
+  const todayKst = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const todayCount = ratingsCacheMeta.recollectCountDate === todayKst
+    ? ratingsCacheMeta.recollectCountToday
+    : 0;
+  if (!forceRecollectActive && todayCount >= MAX_RECOLLECT_PER_DAY) {
+    console.log(`⏸️ 일일 재수집 상한 도달: ${todayCount}/${MAX_RECOLLECT_PER_DAY} (${todayKst} KST)`);
+    console.log(`↪ 재수집 스킵: ${recollectReason}`);
+    appendGithubOutput('recollect_skipped_by_daily_cap', 'true');
+    emitMetrics(snapshot, false);
+    return;
+  }
+
   if (shouldApplyCooldown && isCooldownActive(ratingsCacheMeta.lastRecollectAt)) {
     console.log(`⏸️ 재수집 쿨다운 적용: 마지막 재수집 ${ratingsCacheMeta.lastRecollectAt} (쿨다운 ${RECOLLECT_COOLDOWN_DAYS}일)`);
     console.log(`↪ 재수집 스킵: ${recollectReason}`);
@@ -249,6 +284,30 @@ async function main() {
     // (2026-07-29 수집 82건 중 61건이 수집 시점에 이미 발행된 상태였음).
     env: { ...process.env, RESTAURANT_PUBLISHED_IDS: Array.from(existingIds).join(',') },
   });
+
+  // 재수집 결과 기록: 후보가 늘지 않았으면 연속 실패로 집계한다.
+  try {
+    const afterSnapshot = await readSnapshot();
+    const afterExisting = await getExistingRestaurantIds();
+    const afterCandidates = afterSnapshot ? buildFilteredCandidates(afterSnapshot, afterExisting) : [];
+    const improved = afterCandidates.length > candidates.length;
+    const nextFailed = improved ? 0 : (ratingsCacheMeta.consecutiveFailedRecollects + 1);
+    await updateRecollectStats({
+      date: todayKst,
+      count: todayCount + 1,
+      consecutiveFailed: nextFailed,
+    });
+    console.log(`📊 재수집 결과: 후보 ${candidates.length} → ${afterCandidates.length}건 (연속 미개선 ${nextFailed}회)`);
+    appendGithubOutput('recollect_candidates_before', String(candidates.length));
+    appendGithubOutput('recollect_candidates_after', String(afterCandidates.length));
+    appendGithubOutput('recollect_consecutive_failed', String(nextFailed));
+    if (nextFailed >= FAILED_RECOLLECT_WARN_THRESHOLD) {
+      console.warn(`⚠️ 재수집을 ${nextFailed}회 연속 수행했으나 후보가 늘지 않았습니다. 쿼리 매트릭스 소진 가능성.`);
+      appendGithubOutput('recollect_warning', 'query_pool_exhausted');
+    }
+  } catch (err) {
+    console.warn(`재수집 결과 기록 실패: ${err.message}`);
+  }
 
   if (forceRecollectActive) {
     await markForceRecollectConsumed();
