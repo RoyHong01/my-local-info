@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-06T00:00:00+09:00",
+  "updatedAtKst": "2026-08-07T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -5893,6 +5893,63 @@
       "sourceId": "manual-choice-digital-2026-08-06",
       "themeKey": "digital",
       "themeName": "디지털"
+    },
+    {
+      "date": "2026-08-07",
+      "productId": "6868315752",
+      "productName": "달본 PET 내추럴 강아지 샴푸린스겸용, 500ml, 1개",
+      "brand": "달본",
+      "productGroupTokens": [
+        "pet",
+        "내추럴",
+        "강아지",
+        "샴푸린스겸용",
+        "500ml",
+        "life"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md",
+      "sourceId": "manual-choice-pet-life-2026-08-07",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-08-07",
+      "productId": "9657495702",
+      "productName": "다이아큐브 스마트워치 9H PET 항균 유리코팅 액정보호필름 갤럭시 워치9 44mm 간편부착 3P",
+      "brand": "다이아큐브",
+      "productGroupTokens": [
+        "스마트워치",
+        "9h",
+        "pet",
+        "항균",
+        "유리코팅",
+        "액정보호필름"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md",
+      "sourceId": "manual-choice-pet-life-2026-08-07",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
+    },
+    {
+      "date": "2026-08-07",
+      "productId": "9657724524",
+      "productName": "다이아큐브 스마트워치 9H PET 항균 유리코팅 액정보호필름 갤럭시워치 울트라2 47mm 간편부착 3P",
+      "brand": "다이아큐브",
+      "productGroupTokens": [
+        "스마트워치",
+        "9h",
+        "pet",
+        "항균",
+        "유리코팅",
+        "액정보호필름"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md",
+      "sourceId": "manual-choice-pet-life-2026-08-07",
+      "themeKey": "pet-life",
+      "themeName": "반려 생활"
     }
   ]
 }
