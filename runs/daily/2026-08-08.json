@@ -1,0 +1,315 @@
+{
+  "reportDateKst": "2026-08-08",
+  "generatedAtUtc": "2026-08-07T17:18:23.660Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31199818736",
+    "runNumber": 986,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31199818736",
+    "runStartedAtUtc": "2026-08-07T16:54:50Z",
+    "headSha": "7ce27e22cf31f80c0a898581b6eab79f3f025fad"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 0건, 총 626건",
+        "festival": "신규 0건, 업데이트 217건, 총 421건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "2d1757c0850d230c371feb0b8dd8da1ac218e50b",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-08-08",
+      "authoredAt": "2026-08-07T17:18:22Z",
+      "files": [
+        "public/images/restaurants/2026-08-08-178452145-hero.webp",
+        "public/images/restaurants/2026-08-08-178452145-inline.webp",
+        "public/images/restaurants/2026-08-08-705202577-hero.jpg",
+        "public/images/restaurants/2026-08-08-705202577-inline.jpg",
+        "src/content/life/2026-08-08-gangnam-restaurant-972393172.md",
+        "src/content/life/2026-08-08-incheon-restaurant-178452145.md",
+        "src/content/life/2026-08-08-seoul-restaurant-705202577.md"
+      ]
+    },
+    {
+      "sha": "6bbd7529de0a459f134442b0be030b0631794681",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-08",
+      "authoredAt": "2026-08-07T17:13:45Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-08-choice-beauty-fashion-2026-08-08.md"
+      ]
+    },
+    {
+      "sha": "ff7e3d49e6514d5db4e0adc9df2ec36e9bda5324",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-08",
+      "authoredAt": "2026-08-07T17:12:34Z",
+      "files": [
+        "src/content/posts/2026-08-08-curation-subsidy.md",
+        "src/content/posts/2026-08-08-driving-license-inspection-discount.md",
+        "src/content/posts/2026-08-08-festival-versus-han-river-movie-vs-songdo-beach.md",
+        "src/content/posts/2026-08-08-forest-welfare-voucher.md",
+        "src/content/posts/2026-08-08-incheon-disability-settlement-fund.md"
+      ]
+    },
+    {
+      "sha": "962ce60ac3c7267284afe26f2f9a70b5ddff282e",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-08",
+      "authoredAt": "2026-08-07T16:59:21Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 17,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-08-curation-subsidy.md",
+      "src/content/posts/2026-08-08-driving-license-inspection-discount.md",
+      "src/content/posts/2026-08-08-festival-versus-han-river-movie-vs-songdo-beach.md",
+      "src/content/posts/2026-08-08-forest-welfare-voucher.md",
+      "src/content/posts/2026-08-08-incheon-disability-settlement-fund.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-08-curation-subsidy.md",
+      "src/content/posts/2026-08-08-driving-license-inspection-discount.md",
+      "src/content/posts/2026-08-08-festival-versus-han-river-movie-vs-songdo-beach.md",
+      "src/content/posts/2026-08-08-forest-welfare-voucher.md",
+      "src/content/posts/2026-08-08-incheon-disability-settlement-fund.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-08-choice-beauty-fashion-2026-08-08.md",
+      "src/content/life/2026-08-08-gangnam-restaurant-972393172.md",
+      "src/content/life/2026-08-08-incheon-restaurant-178452145.md",
+      "src/content/life/2026-08-08-seoul-restaurant-705202577.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-08-choice-beauty-fashion-2026-08-08.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-08-gangnam-restaurant-972393172.md",
+      "src/content/life/2026-08-08-incheon-restaurant-178452145.md",
+      "src/content/life/2026-08-08-seoul-restaurant-705202577.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "public/images/restaurants/2026-08-08-178452145-hero.webp",
+      "public/images/restaurants/2026-08-08-178452145-inline.webp",
+      "public/images/restaurants/2026-08-08-705202577-hero.jpg",
+      "public/images/restaurants/2026-08-08-705202577-inline.jpg",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-08-choice-beauty-fashion-2026-08-08.md",
+      "src/content/life/2026-08-08-gangnam-restaurant-972393172.md",
+      "src/content/life/2026-08-08-incheon-restaurant-178452145.md",
+      "src/content/life/2026-08-08-seoul-restaurant-705202577.md",
+      "src/content/posts/2026-08-08-curation-subsidy.md",
+      "src/content/posts/2026-08-08-driving-license-inspection-discount.md",
+      "src/content/posts/2026-08-08-festival-versus-han-river-movie-vs-songdo-beach.md",
+      "src/content/posts/2026-08-08-forest-welfare-voucher.md",
+      "src/content/posts/2026-08-08-incheon-disability-settlement-fund.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_011BEkPj2FNcf4PdZAJb5sdq",
+    "batchStatus": "ended",
+    "batchDurationMs": 300340,
+    "batchRequestCount": 6,
+    "batchSuccessCount": 6,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 1,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-festival-1684261-0808",
+        "reason": "finalize_rejected"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 908.5761299999999,
+    "actualCostKrw": 988.17369,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 20,
+    "errors": 10,
+    "inputTokens": 32280,
+    "outputTokens": 7218,
+    "costKrw": 80.23903200000001
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "3186/2680",
+      "markdown": {
+        "generated": 5,
+        "pending": 133,
+        "titles": [
+          "청년발달장애인 자산형성지원(행복씨앗통장)",
+          "인천피해장애인쉼터 지원",
+          "무상보육 추진 지원",
+          "긴급취약계층 임시주택 지원",
+          "농어촌민박 시설 현대화 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 626건",
+      "validation": "ok",
+      "anthropicUsage": "4720/3123",
+      "markdown": {
+        "generated": 5,
+        "pending": 312,
+        "titles": [
+          "아동 의료비 지원",
+          "외국인 고용허가제",
+          "천안시민안전보험",
+          "용인시 임신지원금 지급",
+          "서울형 기초보장제도 생계급여 등 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 0건, 업데이트 217건, 총 421건",
+      "validation": "ok",
+      "anthropicUsage": "4075/2573",
+      "markdown": {
+        "generated": 5,
+        "pending": 279,
+        "titles": [
+          "송도해변축제",
+          "2026 토요상설무대 프러포즈 및 사천 락 페스티벌",
+          "둔내고랭지토마토축제",
+          "통영한산대첩축제",
+          "수원 국가유산 야행"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_anthropic_unpublished",
+    "label": "완료(Anthropic 미발행 1건)"
+  }
+}
