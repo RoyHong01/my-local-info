@@ -1,0 +1,315 @@
+{
+  "reportDateKst": "2026-08-07",
+  "generatedAtUtc": "2026-08-07T08:19:07.575Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31124175868",
+    "runNumber": 982,
+    "runAttempt": 2,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31124175868",
+    "runStartedAtUtc": "2026-08-07T07:54:25Z",
+    "headSha": "b77f89e28cb8c003b00480ef143464f5dbfbf4ea"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 352건",
+        "subsidy": "신규 7건, 총 626건",
+        "festival": "신규 16건, 업데이트 201건, 총 421건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "d24201211ce5e9ec186cfda375c99e60a94299f6",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-08-07",
+      "authoredAt": "2026-08-07T08:19:05Z",
+      "files": [
+        "public/images/restaurants/2026-08-07-912728534-hero.jpg",
+        "public/images/restaurants/2026-08-07-912728534-inline.jpg",
+        "scripts/data/google-ratings-cache.json",
+        "scripts/data/restaurant-query-rotation-state.json",
+        "scripts/data/restaurant-reject-list.json",
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-08-07-incheon-restaurant-912728534.md",
+        "src/content/life/2026-08-07-seoul-restaurant-1794711302.md",
+        "src/content/life/2026-08-07-seoul-restaurant-27548454.md"
+      ]
+    },
+    {
+      "sha": "79f405ec1ddceab1bafffdf154d03d1cefe74707",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-07",
+      "authoredAt": "2026-08-07T08:13:41Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md"
+      ]
+    },
+    {
+      "sha": "a55457bc680e2e654d5a04047a3fac744c670461",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-07",
+      "authoredAt": "2026-08-07T08:12:29Z",
+      "files": [
+        "src/content/posts/2026-08-07-curation-incheon.md",
+        "src/content/posts/2026-08-07-incheon-imoacard.md",
+        "src/content/posts/2026-08-07-jugeogeubyeo.md",
+        "src/content/posts/2026-08-07-sacheon-rock-festival.md",
+        "src/content/posts/2026-08-07-teen-single-parent-support.md"
+      ]
+    },
+    {
+      "sha": "e862cac5a9e769177332b6c0f8783a2cd0b5c5e4",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-07",
+      "authoredAt": "2026-08-07T07:58:57Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 19,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-07-curation-incheon.md",
+      "src/content/posts/2026-08-07-incheon-imoacard.md",
+      "src/content/posts/2026-08-07-jugeogeubyeo.md",
+      "src/content/posts/2026-08-07-sacheon-rock-festival.md",
+      "src/content/posts/2026-08-07-teen-single-parent-support.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-07-curation-incheon.md",
+      "src/content/posts/2026-08-07-incheon-imoacard.md",
+      "src/content/posts/2026-08-07-jugeogeubyeo.md",
+      "src/content/posts/2026-08-07-sacheon-rock-festival.md",
+      "src/content/posts/2026-08-07-teen-single-parent-support.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md",
+      "src/content/life/2026-08-07-incheon-restaurant-912728534.md",
+      "src/content/life/2026-08-07-seoul-restaurant-1794711302.md",
+      "src/content/life/2026-08-07-seoul-restaurant-27548454.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-07-incheon-restaurant-912728534.md",
+      "src/content/life/2026-08-07-seoul-restaurant-1794711302.md",
+      "src/content/life/2026-08-07-seoul-restaurant-27548454.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "public/images/restaurants/2026-08-07-912728534-hero.jpg",
+      "public/images/restaurants/2026-08-07-912728534-inline.jpg",
+      "scripts/data/google-ratings-cache.json",
+      "scripts/data/recommended-products.json",
+      "scripts/data/restaurant-query-rotation-state.json",
+      "scripts/data/restaurant-reject-list.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-08-07-choice-pet-life-2026-08-07.md",
+      "src/content/life/2026-08-07-incheon-restaurant-912728534.md",
+      "src/content/life/2026-08-07-seoul-restaurant-1794711302.md",
+      "src/content/life/2026-08-07-seoul-restaurant-27548454.md",
+      "src/content/posts/2026-08-07-curation-incheon.md",
+      "src/content/posts/2026-08-07-incheon-imoacard.md",
+      "src/content/posts/2026-08-07-jugeogeubyeo.md",
+      "src/content/posts/2026-08-07-sacheon-rock-festival.md",
+      "src/content/posts/2026-08-07-teen-single-parent-support.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_0188WQbQAYnzkSMV2UrJCSAd",
+    "batchStatus": "ended",
+    "batchDurationMs": 301196,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 885.42951,
+    "actualCostKrw": 967.6877700000002,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 24,
+    "errors": 6,
+    "inputTokens": 32230,
+    "outputTokens": 7128,
+    "costKrw": 79.652232
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 44,
+    "cacheMiss": 31,
+    "googleCalled": 31,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 200,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 24,
+    "queryRotationPerRegion": 8,
+    "queryLegacyAbsorbed": true
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 352건",
+      "validation": "ok",
+      "anthropicUsage": "4995/2848",
+      "markdown": {
+        "generated": 5,
+        "pending": 138,
+        "titles": [
+          "IGC셔틀버스 정기 운행",
+          "인천대교 희망장학금",
+          "산모·신생아 건강관리 본인부담금 지원(강화군)",
+          "국민체육센터 감면혜택 제공",
+          "청각장애인 인공달팽이관 수술 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 7건, 총 626건",
+      "validation": "ok",
+      "anthropicUsage": "4385/2962",
+      "markdown": {
+        "generated": 5,
+        "pending": 317,
+        "titles": [
+          "청소년 미혼 한부모 자립지원 (우리원더패밀리)",
+          "대상포진 예방접종",
+          "시민안전보험 지원",
+          "서울시 난임부부 시술비 지원",
+          "다자녀가족 둘째아 이상 초등학교 입학축하상품권 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 16건, 업데이트 201건, 총 421건",
+      "validation": "ok",
+      "anthropicUsage": "3956/2464",
+      "markdown": {
+        "generated": 5,
+        "pending": 284,
+        "titles": [
+          "백년나이트 야시장 (메기의 귀환)",
+          "부산바다축제",
+          "2026 부산바다도서관",
+          "2026 이럴때이런음악 해설이 있는 청소년음악회",
+          "홍성 국가유산 야행"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
