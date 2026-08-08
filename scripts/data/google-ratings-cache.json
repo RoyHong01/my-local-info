@@ -2,8 +2,7 @@
   "meta": {
     "updatedAt": "2026-08-07T08:14:33.036Z",
     "lastRecollectAt": "2026-08-07T08:14:33.034Z",
-    "ttlDays": 90,
-    "forceRecollectOnceConsumedAt": "2026-08-07T08:14:33.056Z"
+    "ttlDays": 90
   },
   "items": {
     "7901138": {
