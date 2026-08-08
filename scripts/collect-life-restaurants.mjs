@@ -7,8 +7,10 @@ const GOOGLE_RATINGS_CACHE_PATH = path.join(process.cwd(), 'scripts', 'data', 'g
 const QUERY_MATRIX_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-query-matrix.json');
 const QUERY_ROTATION_STATE_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-query-rotation-state.json');
 const REJECT_LIST_PATH = path.join(process.cwd(), 'scripts', 'data', 'restaurant-reject-list.json');
-const MAX_ITEMS_PER_REGION = 30;
-const GOOGLE_PRE_FILTER_SIZE = 50;  // Google 필터 전 Kakao 후보 최대 수
+// 지역별 상한이다(GOOGLE_CALLS_PER_RUN_MAX도 filterByGoogleRating 호출마다 리셋되어 지역당 적용).
+// 평점 4.2 통과율이 지역별로 크게 달라(도심 高 / 외곽 低) 여유 있게 잡는다.
+const MAX_ITEMS_PER_REGION = Math.max(1, Number.parseInt(process.env.MAX_ITEMS_PER_REGION || '50', 10));
+const GOOGLE_PRE_FILTER_SIZE = Math.max(1, Number.parseInt(process.env.GOOGLE_PRE_FILTER_SIZE || '300', 10));
 const GOOGLE_PLACES_MIN_RATING = 4.2; // 구글 평점 최소 기준
 const GOOGLE_PLACES_MIN_REVIEW_COUNT = Number(process.env.GOOGLE_PLACES_MIN_REVIEW_COUNT || 10); // 구글 리뷰 수 최소 기준
 const GOOGLE_RATING_CACHE_TTL_DAYS = Number(process.env.GOOGLE_RATING_CACHE_TTL_DAYS || 90);
@@ -1123,6 +1125,7 @@ async function enrichExistingRestaurantPhotos(payload, googleApiKey, ratingsCach
 }
 
 async function filterByGoogleRating(items, googleApiKey, ratingsCache, rejectList, naverClientId, naverClientSecret) {
+  const stopAt = MAX_ITEMS_PER_REGION;
   const metrics = {
     cacheHit: 0,
     cacheMiss: 0,
@@ -1131,6 +1134,7 @@ async function filterByGoogleRating(items, googleApiKey, ratingsCache, rejectLis
     googleCallsBlockedByCap: 0,
     googleCallCapLimit: GOOGLE_CALLS_PER_RUN_MAX,
     rejectSkipped: 0,
+    earlyStopped: false,
   };
 
   if (!googleApiKey) {
@@ -1238,6 +1242,10 @@ async function filterByGoogleRating(items, googleApiKey, ratingsCache, rejectLis
         googleOpenNow: null,
         googleWeekdayText: [],
       });
+      if (filtered.length >= stopAt) {
+        metrics.earlyStopped = true;
+        break;
+      }
     }
     // 구글 API 속도 제한 방지 (200ms 간격)
     if (!usedCache) {
