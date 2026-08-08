@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T08:14:33.038Z",
+  "updatedAt": "2026-08-08T16:58:55.209Z",
   "policy": {
     "allowLowRatingReevaluation": false,
     "lowRatingReevaluationDays": 180
@@ -24,12 +24,39 @@
       "firstSeenAt": "2026-08-05T17:59:18.922Z",
       "lastSeenAt": "2026-08-05T17:59:18.922Z"
     },
+    "8120548": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 629,
+      "checkedAt": "2026-08-08T16:57:15.196Z",
+      "kakaoId": "8120548",
+      "firstSeenAt": "2026-08-08T16:57:15.196Z",
+      "lastSeenAt": "2026-08-08T16:57:15.196Z"
+    },
     "8256083": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "8256083",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "8365264": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 601,
+      "checkedAt": "2026-08-08T16:56:06.439Z",
+      "kakaoId": "8365264",
+      "firstSeenAt": "2026-08-08T16:56:06.439Z",
+      "lastSeenAt": "2026-08-08T16:56:06.439Z"
+    },
+    "8437771": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 부평점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "8437771",
+      "firstSeenAt": "2026-08-08T16:55:05.976Z",
+      "lastSeenAt": "2026-08-08T16:55:05.976Z"
     },
     "8441290": {
       "reason": "low_rating",
@@ -94,6 +121,42 @@
       "firstSeenAt": "2026-08-05T17:59:15.976Z",
       "lastSeenAt": "2026-08-05T17:59:15.976Z"
     },
+    "11469876": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 13,
+      "checkedAt": "2026-08-08T16:55:46.458Z",
+      "kakaoId": "11469876",
+      "firstSeenAt": "2026-08-08T16:55:46.458Z",
+      "lastSeenAt": "2026-08-08T16:55:46.458Z"
+    },
+    "11831542": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 238,
+      "checkedAt": "2026-08-08T16:57:26.451Z",
+      "kakaoId": "11831542",
+      "firstSeenAt": "2026-08-08T16:57:26.451Z",
+      "lastSeenAt": "2026-08-08T16:57:26.451Z"
+    },
+    "12108444": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 주안역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "12108444",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
+    },
+    "12435058": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 1754,
+      "checkedAt": "2026-08-08T16:55:58.363Z",
+      "kakaoId": "12435058",
+      "firstSeenAt": "2026-08-08T16:55:58.363Z",
+      "lastSeenAt": "2026-08-08T16:55:58.363Z"
+    },
     "13034445": {
       "reason": "low_rating",
       "rating": 3.5,
@@ -103,12 +166,39 @@
       "firstSeenAt": "2026-07-29T06:23:06.861Z",
       "lastSeenAt": "2026-07-29T06:23:06.861Z"
     },
+    "13064350": {
+      "reason": "franchise",
+      "matchedKeyword": "투썸플레이스",
+      "placeName": "투썸플레이스 부천상동점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 투썸플레이스",
+      "kakaoId": "13064350",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
+    "14022196": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라도담초점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "14022196",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
     "14565564": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "14565564",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "15815825": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 168,
+      "checkedAt": "2026-08-08T16:57:05.122Z",
+      "kakaoId": "15815825",
+      "firstSeenAt": "2026-08-08T16:57:05.122Z",
+      "lastSeenAt": "2026-08-08T16:57:05.122Z"
     },
     "15932681": {
       "reason": "low_rating",
@@ -118,6 +208,15 @@
       "kakaoId": "15932681",
       "firstSeenAt": "2026-07-29T06:23:07.800Z",
       "lastSeenAt": "2026-07-29T06:23:07.800Z"
+    },
+    "16143144": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 3,
+      "checkedAt": "2026-08-08T16:56:08.623Z",
+      "kakaoId": "16143144",
+      "firstSeenAt": "2026-08-08T16:56:08.623Z",
+      "lastSeenAt": "2026-08-08T16:56:08.623Z"
     },
     "16155149": {
       "reason": "low_rating",
@@ -136,6 +235,24 @@
       "kakaoId": "16568915",
       "firstSeenAt": "2026-07-29T06:23:03.647Z",
       "lastSeenAt": "2026-07-29T06:23:03.647Z"
+    },
+    "16624292": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 520,
+      "checkedAt": "2026-08-08T16:55:55.426Z",
+      "kakaoId": "16624292",
+      "firstSeenAt": "2026-08-08T16:55:55.426Z",
+      "lastSeenAt": "2026-08-08T16:55:55.426Z"
+    },
+    "16746633": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 23,
+      "checkedAt": "2026-08-08T16:56:09.870Z",
+      "kakaoId": "16746633",
+      "firstSeenAt": "2026-08-08T16:56:09.870Z",
+      "lastSeenAt": "2026-08-08T16:56:09.870Z"
     },
     "16830810": {
       "reason": "low_rating",
@@ -164,6 +281,24 @@
       "firstSeenAt": "2026-07-28T20:22:39.314Z",
       "lastSeenAt": "2026-07-28T20:22:39.314Z"
     },
+    "17379658": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 64,
+      "checkedAt": "2026-08-08T16:56:04.692Z",
+      "kakaoId": "17379658",
+      "firstSeenAt": "2026-08-08T16:56:04.692Z",
+      "lastSeenAt": "2026-08-08T16:56:04.692Z"
+    },
+    "18443843": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 49,
+      "checkedAt": "2026-08-08T16:56:12.663Z",
+      "kakaoId": "18443843",
+      "firstSeenAt": "2026-08-08T16:56:12.663Z",
+      "lastSeenAt": "2026-08-08T16:56:12.663Z"
+    },
     "19032013": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -172,6 +307,60 @@
       "kakaoId": "19032013",
       "firstSeenAt": "2026-07-20T20:31:51.369Z",
       "lastSeenAt": "2026-07-20T20:31:51.369Z"
+    },
+    "19292390": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 60,
+      "checkedAt": "2026-08-08T16:58:42.382Z",
+      "kakaoId": "19292390",
+      "firstSeenAt": "2026-08-08T16:58:42.382Z",
+      "lastSeenAt": "2026-08-08T16:58:42.382Z"
+    },
+    "19736130": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 114,
+      "checkedAt": "2026-08-08T16:55:28.390Z",
+      "kakaoId": "19736130",
+      "firstSeenAt": "2026-08-08T16:55:28.390Z",
+      "lastSeenAt": "2026-08-08T16:55:28.390Z"
+    },
+    "20695988": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 427,
+      "checkedAt": "2026-08-08T16:56:08.168Z",
+      "kakaoId": "20695988",
+      "firstSeenAt": "2026-08-08T16:56:08.168Z",
+      "lastSeenAt": "2026-08-08T16:56:08.168Z"
+    },
+    "21375171": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 263,
+      "checkedAt": "2026-08-08T16:56:12.163Z",
+      "kakaoId": "21375171",
+      "firstSeenAt": "2026-08-08T16:56:12.163Z",
+      "lastSeenAt": "2026-08-08T16:56:12.163Z"
+    },
+    "21453118": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 2539,
+      "checkedAt": "2026-08-08T16:58:34.076Z",
+      "kakaoId": "21453118",
+      "firstSeenAt": "2026-08-08T16:58:34.076Z",
+      "lastSeenAt": "2026-08-08T16:58:34.076Z"
+    },
+    "21524632": {
+      "reason": "franchise",
+      "matchedKeyword": "이디야",
+      "placeName": "이디야커피 IBK고객센터점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 이디야커피",
+      "kakaoId": "21524632",
+      "firstSeenAt": "2026-08-08T16:56:37.701Z",
+      "lastSeenAt": "2026-08-08T16:56:37.701Z"
     },
     "21604864": {
       "reason": "low_rating",
@@ -189,6 +378,15 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "23619795": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 부천중동점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "23619795",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
     "24063108": {
       "reason": "low_rating",
       "rating": 4,
@@ -197,6 +395,33 @@
       "kakaoId": "24063108",
       "firstSeenAt": "2026-07-20T20:31:56.723Z",
       "lastSeenAt": "2026-07-20T20:31:56.723Z"
+    },
+    "24962459": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 147,
+      "checkedAt": "2026-08-08T16:57:02.615Z",
+      "kakaoId": "24962459",
+      "firstSeenAt": "2026-08-08T16:57:02.615Z",
+      "lastSeenAt": "2026-08-08T16:57:02.615Z"
+    },
+    "25550599": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 67,
+      "checkedAt": "2026-08-08T16:55:51.471Z",
+      "kakaoId": "25550599",
+      "firstSeenAt": "2026-08-08T16:55:51.471Z",
+      "lastSeenAt": "2026-08-08T16:55:51.471Z"
+    },
+    "26154721": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 296,
+      "checkedAt": "2026-08-08T16:56:18.614Z",
+      "kakaoId": "26154721",
+      "firstSeenAt": "2026-08-08T16:56:18.614Z",
+      "lastSeenAt": "2026-08-08T16:56:18.614Z"
     },
     "26235884": {
       "reason": "low_rating",
@@ -216,6 +441,60 @@
       "firstSeenAt": "2026-08-07T08:14:06.578Z",
       "lastSeenAt": "2026-08-07T08:14:06.578Z"
     },
+    "26459241": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 인천계양점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "26459241",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
+    },
+    "26644252": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 194,
+      "checkedAt": "2026-08-08T16:55:45.263Z",
+      "kakaoId": "26644252",
+      "firstSeenAt": "2026-08-08T16:55:45.263Z",
+      "lastSeenAt": "2026-08-08T16:55:45.263Z"
+    },
+    "26847807": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 118,
+      "checkedAt": "2026-08-08T16:55:50.489Z",
+      "kakaoId": "26847807",
+      "firstSeenAt": "2026-08-08T16:55:50.489Z",
+      "lastSeenAt": "2026-08-08T16:55:50.489Z"
+    },
+    "26849401": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 부천신중동역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "26849401",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
+    "26855903": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 741,
+      "checkedAt": "2026-08-08T16:56:05.973Z",
+      "kakaoId": "26855903",
+      "firstSeenAt": "2026-08-08T16:56:05.973Z",
+      "lastSeenAt": "2026-08-08T16:56:05.973Z"
+    },
+    "26868032": {
+      "reason": "franchise",
+      "matchedKeyword": "투썸플레이스",
+      "placeName": "투썸플레이스 부평역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 투썸플레이스",
+      "kakaoId": "26868032",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
     "26869543": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -224,6 +503,24 @@
       "kakaoId": "26869543",
       "firstSeenAt": "2026-07-20T20:31:16.910Z",
       "lastSeenAt": "2026-07-20T20:31:16.910Z"
+    },
+    "26870181": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 343,
+      "checkedAt": "2026-08-08T16:58:31.399Z",
+      "kakaoId": "26870181",
+      "firstSeenAt": "2026-08-08T16:58:31.399Z",
+      "lastSeenAt": "2026-08-08T16:58:31.399Z"
+    },
+    "26891740": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 674,
+      "checkedAt": "2026-08-08T16:55:46.938Z",
+      "kakaoId": "26891740",
+      "firstSeenAt": "2026-08-08T16:55:46.938Z",
+      "lastSeenAt": "2026-08-08T16:55:46.938Z"
     },
     "26966842": {
       "reason": "manual_delete",
@@ -240,6 +537,15 @@
       "kakaoId": "26972264",
       "firstSeenAt": "2026-08-05T17:59:15.543Z",
       "lastSeenAt": "2026-08-05T17:59:15.543Z"
+    },
+    "27122533": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 수원광교점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "27122533",
+      "firstSeenAt": "2026-08-08T16:57:46.187Z",
+      "lastSeenAt": "2026-08-08T16:57:46.187Z"
     },
     "27189345": {
       "reason": "low_rating",
@@ -268,6 +574,24 @@
       "firstSeenAt": "2026-08-07T08:14:12.724Z",
       "lastSeenAt": "2026-08-07T08:14:12.724Z"
     },
+    "27344566": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 549,
+      "checkedAt": "2026-08-08T16:58:01.220Z",
+      "kakaoId": "27344566",
+      "firstSeenAt": "2026-08-08T16:58:01.220Z",
+      "lastSeenAt": "2026-08-08T16:58:01.220Z"
+    },
+    "27419559": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 515,
+      "checkedAt": "2026-08-08T16:58:30.928Z",
+      "kakaoId": "27419559",
+      "firstSeenAt": "2026-08-08T16:58:30.928Z",
+      "lastSeenAt": "2026-08-08T16:58:30.928Z"
+    },
     "27467246": {
       "reason": "low_rating",
       "rating": 4,
@@ -276,6 +600,15 @@
       "kakaoId": "27467246",
       "firstSeenAt": "2026-07-20T20:31:39.214Z",
       "lastSeenAt": "2026-07-20T20:31:39.214Z"
+    },
+    "27579564": {
+      "reason": "franchise",
+      "matchedKeyword": "이디야",
+      "placeName": "이디야커피랩",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 이디야커피",
+      "kakaoId": "27579564",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
     },
     "27585975": {
       "reason": "low_rating",
@@ -303,6 +636,24 @@
       "kakaoId": "120792614",
       "firstSeenAt": "2026-08-07T08:13:49.888Z",
       "lastSeenAt": "2026-08-07T08:13:49.888Z"
+    },
+    "127468723": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라센텀로제비앙점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "127468723",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "144978579": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 7,
+      "checkedAt": "2026-08-08T16:55:10.985Z",
+      "kakaoId": "144978579",
+      "firstSeenAt": "2026-08-08T16:55:10.985Z",
+      "lastSeenAt": "2026-08-08T16:55:10.985Z"
     },
     "173009195": {
       "reason": "low_rating",
@@ -340,6 +691,24 @@
       "firstSeenAt": "2026-07-28T20:22:41.185Z",
       "lastSeenAt": "2026-07-28T20:22:41.185Z"
     },
+    "250249077": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-08-08T16:55:22.673Z",
+      "kakaoId": "250249077",
+      "firstSeenAt": "2026-08-08T16:55:22.673Z",
+      "lastSeenAt": "2026-08-08T16:55:22.673Z"
+    },
+    "258548675": {
+      "reason": "franchise",
+      "matchedKeyword": "버거킹",
+      "placeName": "버거킹 인천청라점",
+      "categoryName": "음식점 > 패스트푸드 > 버거킹",
+      "kakaoId": "258548675",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
     "261643883": {
       "reason": "low_rating",
       "rating": 3.4,
@@ -349,6 +718,42 @@
       "firstSeenAt": "2026-07-28T20:22:20.282Z",
       "lastSeenAt": "2026-07-28T20:22:20.282Z"
     },
+    "317052738": {
+      "reason": "low_rating",
+      "rating": 1.3,
+      "reviewCount": 4,
+      "checkedAt": "2026-08-08T16:55:18.117Z",
+      "kakaoId": "317052738",
+      "firstSeenAt": "2026-08-08T16:55:18.117Z",
+      "lastSeenAt": "2026-08-08T16:55:18.117Z"
+    },
+    "334387698": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라스퀘어7점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "334387698",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "343510177": {
+      "reason": "low_rating",
+      "rating": 3.5,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-08T16:56:17.675Z",
+      "kakaoId": "343510177",
+      "firstSeenAt": "2026-08-08T16:56:17.675Z",
+      "lastSeenAt": "2026-08-08T16:56:17.675Z"
+    },
+    "344855653": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 2,
+      "checkedAt": "2026-08-08T16:55:23.138Z",
+      "kakaoId": "344855653",
+      "firstSeenAt": "2026-08-08T16:55:23.138Z",
+      "lastSeenAt": "2026-08-08T16:55:23.138Z"
+    },
     "354755930": {
       "reason": "low_rating",
       "rating": 3.7,
@@ -357,6 +762,15 @@
       "kakaoId": "354755930",
       "firstSeenAt": "2026-07-20T20:31:51.570Z",
       "lastSeenAt": "2026-07-20T20:31:51.570Z"
+    },
+    "366204292": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 478,
+      "checkedAt": "2026-08-08T16:55:50.981Z",
+      "kakaoId": "366204292",
+      "firstSeenAt": "2026-08-08T16:55:50.981Z",
+      "lastSeenAt": "2026-08-08T16:55:50.981Z"
     },
     "372744977": {
       "reason": "franchise",
@@ -383,6 +797,24 @@
       "firstSeenAt": "2026-08-04T00:00:00Z",
       "lastSeenAt": "2026-08-04T00:00:00Z"
     },
+    "382618195": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 판교알파돔타워",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "382618195",
+      "firstSeenAt": "2026-08-08T16:57:46.187Z",
+      "lastSeenAt": "2026-08-08T16:57:46.187Z"
+    },
+    "384873657": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-08T16:55:35.453Z",
+      "kakaoId": "384873657",
+      "firstSeenAt": "2026-08-08T16:55:35.453Z",
+      "lastSeenAt": "2026-08-08T16:55:35.453Z"
+    },
     "411194709": {
       "reason": "low_rating",
       "rating": 4,
@@ -401,6 +833,15 @@
       "firstSeenAt": "2026-07-20T20:32:28.727Z",
       "lastSeenAt": "2026-07-20T20:32:28.727Z"
     },
+    "414749953": {
+      "reason": "low_rating",
+      "rating": 3.6,
+      "reviewCount": 19,
+      "checkedAt": "2026-08-08T16:58:22.217Z",
+      "kakaoId": "414749953",
+      "firstSeenAt": "2026-08-08T16:58:22.217Z",
+      "lastSeenAt": "2026-08-08T16:58:22.217Z"
+    },
     "434665271": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -409,6 +850,33 @@
       "kakaoId": "434665271",
       "firstSeenAt": "2026-07-20T20:31:24.591Z",
       "lastSeenAt": "2026-07-20T20:31:24.591Z"
+    },
+    "462393894": {
+      "reason": "franchise",
+      "matchedKeyword": "맥도날드",
+      "placeName": "맥도날드 인천계산DT점",
+      "categoryName": "음식점 > 패스트푸드 > 맥도날드",
+      "kakaoId": "462393894",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
+    },
+    "468089767": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 39,
+      "checkedAt": "2026-08-08T16:55:42.779Z",
+      "kakaoId": "468089767",
+      "firstSeenAt": "2026-08-08T16:55:42.779Z",
+      "lastSeenAt": "2026-08-08T16:55:42.779Z"
+    },
+    "475924484": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 광교엘포트R점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "475924484",
+      "firstSeenAt": "2026-08-08T16:57:46.187Z",
+      "lastSeenAt": "2026-08-08T16:57:46.187Z"
     },
     "526971723": {
       "reason": "low_rating",
@@ -428,6 +896,24 @@
       "firstSeenAt": "2026-08-05T18:00:21.548Z",
       "lastSeenAt": "2026-08-05T18:00:21.548Z"
     },
+    "546194544": {
+      "reason": "low_rating",
+      "rating": 3.6,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-08T16:55:53.624Z",
+      "kakaoId": "546194544",
+      "firstSeenAt": "2026-08-08T16:55:53.624Z",
+      "lastSeenAt": "2026-08-08T16:55:53.624Z"
+    },
+    "577450141": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 1111,
+      "checkedAt": "2026-08-08T16:58:35.300Z",
+      "kakaoId": "577450141",
+      "firstSeenAt": "2026-08-08T16:58:35.300Z",
+      "lastSeenAt": "2026-08-08T16:58:35.300Z"
+    },
     "582379341": {
       "reason": "low_rating",
       "rating": 4,
@@ -444,6 +930,24 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "584580950": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 16,
+      "checkedAt": "2026-08-08T16:55:26.184Z",
+      "kakaoId": "584580950",
+      "firstSeenAt": "2026-08-08T16:55:26.184Z",
+      "lastSeenAt": "2026-08-08T16:55:26.184Z"
+    },
+    "604516878": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 265,
+      "checkedAt": "2026-08-08T16:55:14.575Z",
+      "kakaoId": "604516878",
+      "firstSeenAt": "2026-08-08T16:55:14.575Z",
+      "lastSeenAt": "2026-08-08T16:55:14.575Z"
+    },
     "630938170": {
       "reason": "franchise",
       "matchedKeyword": "메가mgc",
@@ -452,6 +956,15 @@
       "kakaoId": "630938170",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-07-28T20:23:11.261Z"
+    },
+    "632924118": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 부천원종DT점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "632924118",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
     },
     "637387810": {
       "reason": "low_rating",
@@ -468,6 +981,15 @@
       "kakaoId": "647670913",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "658230657": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라5단지점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "658230657",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
     },
     "670999989": {
       "reason": "low_rating",
@@ -496,6 +1018,24 @@
       "firstSeenAt": "2026-07-28T20:23:32.106Z",
       "lastSeenAt": "2026-07-28T20:23:32.106Z"
     },
+    "716986836": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 46,
+      "checkedAt": "2026-08-08T16:58:17.626Z",
+      "kakaoId": "716986836",
+      "firstSeenAt": "2026-08-08T16:58:17.626Z",
+      "lastSeenAt": "2026-08-08T16:58:17.626Z"
+    },
+    "730447481": {
+      "reason": "franchise",
+      "matchedKeyword": "이디야",
+      "placeName": "이디야커피 인천청라중흥점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 이디야커피",
+      "kakaoId": "730447481",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
     "744785569": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -522,6 +1062,15 @@
       "kakaoId": "804507799",
       "firstSeenAt": "2026-07-20T20:32:06.837Z",
       "lastSeenAt": "2026-07-20T20:32:06.837Z"
+    },
+    "816553056": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 11,
+      "checkedAt": "2026-08-08T16:55:08.133Z",
+      "kakaoId": "816553056",
+      "firstSeenAt": "2026-08-08T16:55:08.133Z",
+      "lastSeenAt": "2026-08-08T16:55:08.133Z"
     },
     "850275015": {
       "reason": "image_mirror_failed",
@@ -555,6 +1104,15 @@
       "kakaoId": "875527532",
       "firstSeenAt": "2026-08-07T08:14:06.989Z",
       "lastSeenAt": "2026-08-07T08:14:06.989Z"
+    },
+    "883506554": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 2,
+      "checkedAt": "2026-08-08T16:55:33.926Z",
+      "kakaoId": "883506554",
+      "firstSeenAt": "2026-08-08T16:55:33.926Z",
+      "lastSeenAt": "2026-08-08T16:55:33.926Z"
     },
     "887251319": {
       "reason": "franchise",
@@ -590,6 +1148,15 @@
       "firstSeenAt": "2026-07-29T06:23:04.990Z",
       "lastSeenAt": "2026-07-29T06:23:04.990Z"
     },
+    "923188773": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 35,
+      "checkedAt": "2026-08-08T16:55:26.641Z",
+      "kakaoId": "923188773",
+      "firstSeenAt": "2026-08-08T16:55:26.641Z",
+      "lastSeenAt": "2026-08-08T16:55:26.641Z"
+    },
     "931881312": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
@@ -615,6 +1182,15 @@
       "firstSeenAt": "2026-07-20T20:32:21.169Z",
       "lastSeenAt": "2026-07-20T20:32:21.169Z"
     },
+    "951719608": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 232,
+      "checkedAt": "2026-08-08T16:56:07.696Z",
+      "kakaoId": "951719608",
+      "firstSeenAt": "2026-08-08T16:56:07.696Z",
+      "lastSeenAt": "2026-08-08T16:56:07.696Z"
+    },
     "953953519": {
       "reason": "franchise",
       "matchedKeyword": "이디야",
@@ -623,6 +1199,33 @@
       "kakaoId": "953953519",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-08-07T08:14:30.487Z"
+    },
+    "959554898": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 뚝섬역교차로점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "959554898",
+      "firstSeenAt": "2026-08-08T16:56:37.700Z",
+      "lastSeenAt": "2026-08-08T16:56:37.700Z"
+    },
+    "979389774": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라심곡천점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "979389774",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1041002314": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 검단사거리역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1041002314",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
     },
     "1083309826": {
       "reason": "manual_delete",
@@ -640,6 +1243,33 @@
       "firstSeenAt": "2026-07-20T20:31:58.620Z",
       "lastSeenAt": "2026-07-20T20:31:58.620Z"
     },
+    "1089973164": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 4,
+      "checkedAt": "2026-08-08T16:55:13.542Z",
+      "kakaoId": "1089973164",
+      "firstSeenAt": "2026-08-08T16:55:13.542Z",
+      "lastSeenAt": "2026-08-08T16:55:13.542Z"
+    },
+    "1105770594": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 62,
+      "checkedAt": "2026-08-08T16:57:03.890Z",
+      "kakaoId": "1105770594",
+      "firstSeenAt": "2026-08-08T16:57:03.890Z",
+      "lastSeenAt": "2026-08-08T16:57:03.890Z"
+    },
+    "1107907637": {
+      "reason": "franchise",
+      "matchedKeyword": "투썸플레이스",
+      "placeName": "투썸플레이스 한강미사 아이에스비즈타워점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 투썸플레이스",
+      "kakaoId": "1107907637",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
     "1115412148": {
       "reason": "franchise",
       "matchedKeyword": "메가mgc",
@@ -648,6 +1278,24 @@
       "kakaoId": "1115412148",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-08-07T08:14:30.487Z"
+    },
+    "1150560161": {
+      "reason": "franchise",
+      "matchedKeyword": "맥도날드",
+      "placeName": "맥도날드 인천청라DT점",
+      "categoryName": "음식점 > 패스트푸드 > 맥도날드",
+      "kakaoId": "1150560161",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1158523439": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 57,
+      "checkedAt": "2026-08-08T16:56:48.773Z",
+      "kakaoId": "1158523439",
+      "firstSeenAt": "2026-08-08T16:56:48.773Z",
+      "lastSeenAt": "2026-08-08T16:56:48.773Z"
     },
     "1169568551": {
       "reason": "low_rating",
@@ -694,6 +1342,15 @@
       "firstSeenAt": "2026-08-05T17:59:12.688Z",
       "lastSeenAt": "2026-08-05T17:59:12.688Z"
     },
+    "1286909469": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 76,
+      "checkedAt": "2026-08-08T16:56:18.153Z",
+      "kakaoId": "1286909469",
+      "firstSeenAt": "2026-08-08T16:56:18.153Z",
+      "lastSeenAt": "2026-08-08T16:56:18.153Z"
+    },
     "1313445681": {
       "reason": "low_rating",
       "rating": 4,
@@ -711,6 +1368,15 @@
       "kakaoId": "1326173242",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-08-07T08:14:30.487Z"
+    },
+    "1355156384": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 33,
+      "checkedAt": "2026-08-08T16:58:23.516Z",
+      "kakaoId": "1355156384",
+      "firstSeenAt": "2026-08-08T16:58:23.516Z",
+      "lastSeenAt": "2026-08-08T16:58:23.516Z"
     },
     "1370232169": {
       "reason": "low_rating",
@@ -737,6 +1403,24 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "1402622018": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라경서점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "1402622018",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1440136797": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 1160,
+      "checkedAt": "2026-08-08T16:58:01.691Z",
+      "kakaoId": "1440136797",
+      "firstSeenAt": "2026-08-08T16:58:01.691Z",
+      "lastSeenAt": "2026-08-08T16:58:01.691Z"
+    },
     "1440400381": {
       "reason": "low_rating",
       "rating": 3,
@@ -753,6 +1437,42 @@
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
     },
+    "1458330965": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 더북한강R점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1458330965",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
+    "1472390238": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 28,
+      "checkedAt": "2026-08-08T16:58:30.463Z",
+      "kakaoId": "1472390238",
+      "firstSeenAt": "2026-08-08T16:58:30.463Z",
+      "lastSeenAt": "2026-08-08T16:58:30.463Z"
+    },
+    "1475437526": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 109,
+      "checkedAt": "2026-08-08T16:56:11.685Z",
+      "kakaoId": "1475437526",
+      "firstSeenAt": "2026-08-08T16:56:11.685Z",
+      "lastSeenAt": "2026-08-08T16:56:11.685Z"
+    },
+    "1476310545": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-08-08T16:55:15.057Z",
+      "kakaoId": "1476310545",
+      "firstSeenAt": "2026-08-08T16:55:15.057Z",
+      "lastSeenAt": "2026-08-08T16:55:15.057Z"
+    },
     "1487172876": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -761,6 +1481,15 @@
       "kakaoId": "1487172876",
       "firstSeenAt": "2026-07-28T20:22:11.275Z",
       "lastSeenAt": "2026-07-28T20:22:11.275Z"
+    },
+    "1501247421": {
+      "reason": "low_rating",
+      "rating": 3.8,
+      "reviewCount": 8,
+      "checkedAt": "2026-08-08T16:57:01.655Z",
+      "kakaoId": "1501247421",
+      "firstSeenAt": "2026-08-08T16:57:01.656Z",
+      "lastSeenAt": "2026-08-08T16:57:01.656Z"
     },
     "1503793880": {
       "reason": "low_rating",
@@ -780,6 +1509,33 @@
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-08-07T08:14:30.487Z"
     },
+    "1549040348": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 영종도운서역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1549040348",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1562438866": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 573,
+      "checkedAt": "2026-08-08T16:57:24.553Z",
+      "kakaoId": "1562438866",
+      "firstSeenAt": "2026-08-08T16:57:24.553Z",
+      "lastSeenAt": "2026-08-08T16:57:24.553Z"
+    },
+    "1566789544": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 1,
+      "checkedAt": "2026-08-08T16:55:22.234Z",
+      "kakaoId": "1566789544",
+      "firstSeenAt": "2026-08-08T16:55:22.234Z",
+      "lastSeenAt": "2026-08-08T16:55:22.234Z"
+    },
     "1568148864": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -795,6 +1551,24 @@
       "kakaoId": "1651030568",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "1664906329": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 한남동R",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1664906329",
+      "firstSeenAt": "2026-08-08T16:56:37.701Z",
+      "lastSeenAt": "2026-08-08T16:56:37.701Z"
+    },
+    "1668468940": {
+      "reason": "low_rating",
+      "rating": 3,
+      "reviewCount": 3,
+      "checkedAt": "2026-08-08T16:55:08.688Z",
+      "kakaoId": "1668468940",
+      "firstSeenAt": "2026-08-08T16:55:08.688Z",
+      "lastSeenAt": "2026-08-08T16:55:08.688Z"
     },
     "1690972003": {
       "reason": "low_rating",
@@ -814,6 +1588,15 @@
       "firstSeenAt": "2026-07-28T20:22:11.010Z",
       "lastSeenAt": "2026-07-28T20:22:11.010Z"
     },
+    "1738694701": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 15,
+      "checkedAt": "2026-08-08T16:58:08.042Z",
+      "kakaoId": "1738694701",
+      "firstSeenAt": "2026-08-08T16:58:08.042Z",
+      "lastSeenAt": "2026-08-08T16:58:08.042Z"
+    },
     "1751927951": {
       "reason": "low_rating",
       "rating": 3.2,
@@ -831,6 +1614,78 @@
       "kakaoId": "1798330241",
       "firstSeenAt": "2026-07-20T20:31:58.620Z",
       "lastSeenAt": "2026-07-20T20:31:58.620Z"
+    },
+    "1800956507": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 청라성당점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "1800956507",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1803451675": {
+      "reason": "low_rating",
+      "rating": 3.9,
+      "reviewCount": 689,
+      "checkedAt": "2026-08-08T16:56:01.320Z",
+      "kakaoId": "1803451675",
+      "firstSeenAt": "2026-08-08T16:56:01.320Z",
+      "lastSeenAt": "2026-08-08T16:56:01.320Z"
+    },
+    "1804814780": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 영종하늘도시점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1804814780",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1828935356": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 62,
+      "checkedAt": "2026-08-08T16:58:35.777Z",
+      "kakaoId": "1828935356",
+      "firstSeenAt": "2026-08-08T16:58:35.777Z",
+      "lastSeenAt": "2026-08-08T16:58:35.777Z"
+    },
+    "1834471427": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 393,
+      "checkedAt": "2026-08-08T16:58:23.992Z",
+      "kakaoId": "1834471427",
+      "firstSeenAt": "2026-08-08T16:58:23.992Z",
+      "lastSeenAt": "2026-08-08T16:58:23.992Z"
+    },
+    "1864425134": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 인천삼산점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "1864425134",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
+    "1874149747": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 미사현대지식산업센터점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "1874149747",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
+    "1876762830": {
+      "reason": "low_rating",
+      "rating": 3.6,
+      "reviewCount": 5,
+      "checkedAt": "2026-08-08T16:56:02.905Z",
+      "kakaoId": "1876762830",
+      "firstSeenAt": "2026-08-08T16:56:02.905Z",
+      "lastSeenAt": "2026-08-08T16:56:02.905Z"
     },
     "1877911730": {
       "reason": "low_rating",
@@ -859,6 +1714,15 @@
       "firstSeenAt": "2026-08-07T08:13:52.620Z",
       "lastSeenAt": "2026-08-07T08:13:52.620Z"
     },
+    "1906876463": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 시민공원역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1906876463",
+      "firstSeenAt": "2026-08-08T16:55:05.978Z",
+      "lastSeenAt": "2026-08-08T16:55:05.978Z"
+    },
     "1917389932": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -868,12 +1732,39 @@
       "firstSeenAt": "2026-07-20T20:32:26.147Z",
       "lastSeenAt": "2026-07-20T20:32:26.147Z"
     },
+    "1929875735": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 20,
+      "checkedAt": "2026-08-08T16:55:54.131Z",
+      "kakaoId": "1929875735",
+      "firstSeenAt": "2026-08-08T16:55:54.131Z",
+      "lastSeenAt": "2026-08-08T16:55:54.131Z"
+    },
+    "1930027650": {
+      "reason": "franchise",
+      "matchedKeyword": "메가mgc",
+      "placeName": "메가MGC커피 인천좋은병원점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
+      "kakaoId": "1930027650",
+      "firstSeenAt": "2026-08-08T16:55:05.977Z",
+      "lastSeenAt": "2026-08-08T16:55:05.977Z"
+    },
     "1953580516": {
       "reason": "manual_delete",
       "checkedAt": "2026-08-02T00:00:00.000Z",
       "kakaoId": "1953580516",
       "firstSeenAt": "2026-08-02T00:00:00.000Z",
       "lastSeenAt": "2026-08-02T00:00:00.000Z"
+    },
+    "1976943632": {
+      "reason": "franchise",
+      "matchedKeyword": "스타벅스",
+      "placeName": "스타벅스 더양평DT",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 스타벅스",
+      "kakaoId": "1976943632",
+      "firstSeenAt": "2026-08-08T16:57:46.189Z",
+      "lastSeenAt": "2026-08-08T16:57:46.189Z"
     },
     "1979843999": {
       "reason": "low_rating",
@@ -893,6 +1784,15 @@
       "firstSeenAt": "2026-07-20T20:32:21.169Z",
       "lastSeenAt": "2026-07-20T20:32:21.169Z"
     },
+    "1994515992": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 36,
+      "checkedAt": "2026-08-08T16:55:25.702Z",
+      "kakaoId": "1994515992",
+      "firstSeenAt": "2026-08-08T16:55:25.702Z",
+      "lastSeenAt": "2026-08-08T16:55:25.702Z"
+    },
     "2031492787": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -901,6 +1801,33 @@
       "kakaoId": "2031492787",
       "firstSeenAt": "2026-08-05T18:00:19.987Z",
       "lastSeenAt": "2026-08-05T18:00:19.987Z"
+    },
+    "2046082429": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 282,
+      "checkedAt": "2026-08-08T16:57:19.856Z",
+      "kakaoId": "2046082429",
+      "firstSeenAt": "2026-08-08T16:57:19.856Z",
+      "lastSeenAt": "2026-08-08T16:57:19.856Z"
+    },
+    "2046253291": {
+      "reason": "franchise",
+      "matchedKeyword": "할리스",
+      "placeName": "할리스 부천역점",
+      "categoryName": "음식점 > 카페 > 커피전문점 > 할리스",
+      "kakaoId": "2046253291",
+      "firstSeenAt": "2026-08-08T16:57:46.188Z",
+      "lastSeenAt": "2026-08-08T16:57:46.188Z"
+    },
+    "2056793271": {
+      "reason": "low_rating",
+      "rating": 4,
+      "reviewCount": 6,
+      "checkedAt": "2026-08-08T16:55:42.268Z",
+      "kakaoId": "2056793271",
+      "firstSeenAt": "2026-08-08T16:55:42.268Z",
+      "lastSeenAt": "2026-08-08T16:55:42.268Z"
     },
     "2063968687": {
       "reason": "low_rating",
@@ -936,6 +1863,15 @@
       "firstSeenAt": "2026-08-07T08:13:58.397Z",
       "lastSeenAt": "2026-08-07T08:13:58.397Z"
     },
+    "2091024584": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 3289,
+      "checkedAt": "2026-08-08T16:55:16.707Z",
+      "kakaoId": "2091024584",
+      "firstSeenAt": "2026-08-08T16:55:16.707Z",
+      "lastSeenAt": "2026-08-08T16:55:16.707Z"
+    },
     "2111998910": {
       "reason": "low_rating",
       "rating": 4.1,
@@ -953,6 +1889,15 @@
       "kakaoId": "2112562440",
       "firstSeenAt": "2026-07-28T20:23:11.261Z",
       "lastSeenAt": "2026-08-07T08:14:30.487Z"
+    },
+    "2118698954": {
+      "reason": "low_rating",
+      "rating": 4.1,
+      "reviewCount": 475,
+      "checkedAt": "2026-08-08T16:57:18.608Z",
+      "kakaoId": "2118698954",
+      "firstSeenAt": "2026-08-08T16:57:18.608Z",
+      "lastSeenAt": "2026-08-08T16:57:18.608Z"
     },
     "2134411175": {
       "reason": "low_rating",
