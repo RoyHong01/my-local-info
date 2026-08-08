@@ -1,0 +1,323 @@
+{
+  "reportDateKst": "2026-08-09",
+  "generatedAtUtc": "2026-08-08T17:03:25.103Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31267249405",
+    "runNumber": 989,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31267249405",
+    "runStartedAtUtc": "2026-08-08T16:34:02Z",
+    "headSha": "2cad109e0ed53b1ff9c406227c2ad0be2710e3a6"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 3건, 총 355건",
+        "subsidy": "신규 4건, 총 624건",
+        "festival": ""
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "e2a80851b3863ee7c8f0888d83c95680664c0dbe",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-08-09",
+      "authoredAt": "2026-08-08T17:03:23Z",
+      "files": [
+        "public/images/restaurants/2026-08-09-27508963-hero.jpg",
+        "public/images/restaurants/2026-08-09-27508963-inline.jpg",
+        "public/images/restaurants/2026-08-09-506457577-hero.jpg",
+        "public/images/restaurants/2026-08-09-506457577-inline.jpg",
+        "public/images/restaurants/2026-08-09-786916744-hero.jpg",
+        "public/images/restaurants/2026-08-09-786916744-inline.jpg",
+        "scripts/data/google-ratings-cache.json",
+        "scripts/data/restaurant-query-rotation-state.json",
+        "scripts/data/restaurant-reject-list.json",
+        "src/app/life/restaurant/data/restaurants.json",
+        "src/content/life/2026-08-09-bupyeong-restaurant-786916744.md",
+        "src/content/life/2026-08-09-suwon-restaurant-506457577.md",
+        "src/content/life/2026-08-09-yeonnam-restaurant-27508963.md"
+      ]
+    },
+    {
+      "sha": "2525f2cbd02395dbb11b6c09c861f346ba5d978f",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-09",
+      "authoredAt": "2026-08-08T16:54:58Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md"
+      ]
+    },
+    {
+      "sha": "e482ac6f4f29ab0c136ee6366d5bdcf735e65e36",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-09",
+      "authoredAt": "2026-08-08T16:53:47Z",
+      "files": [
+        "src/content/posts/2026-08-09-curation-incheon.md",
+        "src/content/posts/2026-08-09-incheon-free-uniform-support.md",
+        "src/content/posts/2026-08-09-lifelong-education-voucher.md",
+        "src/content/posts/2026-08-09-taebaek-sunflower-festival.md"
+      ]
+    },
+    {
+      "sha": "cde04b1a678191e355c0a9cd782f8ae937e6ac07",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-09",
+      "authoredAt": "2026-08-08T16:39:28Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-07-30-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 23,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/app/life/restaurant/data/restaurants.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-07-30-curation-festival.md",
+      "src/content/posts/2026-08-09-curation-incheon.md",
+      "src/content/posts/2026-08-09-incheon-free-uniform-support.md",
+      "src/content/posts/2026-08-09-lifelong-education-voucher.md",
+      "src/content/posts/2026-08-09-taebaek-sunflower-festival.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-09-curation-incheon.md",
+      "src/content/posts/2026-08-09-incheon-free-uniform-support.md",
+      "src/content/posts/2026-08-09-lifelong-education-voucher.md",
+      "src/content/posts/2026-08-09-taebaek-sunflower-festival.md"
+    ],
+    "generatedBlogPostsUpdated": [
+      "src/content/posts/2026-07-30-curation-festival.md"
+    ],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-09-bupyeong-restaurant-786916744.md",
+      "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md",
+      "src/content/life/2026-08-09-suwon-restaurant-506457577.md",
+      "src/content/life/2026-08-09-yeonnam-restaurant-27508963.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-09-bupyeong-restaurant-786916744.md",
+      "src/content/life/2026-08-09-suwon-restaurant-506457577.md",
+      "src/content/life/2026-08-09-yeonnam-restaurant-27508963.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "public/images/restaurants/2026-08-09-27508963-hero.jpg",
+      "public/images/restaurants/2026-08-09-27508963-inline.jpg",
+      "public/images/restaurants/2026-08-09-506457577-hero.jpg",
+      "public/images/restaurants/2026-08-09-506457577-inline.jpg",
+      "public/images/restaurants/2026-08-09-786916744-hero.jpg",
+      "public/images/restaurants/2026-08-09-786916744-inline.jpg",
+      "scripts/data/google-ratings-cache.json",
+      "scripts/data/recommended-products.json",
+      "scripts/data/restaurant-query-rotation-state.json",
+      "scripts/data/restaurant-reject-list.json",
+      "src/app/life/restaurant/data/restaurants.json",
+      "src/content/life/2026-08-09-bupyeong-restaurant-786916744.md",
+      "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md",
+      "src/content/life/2026-08-09-suwon-restaurant-506457577.md",
+      "src/content/life/2026-08-09-yeonnam-restaurant-27508963.md",
+      "src/content/posts/2026-07-30-curation-festival.md",
+      "src/content/posts/2026-08-09-curation-incheon.md",
+      "src/content/posts/2026-08-09-incheon-free-uniform-support.md",
+      "src/content/posts/2026-08-09-lifelong-education-voucher.md",
+      "src/content/posts/2026-08-09-taebaek-sunflower-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01HqTGeXa4vKcFtAgjC3k66n",
+    "batchStatus": "ended",
+    "batchDurationMs": 300408,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 1,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-subsidy-149200000009-0809",
+        "reason": "finalize_rejected"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 891.02286,
+    "actualCostKrw": 986.7125100000001,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 23,
+    "errors": 7,
+    "inputTokens": 32249,
+    "outputTokens": 7087,
+    "costKrw": 79.4339424
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": true,
+    "cacheHit": 2,
+    "cacheMiss": 254,
+    "googleCalled": 254,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 200,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 60,
+    "queryRotationPerRegion": 20,
+    "queryLegacyAbsorbed": true
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 3건, 총 355건",
+      "validation": "ok",
+      "anthropicUsage": "3735/2907",
+      "markdown": {
+        "generated": 5,
+        "pending": 132,
+        "titles": [
+          "SK행복 장학금",
+          "특수교육대상자 치료비 지원",
+          "아동양육시설 아동 심리검사 및 치료비 지원",
+          "효행수당",
+          "인천광역시 청년 주택임차보증금 이자 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 4건, 총 624건",
+      "validation": "ok",
+      "anthropicUsage": "3564/2598",
+      "markdown": {
+        "generated": 5,
+        "pending": 307,
+        "titles": [
+          "동두천사랑카드 구매할인 혜택 비용 지원",
+          "노인 장수수당 지원",
+          "출산장려 지원(대전형 양육기본수당)",
+          "거제시 청년 스펙-UP 지원",
+          "저소득층  지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "",
+      "validation": "",
+      "anthropicUsage": "",
+      "markdown": {
+        "generated": 0,
+        "pending": 0,
+        "titles": []
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_anthropic_unpublished",
+    "label": "완료(Anthropic 미발행 1건)"
+  }
+}
