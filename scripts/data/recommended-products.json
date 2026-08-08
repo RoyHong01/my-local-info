@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-08T00:00:00+09:00",
+  "updatedAtKst": "2026-08-09T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -6007,6 +6007,63 @@
       "sourceId": "manual-choice-beauty-fashion-2026-08-08",
       "themeKey": "beauty-fashion",
       "themeName": "뷰티/패션"
+    },
+    {
+      "date": "2026-08-09",
+      "productId": "9663140676",
+      "productName": "메이홈데코 서랍 레일 3단 볼레일 폭 35mm 일반형 1조 / 고하중 슬라이드레일 서랍장레일 가구 옷장 수납장 하부장 책상 책장 싱크대 레일",
+      "brand": "메이홈데코",
+      "productGroupTokens": [
+        "서랍",
+        "레일",
+        "3단",
+        "볼레일",
+        "35mm",
+        "일반형"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-09",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-09",
+      "productId": "8920729882",
+      "productName": "R380 DC 모터 6-24V 24000RPM DIY 장난감 헤어 드라이어 미니 팬 소형 가전 제품에 대 한 고속 마이크로 스",
+      "brand": "R380",
+      "productGroupTokens": [
+        "dc",
+        "모터",
+        "24v",
+        "24000rpm",
+        "diy",
+        "장난감"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-09",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-09",
+      "productId": "8945352067",
+      "productName": "433Mhz 무선 도어 윈도우 센서 개방형 폐쇄 감지기 및 램프/가전 제품/보안 보호용 110V 220V 230V RF 소",
+      "brand": "433Mhz",
+      "productGroupTokens": [
+        "도어",
+        "윈도우",
+        "센서",
+        "개방형",
+        "폐쇄",
+        "감지기"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-09-choice-home-appliance-furniture-2026-08-09.md",
+      "sourceId": "manual-choice-home-appliance-furniture-2026-08-09",
+      "themeKey": "home-appliance-furniture",
+      "themeName": "가전/가구"
     }
   ]
 }
