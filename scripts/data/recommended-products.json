@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAtKst": "2026-08-09T00:00:00+09:00",
+  "updatedAtKst": "2026-08-10T00:00:00+09:00",
   "entries": [
     {
       "date": "2026-04-14",
@@ -6064,6 +6064,63 @@
       "sourceId": "manual-choice-home-appliance-furniture-2026-08-09",
       "themeKey": "home-appliance-furniture",
       "themeName": "가전/가구"
+    },
+    {
+      "date": "2026-08-10",
+      "productId": "8406321826",
+      "productName": "CGN 비타민D3 K2 고약사 약들약 캘리포니아골드 Vitamin D3 60캡슐",
+      "brand": "CGN",
+      "productGroupTokens": [
+        "비타민d3",
+        "k2",
+        "고약사",
+        "약들약",
+        "캘리포니아골드",
+        "vitamin"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-10-choice-health-2026-08-10.md",
+      "sourceId": "manual-choice-health-2026-08-10",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-08-10",
+      "productId": "7456706685",
+      "productName": "닥터트루 프리미엄 코엔자임 Q10 MAX 코큐텐 혈압 항산화 남성 여성 영양제",
+      "brand": "닥터트루",
+      "productGroupTokens": [
+        "코엔자임",
+        "q10",
+        "max",
+        "코큐텐",
+        "혈압",
+        "항산화"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-10-choice-health-2026-08-10.md",
+      "sourceId": "manual-choice-health-2026-08-10",
+      "themeKey": "health",
+      "themeName": "건강"
+    },
+    {
+      "date": "2026-08-10",
+      "productId": "228822",
+      "productName": "Doctor's Best 닥터스베스트 코엔자임 Q10 100 mg 120 베지 캡슐, 120정, 1개",
+      "brand": "Doctors",
+      "productGroupTokens": [
+        "doctor",
+        "best",
+        "닥터스베스트",
+        "코엔자임",
+        "q10",
+        "mg"
+      ],
+      "publishedBy": "auto",
+      "postFile": "src/content/life/2026-08-10-choice-health-2026-08-10.md",
+      "sourceId": "manual-choice-health-2026-08-10",
+      "themeKey": "health",
+      "themeName": "건강"
     }
   ]
 }
