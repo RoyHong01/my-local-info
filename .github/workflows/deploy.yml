@@ -233,6 +233,9 @@ jobs:
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 1
           fi
+          if [ "$FILE_COUNT" -gt 16000 ]; then
+            echo "::warning::Cloudflare Pages 파일 수가 한도의 80%를 넘었습니다: ${FILE_COUNT}/20000"
+          fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
           DEPLOY_OK=0
@@ -369,6 +372,9 @@ jobs:
             echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 1
+          fi
+          if [ "$FILE_COUNT" -gt 16000 ]; then
+            echo "::warning::Cloudflare Pages 파일 수가 한도의 80%를 넘었습니다: ${FILE_COUNT}/20000"
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -549,6 +555,9 @@ jobs:
             echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
             exit 1
+          fi
+          if [ "$FILE_COUNT" -gt 16000 ]; then
+            echo "::warning::Cloudflare Pages 파일 수가 한도의 80%를 넘었습니다: ${FILE_COUNT}/20000"
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -778,6 +787,9 @@ jobs:
             echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             exit 1
           fi
+          if [ "$FILE_COUNT" -gt 16000 ]; then
+            echo "::warning::Cloudflare Pages 파일 수가 한도의 80%를 넘었습니다: ${FILE_COUNT}/20000"
+          fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
           for idx in 0 1 2; do
@@ -864,6 +876,9 @@ jobs:
           if [ "$FILE_COUNT" -gt 20000 ]; then
             echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             exit 1
+          fi
+          if [ "$FILE_COUNT" -gt 16000 ]; then
+            echo "::warning::Cloudflare Pages 파일 수가 한도의 80%를 넘었습니다: ${FILE_COUNT}/20000"
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
