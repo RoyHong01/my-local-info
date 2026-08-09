@@ -209,12 +209,19 @@ jobs:
         id: deploy_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
-          FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
+          # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
+          FILE_COUNT=$(find out -type f \
+            ! -name '__next.*.txt' \
+            ! -name '__PAGE__.txt' \
+            ! -name '$d$id.txt' \
+            ! -name 'index.txt' \
+            | wc -l)
+          echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
+            echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
-            exit 0
+            exit 1
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -329,12 +336,19 @@ jobs:
         id: deploy_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
-          FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
+          # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
+          FILE_COUNT=$(find out -type f \
+            ! -name '__next.*.txt' \
+            ! -name '__PAGE__.txt' \
+            ! -name '$d$id.txt' \
+            ! -name 'index.txt' \
+            | wc -l)
+          echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
+            echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
-            exit 0
+            exit 1
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -492,12 +506,19 @@ jobs:
         id: deploy_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
-          FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
+          # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
+          FILE_COUNT=$(find out -type f \
+            ! -name '__next.*.txt' \
+            ! -name '__PAGE__.txt' \
+            ! -name '$d$id.txt' \
+            ! -name 'index.txt' \
+            | wc -l)
+          echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
+            echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
             echo "deploy_url=" >> "$GITHUB_OUTPUT"
-            exit 0
+            exit 1
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -704,11 +725,18 @@ jobs:
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           npm run build
-          FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
+          # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
+          FILE_COUNT=$(find out -type f \
+            ! -name '__next.*.txt' \
+            ! -name '__PAGE__.txt' \
+            ! -name '$d$id.txt' \
+            ! -name 'index.txt' \
+            | wc -l)
+          echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
-            exit 0
+            echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
+            exit 1
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)
@@ -774,11 +802,18 @@ jobs:
       - name: '[공통] Cloudflare Pages 배포 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: |
-          FILE_COUNT=$(find out -type f | wc -l)
-          echo "out 파일 수: ${FILE_COUNT}"
+          # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
+          # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
+          FILE_COUNT=$(find out -type f \
+            ! -name '__next.*.txt' \
+            ! -name '__PAGE__.txt' \
+            ! -name '$d$id.txt' \
+            ! -name 'index.txt' \
+            | wc -l)
+          echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
-            echo "⚠️ Cloudflare Pages 파일 수 한도(20000) 초과로 배포를 건너뜁니다"
-            exit 0
+            echo "::error::Cloudflare Pages 파일 수 한도(20000) 초과: ${FILE_COUNT}개. 배포 중단."
+            exit 1
           fi
           DEPLOY_LOG=$(mktemp)
           BACKOFFS=(10 30 60)

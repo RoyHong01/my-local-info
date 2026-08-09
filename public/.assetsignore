@@ -1,0 +1,10 @@
+# Next.js RSC Flight payload. 클라이언트 네비게이션용이며 Cloudflare Pages 업로드에서 제외한다.
+# 2026-08-09: out 20,340개 중 17,918개가 이 파일들이었고, Pages 파일 수 한도(20,000)
+# 초과로 배포가 스킵되어 8/07~09 사흘간 사이트가 갱신되지 않았다.
+# wrangler pages deploy 는 업로드 디렉터리의 .assetsignore 만 읽는다(.wranglerignore 아님).
+# Next.js가 public/ 을 out/ 루트로 복사하므로 여기에 둔다.
+# ads.txt / robots.txt 는 AdSense·SEO 필수이므로 제외하지 않는다.
+__next.*.txt
+__PAGE__.txt
+$d$id.txt
+index.txt
