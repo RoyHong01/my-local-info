@@ -486,6 +486,36 @@ const WRITING_ANGLES = [
   },
 ];
 
+const CHOICE_TITLE_ANGLES = [
+  '증상 제시형',
+  '판단 기준형',
+  '오해 정정형',
+  '장면 한정형',
+  '비교 선택형',
+];
+const CHOICE_TITLE_ANGLE_GUIDE = {
+  '증상 제시형': '독자가 겪는 구체적 불편을 먼저 그린다',
+  '판단 기준형': '고를 때 무엇을 확인해야 하는지를 앞세운다',
+  '오해 정정형': '흔한 착각을 바로잡는 각도로 시작한다',
+  '장면 한정형': '언제·어디서 쓰는지를 특정해 보여준다',
+  '비교 선택형': '여러 선택지 중 어떤 기준으로 갈리는지를 앞세운다',
+};
+
+async function getRecentChoiceTitles(dir, limit = 20) {
+  try {
+    const files = (await fs.readdir(dir))
+      .filter((f) => f.includes('choice') && f.endsWith('.md'))
+      .sort().reverse().slice(0, limit);
+    const titles = [];
+    for (const file of files) {
+      const raw = await fs.readFile(path.join(dir, file), 'utf-8');
+      const m = raw.match(/^title:\s*"?(.+?)"?\s*$/m);
+      if (m) titles.push(m[1]);
+    }
+    return titles;
+  } catch { return []; }
+}
+
 function pickWritingAngle() {
   const manual = String(process.env.CHOICE_WRITING_ANGLE || '').trim().toLowerCase();
   if (manual) {
@@ -1127,6 +1157,11 @@ function buildChoicePrompt(candidate, today, context = {}, angle = WRITING_ANGLE
   const outputFileName = candidate.outputFileName || `${today}-choice-${candidate.englishName || 'choice-item'}.md`;
   const isSingle = isManualSinglePost(candidate);
   const productCount = isSingle ? 1 : (Array.isArray(context.products) ? context.products.length : 3);
+  const titleAngle = context?.choiceTitleAngle || CHOICE_TITLE_ANGLES[0];
+  const recentTitles = Array.isArray(context?.recentChoiceTitles) ? context.recentChoiceTitles : [];
+  const recentTitleBlock = recentTitles.length
+    ? recentTitles.map((t) => `  - ${t}`).join('\n')
+    : '  (없음)';
   const productCountNote = productCount === 1
     ? '단 하나의 제품에 집중하는 포스트입니다. "3종", "3가지", "3개" 같은 복수 상품 표현 절대 금지. 이 제품만의 특성과 사용 경험에 깊이 집중해서 쓸 것.'
     : '"추천 상품은 3개입니다", "총 3가지를 준비했습니다" 같은 기계적 나열 표현 절대 금지. 대신 맥락에 자연스럽게 녹일 것 — 예) "이번에 엄선한 것들만 알면 쇼핑이 훨씬 수월해져요", "핵심만 간추렸어요", "직접 살펴봤어요"';
@@ -1163,6 +1198,25 @@ function buildChoicePrompt(candidate, today, context = {}, angle = WRITING_ANGLE
   - "가장 확실한 방법", "정착기", "완벽한", "무조건", "끝판왕" 같은 과장형 제목 문구
   - 입력 데이터에 없는 통계, 임상 수치, 비교 실험 결과, 사용자 후기 비율
 
+■ 제목 규칙
+- **이번 글에 배정된 유형: ${titleAngle}** — ${CHOICE_TITLE_ANGLE_GUIDE[titleAngle] || ''}
+  배정된 유형의 각도로 제목 앞부분을 구성한다.
+- **제목은 정보 제공형이어야 하며 판매·홍보처럼 읽혀서는 안 된다.**
+  이 글은 제휴 링크를 포함하므로, 제목이 구매를 부추기는 인상을 주면
+  콘텐츠 신뢰도와 검색 평가에 불리하다.
+  독자의 상황·판단 기준·확인할 점을 앞세운다.
+- **제품명(브랜드명)은 제목에 넣지 않는 것을 기본으로 한다.**
+  제품 카테고리까지만 쓴다(예: 매트형 마사지기, 무선 마우스, 실속 수납선반).
+  브랜드 자체가 정보인 경우(리콜·단종 등)만 예외로 허용한다.
+- ⛔ 아래 표현은 제목에 사용 금지:
+  "아이템 N가지" / "~하는 법" / "~할 때" / "~를 위한" / "꿀팁" / "총정리" /
+  "이것만 알면" / "지금 필요한" / "작은 변화" /
+  "지금 사야" / "강력 추천" / "인생템" / "필수템" / "안 사면 후회" / "핫딜"
+  (앞 항목들은 과거 생성물에서 과도하게 반복된 관용구이고,
+   뒤 항목들은 판매 유도형 표현이다)
+- ⛔ 최근 발행 제목들과 앞부분 골격이 겹치면 안 된다:
+${recentTitleBlock}
+
   [문체 및 구조 다양성 규칙]
   - 이번 실행의 글쓰기 앵글: ${angle.title}
   - 앵글 설명: ${angle.guide}
@@ -1176,7 +1230,7 @@ function buildChoicePrompt(candidate, today, context = {}, angle = WRITING_ANGLE
 
 [Frontmatter 스키마 - 키 이름 정확히]
 ---
-title: "(자연스러운 한국어 제목. 번역투 금지. 문제 제기 + 제품명 + 선택 이유 구조 권장)"
+title: "(자연스러운 한국어 제목. 번역투 금지. 아래 제목 규칙을 반드시 따를 것)"
 date: "${today}"
 slug: "choice-${candidate.englishName}"
 summary: "(110~150자, 검색 노출용. 과장 없이 제품명/용도/선택 이유를 설명)"
@@ -1590,7 +1644,16 @@ async function run() {
   candidate.products = productResolution.products;
 
   const writingAngle = pickWritingAngle();
-  const prompt = buildChoicePrompt(candidate, today, productResolution, writingAngle);
+  const recentChoiceTitles = await getRecentChoiceTitles(outDir, 20);
+  const titleAngleSeed = String(candidate?.productId || candidate?.title || '')
+    .split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const choiceTitleAngle = CHOICE_TITLE_ANGLES[titleAngleSeed % CHOICE_TITLE_ANGLES.length];
+  const prompt = buildChoicePrompt(
+    candidate,
+    today,
+    { ...productResolution, recentChoiceTitles, choiceTitleAngle },
+    writingAngle
+  );
 
   console.log(`CHOICE_GEMINI_MODEL: ${GEMINI_MODEL}`);
   console.log(`선택된 글쓰기 앵글: ${writingAngle.title}`);
