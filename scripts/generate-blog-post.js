@@ -1545,6 +1545,23 @@ function postProcessGeneratedMarkdown(markdown, context) {
   };
 }
 
+async function getRecentBlogTitles(postsDir, limit = 20) {
+  try {
+    const files = (await fs.readdir(postsDir))
+      .filter((f) => f.endsWith('.md'))
+      .sort()
+      .reverse()
+      .slice(0, limit);
+    const titles = [];
+    for (const file of files) {
+      const raw = await fs.readFile(path.join(postsDir, file), 'utf-8');
+      const m = raw.match(/^title:\s*"?(.+?)"?\s*$/m);
+      if (m) titles.push(m[1]);
+    }
+    return titles;
+  } catch { return []; }
+}
+
 // 블로그 글 1편 요청 준비
 async function prepareBlogRequest(candidate, postsDir) {
   // NOTE: 사대궁/인천 가정의달/인천 봄꽃축제 등 사용자 큐레이션 이미지는
@@ -1614,6 +1631,49 @@ async function prepareBlogRequest(candidate, postsDir) {
 
   // 전국 축제·여행 전용 스타일 오버라이드
   const isFestival = candidate._category === '전국 축제·여행';
+  const TITLE_ANGLES_BY_CATEGORY = {
+    incheon: ['대상 특정형', '금액 직격형', '질문형', '오해 정정형', '마감 강조형'],
+    subsidy: ['상황 제시형', '금액 직격형', '조건 확인형', '비교형', '질문형'],
+    festival: ['장면 묘사형', '체험 포인트형', '동행자형', '시기·날씨형', '질문형'],
+  };
+  const TITLE_ANGLE_GUIDE = {
+    '대상 특정형': '누가 해당되는지를 앞세운다. 예시 아님, 구조 설명일 뿐',
+    '금액 직격형': '지원 금액이나 절감액을 앞세운다',
+    '질문형': '독자에게 묻는 형태로 시작한다',
+    '오해 정정형': '흔한 오해를 바로잡는 각도',
+    '마감 강조형': '신청 기한이나 남은 기간을 앞세운다',
+    '상황 제시형': '독자가 겪는 구체적 상황을 먼저 그린다',
+    '조건 확인형': '자격 요건 확인을 유도한다',
+    '비교형': '비슷한 제도와의 차이를 앞세운다',
+    '장면 묘사형': '현장의 한 장면을 그린다',
+    '체험 포인트형': '무엇을 할 수 있는지를 앞세운다',
+    '동행자형': '누구와 가면 좋은지를 앞세운다',
+    '시기·날씨형': '언제 가면 좋은지를 앞세운다',
+  };
+
+  const titleCategoryKey = isFestival ? 'festival' : (isSubsidy ? 'subsidy' : 'incheon');
+  const anglePool = TITLE_ANGLES_BY_CATEGORY[titleCategoryKey];
+  const angleSeed = String(sourceId || itemName || '').split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+  const titleAngle = anglePool[angleSeed % anglePool.length];
+
+  const recentTitles = await getRecentBlogTitles(postsDir, 20);
+  const recentTitleBlock = recentTitles.length
+    ? recentTitles.map((t) => `  - ${t}`).join('\n')
+    : '  (없음)';
+
+  const titleRuleBlock = `
+■ 제목 규칙 (모든 카테고리 공통, 반드시 준수)
+- **이번 글에 배정된 유형: ${titleAngle}** — ${TITLE_ANGLE_GUIDE[titleAngle] || ''}
+- 배정된 유형의 각도로 제목 앞부분을 구성한다.
+- ⛔ 아래 표현은 제목에 사용 금지:
+  총정리 / 완전정리 / 완전정복 / 핵심정리 / 총망라 / 알아보기 / 파헤치기 /
+  "~하는 법" / "~ 꿀팁" / "이것만 알면"
+  (과거 생성물에서 과도하게 반복된 관용구다)
+- ⛔ 제목에 연도(2025, 2026 등)를 넣지 않는다.
+- ⛔ 아래 최근 발행 제목들과 앞부분 골격이 겹치면 안 된다:
+${recentTitleBlock}
+`;
+
   const festivalStyleOverride = isFestival ? `
 [전국 축제·여행 카테고리 전용 추가 규칙 - 아래 내용이 기존 규칙보다 우선 적용됨]
 
@@ -1623,12 +1683,7 @@ async function prepareBlogRequest(candidate, postsDir) {
 - 대신 그 축제의 핵심 즐길 거리 2~3개를 조합한 스토리텔링형 제목을 써줘.
 - 같은 어투/같은 문장 시작을 반복하지 마. 특히 아래 시작 문구는 제목/훅에서 절대 사용 금지:
   - "솔직히 말할게요", "진심으로 말씀드려요"
-- 제목 스타일은 매번 다르게 선택해. 아래 유형 중 하나를 랜덤하게 선택:
-  - 질문형 / 정보요약형 / 감성형 / 숫자활용형
 - 제목에는 지역명 + 축제명(또는 행사명)을 자연스럽게 반드시 포함해.
-  - 좋은 예: "딸기 향 가득한 봄날, 논산에서 인생샷 찍고 왔어요 🍓"
-  - 좋은 예: "한강 + 벚꽃 + 치맥 = 여의도 봄꽃 축제, 핵심부터 빠르게 볼까요?"
-  - 나쁜 예: "논산딸기축제 2026: 인생 딸기 맛보러 갈 사람 바로 여기 붙어!"
 
 ■ 소제목 구조 규칙 (기존 규칙 6번 대체):
 - 소제목에 '1.', '2.', '3.' 숫자 번호를 붙이지 마. 블로그가 아니라 보고서처럼 보여.
@@ -1754,6 +1809,7 @@ overview: 상세 설명 전체
 ${buildApplicationInfoPrompt(candidate, candidate._category)}
 
 (본문: 1500자 이상, 아래 스타일 가이드 반드시 적용)
+${titleRuleBlock}
 ${festivalStyleOverride}
 ${subsidyAnalysisOverride}
 [글쓰기 스타일 가이드 - 반드시 따를 것]
