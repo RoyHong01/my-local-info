@@ -7,6 +7,8 @@ description: "하루 일과를 마친 뒤 집에서 편안한 휴식 루틴을 �
 category: "픽앤조이 초이스"
 published_by: "manual"
 tags: ["풀리오", "마사지매트", "홈케어", "휴식루틴", "생활가전", "쿠팡", "리뷰"]
+rating_value: "4.8"
+review_count: "100"
 image: "/images/choice/polio-hero.png"
 source_id: "manual-choice-pulio-premium-massage-mat"
 coupang_link: "https://link.coupang.com/a/f4vL0pThiS"
