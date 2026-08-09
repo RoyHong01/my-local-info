@@ -230,6 +230,11 @@ function generateTitle(category, items, todayISO) {
       `오늘 확인 안 하면 늦는 복지 혜택 에디터 픽 ${n}`,
       `마감 임박 — 서둘러야 할 복지 지원 ${n}가지`,
       `이번 달 기한 끝나는 보조금, 에디터가 직접 골랐어요 ${n}선`,
+      `이번 주 안에 신청해야 하는 지원금 ${n}가지`,
+      `기한이 얼마 안 남은 복지 혜택만 모았어요 ${n}선`,
+      `놓치면 내년을 기다려야 하는 보조금 ${n}가지`,
+      `${month}월 안에 끝나는 신청, 지금 확인하세요 ${n}선`,
+      `마감 순으로 정리한 이번 달 지원 정책 ${n}가지`,
     ];
     const normalPatterns = [
       `${month}월 꼭 챙겨야 할 보조금·복지 정책 ${n}가지`,
@@ -239,6 +244,14 @@ function generateTitle(category, items, todayISO) {
       `픽앤조이 에디터 픽: ${month}월 보조금·지원 정책 ${n}가지`,
       `신청 기간 놓치기 아까운 ${month}월 복지 정책 ${n}가지`,
       `${month}월 보조금, 에디터가 추린 ${n}가지만 보세요`,
+      `${month}월에 새로 열린 지원 정책 ${n}가지`,
+      `조건만 맞으면 받을 수 있는 ${month}월 혜택 ${n}선`,
+      `우리 집 상황에 맞는 복지 제도 찾기 — ${month}월 편`,
+      `현금으로 돌아오는 ${month}월 지원금 ${n}가지`,
+      `${month}월 복지 정책, 대상별로 나눠봤어요 ${n}선`,
+      `신청서 한 장이면 되는 ${month}월 지원 ${n}가지`,
+      `모르면 못 받는 ${month}월 복지 혜택 ${n}선`,
+      `${month}월 생활비를 덜어주는 제도 ${n}가지`,
     ];
     const pool = hasUrgent ? urgentPatterns : normalPatterns;
     return pool[dateSeed(todayISO, pool)];
@@ -253,6 +266,14 @@ function generateTitle(category, items, todayISO) {
       `이번 달 어디 갈지 고르세요 — ${month}월 축제 에디터 큐레이션`,
       `${month}월 풍경 속으로 — 전국 축제 여행 추천 ${n}곳`,
       `${month}월 기억에 남을 여행, 이 축제들로 채워보세요`,
+      `${month}월 주말, 이 축제들이 열려요 ${n}곳`,
+      `아이와 가기 좋은 ${month}월 축제 ${n}선`,
+      `${month}월 밤에 열리는 축제만 골랐어요 ${n}곳`,
+      `당일치기로 다녀올 수 있는 ${month}월 축제 ${n}가지`,
+      `${month}월 제철 먹거리가 있는 축제 ${n}선`,
+      `사람 많은 곳이 싫다면 — ${month}월 조용한 축제 ${n}곳`,
+      `입장료 없는 ${month}월 축제 모음 ${n}가지`,
+      `${month}월 지역별 축제 일정 한눈에 보기 ${n}선`,
     ];
     return patterns[dateSeed(todayISO, patterns)];
   }
@@ -266,6 +287,14 @@ function generateTitle(category, items, todayISO) {
       `인천 살면서 이것만큼은 알아야 해요 — ${month}월 편`,
       `${month}월 인천 지역 혜택 총정리, 이것만 보세요`,
       `인천 ${month}월 — 생활비 아껴주는 지원 정책 ${n}가지`,
+      `인천에서 ${month}월에 신청 가능한 지원 ${n}가지`,
+      `구·군별로 다른 인천 혜택, ${month}월 편 ${n}선`,
+      `인천 육아 가정이 챙길 ${month}월 지원 ${n}가지`,
+      `${month}월 인천 청년 대상 제도만 모았어요 ${n}선`,
+      `인천 어르신을 위한 ${month}월 지원 ${n}가지`,
+      `이사 왔다면 확인할 인천 혜택 ${n}선 — ${month}월`,
+      `인천 소상공인 대상 ${month}월 지원 제도 ${n}가지`,
+      `${month}월 인천, 신청 기한이 다가오는 혜택 ${n}선`,
     ];
     return patterns[dateSeed(todayISO, patterns)];
   }

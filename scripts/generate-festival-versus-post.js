@@ -23,6 +23,16 @@ const HOLIDAY_PICK_COUNT = Math.max(2, Math.min(3, Number(process.env.FESTIVAL_V
 
 const BLOG_PUBLISHED_BY = String(process.env.BLOG_PUBLISHED_BY || 'auto').trim().toLowerCase() === 'manual' ? 'manual' : 'auto';
 const DEFAULT_IMAGE = 'https://pick-n-joy.com/images/default-festival.svg';
+const VERSUS_TITLE_PATTERNS = [
+  (label, list) => `${label}에는 ${list}, 어디가 더 맞을까요?`,
+  (label, list) => `${list} — ${label} 나들이, 어디로 갈까요?`,
+  (label, list) => `${label} 고민 중이라면: ${list} 비교해봤어요`,
+  (label, list) => `${list}, ${label}에 가기 좋은 쪽은 어디일까요?`,
+  (label, list) => `${label} 계획 세우기 전에 — ${list} 차이 정리`,
+  (label, list) => `${list} 중에서 ${label}에 딱 맞는 곳 고르기`,
+  (label, list) => `취향 따라 갈리는 ${label} 축제: ${list}`,
+  (label, list) => `${label}, ${list} 어느 쪽이 나에게 맞을까`,
+];
 
 function toKstDate(date = new Date()) {
   const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
@@ -583,7 +593,7 @@ function buildVersusBody({ mode, candidates, heroImage, bodyImages, topFestivalI
   ].join('\n\n').replace(/\n{3,}/g, '\n\n').trim());
 }
 
-function buildGeminiFrontmatterPrompt({ mode, todayIso, candidates }) {
+function buildGeminiFrontmatterPrompt({ mode, todayIso, candidates, defaultTitle }) {
   const targetLabel = mode === 'holiday' ? '이번 연휴' : '이번 주말';
   const sourceJson = JSON.stringify(candidates.map((item) => ({
     title: item.title,
@@ -593,7 +603,7 @@ function buildGeminiFrontmatterPrompt({ mode, todayIso, candidates }) {
     overview: item.overview,
   })), null, 2);
 
-  return `아래 데이터로 비교형 축제 블로그 frontmatter를 작성해줘.\n후보 데이터:\n${sourceJson}\n\n반드시 아래 형식만 출력:\n---\ntitle: "${targetLabel}에는 ${candidates[0]?.title || '축제 A'}${candidates[1] ? ` vs ${candidates[1].title}` : ''}${candidates[2] ? ` vs ${candidates[2].title}` : ''}, 어디가 더 맞을까요?"\ndate: ${todayIso}\nsummary: (130~160자, 사용자 의사결정 중심)\ndescription: (summary와 동일)\ncategory: 전국 축제·여행\npublished_by: ${BLOG_PUBLISHED_BY}\ntags: [전국 축제·여행, 비교 분석, ${targetLabel}]\n---\n\nFILENAME: YYYY-MM-DD-festival-versus-....md`;
+  return `아래 데이터로 비교형 축제 블로그 frontmatter를 작성해줘.\n후보 데이터:\n${sourceJson}\n\n반드시 아래 형식만 출력:\n---\ntitle: "${defaultTitle}"\ndate: ${todayIso}\nsummary: (130~160자, 사용자 의사결정 중심)\ndescription: (summary와 동일)\ncategory: 전국 축제·여행\npublished_by: ${BLOG_PUBLISHED_BY}\ntags: [전국 축제·여행, 비교 분석, ${targetLabel}]\n---\n\nFILENAME: YYYY-MM-DD-festival-versus-....md`;
 }
 
 async function callGemini(prompt) {
@@ -732,10 +742,13 @@ async function prepareFestivalVersusRequests() {
   const bodyImages = candidates.map((candidate) => selectBodyImage(candidate, heroImage));
 
   const targetLabel = mode === 'holiday' ? '이번 연휴' : '이번 주말';
-  const defaultTitle = `${targetLabel}에는 ${candidates.map((c) => c.title).join(' vs ')}, 어디가 더 맞을까요?`;
+  const versusList = candidates.map((c) => c.title).join(' vs ');
+  const versusSeed = hashString(`${todayIso}:${targetLabel}:${versusList}`);
+  const versusTitleFn = VERSUS_TITLE_PATTERNS[versusSeed % VERSUS_TITLE_PATTERNS.length];
+  const defaultTitle = versusTitleFn(targetLabel, versusList);
   const defaultSummary = `${targetLabel} 일정에서 고민되는 ${candidates.map((c) => c.title).join(', ')}를 분위기·이동·체류시간 기준으로 비교해 지금 바로 선택할 수 있게 정리했어요.`;
 
-  const prompt = buildGeminiFrontmatterPrompt({ mode, todayIso, candidates });
+  const prompt = buildGeminiFrontmatterPrompt({ mode, todayIso, candidates, defaultTitle });
 
   return [{
     customId: `festival-versus-${todayIso}-${mode}-${sourceIds.join('-') || 'selection'}`,
