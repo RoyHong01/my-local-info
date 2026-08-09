@@ -3,6 +3,118 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-08-09 (배포 중단 3일 규명 + 제목 다양화 5개 카테고리 + 초이스 중복 차단)
+
+### 수정 파일
+- `.github/workflows/deploy.yml`, `public/.assetsignore`, `scripts/check-worktree-safety.ps1`
+- `scripts/generate-blog-post.js`, `scripts/generate-choice-post.js`
+- `scripts/generate-curation-posts.js`, `scripts/generate-festival-versus-post.js`
+- `scripts/data/google-ratings-cache.json`, `src/content/life/*`
+
+### 배경
+수동 작성한 초이스 글을 커밋·푸시했는데 사이트에 반영되지 않았다.
+확인 결과 8/07~09 사흘치가 전부 배포되지 않은 상태였다.
+
+### 원인(RCA) — 배포 중단
+- `out` 파일 수가 **20,340개**로 Cloudflare Pages 한도(20,000)를 초과했고,
+  워크플로 가드가 **`exit 0` 으로 스킵**해 성공 처리했다.
+  Actions는 초록불, 텔레그램 리포트도 "전체 정상 완료"로 나갔다.
+- 파일 수의 **88%(17,918개)가 `.txt`** — Next.js RSC Flight payload다.
+  페이지 하나당 `__next._full` / `_head` / `_index` / `_tree` / `__PAGE__` / `index` 등
+  6개 이상이 생성된다. 실제 HTML 페이지는 2,246개뿐이었다.
+
+### 조치 — 세 번의 시도
+1. **`.wranglerignore` 생성** → 실패. wrangler Pages는 이 파일을 읽지 않는다
+   (`cli.js`: `CF_ASSETS_IGNORE_FILENAME = ".assetsignore"`, `path.resolve(dir, ...)`).
+2. **`public/.assetsignore` 생성** → 실패. Next.js가 `public/` 의 dotfile 을
+   `out/` 으로 복사하지 않는다. 가드 앞에서 `cp` 로 직접 복사하도록 고쳤으나
+   (`342bcf6`) 여전히 20,000 에러. 로그에 "assetsignore 복사: 10 줄"이 찍혔음에도
+   **패턴이 하위 디렉터리에 적용되지 않았다.**
+3. **파일 직접 삭제** → 성공(`fb3938a`). 가드 5곳 각각에서
+   `find out -type f -name '__next.*.txt' -delete` 등으로 제거.
+   `BEFORE → AFTER` 를 로그에 남겨 실제 감소를 수치로 확인한다.
+   결과: 20,340 → 2,425개(한도의 12%).
+
+- 가드 `exit 0` → **`exit 1`** 로 변경(5곳). 카운트 기준도 삭제 대상과 일치시켰다.
+  두 기준이 어긋나면 "카운트는 통과인데 업로드는 초과" 또는 그 반대가 된다.
+- 한도의 80%(16,000) 초과 시 `::warning::` 을 남기는 조기 경보 추가(`540475e`).
+
+### 검증
+- 배포 성공. 실사이트 최신 글이 8/06 → 8/09 로 갱신됨.
+- 클라이언트 네비게이션 정상 동작 확인(RSC payload 제거 부작용 없음).
+- 로그: `RSC payload 제거: 20340 → 2422`, `out 업로드 대상 파일 수: 2425`.
+
+### 커밋
+- `a28fd3d` fix(deploy): exclude RSC payload via assetsignore and fail on file count limit
+- `342bcf6` fix(deploy): copy assetsignore into out before deploy guard
+- `fb3938a` fix(deploy): delete RSC payload files instead of assetsignore
+- `540475e` chore(deploy): warn at 80% of pages file limit
+- `ab52932` fix(hooks): skip body check for deleted files in worktree safety
+- `072c4d7` content(choice): remove duplicate mouse product post (2026-07-30)
+- `58a59ff` fix(choice): extend product exclusion window to 30 days
+- `5b3637a` feat(blog): rotate title angles per category and drop fixed examples
+- `61431cb` feat(choice): rotate title angles and keep titles informational
+- `599161c` feat(curation): expand title pattern pools for curation and versus posts
+- `7f7ef7c` `54117d8` 초이스 글(풀리오 마사지 매트) 작성·정정
+
+### 함께 처리한 건
+
+**① 초이스 상품 중복**
+`CHOICE_PRODUCT_HISTORY_DAYS` 가 **7일**인데 카테고리 로테이션도 **7일 주기**(월~일)라,
+조건이 `경과일 < 7` 이어서 정확히 7일 뒤 같은 카테고리가 돌아올 때 제외에 걸리지 않았다.
+최근 20건 중 동일 카테고리·productId 중복 **10종** 확인.
+코드 기본값은 14일이었으나 워크플로 env가 7로 덮고 있었다(§2-12 패턴).
+→ **30일**로 상향. 로테이션 4회 주기 동안 같은 상품이 재등장하지 않는다.
+7/30 마우스 글 1건 삭제(8/06 글과 상품 동일).
+
+**② pre-push 훅 버그**
+`check-worktree-safety.ps1` 이 커밋 파일 목록을 `git diff-tree --name-only` 로 얻고
+`git show "$commit:$file"` 로 본문을 읽는데, **삭제된 파일도 읽으려 해서
+모든 초이스 글 삭제가 차단**됐다. `--diff-filter=d`(소문자 = 삭제 제외) 한 줄 추가로 해결.
+
+**③ 제목 획일화 — 5개 카테고리 전부**
+원인이 카테고리마다 달랐다:
+| 카테고리 | 원인 |
+|---|---|
+| 블로그 축제 | 4유형 지시가 있으나 **예시 문장 2개**가 골격 고정 |
+| 블로그 인천·보조금 | **제목 지시가 아예 없음** → "총정리 / 완전 정리"로 수렴 |
+| 초이스 | 본문 앵글(WRITING_ANGLES)만 있고 **제목 유형 지시 없음** |
+| 큐레이션 3종 | AI가 아니라 **코드 패턴 배열 7개**가 제목 확정 |
+| 축제비교 | **고정 템플릿 1개** → 100% 동일 |
+
+조치:
+- 블로그: 카테고리별 5유형 로테이션 + 금지어(총정리·완전정리·~하는 법 등) +
+  최근 20건 회피 + **축제 예시 3줄 제거**. 소제목 예시는 별개 축이라 유지.
+- 초이스: 5유형 로테이션 + **정보형 전환**. 제휴 링크 포함 콘텐츠이므로
+  제목이 판매·홍보로 읽히면 불리하다는 판단에 따라 **제품명을 제목에서 제외**하고
+  카테고리까지만 쓰도록 했다. 판매 유도어("지금 사야", "인생템" 등) 금지 추가.
+  `buildChoicePrompt` 가 async 가 아니므로 최근 제목은 호출부에서 읽어
+  기존 `context` 인자에 실어 넘겼다(시그니처 변경 없음).
+- 큐레이션: 패턴 7 → 15개(보조금 urgent 5→10). 단순 문구 변형이 아니라
+  대상별(육아·청년·어르신·소상공인)·상황별(당일치기·야간·무료) 각도를 추가했다.
+- 축제비교: 템플릿 1 → 8개. 기존 `hashString` 헬퍼를 재사용하고
+  `defaultTitle` 을 frontmatter 프롬프트에도 넘겨 두 위치를 통일했다.
+
+### 후속/주의
+- **⚠️ 작업 중 워킹트리가 통째로 되돌려지는 사고 발생.** 초이스 글 작성 세션에서
+  코드 파일 9개(재시도·가드·문서 등 8/6~8/9 작업 전부)가 삭제 방향 diff로 나타났다.
+  `git stash list` 는 비어 있었고 원인 미규명. **커밋은 모두 무사**했으며
+  `git restore` 로 완전 복구했다. 원인 규명은 `git reflog` 확인이 남아 있다.
+- **⚠️ 같은 세션에서 초이스 글 본문이 무단 교체됨.** VS Code가 자체 판단으로
+  "직접 경험해보면", "체감하는 분들이 많습니다", "왜 다들 이 모델만 찾을까요?" 등
+  **실제 사용하지 않은 제품에 대한 체험형·단정형 서술**로 바꿨다.
+  `PROJECT_PLAN.md` 로드맵의 "⛔ 실제 가본 것처럼 쓰지 않는다" 원칙에 어긋나므로
+  본문은 원본(정보형)으로 되돌리고 `rating_value`만 반영했다(`54117d8`).
+  **초이스 글 생성 워크플로 자체 점검이 필요하다.**
+- 초이스 요약문에 `"쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한..."` 이
+  그대로 노출된다. 내부 선정 로직이라 독자에게 의미가 없고 상업 신호만 강하다.
+  목록 카드에도 표시되므로 제목보다 오히려 문제가 크다. **미처리.**
+- `out` 파일 수는 계속 증가한다(하루 약 24페이지). 현재 2,425개 기준
+  20,000 도달까지 약 2년. 16,000 경고가 뜨면 **Cloudflare 유료 전환**(Workers Paid,
+  월 $5)이 가장 단순한 해법이다. 과거 글 삭제는 색인·수익 손실이라 권장하지 않는다.
+- 8/10 확인 항목: 제목 5종 개선 여부 / 초이스 상품 중복 해소 /
+  `📭 미발행 0건`·`🔁 fallback 시도 1` (8/09 `4057cf3` 검증).
+
 ## 2026-08-09 (맛집 후보 대량 확보 + finalize 품질 재시도 활성화)
 
 ### 수정 파일
