@@ -3,6 +3,151 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-08-09 (맛집 후보 대량 확보 + finalize 품질 재시도 활성화)
+
+### 수정 파일
+- `.github/workflows/deploy.yml`, `scripts/data/google-ratings-cache.json`
+
+### 배경
+쿼리 확장(8/07)과 pre-filter 확대를 적용했으나 다음 자동 재수집이 8/14라 검증이 지연됐다.
+또한 `finalize_rejected` 미발행이 8/06·08·09 사흘간 반복됐다.
+
+### 원인(RCA)
+- **미발행**: `run-anthropic-blog-batch.js`의 `ANTHROPIC_DISABLE_FINALIZE_SYNC_RETRY`가
+  **기본값 `'true'`**여서 `allowQualityRetry: false` → `maxAttempts = 1`.
+  finalize 거부 조건 4개 중 3개(불완전 출력 / 축제명 정합성 / 보조금 필수 소제목)는
+  **재시도 대상으로 설계돼 있었으나 그 재시도가 아예 돌지 않았다.**
+  거부 시 `continue`로 넘어가 미발행 처리됨.
+- 재시도가 꺼져 있던 이유는 동기 fallback이 Batch보다 비싸기 때문으로 보이나,
+  `guardedSyncFallback`이 일일 예산(1500원)을 검사해 `budget_stopped`로 차단하므로
+  예산 초과는 구조적으로 불가능하다.
+
+### 조치
+- `deploy.yml`의 Anthropic Batch step에 `ANTHROPIC_DISABLE_FINALIZE_SYNC_RETRY: 'false'` 추가.
+  코드 수정 없이 env만으로 재시도 활성화. 예산 가드는 그대로 유지.
+- 강제 재수집을 위해 `google-ratings-cache.json`의 `forceRecollectOnceConsumedAt` 키 삭제.
+  (`FORCE_RECOLLECT_MODE`는 `'once'`만 지원하며, 이 필드 존재 여부로 소비를 판정한다)
+  실행 후 자동 재기록되어 1회성이 보장됨.
+
+### 검증 — 대량 재수집 실측
+| 지역 | 이전 valid | 이후 total / valid |
+|---|---|---|
+| incheon | 4 | 50 / 49 |
+| seoul | 22 | 50 / 49 |
+| gyeonggi | **0** | 50 / **48** |
+
+- `google_called: 254` (직전 31회), `cache_hit: 2` — 거의 전부 신규 식당.
+- `cap_reached: false`, `blocked_by_cap: 0` — 조기 종료가 작동해 지역당 평균 85회로 종료.
+- **실측 통과율 약 59%**(254회 평가 → 150건 저장). pre-filter가 카카오 점수순
+  상위를 먼저 추리기 때문에 체감보다 높다.
+- reject-list 증가: `low_rating` 57 → 152, `franchise` 9 → 47.
+- 유효 후보 146건 = 하루 3건 기준 **약 48일치**.
+- 일일 상한 가드 동작 확인: `recollectCountDate: 2026-08-09`, `recollectCountToday: 1`,
+  `consecutiveFailedRecollects: 0`(후보가 늘어 리셋됨).
+
+### 커밋
+- `2cad109` chore(restaurants): reset force-recollect consumed flag for bulk refill
+- `4057cf3` chore(blog): enable finalize quality retry within daily budget guard
+
+### 후속/주의
+- **미검증**: finalize 재시도 효과는 2026-08-10 실행에서 확인.
+  기대 지표는 `📭 미발행 0건`, `🔁 fallback 시도 1 / 성공 1`, 비용 1,200~1,400원.
+- 재시도로도 계속 거부되면 원인은 프롬프트 쪽이다(보조금 필수 소제목 3종을
+  모델이 안정적으로 생성하지 못하는 문제). 그때는 프롬프트 지시를 강화한다.
+- 다음 자동 재수집은 쿨다운 7일 후인 2026-08-16경. 그때까지 후보가 버티는지가
+  이번 조치의 실질 검증이다.
+
+---
+
+## 2026-08-08 (일일 재수집 상한 + 연속 미개선 경고)
+
+### 수정 파일
+- `scripts/ensure-life-restaurant-candidates.mjs`
+
+### 배경
+8/06·8/07 이틀 연속 맛집 재수집이 실행됐다. 쿨다운 7일 설정과 맞지 않는 동작.
+
+### 원인(RCA)
+- `gyeonggi` 버킷이 비어 `hasAllTargetBuckets = false` → `needsRecollect = true`.
+  전체 후보는 5건 이상이라 `candidatesExhausted`는 false지만,
+  **버킷 하나만 비어도 재수집 조건이 성립**하는 구조였다.
+- 즉 후보를 못 채우는 상태가 지속되면 **매일 재수집이 반복**되고 구글 호출이 매일 나간다.
+  (쿨다운은 `candidatesExhausted`일 때 무시되도록 8/05에 바꿔둔 상태)
+
+### 조치
+- **일일 재수집 상한**(`RESTAURANT_MAX_RECOLLECT_PER_DAY`, 기본 1) 추가.
+  쿨다운 분기보다 앞에서 검사하며, `forceRecollectActive`일 때는 적용하지 않는다.
+- **연속 미개선 감지**: 재수집 직후 후보 수를 재계산해 이전보다 늘지 않으면
+  `consecutiveFailedRecollects`를 증가시키고, 임계(기본 2회) 도달 시
+  `recollect_warning: query_pool_exhausted`를 리포트에 노출.
+- 메타는 `google-ratings-cache.json`의 `meta`에 저장
+  (`recollectCountDate` / `recollectCountToday` / `consecutiveFailedRecollects`).
+
+### 검증
+- `node --check` 통과. 8/09 강제 재수집에서 메타 3필드가 정상 기록됨.
+
+### 커밋
+- `7ce27e2` feat(restaurants): cap daily recollect and warn on repeated no-gain runs
+
+---
+
+## 2026-08-07 (맛집 쿼리 매트릭스 확장 + 수집 상한 재설계 + 워크플로 실패 알림)
+
+### 수정 파일
+- `scripts/data/restaurant-query-matrix.json`, `scripts/collect-life-restaurants.mjs`
+- `.github/workflows/deploy.yml`
+
+### 배경
+맛집 유효 후보가 `incheon 5 / seoul 24 / gyeonggi 0`까지 떨어졌다.
+"서울·경기·인천이 이렇게 넓은데 후보가 없다는 게 말이 안 된다"는 지적에서 조사가 시작됐다.
+
+### 원인(RCA)
+- **쿼리가 전부 광역 단위였다.** 45개 전량이 `"경기 브런치 맛집"`, `"서울 디저트 카페"`
+  형태로, 카카오는 쿼리당 15건만 반환한다. 경기도 전체를 15개 쿼리로 훑으니
+  최대 225건이고, 그마저 매번 거의 동일한 상위 랭킹이라
+  발행 이력 412건과 겹쳐 신규가 남지 않았다.
+- `subregionHint` 필드는 스키마에 있었으나 **45개 전부 빈 값**이었다.
+- `GOOGLE_PRE_FILTER_SIZE = 50` 하드코딩이 지역당 구글 평가 대상을 50건으로 묶어,
+  통과율이 낮은 지역은 목표를 채울 수 없었다.
+- `MAX_ITEMS_PER_REGION = 30` 역시 하드코딩이라, 통과분이 더 나와도 버려졌다.
+
+### 조치
+- **쿼리 매트릭스 45 → 113개 확장.** 세부 지역 단위로 추가:
+  인천 18개(송도/구월동/부평/청라/영종도 등), 서울 25개(성수/연남/서촌/을지로/한남 등),
+  경기 25개(수원/성남/판교/일산/광교/동탄 등). `subregionHint`도 함께 채움.
+  기존 45개는 legacy로 보존.
+- `GOOGLE_PRE_FILTER_SIZE` 50 → **300**, `MAX_ITEMS_PER_REGION` 30 → **50**으로
+  상향하고 둘 다 env 기반으로 전환.
+- `filterByGoogleRating`에 **조기 종료** 추가: 통과 건수가 `MAX_ITEMS_PER_REGION`에
+  도달하면 즉시 중단. 통과율이 높은 지역에서 불필요한 구글 호출을 막는다.
+- `QUERY_ROTATION_PER_REGION` 8 → 20 (deploy.yml env).
+- 워크플로 실패 시 텔레그램 알림 step 추가(`if: failure()`).
+
+### 확인된 구조 (조사 결과)
+- `GOOGLE_CALLS_PER_RUN_MAX`는 **전체가 아니라 지역당** 상한이다.
+  `filterByGoogleRating`이 호출마다 `metrics`를 새로 만들기 때문
+  (`collectRegion`이 지역별로 호출됨). 지역별 실행 분리는 이미 구현돼 있었다.
+- 8/06 자동화 실패는 **GitHub 러너 배정 실패**(`The job was not acquired by Runner`,
+  `Internal server error`)였다. 코드와 무관하며 job이 시작조차 못 해 알림도 없었다.
+  Re-run으로 정상 복구.
+
+### 커밋
+- `d0cc0b0` feat(restaurants): expand query matrix with subregion-level queries
+- `b710d56` feat(restaurants): widen google pre-filter with early stop for bulk refill
+- `17d897a` feat(ci): notify telegram on workflow failure
+
+### 후속/주의
+- `if: failure()` 알림은 **러너 배정 실패는 잡지 못한다**(step이 실행되지 않으므로).
+  기존 텔레그램 step이 `always()` 조건이라 중간 실패는 이미 커버되고 있었고,
+  이번 추가분은 `notify-telegram.mjs` 자체가 터질 때를 위한 이중 안전망이다.
+- **⚠️ 2026-08-06 커밋 `6581301`의 주석 오류**: "기존 코드는 primary를 조회해놓고
+  fallback만 캐시에 저장해 결과가 버려졌다"는 문구는 **사실이 아니다.**
+  원본은 `if (primary)` 분기로 정상 처리하고 있었으며, 조사 인용문이 분기를 생략한
+  압축본이라 오독한 것이다. 해당 커밋은 버그 수정이 아니라 동등 로직 리팩터 +
+  타임아웃/재시도 추가다. **주석 정정 필요.**
+
+---
+
 ## 2026-08-06 (외부 API 일시 장애 대응: 수집 3종 재시도 + 훅/상한 정비)
 
 ### 수정 파일
