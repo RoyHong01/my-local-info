@@ -209,6 +209,10 @@ jobs:
         id: deploy_stage1
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
+          # Next.js는 public/ 의 dotfile 을 out/ 으로 복사하지 않으므로 여기서 직접 복사한다.
+          # wrangler pages deploy 는 업로드 디렉터리(out)의 .assetsignore 만 읽는다.
+          cp public/.assetsignore out/.assetsignore
+          echo "assetsignore 복사: $(wc -l < out/.assetsignore) 줄"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
@@ -336,6 +340,10 @@ jobs:
         id: deploy_stage2
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
+          # Next.js는 public/ 의 dotfile 을 out/ 으로 복사하지 않으므로 여기서 직접 복사한다.
+          # wrangler pages deploy 는 업로드 디렉터리(out)의 .assetsignore 만 읽는다.
+          cp public/.assetsignore out/.assetsignore
+          echo "assetsignore 복사: $(wc -l < out/.assetsignore) 줄"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
@@ -506,6 +514,10 @@ jobs:
         id: deploy_stage3
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
         run: |
+          # Next.js는 public/ 의 dotfile 을 out/ 으로 복사하지 않으므로 여기서 직접 복사한다.
+          # wrangler pages deploy 는 업로드 디렉터리(out)의 .assetsignore 만 읽는다.
+          cp public/.assetsignore out/.assetsignore
+          echo "assetsignore 복사: $(wc -l < out/.assetsignore) 줄"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
@@ -725,6 +737,10 @@ jobs:
         if: always() && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full'))
         run: |
           npm run build
+          # Next.js는 public/ 의 dotfile 을 out/ 으로 복사하지 않으므로 여기서 직접 복사한다.
+          # wrangler pages deploy 는 업로드 디렉터리(out)의 .assetsignore 만 읽는다.
+          cp public/.assetsignore out/.assetsignore
+          echo "assetsignore 복사: $(wc -l < out/.assetsignore) 줄"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
@@ -802,6 +818,10 @@ jobs:
       - name: '[공통] Cloudflare Pages 배포 (deploy_only / push)'
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'deploy_only')
         run: |
+          # Next.js는 public/ 의 dotfile 을 out/ 으로 복사하지 않으므로 여기서 직접 복사한다.
+          # wrangler pages deploy 는 업로드 디렉터리(out)의 .assetsignore 만 읽는다.
+          cp public/.assetsignore out/.assetsignore
+          echo "assetsignore 복사: $(wc -l < out/.assetsignore) 줄"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
