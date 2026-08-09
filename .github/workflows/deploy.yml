@@ -452,7 +452,7 @@ jobs:
         env:
           CHOICE_AUTO_ENABLED: 'true'
           CHOICE_MIN_REVIEW_COUNT: '50'
-          CHOICE_PRODUCT_HISTORY_DAYS: '7'
+          CHOICE_PRODUCT_HISTORY_DAYS: '30'
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CHOICE_GEMINI_MODEL: 'gemini-3.1-flash-lite'
           CHOICE_GEMINI_TIMEOUT_MS: '120000'
