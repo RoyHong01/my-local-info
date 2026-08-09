@@ -86,7 +86,7 @@ function Test-IsDocsOnlyPath {
 function Get-CommitFileList {
     param([string]$Commit)
 
-    return @(git diff-tree --no-commit-id --name-only -r $Commit)
+    return @(git diff-tree --no-commit-id --name-only --diff-filter=d -r $Commit)
 }
 
 function Test-BlobExistsInCommit {
