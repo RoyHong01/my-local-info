@@ -150,6 +150,12 @@ jobs:
           DESCRIPTION_MARKDOWN_DELAY_MS: '15000'
           DESCRIPTION_MARKDOWN_FAIL_THRESHOLD_PCT: '25'
 
+      - name: '[1단계] API 부하 분산 대기'
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        run: |
+          echo "apis.data.go.kr 호출 간격 확보를 위해 45초 대기"
+          sleep 45
+
       - name: '[1단계] 전국 축제·여행 정보 수집'
         id: collect_festival
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')

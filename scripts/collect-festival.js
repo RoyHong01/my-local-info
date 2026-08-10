@@ -16,6 +16,9 @@ const FESTIVAL_FETCH_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.FESTI
 const FESTIVAL_FETCH_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_DELAY_MS || '10000', 10));
 const FESTIVAL_FETCH_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.FESTIVAL_FETCH_TIMEOUT_MS || '20000', 10));
 const FESTIVAL_CONNECT_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.FESTIVAL_CONNECT_TIMEOUT_MS || '20000', 10));
+// 같은 도메인(apis.data.go.kr)을 인천 이미지 조회 등과 공유하므로 간격을 둔다.
+// 2026-08-06·08-10 ConnectTimeout 은 서버 응답 속도가 아니라 호출 집중이 원인으로 보인다.
+const FESTIVAL_PAGE_DELAY_MS = Math.max(0, Number.parseInt(process.env.FESTIVAL_PAGE_DELAY_MS || '500', 10));
 const festivalDispatcher = new Agent({
   connect: { timeout: FESTIVAL_CONNECT_TIMEOUT_MS },
 });
@@ -178,7 +181,7 @@ async function fetchAllFestivalItems({ apiKey, startDate, endDate, numOfRows = 1
   for (let pageNo = 2; pageNo <= pages; pageNo++) {
     const next = await fetchFestivalPage({ apiKey, startDate, endDate, pageNo, numOfRows });
     all.push(...next.pageItems);
-    await delay(80);
+    await delay(FESTIVAL_PAGE_DELAY_MS);
   }
 
   return { items: all, totalCount, pages };
