@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const { Agent } = require('undici');
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TOUR_PHOTO_GALLERY_BASE = 'https://apis.data.go.kr/B551011/PhotoGalleryService1';
 const DEFAULT_GEMINI_MODEL = 'gemini-3.1-flash-lite';
@@ -12,8 +13,12 @@ const DESCRIPTION_MARKDOWN_RETRY_COUNT = Math.max(1, Number.parseInt(process.env
 const DESCRIPTION_MARKDOWN_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.DESCRIPTION_MARKDOWN_RETRY_DELAY_MS || '20000', 10));
 // TourAPI 접속 재시도 (2026-08-06 apis.data.go.kr ConnectTimeout으로 축제 수집 전체 실패)
 const FESTIVAL_FETCH_RETRY_COUNT = Math.max(1, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_COUNT || '3', 10));
-const FESTIVAL_FETCH_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_DELAY_MS || '5000', 10));
+const FESTIVAL_FETCH_RETRY_DELAY_MS = Math.max(0, Number.parseInt(process.env.FESTIVAL_FETCH_RETRY_DELAY_MS || '10000', 10));
 const FESTIVAL_FETCH_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.FESTIVAL_FETCH_TIMEOUT_MS || '20000', 10));
+const FESTIVAL_CONNECT_TIMEOUT_MS = Math.max(1000, Number.parseInt(process.env.FESTIVAL_CONNECT_TIMEOUT_MS || '20000', 10));
+const festivalDispatcher = new Agent({
+  connect: { timeout: FESTIVAL_CONNECT_TIMEOUT_MS },
+});
 if (/\bpro\b/i.test(requestedGeminiModel)) {
   throw new Error('안전장치: 수집 스크립트는 Pro 모델을 사용하지 않습니다.');
 }
@@ -136,7 +141,10 @@ async function fetchFestivalPage({ apiKey, startDate, endDate, pageNo, numOfRows
   let lastError;
   for (let attempt = 1; attempt <= FESTIVAL_FETCH_RETRY_COUNT; attempt++) {
     try {
-      response = await fetch(endpoint, { signal: AbortSignal.timeout(FESTIVAL_FETCH_TIMEOUT_MS) });
+      response = await fetch(endpoint, {
+        signal: AbortSignal.timeout(FESTIVAL_FETCH_TIMEOUT_MS),
+        dispatcher: festivalDispatcher,
+      });
       if (!response.ok) {
         throw new Error(`searchFestival2 failed: ${response.status}`);
       }
