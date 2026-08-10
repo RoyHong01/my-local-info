@@ -6,7 +6,7 @@ description: "영등포구 보건소 금연클리닉에서 니코틴패치·껌�
 category: 전국 보조금·복지 정책
 published_by: "auto"
 tags: [금연클리닉, 영등포구보건소, 니코틴패치, 금연지원, 보건소복지]
-image: "https://pick-n-joy.com/images/default-subsidy.svg"
+image: "https://tong.visitkorea.or.kr/cms/resource/16/4095916_image2_1.jpg"
 source_id: "318000000121"
 slug: "2026-07-26-yeongdeungpo-smoking-cessation"
 source_snapshot_key: "보건소금연클리닉지원|||"
