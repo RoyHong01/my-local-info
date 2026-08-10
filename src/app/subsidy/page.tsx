@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import SubsidyCardList from '@/components/SubsidyCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
@@ -51,11 +52,13 @@ export default async function SubsidyPage() {
               <p className="text-xs text-stone-400 mt-1">총 {items.length}건</p>
             </div>
 
-            {items.length === 0 ? (
-              <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
-            ) : (
-              <SubsidyCardList items={items} />
-            )}
+            <Suspense fallback={<div className="min-h-[600px]" />}>
+              {items.length === 0 ? (
+                <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
+              ) : (
+                <SubsidyCardList items={items} />
+              )}
+            </Suspense>
           </div>
           <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
             <aside className="sticky top-24 sticky-sidebar">
