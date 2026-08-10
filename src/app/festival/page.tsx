@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import FestivalCardList from '@/components/FestivalCardList';
 import TaeheoAdBanner from '@/components/TaeheoAdBanner';
@@ -61,7 +62,9 @@ export default async function FestivalPage() {
             {items.length === 0 ? (
               <p className="text-stone-400 text-sm py-16 text-center">곧 업데이트될 예정입니다.</p>
             ) : (
-              <FestivalCardList items={items} />
+              <Suspense fallback={<div className="min-h-[600px]" />}>
+                <FestivalCardList items={items} />
+              </Suspense>
             )}
           </div>
           <div className="hidden lg:block w-60 flex-shrink-0 self-stretch">
