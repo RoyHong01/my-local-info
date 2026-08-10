@@ -1,7 +1,6 @@
 'use client';
-import { useEffect } from 'react';
 import Link from 'next/link';
-import useClientPagination from '@/components/pagination/useClientPagination';
+import { usePagedList } from '@/components/pagination/useClientPagination';
 
 interface DataItem {
   [key: string]: unknown;
@@ -21,36 +20,27 @@ const cleanText = (text: string) =>
 const PAGE_SIZE = 30;
 
 export default function SubsidyCardList({ items }: { items: DataItem[] }) {
-  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
-    items,
-    pageSize: PAGE_SIZE,
-    scopeKey: 'subsidy-list',
-  });
+  const {
+    pageItems,
+    currentPage,
+    totalPages,
+    totalCount,
+    pageNumbers,
+    hasPrev,
+    hasNext,
+    goTo,
+  } = usePagedList(items, PAGE_SIZE);
 
-  useEffect(() => {
-    const savedVisibleCount = Number(sessionStorage.getItem('subsidyVisibleCount') || 0);
-    if (Number.isFinite(savedVisibleCount) && savedVisibleCount > 0) {
-      ensureVisible(savedVisibleCount);
-    }
-
-    const savedY = sessionStorage.getItem('subsidyScrollY');
-    if (savedY) {
-      const y = Number(savedY);
-      if (Number.isFinite(y) && y >= 0) {
-        setTimeout(() => {
-          window.scrollTo({ top: y, behavior: 'instant' });
-        }, 80);
-      }
-    }
-
-    sessionStorage.removeItem('subsidyScrollY');
-    sessionStorage.removeItem('subsidyVisibleCount');
-  }, [ensureVisible]);
+  const BLOCK_SIZE = 10;
+  const blockStart = Math.floor((currentPage - 1) / BLOCK_SIZE) * BLOCK_SIZE + 1;
+  const blockEnd = Math.min(blockStart + BLOCK_SIZE - 1, totalPages);
+  const hasPrevBlock = blockStart > 1;
+  const hasNextBlock = blockEnd < totalPages;
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {visibleItems.map((item, i) => {
+      {pageItems.map((item, i) => {
         const name = getField(item, ['서비스명', 'name', 'title']);
         const rawSummary = (
           cleanText(getField(item, ['서비스목적요약', 'summary', 'description'])) ||
@@ -68,10 +58,6 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
           <Link
             key={i}
             href={`/subsidy/${itemId}/`}
-            onClick={() => {
-              sessionStorage.setItem('subsidyScrollY', String(window.scrollY));
-              sessionStorage.setItem('subsidyVisibleCount', String(visibleCount));
-            }}
             data-testid={`subsidy-card-${itemId}`}
           >
             <div className="menu-card bg-white rounded-2xl p-5 shadow-sm border border-stone-100 border-t-2 border-t-amber-500 hover:shadow-md hover:border-amber-200 transition-all duration-300 flex flex-col h-full cursor-pointer">
@@ -104,17 +90,28 @@ export default function SubsidyCardList({ items }: { items: DataItem[] }) {
       })}
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-3">
-        <p className="text-xs text-stone-400">{visibleCount} / {items.length}편 표시 중</p>
-        {hasMore && (
-          <button
-            type="button"
-            onClick={loadMore}
-            data-testid="subsidy-load-more"
-            className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
-          >
-            더보기 (+{Math.min(PAGE_SIZE, items.length - visibleCount)})
-          </button>
+      <div className="mt-6">
+        <p className="text-xs text-stone-400">{totalCount}편 중 {currentPage} / {totalPages} 페이지</p>
+        {totalPages > 1 && (
+          <nav className="flex items-center justify-center gap-1 mt-8" aria-label="페이지 이동">
+            <button type="button" onClick={() => goTo(blockStart - 1)} disabled={!hasPrevBlock} aria-label="이전 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≪</button>
+            <button type="button" onClick={() => goTo(currentPage - 1)} disabled={!hasPrev} aria-label="이전 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">←</button>
+            {pageNumbers.map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => goTo(p)}
+                aria-current={p === currentPage ? 'page' : undefined}
+                className={p === currentPage
+                  ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
+                  : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'}
+              >
+                {p}
+              </button>
+            ))}
+            <button type="button" onClick={() => goTo(currentPage + 1)} disabled={!hasNext} aria-label="다음 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">→</button>
+            <button type="button" onClick={() => goTo(blockEnd + 1)} disabled={!hasNextBlock} aria-label="다음 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≫</button>
+          </nav>
         )}
       </div>
     </>
