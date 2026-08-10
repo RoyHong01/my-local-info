@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { LifeRegionTab, RestaurantItem } from '@/lib/life-restaurants';
-import { usePagedList } from '@/components/pagination/useClientPagination';
+import useClientPagination from '@/components/pagination/useClientPagination';
 
 type RegionDataset = Record<LifeRegionTab, RestaurantItem[]>;
 
@@ -18,22 +18,11 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
   const [activeTab, setActiveTab] = useState<LifeRegionTab>('incheon');
 
   const activeItems = useMemo(() => datasets[activeTab] || [], [activeTab, datasets]);
-  const {
-    pageItems,
-    currentPage,
-    totalPages,
-    totalCount,
-    pageNumbers,
-    hasPrev,
-    hasNext,
-    goTo,
-  } = usePagedList(activeItems, PAGE_SIZE);
-
-  const BLOCK_SIZE = 10;
-  const blockStart = Math.floor((currentPage - 1) / BLOCK_SIZE) * BLOCK_SIZE + 1;
-  const blockEnd = Math.min(blockStart + BLOCK_SIZE - 1, totalPages);
-  const hasPrevBlock = blockStart > 1;
-  const hasNextBlock = blockEnd < totalPages;
+  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
+    items: activeItems,
+    pageSize: PAGE_SIZE,
+    scopeKey: activeTab,
+  });
 
   useEffect(() => {
     const savedTab = sessionStorage.getItem('lifeRestaurantTab') as LifeRegionTab | null;
@@ -42,8 +31,32 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
       return;
     }
 
+    const savedVisibleCount = Number(sessionStorage.getItem('lifeRestaurantVisibleCount') || 0);
+    if (Number.isFinite(savedVisibleCount) && savedVisibleCount > 0) {
+      ensureVisible(savedVisibleCount);
+    }
+
+    const savedY = sessionStorage.getItem('lifeRestaurantScrollY');
+    if (savedY) {
+      const y = Number(savedY);
+      if (Number.isFinite(y) && y >= 0) {
+        const restoreScroll = () => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: y, behavior: 'instant' });
+            });
+          });
+        };
+
+        setTimeout(restoreScroll, 160);
+        setTimeout(restoreScroll, 420);
+      }
+    }
+
     sessionStorage.removeItem('lifeRestaurantTab');
-  }, [activeTab]);
+    sessionStorage.removeItem('lifeRestaurantVisibleCount');
+    sessionStorage.removeItem('lifeRestaurantScrollY');
+  }, [activeTab, ensureVisible]);
 
   return (
     <section className="space-y-6">
@@ -55,10 +68,7 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
               <button
                 key={tab.key}
                 type="button"
-                onClick={() => {
-                  setActiveTab(tab.key);
-                  goTo(1);
-                }}
+                onClick={() => setActiveTab(tab.key)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
                   active
                     ? 'bg-orange-500 text-white shadow-sm'
@@ -76,7 +86,7 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {pageItems.map((item) => (
+        {visibleItems.map((item) => (
           <article
             key={item.id}
             data-testid={`life-restaurant-card-${item.id}`}
@@ -110,6 +120,8 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
                         href={item.blogHref}
                         onClick={() => {
                           sessionStorage.setItem('lifeRestaurantTab', activeTab);
+                          sessionStorage.setItem('lifeRestaurantVisibleCount', String(visibleCount));
+                          sessionStorage.setItem('lifeRestaurantScrollY', String(window.scrollY));
                         }}
                         className="whitespace-nowrap text-orange-500 hover:underline"
                       >
@@ -125,28 +137,17 @@ export default function RestaurantExplorer({ datasets }: { datasets: RegionDatas
         ))}
       </div>
 
-      <div className="mt-6">
-        <p className="text-xs text-stone-400">{totalCount}편 중 {currentPage} / {totalPages} 페이지</p>
-        {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-1 mt-8" aria-label="페이지 이동">
-            <button type="button" onClick={() => goTo(blockStart - 1)} disabled={!hasPrevBlock} aria-label="이전 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≪</button>
-            <button type="button" onClick={() => goTo(currentPage - 1)} disabled={!hasPrev} aria-label="이전 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">←</button>
-            {pageNumbers.map((p) => (
-              <button
-                key={p}
-                type="button"
-                onClick={() => goTo(p)}
-                aria-current={p === currentPage ? 'page' : undefined}
-                className={p === currentPage
-                  ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
-                  : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'}
-              >
-                {p}
-              </button>
-            ))}
-            <button type="button" onClick={() => goTo(currentPage + 1)} disabled={!hasNext} aria-label="다음 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">→</button>
-            <button type="button" onClick={() => goTo(blockEnd + 1)} disabled={!hasNextBlock} aria-label="다음 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≫</button>
-          </nav>
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <p className="text-xs text-stone-400">{visibleCount} / {activeItems.length}편 표시 중</p>
+        {hasMore && (
+          <button
+            type="button"
+            onClick={loadMore}
+            data-testid="life-restaurant-load-more"
+            className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
+          >
+            더보기 (+{Math.min(PAGE_SIZE, activeItems.length - visibleCount)})
+          </button>
         )}
       </div>
 
