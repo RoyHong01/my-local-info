@@ -160,6 +160,12 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
     goTo,
   } = usePagedList(filtered, PAGE_SIZE);
 
+  const BLOCK_SIZE = 10;
+  const blockStart = Math.floor((currentPage - 1) / BLOCK_SIZE) * BLOCK_SIZE + 1;
+  const blockEnd = Math.min(blockStart + BLOCK_SIZE - 1, totalPages);
+  const hasPrevBlock = blockStart > 1;
+  const hasNextBlock = blockEnd < totalPages;
+
   const handleCategoryClick = (value: string) => {
     goTo(1);
     if (value === '') {
@@ -309,6 +315,15 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
               <nav className="flex items-center justify-center gap-1 mt-8" aria-label="페이지 이동">
                 <button
                   type="button"
+                  onClick={() => goTo(blockStart - 1)}
+                  disabled={!hasPrevBlock}
+                  aria-label="이전 10페이지"
+                  className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
+                >
+                  ≪
+                </button>
+                <button
+                  type="button"
                   onClick={() => goTo(currentPage - 1)}
                   disabled={!hasPrev}
                   aria-label="이전 페이지"
@@ -316,25 +331,21 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                 >
                   ←
                 </button>
-                {pageNumbers.map((p, i) =>
-                  p === '...' ? (
-                    <span key={`gap-${i}`} className="px-2 text-stone-400 select-none">…</span>
-                  ) : (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => goTo(Number(p))}
-                      aria-current={p === currentPage ? 'page' : undefined}
-                      className={
-                        p === currentPage
-                          ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
-                          : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'
-                      }
-                    >
-                      {p}
-                    </button>
-                  )
-                )}
+                {pageNumbers.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => goTo(p)}
+                    aria-current={p === currentPage ? 'page' : undefined}
+                    className={
+                      p === currentPage
+                        ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
+                        : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'
+                    }
+                  >
+                    {p}
+                  </button>
+                ))}
                 <button
                   type="button"
                   onClick={() => goTo(currentPage + 1)}
@@ -343,6 +354,15 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
                   className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
                 >
                   →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goTo(blockEnd + 1)}
+                  disabled={!hasNextBlock}
+                  aria-label="다음 10페이지"
+                  className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
+                >
+                  ≫
                 </button>
               </nav>
             )}

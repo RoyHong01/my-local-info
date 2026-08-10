@@ -78,24 +78,18 @@ function clampPage(page, totalCount, pageSize) {
   return raw;
 }
 
-// 페이지 번호 목록. 현재 페이지 주변만 노출하고 나머지는 생략 기호로 대체한다.
-// 예: 1 … 4 5 [6] 7 8 … 21
-function buildPageNumbers(currentPage, totalPages, windowSize = 2) {
+// 10개 단위 블록으로 페이지 번호를 노출한다.
+// 예: 현재 3페이지 → 1..10 / 현재 15페이지 → 11..20
+// 블록 앞뒤 이동은 컴포넌트의 이전/다음 화살표가 담당한다.
+function buildPageNumbers(currentPage, totalPages, blockSize = 10) {
   const total = Math.max(1, Math.floor(toNumber(totalPages, 1)));
   const cur = Math.min(Math.max(1, Math.floor(toNumber(currentPage, 1))), total);
-  const win = Math.max(0, Math.floor(toNumber(windowSize, 2)));
-  const pages = new Set([1, total]);
-  for (let i = cur - win; i <= cur + win; i += 1) {
-    if (i >= 1 && i <= total) pages.add(i);
-  }
-  const sorted = Array.from(pages).sort((a, b) => a - b);
+  const size = Math.max(1, Math.floor(toNumber(blockSize, 10)));
+  const blockIndex = Math.floor((cur - 1) / size);
+  const start = blockIndex * size + 1;
+  const end = Math.min(start + size - 1, total);
   const result = [];
-  let prev = 0;
-  for (const p of sorted) {
-    if (prev && p - prev > 1) result.push('...');
-    result.push(p);
-    prev = p;
-  }
+  for (let p = start; p <= end; p += 1) result.push(p);
   return result;
 }
 
