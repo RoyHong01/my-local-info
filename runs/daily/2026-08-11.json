@@ -1,0 +1,314 @@
+{
+  "reportDateKst": "2026-08-11",
+  "generatedAtUtc": "2026-08-10T17:24:13.034Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31411313842",
+    "runNumber": 1028,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31411313842",
+    "runStartedAtUtc": "2026-08-10T16:54:12Z",
+    "headSha": "d2f0a27d6dd7ffd016419a4d341b55f35f99d5b4"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://4c27a38a.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 355건",
+        "subsidy": "신규 0건, 총 624건",
+        "festival": "신규 2건, 업데이트 209건, 총 423건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://fae0389e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://876c9887.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "success",
+        "generateRestaurantPosts": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "35d3662ab9fda5382652ac5ebe3271d96cd548aa",
+      "subject": "자동 업데이트(3단계): 맛집 3건 생성 2026-08-11",
+      "authoredAt": "2026-08-10T17:24:10Z",
+      "files": [
+        "public/images/restaurants/2026-08-11-1590444941-hero.jpg",
+        "public/images/restaurants/2026-08-11-1590444941-inline.jpg",
+        "public/images/restaurants/2026-08-11-328817208-hero.jpg",
+        "public/images/restaurants/2026-08-11-328817208-inline.jpg",
+        "public/images/restaurants/2026-08-11-357442646-hero.jpg",
+        "public/images/restaurants/2026-08-11-357442646-inline.jpg",
+        "src/content/life/2026-08-11-guwol-restaurant-357442646.md",
+        "src/content/life/2026-08-11-gyeonggi-restaurant-1590444941.md",
+        "src/content/life/2026-08-11-seongsu-5to7.md"
+      ]
+    },
+    {
+      "sha": "136731ff41a9f13881d5c920f42b30ca148de427",
+      "subject": "자동 업데이트(2.5단계): 초이스 1건 생성 2026-08-11",
+      "authoredAt": "2026-08-10T17:17:18Z",
+      "files": [
+        "scripts/data/recommended-products.json",
+        "src/content/life/2026-08-11-choice-living-2026-08-11.md"
+      ]
+    },
+    {
+      "sha": "f5cda08482463fdac54150d5df23e6cd8643f065",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-11",
+      "authoredAt": "2026-08-10T17:16:04Z",
+      "files": [
+        "src/content/posts/2026-08-11-curation-festival.md",
+        "src/content/posts/2026-08-11-ganghwa-uniform-support.md",
+        "src/content/posts/2026-08-11-gunsan-heritage-night-walk.md",
+        "src/content/posts/2026-08-11-happy-birth-integrated-service.md",
+        "src/content/posts/2026-08-11-youth-rent-subsidy.md"
+      ]
+    },
+    {
+      "sha": "6290cff217e5a6b49e0ee8ad6c8634440b728292",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-11",
+      "authoredAt": "2026-08-10T16:59:23Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 19,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-11-curation-festival.md",
+      "src/content/posts/2026-08-11-ganghwa-uniform-support.md",
+      "src/content/posts/2026-08-11-gunsan-heritage-night-walk.md",
+      "src/content/posts/2026-08-11-happy-birth-integrated-service.md",
+      "src/content/posts/2026-08-11-youth-rent-subsidy.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-11-curation-festival.md",
+      "src/content/posts/2026-08-11-ganghwa-uniform-support.md",
+      "src/content/posts/2026-08-11-gunsan-heritage-night-walk.md",
+      "src/content/posts/2026-08-11-happy-birth-integrated-service.md",
+      "src/content/posts/2026-08-11-youth-rent-subsidy.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [
+      "src/content/life/2026-08-11-choice-living-2026-08-11.md",
+      "src/content/life/2026-08-11-guwol-restaurant-357442646.md",
+      "src/content/life/2026-08-11-gyeonggi-restaurant-1590444941.md",
+      "src/content/life/2026-08-11-seongsu-5to7.md"
+    ],
+    "generatedChoicePosts": [
+      "src/content/life/2026-08-11-choice-living-2026-08-11.md"
+    ],
+    "generatedRestaurantPosts": [
+      "src/content/life/2026-08-11-guwol-restaurant-357442646.md",
+      "src/content/life/2026-08-11-gyeonggi-restaurant-1590444941.md",
+      "src/content/life/2026-08-11-seongsu-5to7.md"
+    ],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "public/images/restaurants/2026-08-11-1590444941-hero.jpg",
+      "public/images/restaurants/2026-08-11-1590444941-inline.jpg",
+      "public/images/restaurants/2026-08-11-328817208-hero.jpg",
+      "public/images/restaurants/2026-08-11-328817208-inline.jpg",
+      "public/images/restaurants/2026-08-11-357442646-hero.jpg",
+      "public/images/restaurants/2026-08-11-357442646-inline.jpg",
+      "scripts/data/recommended-products.json",
+      "src/content/life/2026-08-11-choice-living-2026-08-11.md",
+      "src/content/life/2026-08-11-guwol-restaurant-357442646.md",
+      "src/content/life/2026-08-11-gyeonggi-restaurant-1590444941.md",
+      "src/content/life/2026-08-11-seongsu-5to7.md",
+      "src/content/posts/2026-08-11-curation-festival.md",
+      "src/content/posts/2026-08-11-ganghwa-uniform-support.md",
+      "src/content/posts/2026-08-11-gunsan-heritage-night-walk.md",
+      "src/content/posts/2026-08-11-happy-birth-integrated-service.md",
+      "src/content/posts/2026-08-11-youth-rent-subsidy.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 9,
+      "manual": 0,
+      "unknown": 0,
+      "total": 9
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 1,
+        "manual": 0,
+        "unknown": 0,
+        "total": 1
+      },
+      "restaurant": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_015kptUBdYpwUuJRYcQ5XMTL",
+    "batchStatus": "ended",
+    "batchDurationMs": 300465,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 903.4634699999999,
+    "actualCostKrw": 1016.21835,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 19,
+    "errors": 11,
+    "inputTokens": 32364,
+    "outputTokens": 7177,
+    "costKrw": 80.0970264
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 355건",
+      "validation": "ok",
+      "anthropicUsage": "3806/2563",
+      "markdown": {
+        "generated": 5,
+        "pending": 122,
+        "titles": [
+          "대일항쟁기 강제동원 피해여성 지원",
+          "인천예술인 역량강화",
+          "저소득 주민 국민건강보험료 지원",
+          "과거사 피해주민 생활안정 지원",
+          "체육시설 이용요금 감면"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 0건, 총 624건",
+      "validation": "ok",
+      "anthropicUsage": "3724/2674",
+      "markdown": {
+        "generated": 5,
+        "pending": 297,
+        "titles": [
+          "임산부 등록관리 지원",
+          "농식품 벤처 창업 활성화 지원",
+          "세종 전세보증금반환보증 보증료 지원",
+          "한부모가족 자녀 교통비 등 지원",
+          "기초생활수급자 명절위문금 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 2건, 업데이트 209건, 총 423건",
+      "validation": "ok",
+      "anthropicUsage": "4193/2455",
+      "markdown": {
+        "generated": 5,
+        "pending": 276,
+        "titles": [
+          "한강페스티벌",
+          "강릉 국가유산 야행",
+          "공주야밤 맥주축제",
+          "제4회 다대포 선셋 영화 축제",
+          "서대문독립민주축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
