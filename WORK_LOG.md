@@ -3,6 +3,126 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-08-10 (목록 번호 페이지네이션 복구 + RSC payload 삭제 범위 축소)
+
+### 수정 파일
+
+- `.github/workflows/deploy.yml`
+- `src/components/SubsidyCardList.tsx`, `src/components/IncheonCardList.tsx`, `src/components/FestivalCardList.tsx`
+- `src/components/LifeFilterClient.tsx`, `src/components/life/RestaurantExplorer.tsx`
+- `src/app/subsidy/page.tsx`, `src/app/incheon/page.tsx`, `src/app/festival/page.tsx`
+- `src/app/life/restaurant/page.tsx`
+- `src/components/BlogFilter.tsx`, `src/components/BlogBackButton.tsx`, `src/components/BlogScrollRestorer.tsx`
+
+### 배경
+
+8/09 블로그에 번호 페이지네이션을 적용(`35a6ad1`, 정상)한 뒤, 나머지 5개
+(subsidy/incheon/festival/life/restaurant)를 9개 커밋으로 한 번에 push했다.
+홈·블로그를 제외한 전 페이지가 `This page couldn't load`(global-error 화면)로 다운됐고
+긴급 롤백(`a16fed4`)했다.
+
+### 원인(RCA) — 두 개의 별개 원인이 겹쳐 있었다
+
+#### ① Suspense 경계를 조건 분기 안쪽에 둔 것
+
+- 블로그(`35a6ad1`)는 `<Suspense>`가 콘텐츠 최상위에서 조건 없이 감싼다.
+- 되돌린 커밋들(`8d3304d`/`9cd1d63`/`3098889`/`2fb0720`)은
+  `items.length === 0`의 **반대 분기 안쪽**에 Suspense를 넣었다.
+- `useSearchParams`를 쓰는 컴포넌트의 Suspense 경계가 조건부로 존재하면 서버 프리렌더와
+  클라이언트 하이드레이션에서 트리 위치가 어긋난다.
+- **`npm run build` / `tsc` / 로컬 `serve out`은 모두 통과**하고 프로덕션에서만 깨졌다.
+
+#### ② 8/09 RSC payload 와일드카드 일괄 삭제 (직접적인 네비게이션 장애 원인)
+
+- 8/09에 파일 수 한도 대응으로 넣은 삭제 명령은 4패턴이었다.
+  `__next.*.txt` / `__PAGE__.txt` / `$d$id.txt` / `index.txt`
+- 이 중 **클라이언트 네비게이션에 실제로 필요한 payload까지 전부 지워졌다.**
+- 당시 모든 목록은 "더보기" 방식이라 URL을 바꾸지 않았고, 클라이언트 네비게이션이
+  **일어나지 않는 상태에서 "정상 동작 확인"으로 기록**됐다(8/09 WORK_LOG).
+- 번호 페이지네이션은 URL을 상태로 쓰므로 매번 payload를 요청한다.
+  전환 직후 필수 payload가 404 → 네비게이션 중단 → global-error로 이어졌다.
+
+### 실측 근거
+
+Network 탭에서 파일 종류별로 응답이 갈렸다.
+
+| 파일 | 응답 | 성격 |
+| --- | --- | --- |
+| `__next._tree.txt` | 일부 304 / 일부 404 | prefetch (무해) |
+| `__next._head.txt` | 304 | prefetch |
+| `__next._index.txt` | **404** | **네비게이션 필수** |
+| `__next.<route>.txt` | **404** | **네비게이션 필수** |
+| `__next.<route>.__PAGE__.txt` | 304 | 실사용 중 |
+
+`out/` 종류별 개수(전체 20,347 / `.txt` 17,918):
+`_tree` 2,241 / `_head` 2,241 / `_index` 2,241 / `__PAGE__` 2,241 /
+`<route>` **4,481** / 기타(`$d$id`·`index.txt` 등) 4,473.
+**균등 분포가 아니다.** "총량 ÷ 6" 추정은 틀린다.
+
+### 조치
+
+1. **삭제 패턴 축소**(`deploy.yml` 5개 블록): 4패턴 →
+   `__next._tree.txt` + `__next._head.txt` 2종만 삭제.
+   **카운트 제외 기준도 동일하게 축소**(PROJECT_CRITICAL_NOTES §2-13 준수).
+   BEFORE/AFTER 로그·`exit 1`·80% 경고는 유지했다.
+   결과: `20,347 → 15,865`(한도의 79%).
+2. **5개 페이지 번호 페이지네이션 전환**: 한 번에 하나씩 각각 배포·확인 후 다음으로 진행했다.
+   Suspense는 전부 **조건 분기 밖 최상위**에 배치했다.
+   되돌린 Suspense 커밋 4개(`8d3304d`/`9cd1d63`/`3098889`/`2fb0720`)는
+   cherry-pick하지 않고 새로 작성했다.
+3. **trailing slash 4파일**: `LifeFilterClient`·`BlogFilter`·`BlogBackButton`·
+   `BlogScrollRestorer`에서 `/blog` → `/blog/`,
+   `/blog?category=X` → `/blog/?category=X`로 통일했다.
+   `LifeFilterClient`에는 블로그와 동일하게 `goTo(1)` 선행 호출을 추가했다.
+
+### 검증
+
+- `/subsidy/`, `/incheon/`, `/festival/`, `/life/`, `/life/restaurant/` 번호 페이지네이션 정상.
+- 탭 전환·상단 네비·뒤로가기 모두 정상.
+- 배포 로그: `RSC payload 제거: 20347 → 15865`, 업로드 `15,864/15,864` 완료.
+
+### 커밋
+
+- `a475d1a` `f760764` — subsidy 전환 + Suspense
+- `18bee47` `77c5131` — incheon 전환 + Suspense
+- `a2a6edd` `a0ba5c7` — festival 전환 + Suspense
+- `125dade` — life 전환(page.tsx에 Suspense가 이미 있어 1커밋)
+- `a93cfd4`(작업 브랜치 원본) → `429d4af`(main cherry-pick) — restaurant 전환
+- `5006d0f` — restaurant Suspense
+- `0d3ed55` — trailing slash 4파일
+- `7be7bb1` — deploy.yml 삭제 패턴 축소
+
+### 폐기된 가설 (기록용 — 재시도 금지)
+
+| 가설 | 왜 틀렸나 |
+| --- | --- |
+| RSC payload 404가 원인 | 404 종류를 구분하지 않은 초기 진단이었다. 초기 관측분은 전부 prefetch용(`_tree`)이었고, 이후 `_index`·route payload 404를 별도로 실측해 직접 원인을 확정했다. |
+| 업로드 누락 / 부분 배포 | #1017(정상)과 #1018(다운)의 배포 로그 수치가 **완전히 동일**했다. |
+| 파일 수 한도 초과 | 두 run 모두 2,431개로 동일했다. |
+| sessionStorage 잔여 참조 | 전환 커밋들이 이미 깨끗하게 제거했다. |
+| trailing slash 누락이 원인 | 해당 코드는 2026-03-27(`b4069d0`) 유입 후 4개월간 정상 동작했다. |
+| `<Link prefetch={false}>`로 파일 감소 | **실측 결과 `20,347 → 20,347`, 감소 0.** 런타임 힌트일 뿐 빌드 산출물을 제어하지 않는다. |
+
+### 후속/주의
+
+- **⚠️ 파일 수 여유가 135개뿐이다.** 현재 15,865개, 80% 경고선은 16,000개다.
+  하루 약 144~170개 증가 → **2~3일 내 경고, 약 25일 내 한도(20,000) 도달** 예상.
+  8/21 AdSense 재신청 전후로 재발할 수 있어 그 전에 호스팅 결정이 필요하다.
+
+| 방안 | 비용 | 효과 |
+| --- | --- | --- |
+| Cloudflare Zone **Pro** | **$20/월** | 20,000 → 100,000. 단 `PAGES_WRANGLER_MAJOR_VERSION=4` 필수 |
+| Netlify | $0 | 파일 수 제한 없음, 상업적 이용 가능. 이전 작업 필요 |
+| Vercel Pro | $20/월 | 제한 없음. Hobby는 상업적 이용 금지 |
+| 더보기 복귀 | $0 | 2,425개. UX 후퇴 |
+
+- **⛔ Workers Paid($5/월)는 Pages 파일 수와 무관하다.** 별개 요금 체계다.
+- E2E `blog-filter.spec.ts`가 `blog-back-button` 대기 30초 타임아웃으로 1회 실패 후
+  재시도 통과(flaky). 실사이트 동작은 정상이며 CI 타이밍 문제로 판단한다. 재발 시 조사.
+- 작업 방식 교훈: 배포 로그·`_redirects`·엣지 캐시를 몇 시간 조사했지만,
+  **정상 페이지(블로그)와 실패 페이지(subsidy)의 코드를 나란히 비교하자마자** 차이가 드러났다.
+  대조군 확보 → 차이 하나만 변경 → 배포 확인이 가장 빠른 경로다.
+
 ## 2026-08-09 (배포 중단 3일 규명 + 제목 다양화 5개 카테고리 + 초이스 중복 차단)
 
 ### 수정 파일

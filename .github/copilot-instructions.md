@@ -128,6 +128,25 @@
 - GitHub Actions — 매일 04:00 KST 자동 실행
 - Cloudflare Pages — 호스팅 및 배포
 
+## URL 규약
+
+- `next.config.ts`에 `trailingSlash: true`가 설정돼 있다.
+- **내부 링크는 반드시 trailing slash를 붙인다.**
+  - `<Link href="/blog/">`, `router.push('/blog/?category=X')`
+  - ❌ `<Link href="/blog">`, `router.push('/blog?category=X')`
+- 목록 → 상세 링크도 동일: `/subsidy/${id}/`
+
+## Suspense 규약
+
+- `useSearchParams()`를 쓰는 컴포넌트의 `<Suspense>`는
+  **조건 분기 밖 최상위**에 둔다. 분기 안쪽에 두면 빌드는 통과하고 배포에서 깨진다.
+- fallback은 `<div className="min-h-[600px]" />`로 통일한다.
+
+## 빌드 산출물
+
+- `out/`의 `.txt`(RSC payload)를 삭제할 때는 `__next._tree.txt`와
+  `__next._head.txt`만 대상으로 한다. 와일드카드(`__next.*.txt`) 금지.
+
 ## 환경변수 (.env.local)
 - **환경변수 운영 원칙**: 민감 키는 `.env.local`만 사용하고 `.env`는 사용/유지하지 않는다.
 - **우선순위 원칙**: 동일 키가 있으면 `.env.local` 값을 기준으로 적용한다.
