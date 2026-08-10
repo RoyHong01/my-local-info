@@ -21,7 +21,7 @@ export default function BlogScrollRestorer() {
 
     // URL에 카테고리 없는데 저장된 카테고리 있으면 → URL 복원 후 재마운트에서 스크롤 복원
     if (savedCategory && !currentCategory) {
-      router.replace(`/blog?category=${savedCategory}`);
+      router.replace(`/blog/?category=${savedCategory}`);
       return;
     }
 

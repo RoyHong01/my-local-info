@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function BlogBackButton({
-  fallbackHref = '/blog',
+  fallbackHref = '/blog/',
 }: {
   fallbackHref?: string;
 }) {
@@ -21,7 +21,7 @@ export default function BlogBackButton({
 
     const savedCategory = sessionStorage.getItem('blogCategory');
     if (savedCategory) {
-      router.push(`/blog?category=${savedCategory}`);
+      router.push(`/blog/?category=${savedCategory}`);
     } else {
       router.push(fallbackHref);
     }

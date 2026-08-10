@@ -195,10 +195,11 @@ export default function LifeFilterClient({
   const activeTab = searchParams.get('tab') ?? '';
 
   const handleTabClick = (value: string) => {
+    goTo(1);
     if (value === '') {
-      router.push('/life');
+      router.push('/life/');
     } else {
-      router.push(`/life?tab=${value}`);
+      router.push(`/life/?tab=${value}`);
     }
   };
 

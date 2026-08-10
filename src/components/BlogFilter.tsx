@@ -169,9 +169,9 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
   const handleCategoryClick = (value: string) => {
     goTo(1);
     if (value === '') {
-      router.push('/blog');
+      router.push('/blog/');
     } else {
-      router.push(`/blog?category=${REVERSE_MAP[value]}`);
+      router.push(`/blog/?category=${REVERSE_MAP[value]}`);
     }
   };
 
