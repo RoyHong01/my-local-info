@@ -219,19 +219,15 @@ jobs:
           # .assetsignore 는 하위 디렉터리에 적용되지 않아 직접 삭제한다.
           # out/ 은 빌드 산출물이므로 삭제해도 소스에 영향이 없다.
           BEFORE=$(find out -type f | wc -l)
-          find out -type f -name '__next.*.txt' -delete
-          find out -type f -name '__PAGE__.txt' -delete
-          find out -type f -name '$d$id.txt' -delete
-          find out -type f -name 'index.txt' -delete
+          find out -type f -name '__next._tree.txt' -delete
+          find out -type f -name '__next._head.txt' -delete
           AFTER=$(find out -type f | wc -l)
           echo "RSC payload 제거: ${BEFORE} → ${AFTER}"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
-            ! -name '__next.*.txt' \
-            ! -name '__PAGE__.txt' \
-            ! -name '$d$id.txt' \
-            ! -name 'index.txt' \
+            ! -name '__next._tree.txt' \
+            ! -name '__next._head.txt' \
             | wc -l)
           echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
@@ -359,19 +355,15 @@ jobs:
           # .assetsignore 는 하위 디렉터리에 적용되지 않아 직접 삭제한다.
           # out/ 은 빌드 산출물이므로 삭제해도 소스에 영향이 없다.
           BEFORE=$(find out -type f | wc -l)
-          find out -type f -name '__next.*.txt' -delete
-          find out -type f -name '__PAGE__.txt' -delete
-          find out -type f -name '$d$id.txt' -delete
-          find out -type f -name 'index.txt' -delete
+          find out -type f -name '__next._tree.txt' -delete
+          find out -type f -name '__next._head.txt' -delete
           AFTER=$(find out -type f | wc -l)
           echo "RSC payload 제거: ${BEFORE} → ${AFTER}"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
-            ! -name '__next.*.txt' \
-            ! -name '__PAGE__.txt' \
-            ! -name '$d$id.txt' \
-            ! -name 'index.txt' \
+            ! -name '__next._tree.txt' \
+            ! -name '__next._head.txt' \
             | wc -l)
           echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
@@ -543,19 +535,15 @@ jobs:
           # .assetsignore 는 하위 디렉터리에 적용되지 않아 직접 삭제한다.
           # out/ 은 빌드 산출물이므로 삭제해도 소스에 영향이 없다.
           BEFORE=$(find out -type f | wc -l)
-          find out -type f -name '__next.*.txt' -delete
-          find out -type f -name '__PAGE__.txt' -delete
-          find out -type f -name '$d$id.txt' -delete
-          find out -type f -name 'index.txt' -delete
+          find out -type f -name '__next._tree.txt' -delete
+          find out -type f -name '__next._head.txt' -delete
           AFTER=$(find out -type f | wc -l)
           echo "RSC payload 제거: ${BEFORE} → ${AFTER}"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
-            ! -name '__next.*.txt' \
-            ! -name '__PAGE__.txt' \
-            ! -name '$d$id.txt' \
-            ! -name 'index.txt' \
+            ! -name '__next._tree.txt' \
+            ! -name '__next._head.txt' \
             | wc -l)
           echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
@@ -775,19 +763,15 @@ jobs:
           # .assetsignore 는 하위 디렉터리에 적용되지 않아 직접 삭제한다.
           # out/ 은 빌드 산출물이므로 삭제해도 소스에 영향이 없다.
           BEFORE=$(find out -type f | wc -l)
-          find out -type f -name '__next.*.txt' -delete
-          find out -type f -name '__PAGE__.txt' -delete
-          find out -type f -name '$d$id.txt' -delete
-          find out -type f -name 'index.txt' -delete
+          find out -type f -name '__next._tree.txt' -delete
+          find out -type f -name '__next._head.txt' -delete
           AFTER=$(find out -type f | wc -l)
           echo "RSC payload 제거: ${BEFORE} → ${AFTER}"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
-            ! -name '__next.*.txt' \
-            ! -name '__PAGE__.txt' \
-            ! -name '$d$id.txt' \
-            ! -name 'index.txt' \
+            ! -name '__next._tree.txt' \
+            ! -name '__next._head.txt' \
             | wc -l)
           echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
@@ -865,19 +849,15 @@ jobs:
           # .assetsignore 는 하위 디렉터리에 적용되지 않아 직접 삭제한다.
           # out/ 은 빌드 산출물이므로 삭제해도 소스에 영향이 없다.
           BEFORE=$(find out -type f | wc -l)
-          find out -type f -name '__next.*.txt' -delete
-          find out -type f -name '__PAGE__.txt' -delete
-          find out -type f -name '$d$id.txt' -delete
-          find out -type f -name 'index.txt' -delete
+          find out -type f -name '__next._tree.txt' -delete
+          find out -type f -name '__next._head.txt' -delete
           AFTER=$(find out -type f | wc -l)
           echo "RSC payload 제거: ${BEFORE} → ${AFTER}"
           # out/.assetsignore 로 제외되는 RSC payload는 업로드되지 않으므로 카운트에서도 뺀다.
           # 두 기준이 어긋나면 실제 업로드는 통과하는데 가드만 걸린다.
           FILE_COUNT=$(find out -type f \
-            ! -name '__next.*.txt' \
-            ! -name '__PAGE__.txt' \
-            ! -name '$d$id.txt' \
-            ! -name 'index.txt' \
+            ! -name '__next._tree.txt' \
+            ! -name '__next._head.txt' \
             | wc -l)
           echo "out 업로드 대상 파일 수: ${FILE_COUNT}"
           if [ "$FILE_COUNT" -gt 20000 ]; then
