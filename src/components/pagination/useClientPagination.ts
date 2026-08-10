@@ -1,9 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
+  buildPageNumbers,
+  clampPage,
   clampVisibleCount,
   resolveInitialVisibleCount,
+  resolveTotalPages,
 } from './pagination-core.js';
 
 type PaginationItem = unknown;
@@ -23,7 +27,7 @@ export interface UseClientPaginationResult<T = PaginationItem> {
   ensureVisible: (indexOrCount: number) => void;
 }
 
-export default function useClientPagination<T>({
+export function useClientPagination<T>({
   items,
   pageSize,
   scopeKey,
@@ -67,3 +71,42 @@ export default function useClientPagination<T>({
     ensureVisible,
   };
 }
+
+export function usePagedList<T>(items: T[], pageSize: number) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const rawPage = Number(searchParams.get('page') || '1');
+  const totalPages = resolveTotalPages(items.length, pageSize);
+  const currentPage = clampPage(rawPage, items.length, pageSize);
+
+  const start = (currentPage - 1) * pageSize;
+  const pageItems = items.slice(start, start + pageSize);
+  const pageNumbers = buildPageNumbers(currentPage, totalPages);
+
+  const goTo = useCallback((page: number) => {
+    const next = clampPage(page, items.length, pageSize);
+    const params = new URLSearchParams(searchParams.toString());
+    if (next <= 1) params.delete('page');
+    else params.set('page', String(next));
+    const query = params.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [items.length, pageSize, pathname, router, searchParams]);
+
+  return {
+    pageItems,
+    currentPage,
+    totalPages,
+    totalCount: items.length,
+    pageNumbers,
+    hasPrev: currentPage > 1,
+    hasNext: currentPage < totalPages,
+    goTo,
+  };
+}
+
+export default useClientPagination;
