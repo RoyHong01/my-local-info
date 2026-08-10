@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import RestaurantExplorer from '@/components/life/RestaurantExplorer';
 import { getRestaurantsByRegion } from '@/lib/life-restaurants';
@@ -52,13 +53,15 @@ export default async function LifeRestaurantPage() {
         </p>
       </header>
 
-      <RestaurantExplorer
-        datasets={{
-          incheon: attachBlogLink(incheon),
-          seoul: attachBlogLink(seoul),
-          gyeonggi: attachBlogLink(gyeonggi),
-        }}
-      />
+      <Suspense fallback={<div className="min-h-[600px]" />}>
+        <RestaurantExplorer
+          datasets={{
+            incheon: attachBlogLink(incheon),
+            seoul: attachBlogLink(seoul),
+            gyeonggi: attachBlogLink(gyeonggi),
+          }}
+        />
+      </Suspense>
     </section>
   );
 }
