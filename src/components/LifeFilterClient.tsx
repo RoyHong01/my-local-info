@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import useClientPagination from '@/components/pagination/useClientPagination';
+import { usePagedList } from '@/components/pagination/useClientPagination';
 
 export interface LifePageItem {
   type: 'restaurant' | 'choice';
@@ -96,21 +95,20 @@ function ChoiceThumbnail() {
   );
 }
 
-function buildLifeReturnHref(activeTab: string) {
-  return activeTab ? `/life?tab=${activeTab}` : '/life';
+function buildLifeReturnHref(activeTab: string, currentPage: number) {
+  const params = new URLSearchParams();
+  if (activeTab) params.set('tab', activeTab);
+  if (currentPage > 1) params.set('page', String(currentPage));
+  const query = params.toString();
+  return query ? `/life?${query}` : '/life';
 }
 
-function LifeCard({ item, activeTab }: { item: LifePageItem; activeTab: string }) {
+function LifeCard({ item, activeTab, currentPage }: { item: LifePageItem; activeTab: string; currentPage: number }) {
   const handleInternalCardClick = () => {
-    sessionStorage.setItem('lifeScrollY', String(window.scrollY));
     sessionStorage.setItem('lifeTab', activeTab);
-    const currentVisible = window.sessionStorage.getItem('lifeCurrentVisibleCount');
-    if (currentVisible) {
-      sessionStorage.setItem('lifeVisibleCount', currentVisible);
-    }
   };
 
-  const returnHref = buildLifeReturnHref(activeTab);
+  const returnHref = buildLifeReturnHref(activeTab, currentPage);
   const internalHref = !item.external && item.href.startsWith('/blog/')
     ? `${item.href}?from=life&returnTo=${encodeURIComponent(returnHref)}`
     : item.href;
@@ -216,40 +214,22 @@ export default function LifeFilterClient({
             return b.date.localeCompare(a.date);
           });
 
-  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
-    items,
-    pageSize: PAGE_SIZE,
-    scopeKey: activeTab || 'all',
-  });
+  const {
+    pageItems,
+    currentPage,
+    totalPages,
+    totalCount,
+    pageNumbers,
+    hasPrev,
+    hasNext,
+    goTo,
+  } = usePagedList(items, PAGE_SIZE);
 
-  useEffect(() => {
-    sessionStorage.setItem('lifeCurrentVisibleCount', String(visibleCount));
-  }, [visibleCount]);
-
-  useEffect(() => {
-    const savedVisibleCount = Number(sessionStorage.getItem('lifeVisibleCount') || 0);
-    if (Number.isFinite(savedVisibleCount) && savedVisibleCount > 0) {
-      ensureVisible(savedVisibleCount);
-    }
-
-    const savedY = sessionStorage.getItem('lifeScrollY');
-    if (savedY) {
-      const y = Number(savedY);
-      if (Number.isFinite(y) && y >= 0) {
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              window.scrollTo({ top: y, behavior: 'instant' });
-            });
-          });
-        }, 160);
-      }
-    }
-
-    sessionStorage.removeItem('lifeTab');
-    sessionStorage.removeItem('lifeVisibleCount');
-    sessionStorage.removeItem('lifeScrollY');
-  }, [ensureVisible, activeTab]);
+  const BLOCK_SIZE = 10;
+  const blockStart = Math.floor((currentPage - 1) / BLOCK_SIZE) * BLOCK_SIZE + 1;
+  const blockEnd = Math.min(blockStart + BLOCK_SIZE - 1, totalPages);
+  const hasPrevBlock = blockStart > 1;
+  const hasNextBlock = blockEnd < totalPages;
 
   return (
     <div>
@@ -277,22 +257,33 @@ export default function LifeFilterClient({
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {visibleItems.map((item) => (
-            <LifeCard key={`${item.type}-${item.id}`} item={item} activeTab={activeTab} />
+          {pageItems.map((item) => (
+            <LifeCard key={`${item.type}-${item.id}`} item={item} activeTab={activeTab} currentPage={currentPage} />
           ))}
           </div>
 
-          <div className="mt-6 flex items-center justify-between gap-3">
-            <p className="text-xs text-stone-400">{visibleCount} / {items.length}편 표시 중</p>
-            {hasMore && (
-              <button
-                type="button"
-                onClick={loadMore}
-                data-testid="life-load-more"
-                className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
-              >
-                더보기 (+{Math.min(PAGE_SIZE, items.length - visibleCount)})
-              </button>
+          <div className="mt-6">
+            <p className="text-xs text-stone-400">{totalCount}편 중 {currentPage} / {totalPages} 페이지</p>
+            {totalPages > 1 && (
+              <nav className="flex items-center justify-center gap-1 mt-8" aria-label="페이지 이동">
+                <button type="button" onClick={() => goTo(blockStart - 1)} disabled={!hasPrevBlock} aria-label="이전 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≪</button>
+                <button type="button" onClick={() => goTo(currentPage - 1)} disabled={!hasPrev} aria-label="이전 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">←</button>
+                {pageNumbers.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => goTo(p)}
+                    aria-current={p === currentPage ? 'page' : undefined}
+                    className={p === currentPage
+                      ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
+                      : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'}
+                  >
+                    {p}
+                  </button>
+                ))}
+                <button type="button" onClick={() => goTo(currentPage + 1)} disabled={!hasNext} aria-label="다음 페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">→</button>
+                <button type="button" onClick={() => goTo(blockEnd + 1)} disabled={!hasNextBlock} aria-label="다음 10페이지" className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer">≫</button>
+              </nav>
             )}
           </div>
         </>
