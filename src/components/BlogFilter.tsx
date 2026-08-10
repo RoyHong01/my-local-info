@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { PostData } from '@/lib/posts';
-import useClientPagination from '@/components/pagination/useClientPagination';
+import { usePagedList } from '@/components/pagination/useClientPagination';
 
 const CATEGORIES = [
   { label: '전체', value: '' },
@@ -145,7 +145,23 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
   const activeCategoryParam = searchParams.get('category') || '';
   const activeCategory = CATEGORY_PARAM_MAP[activeCategoryParam] || '';
 
+  const filtered = activeCategory
+    ? posts.filter((p) => p.category === activeCategory)
+    : posts;
+
+  const {
+    pageItems,
+    currentPage,
+    totalPages,
+    totalCount,
+    pageNumbers,
+    hasPrev,
+    hasNext,
+    goTo,
+  } = usePagedList(filtered, PAGE_SIZE);
+
   const handleCategoryClick = (value: string) => {
+    goTo(1);
     if (value === '') {
       router.push('/blog');
     } else {
@@ -153,36 +169,30 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
     }
   };
 
-  const filtered = activeCategory
-    ? posts.filter((p) => p.category === activeCategory)
-    : posts;
-
-  const { visibleItems, visibleCount, hasMore, loadMore, ensureVisible } = useClientPagination({
-    items: filtered,
-    pageSize: PAGE_SIZE,
-    scopeKey: activeCategoryParam || 'all',
-  });
-
   useEffect(() => {
+    const restoreVisibleCount = (count: number) => {
+      goTo(Math.ceil(count / PAGE_SIZE));
+    };
+
     const handleEnsureVisibleRequest = (event: Event) => {
       const customEvent = event as CustomEvent<{ count?: number }>;
       const requestedCount = Number(customEvent.detail?.count || 0);
       if (Number.isFinite(requestedCount) && requestedCount > 0) {
-        setTimeout(() => ensureVisible(requestedCount), 0);
+        setTimeout(() => restoreVisibleCount(requestedCount), 0);
         sessionStorage.removeItem('blogPendingVisibleCount');
       }
     };
 
-    window.__blogEnsureVisible = ensureVisible;
+    window.__blogEnsureVisible = restoreVisibleCount;
     window.addEventListener('blog:ensure-visible', handleEnsureVisibleRequest as EventListener);
 
     return () => {
       window.removeEventListener('blog:ensure-visible', handleEnsureVisibleRequest as EventListener);
-      if (window.__blogEnsureVisible === ensureVisible) {
+      if (window.__blogEnsureVisible === restoreVisibleCount) {
         delete window.__blogEnsureVisible;
       }
     };
-  }, [ensureVisible]);
+  }, [goTo]);
 
   useEffect(() => {
     const consumePendingVisibleCount = () => {
@@ -191,7 +201,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
         ?? '0';
       const pendingVisibleCount = Number(pendingRaw);
       if (Number.isFinite(pendingVisibleCount) && pendingVisibleCount > 0) {
-        setTimeout(() => ensureVisible(pendingVisibleCount), 0);
+        setTimeout(() => goTo(Math.ceil(pendingVisibleCount / PAGE_SIZE)), 0);
         sessionStorage.removeItem('blogPendingVisibleCount');
         sessionStorage.removeItem('blogVisibleCount');
       }
@@ -205,12 +215,12 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
       window.clearTimeout(retryA);
       window.clearTimeout(retryB);
     };
-  }, [ensureVisible, activeCategoryParam]);
+  }, [goTo, activeCategoryParam]);
 
   const handleCardClick = () => {
     sessionStorage.setItem('blogScrollY', String(window.scrollY));
     sessionStorage.setItem('blogCategory', activeCategoryParam);
-    sessionStorage.setItem('blogVisibleCount', String(visibleCount));
+    sessionStorage.setItem('blogVisibleCount', String(Math.min(currentPage * PAGE_SIZE, totalCount)));
   };
 
   return (
@@ -241,7 +251,7 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {visibleItems.map((post) => (
+            {pageItems.map((post) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
@@ -293,17 +303,48 @@ export default function BlogFilter({ posts }: { posts: PostData[] }) {
             ))}
           </div>
 
-          <div className="mt-6 flex items-center justify-between gap-3">
-            <p className="text-xs text-stone-400">{visibleCount} / {filtered.length}편 표시 중</p>
-            {hasMore && (
-              <button
-                type="button"
-                onClick={loadMore}
-                data-testid="blog-load-more"
-                className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 hover:border-orange-300 transition"
-              >
-                더보기 (+{Math.min(PAGE_SIZE, filtered.length - visibleCount)})
-              </button>
+          <div className="mt-6">
+            <p className="text-xs text-stone-400">{totalCount}편 중 {currentPage} / {totalPages} 페이지</p>
+            {totalPages > 1 && (
+              <nav className="flex items-center justify-center gap-1 mt-8" aria-label="페이지 이동">
+                <button
+                  type="button"
+                  onClick={() => goTo(currentPage - 1)}
+                  disabled={!hasPrev}
+                  aria-label="이전 페이지"
+                  className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
+                >
+                  ←
+                </button>
+                {pageNumbers.map((p, i) =>
+                  p === '...' ? (
+                    <span key={`gap-${i}`} className="px-2 text-stone-400 select-none">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => goTo(Number(p))}
+                      aria-current={p === currentPage ? 'page' : undefined}
+                      className={
+                        p === currentPage
+                          ? 'px-3 py-2 rounded-lg text-sm font-bold bg-orange-500 text-white cursor-pointer'
+                          : 'px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 cursor-pointer'
+                      }
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+                <button
+                  type="button"
+                  onClick={() => goTo(currentPage + 1)}
+                  disabled={!hasNext}
+                  aria-label="다음 페이지"
+                  className="px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-stone-100 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
+                >
+                  →
+                </button>
+              </nav>
             )}
           </div>
         </>
