@@ -1,0 +1,267 @@
+{
+  "reportDateKst": "2026-08-12",
+  "generatedAtUtc": "2026-08-11T17:23:26.669Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31515107382",
+    "runNumber": 1035,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31515107382",
+    "runStartedAtUtc": "2026-08-11T16:57:37Z",
+    "headSha": "f899e708b71f930cd5f6f2cc0479a8778364c1be"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://2d90430e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 1건, 총 356건",
+        "subsidy": "신규 6건, 총 627건",
+        "festival": "신규 4건, 업데이트 211건, 총 427건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://8b3d0c03.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://2f667414.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "dc5d88c6079a883677ee8e1eac92e732cfb1db91",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-12",
+      "authoredAt": "2026-08-11T17:18:30Z",
+      "files": [
+        "src/content/posts/2026-08-12-curation-subsidy.md",
+        "src/content/posts/2026-08-12-incheon-seogu-caregiver-health-checkup.md",
+        "src/content/posts/2026-08-12-jungjangnyeon-naeil-center.md",
+        "src/content/posts/2026-08-12-pohang-chimac-festival.md",
+        "src/content/posts/2026-08-12-아동수당-신청가이드.md"
+      ]
+    },
+    {
+      "sha": "887456a8fc22fe5792e0dd2dc6508ed020e3cd98",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-12",
+      "authoredAt": "2026-08-11T17:03:30Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-12-curation-subsidy.md",
+      "src/content/posts/2026-08-12-incheon-seogu-caregiver-health-checkup.md",
+      "src/content/posts/2026-08-12-jungjangnyeon-naeil-center.md",
+      "src/content/posts/2026-08-12-pohang-chimac-festival.md",
+      "src/content/posts/2026-08-12-아동수당-신청가이드.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-12-curation-subsidy.md",
+      "src/content/posts/2026-08-12-incheon-seogu-caregiver-health-checkup.md",
+      "src/content/posts/2026-08-12-jungjangnyeon-naeil-center.md",
+      "src/content/posts/2026-08-12-pohang-chimac-festival.md",
+      "src/content/posts/2026-08-12-아동수당-신청가이드.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-08-12-curation-subsidy.md",
+      "src/content/posts/2026-08-12-incheon-seogu-caregiver-health-checkup.md",
+      "src/content/posts/2026-08-12-jungjangnyeon-naeil-center.md",
+      "src/content/posts/2026-08-12-pohang-chimac-festival.md",
+      "src/content/posts/2026-08-12-아동수당-신청가이드.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 5,
+      "manual": 0,
+      "unknown": 0,
+      "total": 5
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01YWa5r4WQF52oksTU8aRm4B",
+    "batchStatus": "ended",
+    "batchDurationMs": 300280,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 912.04239,
+    "actualCostKrw": 1020.6283500000001,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 19,
+    "errors": 11,
+    "inputTokens": 32313,
+    "outputTokens": 7263,
+    "costKrw": 80.54182080000001
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 1건, 총 356건",
+      "validation": "ok",
+      "anthropicUsage": "3718/2531",
+      "markdown": {
+        "generated": 5,
+        "pending": 118,
+        "titles": [
+          "체육시설 이용요금 감면",
+          "도시철도 요금 면제(국가유공자)",
+          "장애인 직업재활시설 지원",
+          "시각장애인 일자리",
+          "과수봉지 지원"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 6건, 총 627건",
+      "validation": "ok",
+      "anthropicUsage": "3614/2830",
+      "markdown": {
+        "generated": 5,
+        "pending": 300,
+        "titles": [
+          "성남시 초등학교 등 입학준비금 지원",
+          "수산경영인회생자금",
+          "청년 사회진입 활동비 지원 (청년 디딤돌 카드+)",
+          "(경상남도 진주시)산모·신생아 건강관리 본인부담금 지원",
+          "울산광역시 산모신생아 재가돌봄 서비스 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 4건, 업데이트 211건, 총 427건",
+      "validation": "ok",
+      "anthropicUsage": "4139/2413",
+      "markdown": {
+        "generated": 5,
+        "pending": 275,
+        "titles": [
+          "부산인디커넥트페스티벌 2026",
+          "김천포도축제",
+          "태백 해바라기축제",
+          "춘천 썸머워터 페스티벌",
+          "귀몽 제주신화월드"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
