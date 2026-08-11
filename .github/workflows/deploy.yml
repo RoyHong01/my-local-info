@@ -462,7 +462,7 @@ jobs:
         run: node scripts/generate-choice-posts-auto.js
         timeout-minutes: 20
         env:
-          CHOICE_AUTO_ENABLED: 'true'
+          CHOICE_AUTO_ENABLED: 'false'
           CHOICE_MIN_REVIEW_COUNT: '50'
           CHOICE_PRODUCT_HISTORY_DAYS: '60'
           CHOICE_TARGET_POOL_SIZE: '120'
@@ -494,7 +494,7 @@ jobs:
 
       - name: '[3-step] Restaurant candidate collect/refresh'
         id: collect_restaurants
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        if: ${{ false && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')) }}
         run: node scripts/ensure-life-restaurant-candidates.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
@@ -512,7 +512,7 @@ jobs:
 
       - name: '[3단계] 일상의 즐거움 맛집 포스트 생성'
         id: generate_restaurant_posts
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')
+        if: ${{ false && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'full')) }}
         run: node scripts/generate-life-restaurant-posts.mjs
         env:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
