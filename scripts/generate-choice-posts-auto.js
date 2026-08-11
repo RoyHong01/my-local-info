@@ -89,7 +89,7 @@ async function buildTempInput(themeInfo, dateKst) {
   const payload = {
     title: `${weekdayKo}요일 픽앤조이 초이스 | ${theme.name} 카테고리 실시간 인기 상품 큐레이션`,
     englishName,
-    summary: `${theme.name} 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.`,
+    summary: `${theme.name} 테마에서 요즘 많이 찾는 아이템 3가지를 골라 특징과 활용법을 정리했어요.`,
     brand: '픽앤조이 초이스',
     rating: '4.7',
     reviewCount: '100',
