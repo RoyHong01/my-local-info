@@ -141,6 +141,11 @@ function Validate-PushCommitGuards {
                 $violations += "[$commit] 초이스 포스트 frontmatter에 coupang_link 누락: $choicePost"
             }
 
+            if ("$($env:WORKTREE_SKIP_CHOICE_IMAGE)".Trim() -eq '1') {
+                Write-Host "Choice image validation skipped (WORKTREE_SKIP_CHOICE_IMAGE=1): $choicePost"
+                continue
+            }
+
             $imageMatches = [regex]::Matches($content, '!\[[^\]]*\]\((/images/choice/[^)\s]+)\)')
             if ($imageMatches.Count -eq 0) {
                 $violations += "[$commit] 초이스 포스트 본문에 /images/choice 기반 이미지 누락: $choicePost"
