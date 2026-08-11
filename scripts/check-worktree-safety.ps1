@@ -6,6 +6,13 @@ param(
     [string]$ScopeFile = ".git/change-scope-allowlist.txt"
 )
 
+if (-not $PSBoundParameters.ContainsKey('MaxChanged') -and $env:WORKTREE_MAX_CHANGED) {
+    $environmentMaxChanged = 0
+    if ([int]::TryParse($env:WORKTREE_MAX_CHANGED, [ref]$environmentMaxChanged) -and $environmentMaxChanged -ge 1) {
+        $MaxChanged = $environmentMaxChanged
+    }
+}
+
 $ErrorActionPreference = "Stop"
 
 function Write-Section {
