@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![라입 R2 노워시 케라틴 헤어 트리트먼트 러블리, 250ml, 2개](https://ads-partners.coupang.com/image1/yfxeScWruUiM6OMgyR3CZOGGqm46WKPomREQ330gCxZ8-jrfGHWgisqeJjg75knocEsQFrHLas362dP3xiy09LP0A8BdyHLxXyJUAxWcQIj8fSsTLUdMvT9sEZjYqu2c57t6YmD1o892g8zkTAIAHQYcGdeFyo63P8S4LAc8k-25L7lbTYCMQ8NY4dC0h8ESC7Q0fsl_iupDgIydt7w7FvSbwRAm7SPsUhZVkaCW2XlZ_NxoYAo-rQh7AHro54kxGiz-InH_wAnPB_0xFyoQaRqumD3wlp9iUXimxZZ2qzrKLx8lSHpnLYU3z_Or9tKLCo2hO510SUlyo0aKxjfpfMGqqxS8jRg=)

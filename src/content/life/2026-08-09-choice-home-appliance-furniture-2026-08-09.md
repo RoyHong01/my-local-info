@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![메이홈데코 서랍 레일 3단 볼레일 폭 35mm 일반형 1조 / 고하중 슬라이드레일 서랍장레일 가구 옷장 수납장 하부장 책상 책장 싱크대 레일](https://ads-partners.coupang.com/image1/d79ccF9DRzUkXFwGdzLKrxaSvET-VnBRh6HoU4wQyeRHAuFql894VKCG3tofk11YR7S1IfFK8TqHjdptFQJ9ZsgsQEgzmzMoX5BRZumY_U3zne-v3SozCgRa4Gg0iURA1PRbdfnLi5xjrhWW_6YqcZcV9M4dGemHGlbFmExy9Lxf8bui1xquVLt4SS9E2hbuv0kltq16BE8CR4RmsoPsMICmBuSxCi2Ki_QdH2oj14DcBYXnYgse4vuyBfAMw455p9qJfERnBEDO2qVPqNMlzZPCZAbbYm59eQywzj2EzaA0FzrE1O2sfDCWJycGM_a80Uxy2YxycieLm1qGPbDDn6LKFauK37JcPv85AzA4CxgJq-ygZNR384vfLqbVnK6I)

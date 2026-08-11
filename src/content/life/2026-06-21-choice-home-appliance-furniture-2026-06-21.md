@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![가구 책상 서랍 수납장 2단 볼레일 2개 1조](https://ads-partners.coupang.com/image1/kUAGNPTTz3LvTfqukbx-gd06LkJyu8lcKHqI-sJ356hDjKujGZfWjFDY4KLOJKDwrenPLPggtbEPAVmEluuSUWEo9EsbrUg8VORfUwEXYMVaCsFWV9Ur4J0F05qyBncLccofQex5f4luDHCHkC7PdSDXCuXAyFp1YG5gCsOCM75d7JqvPUvsH31cMjtSHrtFmFcaHifg2BOITRHMPummO5dsQorMMLPZjFobT7XkgS4TTxFVRv5fqpYMkTRGqVtnNF38HfI_DTJK2BdNsF_PuzNLhqI3mbwFAa-9McE2pOwiijT1Z4zEFqBRsNQ4d8d-yR5sljOivGPeBj7ya8pe1lUWQ4579iSMxxi_rbfiziphONvcoXoS9t0=)

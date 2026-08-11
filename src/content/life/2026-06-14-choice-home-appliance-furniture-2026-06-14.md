@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![언케니 브랜드 위키드 2쿼트 슬로우 쿠커 - 소형 주방 가전](https://ads-partners.coupang.com/image1/JXD3BCNXkUzcC9lgJX-qUDo0ClvASYvcv6t-B6wboTNtSxf8nqL9R4h0Uhnd70uZIThrhA9SLSr9xtQaeZIh3Dy-BMMIqiluDOv09GvDrqs8nNisrIS2toXjedpMgbBol-wFo3MOua4r2SLJF6zXEybR_UIDigwMW3NDieT7woul6NnVMIgJ1F59xXAe1qghqWn5ybOAQSYT_yIjdYanuhnOp0C_6zMuivkmMceh32wrufDm_NF6-gNEoozi84OV01s3odfM0WuDmNO4dDHcqvu7DYDcQHNFITOtZHdRPI1jSN1CZbZU8EDsWaqPqMqWC4ZPsyzbpf_-pJawQ0M4LvobRE9lu0ouHwLOcdwuvtrCr4ObbYY7ZSo=)

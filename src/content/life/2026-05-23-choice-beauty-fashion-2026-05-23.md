@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![더마팩토리 나이아신아마이드 20% 세럼, 80ml, 1개](https://ads-partners.coupang.com/image1/gaZfhv0BKeU5PdlFgdGKEVVxXUIPHK04VNiQuBMonO1EbWYlajTAfd4Vagc3dWBkRHsE_1EiLQlfaF8MRrsU9KC1nMvSDnlyTJsVbPpZJVpOg-VrqYuW8RReyti581xs18XJ5WL3a2jHVRQvHhe8CyhNGx1gyat2kEzCQ5NI5TUe5aFPXxjQDxCLAubuFlNNSVtNh5Crm6h0yJJJEUujcX3BfDc6m_XDsVhgTBZYo5XBUX2XnoGeSnZv334ptpL7PF7aHCw9tJDgDdpEuWjs1NoqzviIFg-WhPo1HILTsZxgzdVC2SrEhvsleeVRhNsKL3sX11ATD_I8tW96n9zufBEqvAvyfw==)

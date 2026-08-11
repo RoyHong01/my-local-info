@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![원형 라디오 고무발 / 가구 미끄럼 방지 전화 라디오 스피커 가전 다리 고무받침 소품 소가구 미끌림](https://ads-partners.coupang.com/image1/UQM9K7pKWSFH18BAUSUlnPZgZ4B70SjZwc1w99rlScZb4PGg9JPOReTIeqrCHHJWN4u-HYnEp6z9_lysl08RfxDWnGSx-UITaDUT2rITZe31Ub79KQkHXO65ZuHj1So4IEW0KP7MOiyBc1FLDSIpsyGkFi_JYe2wCqlkNnYf8L5-6FMcMIz1xmjXW07XwQgmaeLyKubHyB5nmaa2IxRB7Ic5lMXsOwifCp7yMsFYJTJlBdmeK9yyFqwQCLzHBQ8AceZ1dOQp_jkvCYndFTKWF7pERk3cJ6BJXY8ZrT-L06ZU9KptBmjm1NxVJ7L_lvP0zUxuxWDW5Wln7UComlYOpazkKhTyThpGuW1jz_nvkvux8CeaYPsiWzKj1zMRQGNU)

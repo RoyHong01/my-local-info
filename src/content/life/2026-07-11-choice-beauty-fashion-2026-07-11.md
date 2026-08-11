@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![2+1 출시하자마자 1위 퓨어그램 모공이별 딥클렌징폼 제주 그린티 저자극 폼클렌징 120ml, 3개, 120ml](https://ads-partners.coupang.com/image1/2kzQQGY9CB0rBsok2rLTeJlw6_GpHPwTE5Sjbo6mcXXarzrGTsccl2jvCTMKaieEvNIKPA7mQiXu0-TXAtuV56HSXqndSW3Npe7ebkF1PPxB2hU3eAzDpmuq_ryUsVFu4kFdWfXSnDvpsmiTwwU9qBcb7fIUquoPKBjogIoXuzk4Who04m3gSArrJMcfjLE9vwDRQst8aKe5_QTvIEqTGb-xoG4iO7ayMysDlCMHKRlXN-lM2yY23Kk982pRH9wRYqfWqpLtaWgtmUa3tK7KTDMZRy74dvcJjxuMNO0lHrwwWiasRzfMHjLPmZEneHK8FW7CtIxFFkRYUGTceJZGXk9GS20QY8StzGuP3WbSM_8-ZZ0DfA==)

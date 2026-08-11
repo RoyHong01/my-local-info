@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![학생 기숙사 작은 전기 가전 샤브샤브 전기 냄비 찜기 미니 인스턴트 요리 라면 냄비](https://ads-partners.coupang.com/image1/ATSzBLvmFYcQfI-RAdPUGncePYoWr2SnSn3mMAxgYa-yxhWz6hXE-CpbSLzU0svadHUegr2jOltoLHNB-3i9PH-YJvISsn9tBpZ2hVHkOSAYqMWI_r28PwUaht2Rs2m-JgzqBN_gVU13uBQAoHYXmIrK8iANj0vehoqi9XdDCWJ6hcThElv8xlQGPYIDCji-sXrSRpEse4IxDB1E2C1RDS0Zsv2lYruMio9J35I8ENJ_ZUNmlqhGOhCoHeWx5VugwF3JoPa-fHOuwQ3tjntbHxW5ZPWFlJ1DRMKgAYQaAkJAgQROlnGlZWX1fXBgPOCBQqgBYlXVsk-7DkF6wuK9WLHmNR1VywKmSHAQqT3q8jL_FbxVmz0-vqp9ZVBSml3qug==)

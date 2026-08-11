@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![울트라랙 3단 4단 5단 아이보리 무볼트 조립식 선반 가구 앵글 철제 베란다 펜트리 선반장 창고 수납 다용도](https://ads-partners.coupang.com/image1/3GIeQSK1-uoHj5Sg3C3XOh0gc3xuW6-5h4TCEs7klR7_lVCu18eR6NbM0qPBeHyBbD9KvFLf30kHkR3zKxiG_fOn5Ahr_NqNK_mwiXSwDt7nLF8b9ktTJeWzOqCf-BwIQZdY9_gEOOWIt7itvTtvnCh21cN30_RgeVNlEU3J7PGpxbQSn8dfluEYIO66wfGQ2pi5KWrPPWx3RsSAT3CPgJZR555_7PiXqb-dugrRQECzoEVObjNMyL9uye4aZoVyTVuiyyf2XqFoyimvl9uOvtizKT9ztJVRFtCwpSBUCetiIGot9tz3tU1AnIOk8ChHwSwNbCh4yW4k1Ndmp0XwFss9exIn_dJlggWhbAvy4DjnBFcLURhm1s_YcYriIdnALcA0RCs0YL6WE1wpVzwPbpZsTvSGcXQa)

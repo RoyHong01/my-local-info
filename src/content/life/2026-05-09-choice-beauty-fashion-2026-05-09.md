@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![에이지투웨니스 시그니처 에센스 커버 팩트 인텐스 케이스 1p + 리필 14g 2p, 21호, 1개](https://ads-partners.coupang.com/image1/WKiFaYyv-S7XFf4QWKvnTzDJOYJpZTkC9SbSJ5X0fOfhpUeABzvS18ahTL7cOEmQuZNxUUHLVh0TFgr2gBdUbWY1Ke5D8e0maD-FLknV5vOOYPmR_UsIaB51QZMG3R1MRh_wb7_kG9NAv1PiIQeF_jNpRWVNDH8DggG2AtbPH49oWC31Wo8C9_ntp6n51GZpc_vEG86IMjghY2ucloNTH1DdhdTsU99azxSdK_lLeIpQGpkyfYXRSSJX4kbXhDeK30IvjhskFZDOEGZkt63_B_JmGTMJkhVHJgcgVh1WvuR20ysKi1ol28D5PSWjuvbnwbceeoDBetdkfchC)

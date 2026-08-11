@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![하루꿈 와이드 멀티 정리함 거실 안방 옷서랍 가구 모던 디자인 패브릭 수납장 수납함](https://ads-partners.coupang.com/image1/PYoVBNf3CYzwCpPvPQRYAJIX5I5fDWko5PiKNQAbdJGw-8sYlj0leKia4Tk9vIAhkiaW2rhzIfenRzTiVW2qB1osPG2Uo_WqN3uUFeezZ307yPKP0eKTEh5KKyxBYnv9HTckBtLlxOCZELaxZLCeDiIRDFMO6tuMAPux2uTPEHAyiiSPkaxABQ0Y8ty902U5dHHdhLbn6kDLlrV27x8uZUQwbiLE7TM41FJPpZJm-itaMWQqigeAgKa9MKpKhTIbt5M_gbSVLtHQxCQsSXaeNPkZShMRqOncH-_mzyG_fUgHpPC9Pr1NJPzN9feZbTZ8Hrk2s2dHbWbB7tYVJTixOcuekNjvV2m-BvFfyOUrmr5zW24MY6cCXo1jlmig6geJ)

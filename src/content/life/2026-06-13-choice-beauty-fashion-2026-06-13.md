@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![티르티르 마스크 핏 레드 쿠션 18g + 퍼프 2p 세트, 17C 포슬린, 1세트](https://ads-partners.coupang.com/image1/nKmAGggM1LsX4D5-nOB007bx2WHB6lEdgeBhMFdztAoIjV3bRQe5f20grxCXjXDC4eIAe6xaNL0n1Zp5KnRRp5N4q8_785pB7DuJP_T1mA9QteLUf0x6n5IZlu5gCkSKKPUSy4AS9Yaw1gv5eM32Soy-upSZcf6lSDsDyDKuXhoRPLQH0UVA4dRVNgrgQowN5KBfyOM36PBTkLzO5mhxzSTE1rPA_G0Cl5sThnldzqH7Xb_xj5j1ggNEQ-PxZDc7wNIeU1mZo01l0LYc3ZRO1B56ZjbgXxtTxhkxZ4tnlSfsgQBgM7kE8RC6d-tjRGGcWONoeiEVBWaBD2pwwNVZooUXeeNl)

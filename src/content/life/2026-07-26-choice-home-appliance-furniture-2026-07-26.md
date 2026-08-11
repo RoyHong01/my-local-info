@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![마루오피스_ 소품 장식물 가구 가전제품 미끄러짐 긁힘 소음방지 충격흡수 1cm/2cm/2.7cm EVA 진동방지 패드](https://ads-partners.coupang.com/image1/c0wcYi59gBWOa070c9zZuVZ-qYl_2odd-x9CFDbD3EjeF1FcRvH-ZQDhScppsTM2-yS7nwcczELyQ4LIt6zTHGbXa25cctf4h_EpZdsNpCqkTbiTVHLIOlvxE36VZpcY6L-BBa-bq3Fkgk8-ynX2MNnjOXd1QCrPkuHrC_jkGS1QTpJMYv7O2Yi-cuVLQaW67KhNikEf9bZYAsFK42mSNjHaKR6TW1z3BCUh0C8mgdxqGukI3_uJBxNrDSzdqp3FcgWiAaBjUvyrdfBq5dq9-8JSiTpHkj0BZQvLz5vu-cpg2TwoYPga8DT4_qJ58UvcYoN0R3OcKVbD4gnT1OzkqhtEWXQy_gl6Ej8leJVxEX4F3_5mhNhZdpNLxHcu80Nu)

@@ -20,8 +20,6 @@ coupang_banner_alt: "일요일 픽앤조이 초이스 | 가전/가구 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-가전/가구 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![접착식 이동바퀴 무타공 가구 이동 수납함 정리함 슬라이더 바퀴](https://ads-partners.coupang.com/image1/QFyYSPrNtt6bFm8kQLgy3DqLn2FIGFV7YVs8nTlPpisnolLD5VbwY87FLfs5Xg4aRxzI5lDvtSSMcXjbEjwfQQeJRXzc7EN4bEhrZmmH9LAUNk1Osa-4xggvVWLodpXjLGgS7ZarZBE-tlR-5bkGElrVgWjDiV2aQJ1tNeLNA2zpaejEzKomQvA0Nxel_q7cJrHAlDM70lqztUPgTSXTw1J5jmBrcZ-0vBeGk3SweNDKqCds5yGhvxnD4CrDB5NHcumKyHjWJ6CNMteTb3qMIVFJouRbjES0eFYVYMsP-5ZeUjE3BWsy_zZnNO80uIxrXVp_kqsixjwIed-lZprCTBmrH7QuyMC24tpVky6g27Bsi9mCITazLymBGtEmsN6C)

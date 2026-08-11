@@ -20,8 +20,6 @@ coupang_banner_alt: "토요일 픽앤조이 초이스 | 뷰티/패션 카테고�
 
 그래서 오늘 픽앤조이 초이스에서는 같은 고민을 하고 있는 분들께 도움이 될 만한 아이템을 한 가지 골라봤어요. 너무 과한 기능보다, 일상에서 꾸준히 쓰기 좋은 균형을 우선 기준으로 삼았습니다.
 
-뷰티/패션 테마에서 쿠팡 판매량 상위권 상품 중 중복 필터와 품질 필터를 통과한 신규 아이템 3개를 엄선한 픽앤조이 초이스입니다.
-
 ## **📍 픽앤조이가 선정한 오늘의 픽**
 
 ![마미케어 홈쇼핑 방송 상품 오쏘타민 비타민C 기미 잡티 멜라닌 개선 앰플 쿠션 13g 본품, 1개, 21호](https://ads-partners.coupang.com/image1/HFyNw45RSb8ptInnHG6i--2san_8xzBrCgIBtkSGQ67LKEavfYMrCXRHilrWrUhNMZ1wLEN0SJXXaP93p3ul09Uj3J1fltBAjQUOkgpJrkdoHF2yRZCMJVUGKiMsVXuMaajmM0bfW1bB_J8PMebziNV4V4WtMuvoYAatOskGO2sRQcXK04a5LPk9LNN1ohOfu1LjkLmBA8YdnfjJF504OLZEP3DVYR_WoLPbaCp7vcFgWUdslmzy83OpEbkvMwaPkrYMvxiYc6LzN6ZALlJ4AsYWaCWURLYOJG1rEZ3SPoTpzMIL_xk-GAQHPX8Bb0l29xmWoqSGxgG9kOeoG-JN140rHO-2SkoOxYWUgO1D)
