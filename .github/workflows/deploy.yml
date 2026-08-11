@@ -18,6 +18,7 @@ on:
       - 'SECURITY.md'
       - 'WORK_LOG.md'
       - '.github/copilot-instructions.md'
+      - 'docs/**'
   schedule:
     - cron: '0 16 * * *'
   workflow_dispatch:
