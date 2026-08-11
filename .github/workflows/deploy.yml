@@ -4,6 +4,20 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'AGENTS.md'
+      - 'AI_RULES.md'
+      - 'AI_WEBSITE_BLUEPRINT.md'
+      - 'CLAUDE.md'
+      - 'COPILOT_MEMORY.md'
+      - 'MOBILE_OVERFLOW_FIXES.md'
+      - 'PROJECT_CRITICAL_NOTES.md'
+      - 'PROJECT_MEMORY.md'
+      - 'PROJECT_PLAN.md'
+      - 'README.md'
+      - 'SECURITY.md'
+      - 'WORK_LOG.md'
+      - '.github/copilot-instructions.md'
   schedule:
     - cron: '0 16 * * *'
   workflow_dispatch:
