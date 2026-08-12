@@ -1,6 +1,62 @@
 {
   "reports": [
     {
+      "date": "2026-08-13",
+      "runId": "31620154464",
+      "runNumber": 1037,
+      "runAttempt": 1,
+      "eventName": "schedule",
+      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31620154464",
+      "stageStatuses": [
+        {
+          "key": "stage1-data",
+          "status": "success"
+        },
+        {
+          "key": "stage2-blog",
+          "status": "success"
+        },
+        {
+          "key": "stage3-life",
+          "status": "success"
+        }
+      ],
+      "generatedBlogCount": 3,
+      "updatedBlogCount": 0,
+      "generatedLifeCount": 0,
+      "generatedChoiceCount": 0,
+      "generatedRestaurantCount": 0,
+      "publishedByAutoCount": 3,
+      "publishedByManualCount": 0,
+      "publishedByUnknownCount": 0,
+      "choiceRelaxedFallbackAppliedCount": 0,
+      "choiceAppliedMinRating": 4.5,
+      "restaurantRecollectPerformed": false,
+      "restaurantCacheHit": 0,
+      "restaurantCacheMiss": 0,
+      "restaurantGoogleCalled": 0,
+      "restaurantGoogleCallCapReached": false,
+      "restaurantGoogleCallCapLimit": 0,
+      "restaurantGoogleCallsBlockedByCap": 0,
+      "restaurantQueryRotationTotalUsed": 0,
+      "restaurantQueryRotationPerRegion": 0,
+      "restaurantQueryLegacyAbsorbed": false,
+      "totalChangedFiles": 6,
+      "anthropicBatchStatus": "ended",
+      "anthropicBatchDurationMs": 9308751,
+      "anthropicBatchRequestCount": 5,
+      "anthropicBatchSuccessCount": 5,
+      "anthropicBatchFailureCount": 0,
+      "anthropicFallbackAttemptedCount": 2,
+      "anthropicUnpublishedCount": 2,
+      "anthropicBudgetStopped": true,
+      "anthropicActualCostKrw": 1179.6735299999998,
+      "anthropicHaikuDataCostKrw": 80.1474912,
+      "midImageInsertedCount": 0,
+      "midImageOmittedCount": 0,
+      "generatedAtUtc": "2026-08-12T19:55:00.606Z"
+    },
+    {
       "date": "2026-08-12",
       "runId": "31515107382",
       "runNumber": 1035,
@@ -4100,49 +4156,6 @@
       "midImageInsertedCount": 1,
       "midImageOmittedCount": 0,
       "generatedAtUtc": "2026-05-17T20:54:14.541Z"
-    },
-    {
-      "date": "2026-05-17",
-      "runId": "25971442069",
-      "runNumber": 791,
-      "runAttempt": 1,
-      "eventName": "schedule",
-      "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/25971442069",
-      "stageStatuses": [
-        {
-          "key": "stage1-data",
-          "status": "success"
-        },
-        {
-          "key": "stage2-blog",
-          "status": "success"
-        },
-        {
-          "key": "stage3-life",
-          "status": "success"
-        }
-      ],
-      "generatedBlogCount": 5,
-      "generatedLifeCount": 4,
-      "generatedChoiceCount": 1,
-      "generatedRestaurantCount": 3,
-      "publishedByAutoCount": 9,
-      "publishedByManualCount": 0,
-      "publishedByUnknownCount": 0,
-      "choiceRelaxedFallbackAppliedCount": 0,
-      "choiceAppliedMinRating": 4.5,
-      "restaurantRecollectPerformed": true,
-      "restaurantCacheHit": 0,
-      "restaurantCacheMiss": 150,
-      "restaurantGoogleCalled": 150,
-      "totalChangedFiles": 14,
-      "blogBudgetEnabled": true,
-      "blogBudgetStopped": false,
-      "blogBudgetLimitKrw": 500,
-      "blogEstimatedCostKrw": 9.82,
-      "midImageInsertedCount": 1,
-      "midImageOmittedCount": 0,
-      "generatedAtUtc": "2026-05-16T20:32:38.481Z"
     }
   ]
 }

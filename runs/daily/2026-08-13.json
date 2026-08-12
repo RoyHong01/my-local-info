@@ -1,0 +1,268 @@
+{
+  "reportDateKst": "2026-08-13",
+  "generatedAtUtc": "2026-08-12T19:55:00.606Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31620154464",
+    "runNumber": 1037,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31620154464",
+    "runStartedAtUtc": "2026-08-12T16:57:08Z",
+    "headSha": "2a047435e8d3a1ae401db9291a9ef35deb2306b8"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://b7f4ddd9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 356건",
+        "subsidy": "신규 5건, 총 627건",
+        "festival": "신규 5건, 업데이트 214건, 총 432건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://34092a6d.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://1b9376ba.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "8d72b38a909fdf0cdcb03ad324d03febcc9538f0",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-13",
+      "authoredAt": "2026-08-12T19:49:43Z",
+      "files": [
+        "src/content/posts/2026-08-13-assistive-device-center.md",
+        "src/content/posts/2026-08-13-children-vaccination-support.md",
+        "src/content/posts/2026-08-13-curation-festival.md"
+      ]
+    },
+    {
+      "sha": "b064ada9d907031c8fecb6b585c629f1dd94412e",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-13",
+      "authoredAt": "2026-08-12T17:02:24Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 6,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-13-assistive-device-center.md",
+      "src/content/posts/2026-08-13-children-vaccination-support.md",
+      "src/content/posts/2026-08-13-curation-festival.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-13-assistive-device-center.md",
+      "src/content/posts/2026-08-13-children-vaccination-support.md",
+      "src/content/posts/2026-08-13-curation-festival.md"
+    ],
+    "generatedBlogPostsUpdated": [],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-08-13-assistive-device-center.md",
+      "src/content/posts/2026-08-13-children-vaccination-support.md",
+      "src/content/posts/2026-08-13-curation-festival.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 3,
+      "manual": 0,
+      "unknown": 0,
+      "total": 3
+    },
+    "byType": {
+      "blog": {
+        "auto": 3,
+        "manual": 0,
+        "unknown": 0,
+        "total": 3
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_0193EDJetLJjeiKHZTDFn8TA",
+    "batchStatus": "ended",
+    "batchDurationMs": 9308751,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 2,
+    "fallbackSuccessCount": 2,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 2,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-incheon-355000000118-0813",
+        "reason": "finalize_rejected"
+      },
+      {
+        "customId": "blog-festival-1939183-0813",
+        "reason": "warning_budget_stop"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 1500,
+    "budgetWarnThresholdKrw": 1200,
+    "estimatedCostKrw": 1046.9501699999998,
+    "actualCostKrw": 1179.6735299999998,
+    "budgetWarning": true,
+    "budgetStopped": true,
+    "budgetStopReason": "warning_budget_stop: fallback 예상 2493.96원 / 한도 1500원"
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 21,
+    "errors": 9,
+    "inputTokens": 32347,
+    "outputTokens": 7189,
+    "costKrw": 80.1474912
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 356건",
+      "validation": "ok",
+      "anthropicUsage": "3386/2499",
+      "markdown": {
+        "generated": 5,
+        "pending": 116,
+        "titles": [
+          "중·고 신입생 체육복 지원",
+          "저소득 노인 국민건강보험료 지원",
+          "서북도서 농약 지원",
+          "발달장애인 안심지킴이 기기 지원",
+          "스포츠강좌이용권(부평국민체육센터)"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 5건, 총 627건",
+      "validation": "ok",
+      "anthropicUsage": "4118/2757",
+      "markdown": {
+        "generated": 5,
+        "pending": 297,
+        "titles": [
+          "장애인고용장려금지원",
+          "서울형 입원 생활비 지원",
+          "우리집 수돗물 안심 확인제 지원",
+          "한부모가족자녀 교육비 지원",
+          "해운대구 무의탁 노인세대 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 5건, 업데이트 214건, 총 432건",
+      "validation": "ok",
+      "anthropicUsage": "4664/2783",
+      "markdown": {
+        "generated": 5,
+        "pending": 275,
+        "titles": [
+          "감탄로드 여행가챠 팝업스토어",
+          "세미원 연꽃문화제",
+          "쉼표：비우고, 머무르고, 채우는",
+          "포항치맥페스티벌",
+          "한강 다리밑 영화관"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_budget_stop",
+    "label": "완료(Anthropic 예산 상한 중단)"
+  }
+}
