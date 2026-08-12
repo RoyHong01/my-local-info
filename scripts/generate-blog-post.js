@@ -1897,6 +1897,36 @@ ${subsidyAnalysisOverride}
   };
 }
 
+function stripStandaloneBrLines(bodyText = '') {
+  if (!bodyText) return bodyText;
+
+  const lines = bodyText.split('\n');
+  const filtered = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^<br\s*\/?>\s*$/i.test(trimmed)) {
+      continue;
+    }
+    filtered.push(line);
+  }
+
+  const collapsed = [];
+  let emptyRun = 0;
+
+  for (const line of filtered) {
+    if (line.trim() === '') {
+      emptyRun += 1;
+      if (emptyRun <= 2) collapsed.push(line);
+    } else {
+      emptyRun = 0;
+      collapsed.push(line);
+    }
+  }
+
+  return collapsed.join('\n');
+}
+
 async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, options = {}) {
   if (promptHash(preparedRequest.prompt) !== preparedRequest.promptHash) {
     throw new Error(`블로그 프롬프트 해시 불일치: ${preparedRequest.customId}`);
@@ -2059,6 +2089,7 @@ async function finalizeBlogRequest(preparedRequest, modelResult, requestModel, o
   else if (finalContent.startsWith('```')) finalContent = finalContent.substring(3);
   if (finalContent.endsWith('```')) finalContent = finalContent.slice(0, -3);
   finalContent = finalContent.trim();
+  finalContent = stripStandaloneBrLines(finalContent);
 
   // image 필드 삽입 (이미 있으면 덮어쓰기, 없으면 tags 뒤에 삽입)
   if (/^image:/m.test(finalContent)) {
