@@ -1,0 +1,273 @@
+{
+  "reportDateKst": "2026-08-14",
+  "generatedAtUtc": "2026-08-13T18:46:45.630Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31723159356",
+    "runNumber": 1040,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31723159356",
+    "runStartedAtUtc": "2026-08-13T16:56:02Z",
+    "headSha": "f61a3001fafc68b72131c54ec2b76365e11c2033"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://0717d112.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 356건",
+        "subsidy": "신규 6건, 총 628건",
+        "festival": "신규 3건, 업데이트 218건, 총 435건"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://69f51a0e.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://11670e59.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "92b154e2e08ce6170e85bcd545c6d15acd642f45",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-14",
+      "authoredAt": "2026-08-13T18:41:56Z",
+      "files": [
+        "src/content/posts/2026-08-14-curation-incheon.md",
+        "src/content/posts/2026-08-14-dementia-treatment-cost-support.md",
+        "src/content/posts/2026-08-14-hwaseong-holiday-comfort-money.md",
+        "src/content/posts/2026-08-14-incheon-gyeyang-premarital-checkup.md"
+      ]
+    },
+    {
+      "sha": "9b352810c12b80a73d084a40d6c8ce78d02c44c4",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-14",
+      "authoredAt": "2026-08-13T17:01:42Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-08-04-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 8,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-14-curation-incheon.md",
+      "src/content/posts/2026-08-14-dementia-treatment-cost-support.md",
+      "src/content/posts/2026-08-14-hwaseong-holiday-comfort-money.md",
+      "src/content/posts/2026-08-14-incheon-gyeyang-premarital-checkup.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-14-curation-incheon.md",
+      "src/content/posts/2026-08-14-dementia-treatment-cost-support.md",
+      "src/content/posts/2026-08-14-hwaseong-holiday-comfort-money.md",
+      "src/content/posts/2026-08-14-incheon-gyeyang-premarital-checkup.md"
+    ],
+    "generatedBlogPostsUpdated": [
+      "src/content/posts/2026-08-04-curation-festival.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-14-curation-incheon.md",
+      "src/content/posts/2026-08-14-dementia-treatment-cost-support.md",
+      "src/content/posts/2026-08-14-hwaseong-holiday-comfort-money.md",
+      "src/content/posts/2026-08-14-incheon-gyeyang-premarital-checkup.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 5,
+      "manual": 0,
+      "unknown": 0,
+      "total": 5
+    },
+    "byType": {
+      "blog": {
+        "auto": 5,
+        "manual": 0,
+        "unknown": 0,
+        "total": 5
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01Sjea8NfPBfzHXndDvjqRiZ",
+    "batchStatus": "ended",
+    "batchDurationMs": 5404973,
+    "batchRequestCount": 5,
+    "batchSuccessCount": 5,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 1,
+    "unpublishedReasons": [
+      {
+        "customId": "blog-festival-1939183-0814",
+        "reason": "warning_budget_stop"
+      }
+    ],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 2000,
+    "budgetWarnThresholdKrw": 1600,
+    "estimatedCostKrw": 930.9083699999999,
+    "actualCostKrw": 1043.62356,
+    "budgetWarning": true,
+    "budgetStopped": true,
+    "budgetStopReason": "warning_budget_stop: fallback 예상 2360.14원 / 한도 2000원"
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 17,
+    "errors": 13,
+    "inputTokens": 32378,
+    "outputTokens": 7279,
+    "costKrw": 80.71199279999999
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 0,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 356건",
+      "validation": "ok",
+      "anthropicUsage": "4939/2856",
+      "markdown": {
+        "generated": 5,
+        "pending": 111,
+        "titles": [
+          "유치원 원외체험학습비 지원",
+          "옹진군인재육성재단 지역핵심인재 장학금 지급",
+          "장사시설 이용요금 감면",
+          "희귀 난치성 질환, 소아암, 심혈관, 뇌혈관 질병에 대한 학생 치료비 지원",
+          "강화한육우 브랜드 육성"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 6건, 총 628건",
+      "validation": "ok",
+      "anthropicUsage": "3664/2776",
+      "markdown": {
+        "generated": 5,
+        "pending": 295,
+        "titles": [
+          "경기도 어린이 건강과일 공급",
+          "전기자동차 구매보조금 지원",
+          "대구시민안전보험",
+          "지역화폐(창원사랑상품권)",
+          "(경상남도 진주시)난임부부 진단비 온라인 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "신규 3건, 업데이트 218건, 총 435건",
+      "validation": "ok",
+      "anthropicUsage": "3945/2393",
+      "markdown": {
+        "generated": 5,
+        "pending": 273,
+        "titles": [
+          "우리동네 문화아지트 : LH주택전시관 복합문화행사",
+          "군산 국가유산 야행",
+          "오감만족 문경새재맨발페스티벌",
+          "영덕 국가유산 야행",
+          "사천시 삼천포항 자연산 전어축제"
+        ]
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "warning",
+    "code": "warning_budget_stop",
+    "label": "완료(Anthropic 예산 상한 중단)"
+  }
+}
