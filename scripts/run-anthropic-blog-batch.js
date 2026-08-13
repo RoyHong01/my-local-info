@@ -248,12 +248,14 @@ async function runAnthropicBlogBatch(options = {}) {
   async function guardedSyncFallback(request, previousUsage = {}) {
     budgetGuard.release(request.customId);
     const estimatedOutputTokens = budgetGuard.estimateFallbackOutputTokens(request.maxTokens);
-    const estimatedInputTokens = Number(previousUsage?.input_tokens || 0)
-      + Number(previousUsage?.cache_creation_input_tokens || 0)
-      + Number(previousUsage?.cache_read_input_tokens || 0);
+    const estimatedInputTokens = Number(previousUsage?.input_tokens || 0);
+    const estimatedCacheWriteTokens = Number(previousUsage?.cache_creation_input_tokens || 0);
+    const estimatedCacheReadTokens = Number(previousUsage?.cache_read_input_tokens || 0);
     const estimatedCost = estimateRequestCostKrw(request, config, false, {
       outputTokensEstimate: estimatedOutputTokens,
       inputTokensEstimate: estimatedInputTokens,
+      cacheWriteTokensEstimate: estimatedCacheWriteTokens,
+      cacheReadTokensEstimate: estimatedCacheReadTokens,
     });
     if (!budgetGuard.canSpend(estimatedCost)) {
       budgetGuard.stop(

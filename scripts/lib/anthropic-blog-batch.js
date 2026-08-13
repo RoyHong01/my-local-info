@@ -11,6 +11,8 @@ const DEFAULT_WARN_RATIO = 0.8;
 const DEFAULT_USD_KRW = 1470;
 const DEFAULT_INPUT_USD_PER_MILLION = 3;
 const DEFAULT_OUTPUT_USD_PER_MILLION = 15;
+const CACHE_READ_RATIO = 0.1;
+const CACHE_WRITE_RATIO = 1.25;
 const DEFAULT_BATCH_DISCOUNT = 0.5;
 const DEFAULT_CHARS_PER_TOKEN = 2;
 const DEFAULT_FALLBACK_OUTPUT_TOKENS_ESTIMATE = 3000;
@@ -153,16 +155,30 @@ function extractUsageFromError(error) {
   return {};
 }
 
-function calculateCostKrw({ inputTokens = 0, outputTokens = 0, isBatch = false }, config = configFromEnv()) {
+function calculateCostKrw({
+  inputTokens = 0,
+  cacheWriteTokens = 0,
+  cacheReadTokens = 0,
+  outputTokens = 0,
+  isBatch = false,
+}, config = configFromEnv()) {
   const inputUsd = (Number(inputTokens || 0) / 1_000_000) * config.inputUsdPerMillion;
+  const cacheWriteUsd = (Number(cacheWriteTokens || 0) / 1_000_000)
+    * config.inputUsdPerMillion
+    * CACHE_WRITE_RATIO;
+  const cacheReadUsd = (Number(cacheReadTokens || 0) / 1_000_000)
+    * config.inputUsdPerMillion
+    * CACHE_READ_RATIO;
   const outputUsd = (Number(outputTokens || 0) / 1_000_000) * config.outputUsdPerMillion;
   const discount = isBatch ? config.batchDiscount : 1;
-  return (inputUsd + outputUsd) * config.usdKrw * discount;
+  return (inputUsd + cacheWriteUsd + cacheReadUsd + outputUsd) * config.usdKrw * discount;
 }
 
 function estimateRequestCostKrw(request, config = configFromEnv(), isBatch = true, options = {}) {
   const fallbackOutputTokens = Number(options.outputTokensEstimate || 0);
   const fallbackInputTokens = Number(options.inputTokensEstimate || 0);
+  const fallbackCacheWriteTokens = Number(options.cacheWriteTokensEstimate || 0);
+  const fallbackCacheReadTokens = Number(options.cacheReadTokensEstimate || 0);
   const boundedOutputTokens = fallbackOutputTokens > 0
     ? Math.min(Number(request.maxTokens || 0), fallbackOutputTokens)
     : Number(request.maxTokens || 0);
@@ -172,6 +188,8 @@ function estimateRequestCostKrw(request, config = configFromEnv(), isBatch = tru
 
   return calculateCostKrw({
     inputTokens: boundedInputTokens,
+    cacheWriteTokens: fallbackCacheWriteTokens,
+    cacheReadTokens: fallbackCacheReadTokens,
     outputTokens: boundedOutputTokens,
     isBatch,
   }, config);
