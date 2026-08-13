@@ -215,6 +215,7 @@ async function buildMessage(report) {
     anthropicGeneration.budgetLimitKrw ?? legacyBudget.limitKrw ?? 0
   );
   const resolvedBudgetStopped = Boolean(anthropicGeneration.budgetStopped ?? legacyBudget.stopped);
+  const resolvedBudgetStopReason = String(anthropicGeneration.budgetStopReason || '').trim();
   const anthropicEstimatedCost = resolvedEstimatedCost.toFixed(1);
   const anthropicBudgetLimit = resolvedBudgetLimit.toFixed(0);
   const anthropicCostLine = resolvedActualCost !== null
@@ -222,6 +223,9 @@ async function buildMessage(report) {
       ? `⛔ Anthropic API 예산 중단: 추정 ${anthropicEstimatedCost}원 / 실제 ${resolvedActualCost.toFixed(1)}원 / 한도 ${anthropicBudgetLimit}원`
       : `💰 Anthropic API 비용: 추정 ${anthropicEstimatedCost}원 / 실제 ${resolvedActualCost.toFixed(1)}원 / 한도 ${anthropicBudgetLimit}원`)
     : `💰 Anthropic API 비용: ${anthropicEstimatedCost}원 / ${anthropicBudgetLimit}원`;
+  const anthropicCostReasonLine = resolvedBudgetStopped && resolvedBudgetStopReason
+    ? `└ 사유: ${resolvedBudgetStopReason}`
+    : '';
   const anthropicBatchLine = `📦 Anthropic Batch: ${anthropicGeneration.batchStatus || '-'} / ${Number(anthropicGeneration.batchSuccessCount || 0)}/${Number(anthropicGeneration.batchRequestCount || 0)} 성공 / ${formatDurationMs(anthropicGeneration.batchDurationMs)}`;
   const anthropicFallbackLine = `🔁 Anthropic fallback: 시도 ${Number(anthropicGeneration.fallbackAttemptedCount || 0)} / 성공 ${Number(anthropicGeneration.fallbackSuccessCount || 0)} / 실패 ${Number(anthropicGeneration.fallbackFailureCount || 0)}`;
   const unpublishedReasons = Array.isArray(anthropicGeneration.unpublishedReasons)
@@ -299,6 +303,7 @@ async function buildMessage(report) {
     googleCapReached ? `⚠️ Google 신규조회 상한 도달: limit ${googleCapLimit}, blocked ${googleBlockedByCap}` : '✅ Google 신규조회 상한 미도달',
     `🎯 초이스 fallback 완화: ${relaxedFallbackCount}회${appliedMinRating > 0 ? ` (적용 하한 ${appliedMinRating.toFixed(1)})` : ''}`,
     anthropicCostLine,
+    anthropicCostReasonLine,
     haikuCostLine,
     anthropicBatchLine,
     anthropicFallbackLine,
