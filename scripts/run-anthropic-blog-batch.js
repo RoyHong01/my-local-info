@@ -258,6 +258,7 @@ async function runAnthropicBlogBatch(options = {}) {
       cacheReadTokensEstimate: estimatedCacheReadTokens,
     });
     if (!budgetGuard.canSpend(estimatedCost)) {
+      console.log(`[budget-diag] customId=${request.customId} promptLen=${String(request.prompt || '').length} maxTokens=${request.maxTokens} in=${estimatedInputTokens} cacheW=${estimatedCacheWriteTokens} cacheR=${estimatedCacheReadTokens} out=${estimatedOutputTokens} est=${estimatedCost.toFixed(2)} projected=${budgetGuard.projectedCostKrw.toFixed(2)} actual=${budgetGuard.actualCostKrw.toFixed(2)} limit=${config.dailyBudgetKrw}`);
       budgetGuard.stop(
         `warning_budget_stop: fallback 예상 ${Number(budgetGuard.projectedCostKrw + estimatedCost).toFixed(2)}원 / 한도 ${config.dailyBudgetKrw}원`
       );
