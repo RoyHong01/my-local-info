@@ -1,0 +1,270 @@
+{
+  "reportDateKst": "2026-08-15",
+  "generatedAtUtc": "2026-08-14T17:21:12.548Z",
+  "workflow": {
+    "name": "Daily Update & Deploy",
+    "repository": "RoyHong01/my-local-info",
+    "runId": "31821404844",
+    "runNumber": 1042,
+    "runAttempt": 1,
+    "eventName": "schedule",
+    "runUrl": "https://github.com/RoyHong01/my-local-info/actions/runs/31821404844",
+    "runStartedAtUtc": "2026-08-14T16:53:08Z",
+    "headSha": "39755ef78d8c03178728aa48b8e81aa72f09758d"
+  },
+  "stages": [
+    {
+      "key": "stage1-data",
+      "title": "1단계: 공공데이터 수집/만료처리",
+      "deployUrl": "https://f94258c9.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectIncheon": "success",
+        "collectSubsidy": "success",
+        "collectFestival": "success",
+        "cleanupExpired": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "collectSummary": {
+        "incheon": "신규 0건, 총 356건",
+        "subsidy": "신규 3건, 총 628건",
+        "festival": ""
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage2-blog",
+      "title": "2단계: AI 블로그 생성",
+      "deployUrl": "https://a5a4d402.my-local-info-2gs.pages.dev",
+      "steps": {
+        "generateAnthropicBlog": "success",
+        "generateChoice": "success",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    },
+    {
+      "key": "stage3-life",
+      "title": "3단계: 일상의 즐거움 맛집",
+      "deployUrl": "https://599c0515.my-local-info-2gs.pages.dev",
+      "steps": {
+        "collectRestaurants": "skipped",
+        "generateRestaurantPosts": "skipped",
+        "build": "success",
+        "e2e": "success",
+        "deploy": "success"
+      },
+      "status": "success"
+    }
+  ],
+  "commits": [
+    {
+      "sha": "327ed0ea505c8544d06b067470ca3b2f6cd2c78a",
+      "subject": "자동 업데이트(2단계): 블로그 4건 생성 2026-08-15",
+      "authoredAt": "2026-08-14T17:16:05Z",
+      "files": [
+        "src/content/posts/2026-08-15-curation-subsidy.md",
+        "src/content/posts/2026-08-15-festival-versus-seodaemun-independence-vs-gyeongju-esports.md",
+        "src/content/posts/2026-08-15-gyeonggi-youth-basic-income.md",
+        "src/content/posts/2026-08-15-incheon-namdonggu-disability-support.md",
+        "src/content/posts/2026-08-15-yangju-teukgi-education-subsidy.md",
+        "src/content/posts/2026-08-15-yeongdeok-heritage-night.md"
+      ]
+    },
+    {
+      "sha": "89907f629dc72b875ed2e7c0cac6de73ff17ebab",
+      "subject": "자동 업데이트(1단계): 공공데이터 동기화 2026-08-15",
+      "authoredAt": "2026-08-14T16:59:22Z",
+      "files": [
+        "public/data/festival.json",
+        "public/data/incheon.json",
+        "public/data/subsidy.json",
+        "src/content/posts/2026-08-04-curation-festival.md"
+      ]
+    }
+  ],
+  "changes": {
+    "totalChangedFiles": 10,
+    "dataChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json"
+    ],
+    "generatedBlogPosts": [
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-15-curation-subsidy.md",
+      "src/content/posts/2026-08-15-festival-versus-seodaemun-independence-vs-gyeongju-esports.md",
+      "src/content/posts/2026-08-15-gyeonggi-youth-basic-income.md",
+      "src/content/posts/2026-08-15-incheon-namdonggu-disability-support.md",
+      "src/content/posts/2026-08-15-yangju-teukgi-education-subsidy.md",
+      "src/content/posts/2026-08-15-yeongdeok-heritage-night.md"
+    ],
+    "generatedBlogPostsNew": [
+      "src/content/posts/2026-08-15-curation-subsidy.md",
+      "src/content/posts/2026-08-15-festival-versus-seodaemun-independence-vs-gyeongju-esports.md",
+      "src/content/posts/2026-08-15-gyeonggi-youth-basic-income.md",
+      "src/content/posts/2026-08-15-incheon-namdonggu-disability-support.md",
+      "src/content/posts/2026-08-15-yangju-teukgi-education-subsidy.md",
+      "src/content/posts/2026-08-15-yeongdeok-heritage-night.md"
+    ],
+    "generatedBlogPostsUpdated": [
+      "src/content/posts/2026-08-04-curation-festival.md"
+    ],
+    "generatedLifePosts": [],
+    "generatedChoicePosts": [],
+    "generatedRestaurantPosts": [],
+    "allChangedFiles": [
+      "public/data/festival.json",
+      "public/data/incheon.json",
+      "public/data/subsidy.json",
+      "src/content/posts/2026-08-04-curation-festival.md",
+      "src/content/posts/2026-08-15-curation-subsidy.md",
+      "src/content/posts/2026-08-15-festival-versus-seodaemun-independence-vs-gyeongju-esports.md",
+      "src/content/posts/2026-08-15-gyeonggi-youth-basic-income.md",
+      "src/content/posts/2026-08-15-incheon-namdonggu-disability-support.md",
+      "src/content/posts/2026-08-15-yangju-teukgi-education-subsidy.md",
+      "src/content/posts/2026-08-15-yeongdeok-heritage-night.md"
+    ]
+  },
+  "publicationStats": {
+    "totals": {
+      "auto": 7,
+      "manual": 0,
+      "unknown": 0,
+      "total": 7
+    },
+    "byType": {
+      "blog": {
+        "auto": 7,
+        "manual": 0,
+        "unknown": 0,
+        "total": 7
+      },
+      "choice": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "restaurant": {
+        "auto": 0,
+        "manual": 0,
+        "unknown": 0,
+        "total": 0
+      }
+    }
+  },
+  "choiceFallback": {
+    "defaultMinRating": 4.5,
+    "appliedMinRating": 4.5,
+    "relaxedAppliedCount": 0
+  },
+  "anthropicGeneration": {
+    "model": "claude-sonnet-5",
+    "batchId": "msgbatch_01D1sn81N4jtetTR3GjUHvcM",
+    "batchStatus": "ended",
+    "batchDurationMs": 300331,
+    "batchRequestCount": 6,
+    "batchSuccessCount": 6,
+    "batchFailureCount": 0,
+    "fallbackAttemptedCount": 0,
+    "fallbackSuccessCount": 0,
+    "fallbackFailureCount": 0,
+    "unpublishedCount": 0,
+    "unpublishedReasons": [],
+    "budgetEnabled": true,
+    "budgetLimitKrw": 2000,
+    "budgetWarnThresholdKrw": 1600,
+    "estimatedCostKrw": 946.77261,
+    "actualCostKrw": 1051.5057,
+    "budgetWarning": false,
+    "budgetStopped": false,
+    "budgetStopReason": ""
+  },
+  "anthropicHaikuData": {
+    "outcome": "success",
+    "generated": 19,
+    "errors": 11,
+    "inputTokens": 32378,
+    "outputTokens": 7347,
+    "costKrw": 81.1110168
+  },
+  "imagePolicy": {
+    "midImageInsertedCount": 1,
+    "midImageOmittedCount": 0
+  },
+  "restaurantCache": {
+    "recollectPerformed": false,
+    "cacheHit": 0,
+    "cacheMiss": 0,
+    "googleCalled": 0,
+    "googleCallCapReached": false,
+    "googleCallCapLimit": 0,
+    "googleCallsBlockedByCap": 0,
+    "queryRotationTotalUsed": 0,
+    "queryRotationPerRegion": 0,
+    "queryLegacyAbsorbed": false
+  },
+  "failureReasons": {
+    "generateChoice": "",
+    "collectRestaurants": ""
+  },
+  "dataValidation": {
+    "incheon": {
+      "summary": "신규 0건, 총 356건",
+      "validation": "ok",
+      "anthropicUsage": "3663/2775",
+      "markdown": {
+        "generated": 5,
+        "pending": 106,
+        "titles": [
+          "옹진군인재육성재단 인재장학금 지급",
+          "저소득 장애인세대 국민건강보험료 지원",
+          "옹진군인재육성재단 예체능특기 장학금 지급",
+          "가축소모성 예방약품 지원",
+          "거주자우선주차 요금감면"
+        ]
+      },
+      "photoApi": {
+        "healthcheck": "",
+        "mode": "",
+        "failureReason": ""
+      }
+    },
+    "subsidy": {
+      "summary": "신규 3건, 총 628건",
+      "validation": "ok",
+      "anthropicUsage": "3546/2878",
+      "markdown": {
+        "generated": 5,
+        "pending": 294,
+        "titles": [
+          "저소득층지원사업 특기교육비",
+          "경영회생지원 농지매입 사업",
+          "1인 소상공인 고용보험료 지원",
+          "양산사랑상품권(양산사랑카드)서비스",
+          "신혼부부 주택(매입,전세)자금 대출이자 지원"
+        ]
+      }
+    },
+    "festival": {
+      "summary": "",
+      "validation": "",
+      "anthropicUsage": "",
+      "markdown": {
+        "generated": 0,
+        "pending": 0,
+        "titles": []
+      },
+      "photoFallback": 0
+    }
+  },
+  "overall": {
+    "level": "success",
+    "code": "success",
+    "label": "전체 정상 완료"
+  }
+}
