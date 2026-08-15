@@ -288,6 +288,11 @@ async function runAnthropicBlogBatch(options = {}) {
     }
   }
 
+  // 결과 스트림에서 개별 settle되지 못한 채 남은 예약을 fallback 판정 전에 정리
+  for (const request of accepted) {
+    budgetGuard.release(request.customId);
+  }
+
   for (const request of accepted) {
     let modelResult = batchResults.get(request.customId);
     if (!modelResult || modelResult.status !== 'succeeded') {
