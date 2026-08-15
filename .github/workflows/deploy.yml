@@ -19,8 +19,9 @@ on:
       - 'WORK_LOG.md'
       - '.github/copilot-instructions.md'
       - 'docs/**'
-  schedule:
-    - cron: '0 16 * * *'
+  # schedule:
+  #   - cron: '0 16 * * *'
+  # 2026-08-15 중단: AdSense 심사 및 프로젝트 정리. 재개 시 주석 해제.
   workflow_dispatch:
     inputs:
       mode:
