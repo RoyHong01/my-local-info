@@ -3,6 +3,114 @@
 > 상세 작업 이력 보관용. CLAUDE.md에는 포함하지 않음.
 > 최신 항목이 위에 오도록 작성.
 
+## 2026-08-15 (fallback 예산 과대 추정 원인 규명 + 예약 정리)
+
+### 수정 파일
+
+- `.github/workflows/deploy.yml`
+- `scripts/lib/anthropic-blog-batch.js`
+- `scripts/run-anthropic-blog-batch.js`
+- `scripts/notify-telegram.mjs`
+
+### 배경
+
+8/13·8/14 연속으로 `⛔ Anthropic API 예산 중단`이 발생했다.
+리포트는 `실제 1043.6원 / 한도 1500원`으로 **한도 미달**을 표시하는데도 중단됐다.
+
+### 원인(RCA) — 미해제 예약분 이중 계산
+
+`canSpend()`는 실제 누적이 아니라 **projected** 기준으로 사전 차단한다.
+
+```
+projectedCostKrw = actualCostKrw + reservedCostKrw
+canSpend(amount) = projectedCostKrw + amount <= dailyBudgetKrw
+```
+
+예약 흐름:
+
+1. `submitBatch`가 요청 **전체를 reserve**(배치 제출 직전)
+2. `pollBatch`가 `ended` 대기
+3. `collectBatchResults`가 **결과 스트림에 나오는 건만** settle/release
+4. 메인 루프에서 `guardedSyncFallback` 진입 시 **자기 것만** release
+
+→ 3단계에서 결과가 안 나온 요청의 예약이 남고, 4단계 fallback 판정 시
+   `reservedCostKrw`에 그대로 포함된다. **곧 처리될 다른 요청의 예약분이
+   자기 판정을 막는 구조**였다.
+
+### 실측 근거
+
+| 날짜 | Batch 소요 | fallback | 예산 중단 |
+| --- | --- | --- | --- |
+| 08-13 | **155분** | 2회 | ⛔ |
+| 08-14 | **90분** | 0회 | ⛔ |
+| 08-15 | **5분** | 0회 | ✅ 없음 |
+
+배치가 오래 걸릴수록 예약이 오래 남는다. 8/15는 5분에 끝나 결과 스트림이
+즉시 처리됐고 문제가 없었다.
+
+로컬 재현 결과 (실제 API 호출 없이 계산만):
+
+| 케이스 | estimatedCost |
+| --- | --- |
+| [A] `previousUsage = {}`, prompt 1000자, out 3000 | **45.57원** |
+| [B] 캐시 읽기 10만 토큰 포함 | **89.67원** |
+| 8/14 실측 차단값 | **1,316원** |
+
+→ 계산식 자체는 정상. **약 1,266원이 미해제 예약분**이었다.
+
+### 조치
+
+1. **한도 1,500 → 2,000원** (`deploy.yml`)
+2. **캐시 토큰 단가 반영** — `CACHE_READ_RATIO = 0.1`, `CACHE_WRITE_RATIO = 1.25`.
+   기존에는 `input_tokens + cache_creation + cache_read`를 단순 합산해
+   **전액 단가**로 계산했다. 효과는 2,494 → 2,360원(5%)으로 **작았다.**
+3. **예약 정리** (`run-anthropic-blog-batch.js`) — `collectBatchResults` 직후,
+   메인 루프 진입 전에 `accepted` 전체를 release.
+   `release()`는 `Map.delete`라 중복 호출이 안전하다(멱등).
+4. **진단 로그 추가** — `[budget-diag]`로 차단 시점의
+   promptLen / in / cacheW / cacheR / out / est / projected / actual / limit 출력.
+5. **리포트에 차단 사유 표시** (`notify-telegram.mjs`) —
+   `budgetStopReason`이 있을 때만 `└ 사유:` 줄 추가.
+
+### 커밋
+
+- `964e7ed` chore(budget): raise anthropic daily limit to 2000 krw
+- `a558b04` fix(budget): apply cache token rates to fallback cost estimate
+- `39755ef` chore(budget): add fallback estimate diagnostic log
+- `e6a8e59` fix(budget): release stale reservations before fallback loop
+- notify-telegram 리포트 사유 표시 커밋
+
+### ⚠️ 미검증
+
+수정 효과는 **다음 배치 지연 발생 시에만** 확인 가능하다.
+`[budget-diag]` 로그에서 `projected`와 `actual` 차이가 사라졌으면 정상.
+
+### 후속/주의
+
+- **⚠️ 예산 초과 위험이 소폭 증가한다.** 배치 실패분의 재시도 비용을 미리
+  잡지 않게 되므로. 다만 실제 비용은 `actualCostKrw`로 정확히 누적되고,
+  한도 2,000원 대비 실제가 1,050원 수준이라 여유가 있다.
+- **fallback 출력 토큰 추정 미해결**: `estimateFallbackOutputTokens`가
+  대상 요청 자체가 아니라 `lastSuccessfulOutputTokens`(또는 기본값 3000)을
+  재사용한다. 영향은 작아 이번 범위에서 제외했다.
+- **배치 155분/90분 지연 원인 미규명.** 코드 타임아웃(360분) 이내라
+  timeout 판정 대상은 아니다. Anthropic 배치 API 외부 요인 가능성.
+  재발 시 폴링 로그 확인 필요.
+- **`[budget-diag]` 로그는 임시 진단용.** 원인 확정 후 제거 여부 판단.
+
+### 파일 수 현황 (8/15)
+
+RSC payload 제거: 20741 → 16173
+⚠ Warning: 한도의 80%를 넘었습니다: 16173/20000
+
+| 날짜 | 파일 수 | 하루 증가 |
+| --- | --- | --- |
+| 08-12 | 16,039 | ~90 |
+| 08-15 | 16,173 | **~45** |
+
+초이스·맛집 중단 효과로 증가 속도가 절반으로 둔화됐다.
+20,000 도달 예상: 약 85일 → **11월 초**. 호스팅 결정에 여유가 생겼다.
+
 ## 2026-08-12 (축제 본문 `<br>` 노출 수정 + API 단가 확인)
 
 ### 수정 파일
